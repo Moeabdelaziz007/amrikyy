@@ -58,13 +58,6 @@ Welcome to the all-new, premium digital CV and portfolio for Mohamed H Abdelaziz
 4. **Connect chatbot**: In `script.js`, set your backend endpoint for the chatbot.
 5. **Switch language**: Use the toggle button for Arabic/English.
 
-## 🖥️ Local Development
-
-1. Install Node.js (v18 or higher recommended).
-2. Run `npm install` to install Express and other dependencies.
-3. Start the local server with `npm start`.
-4. Open `http://localhost:3000` in your browser.
-
 ---
 
 ## ✨ Credits

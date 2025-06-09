@@ -2,13 +2,6 @@ const express = require('express');
 const router = express.Router();
 const geminiService = require('../geminiService');
 
-// Simple in-memory conversation store
-const conversationContext = new Map();
-
-async function setConversationContext(userId, context) {
-    conversationContext.set(userId, context);
-}
-
 router.post('/', async (req, res) => {
     try {
         const userMessage = req.body.prompt;

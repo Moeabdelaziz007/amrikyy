@@ -494,23 +494,19 @@ function initChatbot() {
     // Add user message to chat
     addChatMessage(message, 'user');
     
-    // Send message to backend
-    fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: message })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.response) {
-          addChatMessage(data.response, 'bot');
-        } else {
-          addChatMessage('Sorry, something went wrong.', 'bot');
-        }
-      })
-      .catch(() => {
-        addChatMessage('Error contacting server.', 'bot');
-      });
+    // Simulate bot response (in a real implementation, this would call the backend)
+    setTimeout(() => {
+      // Example responses - in a real implementation, these would come from the backend
+      const responses = [
+        "I'm here to help you create your digital ID card. Would you like to get started?",
+        "The Amrikyy Digital ID is a unique way to showcase your digital identity. Try it out!",
+        "You can customize your digital ID with your own image and preferences.",
+        "Feel free to share your digital ID on social media once you've created it!"
+      ];
+      
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      addChatMessage(randomResponse, 'bot');
+    }, 1000);
   }
   
   /**
