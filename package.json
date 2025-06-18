@@ -3,21 +3,20 @@
   "version": "1.0.0",
   "description": "Digital ID Card Generator and portfolio site",
   "main": "server.js",
-    "scripts": {
-  <<<<<<< codex/remove-merge-conflict-markers
-      "start": "node server.js",
-      "sync-tools": "node scripts/syncTools.js"
-    },
-  =======
-        "start": "node server.js",
-        "sync-tools": "node scripts/syncTools.js"
-      },
-  >>>>>>> main
-    "dependencies": {
-      "express": "^4.18.2",
-      "qrcode": "^1.5.4",
-    "dotenv": "^16.4.5",
+  "scripts": {
+    "start": "node server.js",
+    "sync-tools": "node scripts/syncTools.js",
+    "test": "jest"
+  },
+  "dependencies": {
     "@notionhq/client": "^2.2.1",
-    "firebase-admin": "^12.0.0"
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^12.0.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "jest": "^30.0.0",
+    "supertest": "^7.1.1"
   }
 }
