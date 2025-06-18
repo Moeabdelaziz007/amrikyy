@@ -91,7 +91,7 @@ Welcome to the all-new, premium digital CV and portfolio for Mohamed H Abdelaziz
 
    For Firebase, set `DATA_PROVIDER=firebase` and provide `FIREBASE_SERVICE_ACCOUNT_JSON` and `FIREBASE_DATABASE_URL`.
 
-2. Run `npm run sync-tools` to fetch tool records and update `aiTools.json`.
+2. Run `npm run sync-tools` to fetch tool records and update `public/aiTools.json`.
 
 The server exposes these records at `/api/tools`.
 

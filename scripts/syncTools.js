@@ -7,7 +7,7 @@ const { fetchAITools } = require('../dataLayer');
 async function sync() {
   try {
     const tools = await fetchAITools();
-    const filePath = path.join(__dirname, '..', 'aiTools.json');
+    const filePath = path.join(__dirname, '..', 'public', 'aiTools.json');
     await fs.writeFile(filePath, JSON.stringify(tools, null, 2));
     console.log(`Synced ${tools.length} tools to aiTools.json`);
   } catch (err) {
