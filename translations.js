@@ -175,6 +175,22 @@ const translations = {
     ar: 'نسخ',
     en: 'Copy'
   }
+  ratingComment: {
+    ar: "اترك تعليقاً (اختياري)",
+    en: "Leave a comment (optional)"
+  },
+  submitRating: {
+    ar: "إرسال",
+    en: "Submit"
+  },
+  averageRating: {
+    ar: "متوسط التقييم:",
+    en: "Average rating:"
+  },
+  toolSearchPlaceholder: {
+    ar: "ابحث في أدوات الذكاء الاصطناعي...",
+    en: "Search AI tools..."
+  },
 };
 
 // Helper: add more translations by using the same structure above.

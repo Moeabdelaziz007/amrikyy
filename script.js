@@ -39,10 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize theme and toggle button
     initTheme();
-  <<<<<<< codex/fix-syntax-errors-and-code-structure
 
-  =======
-  >>>>>>> main
     // Initialize rating widgets
     initRatingWidgets();
 
@@ -265,11 +262,19 @@ function updateTranslations(lang) {
   // This function would use the translations from translations.js
   // For now, we'll just implement a placeholder
   const translatableElements = document.querySelectorAll('[data-translate]');
-  
+  const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+
   translatableElements.forEach(element => {
     const key = element.getAttribute('data-translate');
     if (typeof translations !== 'undefined' && translations && translations[key] && translations[key][lang]) {
       element.textContent = translations[key][lang];
+    }
+  });
+
+  placeholderElements.forEach(element => {
+    const key = element.getAttribute('data-translate-placeholder');
+    if (typeof translations !== 'undefined' && translations && translations[key] && translations[key][lang]) {
+      element.setAttribute('placeholder', translations[key][lang]);
     }
   });
 }
@@ -974,16 +979,11 @@ function toggleTheme() {
     } else {
       btn.innerHTML = '<i class="fas fa-sun"></i>';
     }
-  <<<<<<< codex/fix-syntax-errors-and-code-structure
   }
-  /**
-   * Initialize rating widgets and handle persistence
-  =======
-
-  /* Initialize rating widgets and handle persistence */
-  >>>>>>> main
-   */
-  function initRatingWidgets() {
+/**
+ * Initialize rating widgets and handle persistence
+ */
+function initRatingWidgets() {
     const widgets = document.querySelectorAll('.rating-widget');
     if (!widgets.length) return;
 
@@ -1050,16 +1050,11 @@ function toggleTheme() {
           averageDisplay.textContent = '0';
         }
       }
-  <<<<<<< codex/fix-syntax-errors-and-code-structure
     });
   }
-  /**
-   * Load AI tools from JSON and initialize search filtering
-  =======
-
-  /* Load AI tools from JSON and initialize search filtering */
-  >>>>>>> main
-   */
+/**
+ * Load AI tools from JSON and initialize search filtering
+ */
   function initAITools() {
     const searchInput = document.getElementById('toolSearch');
     const cardsContainer = document.getElementById('toolCards');
@@ -1089,19 +1084,23 @@ function toggleTheme() {
    * Render AI tool cards
    * @param {Array} tools - array of tool objects
    */
-  function renderToolCards(tools) {
-    const cardsContainer = document.getElementById('toolCards');
-    if (!cardsContainer) return;
+function renderToolCards(tools) {
+  const cardsContainer = document.getElementById('toolCards');
+  if (!cardsContainer) return;
 
-    cardsContainer.innerHTML = '';
-    tools.forEach(tool => {
-      const card = document.createElement('div');
-      card.className = 'tool-card';
-      card.innerHTML = `
-        <h3>${tool.name}</h3>
-        <p>${tool.description}</p>
-        <a href="${tool.link}" target="_blank">Visit</a>
-      `;
-      cardsContainer.appendChild(card);
+  cardsContainer.innerHTML = '';
+  tools.forEach(tool => {
+    const card = document.createElement('div');
+    card.className = 'tool-card';
+    card.setAttribute('data-aos', 'fade-up');
+    card.innerHTML = `
+      <h3>${tool.name}</h3>
+      <p>${tool.description}</p>
+      <a href="${tool.link}" target="_blank">Visit</a>
+    `;
+    cardsContainer.appendChild(card);
   });
+  if (typeof AOS !== 'undefined') {
+    AOS.refresh();
+  }
 }
