@@ -179,3 +179,5 @@ const translations = {
 
 // Helper: add more translations by using the same structure above.
 
+module.exports = translations;
+

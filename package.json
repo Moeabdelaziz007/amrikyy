@@ -5,16 +5,25 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "sync-tools": "node scripts/syncTools.js"
+    "sync-tools": "node scripts/syncTools.js",
+    "lint": "eslint .",
+    "test": "jest"
   },
-    "dependencies": {
-      "express": "^4.18.2",
-  <<<<<<< codex/use-qrcodejs-for-dynamic-qr-code-generation
-      "qrcode": "^1.5.4"
-  =======
-      "dotenv": "^16.4.5",
-      "@notionhq/client": "^2.2.1",
-      "firebase-admin": "^12.0.0"
-  >>>>>>> main
-    }
+  "dependencies": {
+    "@notionhq/client": "^2.2.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "firebase-admin": "^12.0.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^10.1.5",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
 }
