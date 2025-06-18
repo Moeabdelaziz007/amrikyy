@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// Serve static files (HTML, CSS, JS, images)
-app.use(express.static(__dirname));
+// Serve static files from the "public" directory only
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API routes
 app.use('/api/chat', chatRouter);
