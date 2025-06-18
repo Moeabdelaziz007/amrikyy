@@ -1747,7 +1747,6 @@ html[dir="rtl"] .next-btn:hover {
     border-width: 0;
   }
 
-  <<<<<<< codex/add-star-based-rating-widget-to-tool-cards
   /* Rating Widget */
   .rating-widget {
     margin-top: 2rem;
@@ -1798,7 +1797,8 @@ html[dir="rtl"] .next-btn:hover {
   .rating-average {
     font-size: 0.9rem;
     color: var(--text-secondary);
-  =======
+  }
+
   /* AI Tools Section */
   .tools-section {
     background-color: var(--dark-bg-primary);
@@ -1850,5 +1850,4 @@ html[dir="rtl"] .next-btn:hover {
   .tool-card a {
     color: var(--neon-green);
     text-decoration: none;
-  >>>>>>> main
   }
