@@ -11,8 +11,8 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  basePath: process.env.NODE_ENV === 'production' ? '/amrikyy' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/amrikyy/' : '',
+  basePath: '',
+  assetPrefix: '',
   // Optimization for static export
   swcMinify: true,
   // Disable server features for static export
