@@ -1,0 +1,1700 @@
+/* Quantum AI Nexus - Main Styles */
+
+/* CSS Variables for Quantum Theme */
+:root {
+  /* Quantum Colors */
+  --neon-green: #39FF14;
+  --neon-blue: #00d4ff;
+  --neon-purple: #b600ff;
+  --quantum-white: #ffffff;
+  
+  /* Dark Backgrounds */
+  --dark-bg-primary: #0A0A0A;
+  --dark-bg-secondary: #1a1a1a;
+  --dark-bg-tertiary: #2a2a2a;
+  
+  /* Glassmorphism */
+  --glass: rgba(30, 20, 50, 0.8);
+  --glass-light: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  
+  /* Shadows and Glows */
+  --glow-green: 0 0 20px var(--neon-green);
+  --glow-blue: 0 0 20px var(--neon-blue);
+  --glow-purple: 0 0 20px var(--neon-purple);
+  --shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  /* Animations */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.4s ease;
+  --transition-slow: 0.8s ease;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--dark-bg-primary);
+  color: var(--quantum-white);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* App Container */
+.app-container {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Quantum Loader */
+.quantum-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--dark-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.loader-content {
+  text-align: center;
+  z-index: 2;
+}
+
+.quantum-orb {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+}
+
+.orb-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--glow-green);
+  animation: pulse 2s infinite;
+}
+
+.orb-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 2px solid var(--neon-blue);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 3s linear infinite;
+}
+
+.orb-ring:nth-child(2) {
+  width: 80px;
+  height: 80px;
+  border-color: var(--neon-blue);
+  animation-duration: 2s;
+}
+
+.orb-ring:nth-child(3) {
+  width: 120px;
+  height: 120px;
+  border-color: var(--neon-purple);
+  animation-duration: 4s;
+  animation-direction: reverse;
+}
+
+.loader-content h2 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* App Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantum-logo {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.logo-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: var(--glow-green);
+  animation: pulse 2s infinite;
+}
+
+.logo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 2px solid var(--neon-blue);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 2s linear infinite;
+}
+
+.logo-ring:nth-child(2) {
+  width: 30px;
+  height: 30px;
+  border-color: var(--neon-blue);
+}
+
+.logo-ring:nth-child(3) {
+  width: 50px;
+  height: 50px;
+  border-color: var(--neon-purple);
+  animation-direction: reverse;
+}
+
+.app-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navigation */
+.app-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-btn {
+  padding: 0.8rem 1.5rem;
+  background: transparent;
+  border: 2px solid var(--glass-border);
+  color: var(--quantum-white);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-medium);
+  backdrop-filter: blur(10px);
+}
+
+.nav-btn:hover {
+  border-color: var(--neon-green);
+  box-shadow: var(--glow-green);
+  transform: translateY(-2px);
+}
+
+.nav-btn.active {
+  background: var(--neon-green);
+  color: var(--dark-bg-primary);
+  border-color: var(--neon-green);
+  box-shadow: var(--glow-green);
+}
+
+/* Main Content */
+.app-main {
+  flex: 1;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Quantum Cards */
+.quantum-card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: all var(--transition-medium);
+  position: relative;
+  overflow: hidden;
+}
+
+.quantum-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  opacity: 0.5;
+}
+
+.quantum-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-green);
+  box-shadow: var(--glow-green);
+}
+
+.quantum-card.large {
+  grid-column: span 2;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--quantum-white);
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Status Indicators */
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: var(--glow-green);
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.active {
+  color: var(--neon-green);
+}
+
+/* Metrics */
+.metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.metric:last-child {
+  border-bottom: none;
+}
+
+.metric-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.metric-value {
+  color: var(--neon-green);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+/* Progress Bars */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--dark-bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 4px;
+  transition: width var(--transition-medium);
+  animation: shimmer 2s infinite;
+}
+
+/* Insights */
+.insight-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.insight-label {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.insight-value {
+  color: var(--neon-green);
+  font-weight: 600;
+  min-width: 50px;
+  text-align: right;
+}
+
+/* Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.metric-box {
+  text-align: center;
+  padding: 1rem;
+  background: var(--dark-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+}
+
+.metric-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--neon-green);
+  margin-bottom: 0.5rem;
+}
+
+.metric-name {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Quantum Visualization */
+.quantum-visualization {
+  position: relative;
+  height: 200px;
+  background: var(--dark-bg-secondary);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.data-stream {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.stream-line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  animation: streamFlow 3s linear infinite;
+  animation-delay: var(--delay);
+}
+
+.data-points {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.data-point {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--neon-blue);
+  border-radius: 50%;
+  left: var(--x);
+  top: var(--y);
+  box-shadow: var(--glow-blue);
+  animation: dataPointPulse 2s infinite;
+}
+
+/* Log Container */
+.log-container {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.log-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--glass-border);
+  font-size: 0.9rem;
+}
+
+.log-time {
+  color: var(--neon-blue);
+  font-family: 'Monaco', monospace;
+  min-width: 80px;
+}
+
+.log-message {
+  flex: 1;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.log-status {
+  font-size: 1.2rem;
+}
+
+.log-status.success {
+  color: var(--neon-green);
+}
+
+.log-status.info {
+  color: var(--neon-blue);
+}
+
+/* Chatbot Styles */
+.quantum-chatbot-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--neon-green);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-medium);
+  z-index: 1000;
+  box-shadow: var(--glow-green);
+}
+
+.quantum-chatbot-toggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 30px var(--neon-green);
+}
+
+.quantum-chatbot-toggle.active {
+  background: var(--neon-green);
+  color: var(--dark-bg-primary);
+}
+
+.toggle-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantum-orb-mini {
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.orb-core-mini {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  background: currentColor;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 2s infinite;
+}
+
+.orb-ring-mini {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 2s linear infinite;
+}
+
+.ai-label {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--neon-green);
+  white-space: nowrap;
+}
+
+/* Chatbot Window */
+.quantum-chatbot-window {
+  position: fixed;
+  bottom: 100px;
+  right: 2rem;
+  width: 400px;
+  height: 600px;
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.8) translateY(50px);
+  opacity: 0;
+  transition: all var(--transition-medium);
+  pointer-events: none;
+}
+
+.quantum-chatbot-window.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+
+.chatbot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+  border-radius: 16px 16px 0 0;
+  color: var(--dark-bg-primary);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantum-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.avatar-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  background: var(--dark-bg-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.avatar-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--dark-bg-primary);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotate 2s linear infinite;
+}
+
+.header-text h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--dark-bg-primary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.close-btn:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Messages */
+.chatbot-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.message {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 90%;
+}
+
+.ai-message {
+  align-self: flex-start;
+}
+
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ai-avatar {
+  background: var(--neon-green);
+  color: var(--dark-bg-primary);
+  position: relative;
+}
+
+.ai-core {
+  width: 16px;
+  height: 16px;
+  background: var(--dark-bg-primary);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.user-avatar {
+  background: var(--neon-blue);
+  color: var(--dark-bg-primary);
+  font-size: 1.2rem;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-text {
+  background: var(--dark-bg-secondary);
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  margin-bottom: 0.3rem;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.user-message .message-text {
+  background: var(--neon-blue);
+  color: var(--dark-bg-primary);
+}
+
+.message-time {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 1rem;
+}
+
+.user-message .message-time {
+  text-align: right;
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  background: var(--dark-bg-secondary);
+  border-radius: 12px;
+  margin-bottom: 0.3rem;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.typing-dots span {
+  width: 6px;
+  height: 6px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  animation: typingDot 1.4s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+
+.typing-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Input */
+.chatbot-input {
+  padding: 1rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.input-container {
+  display: flex;
+  gap: 0.8rem;
+  align-items: flex-end;
+}
+
+.input-container textarea {
+  flex: 1;
+  background: var(--dark-bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: var(--quantum-white);
+  font-size: 0.9rem;
+  resize: none;
+  max-height: 100px;
+  min-height: 40px;
+  transition: border-color var(--transition-fast);
+}
+
+.input-container textarea:focus {
+  outline: none;
+  border-color: var(--neon-green);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.2);
+}
+
+.input-container textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.send-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--neon-green);
+  border: none;
+  border-radius: 50%;
+  color: var(--dark-bg-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.send-btn:hover.active {
+  background: var(--neon-blue);
+  transform: scale(1.1);
+}
+
+.send-btn:disabled {
+  background: var(--dark-bg-secondary);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+
+.send-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Backdrop */
+.chatbot-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 999;
+  opacity: 0;
+  animation: fadeIn var(--transition-medium) forwards;
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+@keyframes rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+@keyframes streamFlow {
+  0% { top: 0%; opacity: 0; }
+  50% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes dataPointPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes typingDot {
+  0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .app-nav {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .nav-btn {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quantum-card.large {
+    grid-column: span 1;
+  }
+  
+  .quantum-chatbot-window {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    left: 1rem;
+    height: 70vh;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-main {
+    padding: 1rem;
+  }
+  
+  .quantum-card {
+    padding: 1rem;
+  }
+  
+  .quantum-chatbot-toggle {
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
+}
+
+.neon-green {
+  color: var(--neon-green) !important;
+}
+
+.neon-blue {
+  color: var(--neon-blue) !important;
+}
+
+.neon-purple {
+  color: var(--neon-purple) !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+
+/* Social Media Analytics Styles */
+.social-analytics-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.analytics-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.analytics-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.analytics-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.engagement-chart {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  height: 100px;
+  margin-top: 1rem;
+}
+
+.chart-bar {
+  flex: 1;
+  background: var(--color);
+  border-radius: 4px 4px 0 0;
+  height: var(--height);
+  min-height: 20px;
+  opacity: 0.8;
+  transition: opacity var(--transition-fast);
+  animation: barGrow 1s ease-out;
+}
+
+.chart-bar:hover {
+  opacity: 1;
+}
+
+.platform-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.platform-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.platform-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.platform-name {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.platform-percentage {
+  color: var(--neon-green);
+  font-weight: 600;
+}
+
+.platform-bar {
+  height: 8px;
+  background: var(--dark-bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: var(--color);
+  width: var(--width);
+  border-radius: 4px;
+  transition: width var(--transition-medium);
+  animation: barSlide 1s ease-out;
+}
+
+.sentiment-overview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.sentiment-circle {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-progress {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(var(--neon-green) var(--percentage), var(--dark-bg-secondary) var(--percentage));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle-progress::before {
+  content: '';
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  background: var(--dark-bg-primary);
+  border-radius: 50%;
+}
+
+.sentiment-score {
+  position: relative;
+  z-index: 1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--neon-green);
+}
+
+.sentiment-label {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.sentiment-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.sentiment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.sentiment-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sentiment-item.positive .sentiment-dot {
+  background: var(--neon-green);
+}
+
+.sentiment-item.neutral .sentiment-dot {
+  background: var(--neon-blue);
+}
+
+.sentiment-item.negative .sentiment-dot {
+  background: var(--neon-purple);
+}
+
+.content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.content-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--dark-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  transition: all var(--transition-fast);
+}
+
+.content-item:hover {
+  border-color: var(--neon-green);
+  transform: translateY(-2px);
+}
+
+.content-info h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--quantum-white);
+}
+
+.content-meta {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.content-metrics {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.content-metrics .metric {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  padding: 0;
+}
+
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  background: var(--dark-bg-secondary);
+  border-radius: 8px;
+  border-left: 3px solid var(--neon-green);
+  position: relative;
+}
+
+.activity-time {
+  font-size: 0.7rem;
+  color: var(--neon-blue);
+  font-family: 'Monaco', monospace;
+  min-width: 70px;
+}
+
+.activity-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.activity-pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+/* Quantum Features Styles */
+.quantum-features-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.features-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.features-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+}
+
+.features-header p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+}
+
+.features-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.features-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--quantum-white);
+  cursor: pointer;
+  transition: all var(--transition-medium);
+  text-align: left;
+}
+
+.feature-nav-btn:hover {
+  border-color: var(--neon-green);
+  transform: translateX(5px);
+}
+
+.feature-nav-btn.active {
+  background: var(--neon-green);
+  color: var(--dark-bg-primary);
+  border-color: var(--neon-green);
+  box-shadow: var(--glow-green);
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+}
+
+.feature-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.quantum-indicator {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all var(--transition-medium);
+}
+
+.indicator-dot.active {
+  background: var(--dark-bg-primary);
+  animation: pulse 2s infinite;
+}
+
+.feature-display {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+}
+
+.feature-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-icon-large {
+  font-size: 3rem;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--dark-bg-secondary);
+  border-radius: 50%;
+  border: 2px solid var(--neon-green);
+}
+
+.feature-info h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--quantum-white);
+}
+
+.feature-info p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.quantum-field {
+  position: relative;
+  height: 200px;
+  background: var(--dark-bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantum-particle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--neon-green);
+  box-shadow: var(--glow-green);
+  animation: particleFloat 3s infinite ease-in-out;
+}
+
+.quantum-particle.state-0 {
+  background: var(--neon-green);
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.quantum-particle.state-1 {
+  background: var(--neon-blue);
+  left: 40%;
+  animation-delay: 0.5s;
+}
+
+.quantum-particle.state-2 {
+  background: var(--neon-purple);
+  left: 60%;
+  animation-delay: 1s;
+}
+
+.quantum-particle.state-3 {
+  background: var(--quantum-white);
+  left: 80%;
+  animation-delay: 1.5s;
+}
+
+.quantum-connections {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.connection-line {
+  position: absolute;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  top: 50%;
+  left: 0;
+  right: 0;
+  animation: connectionPulse 2s infinite;
+}
+
+.connection-line:nth-child(2) {
+  animation-delay: 0.7s;
+  background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+}
+
+.connection-line:nth-child(3) {
+  animation-delay: 1.4s;
+  background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+}
+
+.quantum-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.quantum-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: transparent;
+  border: 2px solid var(--neon-green);
+  color: var(--neon-green);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all var(--transition-medium);
+}
+
+.quantum-btn:hover {
+  background: var(--neon-green);
+  color: var(--dark-bg-primary);
+  box-shadow: var(--glow-green);
+}
+
+.quantum-metrics {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+}
+
+.metrics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.metrics-header h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--quantum-white);
+}
+
+.metrics-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--neon-green);
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.metric-item:last-child {
+  margin-bottom: 0;
+}
+
+.metric-bar {
+  height: 8px;
+  background: var(--dark-bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.quantum-equations {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(20px);
+  margin-top: 2rem;
+}
+
+.equations-header {
+  margin-bottom: 1.5rem;
+}
+
+.equations-header h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--quantum-white);
+  margin-bottom: 0.5rem;
+}
+
+.equations-subtitle {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.equation-display {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.equation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem;
+  background: var(--dark-bg-secondary);
+  border-radius: 8px;
+  border-left: 3px solid var(--neon-green);
+}
+
+.equation-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+}
+
+.equation-formula {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 1.1rem;
+  color: var(--neon-green);
+  font-weight: 400;
+}
+
+.quantum-data-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.data-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.data-line:last-child {
+  border-bottom: none;
+}
+
+.data-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.data-value {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--neon-blue);
+  font-weight: 600;
+}
+
+.quantum-pulse {
+  animation: quantumPulse 2s infinite;
+}
+
+/* Additional Animations */
+@keyframes barGrow {
+  from { height: 0; }
+  to { height: var(--height); }
+}
+
+@keyframes barSlide {
+  from { width: 0; }
+  to { width: var(--width); }
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.2); }
+}
+
+@keyframes connectionPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes quantumPulse {
+  0%, 100% { opacity: 0.7; color: var(--neon-blue); }
+  50% { opacity: 1; color: var(--neon-green); }
+}
+
+/* Responsive Design for Features */
+@media (max-width: 1200px) {
+  .features-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .features-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
+  
+  .feature-nav-btn {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .features-nav {
+    flex-direction: column;
+  }
+  
+  .quantum-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .content-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .content-metrics {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
