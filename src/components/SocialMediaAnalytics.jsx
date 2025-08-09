@@ -52,15 +52,15 @@ const SocialMediaAnalytics = ({ socialData }) => {
               <div className="stat-item">
                 <span className="stat-number">7+</span>
                 <span className="stat-label">Years Experience</span>
-              </div>
+            </div>
               <div className="stat-item">
                 <span className="stat-number">50+</span>
                 <span className="stat-label">Projects Delivered</span>
-              </div>
+            </div>
               <div className="stat-item">
                 <span className="stat-number">15+</span>
                 <span className="stat-label">AI Models Deployed</span>
-              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -83,25 +83,25 @@ const SocialMediaAnalytics = ({ socialData }) => {
                     <div className="skill-bar">
                       <div className="skill-progress" style={{'--width': '95%'}}></div>
                     </div>
-                  </div>
+                </div>
                   <div className="skill-item">
                     <span className="skill-name">JavaScript/TypeScript</span>
                     <div className="skill-bar">
                       <div className="skill-progress" style={{'--width': '90%'}}></div>
-                    </div>
-                  </div>
+                </div>
+              </div>
                   <div className="skill-item">
                     <span className="skill-name">React.js</span>
                     <div className="skill-bar">
                       <div className="skill-progress" style={{'--width': '88%'}}></div>
-                    </div>
-                  </div>
+                </div>
+              </div>
                   <div className="skill-item">
                     <span className="skill-name">Flask/FastAPI</span>
                     <div className="skill-bar">
                       <div className="skill-progress" style={{'--width': '92%'}}></div>
                     </div>
-                  </div>
+                </div>
                 </div>
               </div>
               <div className="skill-category">
@@ -227,7 +227,7 @@ const SocialMediaAnalytics = ({ socialData }) => {
                     <span className="tech-tag">Scikit-learn</span>
                     <span className="tech-tag">Docker</span>
                     <span className="tech-tag">Kubernetes</span>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -279,7 +279,7 @@ const SocialMediaAnalytics = ({ socialData }) => {
                 <div className="project-header">
                   <h4>StayX - Web3 Sustainability Rewards Platform</h4>
                   <span className="project-status completed">Coinbase x GCA Challenge</span>
-                </div>
+              </div>
                 <p className="project-description">
                   Web3 blockchain platform incentivizing sustainable actions through token rewards. 
                   Built complete UX design and live demo using real Intel environmental data integration.
@@ -290,7 +290,7 @@ const SocialMediaAnalytics = ({ socialData }) => {
                   <span className="tech-badge">Gradio</span>
                   <span className="tech-badge">UX Design</span>
                   <span className="tech-badge">Intel APIs</span>
-                </div>
+              </div>
                 <a href="https://huggingface.co/spaces/cryptojoker/stayx" target="_blank" rel="noopener noreferrer" className="project-link">
                   <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>

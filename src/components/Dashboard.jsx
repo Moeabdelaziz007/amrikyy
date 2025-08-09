@@ -69,7 +69,7 @@ const Dashboard = ({ quantumData }) => {
                 <span className="tech-tag">PyTorch</span>
                 <span className="tech-tag">Scikit-learn</span>
                 <span className="tech-tag">OpenAI API</span>
-              </div>
+            </div>
             </div>
           </div>
         </div>
@@ -341,7 +341,7 @@ const Dashboard = ({ quantumData }) => {
                   <span className="tech-badge">Web3</span>
                   <span className="tech-badge">Blockchain</span>
                   <span className="tech-badge">Sustainability</span>
-                </div>
+              </div>
               </div>
             </div>
           </div>
