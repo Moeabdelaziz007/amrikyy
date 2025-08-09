@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { professionalAI } from '../services/aiServices';
 
 const QuantumChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -6,7 +7,7 @@ const QuantumChatbot = () => {
     {
       id: 1,
       type: 'ai',
-      content: 'Welcome to Quantum AI Nexus! I am your quantum assistant. How can I help you explore the quantum realm today?',
+      content: 'Hello! I\'m Mohamed Abdelaziz\'s AI assistant. I can help you learn about his experience as a Senior AI Engineer, technical skills, projects, and career opportunities. What would you like to know?',
       timestamp: new Date()
     }
   ]);
@@ -36,18 +37,32 @@ const QuantumChatbot = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI response with quantum-themed responses
-    setTimeout(() => {
-      const aiResponse = generateQuantumResponse(userMessage.content);
+    try {
+      // Use professional AI service
+      const response = await professionalAI.sendMessage(userMessage.content);
+      
       const aiMessage = {
         id: Date.now() + 1,
         type: 'ai',
-        content: aiResponse,
-        timestamp: new Date()
+        content: response.message,
+        timestamp: new Date(),
+        success: response.success
       };
+      
       setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage = {
+        id: Date.now() + 1,
+        type: 'ai',
+        content: 'I apologize, but I\'m experiencing some technical difficulties. Please feel free to explore Mohamed\'s portfolio directly or contact him via LinkedIn or email.',
+        timestamp: new Date(),
+        success: false
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const generateQuantumResponse = (userInput) => {
@@ -69,6 +84,25 @@ const QuantumChatbot = () => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  const handleQuickAction = async (topic) => {
+    setIsTyping(true);
+    try {
+      const response = await professionalAI.getQuickResponse(topic);
+      const aiMessage = {
+        id: Date.now(),
+        type: 'ai',
+        content: response.message,
+        timestamp: new Date(),
+        success: response.success
+      };
+      setMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      console.error('Quick action error:', error);
+    } finally {
+      setIsTyping(false);
     }
   };
 
