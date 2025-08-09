@@ -63,7 +63,39 @@
         .logo-container {
             display: flex;
             align-items: center;
+            gap: 2rem;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
             gap: 1rem;
+        }
+
+        .avatar-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
+            object-fit: cover;
+        }
+
+        .profile-info h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--neon-green), var(--viber));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+        }
+
+        .profile-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin: 0;
+            font-weight: 500;
         }
 
         .quantum-logo {
@@ -330,7 +362,617 @@
             color: transparent;
         }
 
+        /* CV Section Styles */
+        .cv-header {
+            margin-bottom: 2rem;
+        }
+
+        .cv-avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+        }
+
+        .cv-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.4);
+            object-fit: cover;
+        }
+
+        .cv-basic-info h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--neon-green), var(--viber));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .cv-basic-info h2 {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin: 0 0 1rem 0;
+            font-weight: 500;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, var(--neon-green), var(--viber));
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 170, 0.3);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 170, 0.4);
+        }
+
+        .expertise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .expertise-item {
+            padding: 1rem;
+            background: rgba(0, 255, 170, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--neon-green);
+            font-weight: 500;
+        }
+
+        .skills-matrix {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .skill-category h4 {
+            color: var(--neon-green);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: rgba(0, 255, 170, 0.1);
+            color: var(--neon-green);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 255, 170, 0.3);
+            font-weight: 500;
+        }
+
+        .philosophy-content blockquote {
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 255, 170, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--viber);
+            color: var(--text-primary);
+        }
+
+        .vision-points {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .vision-point {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(138, 43, 226, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--viber);
+        }
+
+        .vision-icon {
+            font-size: 1.5rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(0, 255, 170, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 170, 0.1);
+        }
+
+        .contact-icon {
+            font-size: 1.2rem;
+        }
+
+        /* Quantum Loading Screen Styles */
+        .quantum-loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .loader-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        #loader-particles {
+            width: 100%;
+            height: 100%;
+        }
+
+        .loader-content {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            align-items: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Profile Section */
+        .loader-profile {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .loader-avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .loader-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--neon-green);
+            box-shadow: 0 0 40px rgba(0, 255, 170, 0.5);
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar-quantum-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            opacity: 0.4;
+        }
+
+        .avatar-quantum-ring:nth-child(2) {
+            width: 180px;
+            height: 180px;
+            animation: rotate 8s linear infinite;
+        }
+
+        .avatar-quantum-ring:nth-child(3) {
+            width: 210px;
+            height: 210px;
+            animation: rotate 12s linear infinite reverse;
+            border-color: var(--viber);
+        }
+
+        .avatar-quantum-ring:nth-child(4) {
+            width: 240px;
+            height: 240px;
+            animation: rotate 16s linear infinite;
+            border-color: #404040;
+        }
+
+        .loader-identity {
+            margin-top: 1rem;
+        }
+
+        .loader-name {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--neon-green), var(--viber));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .loader-alias {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-green);
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.5);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .loader-title {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(0, 255, 170, 0.5);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(0, 255, 170, 0.8), 0 0 40px rgba(138, 43, 226, 0.5);
+            }
+        }
+
+        /* Expertise Grid */
+        .loader-expertise {
+            width: 100%;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .expertise-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .expertise-card:nth-child(1) { animation-delay: 0.2s; }
+        .expertise-card:nth-child(2) { animation-delay: 0.4s; }
+        .expertise-card:nth-child(3) { animation-delay: 0.6s; }
+        .expertise-card:nth-child(4) { animation-delay: 0.8s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .expertise-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .expertise-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .expertise-card h3 {
+            color: var(--neon-green);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .expertise-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Quantum Progress */
+        .quantum-progress {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-orb {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .progress-orb .orb-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
+        .progress-orb .orb-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid var(--neon-green);
+            opacity: 0.6;
+        }
+
+        .progress-orb .orb-ring:nth-child(2) {
+            width: 50px;
+            height: 50px;
+            animation: rotate 3s linear infinite;
+        }
+
+        .progress-orb .orb-ring:nth-child(3) {
+            width: 65px;
+            height: 65px;
+            animation: rotate 4s linear infinite reverse;
+            border-color: var(--viber);
+        }
+
+        .progress-orb .orb-ring:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            animation: rotate 5s linear infinite;
+            border-color: #404040;
+        }
+
+        .progress-text {
+            flex: 1;
+        }
+
+        #loading-text {
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 255, 170, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-green), var(--viber));
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+        }
+
+        .progress-percentage {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        /* Stats Grid */
+        .loader-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            width: 100%;
+            animation: slideInUp 1s ease-out 1.5s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 170, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Social Links */
+        .loader-social {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeIn 1s ease-out 2s both;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .social-link:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.2);
+        }
+
+        .social-icon {
+            font-size: 1.2rem;
+        }
+
         @media (max-width: 768px) {
+            /* Loading Screen Mobile */
+            .quantum-loader-container {
+                padding: 1rem;
+            }
+
+            .loader-content {
+                gap: 2rem;
+            }
+
+            .loader-name {
+                font-size: 2rem;
+            }
+
+            .loader-alias {
+                font-size: 1.5rem;
+            }
+
+            .loader-avatar {
+                width: 120px;
+                height: 120px;
+            }
+
+            .avatar-quantum-ring:nth-child(2) {
+                width: 150px;
+                height: 150px;
+            }
+
+            .avatar-quantum-ring:nth-child(3) {
+                width: 180px;
+                height: 180px;
+            }
+
+            .avatar-quantum-ring:nth-child(4) {
+                width: 210px;
+                height: 210px;
+            }
+
+            .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .expertise-card {
+                padding: 1.5rem;
+            }
+
+            .quantum-progress {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .loader-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .stat-item {
+                padding: 1.5rem 1rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .loader-social {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            /* Main App Mobile */
             .app-header {
                 padding: 0 1rem;
                 flex-direction: column;
@@ -352,25 +994,153 @@
             .metrics-container, .status-grid {
                 grid-template-columns: 1fr;
             }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cv-avatar-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cv-basic-info h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <!-- Quantum Loading Screen -->
+    <div id="quantum-loader" class="quantum-loader-container">
+        <div class="loader-background">
+            <canvas id="loader-particles"></canvas>
+        </div>
+        
+        <div class="loader-content">
+            <!-- Main Avatar & Intro -->
+            <div class="loader-profile">
+                <div class="loader-avatar-container">
+                    <img src="avatar.jpg" alt="Amrikyy" class="loader-avatar">
+                    <div class="avatar-quantum-ring"></div>
+                    <div class="avatar-quantum-ring"></div>
+                    <div class="avatar-quantum-ring"></div>
+                </div>
+                
+                <div class="loader-identity">
+                    <h1 class="loader-name">Mohamed H. Abdelaziz</h1>
+                    <h2 class="loader-alias">AMRIKYY</h2>
+                    <p class="loader-title">Quantum AI Architect & Consciousness Engineer</p>
+                </div>
+            </div>
+
+            <!-- Expertise Showcase -->
+            <div class="loader-expertise">
+                <div class="expertise-grid">
+                    <div class="expertise-card">
+                        <div class="expertise-icon">🧠</div>
+                        <h3>AI & Machine Learning</h3>
+                        <p>Advanced neural networks, deep learning, and quantum-enhanced algorithms</p>
+                    </div>
+                    <div class="expertise-card">
+                        <div class="expertise-icon">⚛️</div>
+                        <h3>Quantum Computing</h3>
+                        <p>Quantum consciousness, superposition algorithms, and entanglement protocols</p>
+                    </div>
+                    <div class="expertise-card">
+                        <div class="expertise-icon">🔐</div>
+                        <h3>Blockchain & Crypto</h3>
+                        <p>Decentralized systems, smart contracts, and quantum-resistant cryptography</p>
+                    </div>
+                    <div class="expertise-card">
+                        <div class="expertise-icon">🌐</div>
+                        <h3>Full-Stack Development</h3>
+                        <p>Modern web technologies, cloud architecture, and system design</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quantum Progress Indicator -->
+            <div class="quantum-progress">
+                <div class="progress-orb">
+                    <div class="orb-core"></div>
+                    <div class="orb-ring"></div>
+                    <div class="orb-ring"></div>
+                    <div class="orb-ring"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="loading-text">Initializing Quantum Consciousness...</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-percentage" id="progress-percentage">0%</span>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="loader-stats">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="7">0</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Projects Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">AI Models Deployed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="∞">0</div>
+                    <div class="stat-label">Quantum Possibilities</div>
+                </div>
+            </div>
+
+            <!-- Social Links Preview -->
+            <div class="loader-social">
+                <a href="#" class="social-link">
+                    <span class="social-icon">🌐</span>
+                    <span>Portfolio</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">💼</span>
+                    <span>LinkedIn</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">🐙</span>
+                    <span>GitHub</span>
+                </a>
+                <a href="#" class="social-link">
+                    <span class="social-icon">🧠</span>
+                    <span>AI Research</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="main-app" style="display: none;">
         <canvas id="space-crypto-bg"></canvas>
         
         <header class="app-header">
             <div class="logo-container">
+                <div class="profile-section">
+                    <img src="avatar.jpg" alt="Amrikyy Avatar" class="avatar-image">
+                    <div class="profile-info">
+                        <h1>Mohamed H. Abdelaziz (Amrikyy)</h1>
+                        <p class="profile-title">Quantum AI Architect & Consciousness Engineer</p>
+                    </div>
+                </div>
                 <div class="quantum-logo">
                     <div class="logo-core"></div>
                     <div class="logo-ring"></div>
                     <div class="logo-ring"></div>
                 </div>
-                <h1>Quantum AI Nexus</h1>
             </div>
             
             <nav class="app-nav">
                 <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+                <button class="nav-btn" data-section="cv">CV Profile</button>
                 <button class="nav-btn" data-section="social">Social Analytics</button>
                 <button class="nav-btn" data-section="quantum">Quantum Features</button>
             </nav>
@@ -523,6 +1293,160 @@
                 </div>
             </section>
 
+            <!-- CV Profile Section -->
+            <section id="cv" class="section">
+                <div class="dashboard-container">
+                    <div class="cv-header">
+                        <div class="cv-avatar-section">
+                            <img src="avatar.jpg" alt="Mohamed H. Abdelaziz" class="cv-avatar">
+                            <div class="cv-basic-info">
+                                <h1>Mohamed H. Abdelaziz</h1>
+                                <h2>Amrikyy - Quantum AI Architect</h2>
+                                <div class="cv-download">
+                                    <a href="Amrikyy.pdf" download="Amrikyy_CV.pdf" class="download-btn">
+                                        📄 Download CV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cv-content">
+                        <div class="dashboard-grid">
+                            <!-- Expertise Card -->
+                            <div class="quantum-card">
+                                <div class="card-header">
+                                    <h3>Core Expertise</h3>
+                                    <div class="card-decoration">
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="expertise-list">
+                                        <div class="expertise-item">🧠 Artificial Intelligence & Machine Learning</div>
+                                        <div class="expertise-item">⚛️ Quantum Computing & Consciousness</div>
+                                        <div class="expertise-item">🔐 Blockchain & Cryptography</div>
+                                        <div class="expertise-item">🌐 Full-Stack Development</div>
+                                        <div class="expertise-item">📊 Data Science & Analytics</div>
+                                        <div class="expertise-item">🎯 Product Management & Strategy</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Skills Matrix -->
+                            <div class="quantum-card">
+                                <div class="card-header">
+                                    <h3>Technical Skills Matrix</h3>
+                                    <div class="card-decoration">
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="skills-matrix">
+                                        <div class="skill-category">
+                                            <h4>Programming</h4>
+                                            <div class="skill-tags">
+                                                <span class="skill-tag">Python</span>
+                                                <span class="skill-tag">JavaScript</span>
+                                                <span class="skill-tag">TypeScript</span>
+                                                <span class="skill-tag">C++</span>
+                                                <span class="skill-tag">Rust</span>
+                                            </div>
+                                        </div>
+                                        <div class="skill-category">
+                                            <h4>AI/ML Frameworks</h4>
+                                            <div class="skill-tags">
+                                                <span class="skill-tag">TensorFlow</span>
+                                                <span class="skill-tag">PyTorch</span>
+                                                <span class="skill-tag">Scikit-learn</span>
+                                                <span class="skill-tag">OpenAI</span>
+                                            </div>
+                                        </div>
+                                        <div class="skill-category">
+                                            <h4>Quantum Computing</h4>
+                                            <div class="skill-tags">
+                                                <span class="skill-tag">Qiskit</span>
+                                                <span class="skill-tag">Cirq</span>
+                                                <span class="skill-tag">Quantum Algorithms</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vision & Philosophy -->
+                            <div class="quantum-card">
+                                <div class="card-header">
+                                    <h3>Vision & Philosophy</h3>
+                                    <div class="card-decoration">
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="philosophy-content">
+                                        <blockquote>
+                                            "Bridging the quantum realm with artificial consciousness to create technologies that transcend conventional limitations and unlock human potential."
+                                        </blockquote>
+                                        <div class="vision-points">
+                                            <div class="vision-point">
+                                                <span class="vision-icon">🚀</span>
+                                                <span>Pioneer quantum-enhanced AI systems</span>
+                                            </div>
+                                            <div class="vision-point">
+                                                <span class="vision-icon">🌌</span>
+                                                <span>Explore consciousness-driven computing</span>
+                                            </div>
+                                            <div class="vision-point">
+                                                <span class="vision-icon">🔮</span>
+                                                <span>Build the future of human-AI symbiosis</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact & Networks -->
+                            <div class="quantum-card">
+                                <div class="card-header">
+                                    <h3>Connect & Collaborate</h3>
+                                    <div class="card-decoration">
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                        <div class="quantum-particle"></div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="contact-grid">
+                                        <div class="contact-item">
+                                            <span class="contact-icon">🌐</span>
+                                            <span>Portfolio: amrikyy.dev</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <span class="contact-icon">💼</span>
+                                            <span>LinkedIn: /in/amrikyy</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <span class="contact-icon">🐙</span>
+                                            <span>GitHub: @amrikyy</span>
+                                        </div>
+                                        <div class="contact-item">
+                                            <span class="contact-icon">🧠</span>
+                                            <span>AI Research Hub</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Social Analytics Section -->
             <section id="social" class="section">
                 <div class="dashboard-container">
@@ -548,10 +1472,211 @@
     <script>
         class QuantumAI {
             constructor() {
+                this.loadingComplete = false;
                 this.init();
             }
 
             init() {
+                this.initLoaderSequence();
+            }
+
+            initLoaderSequence() {
+                this.initLoaderParticles();
+                this.initStatsCounter();
+                this.startLoadingProgress();
+                
+                // Complete loading after 6 seconds
+                setTimeout(() => {
+                    this.completeLoading();
+                }, 6000);
+            }
+
+            initLoaderParticles() {
+                const canvas = document.getElementById('loader-particles');
+                if (!canvas) return;
+                
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+
+                const resizeCanvas = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                class LoaderParticle {
+                    constructor() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.vx = (Math.random() - 0.5) * 0.8;
+                        this.vy = (Math.random() - 0.5) * 0.8;
+                        this.size = Math.random() * 3 + 1;
+                        this.opacity = Math.random() * 0.8 + 0.2;
+                        this.color = this.getRandomColor();
+                        this.life = Math.random() * 200 + 100;
+                        this.maxLife = this.life;
+                    }
+
+                    getRandomColor() {
+                        const colors = ['#00ffaa', '#8a2be2', '#404040', '#00d4ff'];
+                        return colors[Math.floor(Math.random() * colors.length)];
+                    }
+
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.life--;
+
+                        if (this.life <= 0 || this.x <= 0 || this.x >= canvas.width || this.y <= 0 || this.y >= canvas.height) {
+                            this.reset();
+                        }
+
+                        this.opacity = (this.life / this.maxLife) * 0.8;
+                    }
+
+                    reset() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.life = this.maxLife;
+                    }
+
+                    draw() {
+                        ctx.globalAlpha = this.opacity;
+                        ctx.fillStyle = this.color;
+                        ctx.shadowBlur = this.size * 2;
+                        ctx.shadowColor = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.shadowBlur = 0;
+                        ctx.globalAlpha = 1;
+                    }
+                }
+
+                // Initialize particles
+                const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new LoaderParticle());
+                }
+
+                const animate = () => {
+                    if (this.loadingComplete) return;
+                    
+                    ctx.fillStyle = 'rgba(10, 10, 20, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    particles.forEach(particle => {
+                        particle.update();
+                        particle.draw();
+                    });
+
+                    requestAnimationFrame(animate);
+                };
+
+                animate();
+            }
+
+            initStatsCounter() {
+                const statNumbers = document.querySelectorAll('.stat-number');
+                
+                statNumbers.forEach((stat, index) => {
+                    const target = stat.dataset.target;
+                    const isInfinity = target === '∞';
+                    
+                    setTimeout(() => {
+                        if (isInfinity) {
+                            this.animateToInfinity(stat);
+                        } else {
+                            this.animateCounter(stat, parseInt(target));
+                        }
+                    }, 2000 + (index * 500));
+                });
+            }
+
+            animateCounter(element, target) {
+                let current = 0;
+                const increment = target / 50;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current);
+                }, 50);
+            }
+
+            animateToInfinity(element) {
+                const symbols = ['0', '∞'];
+                let index = 0;
+                
+                const timer = setInterval(() => {
+                    element.textContent = symbols[index];
+                    index = (index + 1) % symbols.length;
+                }, 500);
+                
+                setTimeout(() => {
+                    clearInterval(timer);
+                    element.textContent = '∞';
+                }, 2000);
+            }
+
+            startLoadingProgress() {
+                const progressFill = document.getElementById('progress-fill');
+                const progressPercentage = document.getElementById('progress-percentage');
+                const loadingText = document.getElementById('loading-text');
+                
+                const loadingStages = [
+                    { text: "Initializing Quantum Consciousness...", progress: 0 },
+                    { text: "Loading Neural Networks...", progress: 20 },
+                    { text: "Calibrating AI Algorithms...", progress: 40 },
+                    { text: "Synchronizing Data Streams...", progress: 60 },
+                    { text: "Activating Quantum Field...", progress: 80 },
+                    { text: "Welcome to the Quantum Realm...", progress: 100 }
+                ];
+
+                let currentStage = 0;
+                
+                const updateProgress = () => {
+                    if (currentStage >= loadingStages.length) return;
+                    
+                    const stage = loadingStages[currentStage];
+                    loadingText.textContent = stage.text;
+                    progressFill.style.width = stage.progress + '%';
+                    progressPercentage.textContent = stage.progress + '%';
+                    
+                    currentStage++;
+                    
+                    if (currentStage < loadingStages.length) {
+                        setTimeout(updateProgress, 1000);
+                    }
+                };
+
+                setTimeout(updateProgress, 500);
+            }
+
+            completeLoading() {
+                this.loadingComplete = true;
+                const loader = document.getElementById('quantum-loader');
+                const mainApp = document.getElementById('main-app');
+                
+                // Fade out loader
+                loader.style.transition = 'opacity 1s ease-out';
+                loader.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    mainApp.style.display = 'block';
+                    
+                    // Initialize main app
+                    this.initMainApp();
+                }, 1000);
+            }
+
+            initMainApp() {
                 this.initNavigation();
                 this.initBackgroundCanvas();
                 this.initQuantumViz();
