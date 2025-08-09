@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 // Simulated analytics data store
 let analyticsData = {
   totalQueries: 12847,

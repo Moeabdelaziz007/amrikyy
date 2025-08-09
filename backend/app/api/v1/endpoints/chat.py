@@ -48,11 +48,12 @@ async def query_chat(
         if len(request.message) > 10000:
             raise ValidationError("Message too long", "message")
         
-        # Process the query through RAG pipeline
+        # Process the query through enhanced RAG pipeline with memory
         response = await rag_service.process_query(
             query=request.message,
             conversation_id=request.conversation_id,
-            options=request.options
+            options=request.options,
+            user_id=getattr(request, 'user_id', 'anonymous')
         )
         
         # Save conversation asynchronously

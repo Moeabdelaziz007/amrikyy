@@ -58,6 +58,12 @@ class Settings(BaseSettings):
     RERANK_TOP_K: int = 5
     MIN_CONFIDENCE_THRESHOLD: float = 0.3
     
+    # Memory Settings
+    MEMORY_MAX_ITEMS: int = 10000
+    MEMORY_DECAY_DAYS: int = 30
+    MEMORY_IMPORTANCE_THRESHOLD: float = 0.3
+    CONVERSATION_HISTORY_LIMIT: int = 50
+    
     # File Storage
     STORAGE_TYPE: str = "local"  # local, s3
     LOCAL_STORAGE_PATH: str = "./storage"

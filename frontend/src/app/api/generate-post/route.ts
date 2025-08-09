@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     const { newsSummary, tone, keyword } = await request.json()
@@ -102,25 +104,78 @@ Only return the JSON, no extra commentary.`
 
 function generateMockPost(keyword: string, tone: string, newsSummary: string) {
   const hooks = {
-    inspirational: `The future of ${keyword} is here! 🚀`,
-    technical: `Breaking: ${keyword} technology advances rapidly.`,
-    storytelling: `I just discovered something incredible about ${keyword}...`
+    inspirational: `🚀 The ${keyword} revolution is transforming everything!`,
+    technical: `⚡ Breaking: ${keyword} technology reaches new milestone`,
+    storytelling: `💡 Here's what I discovered about ${keyword} that changed my perspective...`
   }
 
-  const content = `${hooks[tone as keyof typeof hooks]}
+  const toneStyles = {
+    inspirational: {
+      emoji: '🌟',
+      callToAction: `Ready to be part of the ${keyword} revolution? Share your thoughts below! 👇`,
+      structure: 'motivational'
+    },
+    technical: {
+      emoji: '🔬',
+      callToAction: `What's your analysis of these ${keyword} developments? Let's discuss the implications! 💬`,
+      structure: 'analytical'
+    },
+    storytelling: {
+      emoji: '📖',
+      callToAction: `What's your ${keyword} story? I'd love to hear your experiences! ✨`,
+      structure: 'narrative'
+    }
+  }
 
-The latest developments in ${keyword} are reshaping our industry in ways we never imagined.
+  const style = toneStyles[tone as keyof typeof toneStyles] || toneStyles.inspirational
+  const firstNews = newsSummary.split('\n\n')[0] || newsSummary.slice(0, 200)
 
-${newsSummary.slice(0, 200)}...
+  let content = `${hooks[tone as keyof typeof hooks]}
 
-This isn't just another trend – it's a fundamental shift that will impact how we work, innovate, and grow.
+${firstNews}
 
-What's your take on the ${keyword} revolution? Are you ready for what's coming next?`
+${style.emoji} Key insights:
+• This represents a major shift in how we approach ${keyword}
+• Early adopters are already seeing significant advantages
+• The implications extend far beyond what we initially expected
+
+This isn't just another trend – it's a fundamental transformation that will reshape our industry.
+
+${style.callToAction}`
+
+  // Generate relevant hashtags based on keyword
+  const baseHashtags = [keyword.toLowerCase().replace(/\s+/g, ''), 'innovation', 'technology', 'future']
+  const additionalHashtags = {
+    'ai': ['artificialintelligence', 'machinelearning', 'tech'],
+    'blockchain': ['crypto', 'web3', 'fintech'],
+    'startup': ['entrepreneur', 'business', 'growth'],
+    'marketing': ['digitalmarketing', 'branding', 'strategy'],
+    'tech': ['software', 'development', 'coding']
+  }
+
+  const keywordLower = keyword.toLowerCase()
+  let hashtags = [...baseHashtags]
+  
+  Object.entries(additionalHashtags).forEach(([key, tags]) => {
+    if (keywordLower.includes(key)) {
+      hashtags = [...hashtags, ...tags.slice(0, 2)]
+    }
+  })
+
+  // Add tone-specific hashtags
+  if (tone === 'inspirational') hashtags.push('motivation', 'leadership')
+  if (tone === 'technical') hashtags.push('analysis', 'research')
+  if (tone === 'storytelling') hashtags.push('experience', 'insights')
 
   return {
     content,
-    hashtags: [keyword.toLowerCase(), 'innovation', 'technology', 'future', 'business'],
-    tone
+    hashtags: hashtags.slice(0, 8), // Limit to 8 hashtags
+    tone,
+    metrics: {
+      estimatedReach: Math.floor(Math.random() * 5000) + 2000,
+      engagementRate: (Math.random() * 3 + 4).toFixed(1) + '%',
+      viralPotential: Math.floor(Math.random() * 40) + 60
+    }
   }
 }
 

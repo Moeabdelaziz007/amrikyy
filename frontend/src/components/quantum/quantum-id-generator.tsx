@@ -67,14 +67,15 @@ export function QuantumIdGenerator() {
   const generateQuantumId = async () => {
     setIsGenerating(true)
     
-    // Simulate AI processing with quantum-inspired calculations
-    await new Promise(resolve => setTimeout(resolve, 3000))
-    
-    const quantumScore = Math.floor(Math.random() * 40) + 60 // 60-100
-    const aiPersonality = Math.floor(Math.random() * 30) + 70 // 70-100
-    const skillProficiency = Math.min(95, formData.experienceLevel * 15 + Math.random() * 20)
-    const futurePotential = Math.floor(Math.random() * 25) + 75 // 75-100
-    const careerMatch = Math.floor(Math.random() * 20) + 80 // 80-100
+    try {
+      // Simulate AI processing with quantum-inspired calculations
+      await new Promise(resolve => setTimeout(resolve, 3000))
+      
+      const quantumScore = Math.floor(Math.random() * 40) + 60 // 60-100
+      const aiPersonality = Math.floor(Math.random() * 30) + 70 // 70-100
+      const skillProficiency = Math.min(95, formData.experienceLevel * 15 + Math.random() * 20)
+      const futurePotential = Math.floor(Math.random() * 25) + 75 // 75-100
+      const careerMatch = Math.floor(Math.random() * 20) + 80 // 80-100
 
     const analysis = generateQuantumAnalysis(formData, {
       quantumScore,
@@ -102,8 +103,35 @@ export function QuantumIdGenerator() {
       timestamp: new Date().toISOString()
     }
 
-    setProfile(newProfile)
-    setIsGenerating(false)
+      setProfile(newProfile)
+    } catch (error) {
+      console.error('Error generating quantum ID:', error)
+      // Still show a generated profile even on error for demo purposes
+      const fallbackProfile: QuantumProfile = {
+        id: `QID-${Date.now().toString(36).toUpperCase()}`,
+        fullName: formData.fullName,
+        primarySkill: formData.primarySkill,
+        experienceLevel: formData.experienceLevel,
+        personalityTrait: formData.personalityTrait,
+        idType: formData.idType,
+        quantumScore: 85,
+        aiPersonality: 92,
+        skillProficiency: 88,
+        futurePotential: 95,
+        careerMatch: 91,
+        quantumAnalysis: `Your quantum field demonstrates exceptional potential in ${formData.primarySkill}. Advanced AI analysis indicates strong compatibility with innovative technologies and leadership roles.`,
+        recommendations: [
+          'Explore emerging technologies in your field',
+          'Consider leadership opportunities',
+          'Develop cross-functional expertise'
+        ],
+        digitalSignature: generateDigitalSignature(),
+        timestamp: new Date().toISOString()
+      }
+      setProfile(fallbackProfile)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const generateQuantumAnalysis = (data: any, scores: any) => {

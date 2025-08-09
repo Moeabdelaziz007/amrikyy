@@ -13,6 +13,7 @@ from app.models.schemas import QueryRequest, QueryResponse, Source, QueryOptions
 from app.services.retrieval_service import RetrievalService
 from app.services.llm_service import LLMService
 from app.services.embedding_service import EmbeddingService
+from app.services.memory_service import MemoryService
 from app.core.exceptions import RetrievalError, LLMError
 
 logger = structlog.get_logger()
@@ -24,23 +25,29 @@ class RAGService:
         self.retrieval_service = RetrievalService()
         self.llm_service = LLMService()
         self.embedding_service = EmbeddingService()
+        self.memory_service = MemoryService()
+        self._memory_initialized = False
     
     async def process_query(
         self, 
         query: str, 
         conversation_id: Optional[str] = None,
-        options: Optional[QueryOptions] = None
+        options: Optional[QueryOptions] = None,
+        user_id: Optional[str] = None
     ) -> QueryResponse:
         """
-        Process a query through the complete RAG pipeline
+        Process a query through the enhanced RAG pipeline with memory
         
         Steps:
-        1. Generate query embedding
-        2. Retrieve relevant documents
-        3. Rerank results
-        4. Build context
-        5. Generate response with LLM
-        6. Extract citations
+        1. Initialize memory if needed
+        2. Get personalized context from memory
+        3. Generate query embedding
+        4. Retrieve relevant documents
+        5. Search memory for relevant information
+        6. Rerank and combine results
+        7. Build enhanced context
+        8. Generate personalized response
+        9. Update memory with conversation
         """
         start_time = datetime.utcnow()
         
@@ -48,12 +55,24 @@ class RAGService:
             options = QueryOptions()
         
         try:
-            logger.info("Starting RAG pipeline", query=query[:100])
+            logger.info("Starting enhanced RAG pipeline", query=query[:100])
             
-            # Step 1: Generate query embedding
+            # Step 1: Initialize memory service if needed
+            if not self._memory_initialized:
+                await self.memory_service.initialize()
+                self._memory_initialized = True
+            
+            # Step 2: Get personalized context from memory
+            memory_context = await self.memory_service.get_personalized_context(
+                query=query,
+                user_id=user_id,
+                session_id=conversation_id
+            )
+            
+            # Step 3: Generate query embedding
             query_embedding = await self.embedding_service.embed_query(query)
             
-            # Step 2: Retrieve relevant documents
+            # Step 4: Retrieve relevant documents from knowledge base
             retrieved_docs = await self.retrieval_service.retrieve(
                 query_embedding=query_embedding,
                 query_text=query,
@@ -62,7 +81,16 @@ class RAGService:
             
             logger.info("Retrieved documents", count=len(retrieved_docs))
             
-            # Step 3: Rerank if we have results
+            # Step 5: Search memory for relevant information
+            memory_items = await self.memory_service.search_memory(
+                query=query,
+                top_k=3,
+                min_similarity=0.6
+            )
+            
+            logger.info("Retrieved memory items", count=len(memory_items))
+            
+            # Step 6: Rerank documents if we have results
             if retrieved_docs:
                 reranked_docs = await self.retrieval_service.rerank(
                     query=query,
@@ -72,25 +100,33 @@ class RAGService:
             else:
                 reranked_docs = []
             
-            # Step 4: Build context and prompt
-            context = self._build_context(reranked_docs)
-            prompt = self._build_prompt(query, context)
+            # Step 7: Build enhanced context with memory
+            context = self._build_enhanced_context(reranked_docs, memory_items, memory_context)
+            prompt = self._build_enhanced_prompt(query, context, memory_context)
             
-            # Step 5: Generate response
-            response_content = await self.llm_service.generate_response(
-                prompt=prompt,
-                temperature=options.temperature or settings.OPENAI_TEMPERATURE,
-                max_tokens=options.max_tokens or settings.OPENAI_MAX_TOKENS,
-                model=options.model or settings.OPENAI_MODEL
+            # Step 8: Generate personalized response
+            response_content = await self.llm_service.generate_personalized_response(
+                query=query,
+                retrieved_context=context,
+                conversation_history=memory_context.get("conversation_history", [])
             )
             
-            # Step 6: Extract sources and create response
-            sources = self._extract_sources(reranked_docs)
+            # Step 9: Extract sources and create response
+            sources = self._extract_sources(reranked_docs, memory_items)
+            
+            # Step 10: Update memory with conversation
+            if user_id and conversation_id:
+                await self.memory_service.add_conversation_memory(
+                    user_id=user_id,
+                    session_id=conversation_id,
+                    user_message=query,
+                    assistant_response=response_content
+                )
             
             # Calculate processing time
             processing_time = (datetime.utcnow() - start_time).total_seconds()
             
-            # Create response
+            # Create enhanced response
             response = QueryResponse(
                 id=self._generate_response_id(query, response_content),
                 content=response_content,
@@ -101,15 +137,16 @@ class RAGService:
                 processing_time=processing_time
             )
             
-            logger.info("RAG pipeline completed", 
+            logger.info("Enhanced RAG pipeline completed", 
                        response_id=response.id, 
                        processing_time=processing_time,
-                       sources_count=len(sources))
+                       sources_count=len(sources),
+                       memory_items_count=len(memory_items))
             
             return response
             
         except Exception as e:
-            logger.error("RAG pipeline failed", error=str(e), query=query[:100])
+            logger.error("Enhanced RAG pipeline failed", error=str(e), query=query[:100])
             raise LLMError(f"Failed to process query: {str(e)}")
     
     def _build_context(self, documents: List[dict]) -> str:
@@ -148,10 +185,71 @@ Respond in Arabic when appropriate, and always maintain a helpful and profession
         
         return full_prompt
     
-    def _extract_sources(self, documents: List[dict]) -> List[Source]:
-        """Extract sources from retrieved documents"""
+    def _build_enhanced_context(self, documents: List[dict], memory_items: List, memory_context: dict) -> str:
+        """Build enhanced context from documents, memory, and conversation history"""
+        context_parts = []
+        
+        # Add memory-based context first (most personalized)
+        if memory_items:
+            context_parts.append("=== PERSONAL KNOWLEDGE ===")
+            for i, memory in enumerate(memory_items, 1):
+                context_parts.append(f"Memory {i}:")
+                context_parts.append(f"Category: {memory.category}")
+                context_parts.append(f"Content: {memory.content}")
+                context_parts.append(f"Importance: {memory.importance}")
+                context_parts.append("")
+        
+        # Add retrieved documents
+        if documents:
+            context_parts.append("=== RETRIEVED DOCUMENTS ===")
+            for i, doc in enumerate(documents, 1):
+                source_info = f"===SOURCE {i}==="
+                metadata = f"metadata: {doc.get('metadata', {})}"
+                passage = f"passage: \"{doc['content']}\""
+                end_marker = f"===END SOURCE {i}==="
+                
+                context_parts.append(f"{source_info}\n{metadata}\n{passage}\n{end_marker}")
+        
+        # Add conversation context
+        if memory_context.get("conversation_history"):
+            context_parts.append("=== CONVERSATION HISTORY ===")
+            for msg in memory_context["conversation_history"][-3:]:  # Last 3 messages
+                role = "User" if msg.get("role") == "user" else "Assistant"
+                context_parts.append(f"{role}: {msg.get('content', '')}")
+        
+        return "\n\n".join(context_parts)
+    
+    def _build_enhanced_prompt(self, query: str, context: str, memory_context: dict) -> str:
+        """Build enhanced prompt with memory context"""
+        user_prefs = memory_context.get("user_preferences", {})
+        preferred_lang = user_prefs.get("preferred_language", "ar")
+        interests = user_prefs.get("interests", [])
+        
+        system_prompt = f"""أنت Amrikyy AI - مساعد ذكي متخصص ومطور. اتبع هذه القواعد دائماً:
+
+1) عندما يسأل المستخدم سؤالاً واقعياً، استشر المعرفة الشخصية والمصادر المسترجعة أولاً
+2) لكل ادعاء واقعي، أدرج مراجع بين أقواس مربعة مثل [المصدر 1] أو [الذاكرة الشخصية]
+3) إذا لم تدعم المصادر الإجابة، لا تختلق معلومات. قل "لم أجد مصدر داعم"
+4) اجعل إجاباتك طبيعية ومفيدة مع الحفاظ على شخصيتي الودودة والمهنية
+5) استخدم العربية كلغة أساسية ما لم يُطلب غير ذلك
+
+معلومات شخصية: أنا محمد عبدالعزيز (Amrikyy)، مهندس أمن سيبراني ومطور ذكاء اصطناعي."""
+
+        if interests:
+            system_prompt += f"\nاهتمامات المستخدم: {', '.join(interests)}"
+        
+        if context:
+            full_prompt = f"{system_prompt}\n\n{context}\n\nINSTRUCTION: أجب باستخدام المعرفة الشخصية والمصادر المسترجعة. لكل ادعاء واقعي، اذكر المصدر.\n\nسؤال المستخدم: {query}\n\nAmrikyy:"
+        else:
+            full_prompt = f"{system_prompt}\n\nلم يتم العثور على مصادر ذات صلة في قاعدة المعرفة. أجب بناءً على معرفتي الشخصية مع الإشارة لعدم وجود مصادر محددة.\n\nسؤال المستخدم: {query}\n\nAmrikyy:"
+        
+        return full_prompt
+    
+    def _extract_sources(self, documents: List[dict], memory_items: List = None) -> List[Source]:
+        """Extract sources from retrieved documents and memory items"""
         sources = []
         
+        # Add document sources
         for i, doc in enumerate(documents, 1):
             source = Source(
                 id=doc.get('id', f'source_{i}'),
@@ -163,6 +261,25 @@ Respond in Arabic when appropriate, and always maintain a helpful and profession
                 metadata=doc.get('metadata')
             )
             sources.append(source)
+        
+        # Add memory sources
+        if memory_items:
+            for i, memory in enumerate(memory_items, 1):
+                source = Source(
+                    id=memory.id,
+                    title=f"Personal Knowledge - {memory.category.title()}",
+                    snippet=memory.content[:500] + ('...' if len(memory.content) > 500 else ''),
+                    url=None,
+                    timestamp=memory.timestamp,
+                    confidence=memory.importance,
+                    metadata={
+                        "type": "memory",
+                        "category": memory.category,
+                        "tags": memory.tags,
+                        "access_count": memory.access_count
+                    }
+                )
+                sources.append(source)
         
         return sources
     

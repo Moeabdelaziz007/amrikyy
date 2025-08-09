@@ -34,9 +34,9 @@ interface LoadingSpinnerProps extends VariantProps<typeof spinnerVariants> {
   label?: string
 }
 
-export function LoadingSpinner({ size, variant, className, label = 'جاري التحميل...' }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size, variant, className, label = 'Loading...' }: LoadingSpinnerProps) {
   return (
-    <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse" role="status" aria-label={label}>
+    <div className="flex items-center justify-center space-x-2" role="status" aria-label={label}>
       <div className={cn(spinnerVariants({ size, variant }), className)} />
       <span className="sr-only">{label}</span>
     </div>
@@ -46,7 +46,7 @@ export function LoadingSpinner({ size, variant, className, label = 'جاري ا�
 // Advanced Loading Animations
 export function PulseLoader({ className }: { className?: string }) {
   return (
-    <div className={cn('flex space-x-1 rtl:space-x-reverse', className)}>
+    <div className={cn('flex space-x-1', className)}>
       {[0, 1, 2].map((i) => (
         <div
           key={i}
@@ -60,7 +60,7 @@ export function PulseLoader({ className }: { className?: string }) {
 
 export function BouncingDots({ className }: { className?: string }) {
   return (
-    <div className={cn('flex space-x-1 rtl:space-x-reverse', className)}>
+    <div className={cn('flex space-x-1', className)}>
       {[0, 1, 2].map((i) => (
         <div
           key={i}
@@ -74,7 +74,7 @@ export function BouncingDots({ className }: { className?: string }) {
 
 export function WaveLoader({ className }: { className?: string }) {
   return (
-    <div className={cn('flex space-x-1 rtl:space-x-reverse items-end', className)}>
+    <div className={cn('flex space-x-1 items-end', className)}>
       {[0, 1, 2, 3, 4].map((i) => (
         <div
           key={i}

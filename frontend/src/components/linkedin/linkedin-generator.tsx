@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { generateMockNews, generateLinkedInPost, type NewsArticle, type GeneratedPost } from '@/lib/demo-data'
 import { 
   TrendingUp, 
   Copy, 
@@ -31,6 +32,11 @@ interface GeneratedPost {
   content: string
   hashtags: string[]
   tone: string
+  metrics?: {
+    estimatedReach?: number
+    engagementRate?: string
+    viralPotential?: number
+  }
 }
 
 export function LinkedInGenerator() {
@@ -44,14 +50,14 @@ export function LinkedInGenerator() {
   const [error, setError] = useState('')
 
   const tones = [
-    { id: 'inspirational' as const, label: 'تحفيزية', icon: '🚀', description: 'محتوى ملهم ومحفز' },
-    { id: 'technical' as const, label: 'تقنية', icon: '⚡', description: 'تحليل تقني عميق' },
-    { id: 'storytelling' as const, label: 'قصصية', icon: '📖', description: 'سرد جذاب وشخصي' }
+    { id: 'inspirational' as const, label: 'Inspirational', icon: '🚀', description: 'Motivational and uplifting content' },
+    { id: 'technical' as const, label: 'Technical', icon: '⚡', description: 'Deep technical analysis' },
+    { id: 'storytelling' as const, label: 'Storytelling', icon: '📖', description: 'Engaging personal narrative' }
   ]
 
   const fetchTrendingNews = async () => {
     if (!keyword.trim()) {
-      setError('الرجاء إدخال كلمة مفتاحية')
+      setError('Please enter a keyword')
       return
     }
 
@@ -59,22 +65,43 @@ export function LinkedInGenerator() {
     setError('')
     
     try {
-      // Using GNews API (free tier)
       const response = await fetch(`/api/news?q=${encodeURIComponent(keyword)}&lang=en&max=5`)
       
       if (!response.ok) {
-        throw new Error('فشل في جلب الأخبار')
+        throw new Error('Failed to fetch news')
       }
       
       const data = await response.json()
       setNews(data.articles || [])
       
-      if (data.articles?.length === 0) {
-        setError('لم يتم العثور على أخبار لهذه الكلمة المفتاحية')
+      // Show demo mode message if applicable
+      if (data.source === 'demo' || data.source === 'fallback') {
+        setError(`✨ Demo Mode: Showing simulated trending news for "${keyword}". In production, this would fetch real-time news data.`)
+      } else if (data.articles?.length === 0) {
+        setError('No news found for this keyword')
       }
     } catch (err) {
-      setError('حدث خطأ في جلب الأخبار. تأكد من الاتصال بالإنترنت.')
+      setError('Unable to fetch news. Displaying demo data instead.')
       console.error('Error fetching news:', err)
+      
+      // Fallback to client-side mock data
+      const mockArticles = [
+        {
+          title: `${keyword} Technology Breakthrough Changes Everything`,
+          description: `Revolutionary developments in ${keyword} promise to transform industries worldwide.`,
+          url: 'https://example.com/article1',
+          publishedAt: new Date().toISOString(),
+          source: { name: 'Tech Innovation Daily' }
+        },
+        {
+          title: `Market Leaders Invest Billions in ${keyword}`,
+          description: `Major corporations announce unprecedented investments in ${keyword} technology.`,
+          url: 'https://example.com/article2',
+          publishedAt: new Date(Date.now() - 3600000).toISOString(),
+          source: { name: 'Business Technology' }
+        }
+      ]
+      setNews(mockArticles)
     } finally {
       setIsLoadingNews(false)
     }
@@ -82,7 +109,7 @@ export function LinkedInGenerator() {
 
   const generateViralPost = async () => {
     if (news.length === 0) {
-      setError('الرجاء جلب الأخبار أولاً')
+      setError('Please fetch news first')
       return
     }
 
@@ -107,14 +134,43 @@ export function LinkedInGenerator() {
       })
 
       if (!response.ok) {
-        throw new Error('فشل في توليد المنشور')
+        throw new Error('Failed to generate post')
       }
 
       const data = await response.json()
       setGeneratedPost(data)
+      
+      // Clear any demo mode errors since post generation succeeded
+      if (error.includes('Demo Mode')) {
+        setError('')
+      }
     } catch (err) {
-      setError('حدث خطأ في توليد المنشور')
+      setError('Post generation failed. Showing demo content instead.')
       console.error('Error generating post:', err)
+      
+      // Fallback to client-side generation
+      const fallbackPost = {
+        content: `🚀 Exciting developments in ${keyword}!
+
+Based on the latest industry insights, ${keyword} is reshaping how we think about innovation and technology.
+
+🌟 Key highlights:
+• Revolutionary breakthroughs are emerging daily
+• Industry leaders are investing heavily in this space
+• The potential for transformation is unprecedented
+
+This isn't just another trend – it's a fundamental shift that will define the future of our industry.
+
+What's your perspective on the ${keyword} revolution? Share your thoughts below! 👇`,
+        hashtags: [keyword.toLowerCase().replace(/\s+/g, ''), 'innovation', 'technology', 'future', 'business', 'trends'],
+        tone: selectedTone,
+        metrics: {
+          estimatedReach: Math.floor(Math.random() * 3000) + 1500,
+          engagementRate: '4.2%',
+          viralPotential: 75
+        }
+      }
+      setGeneratedPost(fallbackPost)
     } finally {
       setIsGeneratingPost(false)
     }
@@ -141,11 +197,11 @@ export function LinkedInGenerator() {
         <div className="flex items-center justify-center gap-3 mb-4">
           <Share2 className="w-8 h-8 text-blue-600" />
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            مولد منشورات LinkedIn الفيروسية
+            LinkedIn Viral Post Generator
           </h1>
         </div>
         <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          اكتشف آخر الأخبار والتريندات وحولها إلى منشورات LinkedIn جذابة تحصد آلاف المشاهدات والتفاعلات
+          Discover trending news and transform them into engaging LinkedIn posts that generate thousands of views and interactions
         </p>
       </div>
 
@@ -156,19 +212,19 @@ export function LinkedInGenerator() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <Search className="w-5 h-5 text-blue-600" />
-              البحث عن التريندات
+              Search Trending Topics
             </h2>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  الكلمة المفتاحية
+                  Keyword
                 </label>
                 <input
                   type="text"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
-                  placeholder="مثال: AI, Blockchain, Startups, Technology"
+                  placeholder="Example: AI, Blockchain, Startups, Technology"
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   onKeyPress={(e) => e.key === 'Enter' && fetchTrendingNews()}
                 />
@@ -182,12 +238,12 @@ export function LinkedInGenerator() {
                 {isLoadingNews ? (
                   <>
                     <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    جاري البحث...
+                    Fetching News...
                   </>
                 ) : (
                   <>
                     <TrendingUp className="w-4 h-4 mr-2" />
-                    جلب الأخبار المتداولة
+                    Fetch Trending News
                   </>
                 )}
               </Button>
@@ -196,7 +252,7 @@ export function LinkedInGenerator() {
 
           {/* Tone Selection */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold mb-4">اختر نبرة المنشور</h3>
+            <h3 className="text-lg font-semibold mb-4">Choose Post Tone</h3>
             <div className="grid grid-cols-1 gap-3">
               {tones.map((tone) => (
                 <button
@@ -225,7 +281,7 @@ export function LinkedInGenerator() {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-green-600" />
-                آخر الأخبار ({news.length})
+                Latest News ({news.length})
               </h3>
               <ScrollArea className="h-64">
                 <div className="space-y-3">
@@ -238,7 +294,7 @@ export function LinkedInGenerator() {
                           {item.source.name}
                         </Badge>
                         <span className="text-xs text-gray-500">
-                          {new Date(item.publishedAt).toLocaleDateString('ar')}
+                          {new Date(item.publishedAt).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
@@ -254,12 +310,12 @@ export function LinkedInGenerator() {
                 {isGeneratingPost ? (
                   <>
                     <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    جاري التوليد...
+                    Generating...
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 mr-2" />
-                    توليد منشور فيروسي
+                    Generate Viral Post
                   </>
                 )}
               </Button>
@@ -274,7 +330,7 @@ export function LinkedInGenerator() {
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-600" />
-                  المنشور المولد
+                  Generated Post
                 </h3>
                 <Button
                   onClick={copyToClipboard}
@@ -285,12 +341,12 @@ export function LinkedInGenerator() {
                   {copied ? (
                     <>
                       <CheckCircle className="w-4 h-4 mr-2 text-green-600" />
-                      تم النسخ
+                      Copied
                     </>
                   ) : (
                     <>
                       <Copy className="w-4 h-4 mr-2" />
-                      نسخ
+                      Copy
                     </>
                   )}
                 </Button>
@@ -311,9 +367,28 @@ export function LinkedInGenerator() {
                   ))}
                 </div>
 
-                <div className="text-xs text-gray-500 flex items-center gap-2">
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                  النبرة: {tones.find(t => t.id === selectedTone)?.label}
+                <div className="space-y-2">
+                  <div className="text-xs text-gray-500 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                    Tone: {tones.find(t => t.id === selectedTone)?.label}
+                  </div>
+                  
+                  {generatedPost.metrics && (
+                    <div className="grid grid-cols-3 gap-4 pt-3 border-t border-gray-200">
+                      <div className="text-center">
+                        <div className="text-sm font-semibold text-blue-600">{generatedPost.metrics.estimatedReach?.toLocaleString()}</div>
+                        <div className="text-xs text-gray-500">Est. Reach</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-semibold text-green-600">{generatedPost.metrics.engagementRate}</div>
+                        <div className="text-xs text-gray-500">Engagement</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-sm font-semibold text-purple-600">{generatedPost.metrics.viralPotential}%</div>
+                        <div className="text-xs text-gray-500">Viral Score</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -329,23 +404,23 @@ export function LinkedInGenerator() {
 
           {/* Tips */}
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
-            <h3 className="text-lg font-semibold mb-3 text-blue-900">💡 نصائح للحصول على أفضل النتائج</h3>
+            <h3 className="text-lg font-semibold mb-3 text-blue-900">💡 Tips for Best Results</h3>
             <ul className="space-y-2 text-sm text-blue-800">
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
-                استخدم كلمات مفتاحية محددة (AI, Blockchain, Tech Startups)
+                Use specific keywords (AI, Blockchain, Tech Startups)
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
-                اختر النبرة التي تناسب جمهورك المستهدف
+                Choose the tone that fits your target audience
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
-                انشر في أوقات الذروة لزيادة المشاهدات
+                Post during peak hours to increase views
               </li>
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
-                تفاعل مع التعليقات لزيادة الانتشار
+                Engage with comments to boost reach
               </li>
             </ul>
           </div>

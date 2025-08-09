@@ -1,11 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
+// Enhanced mock data generator for better demos
+function generateMockArticles(query: string, count: number = 5) {
+  const sources = ['TechCrunch', 'Wired', 'MIT Technology Review', 'VentureBeat', 'The Verge', 'Forbes Tech', 'Bloomberg Technology']
+  const articleTemplates = [
+    {
+      titleTemplate: `${query} Revolution: How AI is Transforming Industries`,
+      descriptionTemplate: `Breakthrough developments in ${query} technology are reshaping business operations worldwide, with major implications for the future.`
+    },
+    {
+      titleTemplate: `Market Analysis: ${query} Sector Shows Record Growth`,
+      descriptionTemplate: `Industry analysts report unprecedented expansion in ${query} markets as companies race to adopt new technologies.`
+    },
+    {
+      titleTemplate: `Leading Companies Double Down on ${query} Investment`,
+      descriptionTemplate: `Fortune 500 companies announce multi-billion dollar investments in ${query} research and development initiatives.`
+    },
+    {
+      titleTemplate: `Expert Insights: The Future of ${query} in 2024`,
+      descriptionTemplate: `Technology leaders share predictions about ${query} trends and their potential impact on various industries.`
+    },
+    {
+      titleTemplate: `${query} Startup Ecosystem Attracts Record Funding`,
+      descriptionTemplate: `Venture capital firms pour billions into ${query} startups as the sector demonstrates unprecedented growth potential.`
+    },
+    {
+      titleTemplate: `New ${query} Standards Set to Transform Industry`,
+      descriptionTemplate: `Industry consortium announces new ${query} standards that promise to enhance interoperability and accelerate adoption.`
+    }
+  ]
+
+  return Array.from({ length: count }, (_, index) => {
+    const template = articleTemplates[index % articleTemplates.length]
+    const randomSource = sources[Math.floor(Math.random() * sources.length)]
+    const hoursAgo = Math.floor(Math.random() * 24) + 1
+    
+    return {
+      title: template.titleTemplate,
+      description: template.descriptionTemplate,
+      url: `https://example-news.com/${query.toLowerCase()}-article-${index + 1}`,
+      publishedAt: new Date(Date.now() - hoursAgo * 3600000).toISOString(),
+      source: { name: randomSource },
+      urlToImage: `https://images.unsplash.com/800x600/?${query}&sig=${index}`,
+      content: `Full article content about ${query} developments...`
+    }
+  })
+}
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const query = searchParams.get('q')
     const lang = searchParams.get('lang') || 'en'
-    const max = searchParams.get('max') || '5'
+    const max = parseInt(searchParams.get('max') || '5')
 
     if (!query) {
       return NextResponse.json(
@@ -14,59 +63,54 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Using GNews API (free tier) - you'll need to get API key from gnews.io
+    // Try to use real API if available
     const API_KEY = process.env.GNEWS_API_KEY
     
-    if (!API_KEY) {
-      // Fallback to mock data for development
-      const mockArticles = [
-        {
-          title: `Latest ${query} Developments Shake Industry`,
-          description: `Revolutionary ${query} breakthrough promises to transform how businesses operate worldwide.`,
-          url: 'https://example.com/article1',
-          publishedAt: new Date().toISOString(),
-          source: { name: 'Tech News Daily' }
-        },
-        {
-          title: `${query} Market Reaches New Heights`,
-          description: `Industry experts predict massive growth in ${query} sector with new innovations.`,
-          url: 'https://example.com/article2',
-          publishedAt: new Date(Date.now() - 3600000).toISOString(),
-          source: { name: 'Business Insider' }
-        },
-        {
-          title: `Top Companies Invest Heavily in ${query}`,
-          description: `Major corporations announce billion-dollar investments in ${query} technology.`,
-          url: 'https://example.com/article3',
-          publishedAt: new Date(Date.now() - 7200000).toISOString(),
-          source: { name: 'Financial Times' }
+    if (API_KEY && typeof window === 'undefined') {
+      try {
+        const response = await fetch(
+          `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=${lang}&max=${max}&apikey=${API_KEY}`,
+          { 
+            headers: { 'User-Agent': 'AmrikyyAI/1.0' },
+            cache: 'no-cache'
+          }
+        )
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.articles && data.articles.length > 0) {
+            return NextResponse.json({
+              articles: data.articles,
+              source: 'live'
+            })
+          }
         }
-      ]
-
-      return NextResponse.json({
-        articles: mockArticles.slice(0, parseInt(max))
-      })
+      } catch (apiError) {
+        console.warn('GNews API failed, falling back to mock data:', apiError)
+      }
     }
 
-    const response = await fetch(
-      `https://gnews.io/api/v4/search?q=${encodeURIComponent(query)}&lang=${lang}&max=${max}&apikey=${API_KEY}`
-    )
+    // Always fallback to enhanced mock data for GitHub Pages deployment
+    const mockArticles = generateMockArticles(query, max)
 
-    if (!response.ok) {
-      throw new Error(`GNews API error: ${response.status}`)
-    }
-
-    const data = await response.json()
-    
     return NextResponse.json({
-      articles: data.articles || []
+      articles: mockArticles,
+      source: 'demo',
+      message: 'Demo mode: Using simulated news data for showcase purposes'
     })
 
   } catch (error) {
     console.error('News API error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch news' },
-      { status: 500 }
-    )
+    
+    // Even on error, return mock data
+    const query = new URL(request.url).searchParams.get('q') || 'Technology'
+    const max = parseInt(new URL(request.url).searchParams.get('max') || '5')
+    const mockArticles = generateMockArticles(query, max)
+    
+    return NextResponse.json({
+      articles: mockArticles,
+      source: 'fallback',
+      message: 'Fallback mode: Using simulated data due to service unavailability'
+    })
   }
 }
