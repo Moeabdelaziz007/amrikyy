@@ -5,11 +5,15 @@ on:
     branches: [ main ]
     paths:
       - 'frontend/**'
+      - '_next/**'
+      - '*.html'
       - '.github/workflows/deploy-github-pages.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'frontend/**'
+      - '_next/**'
+      - '*.html'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -71,10 +75,16 @@ jobs:
           GNEWS_API_KEY: ${{ secrets.GNEWS_API_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
+      - name: Copy build to root
+        run: |
+          cd ..
+          rm -rf _next *.html ai-tools analytics-dashboard case-studies dashboard linkedin-generator quantum-id-generator
+          cp -r frontend/out/* .
+          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./frontend/out
+          path: .
 
   # Deployment job
   deploy:
