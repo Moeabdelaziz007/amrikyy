@@ -18,30 +18,11 @@ import {
   Clock
 } from 'lucide-react'
 
-interface NewsItem {
-  title: string
-  description: string
-  url: string
-  publishedAt: string
-  source: {
-    name: string
-  }
-}
-
-interface GeneratedPost {
-  content: string
-  hashtags: string[]
-  tone: string
-  metrics?: {
-    estimatedReach?: number
-    engagementRate?: string
-    viralPotential?: number
-  }
-}
+// Using types from demo-data.ts
 
 export function LinkedInGenerator() {
   const [keyword, setKeyword] = useState('')
-  const [news, setNews] = useState<NewsItem[]>([])
+  const [news, setNews] = useState<NewsArticle[]>([])
   const [generatedPost, setGeneratedPost] = useState<GeneratedPost | null>(null)
   const [isLoadingNews, setIsLoadingNews] = useState(false)
   const [isGeneratingPost, setIsGeneratingPost] = useState(false)
@@ -65,43 +46,19 @@ export function LinkedInGenerator() {
     setError('')
     
     try {
-      const response = await fetch(`/api/news?q=${encodeURIComponent(keyword)}&lang=en&max=5`)
+      // Simulate loading time for better UX
+      await new Promise(resolve => setTimeout(resolve, 1500))
       
-      if (!response.ok) {
-        throw new Error('Failed to fetch news')
-      }
-      
-      const data = await response.json()
-      setNews(data.articles || [])
-      
-      // Show demo mode message if applicable
-      if (data.source === 'demo' || data.source === 'fallback') {
-        setError(`✨ Demo Mode: Showing simulated trending news for "${keyword}". In production, this would fetch real-time news data.`)
-      } else if (data.articles?.length === 0) {
-        setError('No news found for this keyword')
-      }
-    } catch (err) {
-      setError('Unable to fetch news. Displaying demo data instead.')
-      console.error('Error fetching news:', err)
-      
-      // Fallback to client-side mock data
-      const mockArticles = [
-        {
-          title: `${keyword} Technology Breakthrough Changes Everything`,
-          description: `Revolutionary developments in ${keyword} promise to transform industries worldwide.`,
-          url: 'https://example.com/article1',
-          publishedAt: new Date().toISOString(),
-          source: { name: 'Tech Innovation Daily' }
-        },
-        {
-          title: `Market Leaders Invest Billions in ${keyword}`,
-          description: `Major corporations announce unprecedented investments in ${keyword} technology.`,
-          url: 'https://example.com/article2',
-          publishedAt: new Date(Date.now() - 3600000).toISOString(),
-          source: { name: 'Business Technology' }
-        }
-      ]
+      // Generate mock news data using client-side function
+      const mockArticles = generateMockNews(keyword, 5)
       setNews(mockArticles)
+      
+      // Show demo mode message
+      setError(`✨ Demo Mode: Showing simulated trending news for "${keyword}". This demonstrates real-time news integration functionality.`)
+      
+    } catch (err) {
+      setError('Unable to generate news data.')
+      console.error('Error generating news:', err)
     } finally {
       setIsLoadingNews(false)
     }
@@ -117,60 +74,24 @@ export function LinkedInGenerator() {
     setError('')
 
     try {
+      // Simulate AI processing time
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
       const newsSummary = news.map(item => 
         `${item.title}: ${item.description}`
       ).join('\n\n')
 
-      const response = await fetch('/api/generate-post', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          newsSummary,
-          tone: selectedTone,
-          keyword
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to generate post')
-      }
-
-      const data = await response.json()
-      setGeneratedPost(data)
+      // Generate post using client-side function
+      const generatedPost = generateLinkedInPost(keyword, selectedTone, newsSummary)
+      setGeneratedPost(generatedPost)
       
       // Clear any demo mode errors since post generation succeeded
       if (error.includes('Demo Mode')) {
         setError('')
       }
     } catch (err) {
-      setError('Post generation failed. Showing demo content instead.')
+      setError('Post generation failed.')
       console.error('Error generating post:', err)
-      
-      // Fallback to client-side generation
-      const fallbackPost = {
-        content: `🚀 Exciting developments in ${keyword}!
-
-Based on the latest industry insights, ${keyword} is reshaping how we think about innovation and technology.
-
-🌟 Key highlights:
-• Revolutionary breakthroughs are emerging daily
-• Industry leaders are investing heavily in this space
-• The potential for transformation is unprecedented
-
-This isn't just another trend – it's a fundamental shift that will define the future of our industry.
-
-What's your perspective on the ${keyword} revolution? Share your thoughts below! 👇`,
-        hashtags: [keyword.toLowerCase().replace(/\s+/g, ''), 'innovation', 'technology', 'future', 'business', 'trends'],
-        tone: selectedTone,
-        metrics: {
-          estimatedReach: Math.floor(Math.random() * 3000) + 1500,
-          engagementRate: '4.2%',
-          viralPotential: 75
-        }
-      }
-      setGeneratedPost(fallbackPost)
     } finally {
       setIsGeneratingPost(false)
     }

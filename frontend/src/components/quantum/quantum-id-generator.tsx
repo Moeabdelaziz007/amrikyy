@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { generateQuantumProfile, type QuantumProfile } from '@/lib/demo-data'
 import { 
   User, 
   Atom, 
@@ -21,23 +22,7 @@ import {
   CheckCircle
 } from 'lucide-react'
 
-interface QuantumProfile {
-  id: string
-  fullName: string
-  primarySkill: string
-  experienceLevel: number
-  personalityTrait: string
-  idType: string
-  quantumScore: number
-  aiPersonality: number
-  skillProficiency: number
-  futurePotential: number
-  careerMatch: number
-  quantumAnalysis: string
-  recommendations: string[]
-  digitalSignature: string
-  timestamp: string
-}
+// Using QuantumProfile type from demo-data.ts
 
 export function QuantumIdGenerator() {
   const [step, setStep] = useState(1)
@@ -71,108 +56,21 @@ export function QuantumIdGenerator() {
       // Simulate AI processing with quantum-inspired calculations
       await new Promise(resolve => setTimeout(resolve, 3000))
       
-      const quantumScore = Math.floor(Math.random() * 40) + 60 // 60-100
-      const aiPersonality = Math.floor(Math.random() * 30) + 70 // 70-100
-      const skillProficiency = Math.min(95, formData.experienceLevel * 15 + Math.random() * 20)
-      const futurePotential = Math.floor(Math.random() * 25) + 75 // 75-100
-      const careerMatch = Math.floor(Math.random() * 20) + 80 // 80-100
-
-    const analysis = generateQuantumAnalysis(formData, {
-      quantumScore,
-      aiPersonality,
-      skillProficiency,
-      futurePotential,
-      careerMatch
-    })
-
-    const newProfile: QuantumProfile = {
-      id: `QID-${Date.now().toString(36).toUpperCase()}`,
-      fullName: formData.fullName,
-      primarySkill: formData.primarySkill,
-      experienceLevel: formData.experienceLevel,
-      personalityTrait: formData.personalityTrait,
-      idType: formData.idType,
-      quantumScore,
-      aiPersonality,
-      skillProficiency: Math.floor(skillProficiency),
-      futurePotential,
-      careerMatch,
-      quantumAnalysis: analysis.main,
-      recommendations: analysis.recommendations,
-      digitalSignature: generateDigitalSignature(),
-      timestamp: new Date().toISOString()
-    }
-
+      // Generate quantum profile using client-side function
+      const newProfile = generateQuantumProfile(formData)
       setProfile(newProfile)
+      
     } catch (error) {
       console.error('Error generating quantum ID:', error)
-      // Still show a generated profile even on error for demo purposes
-      const fallbackProfile: QuantumProfile = {
-        id: `QID-${Date.now().toString(36).toUpperCase()}`,
-        fullName: formData.fullName,
-        primarySkill: formData.primarySkill,
-        experienceLevel: formData.experienceLevel,
-        personalityTrait: formData.personalityTrait,
-        idType: formData.idType,
-        quantumScore: 85,
-        aiPersonality: 92,
-        skillProficiency: 88,
-        futurePotential: 95,
-        careerMatch: 91,
-        quantumAnalysis: `Your quantum field demonstrates exceptional potential in ${formData.primarySkill}. Advanced AI analysis indicates strong compatibility with innovative technologies and leadership roles.`,
-        recommendations: [
-          'Explore emerging technologies in your field',
-          'Consider leadership opportunities',
-          'Develop cross-functional expertise'
-        ],
-        digitalSignature: generateDigitalSignature(),
-        timestamp: new Date().toISOString()
-      }
+      // Still generate a profile even on error for demo purposes
+      const fallbackProfile = generateQuantumProfile(formData)
       setProfile(fallbackProfile)
     } finally {
       setIsGenerating(false)
     }
   }
 
-  const generateQuantumAnalysis = (data: any, scores: any) => {
-    const analyses = {
-      innovative: {
-        main: `Your quantum field resonates with innovation frequencies at ${scores.quantumScore}%. You demonstrate exceptional pattern recognition and forward-thinking capabilities.`,
-        recommendations: [
-          'Lead cutting-edge projects in emerging technologies',
-          'Collaborate with R&D teams to drive innovation',
-          'Develop disruptive solutions in your field'
-        ]
-      },
-      analytical: {
-        main: `Quantum coherence analysis shows ${scores.aiPersonality}% logical processing power. Your analytical neural pathways exhibit superior data interpretation capabilities.`,
-        recommendations: [
-          'Specialize in data-driven decision making',
-          'Lead complex problem-solving initiatives',
-          'Develop predictive models and analytics'
-        ]
-      },
-      creative: {
-        main: `Your creative quantum state operates at ${scores.futurePotential}% potential. Artistic and innovative synapses show exceptional neural plasticity.`,
-        recommendations: [
-          'Pursue interdisciplinary creative projects',
-          'Lead design thinking workshops',
-          'Innovate at the intersection of art and technology'
-        ]
-      }
-    }
-
-    return analyses[data.personalityTrait as keyof typeof analyses] || analyses.innovative
-  }
-
-  const generateDigitalSignature = () => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    let result = ''
-    for (let i = 0; i < 16; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length))
-    }
-    return result.match(/.{4}/g)?.join('-') || result
-  }
+  // Helper functions moved to demo-data.ts
 
   const copyProfile = async () => {
     if (!profile) return

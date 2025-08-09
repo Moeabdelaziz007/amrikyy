@@ -11,8 +11,8 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  basePath: process.env.NODE_ENV === 'production' ? '/amrikyy-ai' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/amrikyy-ai/' : '',
+  basePath: process.env.NODE_ENV === 'production' ? '/amrikyy' : '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/amrikyy/' : '',
   // Optimization for static export
   swcMinify: true,
   // Disable server features for static export
@@ -21,6 +21,10 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: false,
+  },
+  // Static export optimization
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
   },
 }
 
