@@ -11,7 +11,7 @@ import { Message } from '@/types/chat'
 import { 
   User, 
   Bot, 
-  Sources, 
+  FileText, 
   ThumbsUp, 
   ThumbsDown, 
   Copy,
@@ -58,11 +58,12 @@ export function MessageBubble({ message, onShowSources }: MessageBubbleProps) {
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  code({ node, inline, className, children, ...props }) {
+                  code({ node, className, children, ...props }: any) {
                     const match = /language-(\w+)/.exec(className || '')
+                    const inline = props.inline;
                     return !inline && match ? (
                       <SyntaxHighlighter
-                        style={oneDark}
+                        style={oneDark as any}
                         language={match[1]}
                         PreTag="div"
                         {...props}
@@ -95,7 +96,7 @@ export function MessageBubble({ message, onShowSources }: MessageBubbleProps) {
                   onClick={onShowSources}
                   className="gap-2"
                 >
-                  <Sources className="w-3 h-3" />
+                  <FileText className="w-3 h-3" />
                   <Badge variant="secondary" className="text-xs">
                     {message.sources?.length}
                   </Badge>
