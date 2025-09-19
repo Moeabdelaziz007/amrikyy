@@ -1,31 +1,27 @@
-import { Switch, Route } from "wouter";
-import { Suspense, lazy } from "react";
-import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { ThemeProvider } from "@/hooks/use-theme";
-import { AuthProvider } from "@/hooks/use-auth";
-import ProtectedRoute from "@/components/auth/protected-route";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
-import { KeyboardShortcuts, COMMON_SHORTCUTS } from "@/components/ui/keyboard-navigation";
-import { useRouterTracking } from "@/components/analytics/page-tracker";
-import { withPageTracking } from "@/components/analytics/page-tracker";
+import { Suspense, lazy } from 'react';
+import { Router, Route, Switch } from 'wouter';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { ThemeProvider } from '@/hooks/use-theme';
+import { AuthProvider } from '@/hooks/use-auth';
+import ProtectedRoute from '@/components/auth/protected-route';
+import { ErrorBoundary } from '@/components/ui/error-boundary';
+import { KeyboardNavigation } from '@/components/ui/keyboard-navigation';
+import { queryClient } from '@/lib/queryClient';
 
 // Lazy load pages for better performance
-const Dashboard = lazy(() => import("@/pages/dashboard"));
-const SocialFeed = lazy(() => import("@/pages/social-feed"));
-const Workflows = lazy(() => import("@/pages/workflows"));
-const AIAgents = lazy(() => import("@/pages/ai-agents"));
-const MCPToolsPage = lazy(() => import("@/pages/mcp-tools"));
-const PromptLibraryPage = lazy(() => import("@/pages/prompt-library"));
-const TelegramPage = lazy(() => import("@/pages/telegram"));
-const SmartLearningPage = lazy(() => import("@/pages/smart-learning"));
-const AdvancedAIToolsPage = lazy(() => import("@/pages/advanced-ai-tools"));
-const LearningDashboard = lazy(() => import("@/pages/learning-dashboard"));
-const NotFound = lazy(() => import("@/pages/not-found"));
-const DebugView = lazy(() => import("@/pages/DebugView"));
-const Workspace = lazy(() => import("@/pages/Workspace"));
+const Dashboard = lazy(() => import('@/pages/dashboard'));
+const SocialFeed = lazy(() => import('@/pages/social-feed'));
+const Workflows = lazy(() => import('@/pages/workflows'));
+const AIAgents = lazy(() => import('@/pages/ai-agents'));
+const TelegramPage = lazy(() => import('@/pages/telegram'));
+const SmartLearningPage = lazy(() => import('@/pages/smart-learning'));
+const AdvancedAIToolsPage = lazy(() => import('@/pages/advanced-ai-tools'));
+const LearningDashboard = lazy(() => import('@/pages/learning-dashboard'));
+const NotFound = lazy(() => import('@/pages/not-found'));
+const DebugView = lazy(() => import('@/pages/DebugView'));
+const Workspace = lazy(() => import('@/pages/Workspace'));
 
 // Loading component
 const PageLoader = () => (
@@ -34,49 +30,45 @@ const PageLoader = () => (
   </div>
 );
 
-function Router() {
-  useRouterTracking(); // Track router navigation
-  
+function AppRouter() {
   return (
     <ProtectedRoute>
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route path="/" component={withPageTracking(Dashboard, 'Dashboard')} />
-          <Route path="/social-feed" component={withPageTracking(SocialFeed, 'Social Feed')} />
-          <Route path="/workflows" component={withPageTracking(Workflows, 'Workflows')} />
-          <Route path="/ai-agents" component={withPageTracking(AIAgents, 'AI Agents')} />
-          <Route path="/mcp-tools" component={withPageTracking(MCPToolsPage, 'MCP Tools')} />
-          <Route path="/prompt-library" component={withPageTracking(PromptLibraryPage, 'Prompt Library')} />
-          <Route path="/telegram" component={withPageTracking(TelegramPage, 'Telegram')} />
-          <Route path="/smart-learning" component={withPageTracking(SmartLearningPage, 'Smart Learning')} />
-          <Route path="/advanced-ai-tools" component={withPageTracking(AdvancedAIToolsPage, 'Advanced AI Tools')} />
-          <Route path="/learning" component={withPageTracking(LearningDashboard, 'Learning Dashboard')} />
-          <Route path="/debug" component={withPageTracking(DebugView, 'Debug View')} />
-          <Route path="/workspace" component={withPageTracking(Workspace, 'Workspace')} />
-          <Route component={withPageTracking(NotFound, 'Not Found')} />
+          <Route path="/" component={Dashboard} />
+          <Route path="/social-feed" component={SocialFeed} />
+          <Route path="/workflows" component={Workflows} />
+          <Route path="/ai-agents" component={AIAgents} />
+          <Route path="/telegram" component={TelegramPage} />
+          <Route path="/smart-learning" component={SmartLearningPage} />
+          <Route path="/advanced-ai-tools" component={AdvancedAIToolsPage} />
+          <Route path="/learning" component={LearningDashboard} />
+          <Route path="/debug" component={DebugView} />
+          <Route path="/workspace" component={Workspace} />
+          <Route component={NotFound} />
         </Switch>
       </Suspense>
     </ProtectedRoute>
   );
 }
 
-function App() {
+export default function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <AuthProvider>
             <TooltipProvider>
-              <KeyboardShortcuts shortcuts={COMMON_SHORTCUTS}>
+              <Router>
+                <KeyboardNavigation>
+                  <AppRouter />
+                </KeyboardNavigation>
                 <Toaster />
-                <Router />
-              </KeyboardShortcuts>
+              </Router>
             </TooltipProvider>
-          </ThemeProvider>
-        </QueryClientProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
     </ErrorBoundary>
   );
 }
-
-export default App;

@@ -1,183 +1,162 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Play, CheckCircle, XCircle, Settings } from "lucide-react";
-
-export default function SystemDesignerApp() {
-  const [requirements, setRequirements] = useState("");
-  const [complexity, setComplexity] = useState("medium");
-  const [frontend, setFrontend] = useState("React");
-  const [backend, setBackend] = useState("FastAPI");
-  const [database, setDatabase] = useState("PostgreSQL");
-  const [context, setContext] = useState("");
-  const [output, setOutput] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const executeDesigner = async () => {
-    setLoading(true);
-    setError(null);
-    setOutput(null);
-    try {
-      const response = await fetch("http://localhost:3001/mcp/execute", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tool: "system_designer",
-          params: {
-            requirements,
-            complexity,
-            technology_stack: {
-              frontend,
-              backend,
-              database
-            },
-            context,
-          },
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to execute System Designer");
-      }
-
-      const data = await response.json();
-      setOutput(data);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Settings className="h-5 w-5" /> System Designer
-        </CardTitle>
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = SystemDesignerApp;
+const react_1 = require("react");
+const card_1 = require("@/components/ui/card");
+const button_1 = require("@/components/ui/button");
+const textarea_1 = require("@/components/ui/textarea");
+const select_1 = require("@/components/ui/select");
+const lucide_react_1 = require("lucide-react");
+function SystemDesignerApp() {
+    const [requirements, setRequirements] = (0, react_1.useState)("");
+    const [complexity, setComplexity] = (0, react_1.useState)("medium");
+    const [frontend, setFrontend] = (0, react_1.useState)("React");
+    const [backend, setBackend] = (0, react_1.useState)("FastAPI");
+    const [database, setDatabase] = (0, react_1.useState)("PostgreSQL");
+    const [context, setContext] = (0, react_1.useState)("");
+    const [output, setOutput] = (0, react_1.useState)(null);
+    const [loading, setLoading] = (0, react_1.useState)(false);
+    const [error, setError] = (0, react_1.useState)(null);
+    const executeDesigner = async () => {
+        setLoading(true);
+        setError(null);
+        setOutput(null);
+        try {
+            const response = await fetch("http://localhost:3001/mcp/execute", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    tool: "system_designer",
+                    params: {
+                        requirements,
+                        complexity,
+                        technology_stack: {
+                            frontend,
+                            backend,
+                            database
+                        },
+                        context,
+                    },
+                }),
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Failed to execute System Designer");
+            }
+            const data = await response.json();
+            setOutput(data);
+        }
+        catch (err) {
+            setError(err.message);
+        }
+        finally {
+            setLoading(false);
+        }
+    };
+    return (<card_1.Card className="w-full">
+      <card_1.CardHeader>
+        <card_1.CardTitle className="flex items-center gap-2">
+          <lucide_react_1.Settings className="h-5 w-5"/> System Designer
+        </card_1.CardTitle>
         <p className="text-muted-foreground">
           AI-powered system architecture designer for technical creativity and solution planning.
         </p>
-      </CardHeader>
-      <CardContent className="space-y-4">
+      </card_1.CardHeader>
+      <card_1.CardContent className="space-y-4">
         <div>
           <label htmlFor="requirements" className="block text-sm font-medium text-foreground mb-1">Requirements</label>
-          <Textarea
-            id="requirements"
-            placeholder="Describe your system requirements and specifications..."
-            value={requirements}
-            onChange={(e) => setRequirements(e.target.value)}
-            rows={4}
-          />
+          <textarea_1.Textarea id="requirements" placeholder="Describe your system requirements and specifications..." value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4}/>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="complexity" className="block text-sm font-medium text-foreground mb-1">Complexity</label>
-            <Select value={complexity} onValueChange={setComplexity}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select complexity" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="simple">Simple</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="complex">Complex</SelectItem>
-                <SelectItem value="enterprise">Enterprise</SelectItem>
-              </SelectContent>
-            </Select>
+            <select_1.Select value={complexity} onValueChange={setComplexity}>
+              <select_1.SelectTrigger className="w-full">
+                <select_1.SelectValue placeholder="Select complexity"/>
+              </select_1.SelectTrigger>
+              <select_1.SelectContent>
+                <select_1.SelectItem value="simple">Simple</select_1.SelectItem>
+                <select_1.SelectItem value="medium">Medium</select_1.SelectItem>
+                <select_1.SelectItem value="complex">Complex</select_1.SelectItem>
+                <select_1.SelectItem value="enterprise">Enterprise</select_1.SelectItem>
+              </select_1.SelectContent>
+            </select_1.Select>
           </div>
           <div>
             <label htmlFor="frontend" className="block text-sm font-medium text-foreground mb-1">Frontend</label>
-            <Select value={frontend} onValueChange={setFrontend}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select frontend" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="React">React</SelectItem>
-                <SelectItem value="Vue">Vue</SelectItem>
-                <SelectItem value="Angular">Angular</SelectItem>
-                <SelectItem value="Svelte">Svelte</SelectItem>
-              </SelectContent>
-            </Select>
+            <select_1.Select value={frontend} onValueChange={setFrontend}>
+              <select_1.SelectTrigger className="w-full">
+                <select_1.SelectValue placeholder="Select frontend"/>
+              </select_1.SelectTrigger>
+              <select_1.SelectContent>
+                <select_1.SelectItem value="React">React</select_1.SelectItem>
+                <select_1.SelectItem value="Vue">Vue</select_1.SelectItem>
+                <select_1.SelectItem value="Angular">Angular</select_1.SelectItem>
+                <select_1.SelectItem value="Svelte">Svelte</select_1.SelectItem>
+              </select_1.SelectContent>
+            </select_1.Select>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label htmlFor="backend" className="block text-sm font-medium text-foreground mb-1">Backend</label>
-            <Select value={backend} onValueChange={setBackend}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select backend" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="FastAPI">FastAPI</SelectItem>
-                <SelectItem value="Express">Express</SelectItem>
-                <SelectItem value="Django">Django</SelectItem>
-                <SelectItem value="Spring">Spring</SelectItem>
-              </SelectContent>
-            </Select>
+            <select_1.Select value={backend} onValueChange={setBackend}>
+              <select_1.SelectTrigger className="w-full">
+                <select_1.SelectValue placeholder="Select backend"/>
+              </select_1.SelectTrigger>
+              <select_1.SelectContent>
+                <select_1.SelectItem value="FastAPI">FastAPI</select_1.SelectItem>
+                <select_1.SelectItem value="Express">Express</select_1.SelectItem>
+                <select_1.SelectItem value="Django">Django</select_1.SelectItem>
+                <select_1.SelectItem value="Spring">Spring</select_1.SelectItem>
+              </select_1.SelectContent>
+            </select_1.Select>
           </div>
           <div>
             <label htmlFor="database" className="block text-sm font-medium text-foreground mb-1">Database</label>
-            <Select value={database} onValueChange={setDatabase}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select database" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="PostgreSQL">PostgreSQL</SelectItem>
-                <SelectItem value="MySQL">MySQL</SelectItem>
-                <SelectItem value="MongoDB">MongoDB</SelectItem>
-                <SelectItem value="Redis">Redis</SelectItem>
-              </SelectContent>
-            </Select>
+            <select_1.Select value={database} onValueChange={setDatabase}>
+              <select_1.SelectTrigger className="w-full">
+                <select_1.SelectValue placeholder="Select database"/>
+              </select_1.SelectTrigger>
+              <select_1.SelectContent>
+                <select_1.SelectItem value="PostgreSQL">PostgreSQL</select_1.SelectItem>
+                <select_1.SelectItem value="MySQL">MySQL</select_1.SelectItem>
+                <select_1.SelectItem value="MongoDB">MongoDB</select_1.SelectItem>
+                <select_1.SelectItem value="Redis">Redis</select_1.SelectItem>
+              </select_1.SelectContent>
+            </select_1.Select>
           </div>
         </div>
 
         <div>
           <label htmlFor="context" className="block text-sm font-medium text-foreground mb-1">Context (optional)</label>
-          <Textarea
-            id="context"
-            placeholder="Additional context for system design"
-            value={context}
-            onChange={(e) => setContext(e.target.value)}
-            rows={2}
-          />
+          <textarea_1.Textarea id="context" placeholder="Additional context for system design" value={context} onChange={(e) => setContext(e.target.value)} rows={2}/>
         </div>
 
-        <Button onClick={executeDesigner} disabled={loading || !requirements} className="w-full">
-          {loading ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <button_1.Button onClick={executeDesigner} disabled={loading || !requirements} className="w-full">
+          {loading ? (<>
+              <lucide_react_1.Loader2 className="mr-2 h-4 w-4 animate-spin"/>
               Designing...
-            </>
-          ) : (
-            <>
-              <Play className="mr-2 h-4 w-4" />
+            </>) : (<>
+              <lucide_react_1.Play className="mr-2 h-4 w-4"/>
               Design System
-            </>
-          )}
-        </Button>
+            </>)}
+        </button_1.Button>
 
-        {error && (
-          <div className="mt-4 text-red-500 flex items-center gap-2">
-            <XCircle className="h-5 w-5" />
+        {error && (<div className="mt-4 text-red-500 flex items-center gap-2">
+            <lucide_react_1.XCircle className="h-5 w-5"/>
             Error: {error}
-          </div>
-        )}
+          </div>)}
 
-        {output && (
-          <div className="mt-4 space-y-2">
+        {output && (<div className="mt-4 space-y-2">
             <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-500" /> System Design
+              <lucide_react_1.CheckCircle className="h-5 w-5 text-green-500"/> System Design
             </h3>
-            <Card className="bg-muted/20 p-4">
+            <card_1.Card className="bg-muted/20 p-4">
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium mb-2">Architecture</h4>
@@ -212,23 +191,19 @@ export default function SystemDesignerApp() {
                 <div>
                   <h4 className="font-medium mb-2">Components</h4>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-                    {output.system_design?.components?.map((component: string, index: number) => (
-                      <div key={index} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
+                    {output.system_design?.components?.map((component, index) => (<div key={index} className="bg-primary/10 text-primary px-2 py-1 rounded text-xs">
                         {component}
-                      </div>
-                    ))}
+                      </div>))}
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2">Recommendations</h4>
                   <ul className="text-sm space-y-1">
-                    {output.recommendations?.map((rec: string, index: number) => (
-                      <li key={index} className="flex items-start gap-2">
+                    {output.recommendations?.map((rec, index) => (<li key={index} className="flex items-start gap-2">
                         <span className="text-primary">•</span>
                         <span>{rec}</span>
-                      </li>
-                    ))}
+                      </li>))}
                   </ul>
                 </div>
 
@@ -241,10 +216,10 @@ export default function SystemDesignerApp() {
                   </div>
                 </div>
               </div>
-            </Card>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
+            </card_1.Card>
+          </div>)}
+      </card_1.CardContent>
+    </card_1.Card>);
 }
+
+

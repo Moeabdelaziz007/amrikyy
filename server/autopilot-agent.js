@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.autopilotAgent = exports.AutopilotAgent = void 0;
-var advanced_ai_agents_js_1 = require("./advanced-ai-agents.js");
-var firestore_1 = require("firebase-admin/firestore");
-var AutopilotAgent = /** @class */ (function () {
-    function AutopilotAgent(debug) {
-        if (debug === void 0) { debug = false; }
+const advanced_ai_agents_js_1 = require("./advanced-ai-agents.js");
+const firestore_1 = require("firebase-admin/firestore");
+class AutopilotAgent {
+    agentSystem;
+    agent;
+    db;
+    debug;
+    constructor(debug = false) {
         this.debug = debug;
         this.agentSystem = (0, advanced_ai_agents_js_1.getAdvancedAIAgentSystem)();
         this.agent = this.agentSystem.createAgent({
@@ -26,7 +29,6 @@ var AutopilotAgent = /** @class */ (function () {
             console.log('Autopilot Agent initialized in debug mode.');
         }
     }
-    return AutopilotAgent;
-}());
+}
 exports.AutopilotAgent = AutopilotAgent;
 exports.autopilotAgent = new AutopilotAgent(process.env.NODE_ENV === 'development');

@@ -30,8 +30,52 @@ export class AutopilotAgent {
       console.log('Autopilot Agent initialized in debug mode.');
     }
   }
-  
-  // ... (rest of the AutopilotAgent class)
+
+  /**
+   * Start the autopilot agent
+   */
+  start(): void {
+    if (this.debug) {
+      console.log('Starting Autopilot Agent...');
+    }
+    
+    // Start the agent system
+    if (this.agentSystem && this.agent) {
+      this.agentSystem.startAgent(this.agent.id);
+      if (this.debug) {
+        console.log('Autopilot Agent started successfully');
+      }
+    }
+  }
+
+  /**
+   * Stop the autopilot agent
+   */
+  stop(): void {
+    if (this.debug) {
+      console.log('Stopping Autopilot Agent...');
+    }
+    
+    // Stop the agent system
+    if (this.agentSystem && this.agent) {
+      this.agentSystem.stopAgent(this.agent.id);
+      if (this.debug) {
+        console.log('Autopilot Agent stopped successfully');
+      }
+    }
+  }
+
+  /**
+   * Get agent status
+   */
+  getStatus(): any {
+    return {
+      id: this.agent?.id,
+      name: this.agent?.name,
+      status: this.agent?.status,
+      active: this.agent?.status === 'active'
+    };
+  }
 }
 
 export const autopilotAgent = new AutopilotAgent(process.env.NODE_ENV === 'development');

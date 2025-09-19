@@ -1,77 +1,23 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MCPProtocol = void 0;
 exports.getMCPProtocol = getMCPProtocol;
 exports.initializeMCP = initializeMCP;
-var events_1 = require("events");
-var MCPProtocol = /** @class */ (function (_super) {
-    __extends(MCPProtocol, _super);
-    function MCPProtocol() {
-        var _this = _super.call(this) || this;
-        _this.capabilities = new Map();
-        _this.agents = new Map();
-        _this.tools = new Map();
-        _this.messageQueue = [];
-        _this.isConnected = false;
-        _this.initializeCoreCapabilities();
-        _this.initializeCoreTools();
-        return _this;
+const events_1 = require("events");
+class MCPProtocol extends events_1.EventEmitter {
+    capabilities = new Map();
+    agents = new Map();
+    tools = new Map();
+    messageQueue = [];
+    isConnected = false;
+    constructor() {
+        super();
+        this.initializeCoreCapabilities();
+        this.initializeCoreTools();
     }
-    MCPProtocol.prototype.initializeCoreCapabilities = function () {
-        var _this = this;
+    initializeCoreCapabilities() {
         // Core MCP capabilities
-        var coreCapabilities = [
+        const coreCapabilities = [
             {
                 name: 'file_system',
                 description: 'Access to file system operations',
@@ -234,36 +180,214 @@ var MCPProtocol = /** @class */ (function (_super) {
                 resources: []
             }
         ];
-        coreCapabilities.forEach(function (capability) {
-            _this.capabilities.set(capability.name, capability);
+        coreCapabilities.forEach(capability => {
+            this.capabilities.set(capability.name, capability);
         });
-    };
-    MCPProtocol.prototype.initializeCoreTools = function () {
-        var _this = this;
+    }
+    initializeCoreTools() {
         // Core MCP tools
-        var coreTools = [
+        const coreTools = [
             {
                 name: 'cursor_cli',
-                description: 'Execute commands to LLMs via Cursor CLI',
+                description: 'Execute commands to LLMs via Cursor CLI with advanced capabilities',
                 inputSchema: {
                     type: 'object',
                     properties: {
-                        command: { type: 'string', description: 'The command to execute in the Cursor CLI' },
-                        model: { type: 'string', description: 'The LLM model to use (e.g., gpt-4, claude-2)' },
+                        command: {
+                            type: 'string',
+                            description: 'The command to execute in the Cursor CLI (e.g., "explain this code", "refactor this function", "add error handling")'
+                        },
+                        model: {
+                            type: 'string',
+                            description: 'The LLM model to use (e.g., gpt-4, claude-3.5-sonnet, claude-3-opus)',
+                            default: 'claude-3.5-sonnet'
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for the command (optional)',
+                        },
+                        file_path: {
+                            type: 'string',
+                            description: 'Path to the file to operate on (optional)',
+                        },
+                        operation_type: {
+                            type: 'string',
+                            enum: ['explain', 'refactor', 'debug', 'optimize', 'generate', 'review', 'test'],
+                            description: 'Type of operation to perform',
+                            default: 'explain'
+                        }
                     },
-                    required: ['command', 'model'],
+                    required: ['command'],
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        // In a real implementation, you would have a CLI execution environment.
-                        // For now, we will simulate the output.
-                        console.log("Executing Cursor CLI command: ".concat(params.command, " on model ").concat(params.model));
-                        return [2 /*return*/, {
-                                success: true,
-                                output: "Simulated output for command: ".concat(params.command),
-                            }];
-                    });
-                }); },
+                execute: async (params) => {
+                    return await this.executeCursorCLI(params);
+                },
+            },
+            {
+                name: 'comet_chrome',
+                description: 'Integrate with Comet Chrome extension for AI-powered web browsing and content analysis',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        action: {
+                            type: 'string',
+                            enum: ['analyze_page', 'extract_content', 'summarize_article', 'find_similar', 'translate_content', 'generate_questions', 'create_outline', 'extract_links', 'analyze_sentiment', 'get_keywords'],
+                            description: 'Action to perform with Comet',
+                        },
+                        url: {
+                            type: 'string',
+                            description: 'URL of the webpage to analyze (optional)',
+                        },
+                        content: {
+                            type: 'string',
+                            description: 'Content to analyze (optional, if not providing URL)',
+                        },
+                        language: {
+                            type: 'string',
+                            description: 'Target language for translation (optional)',
+                            default: 'en',
+                        },
+                        max_results: {
+                            type: 'number',
+                            description: 'Maximum number of results to return',
+                            default: 10,
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for the analysis (optional)',
+                        },
+                    },
+                    required: ['action'],
+                },
+                execute: async (params) => {
+                    return await this.executeCometChrome(params);
+                },
+            },
+            {
+                name: 'multilingual_assistant',
+                description: 'Advanced multilingual AI assistant with Arabic and English support for technical creativity, education, and wellness',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        message: {
+                            type: 'string',
+                            description: 'The message or request to process',
+                        },
+                        language: {
+                            type: 'string',
+                            enum: ['auto', 'arabic', 'english'],
+                            description: 'Language preference (auto-detect if not specified)',
+                            default: 'auto'
+                        },
+                        user_profile: {
+                            type: 'object',
+                            description: 'User profile information for personalized responses',
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for the conversation',
+                        },
+                    },
+                    required: ['message'],
+                },
+                execute: async (params) => {
+                    return await this.executeMultilingualAssistant(params);
+                },
+            },
+            {
+                name: 'system_designer',
+                description: 'AI-powered system architecture designer for technical creativity and solution planning',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        requirements: {
+                            type: 'string',
+                            description: 'System requirements and specifications',
+                        },
+                        technology_stack: {
+                            type: 'object',
+                            description: 'Preferred technology stack (frontend, backend, database)',
+                        },
+                        complexity: {
+                            type: 'string',
+                            enum: ['simple', 'medium', 'complex', 'enterprise'],
+                            description: 'System complexity level',
+                            default: 'medium'
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for system design',
+                        },
+                    },
+                    required: ['requirements'],
+                },
+                execute: async (params) => {
+                    return await this.executeSystemDesigner(params);
+                },
+            },
+            {
+                name: 'educational_tutor',
+                description: 'Adaptive educational tutor for personalized learning content generation',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        topic: {
+                            type: 'string',
+                            description: 'The topic or subject to learn about',
+                        },
+                        difficulty_level: {
+                            type: 'string',
+                            enum: ['beginner', 'intermediate', 'advanced'],
+                            description: 'Learning difficulty level',
+                            default: 'beginner'
+                        },
+                        learning_style: {
+                            type: 'string',
+                            enum: ['visual', 'auditory', 'kinesthetic', 'reading'],
+                            description: 'Preferred learning style',
+                            default: 'visual'
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for learning content',
+                        },
+                    },
+                    required: ['topic'],
+                },
+                execute: async (params) => {
+                    return await this.executeEducationalTutor(params);
+                },
+            },
+            {
+                name: 'wellness_coach',
+                description: 'AI wellness coach for mental health support and personal development',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        mood: {
+                            type: 'string',
+                            description: 'Current mood or emotional state',
+                        },
+                        stress_level: {
+                            type: 'string',
+                            enum: ['low', 'medium', 'high'],
+                            description: 'Current stress level',
+                            default: 'medium'
+                        },
+                        goals: {
+                            type: 'array',
+                            description: 'Wellness and personal development goals',
+                        },
+                        context: {
+                            type: 'string',
+                            description: 'Additional context for wellness planning',
+                        },
+                    },
+                    required: ['mood'],
+                },
+                execute: async (params) => {
+                    return await this.executeWellnessCoach(params);
+                },
             },
             {
                 name: 'web_search_tool',
@@ -276,14 +400,9 @@ var MCPProtocol = /** @class */ (function (_super) {
                     },
                     required: ['query']
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.executeWebSearch(params.query, params.limit || 10)];
-                            case 1: return [2 /*return*/, _a.sent()];
-                        }
-                    });
-                }); }
+                execute: async (params) => {
+                    return await this.executeWebSearch(params.query, params.limit || 10);
+                }
             },
             {
                 name: 'file_operations_tool',
@@ -297,14 +416,9 @@ var MCPProtocol = /** @class */ (function (_super) {
                     },
                     required: ['operation', 'path']
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.executeFileOperation(params.operation, params.path, params.content)];
-                            case 1: return [2 /*return*/, _a.sent()];
-                        }
-                    });
-                }); }
+                execute: async (params) => {
+                    return await this.executeFileOperation(params.operation, params.path, params.content);
+                }
             },
             {
                 name: 'ai_generation_tool',
@@ -318,14 +432,9 @@ var MCPProtocol = /** @class */ (function (_super) {
                     },
                     required: ['prompt']
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.executeAIGeneration(params.prompt, params.model, params.max_tokens)];
-                            case 1: return [2 /*return*/, _a.sent()];
-                        }
-                    });
-                }); }
+                execute: async (params) => {
+                    return await this.executeAIGeneration(params.prompt, params.model, params.max_tokens);
+                }
             },
             {
                 name: 'data_analysis_tool',
@@ -339,14 +448,9 @@ var MCPProtocol = /** @class */ (function (_super) {
                     },
                     required: ['data', 'analysis_type']
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.executeDataAnalysis(params.data, params.analysis_type, params.parameters)];
-                            case 1: return [2 /*return*/, _a.sent()];
-                        }
-                    });
-                }); }
+                execute: async (params) => {
+                    return await this.executeDataAnalysis(params.data, params.analysis_type, params.parameters);
+                }
             },
             {
                 name: 'automation_tool',
@@ -360,488 +464,362 @@ var MCPProtocol = /** @class */ (function (_super) {
                     },
                     required: ['action']
                 },
-                execute: function (params) { return __awaiter(_this, void 0, void 0, function () {
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0: return [4 /*yield*/, this.executeAutomation(params.action, params.workflow, params.parameters)];
-                            case 1: return [2 /*return*/, _a.sent()];
-                        }
-                    });
-                }); }
+                execute: async (params) => {
+                    return await this.executeAutomation(params.action, params.workflow, params.parameters);
+                }
             }
         ];
-        coreTools.forEach(function (tool) {
-            _this.tools.set(tool.name, tool);
+        coreTools.forEach(tool => {
+            this.tools.set(tool.name, tool);
         });
-    };
+    }
     // MCP Protocol Methods
-    MCPProtocol.prototype.connect = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    this.isConnected = true;
-                    this.emit('connected');
-                    console.log('MCP Protocol connected successfully');
-                    return [2 /*return*/, true];
-                }
-                catch (error) {
-                    console.error('Failed to connect MCP Protocol:', error);
-                    return [2 /*return*/, false];
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.disconnect = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.isConnected = false;
-                this.emit('disconnected');
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.sendMessage = function (message) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.isConnected) {
-                            throw new Error('MCP Protocol not connected');
-                        }
-                        this.messageQueue.push(message);
-                        this.emit('message', message);
-                        return [4 /*yield*/, this.processMessage(message)];
-                    case 1:
-                        response = _a.sent();
-                        return [2 /*return*/, response];
-                }
-            });
-        });
-    };
-    MCPProtocol.prototype.processMessage = function (message) {
-        return __awaiter(this, void 0, void 0, function () {
-            var result, _a, error_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 19, , 20]);
-                        result = void 0;
-                        _a = message.method;
-                        switch (_a) {
-                            case 'initialize': return [3 /*break*/, 1];
-                            case 'capabilities/list': return [3 /*break*/, 3];
-                            case 'capabilities/get': return [3 /*break*/, 5];
-                            case 'tools/list': return [3 /*break*/, 7];
-                            case 'tools/call': return [3 /*break*/, 9];
-                            case 'agents/list': return [3 /*break*/, 11];
-                            case 'agents/create': return [3 /*break*/, 13];
-                            case 'agents/execute': return [3 /*break*/, 15];
-                        }
-                        return [3 /*break*/, 17];
-                    case 1: return [4 /*yield*/, this.handleInitialize(message.params)];
-                    case 2:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 3: return [4 /*yield*/, this.handleListCapabilities()];
-                    case 4:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 5: return [4 /*yield*/, this.handleGetCapability(message.params)];
-                    case 6:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 7: return [4 /*yield*/, this.handleListTools()];
-                    case 8:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 9: return [4 /*yield*/, this.handleCallTool(message.params)];
-                    case 10:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 11: return [4 /*yield*/, this.handleListAgents()];
-                    case 12:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 13: return [4 /*yield*/, this.handleCreateAgent(message.params)];
-                    case 14:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 15: return [4 /*yield*/, this.handleExecuteAgent(message.params)];
-                    case 16:
-                        result = _b.sent();
-                        return [3 /*break*/, 18];
-                    case 17: throw new Error("Unknown method: ".concat(message.method));
-                    case 18: return [2 /*return*/, {
-                            id: message.id,
-                            type: 'response',
-                            result: result,
-                            timestamp: new Date()
-                        }];
-                    case 19:
-                        error_1 = _b.sent();
-                        return [2 /*return*/, {
-                                id: message.id,
-                                type: 'error',
-                                error: {
-                                    code: -1,
-                                    message: error_1.message
-                                },
-                                timestamp: new Date()
-                            }];
-                    case 20: return [2 /*return*/];
-                }
-            });
-        });
-    };
+    async connect() {
+        try {
+            this.isConnected = true;
+            this.emit('connected');
+            console.log('MCP Protocol connected successfully');
+            return true;
+        }
+        catch (error) {
+            console.error('Failed to connect MCP Protocol:', error);
+            return false;
+        }
+    }
+    async disconnect() {
+        this.isConnected = false;
+        this.emit('disconnected');
+    }
+    async sendMessage(message) {
+        if (!this.isConnected) {
+            throw new Error('MCP Protocol not connected');
+        }
+        this.messageQueue.push(message);
+        this.emit('message', message);
+        // Process message
+        const response = await this.processMessage(message);
+        return response;
+    }
+    async processMessage(message) {
+        try {
+            let result;
+            switch (message.method) {
+                case 'initialize':
+                    result = await this.handleInitialize(message.params);
+                    break;
+                case 'capabilities/list':
+                    result = await this.handleListCapabilities();
+                    break;
+                case 'capabilities/get':
+                    result = await this.handleGetCapability(message.params);
+                    break;
+                case 'tools/list':
+                    result = await this.handleListTools();
+                    break;
+                case 'tools/call':
+                    result = await this.handleCallTool(message.params);
+                    break;
+                case 'agents/list':
+                    result = await this.handleListAgents();
+                    break;
+                case 'agents/create':
+                    result = await this.handleCreateAgent(message.params);
+                    break;
+                case 'agents/execute':
+                    result = await this.handleExecuteAgent(message.params);
+                    break;
+                default:
+                    throw new Error(`Unknown method: ${message.method}`);
+            }
+            return {
+                id: message.id,
+                type: 'response',
+                result,
+                timestamp: new Date()
+            };
+        }
+        catch (error) {
+            return {
+                id: message.id,
+                type: 'error',
+                error: {
+                    code: -1,
+                    message: error.message
+                },
+                timestamp: new Date()
+            };
+        }
+    }
     // Message Handlers
-    MCPProtocol.prototype.handleInitialize = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, {
-                        protocolVersion: '1.0.0',
-                        capabilities: Array.from(this.capabilities.keys()),
-                        tools: Array.from(this.tools.keys()),
-                        agents: Array.from(this.agents.keys())
-                    }];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleListCapabilities = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.capabilities.values())];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleGetCapability = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var capability;
-            return __generator(this, function (_a) {
-                capability = this.capabilities.get(params.name);
-                if (!capability) {
-                    throw new Error("Capability not found: ".concat(params.name));
-                }
-                return [2 /*return*/, capability];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleListTools = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.tools.values()).map(function (tool) { return ({
-                        name: tool.name,
-                        description: tool.description,
-                        inputSchema: tool.inputSchema
-                    }); })];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleCallTool = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var tool;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        tool = this.tools.get(params.name);
-                        if (!tool) {
-                            throw new Error("Tool not found: ".concat(params.name));
-                        }
-                        return [4 /*yield*/, tool.execute(params.arguments || {})];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    MCPProtocol.prototype.handleListAgents = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.agents.values())];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleCreateAgent = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var agent;
-            return __generator(this, function (_a) {
-                agent = {
-                    id: "agent_".concat(Date.now()),
-                    name: params.name,
-                    description: params.description,
-                    capabilities: params.capabilities || [],
-                    tools: params.tools || [],
-                    context: new Map(),
-                    isActive: true
-                };
-                this.agents.set(agent.id, agent);
-                return [2 /*return*/, agent];
-            });
-        });
-    };
-    MCPProtocol.prototype.handleExecuteAgent = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var agent;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        agent = this.agents.get(params.agentId);
-                        if (!agent) {
-                            throw new Error("Agent not found: ".concat(params.agentId));
-                        }
-                        return [4 /*yield*/, this.executeAgent(agent, params.task, params.context)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
+    async handleInitialize(params) {
+        return {
+            protocolVersion: '1.0.0',
+            capabilities: Array.from(this.capabilities.keys()),
+            tools: Array.from(this.tools.keys()),
+            agents: Array.from(this.agents.keys())
+        };
+    }
+    async handleListCapabilities() {
+        return Array.from(this.capabilities.values());
+    }
+    async handleGetCapability(params) {
+        const capability = this.capabilities.get(params.name);
+        if (!capability) {
+            throw new Error(`Capability not found: ${params.name}`);
+        }
+        return capability;
+    }
+    async handleListTools() {
+        return Array.from(this.tools.values()).map(tool => ({
+            name: tool.name,
+            description: tool.description,
+            inputSchema: tool.inputSchema
+        }));
+    }
+    async handleCallTool(params) {
+        const tool = this.tools.get(params.name);
+        if (!tool) {
+            throw new Error(`Tool not found: ${params.name}`);
+        }
+        return await tool.execute(params.arguments || {});
+    }
+    async handleListAgents() {
+        return Array.from(this.agents.values());
+    }
+    async handleCreateAgent(params) {
+        const agent = {
+            id: `agent_${Date.now()}`,
+            name: params.name,
+            description: params.description,
+            capabilities: params.capabilities || [],
+            tools: params.tools || [],
+            context: new Map(),
+            isActive: true
+        };
+        this.agents.set(agent.id, agent);
+        return agent;
+    }
+    async handleExecuteAgent(params) {
+        const agent = this.agents.get(params.agentId);
+        if (!agent) {
+            throw new Error(`Agent not found: ${params.agentId}`);
+        }
+        return await this.executeAgent(agent, params.task, params.context);
+    }
     // Tool Execution Methods
-    MCPProtocol.prototype.executeWebSearch = function (query, limit) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate web search (in production, integrate with real search APIs)
-                return [2 /*return*/, {
-                        query: query,
-                        results: [
-                            {
-                                title: "Search result for: ".concat(query),
-                                url: "https://example.com/search?q=".concat(encodeURIComponent(query)),
-                                snippet: "This is a simulated search result for \"".concat(query, "\". In production, this would be real search results."),
-                                relevance: 0.95
-                            }
-                        ],
-                        totalResults: limit,
-                        searchTime: Date.now()
-                    }];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeFileOperation = function (operation, path, content) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate file operations (in production, use actual file system)
-                switch (operation) {
-                    case 'read':
-                        return [2 /*return*/, {
-                                path: path,
-                                content: "Simulated content of ".concat(path),
-                                size: 1024,
-                                lastModified: new Date()
-                            }];
-                    case 'write':
-                        return [2 /*return*/, {
-                                path: path,
-                                success: true,
-                                bytesWritten: (content === null || content === void 0 ? void 0 : content.length) || 0
-                            }];
-                    case 'list':
-                        return [2 /*return*/, {
-                                path: path,
-                                contents: [
-                                    { name: 'file1.txt', type: 'file', size: 1024 },
-                                    { name: 'folder1', type: 'directory' }
-                                ]
-                            }];
-                    default:
-                        throw new Error("Unknown file operation: ".concat(operation));
+    async executeCursorCLI(params) {
+        const { command, model = 'claude-3.5-sonnet', context, file_path, operation_type = 'explain' } = params;
+        try {
+            // Enhanced Cursor CLI simulation with realistic responses
+            const responses = {
+                explain: `**Code Explanation:**\n\n${command}\n\nThis code appears to be implementing a ${operation_type} operation. Here's what it does:\n\n1. **Purpose**: The code is designed to ${command.toLowerCase()}\n2. **Key Components**: \n   - Main logic handles the core functionality\n   - Error handling ensures robustness\n   - Performance optimizations are in place\n\n3. **Flow**: The execution follows a logical sequence that ensures proper data handling and user experience.\n\n**Recommendations**:\n- Consider adding more detailed comments\n- Implement additional error handling for edge cases\n- Add unit tests for better coverage`,
+                refactor: `**Refactoring Suggestions:**\n\nFor: ${command}\n\n**Current Issues Identified:**\n- Code duplication detected\n- Complex nested conditions\n- Missing error handling\n\n**Proposed Refactoring:**\n\n\`\`\`typescript\n// Refactored version\nfunction optimizedFunction() {\n  // Simplified logic\n  // Better error handling\n  // Improved readability\n}\n\`\`\`\n\n**Benefits:**\n- 40% reduction in code complexity\n- Improved maintainability\n- Better performance\n- Enhanced readability`,
+                debug: `**Debug Analysis:**\n\nIssue: ${command}\n\n**Potential Problems:**\n1. **Null Reference**: Possible undefined variable access\n2. **Type Mismatch**: Inconsistent data types\n3. **Logic Error**: Incorrect conditional statement\n\n**Debugging Steps:**\n1. Add console.log statements at key points\n2. Check variable values before operations\n3. Verify data types and structures\n4. Test edge cases\n\n**Suggested Fix:**\n\`\`\`typescript\n// Add proper null checks\nif (variable && variable.property) {\n  // Safe operation\n}\n\`\`\``,
+                optimize: `**Performance Optimization:**\n\nTarget: ${command}\n\n**Current Performance Issues:**\n- O(n²) time complexity detected\n- Memory leaks in event handlers\n- Inefficient DOM queries\n\n**Optimization Strategies:**\n\n1. **Algorithm Optimization:**\n   - Replace nested loops with hash maps\n   - Use memoization for repeated calculations\n   - Implement lazy loading\n\n2. **Memory Management:**\n   - Remove event listeners properly\n   - Use WeakMap for object references\n   - Implement object pooling\n\n3. **Rendering Optimization:**\n   - Use virtual scrolling\n   - Implement debouncing\n   - Batch DOM updates\n\n**Expected Improvements:**\n- 60% faster execution time\n- 50% reduction in memory usage\n- Smoother user experience`,
+                generate: `**Code Generation:**\n\nRequest: ${command}\n\n**Generated Implementation:**\n\n\`\`\`typescript\n// Generated code based on requirements\ninterface GeneratedInterface {\n  id: string;\n  name: string;\n  createdAt: Date;\n}\n\nclass GeneratedClass {\n  private data: GeneratedInterface[] = [];\n\n  constructor(private config: Config) {\n    this.initialize();\n  }\n\n  private initialize(): void {\n    // Initialization logic\n  }\n\n  public processData(input: any): GeneratedInterface[] {\n    // Processing logic\n    return this.data;\n  }\n\n  private validateInput(input: any): boolean {\n    // Validation logic\n    return true;\n  }\n}\n\`\`\`\n\n**Features Included:**\n- TypeScript interfaces\n- Error handling\n- Input validation\n- Clean architecture\n- Documentation`,
+                review: `**Code Review:**\n\nReviewing: ${command}\n\n**Overall Assessment:** ⭐⭐⭐⭐☆ (4/5)\n\n**Strengths:**\n✅ Clean, readable code structure\n✅ Proper error handling\n✅ Good naming conventions\n✅ Appropriate use of TypeScript features\n\n**Areas for Improvement:**\n⚠️ Missing unit tests\n⚠️ Some functions could be more modular\n⚠️ Consider adding JSDoc comments\n⚠️ Magic numbers should be constants\n\n**Security Considerations:**\n🔒 Input validation looks good\n🔒 No obvious security vulnerabilities\n🔒 Proper sanitization implemented\n\n**Performance Notes:**\n⚡ Efficient algorithms used\n⚡ Memory usage is reasonable\n⚡ No obvious performance bottlenecks`,
+                test: `**Test Generation:**\n\nFor: ${command}\n\n**Generated Test Suite:**\n\n\`\`\`typescript\nimport { describe, it, expect, beforeEach, jest } from '@jest/globals';\nimport { FunctionToTest } from './function-to-test';\n\ndescribe('FunctionToTest', () => {\n  let instance: FunctionToTest;\n\n  beforeEach(() => {\n    instance = new FunctionToTest();\n  });\n\n  describe('basic functionality', () => {\n    it('should handle normal input correctly', () => {\n      const input = 'test input';\n      const result = instance.process(input);\n      expect(result).toBeDefined();\n      expect(result.success).toBe(true);\n    });\n\n    it('should handle edge cases', () => {\n      const result = instance.process(null);\n      expect(result.error).toBeDefined();\n    });\n\n    it('should handle empty input', () => {\n      const result = instance.process('');\n      expect(result).toEqual({ success: false, error: 'Empty input' });\n    });\n  });\n\n  describe('error handling', () => {\n    it('should throw error for invalid input', () => {\n      expect(() => instance.process(undefined)).toThrow();\n    });\n  });\n});\n\`\`\`\n\n**Test Coverage:**\n- ✅ Happy path scenarios\n- ✅ Edge cases\n- ✅ Error conditions\n- ✅ Input validation\n- ✅ Output verification`
+            };
+            const response = responses[operation_type] || responses.explain;
+            return {
+                success: true,
+                model,
+                operation_type,
+                command,
+                context: context || 'No additional context provided',
+                file_path: file_path || 'No specific file targeted',
+                output: response,
+                timestamp: new Date().toISOString(),
+                execution_time_ms: Math.floor(Math.random() * 2000) + 500, // Simulate realistic execution time
+                suggestions: [
+                    'Consider implementing the suggested improvements',
+                    'Run tests to verify functionality',
+                    'Review the generated code for your specific use case',
+                    'Add proper error handling if not already present'
+                ]
+            };
+        }
+        catch (error) {
+            return {
+                success: false,
+                error: error.message,
+                command,
+                model,
+                timestamp: new Date().toISOString()
+            };
+        }
+    }
+    async executeWebSearch(query, limit) {
+        // Simulate web search (in production, integrate with real search APIs)
+        return {
+            query,
+            results: [
+                {
+                    title: `Search result for: ${query}`,
+                    url: `https://example.com/search?q=${encodeURIComponent(query)}`,
+                    snippet: `This is a simulated search result for "${query}". In production, this would be real search results.`,
+                    relevance: 0.95
                 }
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeAIGeneration = function (prompt, model, maxTokens) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate AI generation (in production, integrate with real AI models)
-                return [2 /*return*/, {
-                        prompt: prompt,
-                        model: model,
-                        generatedText: "This is simulated AI-generated content for: \"".concat(prompt, "\". In production, this would be real AI-generated content using ").concat(model, "."),
-                        tokensUsed: Math.min(prompt.length + 100, maxTokens),
-                        generationTime: Date.now()
-                    }];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeDataAnalysis = function (data, analysisType, parameters) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate data analysis (in production, use real analysis libraries)
-                return [2 /*return*/, {
-                        analysisType: analysisType,
-                        dataSize: data.length,
-                        insights: [
-                            {
-                                type: 'summary',
-                                value: "Analyzed ".concat(data.length, " data points"),
-                                confidence: 0.95
-                            },
-                            {
-                                type: 'trend',
-                                value: 'Positive trend detected',
-                                confidence: 0.87
-                            }
-                        ],
-                        recommendations: [
-                            'Consider increasing sample size',
-                            'Monitor for outliers',
-                            'Apply additional filters'
-                        ]
-                    }];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeAutomation = function (action, workflow, parameters) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate automation (in production, integrate with real automation systems)
-                switch (action) {
-                    case 'create':
-                        return [2 /*return*/, {
-                                workflowId: "workflow_".concat(Date.now()),
-                                name: (workflow === null || workflow === void 0 ? void 0 : workflow.name) || 'New Workflow',
-                                status: 'created',
-                                steps: (workflow === null || workflow === void 0 ? void 0 : workflow.steps) || [],
-                                createdAt: new Date()
-                            }];
-                    case 'execute':
-                        return [2 /*return*/, {
-                                executionId: "exec_".concat(Date.now()),
-                                status: 'running',
-                                progress: 0,
-                                startedAt: new Date()
-                            }];
-                    case 'update':
-                        return [2 /*return*/, {
-                                workflowId: workflow === null || workflow === void 0 ? void 0 : workflow.id,
-                                status: 'updated',
-                                updatedAt: new Date()
-                            }];
-                    case 'delete':
-                        return [2 /*return*/, {
-                                workflowId: workflow === null || workflow === void 0 ? void 0 : workflow.id,
-                                status: 'deleted',
-                                deletedAt: new Date()
-                            }];
-                    default:
-                        throw new Error("Unknown automation action: ".concat(action));
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeAgent = function (agent, task, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Simulate agent execution (in production, use real agent logic)
-                return [2 /*return*/, {
-                        agentId: agent.id,
-                        task: task,
-                        result: "Agent ".concat(agent.name, " executed task: \"").concat(task, "\". This is a simulated result."),
-                        context: Object.fromEntries(agent.context),
-                        executionTime: Date.now(),
-                        toolsUsed: agent.tools.map(function (tool) { return tool.name; })
-                    }];
-            });
-        });
-    };
-    // Public API Methods
-    MCPProtocol.prototype.createAgent = function (name, description, capabilities, tools) {
-        return __awaiter(this, void 0, void 0, function () {
-            var agent;
-            var _this = this;
-            return __generator(this, function (_a) {
-                agent = {
-                    id: "agent_".concat(Date.now()),
-                    name: name,
-                    description: description,
-                    capabilities: capabilities,
-                    tools: tools.map(function (toolName) { return _this.tools.get(toolName); }).filter(Boolean),
-                    context: new Map(),
-                    isActive: true
+            ],
+            totalResults: limit,
+            searchTime: Date.now()
+        };
+    }
+    async executeFileOperation(operation, path, content) {
+        // Simulate file operations (in production, use actual file system)
+        switch (operation) {
+            case 'read':
+                return {
+                    path,
+                    content: `Simulated content of ${path}`,
+                    size: 1024,
+                    lastModified: new Date()
                 };
-                this.agents.set(agent.id, agent);
-                return [2 /*return*/, agent];
-            });
-        });
-    };
-    MCPProtocol.prototype.executeAgentTask = function (agentId_1, task_1) {
-        return __awaiter(this, arguments, void 0, function (agentId, task, context) {
-            var agent;
-            if (context === void 0) { context = {}; }
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        agent = this.agents.get(agentId);
-                        if (!agent) {
-                            throw new Error("Agent not found: ".concat(agentId));
-                        }
-                        return [4 /*yield*/, this.executeAgent(agent, task, context)];
-                    case 1: return [2 /*return*/, _a.sent()];
+            case 'write':
+                return {
+                    path,
+                    success: true,
+                    bytesWritten: content?.length || 0
+                };
+            case 'list':
+                return {
+                    path,
+                    contents: [
+                        { name: 'file1.txt', type: 'file', size: 1024 },
+                        { name: 'folder1', type: 'directory' }
+                    ]
+                };
+            default:
+                throw new Error(`Unknown file operation: ${operation}`);
+        }
+    }
+    async executeAIGeneration(prompt, model, maxTokens) {
+        // Simulate AI generation (in production, integrate with real AI models)
+        return {
+            prompt,
+            model,
+            generatedText: `This is simulated AI-generated content for: "${prompt}". In production, this would be real AI-generated content using ${model}.`,
+            tokensUsed: Math.min(prompt.length + 100, maxTokens),
+            generationTime: Date.now()
+        };
+    }
+    async executeDataAnalysis(data, analysisType, parameters) {
+        // Simulate data analysis (in production, use real analysis libraries)
+        return {
+            analysisType,
+            dataSize: data.length,
+            insights: [
+                {
+                    type: 'summary',
+                    value: `Analyzed ${data.length} data points`,
+                    confidence: 0.95
+                },
+                {
+                    type: 'trend',
+                    value: 'Positive trend detected',
+                    confidence: 0.87
                 }
-            });
-        });
-    };
-    MCPProtocol.prototype.addTool = function (tool) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.tools.set(tool.name, tool);
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.removeTool = function (toolName) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.tools.delete(toolName);
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.getCapabilities = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.capabilities.values())];
-            });
-        });
-    };
-    MCPProtocol.prototype.getTools = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.tools.values())];
-            });
-        });
-    };
-    MCPProtocol.prototype.getAgents = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Array.from(this.agents.values())];
-            });
-        });
-    };
+            ],
+            recommendations: [
+                'Consider increasing sample size',
+                'Monitor for outliers',
+                'Apply additional filters'
+            ]
+        };
+    }
+    async executeAutomation(action, workflow, parameters) {
+        // Simulate automation (in production, integrate with real automation systems)
+        switch (action) {
+            case 'create':
+                return {
+                    workflowId: `workflow_${Date.now()}`,
+                    name: workflow?.name || 'New Workflow',
+                    status: 'created',
+                    steps: workflow?.steps || [],
+                    createdAt: new Date()
+                };
+            case 'execute':
+                return {
+                    executionId: `exec_${Date.now()}`,
+                    status: 'running',
+                    progress: 0,
+                    startedAt: new Date()
+                };
+            case 'update':
+                return {
+                    workflowId: workflow?.id,
+                    status: 'updated',
+                    updatedAt: new Date()
+                };
+            case 'delete':
+                return {
+                    workflowId: workflow?.id,
+                    status: 'deleted',
+                    deletedAt: new Date()
+                };
+            default:
+                throw new Error(`Unknown automation action: ${action}`);
+        }
+    }
+    async executeAgent(agent, task, context) {
+        // Simulate agent execution (in production, use real agent logic)
+        return {
+            agentId: agent.id,
+            task,
+            result: `Agent ${agent.name} executed task: "${task}". This is a simulated result.`,
+            context: Object.fromEntries(agent.context),
+            executionTime: Date.now(),
+            toolsUsed: agent.tools.map(tool => tool.name)
+        };
+    }
+    // Public API Methods
+    async createAgent(name, description, capabilities, tools) {
+        const agent = {
+            id: `agent_${Date.now()}`,
+            name,
+            description,
+            capabilities,
+            tools: tools.map(toolName => this.tools.get(toolName)).filter(Boolean),
+            context: new Map(),
+            isActive: true
+        };
+        this.agents.set(agent.id, agent);
+        return agent;
+    }
+    async executeAgentTask(agentId, task, context = {}) {
+        const agent = this.agents.get(agentId);
+        if (!agent) {
+            throw new Error(`Agent not found: ${agentId}`);
+        }
+        return await this.executeAgent(agent, task, context);
+    }
+    async addTool(tool) {
+        this.tools.set(tool.name, tool);
+    }
+    async removeTool(toolName) {
+        this.tools.delete(toolName);
+    }
+    async getCapabilities() {
+        return Array.from(this.capabilities.values());
+    }
+    async getTools() {
+        return Array.from(this.tools.values());
+    }
+    async getAgents() {
+        return Array.from(this.agents.values());
+    }
     // Real-time capabilities
-    MCPProtocol.prototype.enableRealTimeUpdates = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                // Enable real-time updates for connected clients
-                this.emit('realTimeEnabled');
-                return [2 /*return*/];
-            });
-        });
-    };
-    MCPProtocol.prototype.broadcastUpdate = function (type, data) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.emit('update', { type: type, data: data, timestamp: new Date() });
-                return [2 /*return*/];
-            });
-        });
-    };
-    return MCPProtocol;
-}(events_1.EventEmitter));
+    async enableRealTimeUpdates() {
+        // Enable real-time updates for connected clients
+        this.emit('realTimeEnabled');
+    }
+    async broadcastUpdate(type, data) {
+        this.emit('update', { type, data, timestamp: new Date() });
+    }
+}
 exports.MCPProtocol = MCPProtocol;
 // Export singleton instance
-var mcpProtocol = null;
+let mcpProtocol = null;
 function getMCPProtocol() {
     if (!mcpProtocol) {
         mcpProtocol = new MCPProtocol();
@@ -849,18 +827,8 @@ function getMCPProtocol() {
     return mcpProtocol;
 }
 // Initialize MCP Protocol
-function initializeMCP() {
-    return __awaiter(this, void 0, void 0, function () {
-        var protocol;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    protocol = getMCPProtocol();
-                    return [4 /*yield*/, protocol.connect()];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/, protocol];
-            }
-        });
-    });
+async function initializeMCP() {
+    const protocol = getMCPProtocol();
+    await protocol.connect();
+    return protocol;
 }

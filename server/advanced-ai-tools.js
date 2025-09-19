@@ -1,53 +1,18 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g = Object.create((typeof Iterator === "function" ? Iterator : Object).prototype);
-    return g.next = verb(0), g["throw"] = verb(1), g["return"] = verb(2), typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (g && (g = 0, op[0] && (_ = 0)), _) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdvancedAIToolsManager = void 0;
 exports.getAdvancedAIToolsManager = getAdvancedAIToolsManager;
-var mcp_protocol_js_1 = require("./mcp-protocol.js");
-var AdvancedAIToolsManager = /** @class */ (function () {
-    function AdvancedAIToolsManager() {
-        this.tools = new Map();
-        this.toolCategories = new Map();
-        this.executionHistory = new Map();
+const mcp_protocol_js_1 = require("./mcp-protocol.js");
+class AdvancedAIToolsManager {
+    tools = new Map();
+    toolCategories = new Map();
+    executionHistory = new Map();
+    mcpProtocol;
+    constructor() {
         this.mcpProtocol = (0, mcp_protocol_js_1.getMCPProtocol)();
         this.initializeCoreTools();
     }
-    AdvancedAIToolsManager.prototype.initializeCoreTools = function () {
+    initializeCoreTools() {
         // Content Generation Tools
         this.addTool({
             id: 'content_generator',
@@ -115,7 +80,7 @@ var AdvancedAIToolsManager = /** @class */ (function () {
                 { name: 'url', type: 'string', required: true, description: 'URL to shorten' },
                 { name: 'custom_alias', type: 'string', required: false, description: 'Custom short alias' }
             ],
-            execute: this.executeUrlShortener.bind(this),
+            execute: async (params) => ({ success: true, data: `Shortened: ${params.url}` }),
             isActive: true,
             usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
         });
@@ -334,142 +299,132 @@ var AdvancedAIToolsManager = /** @class */ (function () {
             isActive: true,
             usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
         });
-    };
+    }
     // Tool Management Methods
-    AdvancedAIToolsManager.prototype.addTool = function (tool) {
+    addTool(tool) {
         this.tools.set(tool.id, tool);
         if (!this.toolCategories.has(tool.category)) {
             this.toolCategories.set(tool.category, []);
         }
         this.toolCategories.get(tool.category).push(tool);
-    };
-    AdvancedAIToolsManager.prototype.removeTool = function (toolId) {
-        var tool = this.tools.get(toolId);
+    }
+    removeTool(toolId) {
+        const tool = this.tools.get(toolId);
         if (!tool)
             return false;
         this.tools.delete(toolId);
-        var categoryTools = this.toolCategories.get(tool.category);
+        const categoryTools = this.toolCategories.get(tool.category);
         if (categoryTools) {
-            var index = categoryTools.findIndex(function (t) { return t.id === toolId; });
+            const index = categoryTools.findIndex(t => t.id === toolId);
             if (index !== -1) {
                 categoryTools.splice(index, 1);
             }
         }
         return true;
-    };
-    AdvancedAIToolsManager.prototype.getTool = function (toolId) {
+    }
+    getTool(toolId) {
         return this.tools.get(toolId);
-    };
-    AdvancedAIToolsManager.prototype.getToolsByCategory = function (category) {
+    }
+    getToolsByCategory(category) {
         return this.toolCategories.get(category) || [];
-    };
-    AdvancedAIToolsManager.prototype.getAllTools = function () {
+    }
+    getAllTools() {
         return Array.from(this.tools.values());
-    };
-    AdvancedAIToolsManager.prototype.getToolCategories = function () {
+    }
+    getToolCategories() {
         return Array.from(this.toolCategories.keys());
-    };
+    }
     // Tool Execution Methods
-    AdvancedAIToolsManager.prototype.executeTool = function (toolId, params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var tool, startTime, validationResult, result, executionTime, toolResult, error_1, executionTime, toolResult;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        tool = this.tools.get(toolId);
-                        if (!tool) {
-                            return [2 /*return*/, {
-                                    success: false,
-                                    error: "Tool not found: ".concat(toolId),
-                                    executionTime: 0,
-                                    toolUsed: toolId,
-                                    confidence: 0
-                                }];
-                        }
-                        if (!tool.isActive) {
-                            return [2 /*return*/, {
-                                    success: false,
-                                    error: "Tool is inactive: ".concat(toolId),
-                                    executionTime: 0,
-                                    toolUsed: toolId,
-                                    confidence: 0
-                                }];
-                        }
-                        startTime = Date.now();
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        validationResult = this.validateParameters(tool, params);
-                        if (!validationResult.valid) {
-                            return [2 /*return*/, {
-                                    success: false,
-                                    error: "Parameter validation failed: ".concat(validationResult.error),
-                                    executionTime: Date.now() - startTime,
-                                    toolUsed: toolId,
-                                    confidence: 0
-                                }];
-                        }
-                        return [4 /*yield*/, tool.execute(params, context)];
-                    case 2:
-                        result = _a.sent();
-                        executionTime = Date.now() - startTime;
-                        // Update usage statistics
-                        this.updateToolUsage(tool, true, executionTime);
-                        toolResult = {
-                            success: true,
-                            data: result,
-                            executionTime: executionTime,
-                            toolUsed: toolId,
-                            confidence: this.calculateConfidence(result, tool),
-                            suggestions: this.generateSuggestions(result, tool)
-                        };
-                        this.storeExecutionHistory(context.userId, toolResult);
-                        return [2 /*return*/, toolResult];
-                    case 3:
-                        error_1 = _a.sent();
-                        executionTime = Date.now() - startTime;
-                        // Update usage statistics
-                        this.updateToolUsage(tool, false, executionTime);
-                        toolResult = {
-                            success: false,
-                            error: error_1.message,
-                            executionTime: executionTime,
-                            toolUsed: toolId,
-                            confidence: 0
-                        };
-                        this.storeExecutionHistory(context.userId, toolResult);
-                        return [2 /*return*/, toolResult];
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    AdvancedAIToolsManager.prototype.validateParameters = function (tool, params) {
-        for (var _i = 0, _a = tool.parameters; _i < _a.length; _i++) {
-            var param = _a[_i];
+    async executeTool(toolId, params, context) {
+        const tool = this.tools.get(toolId);
+        if (!tool) {
+            return {
+                success: false,
+                error: `Tool not found: ${toolId}`,
+                executionTime: 0,
+                toolUsed: toolId,
+                confidence: 0
+            };
+        }
+        if (!tool.isActive) {
+            return {
+                success: false,
+                error: `Tool is inactive: ${toolId}`,
+                executionTime: 0,
+                toolUsed: toolId,
+                confidence: 0
+            };
+        }
+        const startTime = Date.now();
+        try {
+            // Validate parameters
+            const validationResult = this.validateParameters(tool, params);
+            if (!validationResult.valid) {
+                return {
+                    success: false,
+                    error: `Parameter validation failed: ${validationResult.error}`,
+                    executionTime: Date.now() - startTime,
+                    toolUsed: toolId,
+                    confidence: 0
+                };
+            }
+            // Execute tool
+            const result = await tool.execute(params, context);
+            const executionTime = Date.now() - startTime;
+            // Update usage statistics
+            this.updateToolUsage(tool, true, executionTime);
+            // Store execution history
+            const toolResult = {
+                success: true,
+                data: result,
+                executionTime,
+                toolUsed: toolId,
+                confidence: this.calculateConfidence(result, tool),
+                suggestions: this.generateSuggestions(result, tool)
+            };
+            this.storeExecutionHistory(context.userId, toolResult);
+            return toolResult;
+        }
+        catch (error) {
+            const executionTime = Date.now() - startTime;
+            // Update usage statistics
+            this.updateToolUsage(tool, false, executionTime);
+            const toolResult = {
+                success: false,
+                error: error.message,
+                executionTime,
+                toolUsed: toolId,
+                confidence: 0
+            };
+            this.storeExecutionHistory(context.userId, toolResult);
+            return toolResult;
+        }
+    }
+    validateParameters(tool, params) {
+        for (const param of tool.parameters) {
             if (param.required && (params[param.name] === undefined || params[param.name] === null)) {
-                return { valid: false, error: "Required parameter missing: ".concat(param.name) };
+                return { valid: false, error: `Required parameter missing: ${param.name}` };
             }
             if (params[param.name] !== undefined && param.validation) {
                 if (!param.validation(params[param.name])) {
-                    return { valid: false, error: "Invalid parameter value: ".concat(param.name) };
+                    return { valid: false, error: `Invalid parameter value: ${param.name}` };
                 }
             }
         }
         return { valid: true };
-    };
-    AdvancedAIToolsManager.prototype.updateToolUsage = function (tool, success, executionTime) {
+    }
+    updateToolUsage(tool, success, executionTime) {
         tool.usage.totalCalls++;
         tool.usage.lastUsed = new Date();
         // Update success rate using exponential moving average
-        var alpha = 0.1;
+        const alpha = 0.1;
         tool.usage.successRate = alpha * (success ? 1 : 0) + (1 - alpha) * tool.usage.successRate;
         // Update average execution time using exponential moving average
         tool.usage.averageExecutionTime = alpha * executionTime + (1 - alpha) * tool.usage.averageExecutionTime;
-    };
-    AdvancedAIToolsManager.prototype.calculateConfidence = function (result, tool) {
+    }
+    calculateConfidence(result, tool) {
         // Calculate confidence based on tool performance and result quality
-        var confidence = tool.usage.successRate;
+        let confidence = tool.usage.successRate;
         // Adjust confidence based on result characteristics
         if (typeof result === 'string' && result.length > 0) {
             confidence += 0.1;
@@ -478,9 +433,9 @@ var AdvancedAIToolsManager = /** @class */ (function () {
             confidence += 0.05;
         }
         return Math.min(Math.max(confidence, 0), 1);
-    };
-    AdvancedAIToolsManager.prototype.generateSuggestions = function (result, tool) {
-        var suggestions = [];
+    }
+    generateSuggestions(result, tool) {
+        const suggestions = [];
         // Generate suggestions based on tool type and result
         switch (tool.category) {
             case 'content':
@@ -497,256 +452,187 @@ var AdvancedAIToolsManager = /** @class */ (function () {
                 break;
         }
         return suggestions;
-    };
-    AdvancedAIToolsManager.prototype.storeExecutionHistory = function (userId, result) {
+    }
+    storeExecutionHistory(userId, result) {
         if (!this.executionHistory.has(userId)) {
             this.executionHistory.set(userId, []);
         }
-        var history = this.executionHistory.get(userId);
+        const history = this.executionHistory.get(userId);
         history.push(result);
         // Keep only last 100 executions per user
         if (history.length > 100) {
             history.splice(0, history.length - 100);
         }
-    };
+    }
     // Tool Execution Implementations
-    AdvancedAIToolsManager.prototype.executeContentGeneration = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var prompt, style, length, language, tone, mcpResult;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        prompt = params.prompt, style = params.style, length = params.length, language = params.language, tone = params.tone;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "content_gen_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'ai_generation_tool',
-                                    arguments: { prompt: prompt, model: 'gpt-4', max_tokens: length }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _b.sent();
-                        return [2 /*return*/, {
-                                content: ((_a = mcpResult.result) === null || _a === void 0 ? void 0 : _a.generatedText) || "Generated content for: ".concat(prompt),
-                                style: style,
-                                language: language,
-                                tone: tone,
-                                wordCount: length,
-                                generatedAt: new Date(),
-                                model: 'gpt-4'
-                            }];
-                }
-            });
+    async executeContentGeneration(params, context) {
+        const { prompt, style, length, language, tone } = params;
+        // Use MCP protocol for AI generation
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `content_gen_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'ai_generation_tool',
+                arguments: { prompt, model: 'gpt-4', max_tokens: length }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeDataAnalysis = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var data, analysis_type, visualization, insights_depth, mcpResult;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        data = params.data, analysis_type = params.analysis_type, visualization = params.visualization, insights_depth = params.insights_depth;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "data_analysis_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'data_analysis_tool',
-                                    arguments: { data: data, analysis_type: analysis_type, parameters: { visualization: visualization, insights_depth: insights_depth } }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _a.sent();
-                        return [2 /*return*/, {
-                                analysis: mcpResult.result || { insights: [], recommendations: [] },
-                                dataSize: data.length,
-                                analysisType: analysis_type,
-                                visualizations: visualization ? ['chart1.png', 'chart2.png'] : [],
-                                confidence: 0.95
-                            }];
-                }
-            });
+        return {
+            content: mcpResult.result?.generatedText || `Generated content for: ${prompt}`,
+            style,
+            language,
+            tone,
+            wordCount: length,
+            generatedAt: new Date(),
+            model: 'gpt-4'
+        };
+    }
+    async executeDataAnalysis(params, context) {
+        const { data, analysis_type, visualization, insights_depth } = params;
+        // Use MCP protocol for data analysis
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `data_analysis_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'data_analysis_tool',
+                arguments: { data, analysis_type, parameters: { visualization, insights_depth } }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeWebScraping = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var url, selectors, data_format, respect_robots, mcpResult;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        url = params.url, selectors = params.selectors, data_format = params.data_format, respect_robots = params.respect_robots;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "web_scrape_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'web_search_tool',
-                                    arguments: { query: url, limit: 1 }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _b.sent();
-                        return [2 /*return*/, {
-                                url: url,
-                                scrapedData: ((_a = mcpResult.result) === null || _a === void 0 ? void 0 : _a.results) || [],
-                                format: data_format,
-                                selectors: selectors,
-                                scrapedAt: new Date(),
-                                robotsRespected: respect_robots
-                            }];
-                }
-            });
+        return {
+            analysis: mcpResult.result || { insights: [], recommendations: [] },
+            dataSize: data.length,
+            analysisType: analysis_type,
+            visualizations: visualization ? ['chart1.png', 'chart2.png'] : [],
+            confidence: 0.95
+        };
+    }
+    async executeWebScraping(params, context) {
+        const { url, selectors, data_format, respect_robots } = params;
+        // Use MCP protocol for web operations
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `web_scrape_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'web_search_tool',
+                arguments: { query: url, limit: 1 }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeImageProcessing = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var image_url, operation, filters, output_format, mcpResult;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        image_url = params.image_url, operation = params.operation, filters = params.filters, output_format = params.output_format;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "image_process_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'ai_generation_tool',
-                                    arguments: { prompt: "Analyze this image: ".concat(image_url), model: 'gpt-4-vision' }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _b.sent();
-                        return [2 /*return*/, {
-                                imageUrl: image_url,
-                                operation: operation,
-                                analysis: ((_a = mcpResult.result) === null || _a === void 0 ? void 0 : _a.generatedText) || 'Image analysis completed',
-                                filters: filters || [],
-                                outputFormat: output_format,
-                                processedAt: new Date()
-                            }];
-                }
-            });
+        return {
+            url,
+            scrapedData: mcpResult.result?.results || [],
+            format: data_format,
+            selectors,
+            scrapedAt: new Date(),
+            robotsRespected: respect_robots
+        };
+    }
+    async executeImageProcessing(params, context) {
+        const { image_url, operation, filters, output_format } = params;
+        // Use MCP protocol for AI image analysis
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `image_process_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'ai_generation_tool',
+                arguments: { prompt: `Analyze this image: ${image_url}`, model: 'gpt-4-vision' }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeAPIIntegration = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var endpoint, method, headers, body, timeout;
-            return __generator(this, function (_a) {
-                endpoint = params.endpoint, method = params.method, headers = params.headers, body = params.body, timeout = params.timeout;
-                // Simulate API call (in production, use actual HTTP client)
-                return [2 /*return*/, {
-                        endpoint: endpoint,
-                        method: method,
-                        response: {
-                            status: 200,
-                            data: { message: 'API call successful', timestamp: new Date() },
-                            headers: headers || {}
-                        },
-                        executionTime: Math.random() * 1000,
-                        calledAt: new Date()
-                    }];
-            });
+        return {
+            imageUrl: image_url,
+            operation,
+            analysis: mcpResult.result?.generatedText || 'Image analysis completed',
+            filters: filters || [],
+            outputFormat: output_format,
+            processedAt: new Date()
+        };
+    }
+    async executeAPIIntegration(params, context) {
+        const { endpoint, method, headers, body, timeout } = params;
+        // Simulate API call (in production, use actual HTTP client)
+        return {
+            endpoint,
+            method,
+            response: {
+                status: 200,
+                data: { message: 'API call successful', timestamp: new Date() },
+                headers: headers || {}
+            },
+            executionTime: Math.random() * 1000,
+            calledAt: new Date()
+        };
+    }
+    async executeWorkflowAutomation(params, context) {
+        const { workflow_definition, trigger_type, execution_mode, retry_policy } = params;
+        // Use MCP protocol for automation
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `workflow_auto_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'automation_tool',
+                arguments: { action: 'create', workflow: workflow_definition }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeWorkflowAutomation = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var workflow_definition, trigger_type, execution_mode, retry_policy, mcpResult;
-            var _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        workflow_definition = params.workflow_definition, trigger_type = params.trigger_type, execution_mode = params.execution_mode, retry_policy = params.retry_policy;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "workflow_auto_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'automation_tool',
-                                    arguments: { action: 'create', workflow: workflow_definition }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _b.sent();
-                        return [2 /*return*/, {
-                                workflowId: ((_a = mcpResult.result) === null || _a === void 0 ? void 0 : _a.workflowId) || "workflow_".concat(Date.now()),
-                                definition: workflow_definition,
-                                triggerType: trigger_type,
-                                executionMode: execution_mode,
-                                retryPolicy: retry_policy,
-                                status: 'active',
-                                createdAt: new Date()
-                            }];
-                }
-            });
+        return {
+            workflowId: mcpResult.result?.workflowId || `workflow_${Date.now()}`,
+            definition: workflow_definition,
+            triggerType: trigger_type,
+            executionMode: execution_mode,
+            retryPolicy: retry_policy,
+            status: 'active',
+            createdAt: new Date()
+        };
+    }
+    async executeRealtimeMonitoring(params, context) {
+        const { data_source, monitoring_rules, alert_thresholds, aggregation_window } = params;
+        return {
+            dataSource: data_source,
+            monitoringRules: monitoring_rules || [],
+            alertThresholds: alert_thresholds || {},
+            aggregationWindow: aggregation_window,
+            status: 'monitoring',
+            alerts: [],
+            startedAt: new Date()
+        };
+    }
+    async executeNLPProcessing(params, context) {
+        const { text, operations, language, confidence_threshold } = params;
+        // Use MCP protocol for NLP processing
+        const mcpResult = await this.mcpProtocol.sendMessage({
+            id: `nlp_process_${Date.now()}`,
+            type: 'request',
+            method: 'tools/call',
+            params: {
+                name: 'ai_generation_tool',
+                arguments: { prompt: `Process this text: ${text}`, model: 'gpt-4' }
+            },
+            timestamp: new Date()
         });
-    };
-    AdvancedAIToolsManager.prototype.executeRealtimeMonitoring = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var data_source, monitoring_rules, alert_thresholds, aggregation_window;
-            return __generator(this, function (_a) {
-                data_source = params.data_source, monitoring_rules = params.monitoring_rules, alert_thresholds = params.alert_thresholds, aggregation_window = params.aggregation_window;
-                return [2 /*return*/, {
-                        dataSource: data_source,
-                        monitoringRules: monitoring_rules || [],
-                        alertThresholds: alert_thresholds || {},
-                        aggregationWindow: aggregation_window,
-                        status: 'monitoring',
-                        alerts: [],
-                        startedAt: new Date()
-                    }];
-            });
-        });
-    };
-    AdvancedAIToolsManager.prototype.executeNLPProcessing = function (params, context) {
-        return __awaiter(this, void 0, void 0, function () {
-            var text, operations, language, confidence_threshold, mcpResult;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        text = params.text, operations = params.operations, language = params.language, confidence_threshold = params.confidence_threshold;
-                        return [4 /*yield*/, this.mcpProtocol.sendMessage({
-                                id: "nlp_process_".concat(Date.now()),
-                                type: 'request',
-                                method: 'tools/call',
-                                params: {
-                                    name: 'ai_generation_tool',
-                                    arguments: { prompt: "Process this text: ".concat(text), model: 'gpt-4' }
-                                },
-                                timestamp: new Date()
-                            })];
-                    case 1:
-                        mcpResult = _a.sent();
-                        return [2 /*return*/, {
-                                text: text,
-                                operations: operations || ['sentiment', 'entities'],
-                                language: language,
-                                results: {
-                                    sentiment: { score: 0.5, label: 'neutral' },
-                                    entities: [],
-                                    classification: 'general',
-                                    confidence: confidence_threshold
-                                },
-                                processedAt: new Date()
-                            }];
-                }
-            });
-        });
-    };
+        return {
+            text,
+            operations: operations || ['sentiment', 'entities'],
+            language,
+            results: {
+                sentiment: { score: 0.5, label: 'neutral' },
+                entities: [],
+                classification: 'general',
+                confidence: confidence_threshold
+            },
+            processedAt: new Date()
+        };
+    }
     // Analytics and Reporting
-    AdvancedAIToolsManager.prototype.getToolAnalytics = function (toolId) {
-        var _a;
+    getToolAnalytics(toolId) {
         if (toolId) {
-            var tool = this.tools.get(toolId);
+            const tool = this.tools.get(toolId);
             if (!tool)
                 return null;
             return {
@@ -756,49 +642,45 @@ var AdvancedAIToolsManager = /** @class */ (function () {
                     category: tool.category
                 },
                 usage: tool.usage,
-                recentExecutions: ((_a = this.executionHistory.get('system')) === null || _a === void 0 ? void 0 : _a.slice(-10)) || []
+                recentExecutions: this.executionHistory.get('system')?.slice(-10) || []
             };
         }
         // Return analytics for all tools
         return {
             totalTools: this.tools.size,
             categories: Array.from(this.toolCategories.keys()),
-            toolStats: Array.from(this.tools.values()).map(function (tool) { return ({
+            toolStats: Array.from(this.tools.values()).map(tool => ({
                 id: tool.id,
                 name: tool.name,
                 category: tool.category,
                 usage: tool.usage
-            }); }),
+            })),
             totalExecutions: Array.from(this.executionHistory.values())
-                .reduce(function (sum, history) { return sum + history.length; }, 0)
+                .reduce((sum, history) => sum + history.length, 0)
         };
-    };
-    AdvancedAIToolsManager.prototype.getExecutionHistory = function (userId) {
+    }
+    getExecutionHistory(userId) {
         return this.executionHistory.get(userId) || [];
-    };
+    }
     // Tool Discovery and Recommendations
-    AdvancedAIToolsManager.prototype.discoverTools = function (query, category) {
-        var allTools = category ? this.getToolsByCategory(category) : this.getAllTools();
-        return allTools.filter(function (tool) {
-            return tool.name.toLowerCase().includes(query.toLowerCase()) ||
-                tool.description.toLowerCase().includes(query.toLowerCase()) ||
-                tool.capabilities.some(function (cap) { return cap.toLowerCase().includes(query.toLowerCase()); });
-        });
-    };
-    AdvancedAIToolsManager.prototype.recommendTools = function (context, limit) {
-        if (limit === void 0) { limit = 5; }
+    discoverTools(query, category) {
+        const allTools = category ? this.getToolsByCategory(category) : this.getAllTools();
+        return allTools.filter(tool => tool.name.toLowerCase().includes(query.toLowerCase()) ||
+            tool.description.toLowerCase().includes(query.toLowerCase()) ||
+            tool.capabilities.some(cap => cap.toLowerCase().includes(query.toLowerCase())));
+    }
+    recommendTools(context, limit = 5) {
         // Simple recommendation based on usage patterns
-        var allTools = this.getAllTools();
+        const allTools = this.getAllTools();
         return allTools
-            .filter(function (tool) { return tool.isActive; })
-            .sort(function (a, b) { return b.usage.successRate - a.usage.successRate; })
+            .filter(tool => tool.isActive)
+            .sort((a, b) => b.usage.successRate - a.usage.successRate)
             .slice(0, limit);
-    };
-    return AdvancedAIToolsManager;
-}());
+    }
+}
 exports.AdvancedAIToolsManager = AdvancedAIToolsManager;
 // Export singleton instance
-var aiToolsManager = null;
+let aiToolsManager = null;
 function getAdvancedAIToolsManager() {
     if (!aiToolsManager) {
         aiToolsManager = new AdvancedAIToolsManager();
