@@ -1,5 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
-import { handleApiError, ERROR_CODES } from './error-handling';
+import { handleAPIError } from './error-handling';
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
@@ -16,7 +16,7 @@ async function throwIfResNotOk(res: Response) {
       config: { url: res.url, method: 'GET' }
     };
     
-    throw handleApiError(error);
+    throw handleAPIError(error);
   }
 }
 
@@ -42,7 +42,7 @@ export async function apiRequest(
     }
     
     // Handle network and other errors
-    throw handleApiError(error);
+    throw handleAPIError(error);
   }
 }
 
