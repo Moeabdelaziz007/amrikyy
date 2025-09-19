@@ -1,3 +1,18 @@
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyC4xK8Y9Z2L3M4N5O6P7Q8R9S0T1U2V3W4",
+    authDomain: "aios-97581.firebaseapp.com",
+    projectId: "aios-97581",
+    storageBucket: "aios-97581.appspot.com",
+    messagingSenderId: "123456789012",
+    appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 // DOM Elements
 const navbar = document.querySelector('.navbar');
 const hamburger = document.querySelector('.hamburger');
@@ -425,17 +440,30 @@ elementsToCheck.forEach(selector => {
     }
 });
 
-// Authentication System
+// Enhanced Authentication System with Firebase
 class AuthSystem {
     constructor() {
         this.currentUser = null;
         this.isLoggedIn = false;
+        this.isGuest = false;
         this.init();
     }
 
     init() {
         this.setupEventListeners();
+        this.setupFirebaseAuth();
         this.checkAuthStatus();
+    }
+
+    setupFirebaseAuth() {
+        // Listen for authentication state changes
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.handleAuthSuccess(user);
+            } else {
+                this.handleAuthSignOut();
+            }
+        });
     }
 
     setupEventListeners() {
@@ -467,6 +495,13 @@ class AuthSystem {
 
         // Logout
         document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+
+        // Guest login
+        document.getElementById('guestLoginBtn').addEventListener('click', () => this.guestLogin());
+
+        // Social login buttons
+        document.querySelector('.google-btn').addEventListener('click', () => this.googleLogin());
+        document.querySelector('.github-btn').addEventListener('click', () => this.githubLogin());
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
@@ -563,6 +598,7 @@ class AuthSystem {
     async handleLogin(e) {
         e.preventDefault();
         this.clearErrors();
+        this.setLoadingState(true);
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -571,35 +607,68 @@ class AuthSystem {
         // Validation
         if (!this.validateEmail(email)) {
             this.showError('email', 'Please enter a valid email address');
+            this.setLoadingState(false);
             return;
         }
 
         if (!this.validatePassword(password)) {
             this.showError('password', 'Password must be at least 8 characters long');
+            this.setLoadingState(false);
             return;
         }
 
-        // Simulate API call
         try {
-            const user = await this.simulateLogin(email, password);
+            // Firebase Authentication
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
             
-            if (user) {
-                this.currentUser = user;
-                this.isLoggedIn = true;
-                
-                // Store in localStorage if remember me is checked
-                if (rememberMe) {
-                    localStorage.setItem('auraos_user', JSON.stringify(user));
-                }
-                
-                this.hideModal('loginModal');
-                this.showUserDashboard();
-                this.showSuccessMessage('Welcome back!');
-            } else {
-                this.showError('password', 'Invalid email or password');
-            }
+            // Set persistence based on remember me
+            const persistence = rememberMe ? 
+                firebase.auth.Auth.Persistence.LOCAL : 
+                firebase.auth.Auth.Persistence.SESSION;
+            
+            await auth.setPersistence(persistence);
+            
+            // Store user data
+            this.currentUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName || user.email.split('@')[0],
+                photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email.split('@')[0])}&background=6366f1&color=fff`
+            };
+            
+            this.isLoggedIn = true;
+            this.isGuest = false;
+            
+            this.hideModal('loginModal');
+            this.showUserDashboard();
+            this.showSuccessMessage('Welcome back!');
+            
         } catch (error) {
-            this.showError('password', 'Login failed. Please try again.');
+            console.error('Login error:', error);
+            let errorMessage = 'Login failed. Please try again.';
+            
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    errorMessage = 'No account found with this email address.';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage = 'Incorrect password.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'Invalid email address.';
+                    break;
+                case 'auth/user-disabled':
+                    errorMessage = 'This account has been disabled.';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage = 'Too many failed attempts. Please try again later.';
+                    break;
+            }
+            
+            this.showError('password', errorMessage);
+        } finally {
+            this.setLoadingState(false);
         }
     }
 
@@ -707,33 +776,162 @@ class AuthSystem {
         const userEmail = document.getElementById('userEmail');
         const userAvatar = document.getElementById('userAvatar');
 
-        userName.textContent = `Welcome back, ${this.currentUser.name}!`;
-        userEmail.textContent = this.currentUser.email;
-        userAvatar.src = this.currentUser.avatar;
+        const displayName = this.currentUser.displayName || this.currentUser.name;
+        const email = this.currentUser.email;
+        
+        userName.textContent = `Welcome ${this.isGuest ? 'back, Guest' : 'back, ' + displayName}!`;
+        userEmail.textContent = email;
+        userAvatar.src = this.currentUser.photoURL || this.currentUser.avatar;
+
+        // Add guest indicator if needed
+        if (this.isGuest) {
+            userName.innerHTML += ' <span class="guest-badge">Guest</span>';
+        }
 
         dashboard.style.display = 'block';
 
         // Update page title
-        document.title = `${this.currentUser.name} - AuraOS`;
+        document.title = `${displayName} - AuraOS`;
+    }
+
+    // Set loading state for buttons
+    setLoadingState(loading) {
+        const submitBtn = document.querySelector('.login-submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
+        
+        if (loading) {
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'flex';
+            submitBtn.disabled = true;
+        } else {
+            btnText.style.display = 'flex';
+            btnLoading.style.display = 'none';
+            submitBtn.disabled = false;
+        }
+    }
+
+    // Guest login functionality
+    async guestLogin() {
+        try {
+            // Create anonymous guest user
+            const userCredential = await auth.signInAnonymously();
+            const user = userCredential.user;
+            
+            this.currentUser = {
+                uid: user.uid,
+                email: 'guest@auraos.com',
+                displayName: 'Guest User',
+                photoURL: 'https://ui-avatars.com/api/?name=Guest&background=10b981&color=fff',
+                isAnonymous: true
+            };
+            
+            this.isLoggedIn = true;
+            this.isGuest = true;
+            
+            this.hideModal('loginModal');
+            this.showUserDashboard();
+            this.showSuccessMessage('Welcome as guest!');
+            
+        } catch (error) {
+            console.error('Guest login error:', error);
+            this.showError('password', 'Guest login failed. Please try again.');
+        }
+    }
+
+    // Google login
+    async googleLogin() {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            
+            this.currentUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL
+            };
+            
+            this.isLoggedIn = true;
+            this.isGuest = false;
+            
+            this.hideModal('loginModal');
+            this.showUserDashboard();
+            this.showSuccessMessage('Welcome!');
+            
+        } catch (error) {
+            console.error('Google login error:', error);
+            this.showError('password', 'Google login failed. Please try again.');
+        }
+    }
+
+    // GitHub login
+    async githubLogin() {
+        try {
+            const provider = new firebase.auth.GithubAuthProvider();
+            provider.addScope('user:email');
+            
+            const result = await auth.signInWithPopup(provider);
+            const user = result.user;
+            
+            this.currentUser = {
+                uid: user.uid,
+                email: user.email,
+                displayName: user.displayName,
+                photoURL: user.photoURL
+            };
+            
+            this.isLoggedIn = true;
+            this.isGuest = false;
+            
+            this.hideModal('loginModal');
+            this.showUserDashboard();
+            this.showSuccessMessage('Welcome!');
+            
+        } catch (error) {
+            console.error('GitHub login error:', error);
+            this.showError('password', 'GitHub login failed. Please try again.');
+        }
+    }
+
+    // Handle successful authentication
+    handleAuthSuccess(user) {
+        this.currentUser = {
+            uid: user.uid,
+            email: user.email,
+            displayName: user.displayName || user.email.split('@')[0],
+            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email.split('@')[0])}&background=6366f1&color=fff`,
+            isAnonymous: user.isAnonymous
+        };
+        
+        this.isLoggedIn = true;
+        this.isGuest = user.isAnonymous;
+        
+        this.showUserDashboard();
+    }
+
+    // Handle sign out
+    handleAuthSignOut() {
+        this.currentUser = null;
+        this.isLoggedIn = false;
+        this.isGuest = false;
+        
+        document.getElementById('userDashboard').style.display = 'none';
+        document.getElementById('loginBtn').style.display = 'block';
+        document.title = 'AuraOS - Modern Operating System';
     }
 
     logout() {
-        this.currentUser = null;
-        this.isLoggedIn = false;
-        
-        // Clear localStorage
-        localStorage.removeItem('auraos_user');
-        
-        // Hide dashboard
-        document.getElementById('userDashboard').style.display = 'none';
-        
-        // Show login button
-        document.getElementById('loginBtn').style.display = 'block';
-        
-        // Reset page title
-        document.title = 'AuraOS - Modern Operating System';
-        
-        this.showSuccessMessage('Logged out successfully');
+        auth.signOut().then(() => {
+            this.showSuccessMessage('Logged out successfully');
+        }).catch((error) => {
+            console.error('Logout error:', error);
+            this.showSuccessMessage('Logged out successfully');
+        });
     }
 
     checkAuthStatus() {
