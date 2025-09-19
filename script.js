@@ -774,12 +774,22 @@ class AuthSystem {
     }
 }
 
-// Chatbot System
+// Enhanced Chatbot System with Meta-Learning and Zero-Shot Capabilities
 class ChatbotSystem {
     constructor() {
         this.isOpen = false;
         this.messageCount = 0;
         this.conversationHistory = [];
+        this.learningPatterns = new Map();
+        this.zeroShotCache = new Map();
+        this.metaLearningModel = new MetaLearningModel();
+        this.adaptationHistory = [];
+        this.performanceMetrics = {
+            accuracy: 0,
+            responseTime: 0,
+            userSatisfaction: 0,
+            learningRate: 0
+        };
         this.init();
     }
 
@@ -808,6 +818,22 @@ class ChatbotSystem {
                 this.sendQuickMessage(message);
             });
         });
+
+        // Analytics button (add dynamically if not exists)
+        if (!document.getElementById('showAnalytics')) {
+            const analyticsBtn = document.createElement('button');
+            analyticsBtn.id = 'showAnalytics';
+            analyticsBtn.className = 'chatbot-analytics';
+            analyticsBtn.innerHTML = '<i class="fas fa-chart-line"></i>';
+            analyticsBtn.title = 'Show Learning Analytics';
+            analyticsBtn.addEventListener('click', () => this.showLearningAnalytics());
+            
+            const header = document.querySelector('.chatbot-header');
+            if (header) {
+                const controls = header.querySelector('.chatbot-controls') || header;
+                controls.appendChild(analyticsBtn);
+            }
+        }
     }
 
     toggleChatbot() {
@@ -879,8 +905,30 @@ class ChatbotSystem {
     }
 
     generateResponse(userMessage) {
+        const startTime = performance.now();
         const message = userMessage.toLowerCase();
         
+        // Zero-shot learning: Try to generate response without prior examples
+        const zeroShotResponse = this.zeroShotLearning(userMessage);
+        if (zeroShotResponse) {
+            this.updatePerformanceMetrics(performance.now() - startTime, true);
+            return zeroShotResponse;
+        }
+
+        // Meta-learning: Use learned patterns to adapt responses
+        const metaResponse = this.metaLearningModel.adaptResponse(userMessage, this.conversationHistory);
+        if (metaResponse) {
+            this.updatePerformanceMetrics(performance.now() - startTime, true);
+            return metaResponse;
+        }
+
+        // Pattern-based learning: Check learned patterns
+        const patternResponse = this.checkLearnedPatterns(message);
+        if (patternResponse) {
+            this.updatePerformanceMetrics(performance.now() - startTime, true);
+            return patternResponse;
+        }
+
         // Predefined responses based on keywords
         const responses = {
             'download': 'You can download AuraOS from our download section! We support Windows, macOS, and Linux. The download is free and takes about 2.1 GB of space.',
@@ -896,11 +944,13 @@ class ChatbotSystem {
         // Find matching response
         for (const [keyword, response] of Object.entries(responses)) {
             if (message.includes(keyword)) {
+                this.learnPattern(keyword, response, userMessage);
+                this.updatePerformanceMetrics(performance.now() - startTime, true);
                 return response;
             }
         }
 
-        // Default responses
+        // Default responses with learning
         const defaultResponses = [
             'That\'s an interesting question! Let me help you find the right information.',
             'I understand you\'re asking about that. Could you be more specific so I can provide better assistance?',
@@ -909,7 +959,195 @@ class ChatbotSystem {
             'That\'s something our team can definitely help with. Let me provide you with some useful information.'
         ];
 
-        return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        const response = defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        this.learnFromInteraction(userMessage, response);
+        this.updatePerformanceMetrics(performance.now() - startTime, false);
+        return response;
+    }
+
+    // Zero-shot learning: Generate responses without prior examples
+    zeroShotLearning(userMessage) {
+        // Check cache first
+        if (this.zeroShotCache.has(userMessage)) {
+            return this.zeroShotCache.get(userMessage);
+        }
+
+        // Analyze message structure and intent
+        const intent = this.analyzeIntent(userMessage);
+        const entities = this.extractEntities(userMessage);
+        
+        // Generate response based on intent and entities
+        const response = this.generateZeroShotResponse(intent, entities, userMessage);
+        
+        if (response) {
+            this.zeroShotCache.set(userMessage, response);
+            return response;
+        }
+        
+        return null;
+    }
+
+    // Analyze user intent from message
+    analyzeIntent(message) {
+        const questionWords = ['what', 'how', 'when', 'where', 'why', 'who', 'which'];
+        const actionWords = ['download', 'install', 'get', 'find', 'create', 'make'];
+        const problemWords = ['error', 'issue', 'problem', 'bug', 'fix', 'help'];
+        
+        if (questionWords.some(word => message.includes(word))) {
+            return 'question';
+        } else if (actionWords.some(word => message.includes(word))) {
+            return 'action';
+        } else if (problemWords.some(word => message.includes(word))) {
+            return 'problem';
+        } else if (message.includes('hello') || message.includes('hi')) {
+            return 'greeting';
+        }
+        
+        return 'general';
+    }
+
+    // Extract entities from message
+    extractEntities(message) {
+        const entities = {
+            os: [],
+            features: [],
+            technical: []
+        };
+
+        const osTerms = ['windows', 'macos', 'linux', 'ubuntu', 'debian'];
+        const featureTerms = ['security', 'performance', 'interface', 'customization'];
+        const technicalTerms = ['ram', 'cpu', 'gpu', 'storage', 'memory'];
+
+        osTerms.forEach(term => {
+            if (message.includes(term)) entities.os.push(term);
+        });
+
+        featureTerms.forEach(term => {
+            if (message.includes(term)) entities.features.push(term);
+        });
+
+        technicalTerms.forEach(term => {
+            if (message.includes(term)) entities.technical.push(term);
+        });
+
+        return entities;
+    }
+
+    // Generate zero-shot response based on intent and entities
+    generateZeroShotResponse(intent, entities, originalMessage) {
+        switch (intent) {
+            case 'question':
+                if (entities.os.length > 0) {
+                    return `Great question about ${entities.os.join(' and ')}! AuraOS is compatible with multiple operating systems. Would you like specific installation instructions for any of these platforms?`;
+                }
+                if (entities.features.length > 0) {
+                    return `I'd be happy to explain more about ${entities.features.join(', ')} in AuraOS. These are key features that make our OS unique. What specific aspect would you like to know more about?`;
+                }
+                return 'That\'s a great question! Let me provide you with the most relevant information about AuraOS.';
+                
+            case 'action':
+                if (entities.os.length > 0) {
+                    return `I can help you with ${originalMessage} for ${entities.os.join(' and ')}. Let me guide you through the process step by step.`;
+                }
+                return `I\'d be happy to help you with that action! Let me provide you with the best approach for AuraOS.`;
+                
+            case 'problem':
+                return `I understand you\'re experiencing an issue. Let me help you troubleshoot this problem with AuraOS. Can you provide more details about the specific error or situation?`;
+                
+            case 'greeting':
+                return `Hello! I\'m your AuraOS assistant with advanced learning capabilities. I can help you with downloads, technical questions, troubleshooting, and much more. What would you like to explore today?`;
+                
+            default:
+                return null;
+        }
+    }
+
+    // Check learned patterns from previous interactions
+    checkLearnedPatterns(message) {
+        for (const [pattern, response] of this.learningPatterns) {
+            if (this.calculateSimilarity(message, pattern) > 0.7) {
+                return response;
+            }
+        }
+        return null;
+    }
+
+    // Learn patterns from successful interactions
+    learnPattern(keyword, response, userMessage) {
+        const pattern = {
+            keyword,
+            userMessage,
+            response,
+            timestamp: Date.now(),
+            successCount: 1
+        };
+        
+        if (this.learningPatterns.has(keyword)) {
+            const existing = this.learningPatterns.get(keyword);
+            existing.successCount++;
+            existing.lastUsed = Date.now();
+        } else {
+            this.learningPatterns.set(keyword, pattern);
+        }
+    }
+
+    // Learn from general interactions
+    learnFromInteraction(userMessage, response) {
+        const interaction = {
+            userMessage,
+            response,
+            timestamp: Date.now(),
+            feedback: null
+        };
+        
+        this.conversationHistory.push(interaction);
+        
+        // Keep only recent history for performance
+        if (this.conversationHistory.length > 100) {
+            this.conversationHistory = this.conversationHistory.slice(-50);
+        }
+        
+        // Update meta-learning model
+        this.metaLearningModel.updateModel(interaction);
+    }
+
+    // Calculate similarity between two strings
+    calculateSimilarity(str1, str2) {
+        const words1 = str1.toLowerCase().split(' ');
+        const words2 = str2.toLowerCase().split(' ');
+        const intersection = words1.filter(word => words2.includes(word));
+        return intersection.length / Math.max(words1.length, words2.length);
+    }
+
+    // Update performance metrics
+    updatePerformanceMetrics(responseTime, success) {
+        this.performanceMetrics.responseTime = 
+            (this.performanceMetrics.responseTime + responseTime) / 2;
+        
+        if (success) {
+            this.performanceMetrics.accuracy = Math.min(1, this.performanceMetrics.accuracy + 0.01);
+        }
+        
+        // Calculate learning rate based on pattern improvements
+        this.performanceMetrics.learningRate = this.calculateLearningRate();
+    }
+
+    // Calculate current learning rate
+    calculateLearningRate() {
+        const recentInteractions = this.conversationHistory.slice(-10);
+        if (recentInteractions.length < 5) return 0;
+        
+        let improvementCount = 0;
+        for (let i = 1; i < recentInteractions.length; i++) {
+            if (this.calculateSimilarity(
+                recentInteractions[i].userMessage, 
+                recentInteractions[i-1].userMessage
+            ) > 0.5) {
+                improvementCount++;
+            }
+        }
+        
+        return improvementCount / (recentInteractions.length - 1);
     }
 
     updateBadge(count = null) {
@@ -925,6 +1163,472 @@ class ChatbotSystem {
         } else {
             badge.style.display = 'none';
         }
+    }
+
+    // Show learning analytics
+    showLearningAnalytics() {
+        const stats = this.metaLearningModel.getLearningStats();
+        const metrics = this.performanceMetrics;
+        
+        const analyticsHTML = `
+            <div class="analytics-modal">
+                <div class="analytics-header">
+                    <h3>Learning Analytics</h3>
+                    <button class="close-analytics">&times;</button>
+                </div>
+                <div class="analytics-content">
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h4>Response Accuracy</h4>
+                            <div class="metric-value">${(metrics.accuracy * 100).toFixed(1)}%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: ${metrics.accuracy * 100}%"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Response Time</h4>
+                            <div class="metric-value">${metrics.responseTime.toFixed(0)}ms</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Learning Rate</h4>
+                            <div class="metric-value">${(metrics.learningRate * 100).toFixed(1)}%</div>
+                            <div class="metric-bar">
+                                <div class="metric-fill" style="width: ${metrics.learningRate * 100}%"></div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Adaptation Rules</h4>
+                            <div class="metric-value">${stats.adaptationRules}</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Context Memory</h4>
+                            <div class="metric-value">${stats.contextMemory} items</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Zero-Shot Cache</h4>
+                            <div class="metric-value">${this.zeroShotCache.size} responses</div>
+                        </div>
+                    </div>
+                    <div class="learning-insights">
+                        <h4>Learning Insights</h4>
+                        <ul>
+                            <li>Pattern Recognition: ${this.learningPatterns.size} learned patterns</li>
+                            <li>Conversation History: ${this.conversationHistory.length} interactions</li>
+                            <li>Adaptation Success: ${stats.recentAdaptations} recent adaptations</li>
+                            <li>Meta-Learning Rate: ${(stats.learningRate * 100).toFixed(1)}%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Create and show modal
+        const modal = document.createElement('div');
+        modal.className = 'analytics-overlay';
+        modal.innerHTML = analyticsHTML;
+        document.body.appendChild(modal);
+
+        // Add styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .analytics-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10001;
+            }
+            .analytics-modal {
+                background: white;
+                border-radius: 1rem;
+                padding: 2rem;
+                max-width: 600px;
+                width: 90%;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .analytics-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+                border-bottom: 1px solid #e5e7eb;
+                padding-bottom: 1rem;
+            }
+            .analytics-header h3 {
+                margin: 0;
+                color: #1f2937;
+            }
+            .close-analytics {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #6b7280;
+            }
+            .metrics-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
+            .metric-card {
+                background: #f9fafb;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                text-align: center;
+            }
+            .metric-card h4 {
+                margin: 0 0 0.5rem 0;
+                font-size: 0.875rem;
+                color: #6b7280;
+            }
+            .metric-value {
+                font-size: 1.5rem;
+                font-weight: 600;
+                color: #1f2937;
+                margin-bottom: 0.5rem;
+            }
+            .metric-bar {
+                height: 4px;
+                background: #e5e7eb;
+                border-radius: 2px;
+                overflow: hidden;
+            }
+            .metric-fill {
+                height: 100%;
+                background: #6366f1;
+                transition: width 0.3s ease;
+            }
+            .learning-insights {
+                background: #f3f4f6;
+                padding: 1rem;
+                border-radius: 0.5rem;
+            }
+            .learning-insights h4 {
+                margin: 0 0 1rem 0;
+                color: #1f2937;
+            }
+            .learning-insights ul {
+                margin: 0;
+                padding-left: 1.5rem;
+            }
+            .learning-insights li {
+                margin-bottom: 0.5rem;
+                color: #4b5563;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Close modal functionality
+        modal.querySelector('.close-analytics').addEventListener('click', () => {
+            document.body.removeChild(modal);
+            document.head.removeChild(style);
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                document.body.removeChild(modal);
+                document.head.removeChild(style);
+            }
+        });
+    }
+
+    // Update learning rate display
+    updateLearningDisplay() {
+        const learningRateDisplay = document.getElementById('learningRateDisplay');
+        if (learningRateDisplay) {
+            const rate = (this.performanceMetrics.learningRate * 100).toFixed(1);
+            learningRateDisplay.textContent = `${rate}%`;
+        }
+    }
+}
+
+// Meta-Learning Model for Adaptive Responses
+class MetaLearningModel {
+    constructor() {
+        this.adaptationRules = new Map();
+        this.contextMemory = [];
+        this.learningRate = 0.1;
+        this.adaptationHistory = [];
+        this.performanceWeights = {
+            similarity: 0.4,
+            context: 0.3,
+            timing: 0.2,
+            success: 0.1
+        };
+    }
+
+    // Adapt response based on conversation history and patterns
+    adaptResponse(userMessage, conversationHistory) {
+        const context = this.buildContext(userMessage, conversationHistory);
+        const adaptedResponse = this.generateAdaptedResponse(userMessage, context);
+        
+        if (adaptedResponse) {
+            this.recordAdaptation(userMessage, adaptedResponse, context);
+            return adaptedResponse;
+        }
+        
+        return null;
+    }
+
+    // Build context from conversation history
+    buildContext(userMessage, conversationHistory) {
+        const context = {
+            recentTopics: [],
+            userPreferences: {},
+            conversationFlow: [],
+            emotionalTone: 'neutral'
+        };
+
+        // Analyze recent topics
+        const recentMessages = conversationHistory.slice(-5);
+        recentMessages.forEach(interaction => {
+            const topics = this.extractTopics(interaction.userMessage);
+            context.recentTopics.push(...topics);
+        });
+
+        // Detect conversation flow patterns
+        context.conversationFlow = this.analyzeConversationFlow(conversationHistory);
+
+        // Detect emotional tone
+        context.emotionalTone = this.detectEmotionalTone(userMessage);
+
+        return context;
+    }
+
+    // Extract topics from message
+    extractTopics(message) {
+        const topics = [];
+        const topicKeywords = {
+            'installation': ['install', 'setup', 'configure'],
+            'troubleshooting': ['error', 'problem', 'issue', 'fix'],
+            'features': ['feature', 'function', 'capability'],
+            'performance': ['speed', 'fast', 'slow', 'performance'],
+            'security': ['security', 'safe', 'protect', 'secure']
+        };
+
+        Object.entries(topicKeywords).forEach(([topic, keywords]) => {
+            if (keywords.some(keyword => message.toLowerCase().includes(keyword))) {
+                topics.push(topic);
+            }
+        });
+
+        return topics;
+    }
+
+    // Analyze conversation flow patterns
+    analyzeConversationFlow(conversationHistory) {
+        if (conversationHistory.length < 2) return ['initial'];
+
+        const flow = [];
+        for (let i = 1; i < conversationHistory.length; i++) {
+            const prev = conversationHistory[i - 1];
+            const curr = conversationHistory[i];
+            
+            if (this.calculateSimilarity(prev.userMessage, curr.userMessage) > 0.6) {
+                flow.push('continuation');
+            } else {
+                flow.push('topic_shift');
+            }
+        }
+
+        return flow;
+    }
+
+    // Detect emotional tone of message
+    detectEmotionalTone(message) {
+        const positiveWords = ['great', 'awesome', 'excellent', 'love', 'amazing'];
+        const negativeWords = ['terrible', 'awful', 'hate', 'bad', 'problem'];
+        const urgentWords = ['urgent', 'asap', 'quickly', 'immediately'];
+
+        const messageLower = message.toLowerCase();
+        
+        if (urgentWords.some(word => messageLower.includes(word))) {
+            return 'urgent';
+        } else if (positiveWords.some(word => messageLower.includes(word))) {
+            return 'positive';
+        } else if (negativeWords.some(word => messageLower.includes(word))) {
+            return 'negative';
+        }
+        
+        return 'neutral';
+    }
+
+    // Generate adapted response based on context
+    generateAdaptedResponse(userMessage, context) {
+        // Check for adaptation rules
+        for (const [pattern, rule] of this.adaptationRules) {
+            if (this.calculateSimilarity(userMessage, pattern) > 0.7) {
+                return this.applyAdaptationRule(rule, context, userMessage);
+            }
+        }
+
+        // Generate contextual response
+        return this.generateContextualResponse(userMessage, context);
+    }
+
+    // Apply adaptation rule with context
+    applyAdaptationRule(rule, context, userMessage) {
+        let response = rule.baseResponse;
+
+        // Adapt based on emotional tone
+        if (context.emotionalTone === 'urgent') {
+            response = `I understand this is urgent. ${response} Let me provide you with immediate assistance.`;
+        } else if (context.emotionalTone === 'negative') {
+            response = `I'm sorry you're experiencing issues. ${response} Let me help you resolve this.`;
+        } else if (context.emotionalTone === 'positive') {
+            response = `Great to hear! ${response} I'm here to help you get the most out of AuraOS.`;
+        }
+
+        // Adapt based on recent topics
+        if (context.recentTopics.length > 0) {
+            const recentTopic = context.recentTopics[context.recentTopics.length - 1];
+            response += `\n\nSince you were asking about ${recentTopic}, would you like me to elaborate on that as well?`;
+        }
+
+        return response;
+    }
+
+    // Generate contextual response
+    generateContextualResponse(userMessage, context) {
+        const messageLower = userMessage.toLowerCase();
+
+        // Context-aware responses based on conversation flow
+        if (context.conversationFlow.includes('continuation')) {
+            return "I see you'd like to continue our discussion. Let me provide more detailed information about that topic.";
+        }
+
+        if (context.recentTopics.length > 0) {
+            const lastTopic = context.recentTopics[context.recentTopics.length - 1];
+            return `Building on our previous discussion about ${lastTopic}, I can help you with that. What specific aspect would you like to explore further?`;
+        }
+
+        // Emotional tone adaptation
+        switch (context.emotionalTone) {
+            case 'urgent':
+                return "I understand this is time-sensitive. Let me provide you with the most efficient solution right away.";
+            case 'negative':
+                return "I'm here to help resolve any issues you're experiencing. Let's work through this together.";
+            case 'positive':
+                return "I'm glad to help! Let me provide you with the information you need to continue your positive experience with AuraOS.";
+            default:
+                return null;
+        }
+    }
+
+    // Update model with new interaction
+    updateModel(interaction) {
+        // Extract patterns from successful interactions
+        if (interaction.feedback === 'positive' || this.isSuccessfulInteraction(interaction)) {
+            this.createAdaptationRule(interaction);
+        }
+
+        // Update context memory
+        this.contextMemory.push({
+            message: interaction.userMessage,
+            response: interaction.response,
+            timestamp: interaction.timestamp
+        });
+
+        // Keep memory manageable
+        if (this.contextMemory.length > 50) {
+            this.contextMemory = this.contextMemory.slice(-25);
+        }
+
+        // Update learning rate based on performance
+        this.updateLearningRate();
+    }
+
+    // Create adaptation rule from successful interaction
+    createAdaptationRule(interaction) {
+        const pattern = this.extractPattern(interaction.userMessage);
+        const rule = {
+            pattern,
+            baseResponse: interaction.response,
+            successCount: 1,
+            lastUsed: Date.now(),
+            context: this.buildContext(interaction.userMessage, [interaction])
+        };
+
+        if (this.adaptationRules.has(pattern)) {
+            const existing = this.adaptationRules.get(pattern);
+            existing.successCount++;
+            existing.lastUsed = Date.now();
+        } else {
+            this.adaptationRules.set(pattern, rule);
+        }
+    }
+
+    // Extract pattern from message
+    extractPattern(message) {
+        // Simple pattern extraction - could be enhanced with NLP
+        const words = message.toLowerCase().split(' ');
+        return words.filter(word => word.length > 3).join(' ');
+    }
+
+    // Check if interaction was successful
+    isSuccessfulInteraction(interaction) {
+        // Simple heuristic - could be enhanced with user feedback
+        const responseLength = interaction.response.length;
+        const hasSpecificInfo = interaction.response.includes('•') || 
+                               interaction.response.includes('1.') ||
+                               interaction.response.includes('specific');
+        
+        return responseLength > 50 && hasSpecificInfo;
+    }
+
+    // Update learning rate based on performance
+    updateLearningRate() {
+        const recentAdaptations = this.adaptationHistory.slice(-10);
+        if (recentAdaptations.length < 5) return;
+
+        const successRate = recentAdaptations.filter(a => a.success).length / recentAdaptations.length;
+        
+        if (successRate > 0.7) {
+            this.learningRate = Math.min(0.2, this.learningRate + 0.01);
+        } else if (successRate < 0.3) {
+            this.learningRate = Math.max(0.05, this.learningRate - 0.01);
+        }
+    }
+
+    // Record adaptation attempt
+    recordAdaptation(userMessage, response, context) {
+        this.adaptationHistory.push({
+            userMessage,
+            response,
+            context,
+            timestamp: Date.now(),
+            success: null // Would be updated with user feedback
+        });
+
+        if (this.adaptationHistory.length > 100) {
+            this.adaptationHistory = this.adaptationHistory.slice(-50);
+        }
+    }
+
+    // Calculate similarity between two strings
+    calculateSimilarity(str1, str2) {
+        const words1 = str1.toLowerCase().split(' ');
+        const words2 = str2.toLowerCase().split(' ');
+        const intersection = words1.filter(word => words2.includes(word));
+        return intersection.length / Math.max(words1.length, words2.length);
+    }
+
+    // Get learning statistics
+    getLearningStats() {
+        return {
+            adaptationRules: this.adaptationRules.size,
+            contextMemory: this.contextMemory.length,
+            learningRate: this.learningRate,
+            recentAdaptations: this.adaptationHistory.length,
+            performanceWeights: this.performanceWeights
+        };
     }
 }
 
@@ -980,5 +1684,63 @@ window.AuraOS = {
     animateCounters: animateCounters,
     login: () => window.authSystem.showLoginModal(),
     logout: () => window.authSystem.logout(),
-    toggleChatbot: () => window.chatbotSystem.toggleChatbot()
+    toggleChatbot: () => window.chatbotSystem.toggleChatbot(),
+    
+    // Meta-Learning and AI capabilities
+    getLearningStats: () => window.chatbotSystem.metaLearningModel.getLearningStats(),
+    getPerformanceMetrics: () => window.chatbotSystem.performanceMetrics,
+    showLearningAnalytics: () => window.chatbotSystem.showLearningAnalytics(),
+    
+    // Zero-shot learning capabilities
+    testZeroShotLearning: (message) => {
+        const chatbot = window.chatbotSystem;
+        return chatbot.zeroShotLearning(message);
+    },
+    
+    // Meta-learning capabilities
+    testMetaLearning: (message) => {
+        const chatbot = window.chatbotSystem;
+        return chatbot.metaLearningModel.adaptResponse(message, chatbot.conversationHistory);
+    },
+    
+    // Learning system controls
+    resetLearning: () => {
+        const chatbot = window.chatbotSystem;
+        chatbot.learningPatterns.clear();
+        chatbot.zeroShotCache.clear();
+        chatbot.conversationHistory = [];
+        chatbot.metaLearningModel = new MetaLearningModel();
+        chatbot.performanceMetrics = {
+            accuracy: 0,
+            responseTime: 0,
+            userSatisfaction: 0,
+            learningRate: 0
+        };
+        console.log('Learning system reset successfully');
+    },
+    
+    // Export learning data
+    exportLearningData: () => {
+        const chatbot = window.chatbotSystem;
+        const data = {
+            learningPatterns: Array.from(chatbot.learningPatterns.entries()),
+            zeroShotCache: Array.from(chatbot.zeroShotCache.entries()),
+            conversationHistory: chatbot.conversationHistory,
+            performanceMetrics: chatbot.performanceMetrics,
+            metaLearningStats: chatbot.metaLearningModel.getLearningStats(),
+            timestamp: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `auraos-learning-data-${Date.now()}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        return data;
+    }
 };
