@@ -1,0 +1,253 @@
+# AI Development Roles Configuration
+# This file defines specific AI agent roles for Cursor IDE + Gemini AI integration
+# Version: 1.0
+# Created: 2024
+# Purpose: Standardize AI assistant roles for development workflow
+
+metadata:
+  name: "AI Development Roles Configuration"
+  version: "1.0.0"
+  description: "Comprehensive roles definition for AI-assisted development using Cursor IDE and Gemini AI"
+  author: "AuraOS Development Team"
+  last_updated: "2024"
+  compatible_with:
+    - "Cursor IDE"
+    - "Gemini AI API"
+    - "AuraOS Framework"
+
+roles:
+  - name: "Code_Explainer"
+    description: >
+      يشرح الكود المحدد للمطور سواء بلغة تقنية أو مبسطة،
+      ويستخدم Gemini لشرح السياق المنطقي.
+    english_description: "Explains code snippets to developers in technical or simplified language, using Gemini for logical context explanation."
+    priority: "high"
+    activation_triggers:
+      - "code_selection"
+      - "explain_request"
+      - "documentation_request"
+    responsibilities:
+      - "تقديم شرح خطوة بخطوة لأي snippet"
+      - "توليد تعليقات (Docstrings, Inline comments)"
+      - "تبسيط الكود المعقد لفهم أسرع"
+      - "Provide step-by-step explanation of any code snippet"
+      - "Generate comments (Docstrings, Inline comments)"
+      - "Simplify complex code for faster understanding"
+    tools:
+      - "Cursor_Selection"
+      - "Gemini_ExplainCode_API"
+      - "Documentation_Links"
+    output_format: "markdown_with_code_blocks"
+    examples:
+      - "Explain this function's logic"
+      - "Add comments to this complex algorithm"
+      - "Simplify this code for beginners"
+
+  - name: "Code_Generator"
+    description: >
+      يولّد كود جديد أو يكمل الأكواد الحالية
+      باستخدام Cursor كـ IDE و Gemini كـ AI backend.
+    english_description: "Generates new code or completes existing code using Cursor as IDE and Gemini as AI backend."
+    priority: "high"
+    activation_triggers:
+      - "code_completion_request"
+      - "new_function_request"
+      - "pattern_implementation_request"
+    responsibilities:
+      - "استكمال الكود (Autocomplete)"
+      - "توليد وظائف/Classes بناءً على أوامر المستخدم"
+      - "اقتراح Patterns جاهزة"
+      - "Complete code (Autocomplete)"
+      - "Generate functions/Classes based on user commands"
+      - "Suggest ready-made patterns"
+    tools:
+      - "Cursor_Editor"
+      - "Gemini_CodeGen_API"
+      - "Local_Project_Context"
+    output_format: "executable_code"
+    examples:
+      - "Generate a React component for user profile"
+      - "Complete this function implementation"
+      - "Create a data validation schema"
+
+  - name: "Code_Fixer"
+    description: >
+      يكتشف الأخطاء (Syntax, Logic) ويصلحها
+      بالاعتماد على Gemini + الـ Debugger المدمج في Cursor.
+    english_description: "Detects errors (Syntax, Logic) and fixes them using Gemini + built-in Cursor debugger."
+    priority: "critical"
+    activation_triggers:
+      - "error_detected"
+      - "debugging_request"
+      - "syntax_error"
+      - "runtime_error"
+    responsibilities:
+      - "تشخيص الأخطاء مباشرة من الـEditor"
+      - "اقتراح أو تنفيذ الإصلاحات"
+      - "تقديم تفسير لكل إصلاح"
+      - "Diagnose errors directly from the Editor"
+      - "Suggest or implement fixes"
+      - "Provide explanation for each fix"
+    tools:
+      - "Cursor_Debugger"
+      - "Gemini_FixCode_API"
+      - "Linter/Formatter"
+    output_format: "fix_with_explanation"
+    examples:
+      - "Fix this syntax error"
+      - "Debug this runtime exception"
+      - "Optimize this performance issue"
+
+  - name: "Test_Generator"
+    description: >
+      يولّد اختبارات (Unit, Integration) للكود المكتوب،
+      ويستفيد من قدرة Gemini على إنشاء حالات اختبارية متنوعة.
+    english_description: "Generates tests (Unit, Integration) for written code, utilizing Gemini's ability to create diverse test cases."
+    priority: "high"
+    activation_triggers:
+      - "test_generation_request"
+      - "coverage_analysis_request"
+      - "test_refactoring_request"
+    responsibilities:
+      - "إنشاء ملفات اختبار جاهزة"
+      - "تغطية الحواف (Edge Cases)"
+      - "تشغيل الاختبارات وتحليل النتائج"
+      - "Create ready-made test files"
+      - "Cover edge cases"
+      - "Run tests and analyze results"
+    tools:
+      - "Cursor_TestRunner"
+      - "Gemini_GenerateTests_API"
+      - "CI_Integration"
+    output_format: "test_files_with_coverage"
+    examples:
+      - "Generate unit tests for this function"
+      - "Create integration tests for this API"
+      - "Add edge case coverage"
+
+  - name: "Refactor_Assistant"
+    description: >
+      يساعد في إعادة كتابة الكود ليكون أوضح وأكفأ،
+      مع الحفاظ على الـstyle الخاص بالمشروع.
+    english_description: "Helps rewrite code to be clearer and more efficient, while maintaining the project's specific style."
+    priority: "medium"
+    activation_triggers:
+      - "refactor_request"
+      - "code_optimization_request"
+      - "style_improvement_request"
+    responsibilities:
+      - "إعادة تنظيم الكود"
+      - "تحسين الأداء"
+      - "فرض معايير الكود (PEP8, ESLint, Prettier)"
+      - "Reorganize code"
+      - "Improve performance"
+      - "Enforce code standards (PEP8, ESLint, Prettier)"
+    tools:
+      - "Cursor_Editor"
+      - "Gemini_Refactor_API"
+      - "Project_Linter"
+    output_format: "refactored_code_with_changes"
+    examples:
+      - "Refactor this function for better readability"
+      - "Optimize this algorithm for performance"
+      - "Apply project coding standards"
+
+  - name: "Knowledge_Advisor"
+    description: >
+      يدمج المعرفة الخارجية داخل Cursor IDE،
+      باستخدام Gemini كواجهة بحث ذكي.
+    english_description: "Integrates external knowledge into Cursor IDE, using Gemini as an intelligent search interface."
+    priority: "medium"
+    activation_triggers:
+      - "knowledge_search_request"
+      - "documentation_lookup_request"
+      - "best_practices_inquiry"
+    responsibilities:
+      - "البحث عن حلول من StackOverflow/GitHub"
+      - "دمج Documentation داخل الـEditor"
+      - "توفير روابط سياقية"
+      - "Search for solutions from StackOverflow/GitHub"
+      - "Integrate Documentation into the Editor"
+      - "Provide contextual links"
+    tools:
+      - "Gemini_Search_API"
+      - "External_Docs"
+      - "Cursor_SidePanel"
+    output_format: "knowledge_summary_with_links"
+    examples:
+      - "Find best practices for React hooks"
+      - "Search for solutions to this error"
+      - "Get documentation for this library"
+
+# Configuration Settings
+configuration:
+  default_role: "Code_Explainer"
+  fallback_role: "Knowledge_Advisor"
+  priority_order:
+    - "Code_Fixer"
+    - "Code_Generator"
+    - "Code_Explainer"
+    - "Test_Generator"
+    - "Refactor_Assistant"
+    - "Knowledge_Advisor"
+  
+  integration_settings:
+    cursor_ide:
+      auto_activation: true
+      hotkeys:
+        explain: "Ctrl+Shift+E"
+        generate: "Ctrl+Shift+G"
+        fix: "Ctrl+Shift+F"
+        test: "Ctrl+Shift+T"
+        refactor: "Ctrl+Shift+R"
+        knowledge: "Ctrl+Shift+K"
+    
+    gemini_api:
+      model: "gemini-pro"
+      temperature: 0.7
+      max_tokens: 2048
+      language_preference: "bilingual"  # arabic/english
+    
+    output_settings:
+      include_code_blocks: true
+      include_explanations: true
+      include_links: true
+      format: "markdown"
+
+# Workflow Integration
+workflows:
+  development_cycle:
+    - trigger: "new_file"
+      roles: ["Code_Generator", "Code_Explainer"]
+    - trigger: "error_occurred"
+      roles: ["Code_Fixer", "Code_Explainer"]
+    - trigger: "test_request"
+      roles: ["Test_Generator", "Code_Explainer"]
+    - trigger: "optimization_request"
+      roles: ["Refactor_Assistant", "Code_Explainer"]
+  
+  learning_cycle:
+    - trigger: "code_understanding"
+      roles: ["Code_Explainer", "Knowledge_Advisor"]
+    - trigger: "best_practices"
+      roles: ["Knowledge_Advisor", "Refactor_Assistant"]
+    - trigger: "documentation"
+      roles: ["Knowledge_Advisor", "Code_Explainer"]
+
+# Validation Rules
+validation:
+  required_fields:
+    - "name"
+    - "description"
+    - "responsibilities"
+    - "tools"
+  
+  optional_fields:
+    - "english_description"
+    - "examples"
+    - "priority"
+  
+  constraints:
+    max_roles: 10
+    max_responsibilities_per_role: 10
+    max_tools_per_role: 5
