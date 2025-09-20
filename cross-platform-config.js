@@ -71,7 +71,7 @@ const ReactNativeConfig = {
             extensions: ['.ios.js', '.android.js', '.js', '.json', '.ts', '.tsx']
         },
         transformer: {
-            babelTransformerPath: require.resolve('metro-react-native-babel-transformer'),
+            babelTransformerPath: './node_modules/metro-react-native-babel-transformer/lib/index.js',
             getTransformOptions: async () => ({
                 transform: {
                     experimentalImportSupport: false,

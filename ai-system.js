@@ -22,6 +22,38 @@ class AISystem {
         this.loadUserPreferences();
     }
 
+    loadUserPreferences() {
+        // Load user preferences from localStorage or Firebase
+        const stored = localStorage.getItem('auraos_user_preferences');
+        if (stored) {
+            try {
+                this.userPreferences = { ...this.userPreferences, ...JSON.parse(stored) };
+            } catch (error) {
+                console.error('Error loading user preferences:', error);
+            }
+        }
+        
+        // Initialize default preferences if none exist
+        if (!this.userPreferences) {
+            this.userPreferences = {
+                theme: 'light',
+                language: 'en',
+                voiceEnabled: true,
+                notificationsEnabled: true,
+                analyticsEnabled: true
+            };
+            this.saveUserPreferences();
+        }
+    }
+
+    saveUserPreferences() {
+        try {
+            localStorage.setItem('auraos_user_preferences', JSON.stringify(this.userPreferences));
+        } catch (error) {
+            console.error('Error saving user preferences:', error);
+        }
+    }
+
     // Voice Recognition System
     setupVoiceRecognition() {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {

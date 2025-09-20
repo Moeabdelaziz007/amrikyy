@@ -102,19 +102,78 @@ function installApp() {
 }
 
 // Firebase Configuration
+// IMPORTANT: Replace these placeholder values with your actual Firebase project configuration
+// Get your config from: https://console.firebase.google.com/project/YOUR_PROJECT/settings/general
 const firebaseConfig = {
-    apiKey: "AIzaSyC4xK8Y9Z2L3M4N5O6P7Q8R9S0T1U2V3W4",
-    authDomain: "aios-97581.firebaseapp.com",
-    projectId: "aios-97581",
-    storageBucket: "aios-97581.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+    // TODO: Replace with actual Firebase API key from your project
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-api-key-here",
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "your-project-id",
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789",
+    appId: process.env.REACT_APP_FIREBASE_APP_ID || "your-app-id"
 };
+
+// Validate Firebase configuration
+function validateFirebaseConfig() {
+    const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+    const missingFields = requiredFields.filter(field => 
+        !firebaseConfig[field] || firebaseConfig[field].includes('your-') || firebaseConfig[field] === '123456789'
+    );
+    
+    if (missingFields.length > 0) {
+        console.error('❌ Firebase Configuration Error:', {
+            message: 'Please update Firebase configuration with your actual project values',
+            missingFields: missingFields,
+            guide: 'See FIREBASE_SETUP_GUIDE.md for setup instructions'
+        });
+        
+        // Show user-friendly error message
+        showFirebaseConfigError();
+        return false;
+    }
+    
+    console.log('✅ Firebase configuration validated successfully');
+    return true;
+}
+
+// Show Firebase configuration error to user
+function showFirebaseConfigError() {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'firebase-config-error';
+    errorDiv.innerHTML = `
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Firebase Configuration Required</h3>
+            <p>Please configure Firebase authentication to use login features.</p>
+            <p><strong>Setup Guide:</strong> See FIREBASE_SETUP_GUIDE.md</p>
+            <button onclick="this.parentElement.parentElement.remove()">Dismiss</button>
+        </div>
+    `;
+    errorDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #ff6b6b;
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 300px;
+    `;
+    document.body.appendChild(errorDiv);
+}
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Validate Firebase configuration on startup
+document.addEventListener('DOMContentLoaded', () => {
+    validateFirebaseConfig();
+});
 
 // DOM Elements
 const navbar = document.querySelector('.navbar');
@@ -938,7 +997,16 @@ class AuthSystem {
             
         } catch (error) {
             console.error('Guest login error:', error);
-            this.showError('password', 'Guest login failed. Please try again.');
+            
+            // Handle specific Firebase errors
+            if (error.code === 'auth/api-key-not-valid') {
+                this.showError('password', 'Firebase configuration error. Please check setup.');
+                console.error('❌ Firebase API key is invalid. See FIREBASE_SETUP_GUIDE.md');
+            } else if (error.code === 'auth/network-request-failed') {
+                this.showError('password', 'Network error. Please check your connection.');
+            } else {
+                this.showError('password', 'Guest login failed. Please try again.');
+            }
         }
     }
 
@@ -968,7 +1036,18 @@ class AuthSystem {
             
         } catch (error) {
             console.error('Google login error:', error);
-            this.showError('password', 'Google login failed. Please try again.');
+            
+            // Handle specific Firebase errors
+            if (error.code === 'auth/api-key-not-valid') {
+                this.showError('password', 'Firebase configuration error. Please check setup.');
+                console.error('❌ Firebase API key is invalid. See FIREBASE_SETUP_GUIDE.md');
+            } else if (error.code === 'auth/network-request-failed') {
+                this.showError('password', 'Network error. Please check your connection.');
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                this.showError('password', 'Login cancelled by user.');
+            } else {
+                this.showError('password', 'Google login failed. Please try again.');
+            }
         }
     }
 
