@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const react_1 = require("react");
+const react_2 = require("react");
 const react_svg_1 = require("./assets/react.svg");
 const vite_svg_1 = require("/vite.svg");
 require("./App.css");
 function App() {
-    const [count, setCount] = (0, react_1.useState)(0);
+    const [count, setCount] = (0, react_2.useState)(0);
     return (<>
       <div>
         <a href="https://vite.dev" target="_blank">

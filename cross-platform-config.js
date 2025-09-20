@@ -720,3 +720,4 @@ if (typeof module !== 'undefined' && module.exports) {
     window.ReactNativeConfig = ReactNativeConfig;
     window.ElectronConfig = ElectronConfig;
 }
+

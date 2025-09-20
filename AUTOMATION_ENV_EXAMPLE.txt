@@ -1,0 +1,43 @@
+# Environment Configuration for AuraOS Automation System
+
+# Firebase Configuration
+FIREBASE_API_KEY=your_firebase_api_key
+FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+FIREBASE_APP_ID=your_app_id
+
+# Telegram Bot Configuration
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_telegram_chat_id
+
+# Database Configuration
+DATABASE_URL=postgresql://username:password@localhost:5432/auraos
+REDIS_URL=redis://localhost:6379
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+
+# AI Configuration
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# Monitoring Configuration
+MONITORING_ENABLED=true
+LOG_LEVEL=info
+
+# Security Configuration
+JWT_SECRET=your_jwt_secret
+ENCRYPTION_KEY=your_encryption_key
+
+# Automation Configuration
+MAX_CONCURRENT_TASKS=10
+TASK_TIMEOUT=300000
+RETRY_MAX_ATTEMPTS=3
+RETRY_DELAY=5000
+
+# Webhook Configuration
+WEBHOOK_SECRET=your_webhook_secret
+WEBHOOK_URL=https://your-domain.com/webhooks

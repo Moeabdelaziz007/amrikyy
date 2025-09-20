@@ -52,10 +52,11 @@ export class SelfImprovingAISystem {
   }
 
   private async analyzeOverallPerformance(): Promise<any> {
-    const allStates = this.smartLearningAI.getAllLearningStates(); // This function needs to be added to SmartLearningAIMetaLoop
-    if (allStates.size === 0) {
+    // TODO: Fix this function when getAllLearningStates is implemented
+    // const allStates = this.smartLearningAI.getAllLearningStates(); // This function needs to be added to SmartLearningAIMetaLoop
+    // if (allStates.size === 0) {
       return { overallAccuracy: 0, areasForImprovement: [] };
-    }
+    // }
 
     let totalAccuracy = 0;
     const taskTypePerformance = new Map<string, { accuracies: number[], count: number }>();

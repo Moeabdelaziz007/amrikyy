@@ -200,7 +200,7 @@ function DataAnalyzerApp({ onExecute }) {
             </label>
             <textarea_1.Textarea placeholder="Enter data as JSON array or comma-separated values: [1,2,3,4,5] or 1,2,3,4,5" value={data} onChange={(e) => setData(e.target.value)} rows={4}/>
             <p className="text-xs text-muted-foreground">
-              For correlation analysis, use: [{"x"}:1,"y":2},{"x"}:2,"y":4}]
+              For correlation analysis, use: [{"{\"x\":1,\"y\":2},{\"x\":2,\"y\":4}"}]
             </p>
           </div>
 

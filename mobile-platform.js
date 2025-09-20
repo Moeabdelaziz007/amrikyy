@@ -1475,3 +1475,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Export for global access
 window.MobilePlatform = MobilePlatform;
+

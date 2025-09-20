@@ -1,4 +1,5 @@
-import express, { type Request, Response, NextFunction } from "express";
+import express from "express";
+import type { Request, Response, NextFunction } from "express";
 import { createServer } from "http";
 import { registerRoutes } from "./routes";
 import { initializeRealTimeAIStreaming } from "./real-time-streaming";
@@ -7,7 +8,7 @@ import { autopilotAgent } from "./autopilot-agent";
 import { getSelfImprovingAISystem } from "./self-improving-ai";
 import { getDebugStream } from "./debug-stream";
 import { initializeFirebase } from "./firebase";
-import { enhancedLogger } from "./enhanced-logger.js";
+import { enhancedLogger } from "./enhanced-logger";
 
 const app = express();
 const server = createServer(app);

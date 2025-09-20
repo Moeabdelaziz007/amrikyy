@@ -19,6 +19,7 @@ const TelegramPage = lazy(() => import('@/pages/telegram'));
 const SmartLearningPage = lazy(() => import('@/pages/smart-learning'));
 const AdvancedAIToolsPage = lazy(() => import('@/pages/advanced-ai-tools'));
 const LearningDashboard = lazy(() => import('@/pages/learning-dashboard'));
+const AutomationPage = lazy(() => import('@/pages/automation'));
 const NotFound = lazy(() => import('@/pages/not-found'));
 const DebugView = lazy(() => import('@/pages/DebugView'));
 const Workspace = lazy(() => import('@/pages/Workspace'));
@@ -43,6 +44,7 @@ function AppRouter() {
           <Route path="/smart-learning" component={SmartLearningPage} />
           <Route path="/advanced-ai-tools" component={AdvancedAIToolsPage} />
           <Route path="/learning" component={LearningDashboard} />
+          <Route path="/automation" component={AutomationPage} />
           <Route path="/debug" component={DebugView} />
           <Route path="/workspace" component={Workspace} />
           <Route component={NotFound} />

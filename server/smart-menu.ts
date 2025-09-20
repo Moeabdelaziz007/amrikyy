@@ -502,7 +502,7 @@ ${context.stats.favoriteCommands.length > 0 ?
   }
 
   // Get user context for external use
-  getUserContext(chatId: number): UserContext | undefined {
+  getPublicUserContext(chatId: number): UserContext | undefined {
     return this.userContexts.get(chatId);
   }
 

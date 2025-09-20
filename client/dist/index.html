@@ -3,12 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>AuraOS - AI-Powered Operating System</title>
+    
+    <!-- Performance Optimizations -->
+    <meta name="description" content="AuraOS - Advanced AI-Powered Operating System with intelligent automation and workflow management">
+    <meta name="keywords" content="AI, Operating System, Automation, Workflow, Productivity">
+    
+    <!-- Resource Hints -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//firebase.googleapis.com">
+    <link rel="dns-prefetch" href="//api.openai.com">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="data:application/octet-stream;base64,InVzZSBzdHJpY3QiOwpPYmplY3QuZGVmaW5lUHJvcGVydHkoZXhwb3J0cywgIl9fZXNNb2R1bGUiLCB7IHZhbHVlOiB0cnVlIH0pOwpjb25zdCBjbGllbnRfMSA9IHJlcXVpcmUoInJlYWN0LWRvbS9jbGllbnQiKTsKY29uc3QgQXBwXzEgPSByZXF1aXJlKCIuL0FwcCIpOwpyZXF1aXJlKCIuL2luZGV4LmNzcyIpOwooMCwgY2xpZW50XzEuY3JlYXRlUm9vdCkoZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoInJvb3QiKSkucmVuZGVyKDxBcHBfMS5kZWZhdWx0IC8+KTsK" as="script" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" crossorigin>
+    
+    <!-- Preload Critical Images -->
+    <link rel="preload" href="/icons/auraos-logo.svg" as="image" type="image/svg+xml">
+    
+    <!-- Prefetch Next Page Resources -->
+    <link rel="prefetch" href="/assets/dashboard-Bp8z9wMO.tsx">
+    <link rel="prefetch" href="/assets/login-BAywhBxN.tsx">
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AuraOS">
+    
+    <!-- Optimized Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fira+Code:wght@300..700&family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&family=Oxanium:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-DFt0thjE.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Critical CSS Inline -->
+    <style>
+      /* Critical CSS for initial render */
+      * { box-sizing: border-box; }
+      body { 
+        margin: 0; 
+        font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #0f0f23;
+        color: #ffffff;
+        line-height: 1.6;
+      }
+      #root { 
+        min-height: 100vh; 
+        display: flex;
+        flex-direction: column;
+      }
+      .loading { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 500;
+      }
+      .loading::after {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      /* Prevent layout shift */
+      img { max-width: 100%; height: auto; }
+      button { cursor: pointer; }
+      input, textarea { font-family: inherit; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-YP0FEG5d.js"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Loading fallback -->
+      <div class="loading">
+        <div>Loading AuraOS...</div>
+      </div>
+    </div>
   </body>
 </html>

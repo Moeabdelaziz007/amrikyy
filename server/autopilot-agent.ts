@@ -17,15 +17,6 @@ export class AutopilotAgent {
       // ... (rest of the agent configuration)
     });
 
-    try {
-      this.db = getFirestore();
-      if (this.debug) {
-        console.log('Firestore initialized successfully.');
-      }
-    } catch (error) {
-      console.error('Error initializing Firestore:', error);
-    }
-
     if (this.debug) {
       console.log('Autopilot Agent initialized in debug mode.');
     }
@@ -37,6 +28,18 @@ export class AutopilotAgent {
   start(): void {
     if (this.debug) {
       console.log('Starting Autopilot Agent...');
+    }
+    
+    // Initialize Firestore if not already done
+    if (!this.db) {
+      try {
+        this.db = getFirestore();
+        if (this.debug) {
+          console.log('Firestore initialized successfully.');
+        }
+      } catch (error) {
+        console.error('Error initializing Firestore:', error);
+      }
     }
     
     // Start the agent system
