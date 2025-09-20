@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { storage } from './storage.js';
 import { getSmartMenuService } from './smart-menu.js';
-import { getEnhancedChatPersona } from './enhanced-persona.js';
+import { autopilotAgent } from './autopilot-agent.js';
 
 export class TelegramService {
   private bot: TelegramBot;
@@ -61,6 +61,7 @@ export class TelegramService {
     // Save message to database
     await storage.createChatMessage({
       userId: 'telegram-user',
+      tenantId: 'default',
       message: `[Telegram] ${username}: ${text}`,
       response: 'Message received by AuraOS'
     });
@@ -73,11 +74,15 @@ export class TelegramService {
     } else if (text?.startsWith('/menu')) {
       await this.sendSmartMenu(chatId, username);
     } else if (text?.startsWith('/status')) {
-      await this.sendStatusMessage(chatId);
+      await this.sendAutopilotStatus(chatId);
     } else if (text?.startsWith('/posts')) {
       await this.sendRecentPosts(chatId);
     } else if (text?.startsWith('/agents')) {
       await this.sendAgentTemplates(chatId);
+    } else if (text?.startsWith('/autopilot')) {
+      await this.handleAutopilotCommand(chatId, text);
+    } else if (text?.startsWith('/task')) {
+      await this.handleTaskCommand(chatId, text);
     } else {
       await this.sendDefaultResponse(chatId, text);
     }
@@ -265,6 +270,39 @@ export class TelegramService {
       case 'shopping_agents':
         await this.bot.sendMessage(chatId, '🤖 Shopping Agents\n\nHere are your AI shopping agents:\n• Travel Shopping Agent\n• Food Shopping Agent\n• Universal Shopping Agent');
         break;
+      case 'autopilot_menu':
+        await this.sendAutopilotMenu(chatId);
+        break;
+      case 'autopilot_status':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_status', []);
+        break;
+      case 'autopilot_tasks':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_tasks', []);
+        break;
+      case 'autopilot_subscribe':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_subscribe', []);
+        break;
+      case 'autopilot_unsubscribe':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_unsubscribe', []);
+        break;
+      case 'autopilot_force_improvement':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_force_improvement', []);
+        break;
+      case 'autopilot_force_knowledge':
+        await autopilotAgent.handleTelegramCommand(chatId, '/autopilot_force_knowledge', []);
+        break;
+      case 'autopilot_assign_menu':
+        await this.bot.sendMessage(chatId, 
+          '📋 **Assign Task to Autopilot**\n\n' +
+          'Use the command:\n' +
+          '`/autopilot_assign <priority> <title> [description]`\n\n' +
+          '**Priorities:** low, medium, high, urgent\n\n' +
+          '**Examples:**\n' +
+          '• `/autopilot_assign high "Optimize system performance"`\n' +
+          '• `/autopilot_assign medium "Analyze user behavior patterns"`\n' +
+          '• `/autopilot_assign urgent "Fix critical error in automation"`', 
+          { parse_mode: 'Markdown' });
+        break;
       default:
         await this.bot.sendMessage(chatId, '❓ Unknown command. Use /menu to see available options.');
     }
@@ -291,6 +329,13 @@ export class TelegramService {
 /agents - List available AI agent templates
 /create <content> - Create a new post
 /schedule <time> <content> - Schedule a post
+
+🚀 **Autopilot Commands:**
+/autopilot_status - Show autopilot status
+/autopilot_subscribe - Subscribe to updates
+/autopilot_tasks - View pending tasks
+/autopilot_assign - Assign new task
+/autopilot - Open autopilot menu
 
 🤖 **Smart Features:**
 • Context-aware menus
@@ -453,46 +498,30 @@ ${posts.slice(0, 3).map(post =>
       }
     }
 
-    // Enhanced AI response with persona
-    try {
-      const username = 'User'; // In a real app, get from message context
-      const intelligentResponse = await this.enhancedPersona.generateIntelligentResponse(text, chatId, username);
-      
-      // Send main response
-      await this.bot.sendMessage(chatId, intelligentResponse.response);
-      
-      // Send suggestions if available
-      if (intelligentResponse.suggestions.length > 0) {
-        const suggestionsText = `💡 **Quick Actions:**\n${intelligentResponse.suggestions.map(s => `• ${s}`).join('\n')}`;
-        await this.bot.sendMessage(chatId, suggestionsText);
-      }
-      
-      // Add smart menu option for easy navigation
-      const menuKeyboard = {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              { text: '🎯 Smart Menu', callback_data: 'main_menu' },
-              { text: '💬 Continue Chat', callback_data: 'continue_chat' }
-            ]
+    // Basic AI response
+    const aiResponse = await this.generateAIResponse(text);
+    await this.bot.sendMessage(chatId, `🤖 AI Response:\n\n${aiResponse}`);
+    
+    // Add smart menu option for easy navigation
+    const menuKeyboard = {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: '🎯 Smart Menu', callback_data: 'main_menu' },
+            { text: '💬 Continue Chat', callback_data: 'continue_chat' }
           ]
-        }
-      };
-      
-      await this.bot.sendMessage(chatId, '🎯 Need more help? Use the smart menu for quick navigation!', menuKeyboard);
-      
-    } catch (error) {
-      console.error('Enhanced persona error:', error);
-      // Fallback to basic AI response
-      const aiResponse = await this.generateAIResponse(text);
-      await this.bot.sendMessage(chatId, `🤖 AI Response:\n\n${aiResponse}`);
-    }
+        ]
+      }
+    };
+    
+    await this.bot.sendMessage(chatId, '🎯 Need more help? Use the smart menu for quick navigation!', menuKeyboard);
   }
 
   private async createPostFromTelegram(chatId: number, content: string) {
     try {
       const post = await storage.createPost({
         authorId: 'user-1',
+        tenantId: 'default',
         content: content,
         isAiGenerated: false
       });
@@ -538,6 +567,416 @@ ${posts.slice(0, 3).map(post =>
 
   isBotConnected(): boolean {
     return this.isConnected;
+  }
+
+  /**
+   * Handle autopilot commands
+   */
+  private async handleAutopilotCommand(chatId: number, text: string): Promise<void> {
+    const command = text.split(' ')[0];
+    const args = text.split(' ').slice(1);
+
+    // Import autopilot agent dynamically to avoid circular dependency
+    const { autopilotAgent } = await import('./autopilot-agent.js');
+    
+    switch (command) {
+      case '/autopilot':
+        await this.sendAutopilotMenu(chatId);
+        break;
+      case '/autopilot_status':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_force_improvement':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_tasks':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_assign':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_subscribe':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_unsubscribe':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_force_knowledge':
+        await autopilotAgent.handleTelegramCommand(chatId, command, args);
+        break;
+      case '/autopilot_insights':
+        await this.sendAutopilotInsights(chatId);
+        break;
+      default:
+        await this.sendAutopilotHelp(chatId);
+    }
+  }
+
+  /**
+   * Handle task commands
+   */
+  private async handleTaskCommand(chatId: number, text: string): Promise<void> {
+    const command = text.split(' ')[0];
+    const args = text.split(' ').slice(1);
+
+    switch (command) {
+      case '/task':
+        await this.sendTaskHelp(chatId);
+        break;
+      case '/task_assign':
+        if (args.length >= 2) {
+          const priority = args[0] as 'low' | 'medium' | 'high' | 'critical';
+          const title = args[1];
+          const description = args.slice(2).join(' ') || title;
+          await this.assignTask(chatId, title, description, priority);
+        } else {
+          await this.bot.sendMessage(chatId, '❌ Usage: /task_assign <priority> <title> [description]\n\nPriority: low, medium, high, critical');
+        }
+        break;
+      case '/task_list':
+        await this.sendTaskList(chatId);
+        break;
+      case '/task_status':
+        if (args.length >= 1) {
+          await this.sendTaskStatus(chatId, args[0]);
+        } else {
+          await this.bot.sendMessage(chatId, '❌ Usage: /task_status <task_id>');
+        }
+        break;
+      case '/task_cancel':
+        if (args.length >= 1) {
+          await this.cancelTask(chatId, args[0]);
+        } else {
+          await this.bot.sendMessage(chatId, '❌ Usage: /task_cancel <task_id>');
+        }
+        break;
+      default:
+        await this.sendTaskHelp(chatId);
+    }
+  }
+
+  /**
+   * Send autopilot help
+   */
+  private async sendAutopilotHelp(chatId: number): Promise<void> {
+    const helpText = `🤖 **Autopilot Commands**
+
+🎯 **Core Commands:**
+/autopilot - Show this help
+/autopilot_status - Get autopilot status
+/autopilot_force_update - Force status update to Telegram
+/autopilot_tasks - List all tasks
+/autopilot_memory - Show memory summary
+/autopilot_insights - Get autopilot insights
+
+📋 **Task Commands:**
+/task - Task management help
+/task_assign <priority> <title> [description] - Assign new task
+/task_list - List all tasks
+/task_status <task_id> - Get task status
+/task_cancel <task_id> - Cancel task
+
+🎯 **Task Priorities:**
+• low - Background tasks
+• medium - Normal tasks  
+• high - Important tasks
+• critical - Urgent tasks
+
+💡 **Examples:**
+/task_assign high "Optimize system performance"
+/task_assign critical "Fix automation error"
+/autopilot_status`;
+
+    await this.bot.sendMessage(chatId, helpText);
+  }
+
+  /**
+   * Send autopilot status
+   */
+  private async sendAutopilotStatus(chatId: number): Promise<void> {
+    try {
+      const status = autopilotAgent.getStatus();
+      const growthMetrics = autopilotAgent.getGrowthMetrics();
+      const insights = autopilotAgent.getInsights();
+
+      const statusText = `🤖 **Autopilot Status**
+
+📊 **System Status:**
+• Status: ${status.alwaysActive ? '🟢 Always Active' : '🔴 Inactive'}
+• Uptime: ${Math.floor(status.uptime / 3600)}h ${Math.floor((status.uptime % 3600) / 60)}m
+• Memory Size: ${status.memorySize} items
+• Background Tasks: ${status.backgroundTasks.length}
+
+📈 **Growth Metrics:**
+• Knowledge Base: ${growthMetrics.knowledgeBaseSize} items
+• Experience Points: ${growthMetrics.experiencePoints}
+• Learning Cycles: ${growthMetrics.learningCycles}
+• Efficiency: ${(growthMetrics.efficiency * 100).toFixed(1)}%
+• Adaptability: ${(growthMetrics.adaptability * 100).toFixed(1)}%
+• Growth Rate: ${growthMetrics.growthRate.toFixed(2)}/hour
+
+🧠 **Insights:**
+• Growth Trend: ${insights.growthTrend}
+• Efficiency: ${insights.efficiency}
+• Knowledge Base: ${insights.knowledgeBase}
+
+${insights.recommendations.length > 0 ? `💡 **Recommendations:**\n${insights.recommendations.map(r => `• ${r}`).join('\n')}` : ''}
+
+_Last updated: ${new Date().toLocaleTimeString()}_`;
+
+      await this.bot.sendMessage(chatId, statusText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving autopilot status. Please try again later.');
+    }
+  }
+
+  /**
+   * Force autopilot update
+   */
+  private async forceAutopilotUpdate(chatId: number): Promise<void> {
+    try {
+      await autopilotAgent.forceTelegramUpdate();
+      await this.bot.sendMessage(chatId, '✅ Autopilot update sent to Telegram!');
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error forcing autopilot update.');
+    }
+  }
+
+  /**
+   * Send autopilot tasks
+   */
+  private async sendAutopilotTasks(chatId: number): Promise<void> {
+    try {
+      const tasks = autopilotAgent.getAllTasks();
+      
+      if (tasks.length === 0) {
+        await this.bot.sendMessage(chatId, '📋 No tasks found.');
+        return;
+      }
+
+      let tasksText = '📋 **Autopilot Tasks**\n\n';
+      
+      tasks.forEach((task, index) => {
+        const statusEmoji = {
+          'pending': '⏳',
+          'in_progress': '🔄',
+          'completed': '✅',
+          'failed': '❌',
+          'cancelled': '🚫'
+        }[task.status] || '❓';
+        
+        tasksText += `${index + 1}. ${statusEmoji} **${task.title}**\n`;
+        tasksText += `   📝 ${task.description}\n`;
+        tasksText += `   🎯 Priority: ${task.priority}\n`;
+        tasksText += `   📅 Assigned: ${task.assignedAt.toLocaleDateString()}\n`;
+        tasksText += `   🆔 ID: \`${task.id}\`\n\n`;
+      });
+
+      await this.bot.sendMessage(chatId, tasksText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving tasks.');
+    }
+  }
+
+  /**
+   * Send autopilot memory summary
+   */
+  private async sendAutopilotMemory(chatId: number): Promise<void> {
+    try {
+      const memorySummary = autopilotAgent.getMemorySummary();
+      
+      const memoryText = `🧠 **Autopilot Memory Summary**
+
+📊 **Statistics:**
+• Total Memories: ${memorySummary.totalMemories}
+• Average Importance: ${memorySummary.averageImportance?.toFixed(3) || 'N/A'}
+• Average Confidence: ${memorySummary.averageConfidence?.toFixed(3) || 'N/A'}
+
+📚 **By Type:**
+${Object.entries(memorySummary.byType).map(([type, count]) => `• ${type}: ${count}`).join('\n')}
+
+_Last updated: ${new Date().toLocaleTimeString()}_`;
+
+      await this.bot.sendMessage(chatId, memoryText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving memory summary.');
+    }
+  }
+
+  /**
+   * Send autopilot insights
+   */
+  private async sendAutopilotInsights(chatId: number): Promise<void> {
+    try {
+      const insights = autopilotAgent.getInsights();
+      
+      const insightsText = `🧠 **Autopilot Insights**
+
+📈 **Current State:**
+• Growth Trend: ${insights.growthTrend}
+• Efficiency: ${insights.efficiency}
+• Adaptability: ${insights.adaptability}
+• Knowledge Base: ${insights.knowledgeBase}
+
+${insights.recommendations.length > 0 ? `💡 **Recommendations:**\n${insights.recommendations.map(r => `• ${r}`).join('\n')}` : '🎯 No specific recommendations at this time.'}
+
+_Generated at: ${new Date().toLocaleTimeString()}_`;
+
+      await this.bot.sendMessage(chatId, insightsText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving insights.');
+    }
+  }
+
+  /**
+   * Send task help
+   */
+  private async sendTaskHelp(chatId: number): Promise<void> {
+    const helpText = `📋 **Task Management Commands**
+
+🎯 **Commands:**
+/task - Show this help
+/task_assign <priority> <title> [description] - Assign new task
+/task_list - List all tasks
+/task_status <task_id> - Get task status
+/task_cancel <task_id> - Cancel task
+
+🎯 **Priorities:**
+• low - Background tasks
+• medium - Normal tasks
+• high - Important tasks  
+• critical - Urgent tasks
+
+💡 **Examples:**
+/task_assign high "Optimize system performance"
+/task_assign critical "Fix automation error"
+/task_assign medium "Generate weekly report" "Create comprehensive system report"`;
+
+    await this.bot.sendMessage(chatId, helpText);
+  }
+
+  /**
+   * Assign a task to autopilot
+   */
+  private async assignTask(
+    chatId: number, 
+    title: string, 
+    description: string, 
+    priority: 'low' | 'medium' | 'high' | 'critical'
+  ): Promise<void> {
+    try {
+      const task = await autopilotAgent.assignTask(title, description, priority, 'telegram-user');
+      
+      const message = `✅ **Task Assigned Successfully**
+
+📋 **Task:** ${task.title}
+📝 **Description:** ${task.description}
+🎯 **Priority:** ${task.priority}
+🆔 **Task ID:** \`${task.id}\`
+📅 **Assigned:** ${task.assignedAt.toLocaleTimeString()}
+
+_Task added to autopilot queue!_`;
+
+      await this.bot.sendMessage(chatId, message);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error assigning task to autopilot.');
+    }
+  }
+
+  /**
+   * Send task list
+   */
+  private async sendTaskList(chatId: number): Promise<void> {
+    try {
+      const tasks = autopilotAgent.getAllTasks();
+      
+      if (tasks.length === 0) {
+        await this.bot.sendMessage(chatId, '📋 No tasks found.');
+        return;
+      }
+
+      let tasksText = '📋 **All Tasks**\n\n';
+      
+      tasks.forEach((task, index) => {
+        const statusEmoji = {
+          'pending': '⏳',
+          'in_progress': '🔄',
+          'completed': '✅',
+          'failed': '❌',
+          'cancelled': '🚫'
+        }[task.status] || '❓';
+        
+        tasksText += `${index + 1}. ${statusEmoji} **${task.title}**\n`;
+        tasksText += `   📝 ${task.description}\n`;
+        tasksText += `   🎯 Priority: ${task.priority}\n`;
+        tasksText += `   📅 Assigned: ${task.assignedAt.toLocaleDateString()}\n`;
+        tasksText += `   🆔 ID: \`${task.id}\`\n\n`;
+      });
+
+      await this.bot.sendMessage(chatId, tasksText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving task list.');
+    }
+  }
+
+  /**
+   * Send task status
+   */
+  private async sendTaskStatus(chatId: number, taskId: string): Promise<void> {
+    try {
+      const task = autopilotAgent.getTaskStatus(taskId);
+      
+      if (!task) {
+        await this.bot.sendMessage(chatId, '❌ Task not found.');
+        return;
+      }
+
+      const statusEmoji = {
+        'pending': '⏳',
+        'in_progress': '🔄',
+        'completed': '✅',
+        'failed': '❌',
+        'cancelled': '🚫'
+      }[task.status] || '❓';
+
+      const statusText = `📋 **Task Status**
+
+${statusEmoji} **${task.title}**
+📝 **Description:** ${task.description}
+🎯 **Priority:** ${task.priority}
+📊 **Status:** ${task.status}
+👤 **Assigned by:** ${task.assignedBy}
+📅 **Assigned:** ${task.assignedAt.toLocaleString()}
+
+${task.startedAt ? `🔄 **Started:** ${task.startedAt.toLocaleString()}\n` : ''}
+${task.completedAt ? `✅ **Completed:** ${task.completedAt.toLocaleString()}\n` : ''}
+${task.actualDuration ? `⏱️ **Duration:** ${task.actualDuration.toFixed(1)} minutes\n` : ''}
+${task.result ? `📊 **Result:** ${task.result}\n` : ''}
+${task.error ? `⚠️ **Error:** ${task.error}\n` : ''}
+
+🆔 **Task ID:** \`${task.id}\``;
+
+      await this.bot.sendMessage(chatId, statusText);
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error retrieving task status.');
+    }
+  }
+
+  /**
+   * Cancel a task
+   */
+  private async cancelTask(chatId: number, taskId: string): Promise<void> {
+    try {
+      const success = await autopilotAgent.cancelTask(taskId);
+      
+      if (success) {
+        await this.bot.sendMessage(chatId, `✅ Task \`${taskId}\` cancelled successfully.`);
+      } else {
+        await this.bot.sendMessage(chatId, `❌ Cannot cancel task \`${taskId}\`. Task may already be completed or not found.`);
+      }
+    } catch (error) {
+      await this.bot.sendMessage(chatId, '❌ Error cancelling task.');
+    }
   }
 }
 
