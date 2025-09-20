@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraOS - Offline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .offline-icon {
+            font-size: 80px;
+            color: #6366f1;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #94a3b8;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ef4444;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .cached-features {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .cached-features h3 {
+            color: #6366f1;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            width: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .offline-container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .offline-icon {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">
+            <i class="fas fa-wifi-slash"></i>
+        </div>
+        
+        <h1>You're Offline</h1>
+        
+        <p>
+            It looks like you've lost your internet connection. Don't worry - 
+            AuraOS works offline too! Some features are still available.
+        </p>
+        
+        <button class="retry-btn" onclick="checkConnection()">
+            <i class="fas fa-sync-alt"></i> Try Again
+        </button>
+        
+        <button class="retry-btn" onclick="goHome()">
+            <i class="fas fa-home"></i> Go Home
+        </button>
+        
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>Checking connection...</span>
+        </div>
+        
+        <div class="cached-features">
+            <h3>Available Offline</h3>
+            <ul class="feature-list">
+                <li>Basic navigation</li>
+                <li>Cached content</li>
+                <li>User dashboard</li>
+                <li>Settings</li>
+                <li>Recent chat history</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Check connection status
+        function checkConnection() {
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.status-indicator span');
+            
+            statusText.textContent = 'Checking connection...';
+            statusDot.style.background = '#f59e0b';
+            
+            // Try to fetch a small resource
+            fetch('/', { 
+                method: 'HEAD',
+                cache: 'no-cache',
+                mode: 'no-cors'
+            })
+            .then(() => {
+                statusDot.style.background = '#10b981';
+                statusText.textContent = 'Connected! Redirecting...';
+                setTimeout(() => {
+                    window.location.href = '/';
+                }, 1000);
+            })
+            .catch(() => {
+                statusDot.style.background = '#ef4444';
+                statusText.textContent = 'Still offline';
+                
+                // Retry after 3 seconds
+                setTimeout(checkConnection, 3000);
+            });
+        }
+        
+        function goHome() {
+            window.location.href = '/';
+        }
+        
+        // Auto-check connection every 10 seconds
+        setInterval(checkConnection, 10000);
+        
+        // Initial connection check
+        checkConnection();
+        
+        // Listen for online/offline events
+        window.addEventListener('online', () => {
+            checkConnection();
+        });
+        
+        window.addEventListener('offline', () => {
+            const statusDot = document.querySelector('.status-dot');
+            const statusText = document.querySelector('.status-indicator span');
+            
+            statusDot.style.background = '#ef4444';
+            statusText.textContent = 'Connection lost';
+        });
+        
+        // Register service worker if not already registered
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>
+

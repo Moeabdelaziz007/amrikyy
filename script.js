@@ -1,3 +1,106 @@
+// PWA Service Worker Registration
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('Service Worker registered successfully:', registration.scope);
+                
+                // Check for updates
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New content is available, show update notification
+                            showUpdateNotification();
+                        }
+                    });
+                });
+            })
+            .catch((error) => {
+                console.log('Service Worker registration failed:', error);
+            });
+    });
+}
+
+// PWA Update Notification
+function showUpdateNotification() {
+    const updateNotification = document.createElement('div');
+    updateNotification.className = 'update-notification';
+    updateNotification.innerHTML = `
+        <div class="update-content">
+            <i class="fas fa-sync-alt"></i>
+            <span>New version available!</span>
+            <button onclick="updateApp()">Update</button>
+            <button onclick="dismissUpdate()">Later</button>
+        </div>
+    `;
+    
+    document.body.appendChild(updateNotification);
+    
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+        if (updateNotification.parentNode) {
+            updateNotification.remove();
+        }
+    }, 10000);
+}
+
+// Update App Function
+function updateApp() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistration().then((registration) => {
+            if (registration && registration.waiting) {
+                registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                window.location.reload();
+            }
+        });
+    }
+}
+
+// Dismiss Update
+function dismissUpdate() {
+    const notification = document.querySelector('.update-notification');
+    if (notification) {
+        notification.remove();
+    }
+}
+
+// PWA Install Prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showInstallButton();
+});
+
+function showInstallButton() {
+    const installButton = document.createElement('button');
+    installButton.className = 'install-app-btn';
+    installButton.innerHTML = `
+        <i class="fas fa-download"></i>
+        <span>Install AuraOS</span>
+    `;
+    installButton.onclick = installApp;
+    
+    // Add to navigation
+    const navMenu = document.querySelector('.nav-menu');
+    if (navMenu) {
+        navMenu.appendChild(installButton);
+    }
+}
+
+function installApp() {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the install prompt');
+            }
+            deferredPrompt = null;
+        });
+    }
+}
+
 // Firebase Configuration
 const firebaseConfig = {
     apiKey: "AIzaSyC4xK8Y9Z2L3M4N5O6P7Q8R9S0T1U2V3W4",

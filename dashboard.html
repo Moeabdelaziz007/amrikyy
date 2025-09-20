@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraOS Dashboard</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="AuraOS Dashboard">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Dashboard Navigation -->
+    <nav class="dashboard-nav">
+        <div class="nav-brand">
+            <i class="fas fa-cube"></i>
+            <span>AuraOS</span>
+        </div>
+        <div class="nav-user">
+            <div class="user-avatar" id="navUserAvatar">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User Avatar">
+            </div>
+            <div class="user-info">
+                <span class="user-name" id="navUserName">John Doe</span>
+                <span class="user-status online">Online</span>
+            </div>
+            <div class="user-menu">
+                <button class="menu-toggle" id="userMenuToggle">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="dropdown-menu" id="userDropdown">
+                    <a href="#profile" class="dropdown-item">
+                        <i class="fas fa-user"></i>
+                        Profile
+                    </a>
+                    <a href="#settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Sidebar -->
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-content">
+            <nav class="sidebar-nav">
+                <a href="#overview" class="nav-item active" data-section="overview">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#profile" class="nav-item" data-section="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="#activity" class="nav-item" data-section="activity">
+                    <i class="fas fa-history"></i>
+                    <span>Activity</span>
+                </a>
+                <a href="#settings" class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <a href="#security" class="nav-item" data-section="security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security</span>
+                </a>
+                <a href="#preferences" class="nav-item" data-section="preferences">
+                    <i class="fas fa-palette"></i>
+                    <span>Preferences</span>
+                </a>
+                <a href="#support" class="nav-item" data-section="support">
+                    <i class="fas fa-headset"></i>
+                    <span>Support</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Dashboard Main Content -->
+    <main class="dashboard-main">
+        <!-- Overview Section -->
+        <section id="overview" class="dashboard-section active">
+            <div class="section-header">
+                <h1>Dashboard Overview</h1>
+                <p>Welcome back! Here's what's happening with your AuraOS account.</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Session Time</h3>
+                        <span class="stat-value" id="sessionTime">2h 34m</span>
+                        <span class="stat-change positive">+12m today</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Chat Sessions</h3>
+                        <span class="stat-value" id="chatSessions">47</span>
+                        <span class="stat-change positive">+8 this week</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Downloads</h3>
+                        <span class="stat-value" id="downloads">12</span>
+                        <span class="stat-change neutral">No change</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>Rating</h3>
+                        <span class="stat-value" id="rating">4.9</span>
+                        <span class="stat-change positive">+0.2 this month</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="dashboard-grid">
+                <div class="activity-card">
+                    <div class="card-header">
+                        <h3>Recent Activity</h3>
+                        <button class="btn btn-sm btn-outline">View All</button>
+                    </div>
+                    <div class="activity-list" id="recentActivity">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Logged in successfully</p>
+                                <span class="activity-time">2 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Started chat session</p>
+                                <span class="activity-time">15 minutes ago</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p>Downloaded AuraOS v1.0</p>
+                                <span class="activity-time">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions-card">
+                    <div class="card-header">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-btn" data-action="chat">
+                            <i class="fas fa-comments"></i>
+                            <span>Start Chat</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="download">
+                            <i class="fas fa-download"></i>
+                            <span>Download</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </button>
+                        <button class="quick-action-btn" data-action="support">
+                            <i class="fas fa-headset"></i>
+                            <span>Support</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" class="dashboard-section">
+            <div class="section-header">
+                <h1>Profile Management</h1>
+                <p>Manage your personal information and account details.</p>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar-section">
+                            <div class="avatar-container">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=face" alt="Profile Avatar" id="profileAvatar">
+                                <button class="avatar-upload-btn" id="avatarUploadBtn">
+                                    <i class="fas fa-camera"></i>
+                                </button>
+                            </div>
+                            <div class="avatar-info">
+                                <h3 id="profileName">John Doe</h3>
+                                <p id="profileEmail">john.doe@example.com</p>
+                                <span class="member-since">Member since January 2024</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+                    </div>
+
+                    <div class="profile-form" id="profileForm" style="display: none;">
+                        <form id="updateProfileForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" value="John">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" value="Doe">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" value="john.doe@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="bio">Bio</label>
+                                <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself...">Software developer passionate about modern technology and AI.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="location">Location</label>
+                                <input type="text" id="location" name="location" value="San Francisco, CA">
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings" class="dashboard-section">
+            <div class="section-header">
+                <h1>Account Settings</h1>
+                <p>Configure your account preferences and notifications.</p>
+            </div>
+
+            <div class="settings-content">
+                <div class="settings-card">
+                    <div class="settings-section">
+                        <h3>Account Information</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Email Notifications</h4>
+                                <p>Receive email updates about your account and AuraOS news.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="emailNotifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Push Notifications</h4>
+                                <p>Get real-time notifications in your browser.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="pushNotifications" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Marketing Emails</h4>
+                                <p>Receive promotional content and product updates.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="marketingEmails">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Privacy & Security</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Two-Factor Authentication</h4>
+                                <p>Add an extra layer of security to your account.</p>
+                            </div>
+                            <button class="btn btn-outline" id="setup2FABtn">Setup 2FA</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Session Management</h4>
+                                <p>Manage your active sessions and devices.</p>
+                            </div>
+                            <button class="btn btn-outline" id="manageSessionsBtn">Manage Sessions</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Data & Storage</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Data Export</h4>
+                                <p>Download a copy of your account data.</p>
+                            </div>
+                            <button class="btn btn-outline" id="exportDataBtn">Export Data</button>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Delete Account</h4>
+                                <p>Permanently delete your account and all data.</p>
+                            </div>
+                            <button class="btn btn-danger" id="deleteAccountBtn">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections would go here... -->
+    </main>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="script.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
