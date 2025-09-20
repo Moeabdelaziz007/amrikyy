@@ -234,3 +234,4 @@ export const MobileDeviceInfo: React.FC = () => {
     </Card>
   );
 };
+

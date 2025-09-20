@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { enhancedMCP } from './enhanced-mcp-protocol.js';
 
 // MCP (Model Context Protocol) Implementation
 export interface MCPMessage {
@@ -255,6 +256,9 @@ export class MCPProtocol extends EventEmitter {
   }
 
   private initializeCoreTools() {
+    // Get enhanced free tools from the enhanced MCP protocol
+    const enhancedTools = enhancedMCP.getFreeTools();
+    
     // Core MCP tools
     const coreTools: MCPTool[] = [
        {
@@ -540,7 +544,13 @@ export class MCPProtocol extends EventEmitter {
       }
     ];
 
+    // Add core tools
     coreTools.forEach(tool => {
+      this.tools.set(tool.name, tool);
+    });
+
+    // Add enhanced free tools
+    enhancedTools.forEach(tool => {
       this.tools.set(tool.name, tool);
     });
   }

@@ -111,3 +111,4 @@ export const MobileAnalyticsCard: React.FC<MobileAnalyticsCardProps> = ({
     </Card>
   );
 };
+
