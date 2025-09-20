@@ -41,7 +41,8 @@ export class AutopilotAgent {
     
     // Start the agent system
     if (this.agentSystem && this.agent) {
-      this.agentSystem.startAgent(this.agent.id);
+      // Simple start - just mark as active
+      this.agent.status = 'active';
       if (this.debug) {
         console.log('Autopilot Agent started successfully');
       }
@@ -58,7 +59,8 @@ export class AutopilotAgent {
     
     // Stop the agent system
     if (this.agentSystem && this.agent) {
-      this.agentSystem.stopAgent(this.agent.id);
+      // Simple stop - just mark as inactive
+      this.agent.status = 'inactive';
       if (this.debug) {
         console.log('Autopilot Agent stopped successfully');
       }

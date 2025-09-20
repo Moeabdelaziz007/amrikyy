@@ -3198,5 +3198,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // =============================================================================
+  // AUTHENTICATION ENDPOINTS FOR LOGIN BUTTON
+  // =============================================================================
+
+  /**
+   * Check authentication status
+   */
+  app.get('/api/auth/status', async (req, res) => {
+    try {
+      // Check if user is authenticated (you can implement your auth logic here)
+      const authHeader = req.headers.authorization;
+      const sessionToken = req.headers['x-session-token'];
+      
+      // Mock authentication check - replace with your actual auth logic
+      if (authHeader || sessionToken) {
+        // Mock user data
+        const user = {
+          id: '1',
+          email: 'user@example.com',
+          name: 'System User',
+          role: 'admin'
+        };
+        
+        res.json(user);
+      } else {
+        res.status(401).json({ message: 'Not authenticated' });
+      }
+    } catch (error) {
+      console.error('Auth status error:', error);
+      res.status(500).json({ message: 'Failed to check auth status' });
+    }
+  });
+
+  /**
+   * Login endpoint
+   */
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      // Mock login - replace with your actual auth logic
+      if (email && password) {
+        const user = {
+          id: '1',
+          email: email,
+          name: 'System User',
+          role: 'admin',
+          token: 'mock-jwt-token-' + Date.now()
+        };
+        
+        res.json({
+          success: true,
+          user,
+          message: 'Login successful'
+        });
+      } else {
+        res.status(400).json({ message: 'Email and password required' });
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ message: 'Login failed' });
+    }
+  });
+
+  /**
+   * Logout endpoint
+   */
+  app.post('/api/auth/logout', async (req, res) => {
+    try {
+      // Mock logout - replace with your actual auth logic
+      res.json({
+        success: true,
+        message: 'Logout successful'
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      res.status(500).json({ message: 'Logout failed' });
+    }
+  });
+
   return httpServer;
 }
