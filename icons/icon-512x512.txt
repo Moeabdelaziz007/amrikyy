@@ -1,0 +1,2 @@
+AuraOS Icon 512x512
+Generated placeholder - convert SVG to PNG manually
