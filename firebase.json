@@ -5,16 +5,14 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**",
-      "**/client/**",
-      "**/server/**",
-      "**/shared/**",
-      "**/*.md",
-      "**/drizzle.config.js",
-      "**/tailwind.config.js",
-      "**/vite.config.js",
-      "**/seed.js",
-      "**/cli.js",
-      "**/auraos-dev-1/**"
+      "client/**",
+      "scripts/**",
+      "analytics/**",
+      ".mypy_cache/**",
+      "*.log",
+      "DEBUGGING_PLAN.md",
+      "COMPREHENSIVE_BUGS_AND_ERRORS_REPORT.md",
+      "تقرير_شامل_للأخطاء_والأعطال.md"
     ],
     "rewrites": [
       {
@@ -33,11 +31,11 @@
         ]
       },
       {
-        "source": "**/*.@(jpg|jpeg|gif|png|svg|webp)",
+        "source": "**/*.@(html|json)",
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "max-age=31536000"
+            "value": "max-age=0"
           }
         ]
       }

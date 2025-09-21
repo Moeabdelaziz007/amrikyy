@@ -1071,7 +1071,7 @@ program
         .action(async () => {
           await cli.autopilotLLMStatus();
           process.exit(0);
-        })));
+        }));
 
 // System Commands
 program

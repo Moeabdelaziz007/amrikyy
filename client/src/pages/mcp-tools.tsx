@@ -532,7 +532,7 @@ function MCPToolsPage() {
             }
         }
     }, [toolParam]);
-    const handleToolSelect = (tool) => {
+    const handleToolSelect = (tool: any) => {
         setSelectedTool(tool);
         setTestParams({});
         setTestResults(null);
@@ -560,7 +560,7 @@ function MCPToolsPage() {
             setIsLoading(false);
         }
     };
-    const generateMockResults = (toolId, params) => {
+    const generateMockResults = (toolId: any, params: any) => {
         const baseResult = {
             success: true,
             tool: toolId,
@@ -622,7 +622,7 @@ function MCPToolsPage() {
                 };
         }
     };
-    const getCometAnalysisOutput = (action, url) => {
+    const getCometAnalysisOutput = (action: any, url: any) => {
         switch (action) {
             case 'analyze_page':
                 return `**Page Analysis:**\n- Title: Sample Web Page\n- Content Quality: 85/100\n- SEO Score: 78/100\n- Accessibility: 82/100\n- Performance: 75/100`;
@@ -634,7 +634,7 @@ function MCPToolsPage() {
                 return `**Analysis Complete:**\nSuccessfully performed ${action} on ${url || 'provided content'}.`;
         }
     };
-    const getTextProcessingOutput = (operation, text) => {
+    const getTextProcessingOutput = (operation: any, text: any) => {
         switch (operation) {
             case 'summarize':
                 return `**Summary:**\nGenerated summary of the provided text, highlighting key points and main ideas.`;

@@ -26,8 +26,8 @@ function SettingsPage() {
 
     const { data: me, isLoading: loadingMe } = (0, react_query_1.useQuery)({
         queryKey: ['me'],
-        queryFn: () => automation_api_1.automationApi.getMe().then(r => r.data),
-        onSuccess: (data) => {
+        queryFn: () => automation_api_1.automationApi.getMe().then((r: any) => r.data),
+        onSuccess: (data: any) => {
             setName(data?.name || "");
             setEmail(data?.email || "");
             setAvatar(data?.avatar || "");
@@ -40,21 +40,21 @@ function SettingsPage() {
     });
 
     const updateProfile = (0, react_query_1.useMutation)({
-        mutationFn: (payload) => automation_api_1.automationApi.updateMe(payload).then(r => r.data),
+        mutationFn: (payload: any) => automation_api_1.automationApi.updateMe(payload).then((r: any) => r.data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['me'] });
             toaster_1.toast({ title: 'Profile updated' });
         },
-        onError: (e) => toaster_1.toast({ variant: 'destructive', title: 'Update failed', description: e.message })
+        onError: (e: any) => toaster_1.toast({ variant: 'destructive', title: 'Update failed', description: e.message })
     });
 
     const updatePrefs = (0, react_query_1.useMutation)({
-        mutationFn: (payload) => automation_api_1.automationApi.updateMyPreferences(payload).then(r => r.data),
+        mutationFn: (payload: any) => automation_api_1.automationApi.updateMyPreferences(payload).then((r: any) => r.data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['me'] });
             toaster_1.toast({ title: 'Preferences saved' });
         },
-        onError: (e) => toaster_1.toast({ variant: 'destructive', title: 'Save failed', description: e.message })
+        onError: (e: any) => toaster_1.toast({ variant: 'destructive', title: 'Save failed', description: e.message })
     });
 
     return (<div className="flex h-screen overflow-hidden bg-background carbon-texture">

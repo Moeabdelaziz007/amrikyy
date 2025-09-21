@@ -147,7 +147,7 @@ function Sidebar() {
           <avatar_1.Avatar className="w-10 h-10 border border-primary/30 neon-glow-sm group-hover:neon-glow-md transition-all duration-300">
             <avatar_1.AvatarImage src={user?.photoURL || undefined} alt={user?.displayName || 'User'}/>
             <avatar_1.AvatarFallback className="bg-gradient-to-r from-primary/20 to-accent/20 text-primary font-bold">
-              {user?.displayName?.split(' ').map(n => n[0]).join('') || user?.email?.[0]?.toUpperCase() || 'U'}
+              {user?.displayName?.split(' ').map((n: string) => n[0]).join('') || user?.email?.[0]?.toUpperCase() || 'U'}
             </avatar_1.AvatarFallback>
           </avatar_1.Avatar>
           <div className="flex-1 min-w-0">

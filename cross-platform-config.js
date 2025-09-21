@@ -501,7 +501,7 @@ const ElectronConfig = {
                     },
                     {
                         label: 'Toggle Developer Tools',
-                        accelerator: process.platform === 'darwin' ? 'Alt+Cmd+I' : 'Ctrl+Shift+I',
+                        accelerator: (typeof process !== 'undefined' && process.platform === 'darwin') ? 'Alt+Cmd+I' : 'Ctrl+Shift+I',
                         click: 'toggleDevTools'
                     },
                     { type: 'separator' },
@@ -523,7 +523,7 @@ const ElectronConfig = {
                     { type: 'separator' },
                     {
                         label: 'Toggle Fullscreen',
-                        accelerator: process.platform === 'darwin' ? 'Ctrl+Cmd+F' : 'F11',
+                        accelerator: (typeof process !== 'undefined' && process.platform === 'darwin') ? 'Ctrl+Cmd+F' : 'F11',
                         click: 'toggleFullscreen'
                     }
                 ]

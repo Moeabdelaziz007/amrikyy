@@ -1,11 +1,22 @@
-// Task Automation Dashboard Page
 import React from 'react';
-import TaskAutomationDashboard from '@/components/TaskAutomationDashboard';
+import Sidebar from '@/components/layout/sidebar';
+import Header from '@/components/layout/header';
 
-export default function AutomationPage() {
+export default function Automation() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <TaskAutomationDashboard />
+    <div className="flex h-screen overflow-hidden bg-background">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <main className="flex-1 overflow-auto p-6">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="text-3xl font-bold text-foreground mb-8">Automation</h1>
+            <div className="bg-card p-6 rounded-lg border">
+              <p className="text-muted-foreground">Automation interface will be displayed here.</p>
+            </div>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

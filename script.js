@@ -295,36 +295,45 @@ animateElements.forEach(el => {
 });
 
 // Add CSS for animation
-const style = document.createElement('style');
-style.textContent = `
-    .feature-card,
-    .testimonial-card,
-    .download-card,
-    .about-text,
-    .about-visual {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    
-    .animate-in {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
-    
-    .hamburger.active .bar:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-    
-    .hamburger.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-    
-    .hamburger.active .bar:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-    }
-`;
-document.head.appendChild(styleElement);
+function addAnimationStyles() {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = `
+        .feature-card,
+        .testimonial-card,
+        .download-card,
+        .about-text,
+        .about-visual {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        .hamburger.active .bar:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        
+        .hamburger.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger.active .bar:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+    `;
+    document.head.appendChild(styleElement);
+}
+
+// Call the function when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', addAnimationStyles);
+} else {
+    addAnimationStyles();
+}
 
 // Parallax effect for hero section
 window.addEventListener('scroll', () => {
@@ -2068,8 +2077,8 @@ document.addEventListener('DOMContentLoaded', () => {
     window.chatbotSystem = new ChatbotSystem();
     
     // Add toast animation styles
-    const style = document.createElement('style');
-    style.textContent = `
+    const styleElement2 = document.createElement('style');
+    styleElement2.textContent = `
         @keyframes slideInRight {
             from {
                 transform: translateX(100%);
@@ -2092,7 +2101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     `;
-    document.head.appendChild(styleElement);
+    document.head.appendChild(styleElement2);
     
     console.log('AuraOS systems initialized successfully!');
 });
