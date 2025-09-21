@@ -48,3 +48,6 @@ Add `.cursor/mcp.json` in the project root:
 Server ships with `GET /mcp/health` for quick diagnostics.
 
 
+
+
+

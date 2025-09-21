@@ -5749,9 +5749,10 @@
             });
         });
 
-        // Add animation styles
-        const style = document.createElement('style');
-        style.textContent = `
+        // Add animation styles (avoid duplicate identifier)
+        (() => {
+        const styleEl = document.createElement('style');
+        styleEl.textContent = `
             @keyframes slideInRight {
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
@@ -5762,7 +5763,8 @@
                 to { transform: translateX(100%); opacity: 0; }
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(styleEl);
+        })();
     </script>
 </body>
 </html>

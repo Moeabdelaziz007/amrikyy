@@ -669,40 +669,40 @@ class AuthSystem {
 
     setupEventListeners() {
         // Login modal
-        document.getElementById('loginBtn').addEventListener('click', () => this.showLoginModal());
-        document.getElementById('closeLogin').addEventListener('click', () => this.hideModal('loginModal'));
-        document.getElementById('signupLink').addEventListener('click', (e) => {
+        document.getElementById('loginBtn')?.addEventListener('click', () => this.showLoginModal());
+        document.getElementById('closeLogin')?.addEventListener('click', () => this.hideModal('loginModal'));
+        document.getElementById('signupLink')?.addEventListener('click', (e) => {
             e.preventDefault();
             this.switchModal('loginModal', 'signupModal');
         });
 
         // Signup modal
-        document.getElementById('closeSignup').addEventListener('click', () => this.hideModal('signupModal'));
-        document.getElementById('loginLink').addEventListener('click', (e) => {
+        document.getElementById('closeSignup')?.addEventListener('click', () => this.hideModal('signupModal'));
+        document.getElementById('loginLink')?.addEventListener('click', (e) => {
             e.preventDefault();
             this.switchModal('signupModal', 'loginModal');
         });
 
         // Forms
-        document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
-        document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
+        document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e));
+        document.getElementById('signupForm')?.addEventListener('submit', (e) => this.handleSignup(e));
 
         // Password toggles
-        document.getElementById('togglePassword').addEventListener('click', () => this.togglePassword('password'));
-        document.getElementById('toggleSignupPassword').addEventListener('click', () => this.togglePassword('signupPassword'));
+        document.getElementById('togglePassword')?.addEventListener('click', () => this.togglePassword('password'));
+        document.getElementById('toggleSignupPassword')?.addEventListener('click', () => this.togglePassword('signupPassword'));
 
         // Password strength
-        document.getElementById('signupPassword').addEventListener('input', () => this.checkPasswordStrength());
+        document.getElementById('signupPassword')?.addEventListener('input', () => this.checkPasswordStrength());
 
         // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+        document.getElementById('logoutBtn')?.addEventListener('click', () => this.logout());
 
         // Guest login
-        document.getElementById('guestLoginBtn').addEventListener('click', () => this.guestLogin());
+        document.getElementById('guestLoginBtn')?.addEventListener('click', () => this.guestLogin());
 
         // Social login buttons
-        document.querySelector('.google-btn').addEventListener('click', () => this.googleLogin());
-        document.querySelector('.github-btn').addEventListener('click', () => this.githubLogin());
+        document.querySelector('.google-btn')?.addEventListener('click', () => this.googleLogin());
+        document.querySelector('.github-btn')?.addEventListener('click', () => this.githubLogin());
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
@@ -969,7 +969,7 @@ class AuthSystem {
     showUserDashboard() {
         // Update navbar
         const loginBtn = document.getElementById('loginBtn');
-        loginBtn.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'none';
 
         // Show user dashboard
         const dashboard = document.getElementById('userDashboard');
@@ -980,16 +980,16 @@ class AuthSystem {
         const displayName = this.currentUser.displayName || this.currentUser.name;
         const email = this.currentUser.email;
         
-        userName.textContent = `Welcome ${this.isGuest ? 'back, Guest' : 'back, ' + displayName}!`;
-        userEmail.textContent = email;
-        userAvatar.src = this.currentUser.photoURL || this.currentUser.avatar;
+        if (userName) userName.textContent = `Welcome ${this.isGuest ? 'back, Guest' : 'back, ' + displayName}!`;
+        if (userEmail) userEmail.textContent = email;
+        if (userAvatar) userAvatar.src = this.currentUser.photoURL || this.currentUser.avatar;
 
         // Add guest indicator if needed
-        if (this.isGuest) {
+        if (this.isGuest && userName) {
             userName.innerHTML += ' <span class="guest-badge">Guest</span>';
         }
 
-        dashboard.style.display = 'block';
+        if (dashboard) dashboard.style.display = 'block';
 
         // Update page title
         document.title = `${displayName} - AuraOS`;
@@ -1145,8 +1145,10 @@ class AuthSystem {
         this.isLoggedIn = false;
         this.isGuest = false;
         
-        document.getElementById('userDashboard').style.display = 'none';
-        document.getElementById('loginBtn').style.display = 'block';
+        const dashboardEl = document.getElementById('userDashboard');
+        const loginBtn2 = document.getElementById('loginBtn');
+        if (dashboardEl) dashboardEl.style.display = 'none';
+        if (loginBtn2) loginBtn2.style.display = 'block';
         document.title = 'AuraOS - Modern Operating System';
     }
 
