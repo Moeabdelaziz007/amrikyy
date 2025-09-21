@@ -172,7 +172,12 @@ if (typeof firebase !== 'undefined') {
         auth = firebase.auth();
         db = firebase.firestore();
         // Optional: avoid errors on undefined props
-        try { db.settings && db.settings({ ignoreUndefinedProperties: true }); } catch (_) {}
+        try { 
+            if (db.settings && !db._settingsApplied) {
+                db.settings({ ignoreUndefinedProperties: true });
+                db._settingsApplied = true;
+            }
+        } catch (_) {}
         console.log('✅ Firebase initialized successfully');
     } catch (error) {
         console.error('❌ Firebase initialization failed:', error);
