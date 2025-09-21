@@ -548,6 +548,35 @@ router.get('/system/alerts', withDatabaseErrorHandling(async (req: any, res: any
   res.json(buildPaginationResponse(alerts, parseInt(page), parseInt(limit), totalCount[0].count));
 }));
 
+// Create system alert and broadcast via WebSocket
+const CreateAlertSchema = z.object({
+  type: z.enum(['info', 'warning', 'error']).default('info'),
+  title: z.string().min(1),
+  message: z.string().min(1),
+  source: z.string().default('ui'),
+});
+
+router.post('/system/alerts', withDatabaseErrorHandling(async (req: any, res: any) => {
+  const body = CreateAlertSchema.parse(req.body);
+  const newAlert = {
+    type: body.type,
+    title: body.title,
+    message: body.message,
+    timestamp: new Date(),
+    source: body.source,
+    resolved: false,
+  };
+
+  const [created] = await db.insert(systemAlerts).values(newAlert).returning();
+
+  const wsServer = getWebSocketServer();
+  if (wsServer) {
+    wsServer.broadcastAlert(created);
+  }
+
+  res.status(201).json({ success: true, data: created });
+}));
+
 // Realtime info (WebSocket diagnostics)
 router.get('/system/realtime', async (req: any, res: any) => {
   try {

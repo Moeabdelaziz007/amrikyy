@@ -8,6 +8,23 @@ export default {
     "./src/**/*.{js,jsx,ts,tsx,html}",
     "./*.html"
   ],
+  safelist: [
+    // Text gradient utilities
+    'bg-clip-text',
+    'text-transparent',
+    // Backdrop blur utilities for glassmorphism
+    'backdrop-blur-sm',
+    'backdrop-blur',
+    'backdrop-blur-md',
+    'backdrop-blur-lg',
+    // Neon shadow presets
+    'shadow-glow-sm',
+    'shadow-glow-md',
+    'shadow-glow-lg',
+    'shadow-glow-green-md',
+    'shadow-glow-blue-md',
+    'shadow-glow-purple-md',
+  ],
   theme: {
     extend: {
       borderRadius: {

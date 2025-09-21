@@ -26,6 +26,12 @@ class AutopilotDashboard {
         document.getElementById('settingsBtn').addEventListener('click', () => this.openSettingsModal());
         document.getElementById('languageToggle').addEventListener('click', () => this.toggleLanguage());
 
+        // Dark mode toggle
+        const darkToggle = document.getElementById('darkModeToggle');
+        if (darkToggle) {
+            darkToggle.addEventListener('click', () => this.toggleDarkMode());
+        }
+
         // Task queue controls
         document.getElementById('pauseQueue').addEventListener('click', () => this.pauseQueue());
         document.getElementById('clearQueue').addEventListener('click', () => this.clearQueue());
@@ -464,6 +470,13 @@ class AutopilotDashboard {
         } catch (e) {
             console.warn('Live widgets init failed', e);
         }
+    }
+
+    toggleDarkMode() {
+        try {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('auraos:theme', isDark ? 'dark' : 'light');
+        } catch (e) {}
     }
 
     refreshData() {

@@ -19,6 +19,7 @@ class DashboardManager {
         this.initializeRealtimeFeatures();
         this.setupDailyCounters();
         this.setupStatusIndicators();
+        this.scheduleIdlePrefetch();
     }
 
     setupEventListeners() {
@@ -874,6 +875,88 @@ class DashboardManager {
         if (performanceElement) {
             performanceElement.textContent = `${metrics.performance}%`;
         }
+    }
+
+    // Idle-time prefetching to speed up UX and warm SW caches
+    scheduleIdlePrefetch() {
+        const prefetch = () => this.performPrefetch();
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(prefetch, { timeout: 3000 });
+        } else {
+            setTimeout(prefetch, 1500);
+        }
+    }
+
+    async performPrefetch() {
+        try {
+            const urls = this.collectPrefetchUrls();
+
+            // Hint the browser
+            this.injectPreloadHints(urls);
+
+            // Warm the service worker caches
+            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({ type: 'WARM_CACHE', urls });
+            }
+        } catch (e) {
+            console.debug('Prefetch skipped:', e);
+        }
+    }
+
+    collectPrefetchUrls() {
+        const origin = window.location.origin;
+        const urls = new Set();
+
+        // Icons from manifest
+        try {
+            urls.add(`${origin}/manifest.json`);
+            const iconSizes = [72,96,128,144,152,192,384,512];
+            iconSizes.forEach((s) => urls.add(`${origin}/icons/icon-${s}x${s}.png`));
+        } catch {}
+
+        // Font Awesome fonts and css
+        urls.add('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        urls.add('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2');
+        urls.add('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2');
+
+        // Optional charts and widgets
+        urls.add('https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js');
+        urls.add(`${origin}/live-widgets.js`);
+        urls.add(`${origin}/realtime.js`);
+
+        // Critical pages and css
+        urls.add(`${origin}/styles.css`);
+        urls.add(`${origin}/dashboard.css`);
+        urls.add(`${origin}/dashboard.html`);
+
+        return Array.from(urls);
+    }
+
+    injectPreloadHints(urls) {
+        const head = document.head || document.getElementsByTagName('head')[0];
+        const existing = new Set(Array.from(document.querySelectorAll('link[rel="prefetch"], link[rel="preload"], link[rel="preconnect"]')).map(l => l.href));
+        urls.forEach((u) => {
+            if (existing.has(u)) return;
+            const link = document.createElement('link');
+            if (u.endsWith('.woff2') || u.endsWith('.woff') || u.endsWith('.ttf')) {
+                link.rel = 'preload';
+                link.as = 'font';
+                link.crossOrigin = 'anonymous';
+            } else if (u.endsWith('.css')) {
+                link.rel = 'preload';
+                link.as = 'style';
+            } else if (u.endsWith('.js')) {
+                link.rel = 'prefetch';
+                link.as = 'script';
+            } else if (u.includes('/icons/') || u.endsWith('.png') || u.endsWith('.jpg') || u.endsWith('.jpeg') || u.endsWith('.webp') || u.endsWith('.gif') || u.endsWith('.svg')) {
+                link.rel = 'prefetch';
+                link.as = 'image';
+            } else {
+                link.rel = 'prefetch';
+            }
+            link.href = u;
+            head.appendChild(link);
+        });
     }
 }
 
