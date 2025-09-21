@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { GlassCard } from './GlassCard';
 import { StatusWidget } from './StatusWidget';
 import { ControlButton } from './ControlButton';
@@ -11,6 +11,8 @@ interface ClientCardProps {
   successCount: number;
   errorCount: number;
   lastActivity?: string;
+  progressPercent?: number;
+  progressLabel?: string;
   onStart?: () => void;
   onStop?: () => void;
   onRestart?: () => void;
@@ -26,6 +28,8 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   successCount,
   errorCount,
   lastActivity,
+  progressPercent,
+  progressLabel,
   onStart,
   onStop,
   onRestart,
@@ -33,11 +37,13 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   onViewLogs,
 }) => {
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const handleAction = async (action: () => void | undefined, actionType: string) => {
     if (!action) return;
     
     setIsLoading(actionType);
+    setActionError(null);
     try {
       await action();
     } finally {
@@ -132,9 +138,17 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       {/* Progress Bar (if running) */}
       {status === 'running' && (
         <div className="mb-4">
-          <div className="cyberpunk-label text-xs mb-1">Processing...</div>
-          <div className="w-full bg-glass-secondary rounded-full h-2">
-            <div className="bg-gradient-accent h-2 rounded-full animate-cyber-scan" style={{ width: '100%' }} />
+          <div className="flex items-center justify-between mb-1">
+            <div className="cyberpunk-label text-xs">{progressLabel || 'Processing...'}</div>
+            {typeof progressPercent === 'number' && (
+              <div className="cyberpunk-label text-xs text-text-secondary">{Math.max(0, Math.min(100, progressPercent))}%</div>
+            )}
+          </div>
+          <div className="w-full h-2 rounded-full bg-glass-secondary overflow-hidden">
+            <div
+              className={`h-2 rounded-full bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-lime-400 neon-glow-sm ${typeof progressPercent !== 'number' ? 'animate-cyber-scan' : ''}`}
+              style={{ width: typeof progressPercent === 'number' ? `${Math.max(0, Math.min(100, progressPercent))}%` : '100%' }}
+            />
           </div>
         </div>
       )}
@@ -182,6 +196,13 @@ export const ClientCard: React.FC<ClientCardProps> = ({
             Emergency
           </ControlButton>
         </div>
+
+        {/* Action error */}
+        {actionError && (
+          <div className="mb-3 text-xs text-status-error">
+            {actionError}
+          </div>
+        )}
 
         {/* View Logs Button */}
         <ControlButton
