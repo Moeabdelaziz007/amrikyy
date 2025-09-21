@@ -299,6 +299,35 @@
         </div>
     </div>
 
+    <!-- Logs Modal -->
+    <div class="modal" id="logsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>سجل التفاعل والحدث</h3>
+                <button class="modal-close" id="closeLogsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body logs-modal-body">
+                <div class="logs-toolbar">
+                    <input type="search" id="logsSearch" placeholder="بحث..." />
+                    <select id="logsLevel">
+                        <option value="all">الكل</option>
+                        <option value="info">Info</option>
+                        <option value="warning">Warning</option>
+                        <option value="error">Error</option>
+                        <option value="alert">Alert</option>
+                    </select>
+                </div>
+                <div class="logs-list" id="liveLogs"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="clearLiveLogs">مسح</button>
+                <button type="button" class="btn btn-primary" id="pauseLiveLogs">إيقاف البث</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">

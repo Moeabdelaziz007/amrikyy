@@ -73,6 +73,28 @@ class AutopilotDashboard {
                 }
             });
         });
+
+        // Overlay card controls
+        document.querySelectorAll('.glass-card .card-controls .overlay-btn').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const button = e.currentTarget;
+                const action = button.dataset.action;
+                const card = button.closest('.glass-card');
+                await this.handleCardAction(card, action, button);
+            });
+        });
+
+        // Logs modal controls
+        const closeLogs = document.getElementById('closeLogsModal');
+        const clearLive = document.getElementById('clearLiveLogs');
+        const pauseLive = document.getElementById('pauseLiveLogs');
+        if (closeLogs) closeLogs.addEventListener('click', () => this.closeModal('logsModal'));
+        if (clearLive) clearLive.addEventListener('click', () => this.clearLiveLogs());
+        if (pauseLive) pauseLive.addEventListener('click', (e) => this.toggleLogsPause(e.currentTarget));
+        const logsLevel = document.getElementById('logsLevel');
+        const logsSearch = document.getElementById('logsSearch');
+        if (logsLevel) logsLevel.addEventListener('change', () => this.renderLiveLogs());
+        if (logsSearch) logsSearch.addEventListener('input', () => this.renderLiveLogs());
     }
 
     connectToSystem() {
@@ -466,10 +488,108 @@ class AutopilotDashboard {
                 if (el) {
                     this.liveChart = window.AuraWidgets.SystemLiveChart(el, ws);
                 }
+
+                // Subscribe to logs
+                this.liveLogs = [];
+                this.logsPaused = false;
+                this.unsubscribeLogs = ws.subscribe((msg) => {
+                    if (this.logsPaused) return;
+                    const t = new Date();
+                    if (msg?.type === 'notification') {
+                        this.pushLiveLog({ ts: t, level: 'info', text: msg.data?.message || 'Notification' });
+                    } else if (msg?.type === 'alert') {
+                        const title = msg.data?.title || 'Alert';
+                        const message = msg.data?.message || '';
+                        this.pushLiveLog({ ts: t, level: 'alert', text: `${title}${message ? ': ' + message : ''}` });
+                    } else if (msg?.type === 'system_health') {
+                        const cpu = msg.data?.components?.cpu?.value;
+                        const mem = msg.data?.components?.memory?.value;
+                        this.pushLiveLog({ ts: t, level: 'info', text: `Health CPU=${cpu} MEM=${mem}%` });
+                    }
+                });
             }
         } catch (e) {
             console.warn('Live widgets init failed', e);
         }
+    }
+
+    async handleCardAction(card, action, button) {
+        try {
+            button.classList.add('loading');
+            if (action === 'refresh') {
+                await this.refreshData();
+                button.classList.remove('loading');
+                button.classList.add('success');
+                setTimeout(() => button.classList.remove('success'), 800);
+                return;
+            }
+            if (action === 'play') {
+                await this.sendAlert('info', 'تشغيل', 'تم تفعيل التشغيل');
+            } else if (action === 'stop') {
+                await this.sendAlert('warning', 'إيقاف', 'تم إيقاف العمليات');
+            } else if (action === 'emergency') {
+                await this.sendAlert('error', 'طوارئ', 'تم تفعيل وضع الطوارئ');
+                this.openLogsModal();
+            }
+            button.classList.remove('loading');
+            button.classList.add('success');
+            setTimeout(() => button.classList.remove('success'), 800);
+        } catch (err) {
+            button.classList.remove('loading');
+            button.classList.add('error');
+            setTimeout(() => button.classList.remove('error'), 1000);
+            this.pushLiveLog({ ts: new Date(), level: 'error', text: `Action failed: ${err?.message || err}` });
+        }
+    }
+
+    async sendAlert(type, title, message) {
+        const base = `${location.protocol}//${location.hostname}:3001`;
+        const res = await fetch(`${base}/api/v1/system/alerts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type, title, message, source: 'autopilot-ui' })
+        });
+        if (!res.ok) throw new Error('Failed to send alert');
+        return res.json();
+    }
+
+    openLogsModal() {
+        document.getElementById('logsModal').classList.add('active');
+        this.renderLiveLogs();
+    }
+
+    clearLiveLogs() {
+        this.liveLogs = [];
+        this.renderLiveLogs();
+    }
+
+    toggleLogsPause(btn) {
+        this.logsPaused = !this.logsPaused;
+        btn.textContent = this.logsPaused ? 'استئناف البث' : 'إيقاف البث';
+    }
+
+    pushLiveLog(entry) {
+        this.liveLogs.push(entry);
+        if (this.liveLogs.length > 500) this.liveLogs.shift();
+        this.renderLiveLogs();
+    }
+
+    renderLiveLogs() {
+        const list = document.getElementById('liveLogs');
+        if (!list) return;
+        const qEl = document.getElementById('logsSearch');
+        const lEl = document.getElementById('logsLevel');
+        const q = qEl ? (qEl.value || '').toLowerCase() : '';
+        const level = lEl ? (lEl.value || 'all') : 'all';
+        const filtered = (this.liveLogs || []).filter(l => {
+            if (level !== 'all' && l.level !== level) return false;
+            if (q && !(`${l.text}`.toLowerCase().includes(q))) return false;
+            return true;
+        }).slice(-200).reverse();
+        list.innerHTML = filtered.map(l => {
+            const ts = new Date(l.ts).toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            return `<div class="log-item"><span>${ts}</span><span class="badge ${l.level}">${l.level}</span><span>${l.text}</span></div>`;
+        }).join('');
     }
 
     toggleDarkMode() {

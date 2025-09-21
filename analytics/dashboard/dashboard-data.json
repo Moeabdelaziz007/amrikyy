@@ -1207,12 +1207,44 @@
       "tasks": 0,
       "agents": {},
       "users": {}
+    },
+    "2025-09-21T12:00:23.607Z": {
+      "timestamp": "2025-09-21T12:00:23.607Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T12:01:23.608Z": {
+      "timestamp": "2025-09-21T12:01:23.608Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T12:02:22.773Z": {
+      "timestamp": "2025-09-21T12:02:22.773Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T12:02:23.610Z": {
+      "timestamp": "2025-09-21T12:02:23.610Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
     }
   },
   "historicalData": {
     "2025-09-21": {
       "date": "2025-09-21",
-      "totalEvents": 84,
+      "totalEvents": 87,
       "totalTasks": 0,
       "totalErrors": 0,
       "averageSatisfaction": 0,
@@ -1223,20 +1255,20 @@
   "performanceMetrics": {},
   "userInsights": {},
   "systemHealth": {
-    "timestamp": "2025-09-21T12:00:23.356Z",
+    "timestamp": "2025-09-21T12:03:23.422Z",
     "status": "healthy",
-    "uptime": 5043.918853722,
+    "uptime": 5223.975381775,
     "memoryUsage": {
-      "rss": 40099840,
+      "rss": 40566784,
       "heapTotal": 25731072,
-      "heapUsed": 23019376,
-      "external": 2262116,
-      "arrayBuffers": 88699
+      "heapUsed": 19915720,
+      "external": 2231692,
+      "arrayBuffers": 58275
     },
     "cpuUsage": {
-      "user": 53987315,
-      "system": 16414734
+      "user": 55520069,
+      "system": 17026420
     },
-    "activeConnections": 40
+    "activeConnections": 38
   }
 }
