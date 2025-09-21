@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraOS Dashboard - Day 1 Test</title>
+    
+    <!-- Preload Cyberpunk Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Oxanium:wght@200;300;400;500;600;700;800&family=Audiowide&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: ["class"],
+            theme: {
+                extend: {
+                    colors: {
+                        neon: {
+                            green: '#39FF14',
+                            blue: '#00E5FF',
+                            purple: '#9D00FF',
+                            pink: '#FF1493',
+                            yellow: '#FFFF00',
+                            orange: '#FF4500',
+                        },
+                        status: {
+                            success: '#39FF14',
+                            warning: '#FFFF00',
+                            error: '#FF0040',
+                            info: '#00E5FF',
+                        },
+                        glass: {
+                            primary: 'rgba(255, 255, 255, 0.08)',
+                            secondary: 'rgba(255, 255, 255, 0.12)',
+                            tertiary: 'rgba(255, 255, 255, 0.16)',
+                            border: 'rgba(255, 255, 255, 0.2)',
+                        },
+                        bg: {
+                            primary: '#0a0a0a',
+                            secondary: '#1a1a1a',
+                            tertiary: '#2a2a2a',
+                        },
+                        text: {
+                            primary: '#ffffff',
+                            secondary: '#e0e0e0',
+                            tertiary: '#a0a0a0',
+                        }
+                    },
+                    fontFamily: {
+                        cyberpunk: ['Orbitron', 'system-ui', 'sans-serif'],
+                        futuristic: ['Oxanium', 'system-ui', 'sans-serif'],
+                        tech: ['Audiowide', 'system-ui', 'sans-serif'],
+                        modern: ['Rajdhani', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow-sm': '0 0 8px currentColor',
+                        'glow-md': '0 0 16px currentColor',
+                        'glow-lg': '0 0 24px currentColor',
+                        'glow-green-sm': '0 0 8px #39FF14',
+                        'glow-green-md': '0 0 16px #39FF14',
+                        'glow-blue-sm': '0 0 8px #00E5FF',
+                        'glow-blue-md': '0 0 16px #00E5FF',
+                        'glow-purple-sm': '0 0 8px #9D00FF',
+                        'glow-purple-md': '0 0 16px #9D00FF',
+                    },
+                    backdropBlur: {
+                        'glass-sm': '8px',
+                        'glass-md': '12px',
+                        'glass-lg': '16px',
+                    },
+                    backgroundImage: {
+                        'gradient-primary': 'linear-gradient(90deg, #00E5FF, #9D00FF)',
+                        'gradient-accent': 'linear-gradient(135deg, #39FF14, #00E5FF)',
+                        'gradient-secondary': 'linear-gradient(45deg, #9D00FF, #FF1493)',
+                        'cyber-grid': `
+                            linear-gradient(rgba(0, 229, 255, 0.3) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(0, 229, 255, 0.3) 1px, transparent 1px)
+                        `,
+                    },
+                    backgroundSize: {
+                        'grid': '40px 40px',
+                    },
+                    animation: {
+                        'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
+                        'cyber-scan': 'cyber-scan 3s linear infinite',
+                        'cyber-pulse': 'cyber-pulse 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        'neon-pulse': {
+                            '0%, 100%': { boxShadow: '0 0 8px currentColor' },
+                            '50%': { boxShadow: '0 0 24px currentColor' },
+                        },
+                        'cyber-scan': {
+                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
+                            '50%': { opacity: '1' },
+                            '100%': { transform: 'translateX(100%)', opacity: '0' },
+                        },
+                        'cyber-pulse': {
+                            '0%, 100%': { filter: 'brightness(1) saturate(1)' },
+                            '50%': { filter: 'brightness(1.2) saturate(1.5)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom CSS for Day 1 Demo */
+        .cyberpunk-title {
+            font-family: 'Orbitron', system-ui, sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #00E5FF, #9D00FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+        
+        .cyberpunk-subtitle {
+            font-family: 'Oxanium', system-ui, sans-serif;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: #00E5FF;
+            text-shadow: 0 0 8px #00E5FF;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 16px currentColor;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.running {
+            background: #39FF14;
+            box-shadow: 0 0 8px #39FF14;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.error {
+            background: #FF0040;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.warning {
+            background: #FFFF00;
+            animation: pulse 2s infinite;
+        }
+        
+        .btn-cyberpunk {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid;
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+            font-family: 'Oxanium', system-ui, sans-serif;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #39FF14;
+            color: #39FF14;
+        }
+        
+        .btn-primary:hover {
+            background: #39FF14;
+            color: #0a0a0a;
+            box-shadow: 0 0 16px #39FF14;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #00E5FF;
+            color: #00E5FF;
+        }
+        
+        .btn-secondary:hover {
+            background: #00E5FF;
+            color: #0a0a0a;
+            box-shadow: 0 0 16px #00E5FF;
+        }
+        
+        .btn-danger {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: #FF0040;
+            color: #FF0040;
+        }
+        
+        .btn-danger:hover {
+            background: #FF0040;
+            color: #ffffff;
+            box-shadow: 0 0 16px #FF0040;
+        }
+        
+        .cyber-grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 229, 255, 0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.3) 1px, transparent 1px);
+            background-size: 40px 40px;
+            position: relative;
+        }
+        
+        .cyber-grid-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 229, 255, 0.1));
+            pointer-events: none;
+        }
+        
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00E5FF, transparent);
+            opacity: 0.5;
+            animation: cyber-scan 3s linear infinite;
+            pointer-events: none;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-bg-primary cyber-grid-bg text-text-primary font-modern">
+    <!-- Cyber Scan Line Effect -->
+    <div class="scan-line"></div>
+    
+    <div class="container mx-auto px-4 py-8 relative z-10">
+        <!-- Header -->
+        <div class="mb-8 text-center">
+            <h1 class="cyberpunk-title text-4xl md:text-6xl mb-4">
+                AuraOS Control Center
+            </h1>
+            <p class="cyberpunk-subtitle text-lg md:text-xl">
+                Day 1 Implementation - Neon UI/UX + Dashboard Demo
+            </p>
+        </div>
+
+        <!-- System Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="glass-card p-6 text-center">
+                <div class="text-2xl font-bold text-neon-green mb-2">532</div>
+                <div class="text-sm text-text-secondary uppercase tracking-wider">Total Operations</div>
+            </div>
+            
+            <div class="glass-card p-6 text-center">
+                <div class="text-2xl font-bold text-cyber-blue mb-2">94.2%</div>
+                <div class="text-sm text-text-secondary uppercase tracking-wider">Success Rate</div>
+            </div>
+            
+            <div class="glass-card p-6 text-center">
+                <div class="text-2xl font-bold text-vivid-purple mb-2">3</div>
+                <div class="text-sm text-text-secondary uppercase tracking-wider">Active Clients</div>
+            </div>
+            
+            <div class="glass-card p-6 text-center">
+                <div class="text-2xl font-bold text-cyber-blue mb-2">2d 14h</div>
+                <div class="text-sm text-text-secondary uppercase tracking-wider">System Uptime</div>
+            </div>
+        </div>
+
+        <!-- Client Cards -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-neon-green mb-6 font-cyberpunk uppercase tracking-wider">
+                Active Clients & Agents
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Telegram Bot Card -->
+                <div class="glass-card p-6 min-h-[300px] flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="status-dot running"></div>
+                        <span class="text-xs text-text-secondary uppercase tracking-wider">ID: client-001</span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-cyber-blue mb-1 font-futuristic">Telegram Bot</h3>
+                    <p class="text-sm text-text-secondary uppercase tracking-wider mb-4">Communication Agent</p>
+                    
+                    <!-- Status Widgets -->
+                    <div class="flex gap-2 mb-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-success bg-status-success-bg text-status-success">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Success Today</span>
+                                <span class="font-mono font-bold text-sm">142</span>
+                            </div>
+                        </div>
+                        
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-error bg-status-error-bg text-status-error">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Errors Today</span>
+                                <span class="font-mono font-bold text-sm">3</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 text-text-secondary text-xs">
+                        Last Activity: 2 minutes ago
+                    </div>
+                    
+                    <!-- Progress Bar -->
+                    <div class="mb-4">
+                        <div class="text-xs uppercase mb-1">Processing...</div>
+                        <div class="w-full bg-glass-secondary rounded-full h-2">
+                            <div class="bg-gradient-accent h-2 rounded-full animate-cyber-scan" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Control Buttons -->
+                    <div class="mt-auto">
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <button class="btn-primary text-xs py-1.5 px-3 opacity-50 cursor-not-allowed">
+                                Running
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Stop
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Restart
+                            </button>
+                            <button class="btn-danger text-xs py-1.5 px-3">
+                                Emergency
+                            </button>
+                        </div>
+                        <button class="btn-primary text-xs py-1.5 px-3 w-full">
+                            View Live Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Learning Brain Card -->
+                <div class="glass-card p-6 min-h-[300px] flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="status-dot running"></div>
+                        <span class="text-xs text-text-secondary uppercase tracking-wider">ID: client-002</span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-cyber-blue mb-1 font-futuristic">Learning Brain</h3>
+                    <p class="text-sm text-text-secondary uppercase tracking-wider mb-4">AI Processing</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-success bg-status-success-bg text-status-success">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Success Today</span>
+                                <span class="font-mono font-bold text-sm">89</span>
+                            </div>
+                        </div>
+                        
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-success bg-status-success-bg text-status-success">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Errors Today</span>
+                                <span class="font-mono font-bold text-sm">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 text-text-secondary text-xs">
+                        Last Activity: 1 minute ago
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="text-xs uppercase mb-1">Processing...</div>
+                        <div class="w-full bg-glass-secondary rounded-full h-2">
+                            <div class="bg-gradient-accent h-2 rounded-full animate-cyber-scan" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <button class="btn-primary text-xs py-1.5 px-3 opacity-50 cursor-not-allowed">
+                                Running
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Stop
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Restart
+                            </button>
+                            <button class="btn-danger text-xs py-1.5 px-3">
+                                Emergency
+                            </button>
+                        </div>
+                        <button class="btn-primary text-xs py-1.5 px-3 w-full">
+                            View Live Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MCP Tools Card -->
+                <div class="glass-card p-6 min-h-[300px] flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="status-dot warning"></div>
+                        <span class="text-xs text-text-secondary uppercase tracking-wider">ID: client-003</span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-cyber-blue mb-1 font-futuristic">MCP Tools</h3>
+                    <p class="text-sm text-text-secondary uppercase tracking-wider mb-4">System Integration</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-success bg-status-success-bg text-status-success">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Success Today</span>
+                                <span class="font-mono font-bold text-sm">67</span>
+                            </div>
+                        </div>
+                        
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-warning bg-status-warning-bg text-status-warning">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Errors Today</span>
+                                <span class="font-mono font-bold text-sm">12</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 text-text-secondary text-xs">
+                        Last Activity: 5 minutes ago
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <button class="btn-primary text-xs py-1.5 px-3">
+                                Start
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3 opacity-50 cursor-not-allowed">
+                                Stop
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Restart
+                            </button>
+                            <button class="btn-danger text-xs py-1.5 px-3">
+                                Emergency
+                            </button>
+                        </div>
+                        <button class="btn-primary text-xs py-1.5 px-3 w-full">
+                            View Live Logs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Autopilot System Card -->
+                <div class="glass-card p-6 min-h-[300px] flex flex-col">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="status-dot"></div>
+                        <span class="text-xs text-text-secondary uppercase tracking-wider">ID: client-004</span>
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-cyber-blue mb-1 font-futuristic">Autopilot System</h3>
+                    <p class="text-sm text-text-secondary uppercase tracking-wider mb-4">Automation Engine</p>
+                    
+                    <div class="flex gap-2 mb-4">
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-success bg-status-success-bg text-status-success">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Success Today</span>
+                                <span class="font-mono font-bold text-sm">234</span>
+                            </div>
+                        </div>
+                        
+                        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-status-error bg-status-error-bg text-status-error">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-11z" clip-rule="evenodd" />
+                            </svg>
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs uppercase">Errors Today</span>
+                                <span class="font-mono font-bold text-sm">8</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4 text-text-secondary text-xs">
+                        Last Activity: 15 minutes ago
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <div class="grid grid-cols-2 gap-2 mb-3">
+                            <button class="btn-primary text-xs py-1.5 px-3">
+                                Start
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3 opacity-50 cursor-not-allowed">
+                                Stop
+                            </button>
+                            <button class="btn-secondary text-xs py-1.5 px-3">
+                                Restart
+                            </button>
+                            <button class="btn-danger text-xs py-1.5 px-3">
+                                Emergency
+                            </button>
+                        </div>
+                        <button class="btn-primary text-xs py-1.5 px-3 w-full">
+                            View Live Logs
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="glass-card p-6">
+            <h3 class="text-lg font-bold text-cyber-blue mb-2 font-futuristic">Recent Activity</h3>
+            <p class="text-sm text-text-secondary uppercase tracking-wider mb-4">Live system events</p>
+            
+            <div class="space-y-3">
+                <div class="flex items-center gap-3 p-3 bg-glass-secondary rounded-md">
+                    <span class="text-lg">✓</span>
+                    <div class="flex-1">
+                        <div class="text-sm">Telegram Bot processed 12 messages</div>
+                        <div class="text-xs text-text-secondary">14:32:15</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-status-success"></div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 bg-glass-secondary rounded-md">
+                    <span class="text-lg">🧠</span>
+                    <div class="flex-1">
+                        <div class="text-sm">Learning Brain completed training cycle</div>
+                        <div class="text-xs text-text-secondary">14:31:42</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-status-info"></div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 bg-glass-secondary rounded-md">
+                    <span class="text-lg">⚠️</span>
+                    <div class="flex-1">
+                        <div class="text-sm">MCP Tools connection timeout</div>
+                        <div class="text-xs text-text-secondary">14:30:08</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-status-warning"></div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 bg-glass-secondary rounded-md">
+                    <span class="text-lg">🔧</span>
+                    <div class="flex-1">
+                        <div class="text-sm">Autopilot System scheduled maintenance</div>
+                        <div class="text-xs text-text-secondary">14:28:33</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-status-info"></div>
+                </div>
+                
+                <div class="flex items-center gap-3 p-3 bg-glass-secondary rounded-md">
+                    <span class="text-lg">✨</span>
+                    <div class="flex-1">
+                        <div class="text-sm">New workflow automation created</div>
+                        <div class="text-xs text-text-secondary">14:27:19</div>
+                    </div>
+                    <div class="w-2 h-2 rounded-full bg-status-success"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-8 text-center">
+            <p class="text-text-secondary text-sm">
+                🚀 <strong>AuraOS Day 1 Implementation Complete</strong> - Neon UI/UX + Dashboard + Security
+            </p>
+            <p class="text-text-tertiary text-xs mt-2">
+                Ready for Day 2: Advanced Tailwind utilities, Dark Mode, Caching, and CI/CD
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Simple interactivity for demo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click handlers for buttons
+            const buttons = document.querySelectorAll('.btn-primary, .btn-secondary, .btn-danger');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.classList.contains('opacity-50')) {
+                        // Add a simple click effect
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                        
+                        // Show alert for demo
+                        const action = this.textContent.trim();
+                        if (action !== 'View Live Logs') {
+                            alert(`Demo: ${action} action triggered!`);
+                        }
+                    }
+                });
+            });
+            
+            // Add hover effects for cards
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
