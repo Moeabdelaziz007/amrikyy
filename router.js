@@ -19,6 +19,27 @@ class AuraRouter {
         this.addRoute('/settings', 'settings.html');
         this.addRoute('/about', 'about.html');
 
+        // Additional routes
+        this.addRoute('/help', 'help.html');
+        this.addRoute('/app-store', 'app-store.html');
+        this.addRoute('/file-manager', 'file-manager.html');
+        this.addRoute('/task-manager', 'task-manager.html');
+        this.addRoute('/network-manager', 'network-manager.html');
+        this.addRoute('/notifications', 'notifications.html');
+        this.addRoute('/terminal', 'terminal.html');
+        this.addRoute('/profile', 'profile.html');
+        this.addRoute('/system-monitor', 'system-monitor.html');
+        this.addRoute('/admin', 'admin-panel.html');
+        this.addRoute('/autopilot-dashboard', 'autopilot-dashboard.html');
+        this.addRoute('/test-dashboard', 'test-dashboard.html');
+        this.addRoute('/offline', 'offline.html');
+
+        // New pages
+        this.addRoute('/chat', 'chat.html');
+        this.addRoute('/share', 'share.html');
+        this.addRoute('/file-handler', 'file-handler.html');
+        this.addRoute('/protocol', 'protocol.html');
+
         // Setup event listeners
         this.setupEventListeners();
         

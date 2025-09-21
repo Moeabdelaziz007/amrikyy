@@ -1,0 +1,289 @@
+schemaVersion: 2.2.0
+metadata:
+  name: auraos-development
+  displayName: AuraOS Development Environment
+  description: Complete development environment for AuraOS project
+  tags:
+    - React
+    - Node.js
+    - Python
+    - TypeScript
+    - PostgreSQL
+    - Redis
+  projectType: fullstack
+  language: typescript
+  version: 1.0.0
+
+# متغيرات البيئة
+variables:
+  NODE_VERSION: "18"
+  PYTHON_VERSION: "3.11"
+  POSTGRES_VERSION: "15"
+  REDIS_VERSION: "7"
+
+# مكونات بيئة التطوير
+components:
+  # Node.js للواجهة الأمامية والخلفية
+  - name: nodejs-dev
+    container:
+      image: node:18-alpine
+      memoryLimit: 2Gi
+      cpuLimit: 1000m
+      mountSources: true
+      sourceMapping: /projects
+      env:
+        - name: NODE_ENV
+          value: development
+        - name: PORT
+          value: "3000"
+        - name: API_PORT
+          value: "3001"
+      endpoints:
+        - name: frontend
+          targetPort: 3000
+          exposure: public
+          protocol: https
+        - name: backend
+          targetPort: 3001
+          exposure: public
+          protocol: https
+      volumeMounts:
+        - name: node-modules
+          path: /projects/node_modules
+
+  # Python للخدمات المساعدة والذكاء الاصطناعي
+  - name: python-dev
+    container:
+      image: python:3.11-slim
+      memoryLimit: 1Gi
+      cpuLimit: 500m
+      mountSources: true
+      sourceMapping: /projects
+      env:
+        - name: PYTHONPATH
+          value: /projects
+        - name: PYTHON_ENV
+          value: development
+      command: ['tail', '-f', '/dev/null']
+
+  # PostgreSQL قاعدة البيانات
+  - name: postgres-db
+    container:
+      image: postgres:15-alpine
+      memoryLimit: 512Mi
+      cpuLimit: 500m
+      env:
+        - name: POSTGRES_DB
+          value: auraos_automation
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          value: auraos123
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+      endpoints:
+        - name: postgres
+          targetPort: 5432
+          exposure: internal
+      volumeMounts:
+        - name: postgres-data
+          path: /var/lib/postgresql/data
+
+  # Redis للتخزين المؤقت
+  - name: redis-cache
+    container:
+      image: redis:7-alpine
+      memoryLimit: 256Mi
+      cpuLimit: 250m
+      command: ['redis-server', '--appendonly', 'yes']
+      endpoints:
+        - name: redis
+          targetPort: 6379
+          exposure: internal
+      volumeMounts:
+        - name: redis-data
+          path: /data
+
+  # أدوات التطوير
+  - name: dev-tools
+    container:
+      image: quay.io/devfile/universal-developer-image:ubi8-latest
+      memoryLimit: 1Gi
+      cpuLimit: 500m
+      mountSources: true
+      sourceMapping: /projects
+      env:
+        - name: SHELL
+          value: /bin/bash
+
+# مجلدات التخزين
+volumes:
+  - name: node-modules
+    size: 2Gi
+  - name: postgres-data
+    size: 1Gi
+  - name: redis-data
+    size: 512Mi
+
+# أوامر التطوير
+commands:
+  # إعداد المشروع
+  - id: install-dependencies
+    exec:
+      label: "تثبيت المتطلبات"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🚀 تثبيت متطلبات Node.js..."
+        npm install
+        echo "✅ تم تثبيت متطلبات Node.js بنجاح"
+      group:
+        kind: build
+        isDefault: true
+
+  - id: install-python-deps
+    exec:
+      label: "تثبيت متطلبات Python"
+      component: python-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🐍 تثبيت متطلبات Python..."
+        pip install --upgrade pip
+        pip install flask fastapi uvicorn requests python-telegram-bot
+        echo "✅ تم تثبيت متطلبات Python بنجاح"
+      group:
+        kind: build
+
+  # تشغيل الخدمات
+  - id: start-frontend
+    exec:
+      label: "تشغيل الواجهة الأمامية"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🎨 تشغيل الواجهة الأمامية..."
+        python -m http.server 3000
+      group:
+        kind: run
+
+  - id: start-backend
+    exec:
+      label: "تشغيل الخادم الخلفي"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🔧 تشغيل الخادم الخلفي..."
+        node server/index.js || echo "تحقق من وجود ملف server/index.js"
+      group:
+        kind: run
+
+  - id: start-python-services
+    exec:
+      label: "تشغيل خدمات Python"
+      component: python-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🤖 تشغيل خدمات Python..."
+        python run_complete_system.py
+      group:
+        kind: run
+
+  # اختبار الاتصال بقواعد البيانات
+  - id: test-postgres
+    exec:
+      label: "اختبار PostgreSQL"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🗄️ اختبار الاتصال بـ PostgreSQL..."
+        node -e "
+        const { Client } = require('pg');
+        const client = new Client({
+          host: 'localhost',
+          port: 5432,
+          database: 'auraos_automation',
+          user: 'postgres',
+          password: 'auraos123'
+        });
+        client.connect()
+          .then(() => console.log('✅ PostgreSQL متصل بنجاح'))
+          .catch(err => console.log('❌ خطأ في الاتصال:', err.message))
+          .finally(() => client.end());
+        "
+      group:
+        kind: test
+
+  - id: test-redis
+    exec:
+      label: "اختبار Redis"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "💾 اختبار الاتصال بـ Redis..."
+        node -e "
+        const redis = require('redis');
+        const client = redis.createClient({ host: 'localhost', port: 6379 });
+        client.on('connect', () => console.log('✅ Redis متصل بنجاح'));
+        client.on('error', (err) => console.log('❌ خطأ في Redis:', err.message));
+        client.connect();
+        "
+      group:
+        kind: test
+
+  # أدوات التطوير
+  - id: format-code
+    exec:
+      label: "تنسيق الكود"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🎨 تنسيق الكود..."
+        npx prettier --write "**/*.{js,ts,tsx,css,html,json}"
+        echo "✅ تم تنسيق الكود بنجاح"
+      group:
+        kind: build
+
+  - id: lint-code
+    exec:
+      label: "فحص جودة الكود"
+      component: nodejs-dev
+      workingDir: ${PROJECT_SOURCE}
+      commandLine: |
+        echo "🔍 فحص جودة الكود..."
+        npx eslint . --ext .js,.ts,.tsx || echo "تحقق من إعدادات ESLint"
+        echo "✅ تم فحص الكود"
+      group:
+        kind: test
+
+  # تشغيل شامل للنظام
+  - id: start-all
+    composite:
+      label: "تشغيل النظام كاملاً"
+      commands:
+        - install-dependencies
+        - install-python-deps
+        - start-frontend
+        - start-backend
+        - start-python-services
+      group:
+        kind: run
+        isDefault: true
+
+# أحداث دورة الحياة
+events:
+  # عند بدء المساحة
+  preStart:
+    - install-dependencies
+    - install-python-deps
+  
+  # عند الإيقاف
+  postStop:
+    - format-code
+
+# إعدادات إضافية
+starterProjects:
+  - name: auraos-starter
+    description: AuraOS Project Template
+    git:
+      remotes:
+        origin: https://github.com/yourusername/auraos.git

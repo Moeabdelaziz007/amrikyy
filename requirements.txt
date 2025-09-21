@@ -1,0 +1,46 @@
+# AuraOS Python Dependencies
+# متطلبات Python لمشروع AuraOS
+
+# Web Frameworks
+flask==2.3.3
+fastapi==0.104.1
+uvicorn==0.24.0
+
+# HTTP Clients
+requests==2.31.0
+httpx==0.25.2
+
+# Telegram Bot
+python-telegram-bot==20.7
+
+# Database
+psycopg2-binary==2.9.9
+redis==5.0.1
+
+# AI/ML
+openai==1.3.7
+anthropic==0.7.8
+
+# Data Processing
+pandas==2.1.4
+numpy==1.25.2
+
+# Configuration
+python-dotenv==1.0.0
+pyyaml==6.0.1
+
+# Async Support
+asyncio==3.4.3
+aiofiles==23.2.1
+
+# Logging
+structlog==23.2.0
+
+# Utilities
+click==8.1.7
+rich==13.7.0
+
+# Development Tools
+pytest==7.4.3
+black==23.11.0
+flake8==6.1.0

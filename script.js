@@ -268,16 +268,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Scroll indicator click
-scrollIndicator.addEventListener('click', () => {
-    const featuresSection = document.querySelector('#features');
-    if (featuresSection) {
-        const offsetTop = featuresSection.offsetTop - 70;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
-        });
-    }
-});
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+        const featuresSection = document.querySelector('#features');
+        if (featuresSection) {
+            const offsetTop = featuresSection.offsetTop - 70;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
 
 // Intersection Observer for animations
 const observerOptions = {
@@ -445,7 +447,8 @@ document.querySelectorAll('.download-card .btn').forEach(button => {
 });
 
 // Watch demo button interaction
-document.querySelector('.btn-secondary').addEventListener('click', function(e) {
+const heroSecondaryBtn = document.querySelector('.btn-secondary');
+if (heroSecondaryBtn) heroSecondaryBtn.addEventListener('click', function(e) {
     e.preventDefault();
     
     // Create modal for demo video

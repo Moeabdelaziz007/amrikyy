@@ -1,7 +1,7 @@
 
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 
 // Firebase configuration
@@ -11,14 +11,15 @@ const firebaseConfig = {
   projectId: process.env.VITE_FIREBASE_PROJECT_ID || "aios-97581",
   storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "aios-97581.appspot.com",
   messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "307575156824",
-  appId: process.env.VITE_FIREBASE_APP_ID || "1:307575156824:web:00924bd384df1f29909a2d"
+  appId: process.env.VITE_FIREBASE_APP_ID || "1:307575156824:web:00924bd384df1f29909a2d",
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+export const analytics = typeof window !== 'undefined' && firebaseConfig.measurementId ? getAnalytics(app) : undefined;
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
@@ -76,9 +77,7 @@ export class AuthService {
 
       // Update display name if provided
       if (displayName && user) {
-        await user.updateProfile({
-          displayName: displayName
-        });
+        await updateProfile(user, { displayName });
       }
 
       // Save user data to Firestore
@@ -321,7 +320,9 @@ export class FirestoreService {
 }
 
 export const trackEvent = (eventName: string, eventParams?: { [key: string]: any }) => {
-  logEvent(analytics, eventName, eventParams);
+  if (analytics) {
+    logEvent(analytics, eventName, eventParams);
+  }
 };
 
 export default app;

@@ -2779,6 +2779,10 @@
             }
         }
     </style>
+    <!-- Firebase SDKs (compat for script.js usage) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="dashboard-page">
@@ -2801,16 +2805,16 @@
                         <i class="fas fa-home"></i>
                         <span>Dashboard</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="dashboard.html" class="nav-item">
                         <i class="fas fa-chart-line"></i>
                         <span>Analytics</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="task-manager.html" class="nav-item">
                         <i class="fas fa-tasks"></i>
                         <span>Projects</span>
                         <span class="nav-badge">3</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="team.html" class="nav-item">
                         <i class="fas fa-users"></i>
                         <span>Team</span>
                     </a>
@@ -2818,19 +2822,19 @@
 
                 <div class="nav-section">
                     <div class="nav-section-title">Tools</div>
-                    <a href="#" class="nav-item">
+                    <a href="terminal.html" class="nav-item">
                         <i class="fas fa-terminal"></i>
                         <span>Terminal</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="app-store.html" class="nav-item">
                         <i class="fas fa-code"></i>
                         <span>Code Editor</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="system-monitor.html" class="nav-item">
                         <i class="fas fa-database"></i>
                         <span>Database</span>
                     </a>
-                    <a href="#" class="nav-item">
+                    <a href="file-manager.html" class="nav-item">
                         <i class="fas fa-cloud"></i>
                         <span>Cloud Storage</span>
                     </a>
@@ -2838,7 +2842,7 @@
 
                 <div class="nav-section">
                     <div class="nav-section-title">Settings</div>
-                    <a href="settings.html" class="nav-item">
+                    <a href="settings.html" class="nav-item" id="preferencesNav">
                         <i class="fas fa-cog"></i>
                         <span>Preferences</span>
                     </a>

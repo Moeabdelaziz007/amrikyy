@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Target - AuraOS</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="share-page">
+    <main class="container" style="padding: 40px 20px; max-width: 900px;">
+        <h1 class="section-title">Shared Content</h1>
+        <p class="section-description">Content received via Web Share Target API.</p>
+        <div id="shareResult" class="card" style="padding: 20px;"></div>
+        <a href="index.html" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Back to Home</a>
+    </main>
+
+    <script>
+    (async () => {
+        try {
+            if (window.location.search || window.location.hash) {
+                const params = new URLSearchParams(window.location.search);
+                const title = params.get('title') || '';
+                const text = params.get('text') || '';
+                const url = params.get('url') || '';
+                const result = document.getElementById('shareResult');
+                result.innerHTML = `
+                    <h3>Received Data</h3>
+                    <p><strong>Title:</strong> ${title || '—'}</p>
+                    <p><strong>Text:</strong> ${text || '—'}</p>
+                    <p><strong>URL:</strong> ${url ? `<a href="${url}">${url}</a>` : '—'}</p>
+                `;
+                return;
+            }
+
+            if (window.location.pathname === '/share' && 'navigation' in window) {
+                const nav = window.navigation.currentEntry;
+                if (nav && nav.formData) {
+                    const formData = await nav.formData();
+                    const result = document.getElementById('shareResult');
+                    const title = formData.get('title');
+                    const text = formData.get('text');
+                    const url = formData.get('url');
+                    const files = formData.getAll('files');
+                    result.innerHTML = `
+                        <h3>Received Data</h3>
+                        <p><strong>Title:</strong> ${title || '—'}</p>
+                        <p><strong>Text:</strong> ${text || '—'}</p>
+                        <p><strong>URL:</strong> ${url ? `<a href="${url}">${url}</a>` : '—'}</p>
+                        <p><strong>Files:</strong> ${files && files.length ? files.map(f => f.name).join(', ') : '—'}</p>
+                    `;
+                }
+            }
+        } catch (e) {
+            document.getElementById('shareResult').textContent = 'Failed to parse shared content.';
+        }
+    })();
+    </script>
+    <script src="router.js"></script>
+    <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    </body>
+    </html>
+
+

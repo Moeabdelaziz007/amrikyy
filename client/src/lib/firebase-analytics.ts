@@ -1,69 +1,17 @@
 // Firebase Integration for Advanced Analytics
 // Complete Firebase setup and integration for the analytics system
 
-import { initializeApp } from 'firebase/app';
 import { 
-  getFirestore, 
-  connectFirestoreEmulator,
-  enableNetwork,
-  disableNetwork 
-} from 'firebase/firestore';
-import { 
-  getAuth, 
-  connectAuthEmulator,
-  signInAnonymously,
-  onAuthStateChanged,
-  User
-} from 'firebase/auth';
-import { 
-  getStorage, 
-  connectStorageEmulator 
-} from 'firebase/storage';
-import { 
-  getFunctions, 
-  connectFunctionsEmulator 
-} from 'firebase/functions';
-import { 
-  getAnalytics, 
   logEvent,
   setUserId,
   setUserProperties,
   setCurrentScreen
 } from 'firebase/analytics';
+import { signInAnonymously, onAuthStateChanged, User } from 'firebase/auth';
+import { enableNetwork, disableNetwork } from 'firebase/firestore';
+import { db, auth, analytics } from './firebase';
 
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-api-key",
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "your-project-id",
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || "your-app-id",
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-XXXXXXXXXX"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase services
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-export const functions = getFunctions(app);
-export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
-
-// Development mode setup
-if (process.env.NODE_ENV === 'development') {
-  // Connect to Firebase emulators
-  try {
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    connectAuthEmulator(auth, 'http://localhost:9099');
-    connectStorageEmulator(storage, 'localhost', 9199);
-    connectFunctionsEmulator(functions, 'localhost', 5001);
-  } catch (error) {
-    console.log('Firebase emulators already connected or not available');
-  }
-}
+// Note: Initialization and emulator connections are handled in './firebase'.
 
 // Firebase Analytics Integration
 export class FirebaseAnalyticsIntegration {
@@ -84,6 +32,12 @@ export class FirebaseAnalyticsIntegration {
   private setupAuthListener() {
     onAuthStateChanged(auth, (user) => {
       this.currentUser = user;
+      if (!user) {
+        // Fallback to anonymous auth to satisfy Firestore rules that require auth
+        signInAnonymously(auth).catch(() => {
+          // ignore; Firestore operations will fail if rules require auth
+        });
+      }
       if (user && analytics) {
         setUserId(analytics, user.uid);
         setUserProperties(analytics, {
@@ -647,8 +601,6 @@ export const firebaseAnalytics = FirebaseAnalyticsIntegration.getInstance();
 export default {
   db,
   auth,
-  storage,
-  functions,
   analytics,
   firebaseAnalyticsService,
   firebaseAnalytics,

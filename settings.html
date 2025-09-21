@@ -656,6 +656,10 @@
             }
         }
     </style>
+    <!-- Firebase SDKs (compat for script.js usage) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <div class="settings-page">
@@ -1398,8 +1402,8 @@
         new SettingsManager();
 
         // Add animation styles
-        const style = document.createElement('style');
-        style.textContent = `
+        const toastAnimStyle = document.createElement('style');
+        toastAnimStyle.textContent = `
             @keyframes slideInRight {
                 from { transform: translateX(100%); opacity: 0; }
                 to { transform: translateX(0); opacity: 1; }
@@ -1410,7 +1414,7 @@
                 to { transform: translateX(100%); opacity: 0; }
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(toastAnimStyle);
     </script>
 </body>
 </html>
