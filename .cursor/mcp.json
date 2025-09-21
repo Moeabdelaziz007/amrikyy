@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "auraos": {
+      "command": "python",
+      "args": ["auraos-mcp/server.py"],
+      "env": {
+        "AURAOS_API_URL": "http://localhost:8001",
+        "AURAOS_API_KEY": "${AURAOS_API_KEY}"
+      }
+    }
+  }
+}
