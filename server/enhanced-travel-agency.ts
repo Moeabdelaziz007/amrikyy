@@ -1,5 +1,6 @@
 import { storage } from './storage.js';
 import { generateContent } from './gemini.js';
+import axios from 'axios';
 
 interface TravelDestination {
   id: string;
@@ -230,6 +231,8 @@ export class EnhancedTravelAgency {
   private userProfiles: Map<string, UserTravelProfile> = new Map();
   private bookings: Map<string, TravelBooking> = new Map();
   private aiRecommendations: Map<string, any> = new Map();
+  private lastRoutePrices: Map<string, number> = new Map();
+  private alertsEnabled: boolean = (process.env.TRAVEL_TELEGRAM_ALERTS || 'true').toLowerCase() !== 'false';
 
   constructor() {
     this.initializeDestinations();
@@ -301,6 +304,27 @@ export class EnhancedTravelAgency {
     destinations.forEach(dest => {
       this.destinations.set(dest.id, dest);
     });
+  }
+
+  private getTelegramConfig() {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID;
+    if (!token || !chatId || chatId.includes('YOUR_') || chatId.includes('your_')) {
+      return null;
+    }
+    return { token, chatId };
+  }
+
+  private async sendTelegramMessage(message: string) {
+    if (!this.alertsEnabled) return;
+    const cfg = this.getTelegramConfig();
+    if (!cfg) return;
+    try {
+      const url = `https://api.telegram.org/bot${cfg.token}/sendMessage`;
+      await axios.post(url, { chat_id: cfg.chatId, text: message, parse_mode: 'Markdown' });
+    } catch (error: any) {
+      console.error('Telegram send failed:', error?.message || error);
+    }
   }
 
   private startAITravelEngine() {
@@ -566,6 +590,45 @@ export class EnhancedTravelAgency {
     }
   }
 
+  private getAlertThresholdPercent(): number {
+    const raw = process.env.TRAVEL_PRICE_ALERT_THRESHOLD || '10';
+    const val = parseFloat(raw);
+    return isNaN(val) ? 10 : Math.max(0, val);
+  }
+
+  private generateRouteKey(origin: string, destination: string): string {
+    return `${origin}_${destination}`.toUpperCase();
+  }
+
+  private simulateCurrentPrice(origin: string, destination: string): number {
+    // Simple simulation: base by route hash + small variance
+    const base = Math.abs(this.generateRouteKey(origin, destination).split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % 400 + 150;
+    const variance = (Math.random() - 0.5) * 40; // ±20
+    return Math.max(50, Math.round((base + variance) * 100) / 100);
+  }
+
+  private async checkPriceDrops(origin: string, destination: string): Promise<{ route: string; oldPrice: number; newPrice: number; dropPercent: number } | null> {
+    const key = this.generateRouteKey(origin, destination);
+    const current = this.simulateCurrentPrice(origin, destination);
+    const prev = this.lastRoutePrices.get(key);
+    this.lastRoutePrices.set(key, current);
+
+    if (prev == null) return null;
+
+    const dropPercent = ((prev - current) / prev) * 100;
+    const threshold = this.getAlertThresholdPercent();
+    if (dropPercent >= threshold) {
+      return { route: `${origin} → ${destination}`, oldPrice: prev, newPrice: current, dropPercent: Math.round(dropPercent * 100) / 100 };
+    }
+    return null;
+  }
+
+  private async sendPriceAlert(alert: { route: string; oldPrice: number; newPrice: number; dropPercent: number }) {
+    const msg = `💸 Price Drop Alert\nRoute: ${alert.route}\nDrop: ${alert.dropPercent}%\nOld: $${alert.oldPrice.toFixed(2)}\nNew: $${alert.newPrice.toFixed(2)}\n\nAction: Consider booking now for best rates.`;
+    console.log(msg);
+    await this.sendTelegramMessage(msg);
+  }
+
   // Utility Methods
   private parseFlightOptions(aiResponse: string, searchParams: FlightSearch): FlightOption[] {
     // Parse AI response and create structured flight options
@@ -815,16 +878,8 @@ export class EnhancedTravelAgency {
 
   private async sendBookingConfirmation(booking: TravelBooking): Promise<void> {
     console.log(`📧 Sending booking confirmation for ${booking.confirmationCode}`);
-    // Implementation would send email/SMS confirmation
-  }
-
-  private async checkPriceDrops(origin: string, destination: string): Promise<any> {
-    // Simulate price drop detection
-    return null;
-  }
-
-  private async sendPriceAlert(alert: any): Promise<void> {
-    console.log(`💰 Price alert sent: ${alert.message}`);
+    const details = `✅ Booking Confirmed\nType: ${booking.type}\nRef: ${booking.reference}\nCode: ${booking.confirmationCode}\nTravel Date: ${booking.travelDate.toISOString().split('T')[0]}\nAmount: ${booking.price.amount} ${booking.price.currency}`;
+    await this.sendTelegramMessage(details);
   }
 
   private extractRecommendations(response: string): string[] {
