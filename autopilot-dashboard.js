@@ -15,6 +15,7 @@ class AutopilotDashboard {
         this.initializeCharts();
         this.connectToSystem();
         this.startAutoRefresh();
+        this.initLiveWidgets();
         
         console.log('🚀 Autopilot Dashboard initialized');
     }
@@ -449,6 +450,20 @@ class AutopilotDashboard {
         this.refreshInterval = setInterval(() => {
             this.refreshData();
         }, 5000); // Refresh every 5 seconds
+    }
+
+    initLiveWidgets() {
+        try {
+            if (window.AuraWidgets) {
+                const ws = window.AuraWidgets.connect();
+                const el = document.getElementById('live-system-chart');
+                if (el) {
+                    this.liveChart = window.AuraWidgets.SystemLiveChart(el, ws);
+                }
+            }
+        } catch (e) {
+            console.warn('Live widgets init failed', e);
+        }
     }
 
     refreshData() {

@@ -1,0 +1,199 @@
+/* Cyberpunk Fonts - AuraOS */
+
+/* Preload fonts for better performance */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+/* Font Face Declarations */
+:root {
+  --font-cyberpunk: 'Orbitron', system-ui, sans-serif;
+  --font-futuristic: 'Oxanium', system-ui, sans-serif;
+  --font-tech: 'Audiowide', system-ui, sans-serif;
+  --font-modern: 'Rajdhani', system-ui, sans-serif;
+  
+  /* Default system fonts as fallbacks */
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: Georgia, 'Times New Roman', Times, serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+/* Typography Classes */
+.font-cyberpunk {
+  font-family: var(--font-cyberpunk);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.font-futuristic {
+  font-family: var(--font-futuristic);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.font-tech {
+  font-family: var(--font-tech);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.font-modern {
+  font-family: var(--font-modern);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Cyberpunk Typography Styles */
+.cyberpunk-title {
+  font-family: var(--font-cyberpunk);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.cyberpunk-subtitle {
+  font-family: var(--font-futuristic);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--cyber-blue);
+  text-shadow: var(--glow-blue-sm);
+}
+
+.cyberpunk-body {
+  font-family: var(--font-modern);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+}
+
+.cyberpunk-code {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--neon-green);
+  background: var(--glass-bg-primary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--glass-border-primary);
+}
+
+/* Responsive Typography */
+.cyberpunk-display {
+  font-family: var(--font-tech);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1.1;
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.cyberpunk-heading-1 {
+  font-family: var(--font-cyberpunk);
+  font-weight: 800;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--neon-green);
+  text-shadow: var(--glow-green-md);
+}
+
+.cyberpunk-heading-2 {
+  font-family: var(--font-futuristic);
+  font-weight: 600;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  letter-spacing: 0.06em;
+  color: var(--cyber-blue);
+  text-shadow: var(--glow-blue-sm);
+}
+
+.cyberpunk-heading-3 {
+  font-family: var(--font-modern);
+  font-weight: 600;
+  font-size: clamp(0.875rem, 2vw, 1.25rem);
+  letter-spacing: 0.04em;
+  color: var(--vivid-purple);
+  text-shadow: var(--glow-purple-sm);
+}
+
+/* Button Typography */
+.cyberpunk-button-text {
+  font-family: var(--font-futuristic);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+/* Label Typography */
+.cyberpunk-label {
+  font-family: var(--font-modern);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Status Typography */
+.cyberpunk-status {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.cyberpunk-status.success {
+  color: var(--status-success);
+  text-shadow: var(--glow-green-sm);
+}
+
+.cyberpunk-status.warning {
+  color: var(--status-warning);
+  text-shadow: 0 0 8px var(--status-warning);
+}
+
+.cyberpunk-status.error {
+  color: var(--status-error);
+  text-shadow: 0 0 8px var(--status-error);
+}
+
+.cyberpunk-status.info {
+  color: var(--status-info);
+  text-shadow: var(--glow-blue-sm);
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  .cyberpunk-title,
+  .cyberpunk-display {
+    background: var(--neon-green);
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: unset;
+    color: var(--neon-green);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .cyberpunk-title,
+  .cyberpunk-subtitle,
+  .cyberpunk-heading-1,
+  .cyberpunk-heading-2,
+  .cyberpunk-heading-3 {
+    text-shadow: none;
+  }
+}

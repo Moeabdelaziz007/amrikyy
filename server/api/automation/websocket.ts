@@ -1,13 +1,14 @@
 // WebSocket Server for Real-Time Automation Updates
 import { WebSocketServer, WebSocket } from 'ws';
 import { IncomingMessage } from 'http';
+import os from 'os';
 import { URL } from 'url';
 // Note: Direct API calls will be made instead of using automationApi import
-import { db } from './database';
+// import { db } from './database';
 
 // WebSocket message types
 export interface WebSocketMessage {
-  type: 'task_update' | 'execution_update' | 'workspace_update' | 'system_health' | 'alert' | 'notification';
+  type: 'task_update' | 'execution_update' | 'workspace_update' | 'system_health' | 'alert' | 'notification' | 'data_response' | 'error';
   data: any;
   timestamp: string;
   userId?: string;
@@ -17,7 +18,7 @@ export interface WebSocketMessage {
 export interface ClientConnection {
   ws: WebSocket;
   userId: string;
-  workspaceId?: string;
+  workspaceId?: string | undefined;
   subscriptions: string[];
   lastPing: number;
 }
@@ -26,6 +27,7 @@ export class AutomationWebSocketServer {
   private wss: WebSocketServer;
   private clients: Map<string, ClientConnection> = new Map();
   private heartbeatInterval: NodeJS.Timeout | null = null;
+  private metricsBroadcastInterval: NodeJS.Timeout | null = null;
 
   constructor(server: any) {
     this.wss = new WebSocketServer({
@@ -36,6 +38,7 @@ export class AutomationWebSocketServer {
 
     this.setupWebSocketServer();
     this.startHeartbeat();
+    this.startMetricsBroadcast();
   }
 
   private setupWebSocketServer() {
@@ -115,9 +118,21 @@ export class AutomationWebSocketServer {
     }
   }
 
-  private handleMessage(connectionId: string, data: Buffer) {
+  private handleMessage(connectionId: string, data: any) {
     try {
-      const message = JSON.parse(data.toString());
+      let raw = data as any;
+      if (typeof raw !== 'string') {
+        if (Buffer.isBuffer(raw)) {
+          raw = raw.toString();
+        } else if (raw instanceof ArrayBuffer) {
+          raw = Buffer.from(raw).toString();
+        } else if (Array.isArray(raw)) {
+          raw = Buffer.concat(raw as any).toString();
+        } else {
+          raw = String(raw);
+        }
+      }
+      const message = JSON.parse(raw as string);
       const connection = this.clients.get(connectionId);
 
       if (!connection) return;
@@ -209,25 +224,21 @@ export class AutomationWebSocketServer {
           return;
       }
 
-      this.sendMessage(connection.ws, {
+      const response: WebSocketMessage = {
         type: 'data_response',
-        data: {
-          requestType: type,
-          data: responseData
-        },
+        data: { requestType: type, data: responseData },
         timestamp: new Date().toISOString()
-      });
+      };
+      this.sendMessage(connection.ws, response);
 
     } catch (error) {
       console.error('Error handling get_data request:', error);
-      this.sendMessage(connection.ws, {
+      const errMsg: WebSocketMessage = {
         type: 'error',
-        data: {
-          message: 'Failed to fetch data',
-          error: error instanceof Error ? error.message : 'Unknown error'
-        },
+        data: { message: 'Failed to fetch data', error: error instanceof Error ? error.message : 'Unknown error' },
         timestamp: new Date().toISOString()
-      });
+      };
+      this.sendMessage(connection.ws, errMsg);
     }
   }
 
@@ -241,30 +252,33 @@ export class AutomationWebSocketServer {
 
   // Public methods for broadcasting updates
   public broadcastTaskUpdate(taskData: any, workspaceId?: string) {
-    this.broadcast({
+    const message: WebSocketMessage = {
       type: 'task_update',
       data: taskData,
       timestamp: new Date().toISOString(),
-      workspaceId
-    }, workspaceId);
+      ...(workspaceId ? { workspaceId } : {})
+    };
+    this.broadcast(message, workspaceId);
   }
 
   public broadcastExecutionUpdate(executionData: any, workspaceId?: string) {
-    this.broadcast({
+    const message: WebSocketMessage = {
       type: 'execution_update',
       data: executionData,
       timestamp: new Date().toISOString(),
-      workspaceId
-    }, workspaceId);
+      ...(workspaceId ? { workspaceId } : {})
+    };
+    this.broadcast(message, workspaceId);
   }
 
   public broadcastWorkspaceUpdate(workspaceData: any, workspaceId?: string) {
-    this.broadcast({
+    const message: WebSocketMessage = {
       type: 'workspace_update',
       data: workspaceData,
       timestamp: new Date().toISOString(),
-      workspaceId
-    }, workspaceId);
+      ...(workspaceId ? { workspaceId } : {})
+    };
+    this.broadcast(message, workspaceId);
   }
 
   public broadcastSystemHealth(healthData: any) {
@@ -276,12 +290,13 @@ export class AutomationWebSocketServer {
   }
 
   public broadcastAlert(alertData: any, workspaceId?: string) {
-    this.broadcast({
+    const message: WebSocketMessage = {
       type: 'alert',
       data: alertData,
       timestamp: new Date().toISOString(),
-      workspaceId
-    }, workspaceId);
+      ...(workspaceId ? { workspaceId } : {})
+    };
+    this.broadcast(message, workspaceId);
   }
 
   public sendNotification(userId: string, message: string, data?: any) {
@@ -347,6 +362,42 @@ export class AutomationWebSocketServer {
     }, 30000); // 30 seconds heartbeat
   }
 
+  private startMetricsBroadcast() {
+    // Broadcast basic system metrics every 5 seconds
+    this.metricsBroadcastInterval = setInterval(() => {
+      try {
+        const [firstLoad] = os.loadavg();
+        const loadAvg = typeof firstLoad === 'number' ? firstLoad : 0;
+        const totalMem = os.totalmem();
+        const freeMem = os.freemem();
+        const usedMemPct = ((totalMem - freeMem) / totalMem) * 100;
+        const uptime = os.uptime();
+        const connectedClients = this.getConnectedClients();
+
+        const healthData = {
+          overall: usedMemPct > 90 || loadAvg > os.cpus().length ? 'degraded' : 'healthy',
+          components: {
+            cpu: { status: loadAvg > os.cpus().length ? 'degraded' : 'healthy', value: Number(loadAvg.toFixed(2)), unit: 'load' },
+            memory: { status: usedMemPct > 90 ? 'degraded' : 'healthy', value: Number(usedMemPct.toFixed(1)), unit: '%' },
+            disk: { status: 'healthy', value: 0, unit: '%' }, // placeholder without disk probe
+            network: { status: 'healthy', value: 0, unit: 'Mbps' }, // placeholder
+            database: { status: 'healthy', value: 0, unit: 'ms' }, // placeholder
+            queue: { status: 'healthy', value: 0, unit: 'tasks' }
+          },
+          meta: {
+            uptime,
+            connectedClients
+          },
+          timestamp: new Date().toISOString()
+        };
+
+        this.broadcastSystemHealth(healthData);
+      } catch (error) {
+        console.error('Error broadcasting system metrics:', error);
+      }
+    }, 5000);
+  }
+
   private extractUserIdFromToken(token: string): string {
     // In a real app, decode JWT token here
     // For demo purposes, return a mock user ID
@@ -364,7 +415,7 @@ export class AutomationWebSocketServer {
   public getClientInfo(): Array<{ userId: string; workspaceId?: string; subscriptions: string[] }> {
     return Array.from(this.clients.values()).map(connection => ({
       userId: connection.userId,
-      workspaceId: connection.workspaceId,
+      ...(connection.workspaceId ? { workspaceId: connection.workspaceId } : {}),
       subscriptions: connection.subscriptions
     }));
   }
@@ -372,6 +423,9 @@ export class AutomationWebSocketServer {
   public shutdown() {
     if (this.heartbeatInterval) {
       clearInterval(this.heartbeatInterval);
+    }
+    if (this.metricsBroadcastInterval) {
+      clearInterval(this.metricsBroadcastInterval);
     }
 
     this.clients.forEach((connection) => {

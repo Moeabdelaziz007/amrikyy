@@ -2,60 +2,96 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./client/index.html", 
+    "./client/src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx,html}",
+    "./*.html"
+  ],
   theme: {
     extend: {
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--border-radius-lg)",
+        md: "var(--border-radius-md)",
+        sm: "var(--border-radius-sm)",
+        xl: "var(--border-radius-xl)",
       },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        background: "var(--bg-primary)",
+        foreground: "var(--text-primary)",
+        
+        // Neon Color Palette
+        neon: {
+          green: "var(--neon-green)",
+          blue: "var(--cyber-blue)",
+          purple: "var(--vivid-purple)",
+          pink: "var(--neon-pink)",
+          yellow: "var(--electric-yellow)",
+          orange: "var(--cyber-orange)",
+        },
+        
+        // Status Colors
+        status: {
+          success: "var(--status-success)",
+          warning: "var(--status-warning)",
+          error: "var(--status-error)",
+          info: "var(--status-info)",
+        },
+        
+        // Glass Colors
+        glass: {
+          primary: "var(--glass-bg-primary)",
+          secondary: "var(--glass-bg-secondary)",
+          tertiary: "var(--glass-bg-tertiary)",
+          border: "var(--glass-border-primary)",
+          'border-secondary': "var(--glass-border-secondary)",
+        },
+        
+        // Legacy colors for compatibility
         card: {
-          DEFAULT: "var(--card)",
-          foreground: "var(--card-foreground)",
+          DEFAULT: "var(--glass-bg-primary)",
+          foreground: "var(--text-primary)",
         },
         popover: {
-          DEFAULT: "var(--popover)",
-          foreground: "var(--popover-foreground)",
+          DEFAULT: "var(--glass-bg-secondary)",
+          foreground: "var(--text-primary)",
         },
         primary: {
-          DEFAULT: "var(--primary)",
-          foreground: "var(--primary-foreground)",
+          DEFAULT: "var(--neon-green)",
+          foreground: "var(--bg-primary)",
         },
         secondary: {
-          DEFAULT: "var(--secondary)",
-          foreground: "var(--secondary-foreground)",
+          DEFAULT: "var(--cyber-blue)",
+          foreground: "var(--bg-primary)",
         },
         muted: {
-          DEFAULT: "var(--muted)",
-          foreground: "var(--muted-foreground)",
+          DEFAULT: "var(--bg-secondary)",
+          foreground: "var(--text-secondary)",
         },
         accent: {
-          DEFAULT: "var(--accent)",
-          foreground: "var(--accent-foreground)",
+          DEFAULT: "var(--vivid-purple)",
+          foreground: "var(--bg-primary)",
         },
         destructive: {
-          DEFAULT: "var(--destructive)",
-          foreground: "var(--destructive-foreground)",
+          DEFAULT: "var(--status-error)",
+          foreground: "var(--bg-primary)",
         },
-        border: "var(--border)",
-        input: "var(--input)",
-        ring: "var(--ring)",
-    // Professional Designer Colors
-    cyber: {
-      cyan: "#00d9ff",
-      pink: "#ff6b9d", 
-      purple: "#9d4edd",
-      green: "#00ff88",
-      orange: "#ffb347",
-      red: "#ff4757",
-      navy: "#0f172a",
-      slate: "#1e293b",
-      lightSlate: "#334155",
-    },
+        border: "var(--glass-border-primary)",
+        input: "var(--glass-bg-secondary)",
+        ring: "var(--neon-green)",
+        
+        // Professional Designer Colors (legacy)
+        cyber: {
+          cyan: "#00d9ff",
+          pink: "#ff6b9d", 
+          purple: "#9d4edd",
+          green: "#00ff88",
+          orange: "#ffb347",
+          red: "#ff4757",
+          navy: "#0f172a",
+          slate: "#1e293b",
+          lightSlate: "#334155",
+        },
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",
@@ -75,9 +111,15 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        serif: ["var(--font-serif)"],
-        mono: ["var(--font-mono)"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+        mono: ["var(--font-mono)", "Courier New", "monospace"],
+        
+        // Cyberpunk Fonts
+        cyberpunk: ["Orbitron", "system-ui", "sans-serif"],
+        futuristic: ["Oxanium", "system-ui", "sans-serif"],
+        tech: ["Audiowide", "system-ui", "sans-serif"],
+        modern: ["Rajdhani", "system-ui", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {
@@ -247,6 +289,43 @@ export default {
         lg: "var(--shadow-lg)",
         xl: "var(--shadow-xl)",
         "2xl": "var(--shadow-2xl)",
+        
+        // Neon Glows
+        'glow-sm': "var(--glow-sm)",
+        'glow-md': "var(--glow-md)",
+        'glow-lg': "var(--glow-lg)",
+        'glow-xl': "var(--glow-xl)",
+        'glow-green-sm': "var(--glow-green-sm)",
+        'glow-green-md': "var(--glow-green-md)",
+        'glow-green-lg': "var(--glow-green-lg)",
+        'glow-blue-sm': "var(--glow-blue-sm)",
+        'glow-blue-md': "var(--glow-blue-md)",
+        'glow-blue-lg': "var(--glow-blue-lg)",
+        'glow-purple-sm': "var(--glow-purple-sm)",
+        'glow-purple-md': "var(--glow-purple-md)",
+        'glow-purple-lg': "var(--glow-purple-lg)",
+      },
+      
+      backdropBlur: {
+        'glass-sm': "var(--blur-sm)",
+        'glass-md': "var(--blur-md)",
+        'glass-lg': "var(--blur-lg)",
+      },
+      
+      backgroundImage: {
+        'gradient-primary': "var(--gradient-primary)",
+        'gradient-accent': "var(--gradient-accent)",
+        'gradient-secondary': "var(--gradient-secondary)",
+        'gradient-bg-primary': "var(--gradient-bg-primary)",
+        'gradient-bg-secondary': "var(--gradient-bg-secondary)",
+        'cyber-grid': `
+          linear-gradient(var(--grid-color) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)
+        `,
+      },
+      
+      backgroundSize: {
+        'grid': "var(--grid-size) var(--grid-size)",
       },
     },
   },

@@ -5,6 +5,9 @@ class DashboardManager {
         this.currentSection = 'overview';
         this.user = null;
         this.sessionStartTime = Date.now();
+        this.realtimeManager = null;
+        this.statusIndicators = new Map();
+        this.dailyCounters = new Map();
         this.init();
     }
 
@@ -13,6 +16,9 @@ class DashboardManager {
         this.loadUserData();
         this.startSessionTimer();
         this.setupOfflineDetection();
+        this.initializeRealtimeFeatures();
+        this.setupDailyCounters();
+        this.setupStatusIndicators();
     }
 
     setupEventListeners() {
@@ -576,6 +582,298 @@ class DashboardManager {
                 toast.remove();
             }
         }, 5000);
+    }
+
+    // Real-time Features
+    initializeRealtimeFeatures() {
+        // Initialize WebSocket connection for real-time updates
+        this.setupWebSocketConnection();
+        this.setupStatusStreams();
+    }
+
+    setupWebSocketConnection() {
+        // Use existing realtime manager or create new WebSocket connection
+        if (window.RealtimeManager) {
+            this.realtimeManager = new window.RealtimeManager();
+        } else {
+            this.createWebSocketConnection();
+        }
+    }
+
+    createWebSocketConnection() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.host}/ws/dashboard`;
+        
+        try {
+            this.socket = new WebSocket(wsUrl);
+            
+            this.socket.onopen = () => {
+                console.log('Dashboard WebSocket connected');
+                this.updateConnectionStatus(true);
+                this.joinDashboardChannel();
+            };
+
+            this.socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                this.handleRealtimeUpdate(data);
+            };
+
+            this.socket.onclose = () => {
+                console.log('Dashboard WebSocket disconnected');
+                this.updateConnectionStatus(false);
+                this.reconnectWebSocket();
+            };
+
+            this.socket.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        } catch (error) {
+            console.error('Failed to create WebSocket connection:', error);
+            this.fallbackToPolling();
+        }
+    }
+
+    joinDashboardChannel() {
+        if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+            this.socket.send(JSON.stringify({
+                type: 'join_channel',
+                channel: 'dashboard',
+                userId: this.user?.uid
+            }));
+        }
+    }
+
+    handleRealtimeUpdate(data) {
+        switch (data.type) {
+            case 'status_update':
+                this.updateCardStatus(data.cardId, data.status);
+                break;
+            case 'counter_update':
+                this.updateDailyCounter(data.cardId, data.success, data.failure);
+                break;
+            case 'task_progress':
+                this.updateTaskProgress(data.taskId, data.progress);
+                break;
+            case 'system_metrics':
+                this.updateSystemMetrics(data.metrics);
+                break;
+        }
+    }
+
+    updateConnectionStatus(connected) {
+        const statusElements = document.querySelectorAll('.connection-status');
+        statusElements.forEach(element => {
+            element.className = `connection-status ${connected ? 'connected' : 'disconnected'}`;
+            element.textContent = connected ? 'Live' : 'Offline';
+        });
+    }
+
+    reconnectWebSocket() {
+        setTimeout(() => {
+            this.createWebSocketConnection();
+        }, 3000);
+    }
+
+    fallbackToPolling() {
+        // Fallback to polling if WebSocket fails
+        setInterval(() => {
+            this.pollStatusUpdates();
+        }, 5000);
+    }
+
+    async pollStatusUpdates() {
+        try {
+            const response = await fetch('/api/dashboard/status');
+            const data = await response.json();
+            this.handleRealtimeUpdate(data);
+        } catch (error) {
+            console.error('Polling error:', error);
+        }
+    }
+
+    // Status Indicators
+    setupStatusIndicators() {
+        const cards = document.querySelectorAll('.dashboard-card');
+        cards.forEach(card => {
+            const cardId = card.dataset.cardId || this.generateCardId(card);
+            this.createStatusIndicator(card, cardId);
+        });
+    }
+
+    generateCardId(card) {
+        const title = card.querySelector('.card-title')?.textContent || 'unknown';
+        return title.toLowerCase().replace(/\s+/g, '-');
+    }
+
+    createStatusIndicator(card, cardId) {
+        const header = card.querySelector('.card-header');
+        if (!header) return;
+
+        const statusIndicator = document.createElement('div');
+        statusIndicator.className = 'status-indicator';
+        statusIndicator.innerHTML = `
+            <div class="status-dot"></div>
+            <span class="status-text">Initializing</span>
+        `;
+
+        header.appendChild(statusIndicator);
+        this.statusIndicators.set(cardId, statusIndicator);
+    }
+
+    updateCardStatus(cardId, status) {
+        const indicator = this.statusIndicators.get(cardId);
+        if (!indicator) return;
+
+        const dot = indicator.querySelector('.status-dot');
+        const text = indicator.querySelector('.status-text');
+
+        dot.className = `status-dot ${status}`;
+        text.textContent = this.getStatusText(status);
+
+        // Add pulse animation for active status
+        if (status === 'active' || status === 'running') {
+            dot.classList.add('pulse');
+        } else {
+            dot.classList.remove('pulse');
+        }
+    }
+
+    getStatusText(status) {
+        const statusTexts = {
+            'active': 'Active',
+            'running': 'Running',
+            'idle': 'Idle',
+            'error': 'Error',
+            'offline': 'Offline',
+            'maintenance': 'Maintenance'
+        };
+        return statusTexts[status] || 'Unknown';
+    }
+
+    // Daily Counters
+    setupDailyCounters() {
+        const cards = document.querySelectorAll('.dashboard-card');
+        cards.forEach(card => {
+            const cardId = card.dataset.cardId || this.generateCardId(card);
+            this.createDailyCounter(card, cardId);
+        });
+    }
+
+    createDailyCounter(card, cardId) {
+        const content = card.querySelector('.card-content');
+        if (!content) return;
+
+        const counterContainer = document.createElement('div');
+        counterContainer.className = 'daily-counter';
+        counterContainer.innerHTML = `
+            <div class="counter-header">
+                <span class="counter-title">Today's Performance</span>
+            </div>
+            <div class="counter-stats">
+                <div class="counter-item success">
+                    <div class="counter-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="counter-content">
+                        <span class="counter-value" id="success-${cardId}">0</span>
+                        <span class="counter-label">Success</span>
+                    </div>
+                </div>
+                <div class="counter-item failure">
+                    <div class="counter-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="counter-content">
+                        <span class="counter-value" id="failure-${cardId}">0</span>
+                        <span class="counter-label">Failure</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        content.insertBefore(counterContainer, content.firstChild);
+        this.dailyCounters.set(cardId, counterContainer);
+    }
+
+    updateDailyCounter(cardId, success, failure) {
+        const successElement = document.getElementById(`success-${cardId}`);
+        const failureElement = document.getElementById(`failure-${cardId}`);
+
+        if (successElement) {
+            this.animateCounter(successElement, parseInt(successElement.textContent), success);
+        }
+        if (failureElement) {
+            this.animateCounter(failureElement, parseInt(failureElement.textContent), failure);
+        }
+    }
+
+    animateCounter(element, from, to) {
+        const duration = 1000;
+        const startTime = performance.now();
+
+        const animate = (currentTime) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            const current = Math.round(from + (to - from) * progress);
+            element.textContent = current;
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        };
+
+        requestAnimationFrame(animate);
+    }
+
+    // Task Progress Updates
+    updateTaskProgress(taskId, progress) {
+        const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+        if (!taskElement) return;
+
+        const progressBar = taskElement.querySelector('.task-progress-bar');
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+
+        const progressText = taskElement.querySelector('.task-progress-text');
+        if (progressText) {
+            progressText.textContent = `${progress}%`;
+        }
+
+        // Add scan animation for running tasks
+        if (progress > 0 && progress < 100) {
+            taskElement.classList.add('scanning');
+        } else {
+            taskElement.classList.remove('scanning');
+        }
+    }
+
+    // System Metrics Updates
+    updateSystemMetrics(metrics) {
+        // Update CPU usage
+        const cpuElement = document.getElementById('cpuUsage');
+        if (cpuElement) {
+            cpuElement.textContent = `${metrics.cpu}%`;
+        }
+
+        // Update memory usage
+        const memoryElement = document.getElementById('memoryUsage');
+        if (memoryElement) {
+            memoryElement.textContent = `${metrics.memory}%`;
+        }
+
+        // Update active tasks
+        const tasksElement = document.getElementById('activeTasks');
+        if (tasksElement) {
+            tasksElement.textContent = metrics.activeTasks;
+        }
+
+        // Update system performance
+        const performanceElement = document.getElementById('systemPerformance');
+        if (performanceElement) {
+            performanceElement.textContent = `${metrics.performance}%`;
+        }
     }
 }
 

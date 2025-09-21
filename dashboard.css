@@ -213,6 +213,7 @@
     min-height: calc(100vh - 70px);
     background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2a2a2a 100%);
     position: relative;
+    overflow: hidden;
 }
 
 .dashboard-main::before {
@@ -227,6 +228,104 @@
         radial-gradient(circle at 90% 80%, rgba(102, 102, 102, 0.05) 0%, transparent 50%);
     pointer-events: none;
     z-index: -1;
+}
+
+/* Cyberpunk Grid Background */
+.dashboard-main::after {
+    content: '';
+    position: fixed;
+    top: 70px;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+        linear-gradient(rgba(0, 217, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 217, 255, 0.05) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position: 0 0, 0 0, 0 0, 0 0;
+    animation: cyberpunk-grid-move 20s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+@keyframes cyberpunk-grid-move {
+    0% {
+        background-position: 0 0, 0 0, 0 0, 0 0;
+    }
+    100% {
+        background-position: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    }
+}
+
+/* Cyberpunk Scan Lines */
+.dashboard-main {
+    position: relative;
+}
+
+.dashboard-main::before {
+    content: '';
+    position: fixed;
+    top: 70px;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(102, 102, 102, 0.05) 0%, transparent 50%),
+        linear-gradient(
+            0deg,
+            transparent 0%,
+            rgba(0, 255, 136, 0.02) 50%,
+            transparent 100%
+        );
+    background-size: 100% 100%, 100% 100%, 100% 2px;
+    animation: cyberpunk-scanlines 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes cyberpunk-scanlines {
+    0%, 100% {
+        background-position: 0 0, 0 0, 0 0;
+    }
+    50% {
+        background-position: 0 0, 0 0, 0 100vh;
+    }
+}
+
+/* Cyberpunk Glitch Effect */
+.dashboard-main {
+    position: relative;
+}
+
+.dashboard-main:hover::before {
+    animation: cyberpunk-glitch 0.3s ease-in-out;
+}
+
+@keyframes cyberpunk-glitch {
+    0%, 100% {
+        transform: translateX(0);
+        filter: hue-rotate(0deg);
+    }
+    20% {
+        transform: translateX(-2px);
+        filter: hue-rotate(90deg);
+    }
+    40% {
+        transform: translateX(2px);
+        filter: hue-rotate(180deg);
+    }
+    60% {
+        transform: translateX(-1px);
+        filter: hue-rotate(270deg);
+    }
+    80% {
+        transform: translateX(1px);
+        filter: hue-rotate(360deg);
+    }
 }
 
 .dashboard-section {
@@ -775,6 +874,304 @@ input:checked + .toggle-slider:before {
     }
 }
 
+/* Status Indicators */
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #6b7280;
+    transition: all 0.3s ease;
+}
+
+.status-dot.active {
+    background: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+}
+
+.status-dot.running {
+    background: #00d9ff;
+    box-shadow: 0 0 8px rgba(0, 217, 255, 0.6);
+}
+
+.status-dot.idle {
+    background: #f59e0b;
+    box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.status-dot.error {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+}
+
+.status-dot.offline {
+    background: #6b7280;
+}
+
+.status-dot.maintenance {
+    background: #8b5cf6;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+}
+
+.status-dot.pulse {
+    animation: neon-pulse 2s ease-in-out infinite;
+}
+
+.status-text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #cbd5e1;
+}
+
+/* Daily Counters */
+.daily-counter {
+    background: rgba(0, 255, 136, 0.05);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.counter-header {
+    margin-bottom: 0.75rem;
+}
+
+.counter-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #00ff88;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.counter-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.counter-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.counter-item.success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.counter-item.failure {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.counter-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+}
+
+.counter-item.success .counter-icon {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+.counter-item.failure .counter-icon {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.counter-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.counter-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.counter-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Neon Pulse/Scan Animations */
+@keyframes neon-pulse {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(0, 255, 136, 0.8);
+        transform: scale(1.1);
+    }
+}
+
+@keyframes neon-scan {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes cyberpunk-scan {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.scanning {
+    position: relative;
+    overflow: hidden;
+}
+
+.scanning::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 255, 136, 0.3) 50%,
+        transparent 100%
+    );
+    animation: cyberpunk-scan 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Task Progress Bars */
+.task-progress-bar {
+    height: 4px;
+    background: linear-gradient(90deg, #00ff88, #00d9ff);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.task-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        transparent 100%
+    );
+    animation: neon-scan 1.5s ease-in-out infinite;
+}
+
+.task-progress-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #00ff88;
+    text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+/* Connection Status */
+.connection-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.connection-status.connected {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.connection-status.disconnected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.connection-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.connection-status.connected::before {
+    animation: neon-pulse 2s ease-in-out infinite;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .status-dot.pulse,
+    .connection-status.connected::before {
+        animation: none;
+    }
+    
+    .scanning::before,
+    .task-progress-bar::after {
+        animation: none;
+    }
+    
+    .counter-value {
+        transition: none;
+    }
+    
+    .dashboard-card {
+        transition: none;
+    }
+    
+    .stat-card {
+        transition: none;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .dashboard-sidebar {
@@ -786,6 +1183,10 @@ input:checked + .toggle-slider:before {
     }
     
     .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .counter-stats {
         grid-template-columns: 1fr;
     }
 }

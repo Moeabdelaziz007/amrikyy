@@ -279,12 +279,692 @@
       "tasks": 0,
       "agents": {},
       "users": {}
+    },
+    "2025-09-21T10:52:22.536Z": {
+      "timestamp": "2025-09-21T10:52:22.536Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:53:22.536Z": {
+      "timestamp": "2025-09-21T10:53:22.536Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:54:22.375Z": {
+      "timestamp": "2025-09-21T10:54:22.375Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:54:22.537Z": {
+      "timestamp": "2025-09-21T10:54:22.537Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:55:22.562Z": {
+      "timestamp": "2025-09-21T10:55:22.562Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:56:22.378Z": {
+      "timestamp": "2025-09-21T10:56:22.378Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:56:22.379Z": {
+      "timestamp": "2025-09-21T10:56:22.379Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:56:22.567Z": {
+      "timestamp": "2025-09-21T10:56:22.567Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:57:22.568Z": {
+      "timestamp": "2025-09-21T10:57:22.568Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:58:22.395Z": {
+      "timestamp": "2025-09-21T10:58:22.395Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:58:22.405Z": {
+      "timestamp": "2025-09-21T10:58:22.405Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:58:22.595Z": {
+      "timestamp": "2025-09-21T10:58:22.595Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T10:59:22.635Z": {
+      "timestamp": "2025-09-21T10:59:22.635Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:00:22.382Z": {
+      "timestamp": "2025-09-21T11:00:22.382Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:00:22.636Z": {
+      "timestamp": "2025-09-21T11:00:22.636Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:01:22.720Z": {
+      "timestamp": "2025-09-21T11:01:22.720Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:02:22.385Z": {
+      "timestamp": "2025-09-21T11:02:22.385Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:02:22.726Z": {
+      "timestamp": "2025-09-21T11:02:22.726Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:03:22.737Z": {
+      "timestamp": "2025-09-21T11:03:22.737Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:04:22.389Z": {
+      "timestamp": "2025-09-21T11:04:22.389Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:04:22.743Z": {
+      "timestamp": "2025-09-21T11:04:22.743Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:05:22.744Z": {
+      "timestamp": "2025-09-21T11:05:22.744Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:06:22.395Z": {
+      "timestamp": "2025-09-21T11:06:22.395Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:06:22.744Z": {
+      "timestamp": "2025-09-21T11:06:22.744Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:07:22.746Z": {
+      "timestamp": "2025-09-21T11:07:22.746Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:08:22.397Z": {
+      "timestamp": "2025-09-21T11:08:22.397Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:08:22.749Z": {
+      "timestamp": "2025-09-21T11:08:22.749Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:09:22.757Z": {
+      "timestamp": "2025-09-21T11:09:22.757Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:10:22.401Z": {
+      "timestamp": "2025-09-21T11:10:22.401Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:10:22.758Z": {
+      "timestamp": "2025-09-21T11:10:22.758Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:11:22.765Z": {
+      "timestamp": "2025-09-21T11:11:22.765Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:12:22.401Z": {
+      "timestamp": "2025-09-21T11:12:22.401Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:12:22.822Z": {
+      "timestamp": "2025-09-21T11:12:22.822Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:13:22.824Z": {
+      "timestamp": "2025-09-21T11:13:22.824Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:14:22.404Z": {
+      "timestamp": "2025-09-21T11:14:22.404Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:14:22.827Z": {
+      "timestamp": "2025-09-21T11:14:22.827Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:15:22.874Z": {
+      "timestamp": "2025-09-21T11:15:22.874Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:16:22.405Z": {
+      "timestamp": "2025-09-21T11:16:22.405Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:16:22.880Z": {
+      "timestamp": "2025-09-21T11:16:22.880Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:17:22.883Z": {
+      "timestamp": "2025-09-21T11:17:22.883Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:18:22.409Z": {
+      "timestamp": "2025-09-21T11:18:22.409Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:18:22.410Z": {
+      "timestamp": "2025-09-21T11:18:22.410Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:18:23.012Z": {
+      "timestamp": "2025-09-21T11:18:23.012Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:19:23.013Z": {
+      "timestamp": "2025-09-21T11:19:23.013Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:20:22.410Z": {
+      "timestamp": "2025-09-21T11:20:22.410Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:20:22.411Z": {
+      "timestamp": "2025-09-21T11:20:22.411Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:20:23.013Z": {
+      "timestamp": "2025-09-21T11:20:23.013Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:21:23.014Z": {
+      "timestamp": "2025-09-21T11:21:23.014Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:22:22.446Z": {
+      "timestamp": "2025-09-21T11:22:22.446Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:22:22.447Z": {
+      "timestamp": "2025-09-21T11:22:22.447Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:22:23.082Z": {
+      "timestamp": "2025-09-21T11:22:23.082Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:23:23.154Z": {
+      "timestamp": "2025-09-21T11:23:23.154Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:24:22.449Z": {
+      "timestamp": "2025-09-21T11:24:22.449Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:24:22.450Z": {
+      "timestamp": "2025-09-21T11:24:22.450Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:24:23.156Z": {
+      "timestamp": "2025-09-21T11:24:23.156Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:25:23.159Z": {
+      "timestamp": "2025-09-21T11:25:23.159Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:26:22.460Z": {
+      "timestamp": "2025-09-21T11:26:22.460Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:26:23.161Z": {
+      "timestamp": "2025-09-21T11:26:23.161Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:27:23.163Z": {
+      "timestamp": "2025-09-21T11:27:23.163Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:28:22.454Z": {
+      "timestamp": "2025-09-21T11:28:22.454Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:28:23.165Z": {
+      "timestamp": "2025-09-21T11:28:23.165Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:29:23.166Z": {
+      "timestamp": "2025-09-21T11:29:23.166Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:30:22.477Z": {
+      "timestamp": "2025-09-21T11:30:22.477Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:30:23.168Z": {
+      "timestamp": "2025-09-21T11:30:23.168Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:31:23.189Z": {
+      "timestamp": "2025-09-21T11:31:23.189Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:32:22.572Z": {
+      "timestamp": "2025-09-21T11:32:22.572Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:32:22.573Z": {
+      "timestamp": "2025-09-21T11:32:22.573Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:32:23.191Z": {
+      "timestamp": "2025-09-21T11:32:23.191Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:33:23.192Z": {
+      "timestamp": "2025-09-21T11:33:23.192Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:34:22.572Z": {
+      "timestamp": "2025-09-21T11:34:22.572Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:34:22.573Z": {
+      "timestamp": "2025-09-21T11:34:22.573Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:34:23.193Z": {
+      "timestamp": "2025-09-21T11:34:23.193Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:35:23.212Z": {
+      "timestamp": "2025-09-21T11:35:23.212Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:36:22.610Z": {
+      "timestamp": "2025-09-21T11:36:22.610Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:36:23.213Z": {
+      "timestamp": "2025-09-21T11:36:23.213Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:37:23.237Z": {
+      "timestamp": "2025-09-21T11:37:23.237Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:38:22.613Z": {
+      "timestamp": "2025-09-21T11:38:22.613Z",
+      "events": 2,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:38:23.242Z": {
+      "timestamp": "2025-09-21T11:38:23.242Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:39:23.252Z": {
+      "timestamp": "2025-09-21T11:39:23.252Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:40:22.625Z": {
+      "timestamp": "2025-09-21T11:40:22.625Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:40:22.690Z": {
+      "timestamp": "2025-09-21T11:40:22.690Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:40:23.266Z": {
+      "timestamp": "2025-09-21T11:40:23.266Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:41:23.267Z": {
+      "timestamp": "2025-09-21T11:41:23.267Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:42:22.634Z": {
+      "timestamp": "2025-09-21T11:42:22.634Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
+    },
+    "2025-09-21T11:42:22.635Z": {
+      "timestamp": "2025-09-21T11:42:22.635Z",
+      "events": 1,
+      "errors": 0,
+      "tasks": 0,
+      "agents": {},
+      "users": {}
     }
   },
   "historicalData": {
     "2025-09-21": {
       "date": "2025-09-21",
-      "totalEvents": 16,
+      "totalEvents": 66,
       "totalTasks": 0,
       "totalErrors": 0,
       "averageSatisfaction": 0,
@@ -295,20 +975,20 @@
   "performanceMetrics": {},
   "userInsights": {},
   "systemHealth": {
-    "timestamp": "2025-09-21T10:52:22.523Z",
+    "timestamp": "2025-09-21T11:42:23.265Z",
     "status": "healthy",
-    "uptime": 963.136008166,
+    "uptime": 3963.839839782,
     "memoryUsage": {
-      "rss": 44732416,
-      "heapTotal": 24944640,
-      "heapUsed": 18657288,
-      "external": 2222050,
-      "arrayBuffers": 48633
+      "rss": 42799104,
+      "heapTotal": 25731072,
+      "heapUsed": 18324656,
+      "external": 2221858,
+      "arrayBuffers": 48441
     },
     "cpuUsage": {
-      "user": 15297650,
-      "system": 3765614
+      "user": 44768001,
+      "system": 13264335
     },
-    "activeConnections": 26
+    "activeConnections": 42
   }
 }

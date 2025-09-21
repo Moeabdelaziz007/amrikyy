@@ -1,0 +1,29 @@
+# Global code owners
+* @cryptojoker710
+
+# Backend/Server code
+/server/ @cryptojoker710
+/auraos-automation/ @cryptojoker710
+*.py @cryptojoker710
+
+# Frontend/Client code  
+/client/ @cryptojoker710
+*.html @cryptojoker710
+*.css @cryptojoker710
+*.js @cryptojoker710
+*.ts @cryptojoker710
+
+# Configuration files
+*.json @cryptojoker710
+*.yml @cryptojoker710
+*.yaml @cryptojoker710
+docker-compose.yml @cryptojoker710
+Dockerfile @cryptojoker710
+
+# Security and CI/CD
+/.github/ @cryptojoker710
+/security/ @cryptojoker710
+SECURITY.md @cryptojoker710
+
+# Documentation
+*.md @cryptojoker710

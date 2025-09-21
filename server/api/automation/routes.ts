@@ -30,6 +30,7 @@ import {
   CreateSuggestionSchema
 } from './types';
 import { getWebSocketServer } from './websocket';
+import { getAdvancedAIAgentSystem } from '../../advanced-ai-agents';
 
 const router = Router();
 
@@ -546,6 +547,78 @@ router.get('/system/alerts', withDatabaseErrorHandling(async (req: any, res: any
   
   res.json(buildPaginationResponse(alerts, parseInt(page), parseInt(limit), totalCount[0].count));
 }));
+
+// Realtime info (WebSocket diagnostics)
+router.get('/system/realtime', async (req: any, res: any) => {
+  try {
+    const wsServer = getWebSocketServer();
+    if (!wsServer) {
+      return res.status(503).json({ success: false, error: { code: 'WS_UNAVAILABLE', message: 'WebSocket server not initialized' } });
+    }
+    res.json({
+      success: true,
+      data: {
+        connectedClients: wsServer.getConnectedClients(),
+        clients: wsServer.getClientInfo(),
+        timestamp: new Date()
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch realtime info' } });
+  }
+});
+
+// Agents Routes (in-memory AdvancedAIAgentSystem)
+router.get('/agents', async (req: any, res: any) => {
+  try {
+    const agentSystem = getAdvancedAIAgentSystem();
+    const agents = agentSystem.getAllAgents().map(a => ({
+      id: a.id,
+      name: a.name,
+      type: a.type,
+      status: a.status,
+      performance: a.performance,
+      lastActive: a.lastActive
+    }));
+    res.json({ success: true, data: agents });
+  } catch (error) {
+    res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agents' } });
+  }
+});
+
+router.get('/agents/:id', async (req: any, res: any) => {
+  try {
+    const agentSystem = getAdvancedAIAgentSystem();
+    const agent = agentSystem.getAgent(req.params.id);
+    if (!agent) {
+      return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Agent not found' } });
+    }
+    res.json({ success: true, data: agent });
+  } catch (error) {
+    res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agent' } });
+  }
+});
+
+router.get('/agents/:id/metrics', async (req: any, res: any) => {
+  try {
+    const agentSystem = getAdvancedAIAgentSystem();
+    const agent = agentSystem.getAgent(req.params.id);
+    if (!agent) {
+      return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Agent not found' } });
+    }
+    const now = Date.now();
+    const metrics = {
+      id: agent.id,
+      name: agent.name,
+      status: agent.status,
+      performance: agent.performance,
+      lastActiveMsAgo: Math.max(0, now - new Date(agent.lastActive).getTime())
+    };
+    res.json({ success: true, data: metrics });
+  } catch (error) {
+    res.status(500).json({ success: false, error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agent metrics' } });
+  }
+});
 
 // Analytics Routes
 router.get('/analytics', withDatabaseErrorHandling(async (req: any, res: any) => {
