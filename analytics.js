@@ -20,6 +20,19 @@ class AnalyticsManager {
         this.startSessionTracking();
         this.setupHeatmapTracking();
         this.setupConversionTracking();
+        this.setupFirebaseAuthListener();
+    }
+
+    // Setup Firebase authentication listener for analytics sync
+    setupFirebaseAuthListener() {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    // User signed in, sync local analytics
+                    this.syncLocalAnalytics();
+                }
+            });
+        }
     }
 
     // Performance Monitoring
@@ -594,13 +607,64 @@ class AnalyticsManager {
     // Data Sending
     async sendToFirebase(event) {
         try {
-            if (firebase.auth().currentUser) {
+            // Check if Firebase is properly initialized and user is authenticated
+            if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
                 await firebase.firestore()
                     .collection('analytics')
                     .add(event);
+            } else {
+                // If not authenticated, store locally for later sync
+                this.storeLocally(event);
             }
         } catch (error) {
             console.error('Error sending analytics to Firebase:', error);
+            // Store locally if Firebase fails
+            this.storeLocally(event);
+        }
+    }
+
+    // Store analytics data locally when Firebase is unavailable
+    storeLocally(event) {
+        try {
+            const localAnalytics = JSON.parse(localStorage.getItem('auraos_analytics') || '[]');
+            localAnalytics.push({
+                ...event,
+                timestamp: Date.now(),
+                storedLocally: true
+            });
+            
+            // Keep only last 100 events locally
+            if (localAnalytics.length > 100) {
+                localAnalytics.splice(0, localAnalytics.length - 100);
+            }
+            
+            localStorage.setItem('auraos_analytics', JSON.stringify(localAnalytics));
+        } catch (error) {
+            console.error('Error storing analytics locally:', error);
+        }
+    }
+
+    // Sync locally stored analytics when Firebase becomes available
+    async syncLocalAnalytics() {
+        try {
+            const localAnalytics = JSON.parse(localStorage.getItem('auraos_analytics') || '[]');
+            if (localAnalytics.length === 0) return;
+
+            if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+                const batch = firebase.firestore().batch();
+                const analyticsRef = firebase.firestore().collection('analytics');
+                
+                localAnalytics.forEach(event => {
+                    const docRef = analyticsRef.doc();
+                    batch.set(docRef, event);
+                });
+                
+                await batch.commit();
+                localStorage.removeItem('auraos_analytics');
+                console.log(`Synced ${localAnalytics.length} analytics events to Firebase`);
+            }
+        } catch (error) {
+            console.error('Error syncing local analytics:', error);
         }
     }
 
@@ -632,25 +696,33 @@ class AnalyticsManager {
 
     async sendErrorToServer(error) {
         try {
-            if (firebase.auth().currentUser) {
+            if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
                 await firebase.firestore()
                     .collection('errors')
                     .add(error);
+            } else {
+                // Store error locally if Firebase is unavailable
+                this.storeLocally({ ...error, type: 'error' });
             }
         } catch (error) {
             console.error('Error sending error to server:', error);
+            this.storeLocally({ ...error, type: 'error' });
         }
     }
 
     async sendSessionToServer(sessionData) {
         try {
-            if (firebase.auth().currentUser) {
+            if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
                 await firebase.firestore()
                     .collection('sessions')
                     .add(sessionData);
+            } else {
+                // Store session locally if Firebase is unavailable
+                this.storeLocally({ ...sessionData, type: 'session' });
             }
         } catch (error) {
             console.error('Error sending session to server:', error);
+            this.storeLocally({ ...sessionData, type: 'session' });
         }
     }
 
@@ -696,6 +768,21 @@ class AnalyticsManager {
             mousePositions: this.mousePositions,
             clickPositions: this.clickPositions
         };
+    }
+
+    // Public method to manually sync local analytics
+    async syncAnalytics() {
+        await this.syncLocalAnalytics();
+    }
+
+    // Get local analytics count
+    getLocalAnalyticsCount() {
+        try {
+            const localAnalytics = JSON.parse(localStorage.getItem('auraos_analytics') || '[]');
+            return localAnalytics.length;
+        } catch (error) {
+            return 0;
+        }
     }
 }
 

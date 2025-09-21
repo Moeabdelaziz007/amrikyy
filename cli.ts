@@ -258,6 +258,14 @@ class AuraOSCLI {
     console.log('  auraos interactive - Start interactive chat');
     console.log('  auraos demo       - Run demo interactions');
     console.log('  auraos monitor    - Monitor real-time events');
+    console.log('\n' + chalk.green('Autopilot Commands:'));
+    console.log('  auraos autopilot start    - Start autopilot system');
+    console.log('  auraos autopilot stop     - Stop autopilot system');
+    console.log('  auraos autopilot status   - Show autopilot status');
+    console.log('  auraos autopilot monitor  - Monitor autopilot in real-time');
+    console.log('  auraos autopilot logs     - Show autopilot logs');
+    console.log('  auraos autopilot ai chat  - Chat with AI assistant');
+    console.log('  auraos autopilot ai analyze - AI performance analysis');
     console.log('');
   }
 

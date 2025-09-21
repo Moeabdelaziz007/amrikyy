@@ -20,9 +20,11 @@ const SmartLearningPage = lazy(() => import('@/pages/smart-learning'));
 const AdvancedAIToolsPage = lazy(() => import('@/pages/advanced-ai-tools'));
 const LearningDashboard = lazy(() => import('@/pages/learning-dashboard'));
 const AutomationPage = lazy(() => import('@/pages/automation'));
+const AutomationTasksPage = lazy(() => import('@/pages/automation-tasks'));
 const NotFound = lazy(() => import('@/pages/not-found'));
 const DebugView = lazy(() => import('@/pages/DebugView'));
 const Workspace = lazy(() => import('@/pages/Workspace'));
+const AITravelAgencyPage = lazy(() => import('@/pages/ai-travel-agency'));
 
 // Loading component
 const PageLoader = () => (
@@ -45,8 +47,10 @@ function AppRouter() {
           <Route path="/advanced-ai-tools" component={AdvancedAIToolsPage} />
           <Route path="/learning" component={LearningDashboard} />
           <Route path="/automation" component={AutomationPage} />
+          <Route path="/automation-tasks" component={AutomationTasksPage} />
           <Route path="/debug" component={DebugView} />
           <Route path="/workspace" component={Workspace} />
+          <Route path="/ai-travel-agency" component={AITravelAgencyPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

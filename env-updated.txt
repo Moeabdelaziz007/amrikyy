@@ -1,0 +1,23 @@
+# 🔥 Firebase Configuration - Updated with your project
+FIREBASE_PROJECT_ID=aios-97581
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR_PRIVATE_KEY_HERE\n-----END PRIVATE KEY-----\n"
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@aios-97581.iam.gserviceaccount.com
+
+# 🤖 Telegram Bot Configuration
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_ADMIN_CHAT_ID=your_chat_id_here
+
+# 🧠 Google AI Configuration - UPDATED
+GOOGLE_AI_API_KEY=AIzaSyBiPaJdVBxBno4gRznPxua5TydUmMN4U3g
+
+# ⚙️ System Configuration
+NODE_ENV=development
+PORT=3000
+
+# 📝 Instructions:
+# 1. Download service-account-key.json from Firebase Console
+# 2. Replace YOUR_PRIVATE_KEY_HERE with actual private key from JSON
+# 3. Replace your_bot_token_here with Telegram bot token
+# 4. Replace your_chat_id_here with Telegram chat ID
+# 5. ✅ Gemini API Key is already set!
+# 6. Update FIREBASE_CLIENT_EMAIL with actual service account email

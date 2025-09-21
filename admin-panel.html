@@ -6,8 +6,8 @@
     <title>AuraOS Admin Panel</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#6366f1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#00ff88">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AuraOS Admin">
     
@@ -172,28 +172,28 @@
                         <div class="perf-item">
                             <span class="perf-label">CPU Usage</span>
                             <div class="perf-bar">
-                                <div class="perf-fill" style="width: 45%"></div>
+                                <div class="perf-fill perf-fill-45"></div>
                             </div>
                             <span class="perf-value">45%</span>
                         </div>
                         <div class="perf-item">
                             <span class="perf-label">Memory Usage</span>
                             <div class="perf-bar">
-                                <div class="perf-fill" style="width: 62%"></div>
+                                <div class="perf-fill perf-fill-62"></div>
                             </div>
                             <span class="perf-value">62%</span>
                         </div>
                         <div class="perf-item">
                             <span class="perf-label">Disk Usage</span>
                             <div class="perf-bar">
-                                <div class="perf-fill" style="width: 38%"></div>
+                                <div class="perf-fill perf-fill-38"></div>
                             </div>
                             <span class="perf-value">38%</span>
                         </div>
                         <div class="perf-item">
                             <span class="perf-label">Network I/O</span>
                             <div class="perf-bar">
-                                <div class="perf-fill" style="width: 28%"></div>
+                                <div class="perf-fill perf-fill-28"></div>
                             </div>
                             <span class="perf-value">28%</span>
                         </div>
@@ -224,13 +224,13 @@
             <div class="filters-bar">
                 <div class="filter-group">
                     <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
-                    <select id="roleFilter" class="filter-select">
+                    <select id="roleFilter" class="filter-select" aria-label="Filter by user role">
                         <option value="">All Roles</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
                         <option value="guest">Guest</option>
                     </select>
-                    <select id="statusFilter" class="filter-select">
+                    <select id="statusFilter" class="filter-select" aria-label="Filter by user status">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -661,22 +661,22 @@
             <!-- Log Filters -->
             <div class="log-filters">
                 <div class="filter-group">
-                    <select id="logLevel" class="filter-select">
+                    <select id="logLevel" class="filter-select" aria-label="Filter by log level">
                         <option value="">All Levels</option>
                         <option value="error">Error</option>
                         <option value="warning">Warning</option>
                         <option value="info">Info</option>
                         <option value="debug">Debug</option>
                     </select>
-                    <select id="logSource" class="filter-select">
+                    <select id="logSource" class="filter-select" aria-label="Filter by log source">
                         <option value="">All Sources</option>
                         <option value="auth">Authentication</option>
                         <option value="api">API</option>
                         <option value="system">System</option>
                         <option value="security">Security</option>
                     </select>
-                    <input type="datetime-local" id="logDateFrom" class="filter-input">
-                    <input type="datetime-local" id="logDateTo" class="filter-input">
+                    <input type="datetime-local" id="logDateFrom" class="filter-input" aria-label="Filter logs from date">
+                    <input type="datetime-local" id="logDateTo" class="filter-input" aria-label="Filter logs to date">
                 </div>
                 <div class="filter-actions">
                     <button class="btn btn-secondary" id="refreshLogs">
@@ -712,7 +712,7 @@
     </main>
 
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+    <div id="loadingOverlay" class="loading-overlay hidden">
         <div class="loading-spinner">
             <i class="fas fa-spinner fa-spin"></i>
             <p>Loading...</p>

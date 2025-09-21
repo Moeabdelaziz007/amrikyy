@@ -44,6 +44,18 @@ export default {
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",
+    // Professional Designer Colors
+    cyber: {
+      cyan: "#00d9ff",
+      pink: "#ff6b9d", 
+      purple: "#9d4edd",
+      green: "#00ff88",
+      orange: "#ffb347",
+      red: "#ff4757",
+      navy: "#0f172a",
+      slate: "#1e293b",
+      lightSlate: "#334155",
+    },
         chart: {
           "1": "var(--chart-1)",
           "2": "var(--chart-2)",

@@ -7,14 +7,16 @@
     left: 0;
     right: 0;
     height: 70px;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+    border-bottom: 1px solid rgba(0, 255, 136, 0.3);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
 }
 
 .nav-brand {
@@ -27,8 +29,10 @@
 }
 
 .nav-brand i {
-    color: #ef4444;
+    color: #00ff88;
     font-size: 1.8rem;
+    text-shadow: 0 0 10px #00ff88;
+    animation: neon-pulse 2s ease-in-out infinite;
 }
 
 .nav-controls {
@@ -52,7 +56,8 @@
 .admin-role {
     font-size: 0.75rem;
     opacity: 0.8;
-    color: #10b981;
+    color: #666666;
+    text-shadow: 0 0 5px #666666;
 }
 
 .admin-actions {
@@ -67,10 +72,11 @@
     left: 0;
     width: 280px;
     height: calc(100vh - 70px);
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%);
+    border-right: 1px solid rgba(0, 255, 136, 0.3);
     overflow-y: auto;
     z-index: 999;
+    box-shadow: 2px 0 20px rgba(0, 255, 136, 0.1);
 }
 
 .admin-nav-menu {
@@ -92,13 +98,15 @@
 }
 
 .admin-nav-menu .nav-item:hover {
-    background: rgba(239, 68, 68, 0.1);
-    color: white;
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+    text-shadow: 0 0 5px #00ff88;
 }
 
 .admin-nav-menu .nav-item.active {
-    background: linear-gradient(90deg, rgba(239, 68, 68, 0.2), transparent);
-    color: #ef4444;
+    background: linear-gradient(90deg, rgba(0, 255, 136, 0.2), transparent);
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
 }
 
 .admin-nav-menu .nav-item.active::before {
@@ -108,7 +116,8 @@
     top: 0;
     bottom: 0;
     width: 3px;
-    background: #ef4444;
+    background: #00ff88;
+    box-shadow: 0 0 10px #00ff88;
 }
 
 .admin-nav-menu .nav-item i {
@@ -117,12 +126,13 @@
 }
 
 .admin-nav-menu .nav-item .badge {
-    background: #ef4444;
-    color: white;
+    background: #00ff88;
+    color: #000000;
     font-size: 0.7rem;
     padding: 2px 6px;
     border-radius: 10px;
     margin-left: auto;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }
 
 /* Admin Main Content */
@@ -131,7 +141,22 @@
     margin-top: 70px;
     padding: 2rem;
     min-height: calc(100vh - 70px);
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2a2a2a 100%);
+    position: relative;
+}
+
+.admin-main::before {
+    content: '';
+    position: fixed;
+    top: 70px;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 10% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 90% 80%, rgba(102, 102, 102, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
 }
 
 .admin-section {

@@ -1,0 +1,7 @@
+{
+  "agents": [
+    "httpie-agent",
+    "jq-agent"
+  ],
+  "last_updated": "2025-09-20T20:51:56.128105"
+}

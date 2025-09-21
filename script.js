@@ -101,17 +101,16 @@ function installApp() {
     }
 }
 
-// Firebase Configuration
-// IMPORTANT: Replace these placeholder values with your actual Firebase project configuration
-// Get your config from: https://console.firebase.google.com/project/YOUR_PROJECT/settings/general
+// Firebase Configuration (Web App)
+// Source: Firebase Console → Project Settings → Your apps (Web)
 const firebaseConfig = {
-    // TODO: Replace with actual Firebase API key from your project
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-api-key-here",
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "your-project-id",
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-    appId: process.env.REACT_APP_FIREBASE_APP_ID || "your-app-id"
+    apiKey: "AIzaSyApDku-geNVplwIgRBz2U0rs46aAVo-_mE",
+    authDomain: "aios-97581.firebaseapp.com",
+    projectId: "aios-97581",
+    storageBucket: "aios-97581.firebasestorage.app",
+    messagingSenderId: "307575156824",
+    appId: "1:307575156824:web:00924bd384df1f29909a2d",
+    measurementId: "G-JQN1FBR0F4"
 };
 
 // Validate Firebase configuration
@@ -166,9 +165,21 @@ function showFirebaseConfigError() {
 }
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
+let auth, db;
+if (typeof firebase !== 'undefined') {
+    try {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+        // Optional: avoid errors on undefined props
+        try { db.settings && db.settings({ ignoreUndefinedProperties: true }); } catch (_) {}
+        console.log('✅ Firebase initialized successfully');
+    } catch (error) {
+        console.error('❌ Firebase initialization failed:', error);
+    }
+} else {
+    console.error('❌ Firebase SDK not loaded');
+}
 
 // Validate Firebase configuration on startup
 document.addEventListener('DOMContentLoaded', () => {
@@ -183,29 +194,32 @@ const navLinks = document.querySelectorAll('.nav-link');
 const scrollIndicator = document.querySelector('.scroll-indicator');
 
 // Mobile Navigation Toggle
-hamburger.addEventListener('click', () => {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-    
-    // Animate hamburger bars
-    const bars = hamburger.querySelectorAll('.bar');
-    bars.forEach((bar, index) => {
-        if (hamburger.classList.contains('active')) {
-            if (index === 0) bar.style.transform = 'rotate(45deg) translate(5px, 5px)';
-            if (index === 1) bar.style.opacity = '0';
-            if (index === 2) bar.style.transform = 'rotate(-45deg) translate(7px, -6px)';
-        } else {
-            bar.style.transform = 'none';
-            bar.style.opacity = '1';
-        }
+if (hamburger && navMenu) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+
+        // Animate hamburger bars
+        const bars = hamburger.querySelectorAll('.bar');
+        bars.forEach((bar, index) => {
+            if (hamburger.classList.contains('active')) {
+                if (index === 0) bar.style.transform = 'rotate(45deg) translate(5px, 5px)';
+                if (index === 1) bar.style.opacity = '0';
+                if (index === 2) bar.style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                bar.style.transform = 'none';
+                bar.style.opacity = '1';
+            }
+        });
     });
-});
+}
 
 // Close mobile menu when clicking on nav links
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
+if (hamburger && navMenu) {
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
         
         // Reset hamburger bars
         const bars = hamburger.querySelectorAll('.bar');
@@ -214,13 +228,14 @@ navLinks.forEach(link => {
             bar.style.opacity = '1';
         });
     });
-});
+    });
+}
 
 // Navbar scroll effect
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+    if (navbar && window.scrollY > 100) {
         navbar.classList.add('scrolled');
-    } else {
+    } else if (navbar) {
         navbar.classList.remove('scrolled');
     }
 });
@@ -229,7 +244,14 @@ window.addEventListener('scroll', () => {
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        
+        // Skip if href is just '#' or empty
+        if (!href || href === '#' || href.length <= 1) {
+            return;
+        }
+        
+        const target = document.querySelector(href);
         if (target) {
             const offsetTop = target.offsetTop - 70; // Account for fixed navbar
             window.scrollTo({
@@ -302,7 +324,7 @@ style.textContent = `
         transform: rotate(-45deg) translate(7px, -6px);
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(styleElement);
 
 // Parallax effect for hero section
 window.addEventListener('scroll', () => {
@@ -564,9 +586,9 @@ const throttledScrollHandler = throttle(() => {
     }
     
     // Navbar background
-    if (scrolled > 100) {
+    if (navbar && scrolled > 100) {
         navbar.classList.add('scrolled');
-    } else {
+    } else if (navbar) {
         navbar.classList.remove('scrolled');
     }
 }, 16); // ~60fps
@@ -976,6 +998,7 @@ class AuthSystem {
     // Guest login functionality
     async guestLogin() {
         try {
+            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
             // Create anonymous guest user
             const userCredential = await auth.signInAnonymously();
             const user = userCredential.user;
@@ -1013,6 +1036,7 @@ class AuthSystem {
     // Google login
     async googleLogin() {
         try {
+            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
             const provider = new firebase.auth.GoogleAuthProvider();
             provider.addScope('email');
             provider.addScope('profile');
@@ -1092,6 +1116,8 @@ class AuthSystem {
         
         this.isLoggedIn = true;
         this.isGuest = user.isAnonymous;
+        // Ensure user profile exists in Firestore
+        this.upsertUserProfile(user).catch(console.error);
         
         this.showUserDashboard();
     }
@@ -1114,6 +1140,27 @@ class AuthSystem {
             console.error('Logout error:', error);
             this.showSuccessMessage('Logged out successfully');
         });
+    }
+
+    // Create/merge a user document in Firestore on first login
+    async upsertUserProfile(user) {
+        if (!user || !user.uid) return;
+        const userRef = db.collection('users').doc(user.uid);
+        const snapshot = await userRef.get();
+        const providerId = (user.providerData && user.providerData[0] && user.providerData[0].providerId) || (user.isAnonymous ? 'anonymous' : 'password');
+        const data = {
+            uid: user.uid,
+            email: user.email || null,
+            displayName: user.displayName || null,
+            photoURL: user.photoURL || null,
+            provider: providerId,
+            isAnonymous: !!user.isAnonymous,
+            lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+        if (!snapshot.exists) {
+            data.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        }
+        await userRef.set(data, { merge: true });
     }
 
     checkAuthStatus() {
@@ -1609,8 +1656,8 @@ class ChatbotSystem {
         document.body.appendChild(modal);
 
         // Add styles
-        const style = document.createElement('style');
-        style.textContent = `
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
             .analytics-overlay {
                 position: fixed;
                 top: 0;
@@ -1703,7 +1750,7 @@ class ChatbotSystem {
                 color: #4b5563;
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(styleElement);
 
         // Close modal functionality
         modal.querySelector('.close-analytics').addEventListener('click', () => {
@@ -2045,7 +2092,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(styleElement);
     
     console.log('AuraOS systems initialized successfully!');
 });

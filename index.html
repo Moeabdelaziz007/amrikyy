@@ -6,11 +6,11 @@
     <title>AuraOS - Modern Operating System</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="#00d9ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="AuraOS">
-    <meta name="msapplication-TileColor" content="#6366f1">
+    <meta name="msapplication-TileColor" content="#00ff88">
     <meta name="msapplication-tap-highlight" content="no">
     
     <!-- PWA Manifest -->
@@ -52,7 +52,7 @@
                     <a href="#features" class="nav-link">Features</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#about" class="nav-link">About</a>
+                    <a href="about.html" class="nav-link">About</a>
                 </li>
                 <li class="nav-item">
                     <a href="#contact" class="nav-link">Contact</a>
@@ -61,11 +61,10 @@
                     <a href="#download" class="nav-link cta-button">Download</a>
                 </li>
                 <li class="nav-item">
-                    <button class="nav-link login-btn" id="loginBtn">
+                    <a href="login.html" class="nav-link login-btn">
                         <i class="fas fa-sign-in-alt"></i>
                         <span>Login</span>
-                        <div class="btn-ripple"></div>
-                    </button>
+                    </a>
                 </li>
             </ul>
             <div class="hamburger">
@@ -84,7 +83,7 @@
         <div class="hero-content">
             <h1 class="hero-title">
                 The Future of
-                <span class="gradient-text">Operating Systems</span>
+                <span class="gradient-text" data-text="Operating Systems">Operating Systems</span>
                 is Here
             </h1>
             <p class="hero-description">
@@ -92,14 +91,14 @@
                 Sleek, powerful, and intuitive - designed for the modern world.
             </p>
             <div class="hero-buttons">
-                <button class="btn btn-primary">
-                    <i class="fas fa-download"></i>
-                    Download Now
-                </button>
-                <button class="btn btn-secondary">
-                    <i class="fas fa-play"></i>
-                    Watch Demo
-                </button>
+                <a href="login.html" class="btn btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Get Started
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i>
+                    Learn More
+                </a>
             </div>
             <div class="hero-stats">
                 <div class="stat">
@@ -262,7 +261,7 @@
                         </p>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="Sarah Johnson">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&auto=format&q=80" alt="Sarah Johnson">
                             </div>
                             <div class="author-info">
                                 <h4 class="author-name">Sarah Johnson</h4>
@@ -286,7 +285,7 @@
                         </p>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face" alt="Michael Chen">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face&auto=format&q=80" alt="Michael Chen">
                             </div>
                             <div class="author-info">
                                 <h4 class="author-name">Michael Chen</h4>
@@ -310,7 +309,7 @@
                         </p>
                         <div class="testimonial-author">
                             <div class="author-avatar">
-                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face" alt="Emily Rodriguez">
+                                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face&auto=format&q=80" alt="Emily Rodriguez">
                             </div>
                             <div class="author-info">
                                 <h4 class="author-name">Emily Rodriguez</h4>
@@ -338,7 +337,7 @@
                         </div>
                         <h3>Windows</h3>
                         <p>Compatible with Windows 10/11</p>
-                        <button class="btn btn-primary">Download for Windows</button>
+                        <a href="login.html" class="btn btn-primary">Download for Windows</a>
                     </div>
                     <div class="download-card">
                         <div class="download-icon">
@@ -346,7 +345,7 @@
                         </div>
                         <h3>macOS</h3>
                         <p>Compatible with macOS 10.15+</p>
-                        <button class="btn btn-primary">Download for macOS</button>
+                        <a href="login.html" class="btn btn-primary">Download for macOS</a>
                     </div>
                     <div class="download-card">
                         <div class="download-icon">
@@ -354,7 +353,7 @@
                         </div>
                         <h3>Linux</h3>
                         <p>Available for all major distributions</p>
-                        <button class="btn btn-primary">Download for Linux</button>
+                        <a href="login.html" class="btn btn-primary">Download for Linux</a>
                     </div>
                 </div>
                 <div class="download-info">
@@ -440,7 +439,7 @@
                             <i class="fas fa-envelope"></i>
                             Email Address
                         </label>
-                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                        <input type="email" id="email" name="email" required placeholder="Enter your email" autocomplete="username">
                         <span class="error-message" id="emailError"></span>
                         <div class="input-focus-line"></div>
                     </div>
@@ -451,7 +450,7 @@
                         </label>
                         <div class="password-input">
                             <input type="password" id="password" name="password" required placeholder="Enter your password" autocomplete="current-password">
-                            <button type="button" class="toggle-password" id="togglePassword">
+                            <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility" title="Show/Hide password">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -516,14 +515,14 @@
                     </div>
                     <div class="form-group">
                         <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" name="email" required>
+                        <input type="email" id="signupEmail" name="email" required autocomplete="username">
                         <span class="error-message" id="signupEmailError"></span>
                     </div>
                     <div class="form-group">
                         <label for="signupPassword">Password</label>
                         <div class="password-input">
                             <input type="password" id="signupPassword" name="password" required autocomplete="new-password">
-                            <button type="button" class="toggle-password" id="toggleSignupPassword">
+                            <button type="button" class="toggle-password" id="toggleSignupPassword" aria-label="Toggle password visibility" title="Show/Hide password">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
@@ -570,11 +569,11 @@
     </div>
 
     <!-- User Dashboard (Hidden by default) -->
-    <div id="userDashboard" class="user-dashboard" style="display: none;">
+    <div id="userDashboard" class="user-dashboard hidden">
         <div class="dashboard-header">
             <div class="user-info">
                 <div class="user-avatar">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" alt="User Avatar" id="userAvatar">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face&auto=format&q=80" alt="User Avatar" id="userAvatar">
                 </div>
                 <div class="user-details">
                     <h3 id="userName">Welcome back!</h3>
@@ -603,7 +602,7 @@
                     <h4>AuraOS Assistant</h4>
                     <span class="status online">Online</span>
                 </div>
-                <button class="chatbot-minimize" id="minimizeChatbot">
+                <button class="chatbot-minimize" id="minimizeChatbot" aria-label="Minimize chatbot" title="Minimize chatbot window">
                     <i class="fas fa-minus"></i>
                 </button>
             </div>
@@ -626,7 +625,7 @@
                 </div>
                 <div class="input-group">
                     <input type="text" id="chatbotInput" placeholder="Type your message...">
-                    <button id="sendMessage" class="send-btn">
+                    <button id="sendMessage" class="send-btn" aria-label="Send message" title="Send message">
                         <i class="fas fa-paper-plane"></i>
                     </button>
                 </div>
@@ -634,7 +633,21 @@
         </div>
     </div>
 
+    <!-- Floating Action Buttons -->
+    <button class="floating-action-btn" id="chatBtn" title="Open Chat">
+        <i class="fas fa-comments"></i>
+    </button>
+    
+    <button class="scroll-to-top" id="scrollToTop" title="Scroll to Top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Interactive Particles -->
+    <div class="particles-container" id="particlesContainer"></div>
+
+    <script src="router.js"></script>
     <script src="script.js"></script>
+    <script src="test-learning-growth-mac.js"></script>
     <script src="realtime.js"></script>
     <script src="analytics.js"></script>
     <script src="ai-system.js"></script>

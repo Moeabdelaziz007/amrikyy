@@ -1,17 +1,17 @@
 
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, logEvent } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyApDku-geNVplwIgRBz2U0rs46aAVo-_mE",
-  authDomain: "aios-97581.firebaseapp.com",
-  projectId: "aios-97581",
-  storageBucket: "aios-97581.appspot.com",
-  messagingSenderId: "307575156824",
-  appId: "1:307575156824:web:00924bd384df1f29909a2d"
+  apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyApDku-geNVplwIgRBz2U0rs46aAVo-_mE",
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "aios-97581.firebaseapp.com",
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID || "aios-97581",
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "aios-97581.appspot.com",
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "307575156824",
+  appId: process.env.VITE_FIREBASE_APP_ID || "1:307575156824:web:00924bd384df1f29909a2d"
 };
 
 // Initialize Firebase
@@ -52,6 +52,43 @@ export class AuthService {
 
   static onAuthStateChanged(callback: (user: User | null) => void): () => void {
     return onAuthStateChanged(auth, callback);
+  }
+
+  static async signInWithEmail(email: string, password: string): Promise<User> {
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+
+      // Save user data to Firestore
+      await this.saveUserToFirestore(user);
+
+      return user;
+    } catch (error) {
+      console.error('Email sign-in error:', error);
+      throw error;
+    }
+  }
+
+  static async signUpWithEmail(email: string, password: string, displayName?: string): Promise<User> {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const user = result.user;
+
+      // Update display name if provided
+      if (displayName && user) {
+        await user.updateProfile({
+          displayName: displayName
+        });
+      }
+
+      // Save user data to Firestore
+      await this.saveUserToFirestore(user);
+
+      return user;
+    } catch (error) {
+      console.error('Email sign-up error:', error);
+      throw error;
+    }
   }
 
   static async saveUserToFirestore(user: User): Promise<void> {

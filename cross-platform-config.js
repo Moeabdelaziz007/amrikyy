@@ -445,7 +445,7 @@ const ElectronConfig = {
                     { type: 'separator' },
                     {
                         label: 'Exit',
-                        accelerator: process.platform === 'darwin' ? 'Cmd+Q' : 'Ctrl+Q',
+                        accelerator: (typeof process !== 'undefined' && process.platform === 'darwin') ? 'Cmd+Q' : 'Ctrl+Q',
                         click: 'quit'
                     }
                 ]

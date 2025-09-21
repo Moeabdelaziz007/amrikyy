@@ -1,0 +1,13 @@
+{
+  "script": "auraos_learning_api_server.py",
+  "restart_backoff_sec": 5,
+  "max_backoff_sec": 120,
+  "auto_start": true,
+  "health_check_enabled": true,
+  "log_rotation_enabled": true,
+  "max_log_size_mb": 10,
+  "max_health_failures": 3,
+  "health_check_interval": 30,
+  "enable_dynamic_config_reload": true,
+  "daemon_description": "AuraOS Learning Growth Continuous Daemon"
+}

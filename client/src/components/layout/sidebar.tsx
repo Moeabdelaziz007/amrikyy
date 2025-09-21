@@ -19,6 +19,7 @@ const navigation = [
     { name: 'Learning', href: '/learning', icon: 'fas fa-graduation-cap', hasNotification: true },
     { name: 'Smart Learning', href: '/smart-learning', icon: 'fas fa-brain' },
     { name: 'AI Tools', href: '/advanced-ai-tools', icon: 'fas fa-tools' },
+    { name: 'Travel Agency', href: '/ai-travel-agency', icon: 'fas fa-plane' },
     { name: 'Telegram', href: '/telegram', icon: 'fab fa-telegram' },
     { name: 'Analytics', href: '/analytics', icon: 'fas fa-chart-bar' },
     { name: 'Settings', href: '/settings', icon: 'fas fa-cog' },
@@ -28,6 +29,7 @@ const navigation = [
 function Sidebar() {
     const [location] = (0, wouter_1.useLocation)();
     const { user, signOut } = (0, use_auth_1.useAuth)();
+    const isGuestUser = user?.isAnonymous || localStorage.getItem('isGuestUser') === 'true';
     const { data: userData } = (0, react_query_1.useQuery)({
         queryKey: ['userData', user?.uid],
         queryFn: () => user?.uid ? Promise.resolve({ displayName: user.displayName, email: user.email }) : null,
@@ -88,9 +90,16 @@ function Sidebar() {
             </avatar_1.AvatarFallback>
           </avatar_1.Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate neon-text" data-testid="text-user-name">
-              {user?.displayName || user?.email || 'User'}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium text-foreground truncate neon-text" data-testid="text-user-name">
+                {user?.displayName || user?.email || 'User'}
+              </p>
+              {isGuestUser && (
+                <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 text-xs rounded-full">
+                  Guest
+                </span>
+              )}
+            </div>
             <p className="text-xs text-muted-foreground truncate" data-testid="text-user-email">
               {user?.email || 'user@example.com'}
             </p>

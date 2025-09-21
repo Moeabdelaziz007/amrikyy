@@ -465,7 +465,279 @@ class MobilePlatform {
         this.syncManager = new SyncManager();
     }
 
-    class SyncManager {
+    // Cross-Platform Features
+    setupCrossPlatformFeatures() {
+        this.setupResponsiveDesign();
+        this.setupAdaptiveUI();
+        this.setupPlatformSpecificFeatures();
+    }
+
+    setupResponsiveDesign() {
+        // Add responsive design classes
+        this.addResponsiveClasses();
+        this.setupResponsiveBreakpoints();
+    }
+
+    addResponsiveClasses() {
+        // Add responsive classes based on screen size
+        const body = document.body;
+        
+        const updateClasses = () => {
+            body.classList.remove('mobile', 'tablet', 'desktop');
+            
+            if (window.innerWidth < 768) {
+                body.classList.add('mobile');
+            } else if (window.innerWidth < 1024) {
+                body.classList.add('tablet');
+            } else {
+                body.classList.add('desktop');
+            }
+        };
+        
+        updateClasses();
+        window.addEventListener('resize', updateClasses);
+    }
+
+    setupResponsiveBreakpoints() {
+        // Define responsive breakpoints
+        const breakpoints = {
+            mobile: 768,
+            tablet: 1024,
+            desktop: 1200
+        };
+        
+        // Set CSS custom properties for breakpoints
+        document.documentElement.style.setProperty('--mobile-breakpoint', `${breakpoints.mobile}px`);
+        document.documentElement.style.setProperty('--tablet-breakpoint', `${breakpoints.tablet}px`);
+        document.documentElement.style.setProperty('--desktop-breakpoint', `${breakpoints.desktop}px`);
+    }
+
+    setupAdaptiveUI() {
+        this.adaptUIForPlatform();
+        
+        // Listen for orientation changes
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => this.adaptUIForPlatform(), 100);
+        });
+    }
+
+    adaptUIForPlatform() {
+        if (this.isMobile()) {
+            this.adaptUIForMobile();
+        } else {
+            this.adaptUIForDesktop();
+        }
+    }
+
+    adaptUIForMobile() {
+        // Mobile-specific UI adaptations
+        document.body.classList.add('mobile-ui');
+        document.body.classList.remove('desktop-ui');
+    }
+
+    adaptUIForDesktop() {
+        // Desktop-specific UI adaptations
+        document.body.classList.add('desktop-ui');
+        document.body.classList.remove('mobile-ui');
+    }
+
+    setupPlatformSpecificFeatures() {
+        if (this.platform === 'ios') {
+            this.setupIOSFeatures();
+        } else if (this.platform === 'android') {
+            this.setupAndroidFeatures();
+        }
+    }
+
+    setupIOSFeatures() {
+        this.setupIOSStatusBar();
+        this.setupIOSGestures();
+        this.setupIOSPullToRefresh();
+    }
+
+    setupIOSStatusBar() {
+        // iOS status bar handling
+        document.documentElement.style.setProperty('--status-bar-height', '20px');
+    }
+
+    setupIOSGestures() {
+        // iOS-specific gesture handling
+        this.setupIOSPullToRefresh();
+    }
+
+    setupIOSPullToRefresh() {
+        let startY = 0;
+        let pullDistance = 0;
+        const pullThreshold = 100;
+        
+        document.addEventListener('touchstart', (e) => {
+            if (window.scrollY === 0) {
+                startY = e.touches[0].clientY;
+            }
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (window.scrollY === 0 && startY > 0) {
+                pullDistance = e.touches[0].clientY - startY;
+                
+                if (pullDistance > 0) {
+                    e.preventDefault();
+                    
+                    if (pullDistance > pullThreshold) {
+                        this.triggerPullToRefresh();
+                    }
+                }
+            }
+        });
+        
+        document.addEventListener('touchend', () => {
+            if (pullDistance > pullThreshold) {
+                this.resetPullToRefresh();
+            }
+            startY = 0;
+            pullDistance = 0;
+        });
+    }
+
+    triggerPullToRefresh() {
+        // Trigger pull-to-refresh action
+        console.log('Pull to refresh triggered');
+        // Add your refresh logic here
+    }
+
+    resetPullToRefresh() {
+        // Reset pull-to-refresh state
+        console.log('Pull to refresh reset');
+    }
+
+    setupAndroidFeatures() {
+        this.setupAndroidBackButton();
+        this.setupAndroidHardwareAcceleration();
+    }
+
+    setupAndroidBackButton() {
+        // Handle Android back button
+        document.addEventListener('backbutton', () => {
+            this.handleAndroidBackButton();
+        });
+    }
+
+    handleAndroidBackButton() {
+        // Handle Android back button press
+        const modals = document.querySelectorAll('.modal:not(.hidden)');
+        if (modals.length > 0) {
+            modals[modals.length - 1].classList.add('hidden');
+        } else {
+            this.showExitConfirmation();
+        }
+    }
+
+    showExitConfirmation() {
+        // Show exit confirmation dialog
+        if (confirm('Are you sure you want to exit?')) {
+            navigator.app.exitApp();
+        }
+    }
+
+    setupAndroidHardwareAcceleration() {
+        // Enable hardware acceleration for Android
+        const style = document.createElement('style');
+        style.textContent = `
+            * {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-perspective: 1000;
+                perspective: 1000;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    // Event Handlers
+    handleOrientationChange() {
+        this.detectPlatform();
+        this.applyPlatformOptimizations();
+    }
+
+    handleResize() {
+        this.setupResponsiveDesign();
+        this.adaptUIForPlatform();
+    }
+
+    // Gesture Handlers
+    handleSwipeLeft() {
+        console.log('Swipe left detected');
+    }
+
+    handleSwipeRight() {
+        console.log('Swipe right detected');
+    }
+
+    handleSwipeUp() {
+        console.log('Swipe up detected');
+    }
+
+    handleSwipeDown() {
+        console.log('Swipe down detected');
+    }
+
+    // Utility Methods
+    openSearch() {
+        // Open search functionality
+        const searchInput = document.querySelector('#searchInput');
+        if (searchInput) {
+            searchInput.focus();
+        }
+    }
+
+    showKeyboardShortcuts() {
+        // Show keyboard shortcuts help
+        console.log('Keyboard shortcuts help');
+    }
+
+    closeModals() {
+        // Close all open modals
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(modal => modal.classList.add('hidden'));
+    }
+
+    refreshData() {
+        // Refresh application data
+        console.log('Refreshing data...');
+        // Add your data refresh logic here
+    }
+
+    // Public API Methods
+    getPlatform() {
+        return this.platform;
+    }
+
+    getDeviceInfo() {
+        return this.deviceInfo;
+    }
+
+    getCapabilities() {
+        return this.capabilities;
+    }
+
+    isMobile() {
+        return this.isMobileDevice;
+    }
+
+    isDesktop() {
+        return this.isDesktopDevice;
+    }
+
+    // Data Sync Methods
+    async syncData() {
+        return await this.syncManager?.syncAll();
+    }
+}
+
+// SyncManager class definition
+class SyncManager {
         constructor() {
             this.syncQueue = [];
             this.syncInProgress = false;
@@ -762,14 +1034,15 @@ class MobilePlatform {
                 this.conflictResolution = preference;
             }
         }
+
+        // Offline Management
+        setupOfflineManager() {
+            this.offlineManager = new OfflineManager();
+        }
     }
 
-    // Offline Management
-    setupOfflineManager() {
-        this.offlineManager = new OfflineManager();
-    }
-
-    class OfflineManager {
+// OfflineManager class definition
+class OfflineManager {
         constructor() {
             this.offlineData = new Map();
             this.offlineActions = [];
@@ -992,11 +1265,11 @@ class MobilePlatform {
             
             document.body.appendChild(offlineUI);
         }
-    }
 
-    // Push Notifications
-    setupPushNotifications() {
-        this.pushManager = new PushManager();
+        // Push Notifications
+        setupPushNotifications() {
+            this.pushManager = new PushManager();
+        }
     }
 
     class PushManager {
@@ -1122,358 +1395,4 @@ class MobilePlatform {
             }
         }
     }
-
-    // Cross-Platform Features
-    setupCrossPlatformFeatures() {
-        this.setupResponsiveDesign();
-        this.setupAdaptiveUI();
-        this.setupPlatformSpecificFeatures();
-    }
-
-    setupResponsiveDesign() {
-        // Add responsive design classes
-        this.addResponsiveClasses();
-        
-        // Setup responsive breakpoints
-        this.setupResponsiveBreakpoints();
-    }
-
-    addResponsiveClasses() {
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        
-        // Add size classes
-        if (width < 768) {
-            document.body.classList.add('mobile-size');
-        } else if (width < 1024) {
-            document.body.classList.add('tablet-size');
-        } else {
-            document.body.classList.add('desktop-size');
-        }
-        
-        // Add orientation classes
-        if (height > width) {
-            document.body.classList.add('portrait');
-        } else {
-            document.body.classList.add('landscape');
-        }
-    }
-
-    setupResponsiveBreakpoints() {
-        const breakpoints = {
-            mobile: 768,
-            tablet: 1024,
-            desktop: 1200
-        };
-        
-        window.addEventListener('resize', this.debounce(() => {
-            this.handleResponsiveChange(breakpoints);
-        }, 250));
-    }
-
-    handleResponsiveChange(breakpoints) {
-        const width = window.innerWidth;
-        
-        // Remove existing size classes
-        document.body.classList.remove('mobile-size', 'tablet-size', 'desktop-size');
-        
-        // Add appropriate size class
-        if (width < breakpoints.mobile) {
-            document.body.classList.add('mobile-size');
-        } else if (width < breakpoints.tablet) {
-            document.body.classList.add('tablet-size');
-        } else {
-            document.body.classList.add('desktop-size');
-        }
-    }
-
-    setupAdaptiveUI() {
-        // Adapt UI based on platform capabilities
-        this.adaptUIForPlatform();
-    }
-
-    adaptUIForPlatform() {
-        // Adapt UI elements based on platform
-        if (this.isMobile()) {
-            this.adaptUIForMobile();
-        } else if (this.isDesktop()) {
-            this.adaptUIForDesktop();
-        }
-    }
-
-    adaptUIForMobile() {
-        // Make buttons larger for touch
-        const buttons = document.querySelectorAll('button, .btn');
-        buttons.forEach(btn => {
-            btn.classList.add('touch-friendly');
-        });
-        
-        // Add touch-friendly spacing
-        const containers = document.querySelectorAll('.container, .content');
-        containers.forEach(container => {
-            container.classList.add('mobile-spacing');
-        });
-    }
-
-    adaptUIForDesktop() {
-        // Add hover effects for desktop
-        const interactiveElements = document.querySelectorAll('button, .btn, .card');
-        interactiveElements.forEach(element => {
-            element.classList.add('desktop-hover');
-        });
-    }
-
-    setupPlatformSpecificFeatures() {
-        // Setup features specific to each platform
-        if (this.platform === 'ios') {
-            this.setupIOSFeatures();
-        } else if (this.platform === 'android') {
-            this.setupAndroidFeatures();
-        } else if (this.platform === 'electron') {
-            this.setupElectronFeatures();
-        }
-    }
-
-    setupIOSFeatures() {
-        // iOS-specific features
-        this.setupIOSStatusBar();
-        this.setupIOSGestures();
-    }
-
-    setupIOSStatusBar() {
-        // Handle iOS status bar
-        if (window.navigator.standalone) {
-            document.body.classList.add('ios-standalone');
-        }
-    }
-
-    setupIOSGestures() {
-        // iOS-specific gesture handling
-        this.setupIOSPullToRefresh();
-    }
-
-    setupIOSPullToRefresh() {
-        // Implement pull-to-refresh for iOS
-        let startY = 0;
-        let currentY = 0;
-        let isRefreshing = false;
-        
-        document.addEventListener('touchstart', (e) => {
-            if (window.scrollY === 0) {
-                startY = e.touches[0].clientY;
-            }
-        });
-        
-        document.addEventListener('touchmove', (e) => {
-            if (window.scrollY === 0 && startY > 0) {
-                currentY = e.touches[0].clientY;
-                const diff = currentY - startY;
-                
-                if (diff > 0 && diff < 100) {
-                    e.preventDefault();
-                    this.updatePullToRefresh(diff);
-                }
-            }
-        });
-        
-        document.addEventListener('touchend', () => {
-            if (currentY - startY > 50 && !isRefreshing) {
-                this.triggerPullToRefresh();
-            }
-            this.resetPullToRefresh();
-        });
-    }
-
-    updatePullToRefresh(diff) {
-        // Update pull-to-refresh UI
-        const refreshIndicator = document.getElementById('pullToRefresh');
-        if (refreshIndicator) {
-            refreshIndicator.style.transform = `translateY(${diff}px)`;
-            refreshIndicator.style.opacity = Math.min(diff / 50, 1);
-        }
-    }
-
-    triggerPullToRefresh() {
-        // Trigger pull-to-refresh action
-        this.isRefreshing = true;
-        this.refreshData();
-    }
-
-    resetPullToRefresh() {
-        // Reset pull-to-refresh UI
-        const refreshIndicator = document.getElementById('pullToRefresh');
-        if (refreshIndicator) {
-            refreshIndicator.style.transform = 'translateY(0)';
-            refreshIndicator.style.opacity = '0';
-        }
-        startY = 0;
-        currentY = 0;
-        isRefreshing = false;
-    }
-
-    setupAndroidFeatures() {
-        // Android-specific features
-        this.setupAndroidBackButton();
-        this.setupAndroidHardwareAcceleration();
-    }
-
-    setupAndroidBackButton() {
-        // Handle Android back button
-        document.addEventListener('backbutton', (e) => {
-            e.preventDefault();
-            this.handleAndroidBackButton();
-        });
-    }
-
-    handleAndroidBackButton() {
-        // Handle Android back button press
-        if (window.history.length > 1) {
-            window.history.back();
-        } else {
-            // Close app or show exit confirmation
-            this.showExitConfirmation();
-        }
-    }
-
-    showExitConfirmation() {
-        if (confirm('Are you sure you want to exit?')) {
-            // Close app
-            if (window.navigator.app) {
-                window.navigator.app.exitApp();
-            }
-        }
-    }
-
-    setupAndroidHardwareAcceleration() {
-        // Enable hardware acceleration for Android
-        document.body.style.transform = 'translateZ(0)';
-        document.body.style.webkitTransform = 'translateZ(0)';
-    }
-
-    // Utility Methods
-    debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    }
-
-    handleOrientationChange() {
-        // Handle orientation change
-        this.deviceInfo.orientation = this.getOrientation();
-        this.addResponsiveClasses();
-    }
-
-    handleResize() {
-        // Handle window resize
-        this.deviceInfo.screenWidth = window.innerWidth;
-        this.deviceInfo.screenHeight = window.innerHeight;
-        this.addResponsiveClasses();
-    }
-
-    handleConnectionChange(isOnline) {
-        // Handle connection change
-        this.deviceInfo.isOnline = isOnline;
-        
-        if (isOnline) {
-            this.syncManager?.syncAll();
-        }
-    }
-
-    handleSwipeLeft() {
-        // Handle swipe left gesture
-        console.log('Swipe left detected');
-    }
-
-    handleSwipeRight() {
-        // Handle swipe right gesture
-        console.log('Swipe right detected');
-    }
-
-    handleSwipeUp() {
-        // Handle swipe up gesture
-        console.log('Swipe up detected');
-    }
-
-    handleSwipeDown() {
-        // Handle swipe down gesture
-        console.log('Swipe down detected');
-    }
-
-    openSearch() {
-        // Open search functionality
-        const searchInput = document.querySelector('#searchInput');
-        if (searchInput) {
-            searchInput.focus();
-        }
-    }
-
-    showKeyboardShortcuts() {
-        // Show keyboard shortcuts help
-        console.log('Show keyboard shortcuts');
-    }
-
-    closeModals() {
-        // Close all open modals
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(modal => {
-            modal.style.display = 'none';
-        });
-    }
-
-    refreshData() {
-        // Refresh application data
-        if (window.adminPanel) {
-            window.adminPanel.refreshAllData();
-        }
-    }
-
-    // Public API
-    getPlatform() {
-        return this.platform;
-    }
-
-    getDeviceInfo() {
-        return this.deviceInfo;
-    }
-
-    getCapabilities() {
-        return this.capabilities;
-    }
-
-    isMobile() {
-        return this.isMobile();
-    }
-
-    isDesktop() {
-        return this.isDesktop();
-    }
-
-    async showNotification(title, options) {
-        return await this.pushManager?.showNotification(title, options);
-    }
-
-    async syncData() {
-        return await this.syncManager?.syncAll();
-    }
-}
-
-// Initialize mobile platform when DOM is loaded
-let mobilePlatform = null;
-
-document.addEventListener('DOMContentLoaded', () => {
-    mobilePlatform = new MobilePlatform();
-    
-    // Make mobile platform available globally
-    window.MobilePlatform = mobilePlatform;
-});
-
-// Export for global access
-window.MobilePlatform = MobilePlatform;
-
 
