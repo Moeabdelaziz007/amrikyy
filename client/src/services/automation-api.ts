@@ -469,6 +469,23 @@ class AutomationApiService {
     return this.post('/ai/insights', data);
   }
 
+  // User Profile & Preferences API methods
+  async getMe() {
+    return this.get('/users/me');
+  }
+
+  async updateMe(data: Partial<{ name: string; avatar: string }>) {
+    return this.put('/users/me', data);
+  }
+
+  async getMyPreferences() {
+    return this.get('/users/me/preferences');
+  }
+
+  async updateMyPreferences(data: Partial<{ theme: 'light' | 'dark' | 'auto'; notifications: boolean; language: string; reducedMotion: boolean }>) {
+    return this.put('/users/me/preferences', data);
+  }
+
   async optimizeWorkflowAi(workflowId: string, data?: {
     focus?: 'performance' | 'cost' | 'reliability';
     constraints?: Record<string, any>;

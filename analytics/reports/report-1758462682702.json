@@ -1,0 +1,35 @@
+{
+  "timestamp": "2025-09-21T13:51:22.700Z",
+  "period": "15_minutes",
+  "summary": {
+    "totalUsers": 0,
+    "totalEvents": 396,
+    "totalErrors": 1,
+    "errorRate": "0.25",
+    "systemHealth": "healthy"
+  },
+  "performance": {
+    "averageResponseTime": 4889,
+    "successRate": 93,
+    "agentEfficiency": {
+      "gemini_ai": 82,
+      "httpie_agent": 92,
+      "jq_agent": 96
+    },
+    "peakHours": [
+      "09:00",
+      "14:00",
+      "20:00"
+    ]
+  },
+  "users": {
+    "totalUsers": 0,
+    "activeUsers": 0,
+    "topUsers": []
+  },
+  "agents": {
+    "totalAgents": 0,
+    "topAgents": []
+  },
+  "recommendations": []
+}

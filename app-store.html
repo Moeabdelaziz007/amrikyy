@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Store - AuraOS</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00d9ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .appstore-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .appstore-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: ambient-glow 8s ease-in-out infinite alternate;
+        }
+
+        .appstore-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 20px 20px;
+        }
+
+        .appstore-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .appstore-title {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .appstore-subtitle {
+            font-size: 18px;
+            color: var(--text-light);
+        }
+
+        .featured-banner {
+            background: var(--bg-card);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.1s;
+        }
+
+        .featured-content {
+            flex: 1;
+        }
+
+        .featured-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .featured-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .featured-desc {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .featured-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-md);
+        }
+
+        .btn-secondary {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .featured-image {
+            width: 400px;
+            height: 250px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            color: white;
+        }
+
+        .categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            backdrop-filter: blur(20px);
+        }
+
+        .category-btn:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .category-btn.active {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .app-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.8s ease backwards;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--glow-md);
+            border-color: var(--primary-color);
+        }
+
+        .app-header {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .app-developer {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .app-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .stars {
+            color: #fbbf24;
+        }
+
+        .rating-value {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-left: 4px;
+        }
+
+        .app-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .app-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .app-price.free {
+            color: var(--success-color);
+        }
+
+        .install-btn {
+            padding: 8px 16px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes ambient-glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="appstore-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-cube"></i>
+                    <span>AuraOS</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="app-store.html" class="nav-link active">App Store</a></li>
+                    <li><a href="settings.html" class="nav-link">Settings</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="appstore-container">
+            <!-- Header -->
+            <div class="appstore-header">
+                <h1 class="appstore-title">App Store</h1>
+                <p class="appstore-subtitle">Discover and download amazing applications for AuraOS</p>
+            </div>
+
+            <!-- Featured App -->
+            <div class="featured-banner">
+                <div class="featured-content">
+                    <span class="featured-tag">Featured Today</span>
+                    <h2 class="featured-title">AuraCode Pro</h2>
+                    <p class="featured-desc">
+                        The ultimate code editor for developers. Featuring syntax highlighting, 
+                        intelligent code completion, and seamless integration with AuraOS.
+                    </p>
+                    <div class="featured-actions">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-download"></i>
+                            Install Now
+                        </button>
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i>
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="featured-image">
+                    <i class="fas fa-code"></i>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="categories">
+                <button class="category-btn active">All Apps</button>
+                <button class="category-btn">Productivity</button>
+                <button class="category-btn">Development</button>
+                <button class="category-btn">Graphics</button>
+                <button class="category-btn">Media</button>
+                <button class="category-btn">Games</button>
+                <button class="category-btn">Utilities</button>
+                <button class="category-btn">Security</button>
+            </div>
+
+            <!-- Apps Grid -->
+            <div class="apps-grid">
+                <div class="app-card" style="animation-delay: 0.1s">
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <i class="fas fa-browser"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">Quantum Browser</div>
+                            <div class="app-developer">AuraOS Team</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                        <span class="rating-value">4.5</span>
+                    </div>
+                    <p class="app-desc">Fast, secure, and privacy-focused web browser with built-in ad blocking.</p>
+                    <div class="app-footer">
+                        <span class="app-price free">Free</span>
+                        <button class="install-btn">Install</button>
+                    </div>
+                </div>
+
+                <div class="app-card" style="animation-delay: 0.15s">
+                    <div class="app-header">
+                        <div class="app-icon" style="background: var(--secondary-gradient)">
+                            <i class="fas fa-paint-brush"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">AuraDesign</div>
+                            <div class="app-developer">Creative Labs</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="rating-value">5.0</span>
+                    </div>
+                    <p class="app-desc">Professional graphic design suite with advanced photo editing capabilities.</p>
+                    <div class="app-footer">
+                        <span class="app-price">$29.99</span>
+                        <button class="install-btn">Buy</button>
+                    </div>
+                </div>
+
+                <div class="app-card" style="animation-delay: 0.2s">
+                    <div class="app-header">
+                        <div class="app-icon" style="background: var(--accent-gradient)">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">SoundWave</div>
+                            <div class="app-developer">Audio Studios</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </span>
+                        <span class="rating-value">4.0</span>
+                    </div>
+                    <p class="app-desc">Stream millions of songs and podcasts with high-quality audio.</p>
+                    <div class="app-footer">
+                        <span class="app-price free">Free</span>
+                        <button class="install-btn">Install</button>
+                    </div>
+                </div>
+
+                <div class="app-card" style="animation-delay: 0.25s">
+                    <div class="app-header">
+                        <div class="app-icon" style="background: var(--success-gradient)">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">SecureVault</div>
+                            <div class="app-developer">CyberSec Pro</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                        <span class="rating-value">4.8</span>
+                    </div>
+                    <p class="app-desc">Military-grade encryption for your files and passwords.</p>
+                    <div class="app-footer">
+                        <span class="app-price">$14.99</span>
+                        <button class="install-btn">Buy</button>
+                    </div>
+                </div>
+
+                <div class="app-card" style="animation-delay: 0.3s">
+                    <div class="app-header">
+                        <div class="app-icon" style="background: var(--warning-gradient)">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">StreamCast</div>
+                            <div class="app-developer">Media Works</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="rating-value">5.0</span>
+                    </div>
+                    <p class="app-desc">Professional streaming and recording software for content creators.</p>
+                    <div class="app-footer">
+                        <span class="app-price free">Free</span>
+                        <button class="install-btn">Install</button>
+                    </div>
+                </div>
+
+                <div class="app-card" style="animation-delay: 0.35s">
+                    <div class="app-header">
+                        <div class="app-icon" style="background: var(--error-gradient)">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="app-info">
+                            <div class="app-name">Cyber Quest</div>
+                            <div class="app-developer">GameForge</div>
+                        </div>
+                    </div>
+                    <div class="app-rating">
+                        <span class="stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </span>
+                        <span class="rating-value">4.7</span>
+                    </div>
+                    <p class="app-desc">Immersive cyberpunk RPG with stunning graphics and gameplay.</p>
+                    <div class="app-footer">
+                        <span class="app-price">$39.99</span>
+                        <button class="install-btn">Buy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Category filtering
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // Filter apps based on category
+                console.log('Filtering by:', this.textContent);
+            });
+        });
+
+        // Install button functionality
+        document.querySelectorAll('.install-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const originalText = this.textContent;
+                this.textContent = 'Installing...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.textContent = 'Installed';
+                    this.style.background = 'var(--success-gradient)';
+                }, 2000);
+            });
+        });
+
+        // App card click
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('click', function() {
+                console.log('Opening app details');
+            });
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+    </script>
+</body>
+</html>

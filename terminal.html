@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal - AuraOS</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00d9ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .terminal-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
+            background-attachment: fixed;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .terminal-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: ambient-glow 8s ease-in-out infinite alternate;
+        }
+
+        .terminal-container {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 100px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .terminal-tabs {
+            background: var(--bg-card);
+            border-radius: 16px 16px 0 0;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            padding: 10px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-glass);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .tab.active {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+        }
+
+        .tab:hover {
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .tab-close {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .add-tab {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-glass);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+        }
+
+        .add-tab:hover {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--primary-color);
+        }
+
+        .terminal-window {
+            flex: 1;
+            background: #0a0e27;
+            border-radius: 0 0 16px 16px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.1s;
+        }
+
+        .terminal-header {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-title {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-btn {
+            width: 28px;
+            height: 28px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .terminal-btn:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .terminal-output {
+            margin-bottom: 10px;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .prompt {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .command {
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .output {
+            color: var(--text-secondary);
+            padding-left: 20px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .output.success {
+            color: var(--success-color);
+        }
+
+        .output.error {
+            color: var(--error-color);
+        }
+
+        .output.warning {
+            color: var(--warning-color);
+        }
+
+        .terminal-input-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .terminal-prompt {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-weight: 600;
+        }
+
+        .terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            outline: none;
+            caret-color: var(--primary-color);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 18px;
+            background: var(--primary-color);
+            animation: blink 1s infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .terminal-sidebar {
+            width: 200px;
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        .shortcuts {
+            margin-bottom: 24px;
+        }
+
+        .shortcuts-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+        }
+
+        .shortcut-item:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
+        .shortcut-key {
+            background: var(--bg-glass);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+        }
+
+        .terminal-layout {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .terminal-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ASCII Art Welcome */
+        .ascii-art {
+            color: var(--primary-color);
+            font-size: 12px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* Syntax Highlighting */
+        .syntax-keyword {
+            color: #ff6b9d;
+        }
+
+        .syntax-string {
+            color: #00ff88;
+        }
+
+        .syntax-number {
+            color: #ffb347;
+        }
+
+        .syntax-comment {
+            color: #64748b;
+            font-style: italic;
+        }
+
+        .syntax-function {
+            color: #9d4edd;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes ambient-glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 968px) {
+            .terminal-layout {
+                flex-direction: column;
+            }
+            
+            .terminal-sidebar {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-cube"></i>
+                    <span>AuraOS</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="terminal.html" class="nav-link active">Terminal</a></li>
+                    <li><a href="settings.html" class="nav-link">Settings</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="terminal-container">
+            <div class="terminal-layout">
+                <!-- Sidebar -->
+                <div class="terminal-sidebar">
+                    <div class="shortcuts">
+                        <div class="shortcuts-title">Shortcuts</div>
+                        <div class="shortcut-item">
+                            <span>Clear</span>
+                            <span class="shortcut-key">Ctrl+L</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span>History</span>
+                            <span class="shortcut-key">↑ ↓</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span>Cancel</span>
+                            <span class="shortcut-key">Ctrl+C</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span>Tab Complete</span>
+                            <span class="shortcut-key">Tab</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span>Search</span>
+                            <span class="shortcut-key">Ctrl+R</span>
+                        </div>
+                    </div>
+                    
+                    <div class="shortcuts">
+                        <div class="shortcuts-title">Quick Commands</div>
+                        <div class="shortcut-item" onclick="executeCommand('help')">
+                            <span>help</span>
+                        </div>
+                        <div class="shortcut-item" onclick="executeCommand('ls')">
+                            <span>ls</span>
+                        </div>
+                        <div class="shortcut-item" onclick="executeCommand('pwd')">
+                            <span>pwd</span>
+                        </div>
+                        <div class="shortcut-item" onclick="executeCommand('clear')">
+                            <span>clear</span>
+                        </div>
+                        <div class="shortcut-item" onclick="executeCommand('system')">
+                            <span>system</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Terminal -->
+                <div class="terminal-main">
+                    <!-- Tabs -->
+                    <div class="terminal-tabs">
+                        <div class="tab active">
+                            <i class="fas fa-terminal"></i>
+                            <span>Terminal 1</span>
+                            <span class="tab-close">×</span>
+                        </div>
+                        <div class="tab">
+                            <i class="fas fa-terminal"></i>
+                            <span>Terminal 2</span>
+                            <span class="tab-close">×</span>
+                        </div>
+                        <div class="add-tab">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                    </div>
+
+                    <!-- Terminal Window -->
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-title">AuraOS Terminal v2.0.1 - bash</div>
+                            <div class="terminal-controls">
+                                <button class="terminal-btn" onclick="minimizeTerminal()">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button class="terminal-btn" onclick="maximizeTerminal()">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                                <button class="terminal-btn" onclick="closeTerminal()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="terminal-body" id="terminalBody">
+                            <pre class="ascii-art">
+    ___                    ____  _____ 
+   /   | __  ___________ _/ __ \/ ___/
+  / /| |/ / / / ___/ __ `/ / / /\__ \ 
+ / ___ / /_/ / /  / /_/ / /_/ /___/ / 
+/_/  |_\__,_/_/   \__,_/\____//____/  
+                                      
+Welcome to AuraOS Terminal v2.0.1
+Type 'help' for available commands
+                            </pre>
+                            
+                            <div class="terminal-output" id="terminalOutput">
+                                <div class="command-line">
+                                    <span class="prompt">user@auraos:~$</span>
+                                    <span class="command">whoami</span>
+                                </div>
+                                <div class="output">user</div>
+                                
+                                <div class="command-line">
+                                    <span class="prompt">user@auraos:~$</span>
+                                    <span class="command">date</span>
+                                </div>
+                                <div class="output" id="currentDate"></div>
+                                
+                                <div class="command-line">
+                                    <span class="prompt">user@auraos:~$</span>
+                                    <span class="command">uname -a</span>
+                                </div>
+                                <div class="output">AuraOS 2.0.1 x86_64 GNU/Linux</div>
+                            </div>
+                            
+                            <div class="terminal-input-wrapper">
+                                <span class="terminal-prompt">user@auraos:~$</span>
+                                <input type="text" class="terminal-input" id="terminalInput" autofocus>
+                                <span class="cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Terminal functionality
+        const terminalInput = document.getElementById('terminalInput');
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalBody = document.getElementById('terminalBody');
+        
+        let commandHistory = [];
+        let historyIndex = -1;
+        
+        // Available commands
+        const commands = {
+            help: () => {
+                return `Available commands:
+  help        - Show this help message
+  clear       - Clear the terminal
+  ls          - List directory contents
+  pwd         - Print working directory
+  cd          - Change directory
+  mkdir       - Make directory
+  rm          - Remove file or directory
+  cat         - Display file contents
+  echo        - Display a message
+  date        - Display current date and time
+  whoami      - Display current user
+  uname       - Display system information
+  system      - Show system status
+  network     - Show network status
+  processes   - List running processes
+  exit        - Exit terminal`;
+            },
+            clear: () => {
+                terminalOutput.innerHTML = '';
+                return null;
+            },
+            ls: () => {
+                return `Documents/  Downloads/  Pictures/  Videos/  
+Music/      Desktop/    Projects/  .config/`;
+            },
+            pwd: () => '/home/user',
+            date: () => new Date().toString(),
+            whoami: () => 'user',
+            uname: (args) => {
+                if (args.includes('-a')) {
+                    return 'AuraOS 2.0.1 x86_64 GNU/Linux';
+                }
+                return 'AuraOS';
+            },
+            echo: (args) => args.join(' '),
+            system: () => {
+                return `System Status:
+  CPU Usage: 45%
+  Memory: 8.2GB / 16GB
+  Disk: 256GB / 500GB
+  Uptime: 5 days, 14 hours
+  Network: Connected`;
+            },
+            network: () => {
+                return `Network Status:
+  Interface: eth0
+  IP Address: 192.168.1.100
+  Gateway: 192.168.1.1
+  DNS: 8.8.8.8, 8.8.4.4
+  Status: Connected
+  Speed: 125 Mbps`;
+            },
+            processes: () => {
+                return `PID    NAME             CPU    MEM
+1234   Chrome          25%    2.1GB
+5678   VS Code         60%    1.8GB
+9012   Spotify         5%     256MB
+3456   System Security 15%    512MB`;
+            }
+        };
+        
+        // Handle input
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim();
+                if (command) {
+                    executeCommand(command);
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                }
+                this.value = '';
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    this.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    this.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    this.value = '';
+                }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                // Auto-complete functionality
+                const currentInput = this.value;
+                const matches = Object.keys(commands).filter(cmd => cmd.startsWith(currentInput));
+                if (matches.length === 1) {
+                    this.value = matches[0];
+                }
+            } else if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                executeCommand('clear');
+            }
+        });
+        
+        function executeCommand(commandLine) {
+            const [cmd, ...args] = commandLine.split(' ');
+            
+            // Add command to output
+            const commandDiv = document.createElement('div');
+            commandDiv.className = 'command-line';
+            commandDiv.innerHTML = `
+                <span class="prompt">user@auraos:~$</span>
+                <span class="command">${commandLine}</span>
+            `;
+            terminalOutput.appendChild(commandDiv);
+            
+            // Execute command
+            let output = '';
+            if (commands[cmd]) {
+                output = commands[cmd](args);
+            } else if (cmd) {
+                output = `Command not found: ${cmd}`;
+                const outputDiv = document.createElement('div');
+                outputDiv.className = 'output error';
+                outputDiv.textContent = output;
+                terminalOutput.appendChild(outputDiv);
+                terminalBody.scrollTop = terminalBody.scrollHeight;
+                return;
+            }
+            
+            // Add output
+            if (output) {
+                const outputDiv = document.createElement('div');
+                outputDiv.className = 'output';
+                outputDiv.textContent = output;
+                terminalOutput.appendChild(outputDiv);
+            }
+            
+            // Scroll to bottom
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+        
+        // Set current date
+        document.getElementById('currentDate').textContent = new Date().toString();
+        
+        // Terminal controls
+        function minimizeTerminal() {
+            console.log('Minimize terminal');
+        }
+        
+        function maximizeTerminal() {
+            const terminal = document.querySelector('.terminal-window');
+            terminal.requestFullscreen();
+        }
+        
+        function closeTerminal() {
+            if (confirm('Close terminal?')) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+        
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+        
+        // Focus input on click
+        terminalBody.addEventListener('click', function() {
+            terminalInput.focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - AuraOS</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#00d9ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .notifications-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .notifications-page::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: ambient-glow 8s ease-in-out infinite alternate;
+        }
+
+        .notifications-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 20px;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .notifications-title {
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .notifications-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 30px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .notification-item {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            backdrop-filter: blur(20px);
+            display: flex;
+            gap: 16px;
+            animation: fadeInUp 0.8s ease backwards;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-primary);
+            border-color: var(--primary-color);
+        }
+
+        .notification-item.unread {
+            background: rgba(0, 217, 255, 0.05);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .notification-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .notification-icon.success {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--success-color);
+        }
+
+        .notification-icon.warning {
+            background: rgba(255, 179, 71, 0.1);
+            color: var(--warning-color);
+        }
+
+        .notification-icon.error {
+            background: rgba(255, 71, 87, 0.1);
+            color: var(--error-color);
+        }
+
+        .notification-icon.update {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .notification-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .notif-action {
+            padding: 6px 12px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notif-action:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .notif-action.primary {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .empty-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .empty-message {
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes ambient-glow {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="notifications-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-cube"></i>
+                    <span>AuraOS</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                    <li><a href="notifications.html" class="nav-link active">Notifications</a></li>
+                    <li><a href="settings.html" class="nav-link">Settings</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="notifications-container">
+            <div class="notifications-header">
+                <h1 class="notifications-title">Notifications</h1>
+                <div class="header-actions">
+                    <button class="action-btn" onclick="markAllRead()">
+                        <i class="fas fa-check"></i> Mark All Read
+                    </button>
+                    <button class="action-btn" onclick="clearAll()">
+                        <i class="fas fa-trash"></i> Clear All
+                    </button>
+                </div>
+            </div>
+
+            <div class="notifications-filters">
+                <button class="filter-btn active" onclick="filterNotifications('all')">All</button>
+                <button class="filter-btn" onclick="filterNotifications('unread')">Unread</button>
+                <button class="filter-btn" onclick="filterNotifications('system')">System</button>
+                <button class="filter-btn" onclick="filterNotifications('security')">Security</button>
+                <button class="filter-btn" onclick="filterNotifications('updates')">Updates</button>
+                <button class="filter-btn" onclick="filterNotifications('apps')">Apps</button>
+            </div>
+
+            <div class="notifications-list" id="notificationsList">
+                <div class="notification-item unread" style="animation-delay: 0.1s">
+                    <div class="notification-icon update">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">System Update Available</span>
+                            <span class="notification-time">5 minutes ago</span>
+                        </div>
+                        <p class="notification-message">
+                            AuraOS 2.1 is now available with new features and performance improvements. The update size is 256 MB.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action primary">Update Now</button>
+                            <button class="notif-action">View Details</button>
+                            <button class="notif-action">Remind Later</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item unread" style="animation-delay: 0.15s">
+                    <div class="notification-icon success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">File Upload Complete</span>
+                            <span class="notification-time">15 minutes ago</span>
+                        </div>
+                        <p class="notification-message">
+                            Your files have been successfully uploaded to AuraCloud. 25 files (458 MB) synced.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action">View Files</button>
+                            <button class="notif-action">Dismiss</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item" style="animation-delay: 0.2s">
+                    <div class="notification-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">High Memory Usage</span>
+                            <span class="notification-time">1 hour ago</span>
+                        </div>
+                        <p class="notification-message">
+                            System memory usage is at 85%. Consider closing some applications to improve performance.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action">Open Task Manager</button>
+                            <button class="notif-action">Ignore</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item" style="animation-delay: 0.25s">
+                    <div class="notification-icon info">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">New Login Detected</span>
+                            <span class="notification-time">2 hours ago</span>
+                        </div>
+                        <p class="notification-message">
+                            A new login to your account was detected from San Francisco, CA using Chrome browser.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action">Review Activity</button>
+                            <button class="notif-action">It was me</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item" style="animation-delay: 0.3s">
+                    <div class="notification-icon success">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">Security Scan Complete</span>
+                            <span class="notification-time">3 hours ago</span>
+                        </div>
+                        <p class="notification-message">
+                            System security scan completed successfully. No threats detected. Your system is secure.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action">View Report</button>
+                            <button class="notif-action">Dismiss</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notification-item" style="animation-delay: 0.35s">
+                    <div class="notification-icon error">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-header">
+                            <span class="notification-title">Backup Failed</span>
+                            <span class="notification-time">Yesterday</span>
+                        </div>
+                        <p class="notification-message">
+                            Scheduled backup failed due to insufficient storage space. Free up space and try again.
+                        </p>
+                        <div class="notification-actions">
+                            <button class="notif-action primary">Retry Backup</button>
+                            <button class="notif-action">Manage Storage</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State (Hidden by default) -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-bell-slash"></i>
+                </div>
+                <div class="empty-title">No Notifications</div>
+                <p class="empty-message">You're all caught up! Check back later for updates.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Filter notifications
+        function filterNotifications(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log('Filtering by:', filter);
+            // Add filtering logic here
+        }
+
+        // Mark all as read
+        function markAllRead() {
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.classList.remove('unread');
+            });
+        }
+
+        // Clear all notifications
+        function clearAll() {
+            if (confirm('Clear all notifications?')) {
+                document.getElementById('notificationsList').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+            }
+        }
+
+        // Handle notification actions
+        document.querySelectorAll('.notif-action').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                console.log('Action clicked:', this.textContent);
+            });
+        });
+
+        // Mark individual notification as read on click
+        document.querySelectorAll('.notification-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.remove('unread');
+            });
+        });
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('.theme-toggle i');
+            icon.classList.toggle('fa-moon');
+            icon.classList.toggle('fa-sun');
+        }
+    </script>
+</body>
+</html>

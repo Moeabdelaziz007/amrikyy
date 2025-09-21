@@ -1,5 +1,7 @@
 // Automation API Routes - Backend Endpoints
 import { Router } from 'express';
+import fs from 'fs/promises';
+import path from 'path';
 import { z } from 'zod';
 import { db } from './database';
 import { 
@@ -48,6 +50,94 @@ const authenticate = (req: any, res: any, next: any) => {
 
 // Apply authentication to all routes
 router.use(authenticate);
+
+// -----------------------
+// User Profile & Preferences
+// -----------------------
+
+const UpdateProfileSchema = z.object({
+  name: z.string().min(1).optional(),
+  avatar: z.string().url().optional(),
+});
+
+const UserPreferencesSchema = z.object({
+  theme: z.enum(['light', 'dark', 'auto']).default('auto'),
+  notifications: z.boolean().default(true),
+  language: z.string().default('en'),
+  reducedMotion: z.boolean().default(false),
+});
+
+const getPrefsFilePath = () => {
+  const dataDir = path.resolve(process.cwd(), 'data');
+  return { dataDir, filePath: path.resolve(dataDir, 'user-preferences.json') };
+};
+
+async function loadAllPreferences(): Promise<Record<string, any>> {
+  try {
+    const { dataDir, filePath } = getPrefsFilePath();
+    await fs.mkdir(dataDir, { recursive: true });
+    try {
+      const raw = await fs.readFile(filePath, 'utf-8');
+      return JSON.parse(raw);
+    } catch {
+      await fs.writeFile(filePath, JSON.stringify({}, null, 2));
+      return {};
+    }
+  } catch {
+    return {};
+  }
+}
+
+async function saveAllPreferences(prefs: Record<string, any>): Promise<void> {
+  const { dataDir, filePath } = getPrefsFilePath();
+  await fs.mkdir(dataDir, { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(prefs, null, 2));
+}
+
+router.get('/users/me', withDatabaseErrorHandling(async (req: any, res: any) => {
+  const [user] = await db.select().from(users).where(eq(users.id, req.user.id)).limit(1);
+  if (!user) {
+    return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'User not found' } });
+  }
+
+  const allPrefs = await loadAllPreferences();
+  const prefs = allPrefs[req.user.id] ?? UserPreferencesSchema.parse({});
+  res.json({ success: true, data: { 
+    id: user.id, 
+    email: user.email, 
+    name: user.name, 
+    avatar: user.avatar, 
+    role: user.role, 
+    preferences: prefs 
+  }});
+}));
+
+router.put('/users/me', withDatabaseErrorHandling(async (req: any, res: any) => {
+  const body = UpdateProfileSchema.parse(req.body);
+  const updateData: any = { updatedAt: new Date() };
+  if (body.name !== undefined) updateData.name = body.name;
+  if (body.avatar !== undefined) updateData.avatar = body.avatar;
+
+  const [updated] = await db.update(users).set(updateData).where(eq(users.id, req.user.id)).returning();
+  if (!updated) {
+    return res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'User not found' } });
+  }
+  res.json({ success: true, data: { id: updated.id, email: updated.email, name: updated.name, avatar: updated.avatar, role: updated.role } });
+}));
+
+router.get('/users/me/preferences', withDatabaseErrorHandling(async (req: any, res: any) => {
+  const allPrefs = await loadAllPreferences();
+  const prefs = allPrefs[req.user.id] ?? UserPreferencesSchema.parse({});
+  res.json({ success: true, data: prefs });
+}));
+
+router.put('/users/me/preferences', withDatabaseErrorHandling(async (req: any, res: any) => {
+  const incoming = UserPreferencesSchema.parse(req.body || {});
+  const allPrefs = await loadAllPreferences();
+  allPrefs[req.user.id] = { ...(allPrefs[req.user.id] ?? {}), ...incoming };
+  await saveAllPreferences(allPrefs);
+  res.json({ success: true, data: allPrefs[req.user.id] });
+}));
 
 // Utility function to build pagination response
 const buildPaginationResponse = (data: any[], page: number, limit: number, total: number) => ({

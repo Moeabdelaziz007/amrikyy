@@ -174,6 +174,341 @@ const mcpTools = [
                 description: 'Generate code snippets and components'
             }
         ]
+    },
+    {
+        id: 'file_operations',
+        name: 'File Operations',
+        description: 'Perform file operations (read, write, convert)',
+        category: 'File Management',
+        icon: <lucide_react_1.File className="w-5 h-5"/>,
+        parameters: [
+            { name: 'operation', type: 'string', required: true, description: 'File operation to perform', options: ['read', 'write', 'convert', 'compress', 'extract'] },
+            { name: 'file_path', type: 'string', required: true, description: 'Path to the file' },
+            { name: 'content', type: 'string', required: false, description: 'Content to write (for write operation)' },
+            { name: 'format', type: 'string', required: false, description: 'Target format for conversion' }
+        ],
+        examples: [
+            {
+                title: 'Read File',
+                params: { operation: 'read', file_path: '/path/to/file.txt' },
+                description: 'Read content from a file'
+            },
+            {
+                title: 'Write File',
+                params: { operation: 'write', file_path: '/path/to/output.txt', content: 'Hello World!' },
+                description: 'Write content to a file'
+            }
+        ]
+    },
+    {
+        id: 'image_processor',
+        name: 'Image Processor',
+        description: 'Process images using free libraries',
+        category: 'Media',
+        icon: <lucide_react_1.Image className="w-5 h-5"/>,
+        parameters: [
+            { name: 'image_path', type: 'string', required: true, description: 'Path to the image file' },
+            { name: 'operation', type: 'string', required: true, description: 'Image processing operation', options: ['resize', 'crop', 'rotate', 'filter', 'extract_text', 'analyze'] },
+            { name: 'width', type: 'number', required: false, description: 'Target width for resize operation' },
+            { name: 'height', type: 'number', required: false, description: 'Target height for resize operation' },
+            { name: 'angle', type: 'number', required: false, description: 'Rotation angle in degrees' }
+        ],
+        examples: [
+            {
+                title: 'Resize Image',
+                params: { image_path: '/path/to/image.jpg', operation: 'resize', width: 800, height: 600 },
+                description: 'Resize an image to specific dimensions'
+            },
+            {
+                title: 'Rotate Image',
+                params: { image_path: '/path/to/image.jpg', operation: 'rotate', angle: 90 },
+                description: 'Rotate an image by specified angle'
+            }
+        ]
+    },
+    {
+        id: 'database_operations',
+        name: 'Database Operations',
+        description: 'Perform database operations on Firestore',
+        category: 'Database',
+        icon: <lucide_react_1.Database className="w-5 h-5"/>,
+        parameters: [
+            { name: 'operation', type: 'string', required: true, description: 'Database operation to perform', options: ['query', 'insert', 'update', 'delete', 'aggregate'] },
+            { name: 'collection', type: 'string', required: true, description: 'Firestore collection name' },
+            { name: 'data', type: 'object', required: false, description: 'Data to insert/update' },
+            { name: 'filters', type: 'object', required: false, description: 'Query filters' }
+        ],
+        examples: [
+            {
+                title: 'Query Collection',
+                params: { operation: 'query', collection: 'users', filters: { status: 'active' } },
+                description: 'Query documents from a collection'
+            },
+            {
+                title: 'Insert Document',
+                params: { operation: 'insert', collection: 'users', data: { name: 'John Doe', email: 'john@example.com' } },
+                description: 'Insert a new document into collection'
+            }
+        ]
+    },
+    {
+        id: 'api_tester',
+        name: 'API Tester',
+        description: 'Test APIs and webhooks (free)',
+        category: 'Testing',
+        icon: <lucide_react_1.Flask className="w-5 h-5"/>,
+        parameters: [
+            { name: 'url', type: 'string', required: true, description: 'API endpoint URL' },
+            { name: 'method', type: 'string', required: true, description: 'HTTP method', options: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] },
+            { name: 'headers', type: 'object', required: false, description: 'HTTP headers' },
+            { name: 'body', type: 'object', required: false, description: 'Request body' }
+        ],
+        examples: [
+            {
+                title: 'GET Request',
+                params: { url: 'https://api.example.com/users', method: 'GET' },
+                description: 'Test a GET API endpoint'
+            },
+            {
+                title: 'POST Request',
+                params: { url: 'https://api.example.com/users', method: 'POST', body: { name: 'John Doe' } },
+                description: 'Test a POST API endpoint'
+            }
+        ]
+    },
+    {
+        id: 'code_generator',
+        name: 'Code Generator',
+        description: 'Generate code snippets and templates',
+        category: 'Development',
+        icon: <lucide_react_1.Code2 className="w-5 h-5"/>,
+        parameters: [
+            { name: 'language', type: 'string', required: true, description: 'Programming language', options: ['javascript', 'typescript', 'python', 'react', 'vue', 'html', 'css'] },
+            { name: 'template', type: 'string', required: true, description: 'Code template type', options: ['component', 'function', 'class', 'api', 'database', 'test'] },
+            { name: 'description', type: 'string', required: true, description: 'Description of what the code should do' },
+            { name: 'framework', type: 'string', required: false, description: 'Framework (optional)' }
+        ],
+        examples: [
+            {
+                title: 'React Component',
+                params: { language: 'react', template: 'component', description: 'A user profile card component' },
+                description: 'Generate a React component'
+            },
+            {
+                title: 'API Function',
+                params: { language: 'typescript', template: 'api', description: 'A function to fetch user data' },
+                description: 'Generate an API function'
+            }
+        ]
+    },
+    {
+        id: 'data_visualizer',
+        name: 'Data Visualizer',
+        description: 'Create data visualizations and charts',
+        category: 'Analytics',
+        icon: <lucide_react_1.PieChart className="w-5 h-5"/>,
+        parameters: [
+            { name: 'data', type: 'array', required: true, description: 'Data to visualize' },
+            { name: 'chart_type', type: 'string', required: true, description: 'Type of chart to create', options: ['line', 'bar', 'pie', 'scatter', 'histogram', 'heatmap'] },
+            { name: 'title', type: 'string', required: false, description: 'Chart title' },
+            { name: 'output_format', type: 'string', required: false, description: 'Output format', options: ['svg', 'png', 'html'] }
+        ],
+        examples: [
+            {
+                title: 'Line Chart',
+                params: { data: '[{x: 1, y: 10}, {x: 2, y: 20}]', chart_type: 'line', title: 'Sales Trend' },
+                description: 'Create a line chart visualization'
+            },
+            {
+                title: 'Bar Chart',
+                params: { data: '[{name: "A", value: 10}, {name: "B", value: 20}]', chart_type: 'bar', title: 'Category Comparison' },
+                description: 'Create a bar chart visualization'
+            }
+        ]
+    },
+    {
+        id: 'automation',
+        name: 'Automation',
+        description: 'Automate repetitive tasks',
+        category: 'Automation',
+        icon: <lucide_react_1.Cog className="w-5 h-5"/>,
+        parameters: [
+            { name: 'task_type', type: 'string', required: true, description: 'Type of automation task', options: ['file_processing', 'data_migration', 'email_sending', 'social_media', 'backup'] },
+            { name: 'config', type: 'object', required: true, description: 'Task configuration' },
+            { name: 'schedule', type: 'string', required: false, description: 'Cron expression for scheduling (optional)' }
+        ],
+        examples: [
+            {
+                title: 'File Processing',
+                params: { task_type: 'file_processing', config: { source_dir: '/input', target_dir: '/output' } },
+                description: 'Automate file processing tasks'
+            },
+            {
+                title: 'Data Migration',
+                params: { task_type: 'data_migration', config: { source_db: 'old_db', target_db: 'new_db' } },
+                description: 'Automate data migration between databases'
+            }
+        ]
+    },
+    {
+        id: 'knowledge_base',
+        name: 'Knowledge Base',
+        description: 'Query a knowledge base for information',
+        category: 'Information',
+        icon: <lucide_react_1.BookOpen className="w-5 h-5"/>,
+        parameters: [
+            { name: 'query', type: 'string', required: true, description: 'The query to search for in the knowledge base' }
+        ],
+        examples: [
+            {
+                title: 'Search Knowledge',
+                params: { query: 'How to implement authentication?' },
+                description: 'Search for information in the knowledge base'
+            },
+            {
+                title: 'Get Documentation',
+                params: { query: 'API documentation for user management' },
+                description: 'Retrieve documentation from knowledge base'
+            }
+        ]
+    },
+    {
+        id: 'system_info',
+        name: 'System Info',
+        description: 'Get information about the system',
+        category: 'System',
+        icon: <lucide_react_1.Info className="w-5 h-5"/>,
+        parameters: [],
+        examples: [
+            {
+                title: 'Get System Info',
+                params: {},
+                description: 'Retrieve system information and status'
+            }
+        ]
+    },
+    {
+        id: 'code_formatter',
+        name: 'Code Formatter',
+        description: 'Format code snippets',
+        category: 'Development',
+        icon: <lucide_react_1.AlignLeft className="w-5 h-5"/>,
+        parameters: [
+            { name: 'code', type: 'string', required: true, description: 'The code to format' },
+            { name: 'language', type: 'string', required: true, description: 'The programming language of the code' }
+        ],
+        examples: [
+            {
+                title: 'Format JavaScript',
+                params: { code: 'function test(){return "hello";}', language: 'javascript' },
+                description: 'Format JavaScript code'
+            },
+            {
+                title: 'Format Python',
+                params: { code: 'def test():\nreturn "hello"', language: 'python' },
+                description: 'Format Python code'
+            }
+        ]
+    },
+    {
+        id: 'multilingual_assistant',
+        name: 'Multilingual Assistant',
+        description: 'AI assistant with Arabic and English support',
+        category: 'AI',
+        icon: <lucide_react_1.Languages className="w-5 h-5"/>,
+        parameters: [
+            { name: 'message', type: 'string', required: true, description: 'The message to send to the assistant' },
+            { name: 'language', type: 'string', required: false, description: 'Language preference', options: ['auto', 'arabic', 'english'] },
+            { name: 'user_profile', type: 'object', required: false, description: 'User profile information' },
+            { name: 'context', type: 'string', required: false, description: 'Additional context' }
+        ],
+        examples: [
+            {
+                title: 'Arabic Support',
+                params: { message: 'صمم لي نظام إدارة', language: 'arabic' },
+                description: 'Get assistance in Arabic'
+            },
+            {
+                title: 'English Support',
+                params: { message: 'Design a management system for me', language: 'english' },
+                description: 'Get assistance in English'
+            }
+        ]
+    },
+    {
+        id: 'system_designer',
+        name: 'System Designer',
+        description: 'Design system architecture and components',
+        category: 'Architecture',
+        icon: <lucide_react_1.Compass className="w-5 h-5"/>,
+        parameters: [
+            { name: 'requirements', type: 'string', required: true, description: 'System requirements' },
+            { name: 'technology_stack', type: 'object', required: false, description: 'Preferred technology stack' },
+            { name: 'complexity', type: 'string', required: false, description: 'System complexity level', options: ['simple', 'medium', 'complex', 'enterprise'] },
+            { name: 'context', type: 'string', required: false, description: 'Additional context' }
+        ],
+        examples: [
+            {
+                title: 'Web Application',
+                params: { requirements: 'E-commerce platform with user management', complexity: 'medium' },
+                description: 'Design a web application architecture'
+            },
+            {
+                title: 'API System',
+                params: { requirements: 'RESTful API for mobile app backend', complexity: 'simple' },
+                description: 'Design an API system architecture'
+            }
+        ]
+    },
+    {
+        id: 'educational_tutor',
+        name: 'Educational Tutor',
+        description: 'AI tutor for learning and education',
+        category: 'Education',
+        icon: <lucide_react_1.GraduationCap className="w-5 h-5"/>,
+        parameters: [
+            { name: 'topic', type: 'string', required: true, description: 'Learning topic' },
+            { name: 'difficulty_level', type: 'string', required: false, description: 'Difficulty level', options: ['beginner', 'intermediate', 'advanced'] },
+            { name: 'learning_style', type: 'string', required: false, description: 'Learning style preference', options: ['visual', 'auditory', 'kinesthetic', 'reading'] },
+            { name: 'context', type: 'string', required: false, description: 'Additional context' }
+        ],
+        examples: [
+            {
+                title: 'Learn Programming',
+                params: { topic: 'JavaScript fundamentals', difficulty_level: 'beginner', learning_style: 'visual' },
+                description: 'Get programming lessons'
+            },
+            {
+                title: 'Study Math',
+                params: { topic: 'Calculus derivatives', difficulty_level: 'intermediate', learning_style: 'reading' },
+                description: 'Get math tutoring'
+            }
+        ]
+    },
+    {
+        id: 'wellness_coach',
+        name: 'Wellness Coach',
+        description: 'AI wellness coach for mental health support',
+        category: 'Wellness',
+        icon: <lucide_react_1.Heart className="w-5 h-5"/>,
+        parameters: [
+            { name: 'mood', type: 'string', required: false, description: 'Current mood' },
+            { name: 'stress_level', type: 'string', required: false, description: 'Stress level', options: ['low', 'medium', 'high'] },
+            { name: 'goals', type: 'array', required: false, description: 'Wellness goals' },
+            { name: 'context', type: 'string', required: false, description: 'Additional context' }
+        ],
+        examples: [
+            {
+                title: 'Mood Check',
+                params: { mood: 'anxious', stress_level: 'high' },
+                description: 'Get wellness support and guidance'
+            },
+            {
+                title: 'Goal Setting',
+                params: { goals: ['better sleep', 'reduce stress'], stress_level: 'medium' },
+                description: 'Set and track wellness goals'
+            }
+        ]
     }
 ];
 function MCPToolsPage() {
@@ -182,6 +517,21 @@ function MCPToolsPage() {
     const [testResults, setTestResults] = (0, react_1.useState)(null);
     const [isLoading, setIsLoading] = (0, react_1.useState)(false);
     const [activeTab, setActiveTab] = (0, react_1.useState)('overview');
+    
+    // Get tool parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const toolParam = urlParams.get('tool');
+    
+    // Auto-select tool if specified in URL
+    (0, react_1.useEffect)(() => {
+        if (toolParam) {
+            const tool = mcpTools.find(t => t.id === toolParam);
+            if (tool) {
+                setSelectedTool(tool);
+                setActiveTab('test');
+            }
+        }
+    }, [toolParam]);
     const handleToolSelect = (tool) => {
         setSelectedTool(tool);
         setTestParams({});

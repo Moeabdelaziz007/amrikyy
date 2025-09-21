@@ -15,6 +15,25 @@ const navigation = [
     { name: 'Workflows', href: '/workflows', icon: 'fas fa-project-diagram' },
     { name: 'AI Agents', href: '/ai-agents', icon: 'fas fa-robot' },
     { name: 'MCP Tools', href: '/mcp-tools', icon: 'fas fa-puzzle-piece', hasNotification: true },
+    { name: 'Web Scraper', href: '/mcp-tools?tool=web_scraper', icon: 'fas fa-spider', category: 'mcp' },
+    { name: 'Data Analyzer', href: '/mcp-tools?tool=data_analyzer', icon: 'fas fa-chart-line', category: 'mcp' },
+    { name: 'Text Processor', href: '/mcp-tools?tool=text_processor', icon: 'fas fa-file-text', category: 'mcp' },
+    { name: 'File Operations', href: '/mcp-tools?tool=file_operations', icon: 'fas fa-file', category: 'mcp' },
+    { name: 'Image Processor', href: '/mcp-tools?tool=image_processor', icon: 'fas fa-image', category: 'mcp' },
+    { name: 'Database Ops', href: '/mcp-tools?tool=database_operations', icon: 'fas fa-database', category: 'mcp' },
+    { name: 'API Tester', href: '/mcp-tools?tool=api_tester', icon: 'fas fa-flask', category: 'mcp' },
+    { name: 'Code Generator', href: '/mcp-tools?tool=code_generator', icon: 'fas fa-code', category: 'mcp' },
+    { name: 'Data Visualizer', href: '/mcp-tools?tool=data_visualizer', icon: 'fas fa-chart-pie', category: 'mcp' },
+    { name: 'Automation', href: '/mcp-tools?tool=automation', icon: 'fas fa-cogs', category: 'mcp' },
+    { name: 'Knowledge Base', href: '/mcp-tools?tool=knowledge_base', icon: 'fas fa-book-open', category: 'mcp' },
+    { name: 'System Info', href: '/mcp-tools?tool=system_info', icon: 'fas fa-info-circle', category: 'mcp' },
+    { name: 'Code Formatter', href: '/mcp-tools?tool=code_formatter', icon: 'fas fa-indent', category: 'mcp' },
+    { name: 'Cursor CLI', href: '/mcp-tools?tool=cursor_cli', icon: 'fas fa-terminal', category: 'mcp' },
+    { name: 'Comet Chrome', href: '/mcp-tools?tool=comet_chrome', icon: 'fas fa-globe', category: 'mcp' },
+    { name: 'Multilingual Assistant', href: '/mcp-tools?tool=multilingual_assistant', icon: 'fas fa-language', category: 'mcp' },
+    { name: 'System Designer', href: '/mcp-tools?tool=system_designer', icon: 'fas fa-drafting-compass', category: 'mcp' },
+    { name: 'Educational Tutor', href: '/mcp-tools?tool=educational_tutor', icon: 'fas fa-chalkboard-teacher', category: 'mcp' },
+    { name: 'Wellness Coach', href: '/mcp-tools?tool=wellness_coach', icon: 'fas fa-heart', category: 'mcp' },
     { name: 'Prompt Library', href: '/prompt-library', icon: 'fas fa-book', hasNotification: true },
     { name: 'Learning', href: '/learning', icon: 'fas fa-graduation-cap', hasNotification: true },
     { name: 'Smart Learning', href: '/smart-learning', icon: 'fas fa-brain' },
@@ -30,6 +49,11 @@ function Sidebar() {
     const [location] = (0, wouter_1.useLocation)();
     const { user, signOut } = (0, use_auth_1.useAuth)();
     const isGuestUser = user?.isAnonymous || localStorage.getItem('isGuestUser') === 'true';
+    const [expandedSections, setExpandedSections] = (0, react_1.useState)({
+        mcp: true,
+        ai: true,
+        tools: true
+    });
     const { data: userData } = (0, react_query_1.useQuery)({
         queryKey: ['userData', user?.uid],
         queryFn: () => user?.uid ? Promise.resolve({ displayName: user.displayName, email: user.email }) : null,
@@ -42,6 +66,16 @@ function Sidebar() {
         catch (error) {
             console.error('Sign out error:', error);
         }
+    };
+    const toggleSection = (section: string) => {
+        setExpandedSections((prev: any) => ({
+            ...prev,
+            [section]: !prev[section]
+        }));
+    };
+    const groupedNavigation = {
+        main: navigation.filter(item => !item.category),
+        mcp: navigation.filter(item => item.category === 'mcp')
     };
     return (<div className="w-64 glass-card border-r border-border/50 flex flex-col backdrop-blur-xl cyber-scrollbar">
       {/* Logo */}
@@ -60,7 +94,8 @@ function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1 px-4 pb-4">
         <ul className="space-y-2">
-          {navigation.map((item) => {
+          {/* Main Navigation */}
+          {groupedNavigation.main.map((item) => {
             const isActive = location === item.href;
             return (<li key={item.name}>
                 <wouter_2.Link href={item.href}>
@@ -75,6 +110,32 @@ function Sidebar() {
                 </wouter_2.Link>
               </li>);
         })}
+          
+          {/* MCP Tools Section */}
+          {groupedNavigation.mcp.length > 0 && (<>
+            <separator_1.Separator className="my-4 bg-border/30"/>
+            <li>
+              <button onClick={() => toggleSection('mcp')} className="flex items-center gap-3 px-4 py-2 w-full text-left text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
+                <i className={`fas fa-chevron-${expandedSections.mcp ? 'down' : 'right'} w-4 transition-transform duration-200`}></i>
+                <i className="fas fa-puzzle-piece w-4"></i>
+                <span>MCP Tools ({groupedNavigation.mcp.length})</span>
+              </button>
+            </li>
+            {expandedSections.mcp && groupedNavigation.mcp.map((item) => {
+              const isActive = location === item.href;
+              return (<li key={item.name} className="ml-4">
+                  <wouter_2.Link href={item.href}>
+                    <a className={(0, utils_1.cn)("flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 group relative overflow-hidden text-sm", isActive
+                      ? "gradient-cyber-primary text-white neon-glow-lg animate-neon-pulse"
+                      : "text-muted-foreground hover:text-foreground hover:bg-primary/10 hover:neon-glow-sm hover:border-primary/30 border border-transparent")} data-testid={`nav-${item.name.toLowerCase().replace(' ', '-')}`}>
+                      <i className={`${item.icon} w-4 transition-transform duration-300 group-hover:scale-110`}></i>
+                      <span className="font-medium">{item.name}</span>
+                      {isActive && (<div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-cyber-scan"></div>)}
+                    </a>
+                  </wouter_2.Link>
+                </li>);
+          })}
+          </>)}
         </ul>
       </nav>
       

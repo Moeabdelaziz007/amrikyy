@@ -19,6 +19,10 @@ const TelegramPage = lazy(() => import('@/pages/telegram'));
 const SmartLearningPage = lazy(() => import('@/pages/smart-learning'));
 const AdvancedAIToolsPage = lazy(() => import('@/pages/advanced-ai-tools'));
 const LearningDashboard = lazy(() => import('@/pages/learning-dashboard'));
+const MCPToolsPage = lazy(() => import('@/pages/mcp-tools'));
+const PromptLibraryPage = lazy(() => import('@/pages/prompt-library'));
+const AnalyticsPage = lazy(() => import('@/pages/analytics'));
+const SettingsPage = lazy(() => import('@/pages/settings'));
 const AutomationPage = lazy(() => import('@/pages/automation'));
 const AutomationTasksPage = lazy(() => import('@/pages/automation-tasks'));
 const NotFound = lazy(() => import('@/pages/not-found'));
@@ -46,6 +50,10 @@ function AppRouter() {
           <Route path="/smart-learning" component={SmartLearningPage} />
           <Route path="/advanced-ai-tools" component={AdvancedAIToolsPage} />
           <Route path="/learning" component={LearningDashboard} />
+          <Route path="/mcp-tools" component={MCPToolsPage} />
+          <Route path="/prompt-library" component={PromptLibraryPage} />
+          <Route path="/analytics" component={AnalyticsPage} />
+          <Route path="/settings" component={SettingsPage} />
           <Route path="/automation" component={AutomationPage} />
           <Route path="/automation-tasks" component={AutomationTasksPage} />
           <Route path="/debug" component={DebugView} />
