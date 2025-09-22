@@ -11,6 +11,8 @@ import { KeyboardNavigation } from '@/components/ui/keyboard-navigation';
 import { queryClient } from '@/lib/queryClient';
 
 // Lazy load pages for better performance
+const AuraOSPage = lazy(() => import('@/pages/AuraOS'));
+const GalleryPage = lazy(() => import('@/pages/Gallery'));
 const Dashboard = lazy(() => import('@/pages/dashboard'));
 const SocialFeed = lazy(() => import('@/pages/social-feed'));
 const Workflows = lazy(() => import('@/pages/workflows'));
@@ -42,6 +44,8 @@ function AppRouter() {
     <ProtectedRoute>
       <Suspense fallback={<PageLoader />}>
         <Switch>
+          <Route path="/auraos" component={AuraOSPage} />
+          <Route path="/gallery" component={GalleryPage} />
           <Route path="/" component={Dashboard} />
           <Route path="/social-feed" component={SocialFeed} />
           <Route path="/workflows" component={Workflows} />
