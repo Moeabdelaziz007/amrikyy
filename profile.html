@@ -567,6 +567,48 @@
             0% { opacity: 0.5; }
             100% { opacity: 1; }
         }
+
+        /* Modal styles */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: fadeIn 0.3s;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--text-primary);
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -870,20 +912,9 @@
     <script>
         // Tab switching
         function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.style.display = 'none';
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabName + '-tab').style.display = 'block';
-            
-            // Add active class to clicked button
             event.target.closest('.tab-btn').classList.add('active');
         }
 
@@ -891,88 +922,158 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
+            // --- Re-authentication Modal Logic ---
+            const reauthModal = document.getElementById('reauthModal');
+            const closeBtn = reauthModal.querySelector('.close-btn');
+            const confirmReauthBtn = document.getElementById('confirmReauthBtn');
+            const reauthPasswordInput = document.getElementById('reauthPassword');
+            const reauthError = document.getElementById('reauthError');
+
+            let updateEmailFunction = null; // To store the update function to retry
+
+            function showReauthModal(onConfirm) {
+                updateEmailFunction = onConfirm;
+                reauthPasswordInput.value = '';
+                reauthError.textContent = '';
+                reauthModal.style.display = 'block';
+                reauthPasswordInput.focus();
+            }
+
+            function hideReauthModal() {
+                reauthModal.style.display = 'none';
+            }
+
+            closeBtn.onclick = hideReauthModal;
+            window.onclick = function(event) {
+                if (event.target == reauthModal) {
+                    hideReauthModal();
+                }
+            };
+
+            confirmReauthBtn.addEventListener('click', function() {
+                const password = reauthPasswordInput.value;
+                const user = firebase.auth().currentUser;
+
+                if (!password) {
+                    reauthError.textContent = 'Password is required.';
+                    return;
+                }
+                reauthError.textContent = '';
+                confirmReauthBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming...';
+                confirmReauthBtn.disabled = true;
+
+                const credential = firebase.auth.EmailAuthProvider.credential(user.email, password);
+
+                user.reauthenticateWithCredential(credential).then(() => {
+                    if (updateEmailFunction) {
+                        updateEmailFunction(); // Retry the email update
+                    }
+                    hideReauthModal();
+                }).catch((error) => {
+                    reauthError.textContent = 'Incorrect password. Please try again.';
+                }).finally(() => {
+                    confirmReauthBtn.innerHTML = 'Confirm';
+                    confirmReauthBtn.disabled = false;
+                });
+            });
+            // --- End of Modal Logic ---
+
             if (currentUser) {
                 // Populate profile with user data
                 document.getElementById('userName').textContent = currentUser.displayName || 'User';
                 document.getElementById('userUsername').textContent = '@' + (currentUser.email ? currentUser.email.split('@')[0] : 'user');
                 document.getElementById('userEmail').textContent = currentUser.email || 'No email';
                 if (currentUser.displayName) {
-                    const avatar = document.getElementById('userAvatar');
-                    avatar.innerHTML = currentUser.displayName.charAt(0).toUpperCase();
+                    document.getElementById('userAvatar').innerHTML = currentUser.displayName.charAt(0).toUpperCase();
                 }
 
-                // Handle profile settings update
                 const settingsForm = document.querySelector('.settings-form');
                 if (settingsForm) {
-                    // Populate form with existing data
-                    settingsForm.querySelector('input[placeholder="Enter your name"]').value = currentUser.displayName || '';
-                    settingsForm.querySelector('input[placeholder="email@example.com"]').value = currentUser.email || '';
-                    settingsForm.querySelector('input[placeholder="@username"]').value = '@' + (currentUser.email ? currentUser.email.split('@')[0] : 'user');
+                    const nameInput = settingsForm.querySelector('input[placeholder="Enter your name"]');
+                    const emailInput = settingsForm.querySelector('input[placeholder="email@example.com"]');
+                    const usernameInput = settingsForm.querySelector('input[placeholder="@username"]');
+
+                    nameInput.value = currentUser.displayName || '';
+                    emailInput.value = currentUser.email || '';
+                    usernameInput.value = '@' + (currentUser.email ? currentUser.email.split('@')[0] : 'user');
 
                     const saveButton = settingsForm.querySelector('.btn-primary');
                     saveButton.addEventListener('click', function(event) {
                         event.preventDefault();
 
-                        const newName = settingsForm.querySelector('input[placeholder="Enter your name"]').value;
-                        const newEmail = settingsForm.querySelector('input[placeholder="email@example.com"]').value;
+                        const newName = nameInput.value;
+                        const newEmail = emailInput.value;
                         const user = firebase.auth().currentUser;
 
-                        if (user) {
-                            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-                            saveButton.disabled = true;
+                        if (!user) return;
 
-                            const profileUpdates = [];
+                        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                        saveButton.disabled = true;
 
-                            // Update display name if it has changed
-                            if (newName !== user.displayName) {
-                                profileUpdates.push(user.updateProfile({ displayName: newName }));
-                            }
+                        const nameChanged = newName !== user.displayName;
+                        const emailChanged = newEmail !== user.email;
 
-                            // Update email if it has changed
-                            if (newEmail !== user.email) {
-                                profileUpdates.push(user.updateEmail(newEmail));
-                            }
+                        if (!nameChanged && !emailChanged) {
+                            alert("No changes to save.");
+                            saveButton.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                            saveButton.disabled = false;
+                            return;
+                        }
 
-                            if (profileUpdates.length === 0) {
-                                alert("No changes to save.");
+                        const updateName = () => {
+                            if (!nameChanged) return Promise.resolve();
+                            return user.updateProfile({ displayName: newName });
+                        };
+
+                        const updateEmail = () => {
+                            if (!emailChanged) return Promise.resolve();
+                            return user.updateEmail(newEmail);
+                        };
+
+                        updateName()
+                            .then(() => {
+                                return updateEmail();
+                            })
+                            .then(() => {
+                                const updatedUser = { ...JSON.parse(localStorage.getItem('currentUser')), displayName: newName, email: newEmail };
+                                localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+                                // Update UI
+                                document.getElementById('userName').textContent = newName;
+                                document.getElementById('userEmail').textContent = newEmail;
+                                document.getElementById('userUsername').textContent = '@' + newEmail.split('@')[0];
+                                if (newName) {
+                                    document.getElementById('userAvatar').innerHTML = newName.charAt(0).toUpperCase();
+                                }
+
+                                alert('Profile updated successfully!');
+                            })
+                            .catch((error) => {
+                                console.error('Error updating profile:', error);
+                                if (error.code === 'auth/requires-recent-login') {
+                                    alert('To update your email, we need to verify your identity.');
+                                    showReauthModal(() => {
+                                        updateEmail().then(() => {
+                                            const updatedUser = { ...JSON.parse(localStorage.getItem('currentUser')), email: newEmail };
+                                            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+                                            document.getElementById('userEmail').textContent = newEmail;
+                                            document.getElementById('userUsername').textContent = '@' + newEmail.split('@')[0];
+                                            alert('Your email has been updated successfully!');
+                                        }).catch(err => {
+                                            alert('Error updating email: ' + err.message);
+                                        });
+                                    });
+                                } else {
+                                    alert('Error updating profile: ' + error.message);
+                                }
+                            })
+                            .finally(() => {
                                 saveButton.innerHTML = '<i class="fas fa-save"></i> Save Changes';
                                 saveButton.disabled = false;
-                                return;
-                            }
-
-                            Promise.all(profileUpdates)
-                                .then(() => {
-                                    const updatedUser = { ...JSON.parse(localStorage.getItem('currentUser')), displayName: newName, email: newEmail };
-                                    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-
-                                    // Update UI in real-time
-                                    document.getElementById('userName').textContent = newName;
-                                    document.getElementById('userEmail').textContent = newEmail;
-                                    document.getElementById('userUsername').textContent = '@' + newEmail.split('@')[0];
-                                    if (newName) {
-                                        document.getElementById('userAvatar').innerHTML = newName.charAt(0).toUpperCase();
-                                    }
-
-                                    alert('Profile updated successfully!');
-                                })
-                                .catch((error) => {
-                                    console.error('Error updating profile:', error);
-                                    // Firebase may require recent login for security-sensitive operations
-                                    if (error.code === 'auth/requires-recent-login') {
-                                        alert('This action is sensitive and requires recent authentication. Please log out and log back in to update your profile.');
-                                    } else {
-                                        alert('Error updating profile: ' + error.message);
-                                    }
-                                })
-                                .finally(() => {
-                                    saveButton.innerHTML = '<i class="fas fa-save"></i> Save Changes';
-                                    saveButton.disabled = false;
-                                });
-                        }
+                            });
                     });
                 }
             } else {
-                // Redirect to login if not authenticated
                 window.location.href = 'login.html';
             }
         });
@@ -985,5 +1086,20 @@
             icon.classList.toggle('fa-sun');
         }
     </script>
+
+    <!-- Re-authentication Modal -->
+    <div id="reauthModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h4>Confirm Your Identity</h4>
+            <p>To update your email, please re-enter your password.</p>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="reauthPassword" class="form-input" placeholder="Enter your password">
+                <p id="reauthError" class="error-message" style="color:red;"></p>
+            </div>
+            <button id="confirmReauthBtn" class="btn-primary">Confirm</button>
+        </div>
+    </div>
 </body>
 </html>
