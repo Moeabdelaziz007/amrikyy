@@ -16,7 +16,7 @@ export enum SecurityEventType {
   SQL_INJECTION_ATTEMPT = 'SQL_INJECTION_ATTEMPT',
   XSS_ATTEMPT = 'XSS_ATTEMPT',
   PATH_TRAVERSAL_ATTEMPT = 'PATH_TRAVERSAL_ATTEMPT',
-  CSRF_ATTEMPT = 'CSRF_ATTEMPT'
+  CSRF_ATTEMPT = 'CSRF_ATTEMPT',
 }
 
 // Security event interface
@@ -64,9 +64,9 @@ const defaultConfig: SecurityMonitoringConfig = {
   alertThresholds: {
     failedLogins: 5,
     suspiciousRequests: 10,
-    rateLimitViolations: 20
+    rateLimitViolations: 20,
   },
-  alertChannels: ['webhook']
+  alertChannels: ['webhook'],
 };
 
 // Security event storage (in production, use a proper database)
@@ -84,11 +84,13 @@ export class SecurityMonitor {
   }
 
   // Log security event
-  async logSecurityEvent(event: Omit<SecurityEvent, 'id' | 'timestamp'>): Promise<void> {
+  async logSecurityEvent(
+    event: Omit<SecurityEvent, 'id' | 'timestamp'>
+  ): Promise<void> {
     const securityEvent: SecurityEvent = {
       ...event,
       id: this.generateEventId(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Store event
@@ -128,48 +130,64 @@ export class SecurityMonitor {
       method: req.method,
       statusCode: res.statusCode,
       details,
-      sessionId: user?.sessionId
+      sessionId: user?.sessionId,
     };
   }
 
   // Get security events
-  getSecurityEvents(filters: {
-    type?: SecurityEventType;
-    severity?: SecurityEvent['severity'];
-    userId?: string;
-    ipAddress?: string;
-    startDate?: Date;
-    endDate?: Date;
-    limit?: number;
-  } = {}): SecurityEvent[] {
+  getSecurityEvents(
+    filters: {
+      type?: SecurityEventType;
+      severity?: SecurityEvent['severity'];
+      userId?: string;
+      ipAddress?: string;
+      startDate?: Date;
+      endDate?: Date;
+      limit?: number;
+    } = {}
+  ): SecurityEvent[] {
     let filteredEvents = [...securityEvents];
 
     if (filters.type) {
-      filteredEvents = filteredEvents.filter(event => event.type === filters.type);
+      filteredEvents = filteredEvents.filter(
+        event => event.type === filters.type
+      );
     }
 
     if (filters.severity) {
-      filteredEvents = filteredEvents.filter(event => event.severity === filters.severity);
+      filteredEvents = filteredEvents.filter(
+        event => event.severity === filters.severity
+      );
     }
 
     if (filters.userId) {
-      filteredEvents = filteredEvents.filter(event => event.userId === filters.userId);
+      filteredEvents = filteredEvents.filter(
+        event => event.userId === filters.userId
+      );
     }
 
     if (filters.ipAddress) {
-      filteredEvents = filteredEvents.filter(event => event.ipAddress === filters.ipAddress);
+      filteredEvents = filteredEvents.filter(
+        event => event.ipAddress === filters.ipAddress
+      );
     }
 
     if (filters.startDate) {
-      filteredEvents = filteredEvents.filter(event => event.timestamp >= filters.startDate!);
+      filteredEvents = filteredEvents.filter(
+        event => event.timestamp >= filters.startDate!
+      );
     }
 
     if (filters.endDate) {
-      filteredEvents = filteredEvents.filter(event => event.timestamp <= filters.endDate!);
+      filteredEvents = filteredEvents.filter(
+        event => event.timestamp <= filters.endDate!
+      );
     }
 
     // Sort by timestamp (newest first)
-    filteredEvents.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    filteredEvents.sort(
+      (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
+    );
 
     if (filters.limit) {
       filteredEvents = filteredEvents.slice(0, filters.limit);
@@ -191,7 +209,9 @@ export class SecurityMonitor {
     const now = new Date();
     const startTime = new Date(now.getTime() - this.getTimeRangeMs(timeRange));
 
-    const relevantEvents = securityEvents.filter(event => event.timestamp >= startTime);
+    const relevantEvents = securityEvents.filter(
+      event => event.timestamp >= startTime
+    );
 
     const eventsByType: Record<string, number> = {};
     const eventsBySeverity: Record<string, number> = {};
@@ -205,7 +225,8 @@ export class SecurityMonitor {
       eventsByType[event.type] = (eventsByType[event.type] || 0) + 1;
 
       // Count by severity
-      eventsBySeverity[event.severity] = (eventsBySeverity[event.severity] || 0) + 1;
+      eventsBySeverity[event.severity] =
+        (eventsBySeverity[event.severity] || 0) + 1;
 
       // Count by IP
       ipCounts.set(event.ipAddress, (ipCounts.get(event.ipAddress) || 0) + 1);
@@ -221,9 +242,11 @@ export class SecurityMonitor {
       }
 
       // Identify suspicious IPs
-      if (event.type === SecurityEventType.SUSPICIOUS_REQUEST ||
-          event.type === SecurityEventType.SQL_INJECTION_ATTEMPT ||
-          event.type === SecurityEventType.XSS_ATTEMPT) {
+      if (
+        event.type === SecurityEventType.SUSPICIOUS_REQUEST ||
+        event.type === SecurityEventType.SQL_INJECTION_ATTEMPT ||
+        event.type === SecurityEventType.XSS_ATTEMPT
+      ) {
         suspiciousIPs.add(event.ipAddress);
       }
     }
@@ -241,7 +264,7 @@ export class SecurityMonitor {
         .sort((a, b) => b.count - a.count)
         .slice(0, 10),
       criticalEvents,
-      suspiciousIPs: Array.from(suspiciousIPs)
+      suspiciousIPs: Array.from(suspiciousIPs),
     };
   }
 
@@ -267,7 +290,7 @@ export class SecurityMonitor {
       /delete.*from/i,
       /drop.*table/i,
       /exec\s*\(/i,
-      /script.*alert/i
+      /script.*alert/i,
     ];
 
     for (const pattern of sqlPatterns) {
@@ -284,7 +307,7 @@ export class SecurityMonitor {
       /on\w+\s*=/i,
       /<iframe/i,
       /<object/i,
-      /<embed/i
+      /<embed/i,
     ];
 
     for (const pattern of xssPatterns) {
@@ -299,7 +322,7 @@ export class SecurityMonitor {
       /\.\.\//,
       /\.\.\\/,
       /%2e%2e%2f/i,
-      /%2e%2e%5c/i
+      /%2e%2e%5c/i,
     ];
 
     for (const pattern of pathTraversalPatterns) {
@@ -318,7 +341,7 @@ export class SecurityMonitor {
       /curl/i,
       /wget/i,
       /python/i,
-      /php/i
+      /php/i,
     ];
 
     for (const pattern of suspiciousUserAgents) {
@@ -331,7 +354,7 @@ export class SecurityMonitor {
     return {
       isSuspicious: patterns.length > 0,
       patterns,
-      severity: patterns.length > 2 ? 'CRITICAL' : severity
+      severity: patterns.length > 2 ? 'CRITICAL' : severity,
     };
   }
 
@@ -373,7 +396,8 @@ export class SecurityMonitor {
 
     if (event.type === SecurityEventType.LOGIN_FAILED) {
       const userCounters = userActivityCounters.get(event.userId || '');
-      const failedLogins = userCounters?.get(SecurityEventType.LOGIN_FAILED) || 0;
+      const failedLogins =
+        userCounters?.get(SecurityEventType.LOGIN_FAILED) || 0;
       if (failedLogins >= this.config.alertThresholds.failedLogins) {
         shouldAlert = true;
       }
@@ -381,16 +405,22 @@ export class SecurityMonitor {
 
     if (event.type === SecurityEventType.SUSPICIOUS_REQUEST) {
       const ipCounters = ipActivityCounters.get(event.ipAddress);
-      const suspiciousRequests = ipCounters?.get(SecurityEventType.SUSPICIOUS_REQUEST) || 0;
-      if (suspiciousRequests >= this.config.alertThresholds.suspiciousRequests) {
+      const suspiciousRequests =
+        ipCounters?.get(SecurityEventType.SUSPICIOUS_REQUEST) || 0;
+      if (
+        suspiciousRequests >= this.config.alertThresholds.suspiciousRequests
+      ) {
         shouldAlert = true;
       }
     }
 
     if (event.type === SecurityEventType.RATE_LIMIT_EXCEEDED) {
       const ipCounters = ipActivityCounters.get(event.ipAddress);
-      const rateLimitViolations = ipCounters?.get(SecurityEventType.RATE_LIMIT_EXCEEDED) || 0;
-      if (rateLimitViolations >= this.config.alertThresholds.rateLimitViolations) {
+      const rateLimitViolations =
+        ipCounters?.get(SecurityEventType.RATE_LIMIT_EXCEEDED) || 0;
+      if (
+        rateLimitViolations >= this.config.alertThresholds.rateLimitViolations
+      ) {
         shouldAlert = true;
       }
     }
@@ -418,8 +448,8 @@ export class SecurityMonitor {
         endpoint: event.endpoint,
         method: event.method,
         userAgent: event.userAgent,
-        details: event.details
-      }
+        details: event.details,
+      },
     };
 
     // Log alert
@@ -461,23 +491,29 @@ export class SecurityMonitor {
   }
 
   private logToConsole(event: SecurityEvent): void {
-    const logLevel = event.severity === 'CRITICAL' ? 'error' : 
-                    event.severity === 'HIGH' ? 'warn' : 'info';
-    
+    const logLevel =
+      event.severity === 'CRITICAL'
+        ? 'error'
+        : event.severity === 'HIGH'
+          ? 'warn'
+          : 'info';
+
     console[logLevel](`Security Event [${event.severity}]:`, {
       type: event.type,
       userId: event.userId,
       ipAddress: event.ipAddress,
       endpoint: event.endpoint,
       method: event.method,
-      timestamp: event.timestamp.toISOString()
+      timestamp: event.timestamp.toISOString(),
     });
   }
 
   private cleanupOldEvents(): void {
-    const cutoffDate = new Date(Date.now() - (this.config.logRetentionDays * 24 * 60 * 60 * 1000));
+    const cutoffDate = new Date(
+      Date.now() - this.config.logRetentionDays * 24 * 60 * 60 * 1000
+    );
     const initialLength = securityEvents.length;
-    
+
     // Remove old events
     for (let i = securityEvents.length - 1; i >= 0; i--) {
       if (securityEvents[i].timestamp < cutoffDate) {
@@ -493,11 +529,16 @@ export class SecurityMonitor {
 
   private getTimeRangeMs(timeRange: string): number {
     switch (timeRange) {
-      case '1h': return 60 * 60 * 1000;
-      case '24h': return 24 * 60 * 60 * 1000;
-      case '7d': return 7 * 24 * 60 * 60 * 1000;
-      case '30d': return 30 * 24 * 60 * 60 * 1000;
-      default: return 24 * 60 * 60 * 1000;
+      case '1h':
+        return 60 * 60 * 1000;
+      case '24h':
+        return 24 * 60 * 60 * 1000;
+      case '7d':
+        return 7 * 24 * 60 * 60 * 1000;
+      case '30d':
+        return 30 * 24 * 60 * 60 * 1000;
+      default:
+        return 24 * 60 * 60 * 1000;
     }
   }
 }
@@ -527,7 +568,10 @@ export const securityEventLogger = (req: Request, res: Response, next: any) => {
       eventType = SecurityEventType.RATE_LIMIT_EXCEEDED;
       severity = 'MEDIUM';
     } else if (req.method === 'POST' && req.originalUrl.includes('/login')) {
-      eventType = res.statusCode === 200 ? SecurityEventType.LOGIN_SUCCESS : SecurityEventType.LOGIN_FAILED;
+      eventType =
+        res.statusCode === 200
+          ? SecurityEventType.LOGIN_SUCCESS
+          : SecurityEventType.LOGIN_FAILED;
       severity = res.statusCode === 200 ? 'LOW' : 'MEDIUM';
     } else if (req.method === 'POST' && req.originalUrl.includes('/logout')) {
       eventType = SecurityEventType.LOGOUT;
@@ -541,9 +585,15 @@ export const securityEventLogger = (req: Request, res: Response, next: any) => {
     const suspiciousCheck = securityMonitor.detectSuspiciousPatterns(req);
     if (suspiciousCheck.isSuspicious) {
       await securityMonitor.logSecurityEvent(
-        securityMonitor.createEventFromRequest(req, res, SecurityEventType.SUSPICIOUS_REQUEST, suspiciousCheck.severity, {
-          detectedPatterns: suspiciousCheck.patterns
-        })
+        securityMonitor.createEventFromRequest(
+          req,
+          res,
+          SecurityEventType.SUSPICIOUS_REQUEST,
+          suspiciousCheck.severity,
+          {
+            detectedPatterns: suspiciousCheck.patterns,
+          }
+        )
       );
     }
 
@@ -551,7 +601,7 @@ export const securityEventLogger = (req: Request, res: Response, next: any) => {
     await securityMonitor.logSecurityEvent(
       securityMonitor.createEventFromRequest(req, res, eventType, severity, {
         duration,
-        responseSize: res.get('Content-Length') || 0
+        responseSize: res.get('Content-Length') || 0,
       })
     );
   });

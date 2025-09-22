@@ -70,7 +70,6 @@ export interface LearningResult {
   reward: Reward;
 }
 
-
 export class SmartLearningAIMetaLoop {
   private learningStates: Map<string, MetaLearningState> = new Map();
   private defaultLearningRate: number = 0.1;
@@ -82,21 +81,27 @@ export class SmartLearningAIMetaLoop {
   private initializeDefaultStrategies(): void {
     // Initialize with some default adaptation strategies
     const defaultStrategies = new Map<string, AdaptationStrategy>();
-    
+
     defaultStrategies.set('basic_learning', {
       name: 'Basic Learning',
       description: 'Standard learning approach with default parameters',
       execute: async (context: LearningContext, state: MetaLearningState) => {
         // Basic implementation - can be enhanced
-        return { success: true, output: 'Basic learning result', confidence: 0.7 };
-      }
+        return {
+          success: true,
+          output: 'Basic learning result',
+          confidence: 0.7,
+        };
+      },
     });
 
     // Store default strategies in a global state if needed
     // This could be enhanced to load from storage
   }
 
-  public async initializeLearningState(userId: string): Promise<MetaLearningState> {
+  public async initializeLearningState(
+    userId: string
+  ): Promise<MetaLearningState> {
     const existingState = this.learningStates.get(userId);
     if (existingState) {
       return existingState;
@@ -112,10 +117,10 @@ export class SmartLearningAIMetaLoop {
         taskSpecificAccuracy: new Map(),
         averageResponseTime: 0,
         totalRequests: 0,
-        successfulRequests: 0
+        successfulRequests: 0,
       },
       lastUpdated: new Date(),
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.learningStates.set(userId, newState);
@@ -131,7 +136,10 @@ export class SmartLearningAIMetaLoop {
     return this.learningStates;
   }
 
-  public addAdaptationStrategy(name: string, strategy: AdaptationStrategy): void {
+  public addAdaptationStrategy(
+    name: string,
+    strategy: AdaptationStrategy
+  ): void {
     // Add strategy to all existing learning states
     for (const state of this.learningStates.values()) {
       state.adaptationStrategies.set(name, strategy);
@@ -141,13 +149,18 @@ export class SmartLearningAIMetaLoop {
   private async saveLearningState(state: MetaLearningState): Promise<void> {
     try {
       // Save to storage (could be file system, database, etc.)
-      await storage.set(`learning_state_${state.userId}`, JSON.stringify(state, this.mapReplacer));
+      await storage.set(
+        `learning_state_${state.userId}`,
+        JSON.stringify(state, this.mapReplacer)
+      );
     } catch (error) {
       console.error('Failed to save learning state:', error);
     }
   }
 
-  private async loadLearningState(userId: string): Promise<MetaLearningState | null> {
+  private async loadLearningState(
+    userId: string
+  ): Promise<MetaLearningState | null> {
     try {
       const data = await storage.get(`learning_state_${userId}`);
       if (data) {
@@ -163,7 +176,7 @@ export class SmartLearningAIMetaLoop {
     if (value instanceof Map) {
       return {
         dataType: 'Map',
-        value: Array.from(value.entries())
+        value: Array.from(value.entries()),
       };
     }
     return value;
@@ -178,9 +191,11 @@ export class SmartLearningAIMetaLoop {
     return value;
   }
 
-  async processLearningRequest(context: LearningContext): Promise<LearningResult> {
+  async processLearningRequest(
+    context: LearningContext
+  ): Promise<LearningResult> {
     const startTime = Date.now();
-    
+
     // Step 1: Get or create learning state
     let learningState = this.getLearningState(context.userId);
     if (!learningState) {
@@ -189,7 +204,7 @@ export class SmartLearningAIMetaLoop {
 
     // Step 2: Select adaptation strategy
     const strategy = this.selectAdaptationStrategy(learningState, context);
-    
+
     // Step 3: Execute the strategy
     let result: LearningResult;
     try {
@@ -202,7 +217,7 @@ export class SmartLearningAIMetaLoop {
         executionTime: Date.now() - startTime,
         strategy: strategy.name,
         adaptationType: 'strategy_execution',
-        reward: { value: 0, confidence: 0.5, source: 'system_evaluation' }
+        reward: { value: 0, confidence: 0.5, source: 'system_evaluation' },
       };
     } catch (error) {
       result = {
@@ -213,10 +228,10 @@ export class SmartLearningAIMetaLoop {
         executionTime: Date.now() - startTime,
         strategy: strategy.name,
         adaptationType: 'strategy_execution',
-        reward: { value: -0.5, confidence: 0.8, source: 'system_evaluation' }
+        reward: { value: -0.5, confidence: 0.8, source: 'system_evaluation' },
       };
     }
-    
+
     // Step 4: Calculate Reward
     const reward = this.calculateReward(context, result);
     result.reward = reward;
@@ -230,18 +245,25 @@ export class SmartLearningAIMetaLoop {
     return result;
   }
 
-  private selectAdaptationStrategy(state: MetaLearningState, context: LearningContext): AdaptationStrategy {
+  private selectAdaptationStrategy(
+    state: MetaLearningState,
+    context: LearningContext
+  ): AdaptationStrategy {
     // Simple strategy selection - can be enhanced with more sophisticated logic
     const strategies = Array.from(state.adaptationStrategies.values());
-    
+
     if (strategies.length === 0) {
       // Return a default strategy if none are available
       return {
         name: 'default',
         description: 'Default strategy',
         execute: async (context: LearningContext, state: MetaLearningState) => {
-          return { success: true, output: 'Default execution', confidence: 0.5 };
-        }
+          return {
+            success: true,
+            output: 'Default execution',
+            confidence: 0.5,
+          };
+        },
       };
     }
 
@@ -254,30 +276,30 @@ export class SmartLearningAIMetaLoop {
   }
 
   private async updateLearningState(
-    state: MetaLearningState, 
-    context: LearningContext, 
+    state: MetaLearningState,
+    context: LearningContext,
     result: LearningResult
   ): Promise<void> {
     // Update performance metrics
     await this.updatePerformanceMetrics(state, context, result);
-    
+
     // Update task patterns
     await this.updateTaskPatterns(state, context, result);
-    
+
     // Update overall state
     state.lastUpdated = new Date();
     state.performanceMetrics.totalRequests++;
     if (result.success) {
       state.performanceMetrics.successfulRequests++;
     }
-    
+
     // Save updated state
     await this.saveLearningState(state);
   }
 
   private async recordAdaptation(
-    state: MetaLearningState, 
-    context: LearningContext, 
+    state: MetaLearningState,
+    context: LearningContext,
     result: LearningResult
   ): Promise<void> {
     // Record the adaptation for future analysis
@@ -288,11 +310,14 @@ export class SmartLearningAIMetaLoop {
       success: result.success,
       confidence: result.confidence,
       executionTime: result.executionTime,
-      taskType: context.taskType
+      taskType: context.taskType,
     };
 
     try {
-      await storage.set(`adaptation_${Date.now()}_${context.userId}`, JSON.stringify(adaptationRecord));
+      await storage.set(
+        `adaptation_${Date.now()}_${context.userId}`,
+        JSON.stringify(adaptationRecord)
+      );
     } catch (error) {
       console.error('Failed to record adaptation:', error);
     }
@@ -308,7 +333,10 @@ export class SmartLearningAIMetaLoop {
     return `${typeof output}_${output?.length || 0}`;
   }
 
-  private calculateReward(context: LearningContext, result: LearningResult): Reward {
+  private calculateReward(
+    context: LearningContext,
+    result: LearningResult
+  ): Reward {
     let value = 0;
     let confidence = 0.5;
 
@@ -333,72 +361,79 @@ export class SmartLearningAIMetaLoop {
   }
 
   private async updateTaskPatterns(
-    state: MetaLearningState, 
-    context: LearningContext, 
+    state: MetaLearningState,
+    context: LearningContext,
     result: LearningResult
   ): Promise<void> {
-      const signature = this.generateTaskSignature(context);
-      let pattern = state.taskPatterns.get(signature);
+    const signature = this.generateTaskSignature(context);
+    let pattern = state.taskPatterns.get(signature);
 
-      if (!pattern) {
-          pattern = {
-              patternId: signature,
-              taskType: context.taskType,
-              inputSignature: signature,
-              outputSignature: this.generateOutputSignature(result.output),
-              successRate: result.success ? 1 : 0,
-              adaptationCount: 1,
-              examples: [],
-              createdAt: new Date(),
-              lastUsed: new Date(),
-          };
-          state.taskPatterns.set(signature, pattern);
-      } else {
-          pattern.adaptationCount++;
-          pattern.lastUsed = new Date();
-          
-          // Confidence-weighted learning
-          const alpha = 0.1 * result.confidence;
-          pattern.successRate = alpha * (result.success ? 1 : 0) + (1 - alpha) * pattern.successRate;
-      }
+    if (!pattern) {
+      pattern = {
+        patternId: signature,
+        taskType: context.taskType,
+        inputSignature: signature,
+        outputSignature: this.generateOutputSignature(result.output),
+        successRate: result.success ? 1 : 0,
+        adaptationCount: 1,
+        examples: [],
+        createdAt: new Date(),
+        lastUsed: new Date(),
+      };
+      state.taskPatterns.set(signature, pattern);
+    } else {
+      pattern.adaptationCount++;
+      pattern.lastUsed = new Date();
 
-      // Add example to pattern
-      pattern.examples.push({
-        input: context.inputData,
-        output: result.output,
-        success: result.success,
-        timestamp: new Date()
-      });
+      // Confidence-weighted learning
+      const alpha = 0.1 * result.confidence;
+      pattern.successRate =
+        alpha * (result.success ? 1 : 0) + (1 - alpha) * pattern.successRate;
+    }
 
-      // Keep only recent examples (last 10)
-      if (pattern.examples.length > 10) {
-        pattern.examples = pattern.examples.slice(-10);
-      }
+    // Add example to pattern
+    pattern.examples.push({
+      input: context.inputData,
+      output: result.output,
+      success: result.success,
+      timestamp: new Date(),
+    });
+
+    // Keep only recent examples (last 10)
+    if (pattern.examples.length > 10) {
+      pattern.examples = pattern.examples.slice(-10);
+    }
   }
 
   private async updatePerformanceMetrics(
-    state: MetaLearningState, 
-    context: LearningContext, 
+    state: MetaLearningState,
+    context: LearningContext,
     result: LearningResult
   ): Promise<void> {
-      const taskType = context.taskType;
-      const currentAccuracy = state.performanceMetrics.taskSpecificAccuracy.get(taskType) || 0.5;
+    const taskType = context.taskType;
+    const currentAccuracy =
+      state.performanceMetrics.taskSpecificAccuracy.get(taskType) || 0.5;
 
-      // Update task-specific accuracy with reward
-      const alpha = 0.1;
-      const newAccuracy = alpha * result.reward.value + (1 - alpha) * currentAccuracy;
-      state.performanceMetrics.taskSpecificAccuracy.set(taskType, newAccuracy);
-      
-      // Update overall accuracy
-      const totalAccuracy = Array.from(state.performanceMetrics.taskSpecificAccuracy.values())
-        .reduce((sum, acc) => sum + acc, 0);
-      state.performanceMetrics.overallAccuracy = totalAccuracy / state.performanceMetrics.taskSpecificAccuracy.size;
+    // Update task-specific accuracy with reward
+    const alpha = 0.1;
+    const newAccuracy =
+      alpha * result.reward.value + (1 - alpha) * currentAccuracy;
+    state.performanceMetrics.taskSpecificAccuracy.set(taskType, newAccuracy);
 
-      // Update average response time
-      const currentAvgTime = state.performanceMetrics.averageResponseTime;
-      const newAvgTime = (currentAvgTime * state.performanceMetrics.totalRequests + result.executionTime) / 
-        (state.performanceMetrics.totalRequests + 1);
-      state.performanceMetrics.averageResponseTime = newAvgTime;
+    // Update overall accuracy
+    const totalAccuracy = Array.from(
+      state.performanceMetrics.taskSpecificAccuracy.values()
+    ).reduce((sum, acc) => sum + acc, 0);
+    state.performanceMetrics.overallAccuracy =
+      totalAccuracy / state.performanceMetrics.taskSpecificAccuracy.size;
+
+    // Update average response time
+    const currentAvgTime = state.performanceMetrics.averageResponseTime;
+    const newAvgTime =
+      (currentAvgTime * state.performanceMetrics.totalRequests +
+        result.executionTime) /
+      (state.performanceMetrics.totalRequests + 1);
+    state.performanceMetrics.averageResponseTime = newAvgTime;
   }
 }
 

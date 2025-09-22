@@ -7,13 +7,13 @@ console.log('🤖 Testing Amrikyy Telegram Bot...');
 console.log('='.repeat(50));
 
 if (!process.env.TELEGRAM_BOT_TOKEN) {
-    console.log('❌ TELEGRAM_BOT_TOKEN not found');
-    process.exit(1);
+  console.log('❌ TELEGRAM_BOT_TOKEN not found');
+  process.exit(1);
 }
 
 if (!process.env.TELEGRAM_ADMIN_CHAT_ID) {
-    console.log('❌ TELEGRAM_ADMIN_CHAT_ID not set');
-    process.exit(1);
+  console.log('❌ TELEGRAM_ADMIN_CHAT_ID not set');
+  process.exit(1);
 }
 
 console.log('✅ Bot Token: Found');
@@ -52,8 +52,11 @@ const testMessage = `🎉 **AuraOS AI System - Amrikyy Bot Connected!**
 
 _Last updated: ${new Date().toLocaleString()}_`;
 
-bot.sendMessage(process.env.TELEGRAM_ADMIN_CHAT_ID, testMessage, { parse_mode: 'Markdown' })
-.then(() => {
+bot
+  .sendMessage(process.env.TELEGRAM_ADMIN_CHAT_ID, testMessage, {
+    parse_mode: 'Markdown',
+  })
+  .then(() => {
     console.log('✅ Test message sent successfully!');
     console.log('📱 Check your Telegram for the test message');
     console.log('='.repeat(50));
@@ -63,8 +66,8 @@ bot.sendMessage(process.env.TELEGRAM_ADMIN_CHAT_ID, testMessage, { parse_mode: '
     console.log('3. Test other commands like /help, /status');
     console.log('4. Integrate with AuraOS dashboard');
     console.log('='.repeat(50));
-})
-.catch((error) => {
+  })
+  .catch(error => {
     console.log('❌ Failed to send message:', error.message);
     console.log('🔍 Error details:', error);
-});
+  });

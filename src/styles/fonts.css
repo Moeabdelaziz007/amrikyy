@@ -12,11 +12,14 @@
   --font-futuristic: 'Oxanium', system-ui, sans-serif;
   --font-tech: 'Audiowide', system-ui, sans-serif;
   --font-modern: 'Rajdhani', system-ui, sans-serif;
-  
+
   /* Default system fonts as fallbacks */
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: Georgia, 'Times New Roman', Times, serif;
-  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  --font-mono:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New',
+    monospace;
 }
 
 /* Typography Classes */

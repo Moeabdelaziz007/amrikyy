@@ -10,14 +10,14 @@ export class FreeAITools {
     HUGGINGFACE_API: 'https://api-inference.huggingface.co/models',
     OPENAI_FREE: 'https://api.openai.com/v1', // Free tier available
     GEMINI_FREE: 'https://generativelanguage.googleapis.com/v1beta',
-    
+
     // Free translation APIs
     LIBRE_TRANSLATE: 'https://libretranslate.de/translate',
     MYMEMORY_TRANSLATE: 'https://api.mymemory.translated.net/get',
-    
+
     // Free image processing
     UPLOAD_IMAGE: 'https://api.imgbb.com/1/upload',
-    
+
     // Free web scraping
     SCRAPING_BEE: 'https://app.scrapingbee.com/api/v1',
   };
@@ -25,7 +25,10 @@ export class FreeAITools {
   /**
    * Free Text Analysis using Hugging Face Inference API
    */
-  static async analyzeText(text: string, analysisType: 'sentiment' | 'emotion' | 'keywords' | 'summary'): Promise<any> {
+  static async analyzeText(
+    text: string,
+    analysisType: 'sentiment' | 'emotion' | 'keywords' | 'summary'
+  ): Promise<any> {
     try {
       let model = '';
       switch (analysisType) {
@@ -48,7 +51,7 @@ export class FreeAITools {
         { inputs: text },
         {
           headers: {
-            'Authorization': `Bearer ${process.env.HUGGINGFACE_API_KEY || 'hf_your_free_token'}`,
+            Authorization: `Bearer ${process.env.HUGGINGFACE_API_KEY || 'hf_your_free_token'}`,
             'Content-Type': 'application/json',
           },
         }
@@ -72,7 +75,10 @@ export class FreeAITools {
   /**
    * Fallback text analysis using simple algorithms
    */
-  private static async fallbackTextAnalysis(text: string, analysisType: string): Promise<any> {
+  private static async fallbackTextAnalysis(
+    text: string,
+    analysisType: string
+  ): Promise<any> {
     switch (analysisType) {
       case 'sentiment':
         return this.simpleSentimentAnalysis(text);
@@ -86,23 +92,45 @@ export class FreeAITools {
   }
 
   private static simpleSentimentAnalysis(text: string): any {
-    const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic', 'love', 'like', 'happy', 'joy'];
-    const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'dislike', 'horrible', 'worst', 'disappointed', 'sad', 'angry'];
-    
+    const positiveWords = [
+      'good',
+      'great',
+      'excellent',
+      'amazing',
+      'wonderful',
+      'fantastic',
+      'love',
+      'like',
+      'happy',
+      'joy',
+    ];
+    const negativeWords = [
+      'bad',
+      'terrible',
+      'awful',
+      'hate',
+      'dislike',
+      'horrible',
+      'worst',
+      'disappointed',
+      'sad',
+      'angry',
+    ];
+
     const words = text.toLowerCase().split(/\s+/);
     let positiveScore = 0;
     let negativeScore = 0;
-    
+
     words.forEach(word => {
       if (positiveWords.includes(word)) positiveScore++;
       if (negativeWords.includes(word)) negativeScore++;
     });
-    
+
     const totalScore = positiveScore - negativeScore;
     let sentiment = 'neutral';
     if (totalScore > 0) sentiment = 'positive';
     else if (totalScore < 0) sentiment = 'negative';
-    
+
     return {
       sentiment,
       confidence: Math.abs(totalScore) / words.length,
@@ -112,21 +140,22 @@ export class FreeAITools {
   }
 
   private static simpleKeywordExtraction(text: string): any {
-    const words = text.toLowerCase()
+    const words = text
+      .toLowerCase()
       .replace(/[^\w\s]/g, '')
       .split(/\s+/)
       .filter(word => word.length > 3);
-    
+
     const wordFreq: { [key: string]: number } = {};
     words.forEach(word => {
       wordFreq[word] = (wordFreq[word] || 0) + 1;
     });
-    
+
     const keywords = Object.entries(wordFreq)
-      .sort(([,a], [,b]) => b - a)
+      .sort(([, a], [, b]) => b - a)
       .slice(0, 10)
       .map(([word, freq]) => ({ word, frequency: freq }));
-    
+
     return { keywords };
   }
 
@@ -134,7 +163,7 @@ export class FreeAITools {
     const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const summaryLength = Math.min(3, Math.ceil(sentences.length * 0.3));
     const summary = sentences.slice(0, summaryLength).join('. ') + '.';
-    
+
     return {
       summary,
       originalLength: text.length,
@@ -146,7 +175,11 @@ export class FreeAITools {
   /**
    * Free Translation using LibreTranslate
    */
-  static async translateText(text: string, targetLang: string, sourceLang = 'auto'): Promise<any> {
+  static async translateText(
+    text: string,
+    targetLang: string,
+    sourceLang = 'auto'
+  ): Promise<any> {
     try {
       const response = await axios.post(this.FREE_APIS.LIBRE_TRANSLATE, {
         q: text,
@@ -166,12 +199,15 @@ export class FreeAITools {
     } catch (error) {
       // Fallback to MyMemory API
       try {
-        const fallbackResponse = await axios.get(this.FREE_APIS.MYMEMORY_TRANSLATE, {
-          params: {
-            q: text,
-            langpair: `${sourceLang}|${targetLang}`,
-          },
-        });
+        const fallbackResponse = await axios.get(
+          this.FREE_APIS.MYMEMORY_TRANSLATE,
+          {
+            params: {
+              q: text,
+              langpair: `${sourceLang}|${targetLang}`,
+            },
+          }
+        );
 
         return {
           success: true,
@@ -194,8 +230,13 @@ export class FreeAITools {
   private static simpleTranslation(text: string, targetLang: string): any {
     // Simple translation mapping (very basic)
     const translations: { [key: string]: { [key: string]: string } } = {
-      'hello': { es: 'hola', fr: 'bonjour', de: 'hallo', it: 'ciao' },
-      'goodbye': { es: 'adiós', fr: 'au revoir', de: 'auf wiedersehen', it: 'arrivederci' },
+      hello: { es: 'hola', fr: 'bonjour', de: 'hallo', it: 'ciao' },
+      goodbye: {
+        es: 'adiós',
+        fr: 'au revoir',
+        de: 'auf wiedersehen',
+        it: 'arrivederci',
+      },
       'thank you': { es: 'gracias', fr: 'merci', de: 'danke', it: 'grazie' },
     };
 
@@ -204,7 +245,10 @@ export class FreeAITools {
       if (lowerText.includes(english) && translations[targetLang]) {
         return {
           originalText: text,
-          translatedText: text.replace(new RegExp(english, 'gi'), translations[targetLang]),
+          translatedText: text.replace(
+            new RegExp(english, 'gi'),
+            translations[targetLang]
+          ),
           provider: 'Simple Dictionary',
         };
       }
@@ -220,7 +264,10 @@ export class FreeAITools {
   /**
    * Free Image Processing using free APIs
    */
-  static async processImage(imageUrl: string, operation: 'analyze' | 'resize' | 'filter'): Promise<any> {
+  static async processImage(
+    imageUrl: string,
+    operation: 'analyze' | 'resize' | 'filter'
+  ): Promise<any> {
     try {
       switch (operation) {
         case 'analyze':
@@ -294,11 +341,15 @@ export class FreeAITools {
   /**
    * Free Web Scraping
    */
-  static async scrapeWebsite(url: string, options: { extractText?: boolean; selectors?: string[] } = {}): Promise<any> {
+  static async scrapeWebsite(
+    url: string,
+    options: { extractText?: boolean; selectors?: string[] } = {}
+  ): Promise<any> {
     try {
       const response = await axios.get(url, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
         },
         timeout: 10000,
       });
@@ -335,7 +386,10 @@ export class FreeAITools {
   /**
    * Free Data Analysis
    */
-  static async analyzeData(data: any[], analysisType: 'statistics' | 'trends' | 'correlations' | 'outliers'): Promise<any> {
+  static async analyzeData(
+    data: any[],
+    analysisType: 'statistics' | 'trends' | 'correlations' | 'outliers'
+  ): Promise<any> {
     try {
       switch (analysisType) {
         case 'statistics':
@@ -362,7 +416,8 @@ export class FreeAITools {
     const sum = data.reduce((a, b) => a + b, 0);
     const mean = sum / data.length;
     const median = sorted[Math.floor(sorted.length / 2)];
-    const variance = data.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / data.length;
+    const variance =
+      data.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / data.length;
     const stdDev = Math.sqrt(variance);
 
     return {
@@ -401,7 +456,8 @@ export class FreeAITools {
       results: {
         slope: parseFloat(slope.toFixed(4)),
         intercept: parseFloat(intercept.toFixed(4)),
-        trend: slope > 0.01 ? 'increasing' : slope < -0.01 ? 'decreasing' : 'stable',
+        trend:
+          slope > 0.01 ? 'increasing' : slope < -0.01 ? 'decreasing' : 'stable',
         equation: `y = ${slope.toFixed(4)}x + ${intercept.toFixed(4)}`,
         rSquared: this.calculateRSquared(xValues, yValues, slope, intercept),
       },
@@ -410,7 +466,10 @@ export class FreeAITools {
 
   private static findCorrelations(data: any[]): any {
     if (data.length < 2) {
-      return { success: false, error: 'Need at least 2 data points for correlation analysis' };
+      return {
+        success: false,
+        error: 'Need at least 2 data points for correlation analysis',
+      };
     }
 
     // Assuming data is array of objects with x and y properties
@@ -424,8 +483,12 @@ export class FreeAITools {
       analysisType: 'correlations',
       results: {
         correlationCoefficient: parseFloat(correlation.toFixed(4)),
-        strength: Math.abs(correlation) > 0.7 ? 'strong' : 
-                 Math.abs(correlation) > 0.3 ? 'moderate' : 'weak',
+        strength:
+          Math.abs(correlation) > 0.7
+            ? 'strong'
+            : Math.abs(correlation) > 0.3
+              ? 'moderate'
+              : 'weak',
         direction: correlation > 0 ? 'positive' : 'negative',
         interpretation: this.interpretCorrelation(correlation),
       },
@@ -448,7 +511,9 @@ export class FreeAITools {
       results: {
         outliers,
         outlierCount: outliers.length,
-        outlierPercentage: parseFloat(((outliers.length / data.length) * 100).toFixed(2)),
+        outlierPercentage: parseFloat(
+          ((outliers.length / data.length) * 100).toFixed(2)
+        ),
         bounds: {
           lower: parseFloat(lowerBound.toFixed(2)),
           upper: parseFloat(upperBound.toFixed(2)),
@@ -470,15 +535,25 @@ export class FreeAITools {
     const sumX2 = x.reduce((acc, xVal) => acc + xVal * xVal, 0);
     const sumY2 = y.reduce((acc, yVal) => acc + yVal * yVal, 0);
 
-    return (n * sumXY - sumX * sumY) / 
-      Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+    return (
+      (n * sumXY - sumX * sumY) /
+      Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY))
+    );
   }
 
-  private static calculateRSquared(x: number[], y: number[], slope: number, intercept: number): number {
+  private static calculateRSquared(
+    x: number[],
+    y: number[],
+    slope: number,
+    intercept: number
+  ): number {
     const yMean = y.reduce((a, b) => a + b, 0) / y.length;
-    const ssRes = y.reduce((acc, yVal, i) => acc + Math.pow(yVal - (slope * x[i] + intercept), 2), 0);
+    const ssRes = y.reduce(
+      (acc, yVal, i) => acc + Math.pow(yVal - (slope * x[i] + intercept), 2),
+      0
+    );
     const ssTot = y.reduce((acc, yVal) => acc + Math.pow(yVal - yMean, 2), 0);
-    
+
     return parseFloat((1 - ssRes / ssTot).toFixed(4));
   }
 
@@ -494,7 +569,11 @@ export class FreeAITools {
   /**
    * Free Code Generation
    */
-  static async generateCode(language: string, description: string, template: string): Promise<any> {
+  static async generateCode(
+    language: string,
+    description: string,
+    template: string
+  ): Promise<any> {
     try {
       const codeTemplates = {
         javascript: {
@@ -509,7 +588,9 @@ export class FreeAITools {
         },
       };
 
-      const code = codeTemplates[language]?.[template] || `// ${description} in ${language}`;
+      const code =
+        codeTemplates[language]?.[template] ||
+        `// ${description} in ${language}`;
 
       return {
         success: true,
@@ -529,26 +610,32 @@ export class FreeAITools {
 
   // Utility functions for code generation
   private static camelCase(str: string): string {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-      return index === 0 ? word.toLowerCase() : word.toUpperCase();
-    }).replace(/\s+/g, '');
+    return str
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+        return index === 0 ? word.toLowerCase() : word.toUpperCase();
+      })
+      .replace(/\s+/g, '');
   }
 
   private static pascalCase(str: string): string {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word) => {
-      return word.toUpperCase();
-    }).replace(/\s+/g, '');
+    return str
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, word => {
+        return word.toUpperCase();
+      })
+      .replace(/\s+/g, '');
   }
 
   private static snakeCase(str: string): string {
-    return str.replace(/\W+/g, ' ')
+    return str
+      .replace(/\W+/g, ' ')
       .split(/ |\B(?=[A-Z])/)
       .map(word => word.toLowerCase())
       .join('_');
   }
 
   private static kebabCase(str: string): string {
-    return str.replace(/([a-z])([A-Z])/g, '$1-$2')
+    return str
+      .replace(/([a-z])([A-Z])/g, '$1-$2')
       .replace(/[\s_]+/g, '-')
       .toLowerCase();
   }
@@ -556,7 +643,11 @@ export class FreeAITools {
   /**
    * Save analysis results to Firestore
    */
-  static async saveAnalysisToFirestore(userId: string, analysisType: string, results: any): Promise<string> {
+  static async saveAnalysisToFirestore(
+    userId: string,
+    analysisType: string,
+    results: any
+  ): Promise<string> {
     try {
       const analysisData = {
         type: analysisType,

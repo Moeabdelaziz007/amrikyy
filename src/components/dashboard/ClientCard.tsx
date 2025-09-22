@@ -39,9 +39,12 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
-  const handleAction = async (action: () => void | undefined, actionType: string) => {
+  const handleAction = async (
+    action: () => void | undefined,
+    actionType: string
+  ) => {
     if (!action) return;
-    
+
     setIsLoading(actionType);
     setActionError(null);
     try {
@@ -66,9 +69,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           <div className="w-2 h-2 bg-status-warning rounded-full animate-pulse" />
         );
       default:
-        return (
-          <div className="w-2 h-2 bg-glass-border rounded-full" />
-        );
+        return <div className="w-2 h-2 bg-glass-border rounded-full" />;
     }
   };
 
@@ -97,9 +98,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       {/* Client Info */}
       <div className="flex items-center gap-2 mb-4">
         {getStatusIcon()}
-        <span className="cyberpunk-label text-xs">
-          ID: {id}
-        </span>
+        <span className="cyberpunk-label text-xs">ID: {id}</span>
       </div>
 
       {/* Status Widgets */}
@@ -110,19 +109,27 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           type="success"
           icon={
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           }
           animate={status === 'running'}
         />
-        
+
         <StatusWidget
           label="Errors Today"
           value={errorCount}
           type="error"
           icon={
             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
             </svg>
           }
         />
@@ -139,15 +146,24 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       {status === 'running' && (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1">
-            <div className="cyberpunk-label text-xs">{progressLabel || 'Processing...'}</div>
+            <div className="cyberpunk-label text-xs">
+              {progressLabel || 'Processing...'}
+            </div>
             {typeof progressPercent === 'number' && (
-              <div className="cyberpunk-label text-xs text-text-secondary">{Math.max(0, Math.min(100, progressPercent))}%</div>
+              <div className="cyberpunk-label text-xs text-text-secondary">
+                {Math.max(0, Math.min(100, progressPercent))}%
+              </div>
             )}
           </div>
           <div className="w-full h-2 rounded-full bg-glass-secondary overflow-hidden">
             <div
               className={`h-2 rounded-full bg-gradient-to-r from-cyan-400 via-fuchsia-500 to-lime-400 neon-glow-sm ${typeof progressPercent !== 'number' ? 'animate-cyber-scan' : ''}`}
-              style={{ width: typeof progressPercent === 'number' ? `${Math.max(0, Math.min(100, progressPercent))}%` : '100%' }}
+              style={{
+                width:
+                  typeof progressPercent === 'number'
+                    ? `${Math.max(0, Math.min(100, progressPercent))}%`
+                    : '100%',
+              }}
             />
           </div>
         </div>
@@ -165,7 +181,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           >
             {status === 'running' ? 'Running' : 'Start'}
           </ControlButton>
-          
+
           <ControlButton
             variant="warning"
             size="sm"
@@ -175,7 +191,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           >
             Stop
           </ControlButton>
-          
+
           <ControlButton
             variant="secondary"
             size="sm"
@@ -185,7 +201,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
           >
             Restart
           </ControlButton>
-          
+
           <ControlButton
             variant="danger"
             size="sm"
@@ -199,9 +215,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
 
         {/* Action error */}
         {actionError && (
-          <div className="mb-3 text-xs text-status-error">
-            {actionError}
-          </div>
+          <div className="mb-3 text-xs text-status-error">{actionError}</div>
         )}
 
         {/* View Logs Button */}

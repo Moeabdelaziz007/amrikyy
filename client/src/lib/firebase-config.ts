@@ -5,62 +5,78 @@
 export const firebaseConfig = {
   // Production Configuration
   production: {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-production-api-key",
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "your-project.firebaseapp.com",
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "your-project-id",
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "your-project.appspot.com",
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "123456789",
-    appId: process.env.REACT_APP_FIREBASE_APP_ID || "your-app-id",
-    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-XXXXXXXXXX"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || 'your-production-api-key',
+    authDomain:
+      process.env.REACT_APP_FIREBASE_AUTH_DOMAIN ||
+      'your-project.firebaseapp.com',
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || 'your-project-id',
+    storageBucket:
+      process.env.REACT_APP_FIREBASE_STORAGE_BUCKET ||
+      'your-project.appspot.com',
+    messagingSenderId:
+      process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '123456789',
+    appId: process.env.REACT_APP_FIREBASE_APP_ID || 'your-app-id',
+    measurementId:
+      process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || 'G-XXXXXXXXXX',
   },
 
   // Development Configuration
   development: {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "your-dev-api-key",
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "your-dev-project.firebaseapp.com",
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "your-dev-project-id",
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "your-dev-project.appspot.com",
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "987654321",
-    appId: process.env.REACT_APP_FIREBASE_APP_ID || "your-dev-app-id",
-    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-YYYYYYYYYY"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY || 'your-dev-api-key',
+    authDomain:
+      process.env.REACT_APP_FIREBASE_AUTH_DOMAIN ||
+      'your-dev-project.firebaseapp.com',
+    projectId:
+      process.env.REACT_APP_FIREBASE_PROJECT_ID || 'your-dev-project-id',
+    storageBucket:
+      process.env.REACT_APP_FIREBASE_STORAGE_BUCKET ||
+      'your-dev-project.appspot.com',
+    messagingSenderId:
+      process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || '987654321',
+    appId: process.env.REACT_APP_FIREBASE_APP_ID || 'your-dev-app-id',
+    measurementId:
+      process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || 'G-YYYYYYYYYY',
   },
 
   // Test Configuration
   test: {
-    apiKey: "test-api-key",
-    authDomain: "test-project.firebaseapp.com",
-    projectId: "test-project-id",
-    storageBucket: "test-project.appspot.com",
-    messagingSenderId: "111111111",
-    appId: "test-app-id",
-    measurementId: "G-TESTTESTTEST"
-  }
+    apiKey: 'test-api-key',
+    authDomain: 'test-project.firebaseapp.com',
+    projectId: 'test-project-id',
+    storageBucket: 'test-project.appspot.com',
+    messagingSenderId: '111111111',
+    appId: 'test-app-id',
+    measurementId: 'G-TESTTESTTEST',
+  },
 };
 
 // Get current environment configuration
 export const getFirebaseConfig = () => {
   const env = process.env.NODE_ENV || 'development';
-  return firebaseConfig[env as keyof typeof firebaseConfig] || firebaseConfig.development;
+  return (
+    firebaseConfig[env as keyof typeof firebaseConfig] ||
+    firebaseConfig.development
+  );
 };
 
 // Firebase Emulator Configuration
 export const emulatorConfig = {
   firestore: {
     host: 'localhost',
-    port: 8080
+    port: 8080,
   },
   auth: {
     host: 'localhost',
-    port: 9099
+    port: 9099,
   },
   storage: {
     host: 'localhost',
-    port: 9199
+    port: 9199,
   },
   functions: {
     host: 'localhost',
-    port: 5001
-  }
+    port: 5001,
+  },
 };
 
 // Firebase Security Rules (for reference)
@@ -146,7 +162,7 @@ export const functionsConfig = {
   region: 'us-central1',
   timeout: 60,
   memory: '256MB',
-  runtime: 'nodejs18'
+  runtime: 'nodejs18',
 };
 
 // Analytics Configuration
@@ -162,9 +178,9 @@ export const analyticsConfig = {
     PREDICTIVE_INSIGHT_GENERATED: 'predictive_insight_generated',
     SECURITY_ALERT_CREATED: 'security_alert_created',
     REPORT_GENERATED: 'report_generated',
-    ANALYTICS_INITIALIZED: 'analytics_initialized'
+    ANALYTICS_INITIALIZED: 'analytics_initialized',
   },
-  
+
   // Custom parameters
   parameters: {
     USER_ID: 'user_id',
@@ -179,8 +195,8 @@ export const analyticsConfig = {
     CONFIDENCE: 'confidence',
     ALERT_TYPE: 'alert_type',
     SEVERITY: 'severity',
-    REPORT_TYPE: 'report_type'
-  }
+    REPORT_TYPE: 'report_type',
+  },
 };
 
 // Database Indexes (for reference)
@@ -190,78 +206,78 @@ export const firestoreIndexes = {
       collectionGroup: 'user_history',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
-        { fieldPath: 'timestamp', order: 'DESCENDING' }
-      ]
+        { fieldPath: 'timestamp', order: 'DESCENDING' },
+      ],
     },
     {
       collectionGroup: 'user_history',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
         { fieldPath: 'action.category', order: 'ASCENDING' },
-        { fieldPath: 'timestamp', order: 'DESCENDING' }
-      ]
-    }
+        { fieldPath: 'timestamp', order: 'DESCENDING' },
+      ],
+    },
   ],
   user_sessions: [
     {
       collectionGroup: 'user_sessions',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
-        { fieldPath: 'startTime', order: 'DESCENDING' }
-      ]
-    }
+        { fieldPath: 'startTime', order: 'DESCENDING' },
+      ],
+    },
   ],
   predictive_insights: [
     {
       collectionGroup: 'predictive_insights',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
-        { fieldPath: 'createdAt', order: 'DESCENDING' }
-      ]
+        { fieldPath: 'createdAt', order: 'DESCENDING' },
+      ],
     },
     {
       collectionGroup: 'predictive_insights',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
         { fieldPath: 'type', order: 'ASCENDING' },
-        { fieldPath: 'confidence', order: 'DESCENDING' }
-      ]
-    }
+        { fieldPath: 'confidence', order: 'DESCENDING' },
+      ],
+    },
   ],
   performance_metrics: [
     {
       collectionGroup: 'performance_metrics',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
-        { fieldPath: 'timestamp', order: 'DESCENDING' }
-      ]
+        { fieldPath: 'timestamp', order: 'DESCENDING' },
+      ],
     },
     {
       collectionGroup: 'performance_metrics',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
         { fieldPath: 'metric', order: 'ASCENDING' },
-        { fieldPath: 'timestamp', order: 'DESCENDING' }
-      ]
-    }
+        { fieldPath: 'timestamp', order: 'DESCENDING' },
+      ],
+    },
   ],
   security_alerts: [
     {
       collectionGroup: 'security_alerts',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
-        { fieldPath: 'timestamp', order: 'DESCENDING' }
-      ]
+        { fieldPath: 'timestamp', order: 'DESCENDING' },
+      ],
     },
     {
       collectionGroup: 'security_alerts',
       fields: [
         { fieldPath: 'userId', order: 'ASCENDING' },
         { fieldPath: 'severity', order: 'ASCENDING' },
-        { fieldPath: 'resolved', order: 'ASCENDING' }
-      ]
-    }
-  ]
+        { fieldPath: 'resolved', order: 'ASCENDING' },
+      ],
+    },
+  ],
 };
 
 // Environment Variables Template
@@ -361,5 +377,5 @@ export default {
   analyticsConfig,
   firestoreIndexes,
   envTemplate,
-  setupInstructions
+  setupInstructions,
 };

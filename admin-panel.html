@@ -1,722 +1,789 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AuraOS Admin Panel</title>
-    
+
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#00ff88">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="AuraOS Admin">
-    
+    <meta name="theme-color" content="#00ff88" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AuraOS Admin" />
+
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="admin-panel.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="admin-panel.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Admin Navigation -->
     <nav class="admin-nav">
-        <div class="nav-brand">
-            <i class="fas fa-shield-alt"></i>
-            <span>AuraOS Admin</span>
+      <div class="nav-brand">
+        <i class="fas fa-shield-alt"></i>
+        <span>AuraOS Admin</span>
+      </div>
+      <div class="nav-controls">
+        <div class="admin-info">
+          <span class="admin-name" id="adminName">Admin User</span>
+          <span class="admin-role">Super Admin</span>
         </div>
-        <div class="nav-controls">
-            <div class="admin-info">
-                <span class="admin-name" id="adminName">Admin User</span>
-                <span class="admin-role">Super Admin</span>
-            </div>
-            <div class="admin-actions">
-                <button class="btn btn-secondary" id="refreshData">
-                    <i class="fas fa-sync-alt"></i>
-                    Refresh
-                </button>
-                <button class="btn btn-outline" id="exportData">
-                    <i class="fas fa-download"></i>
-                    Export
-                </button>
-                <button class="btn btn-danger" id="logoutAdmin">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </button>
-            </div>
+        <div class="admin-actions">
+          <button class="btn btn-secondary" id="refreshData">
+            <i class="fas fa-sync-alt"></i>
+            Refresh
+          </button>
+          <button class="btn btn-outline" id="exportData">
+            <i class="fas fa-download"></i>
+            Export
+          </button>
+          <button class="btn btn-danger" id="logoutAdmin">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
         </div>
+      </div>
     </nav>
 
     <!-- Admin Sidebar -->
     <aside class="admin-sidebar">
-        <div class="sidebar-content">
-            <nav class="admin-nav-menu">
-                <a href="#dashboard" class="nav-item active" data-section="dashboard">
-                    <i class="fas fa-chart-dashboard"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#users" class="nav-item" data-section="users">
-                    <i class="fas fa-users"></i>
-                    <span>User Management</span>
-                    <span class="badge" id="userCount">0</span>
-                </a>
-                <a href="#analytics" class="nav-item" data-section="analytics">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </a>
-                <a href="#system" class="nav-item" data-section="system">
-                    <i class="fas fa-server"></i>
-                    <span>System Monitor</span>
-                </a>
-                <a href="#security" class="nav-item" data-section="security">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Security</span>
-                </a>
-                <a href="#content" class="nav-item" data-section="content">
-                    <i class="fas fa-file-alt"></i>
-                    <span>Content Management</span>
-                </a>
-                <a href="#settings" class="nav-item" data-section="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-                <a href="#logs" class="nav-item" data-section="logs">
-                    <i class="fas fa-list-alt"></i>
-                    <span>System Logs</span>
-                </a>
-            </nav>
-        </div>
+      <div class="sidebar-content">
+        <nav class="admin-nav-menu">
+          <a href="#dashboard" class="nav-item active" data-section="dashboard">
+            <i class="fas fa-chart-dashboard"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="#users" class="nav-item" data-section="users">
+            <i class="fas fa-users"></i>
+            <span>User Management</span>
+            <span class="badge" id="userCount">0</span>
+          </a>
+          <a href="#analytics" class="nav-item" data-section="analytics">
+            <i class="fas fa-chart-line"></i>
+            <span>Analytics</span>
+          </a>
+          <a href="#system" class="nav-item" data-section="system">
+            <i class="fas fa-server"></i>
+            <span>System Monitor</span>
+          </a>
+          <a href="#security" class="nav-item" data-section="security">
+            <i class="fas fa-shield-alt"></i>
+            <span>Security</span>
+          </a>
+          <a href="#content" class="nav-item" data-section="content">
+            <i class="fas fa-file-alt"></i>
+            <span>Content Management</span>
+          </a>
+          <a href="#settings" class="nav-item" data-section="settings">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+          <a href="#logs" class="nav-item" data-section="logs">
+            <i class="fas fa-list-alt"></i>
+            <span>System Logs</span>
+          </a>
+        </nav>
+      </div>
     </aside>
 
     <!-- Admin Main Content -->
     <main class="admin-main">
-        <!-- Dashboard Section -->
-        <section id="dashboard" class="admin-section active">
-            <div class="section-header">
-                <h1>Admin Dashboard</h1>
-                <p>System overview and key metrics</p>
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="admin-section active">
+        <div class="section-header">
+          <h1>Admin Dashboard</h1>
+          <p>System overview and key metrics</p>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-users"></i>
             </div>
-
-            <!-- Key Metrics -->
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="metric-content">
-                        <h3>Total Users</h3>
-                        <span class="metric-value" id="totalUsers">0</span>
-                        <span class="metric-change positive">+12 this week</span>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-download"></i>
-                    </div>
-                    <div class="metric-content">
-                        <h3>Downloads</h3>
-                        <span class="metric-value" id="totalDownloads">0</span>
-                        <span class="metric-change positive">+8% this month</span>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <div class="metric-content">
-                        <h3>Chat Sessions</h3>
-                        <span class="metric-value" id="chatSessions">0</span>
-                        <span class="metric-change positive">+24 today</span>
-                    </div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="metric-content">
-                        <h3>System Health</h3>
-                        <span class="metric-value" id="systemHealth">100%</span>
-                        <span class="metric-change neutral">All systems operational</span>
-                    </div>
-                </div>
+            <div class="metric-content">
+              <h3>Total Users</h3>
+              <span class="metric-value" id="totalUsers">0</span>
+              <span class="metric-change positive">+12 this week</span>
             </div>
-
-            <!-- Charts and Analytics -->
-            <div class="dashboard-grid">
-                <div class="chart-card">
-                    <div class="card-header">
-                        <h3>User Growth</h3>
-                        <div class="chart-controls">
-                            <button class="btn btn-sm btn-outline" data-period="7d">7 Days</button>
-                            <button class="btn btn-sm btn-primary" data-period="30d">30 Days</button>
-                            <button class="btn btn-sm btn-outline" data-period="90d">90 Days</button>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="userGrowthChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="card-header">
-                        <h3>System Performance</h3>
-                    </div>
-                    <div class="performance-metrics">
-                        <div class="perf-item">
-                            <span class="perf-label">CPU Usage</span>
-                            <div class="perf-bar">
-                                <div class="perf-fill perf-fill-45"></div>
-                            </div>
-                            <span class="perf-value">45%</span>
-                        </div>
-                        <div class="perf-item">
-                            <span class="perf-label">Memory Usage</span>
-                            <div class="perf-bar">
-                                <div class="perf-fill perf-fill-62"></div>
-                            </div>
-                            <span class="perf-value">62%</span>
-                        </div>
-                        <div class="perf-item">
-                            <span class="perf-label">Disk Usage</span>
-                            <div class="perf-bar">
-                                <div class="perf-fill perf-fill-38"></div>
-                            </div>
-                            <span class="perf-value">38%</span>
-                        </div>
-                        <div class="perf-item">
-                            <span class="perf-label">Network I/O</span>
-                            <div class="perf-bar">
-                                <div class="perf-fill perf-fill-28"></div>
-                            </div>
-                            <span class="perf-value">28%</span>
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-download"></i>
             </div>
-
-            <!-- Recent Activity -->
-            <div class="activity-card">
-                <div class="card-header">
-                    <h3>Recent Activity</h3>
-                    <button class="btn btn-sm btn-outline">View All</button>
-                </div>
-                <div class="activity-list" id="recentActivityList">
-                    <!-- Activity items will be populated by JavaScript -->
-                </div>
+            <div class="metric-content">
+              <h3>Downloads</h3>
+              <span class="metric-value" id="totalDownloads">0</span>
+              <span class="metric-change positive">+8% this month</span>
             </div>
-        </section>
-
-        <!-- User Management Section -->
-        <section id="users" class="admin-section">
-            <div class="section-header">
-                <h1>User Management</h1>
-                <p>Manage users, roles, and permissions</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-comments"></i>
             </div>
-
-            <!-- User Filters -->
-            <div class="filters-bar">
-                <div class="filter-group">
-                    <input type="text" id="userSearch" placeholder="Search users..." class="search-input">
-                    <select id="roleFilter" class="filter-select" aria-label="Filter by user role">
-                        <option value="">All Roles</option>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                        <option value="guest">Guest</option>
-                    </select>
-                    <select id="statusFilter" class="filter-select" aria-label="Filter by user status">
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="banned">Banned</option>
-                    </select>
-                </div>
-                <div class="filter-actions">
-                    <button class="btn btn-primary" id="addUser">
-                        <i class="fas fa-plus"></i>
-                        Add User
-                    </button>
-                    <button class="btn btn-secondary" id="bulkActions">
-                        <i class="fas fa-tasks"></i>
-                        Bulk Actions
-                    </button>
-                </div>
+            <div class="metric-content">
+              <h3>Chat Sessions</h3>
+              <span class="metric-value" id="chatSessions">0</span>
+              <span class="metric-change positive">+24 today</span>
             </div>
-
-            <!-- Users Table -->
-            <div class="table-container">
-                <table class="admin-table" id="usersTable">
-                    <thead>
-                        <tr>
-                            <th>
-                                <input type="checkbox" id="selectAllUsers">
-                            </th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Last Login</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                        <!-- User rows will be populated by JavaScript -->
-                    </tbody>
-                </table>
+          </div>
+          <div class="metric-card">
+            <div class="metric-icon">
+              <i class="fas fa-server"></i>
             </div>
+            <div class="metric-content">
+              <h3>System Health</h3>
+              <span class="metric-value" id="systemHealth">100%</span>
+              <span class="metric-change neutral">All systems operational</span>
+            </div>
+          </div>
+        </div>
 
-            <!-- Pagination -->
-            <div class="pagination">
-                <button class="btn btn-outline" id="prevPage">
-                    <i class="fas fa-chevron-left"></i>
-                    Previous
+        <!-- Charts and Analytics -->
+        <div class="dashboard-grid">
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>User Growth</h3>
+              <div class="chart-controls">
+                <button class="btn btn-sm btn-outline" data-period="7d">
+                  7 Days
                 </button>
-                <div class="page-info">
-                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
-                </div>
-                <button class="btn btn-outline" id="nextPage">
-                    Next
-                    <i class="fas fa-chevron-right"></i>
+                <button class="btn btn-sm btn-primary" data-period="30d">
+                  30 Days
                 </button>
-            </div>
-        </section>
-
-        <!-- Analytics Section -->
-        <section id="analytics" class="admin-section">
-            <div class="section-header">
-                <h1>Analytics Dashboard</h1>
-                <p>Detailed analytics and reporting</p>
-            </div>
-
-            <!-- Analytics Tabs -->
-            <div class="analytics-tabs">
-                <button class="tab-btn active" data-tab="overview">Overview</button>
-                <button class="tab-btn" data-tab="users">User Analytics</button>
-                <button class="tab-btn" data-tab="performance">Performance</button>
-                <button class="tab-btn" data-tab="errors">Error Tracking</button>
-            </div>
-
-            <!-- Analytics Content -->
-            <div class="analytics-content">
-                <div class="tab-content active" id="overviewTab">
-                    <div class="analytics-grid">
-                        <div class="chart-card">
-                            <h3>Page Views</h3>
-                            <canvas id="pageViewsChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>User Engagement</h3>
-                            <canvas id="engagementChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Geographic Distribution</h3>
-                            <div class="geo-list" id="geoDistribution">
-                                <!-- Geographic data will be populated by JavaScript -->
-                            </div>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Device Types</h3>
-                            <canvas id="deviceChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="usersTab">
-                    <div class="user-analytics">
-                        <div class="chart-card">
-                            <h3>User Registration Trends</h3>
-                            <canvas id="registrationChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>User Activity Heatmap</h3>
-                            <div class="heatmap-container">
-                                <!-- Activity heatmap will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="performanceTab">
-                    <div class="performance-analytics">
-                        <div class="chart-card">
-                            <h3>Core Web Vitals</h3>
-                            <div class="vitals-grid">
-                                <div class="vital-item">
-                                    <span class="vital-label">LCP</span>
-                                    <span class="vital-value good">1.2s</span>
-                                </div>
-                                <div class="vital-item">
-                                    <span class="vital-label">FID</span>
-                                    <span class="vital-value good">45ms</span>
-                                </div>
-                                <div class="vital-item">
-                                    <span class="vital-label">CLS</span>
-                                    <span class="vital-value good">0.05</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Response Times</h3>
-                            <canvas id="responseTimeChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-content" id="errorsTab">
-                    <div class="error-analytics">
-                        <div class="chart-card">
-                            <h3>Error Trends</h3>
-                            <canvas id="errorTrendsChart"></canvas>
-                        </div>
-                        <div class="chart-card">
-                            <h3>Top Errors</h3>
-                            <div class="error-list" id="topErrors">
-                                <!-- Error list will be populated by JavaScript -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- System Monitor Section -->
-        <section id="system" class="admin-section">
-            <div class="section-header">
-                <h1>System Monitor</h1>
-                <p>Real-time system monitoring and alerts</p>
-            </div>
-
-            <!-- System Status -->
-            <div class="system-status">
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>System Health</h3>
-                        <span class="status-indicator healthy">Healthy</span>
-                    </div>
-                    <div class="status-metrics">
-                        <div class="status-metric">
-                            <span class="metric-label">Uptime</span>
-                            <span class="metric-value">99.9%</span>
-                        </div>
-                        <div class="status-metric">
-                            <span class="metric-label">Response Time</span>
-                            <span class="metric-value">120ms</span>
-                        </div>
-                        <div class="status-metric">
-                            <span class="metric-label">Active Users</span>
-                            <span class="metric-value">1,247</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="status-card">
-                    <div class="status-header">
-                        <h3>Infrastructure</h3>
-                        <span class="status-indicator healthy">Operational</span>
-                    </div>
-                    <div class="infrastructure-list">
-                        <div class="infra-item">
-                            <i class="fas fa-server"></i>
-                            <span>Web Server</span>
-                            <span class="status-dot healthy"></span>
-                        </div>
-                        <div class="infra-item">
-                            <i class="fas fa-database"></i>
-                            <span>Database</span>
-                            <span class="status-dot healthy"></span>
-                        </div>
-                        <div class="infra-item">
-                            <i class="fas fa-cloud"></i>
-                            <span>CDN</span>
-                            <span class="status-dot healthy"></span>
-                        </div>
-                        <div class="infra-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Security</span>
-                            <span class="status-dot healthy"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Real-time Metrics -->
-            <div class="realtime-metrics">
-                <div class="chart-card">
-                    <h3>Real-time Performance</h3>
-                    <canvas id="realtimeChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- Security Section -->
-        <section id="security" class="admin-section">
-            <div class="section-header">
-                <h1>Security Dashboard</h1>
-                <p>Security monitoring and threat detection</p>
-            </div>
-
-            <!-- Security Overview -->
-            <div class="security-overview">
-                <div class="security-card">
-                    <div class="security-header">
-                        <h3>Security Status</h3>
-                        <span class="security-level high">High Security</span>
-                    </div>
-                    <div class="security-metrics">
-                        <div class="security-metric">
-                            <span class="metric-label">Threats Blocked</span>
-                            <span class="metric-value">1,247</span>
-                        </div>
-                        <div class="security-metric">
-                            <span class="metric-label">Failed Logins</span>
-                            <span class="metric-value">23</span>
-                        </div>
-                        <div class="security-metric">
-                            <span class="metric-label">Active Sessions</span>
-                            <span class="metric-value">892</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="security-card">
-                    <h3>Recent Security Events</h3>
-                    <div class="security-events" id="securityEvents">
-                        <!-- Security events will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Security Actions -->
-            <div class="security-actions">
-                <button class="btn btn-primary">
-                    <i class="fas fa-shield-alt"></i>
-                    Run Security Scan
+                <button class="btn btn-sm btn-outline" data-period="90d">
+                  90 Days
                 </button>
-                <button class="btn btn-secondary">
-                    <i class="fas fa-key"></i>
-                    Manage API Keys
-                </button>
-                <button class="btn btn-warning">
-                    <i class="fas fa-ban"></i>
-                    Block Suspicious IPs
-                </button>
+              </div>
             </div>
-        </section>
-
-        <!-- Content Management Section -->
-        <section id="content" class="admin-section">
-            <div class="section-header">
-                <h1>Content Management</h1>
-                <p>Manage announcements, documentation, and content</p>
+            <div class="chart-container">
+              <canvas id="userGrowthChart"></canvas>
             </div>
+          </div>
 
-            <!-- Content Tabs -->
-            <div class="content-tabs">
-                <button class="tab-btn active" data-content="announcements">Announcements</button>
-                <button class="tab-btn" data-content="documentation">Documentation</button>
-                <button class="tab-btn" data-content="media">Media</button>
+          <div class="chart-card">
+            <div class="card-header">
+              <h3>System Performance</h3>
             </div>
-
-            <!-- Content Management -->
-            <div class="content-management">
-                <div class="content-section active" id="announcementsContent">
-                    <div class="content-header">
-                        <h3>System Announcements</h3>
-                        <button class="btn btn-primary" id="createAnnouncement">
-                            <i class="fas fa-plus"></i>
-                            Create Announcement
-                        </button>
-                    </div>
-                    <div class="announcements-list" id="announcementsList">
-                        <!-- Announcements will be populated by JavaScript -->
-                    </div>
+            <div class="performance-metrics">
+              <div class="perf-item">
+                <span class="perf-label">CPU Usage</span>
+                <div class="perf-bar">
+                  <div class="perf-fill perf-fill-45"></div>
                 </div>
-
-                <div class="content-section" id="documentationContent">
-                    <div class="content-header">
-                        <h3>Documentation</h3>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-plus"></i>
-                            Add Documentation
-                        </button>
-                    </div>
-                    <div class="documentation-tree">
-                        <!-- Documentation structure will be populated by JavaScript -->
-                    </div>
+                <span class="perf-value">45%</span>
+              </div>
+              <div class="perf-item">
+                <span class="perf-label">Memory Usage</span>
+                <div class="perf-bar">
+                  <div class="perf-fill perf-fill-62"></div>
                 </div>
-
-                <div class="content-section" id="mediaContent">
-                    <div class="content-header">
-                        <h3>Media Library</h3>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-upload"></i>
-                            Upload Media
-                        </button>
-                    </div>
-                    <div class="media-grid" id="mediaGrid">
-                        <!-- Media items will be populated by JavaScript -->
-                    </div>
+                <span class="perf-value">62%</span>
+              </div>
+              <div class="perf-item">
+                <span class="perf-label">Disk Usage</span>
+                <div class="perf-bar">
+                  <div class="perf-fill perf-fill-38"></div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Settings Section -->
-        <section id="settings" class="admin-section">
-            <div class="section-header">
-                <h1>System Settings</h1>
-                <p>Configure system-wide settings and preferences</p>
-            </div>
-
-            <!-- Settings Categories -->
-            <div class="settings-categories">
-                <div class="settings-card">
-                    <h3>General Settings</h3>
-                    <div class="setting-item">
-                        <label for="siteName">Site Name</label>
-                        <input type="text" id="siteName" value="AuraOS" class="setting-input">
-                    </div>
-                    <div class="setting-item">
-                        <label for="siteDescription">Site Description</label>
-                        <textarea id="siteDescription" class="setting-textarea">Modern, AI-powered operating system platform</textarea>
-                    </div>
-                    <div class="setting-item">
-                        <label for="maintenanceMode">Maintenance Mode</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="maintenanceMode">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
+                <span class="perf-value">38%</span>
+              </div>
+              <div class="perf-item">
+                <span class="perf-label">Network I/O</span>
+                <div class="perf-bar">
+                  <div class="perf-fill perf-fill-28"></div>
                 </div>
+                <span class="perf-value">28%</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div class="settings-card">
-                    <h3>User Management</h3>
-                    <div class="setting-item">
-                        <label for="allowRegistration">Allow Registration</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="allowRegistration" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label for="requireEmailVerification">Require Email Verification</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="requireEmailVerification" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label for="defaultUserRole">Default User Role</label>
-                        <select id="defaultUserRole" class="setting-select">
-                            <option value="user">User</option>
-                            <option value="guest">Guest</option>
-                        </select>
-                    </div>
+        <!-- Recent Activity -->
+        <div class="activity-card">
+          <div class="card-header">
+            <h3>Recent Activity</h3>
+            <button class="btn btn-sm btn-outline">View All</button>
+          </div>
+          <div class="activity-list" id="recentActivityList">
+            <!-- Activity items will be populated by JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- User Management Section -->
+      <section id="users" class="admin-section">
+        <div class="section-header">
+          <h1>User Management</h1>
+          <p>Manage users, roles, and permissions</p>
+        </div>
+
+        <!-- User Filters -->
+        <div class="filters-bar">
+          <div class="filter-group">
+            <input
+              type="text"
+              id="userSearch"
+              placeholder="Search users..."
+              class="search-input"
+            />
+            <select
+              id="roleFilter"
+              class="filter-select"
+              aria-label="Filter by user role"
+            >
+              <option value="">All Roles</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+              <option value="guest">Guest</option>
+            </select>
+            <select
+              id="statusFilter"
+              class="filter-select"
+              aria-label="Filter by user status"
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-primary" id="addUser">
+              <i class="fas fa-plus"></i>
+              Add User
+            </button>
+            <button class="btn btn-secondary" id="bulkActions">
+              <i class="fas fa-tasks"></i>
+              Bulk Actions
+            </button>
+          </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-container">
+          <table class="admin-table" id="usersTable">
+            <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" id="selectAllUsers" />
+                </th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- User rows will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+          <button class="btn btn-outline" id="prevPage">
+            <i class="fas fa-chevron-left"></i>
+            Previous
+          </button>
+          <div class="page-info">
+            Page <span id="currentPage">1</span> of
+            <span id="totalPages">1</span>
+          </div>
+          <button class="btn btn-outline" id="nextPage">
+            Next
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- Analytics Section -->
+      <section id="analytics" class="admin-section">
+        <div class="section-header">
+          <h1>Analytics Dashboard</h1>
+          <p>Detailed analytics and reporting</p>
+        </div>
+
+        <!-- Analytics Tabs -->
+        <div class="analytics-tabs">
+          <button class="tab-btn active" data-tab="overview">Overview</button>
+          <button class="tab-btn" data-tab="users">User Analytics</button>
+          <button class="tab-btn" data-tab="performance">Performance</button>
+          <button class="tab-btn" data-tab="errors">Error Tracking</button>
+        </div>
+
+        <!-- Analytics Content -->
+        <div class="analytics-content">
+          <div class="tab-content active" id="overviewTab">
+            <div class="analytics-grid">
+              <div class="chart-card">
+                <h3>Page Views</h3>
+                <canvas id="pageViewsChart"></canvas>
+              </div>
+              <div class="chart-card">
+                <h3>User Engagement</h3>
+                <canvas id="engagementChart"></canvas>
+              </div>
+              <div class="chart-card">
+                <h3>Geographic Distribution</h3>
+                <div class="geo-list" id="geoDistribution">
+                  <!-- Geographic data will be populated by JavaScript -->
                 </div>
+              </div>
+              <div class="chart-card">
+                <h3>Device Types</h3>
+                <canvas id="deviceChart"></canvas>
+              </div>
+            </div>
+          </div>
 
-                <div class="settings-card">
-                    <h3>Security Settings</h3>
-                    <div class="setting-item">
-                        <label for="enable2FA">Enable 2FA</label>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="enable2FA" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <label for="sessionTimeout">Session Timeout (minutes)</label>
-                        <input type="number" id="sessionTimeout" value="30" class="setting-input">
-                    </div>
-                    <div class="setting-item">
-                        <label for="maxLoginAttempts">Max Login Attempts</label>
-                        <input type="number" id="maxLoginAttempts" value="5" class="setting-input">
-                    </div>
+          <div class="tab-content" id="usersTab">
+            <div class="user-analytics">
+              <div class="chart-card">
+                <h3>User Registration Trends</h3>
+                <canvas id="registrationChart"></canvas>
+              </div>
+              <div class="chart-card">
+                <h3>User Activity Heatmap</h3>
+                <div class="heatmap-container">
+                  <!-- Activity heatmap will be populated by JavaScript -->
                 </div>
+              </div>
             </div>
+          </div>
 
-            <div class="settings-actions">
-                <button class="btn btn-primary" id="saveSettings">
-                    <i class="fas fa-save"></i>
-                    Save Settings
-                </button>
-                <button class="btn btn-secondary" id="resetSettings">
-                    <i class="fas fa-undo"></i>
-                    Reset to Defaults
-                </button>
-            </div>
-        </section>
-
-        <!-- System Logs Section -->
-        <section id="logs" class="admin-section">
-            <div class="section-header">
-                <h1>System Logs</h1>
-                <p>Monitor system logs and events</p>
-            </div>
-
-            <!-- Log Filters -->
-            <div class="log-filters">
-                <div class="filter-group">
-                    <select id="logLevel" class="filter-select" aria-label="Filter by log level">
-                        <option value="">All Levels</option>
-                        <option value="error">Error</option>
-                        <option value="warning">Warning</option>
-                        <option value="info">Info</option>
-                        <option value="debug">Debug</option>
-                    </select>
-                    <select id="logSource" class="filter-select" aria-label="Filter by log source">
-                        <option value="">All Sources</option>
-                        <option value="auth">Authentication</option>
-                        <option value="api">API</option>
-                        <option value="system">System</option>
-                        <option value="security">Security</option>
-                    </select>
-                    <input type="datetime-local" id="logDateFrom" class="filter-input" aria-label="Filter logs from date">
-                    <input type="datetime-local" id="logDateTo" class="filter-input" aria-label="Filter logs to date">
+          <div class="tab-content" id="performanceTab">
+            <div class="performance-analytics">
+              <div class="chart-card">
+                <h3>Core Web Vitals</h3>
+                <div class="vitals-grid">
+                  <div class="vital-item">
+                    <span class="vital-label">LCP</span>
+                    <span class="vital-value good">1.2s</span>
+                  </div>
+                  <div class="vital-item">
+                    <span class="vital-label">FID</span>
+                    <span class="vital-value good">45ms</span>
+                  </div>
+                  <div class="vital-item">
+                    <span class="vital-label">CLS</span>
+                    <span class="vital-value good">0.05</span>
+                  </div>
                 </div>
-                <div class="filter-actions">
-                    <button class="btn btn-secondary" id="refreshLogs">
-                        <i class="fas fa-sync-alt"></i>
-                        Refresh
-                    </button>
-                    <button class="btn btn-outline" id="exportLogs">
-                        <i class="fas fa-download"></i>
-                        Export
-                    </button>
-                </div>
+              </div>
+              <div class="chart-card">
+                <h3>Response Times</h3>
+                <canvas id="responseTimeChart"></canvas>
+              </div>
             </div>
+          </div>
 
-            <!-- Logs Table -->
-            <div class="logs-container">
-                <table class="admin-table" id="logsTable">
-                    <thead>
-                        <tr>
-                            <th>Timestamp</th>
-                            <th>Level</th>
-                            <th>Source</th>
-                            <th>Message</th>
-                            <th>User</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logsTableBody">
-                        <!-- Log entries will be populated by JavaScript -->
-                    </tbody>
-                </table>
+          <div class="tab-content" id="errorsTab">
+            <div class="error-analytics">
+              <div class="chart-card">
+                <h3>Error Trends</h3>
+                <canvas id="errorTrendsChart"></canvas>
+              </div>
+              <div class="chart-card">
+                <h3>Top Errors</h3>
+                <div class="error-list" id="topErrors">
+                  <!-- Error list will be populated by JavaScript -->
+                </div>
+              </div>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Monitor Section -->
+      <section id="system" class="admin-section">
+        <div class="section-header">
+          <h1>System Monitor</h1>
+          <p>Real-time system monitoring and alerts</p>
+        </div>
+
+        <!-- System Status -->
+        <div class="system-status">
+          <div class="status-card">
+            <div class="status-header">
+              <h3>System Health</h3>
+              <span class="status-indicator healthy">Healthy</span>
+            </div>
+            <div class="status-metrics">
+              <div class="status-metric">
+                <span class="metric-label">Uptime</span>
+                <span class="metric-value">99.9%</span>
+              </div>
+              <div class="status-metric">
+                <span class="metric-label">Response Time</span>
+                <span class="metric-value">120ms</span>
+              </div>
+              <div class="status-metric">
+                <span class="metric-label">Active Users</span>
+                <span class="metric-value">1,247</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-header">
+              <h3>Infrastructure</h3>
+              <span class="status-indicator healthy">Operational</span>
+            </div>
+            <div class="infrastructure-list">
+              <div class="infra-item">
+                <i class="fas fa-server"></i>
+                <span>Web Server</span>
+                <span class="status-dot healthy"></span>
+              </div>
+              <div class="infra-item">
+                <i class="fas fa-database"></i>
+                <span>Database</span>
+                <span class="status-dot healthy"></span>
+              </div>
+              <div class="infra-item">
+                <i class="fas fa-cloud"></i>
+                <span>CDN</span>
+                <span class="status-dot healthy"></span>
+              </div>
+              <div class="infra-item">
+                <i class="fas fa-shield-alt"></i>
+                <span>Security</span>
+                <span class="status-dot healthy"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Metrics -->
+        <div class="realtime-metrics">
+          <div class="chart-card">
+            <h3>Real-time Performance</h3>
+            <canvas id="realtimeChart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security Section -->
+      <section id="security" class="admin-section">
+        <div class="section-header">
+          <h1>Security Dashboard</h1>
+          <p>Security monitoring and threat detection</p>
+        </div>
+
+        <!-- Security Overview -->
+        <div class="security-overview">
+          <div class="security-card">
+            <div class="security-header">
+              <h3>Security Status</h3>
+              <span class="security-level high">High Security</span>
+            </div>
+            <div class="security-metrics">
+              <div class="security-metric">
+                <span class="metric-label">Threats Blocked</span>
+                <span class="metric-value">1,247</span>
+              </div>
+              <div class="security-metric">
+                <span class="metric-label">Failed Logins</span>
+                <span class="metric-value">23</span>
+              </div>
+              <div class="security-metric">
+                <span class="metric-label">Active Sessions</span>
+                <span class="metric-value">892</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="security-card">
+            <h3>Recent Security Events</h3>
+            <div class="security-events" id="securityEvents">
+              <!-- Security events will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Actions -->
+        <div class="security-actions">
+          <button class="btn btn-primary">
+            <i class="fas fa-shield-alt"></i>
+            Run Security Scan
+          </button>
+          <button class="btn btn-secondary">
+            <i class="fas fa-key"></i>
+            Manage API Keys
+          </button>
+          <button class="btn btn-warning">
+            <i class="fas fa-ban"></i>
+            Block Suspicious IPs
+          </button>
+        </div>
+      </section>
+
+      <!-- Content Management Section -->
+      <section id="content" class="admin-section">
+        <div class="section-header">
+          <h1>Content Management</h1>
+          <p>Manage announcements, documentation, and content</p>
+        </div>
+
+        <!-- Content Tabs -->
+        <div class="content-tabs">
+          <button class="tab-btn active" data-content="announcements">
+            Announcements
+          </button>
+          <button class="tab-btn" data-content="documentation">
+            Documentation
+          </button>
+          <button class="tab-btn" data-content="media">Media</button>
+        </div>
+
+        <!-- Content Management -->
+        <div class="content-management">
+          <div class="content-section active" id="announcementsContent">
+            <div class="content-header">
+              <h3>System Announcements</h3>
+              <button class="btn btn-primary" id="createAnnouncement">
+                <i class="fas fa-plus"></i>
+                Create Announcement
+              </button>
+            </div>
+            <div class="announcements-list" id="announcementsList">
+              <!-- Announcements will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <div class="content-section" id="documentationContent">
+            <div class="content-header">
+              <h3>Documentation</h3>
+              <button class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                Add Documentation
+              </button>
+            </div>
+            <div class="documentation-tree">
+              <!-- Documentation structure will be populated by JavaScript -->
+            </div>
+          </div>
+
+          <div class="content-section" id="mediaContent">
+            <div class="content-header">
+              <h3>Media Library</h3>
+              <button class="btn btn-primary">
+                <i class="fas fa-upload"></i>
+                Upload Media
+              </button>
+            </div>
+            <div class="media-grid" id="mediaGrid">
+              <!-- Media items will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="settings" class="admin-section">
+        <div class="section-header">
+          <h1>System Settings</h1>
+          <p>Configure system-wide settings and preferences</p>
+        </div>
+
+        <!-- Settings Categories -->
+        <div class="settings-categories">
+          <div class="settings-card">
+            <h3>General Settings</h3>
+            <div class="setting-item">
+              <label for="siteName">Site Name</label>
+              <input
+                type="text"
+                id="siteName"
+                value="AuraOS"
+                class="setting-input"
+              />
+            </div>
+            <div class="setting-item">
+              <label for="siteDescription">Site Description</label>
+              <textarea id="siteDescription" class="setting-textarea">
+Modern, AI-powered operating system platform</textarea
+              >
+            </div>
+            <div class="setting-item">
+              <label for="maintenanceMode">Maintenance Mode</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="maintenanceMode" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>User Management</h3>
+            <div class="setting-item">
+              <label for="allowRegistration">Allow Registration</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="allowRegistration" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="requireEmailVerification"
+                >Require Email Verification</label
+              >
+              <label class="toggle-switch">
+                <input type="checkbox" id="requireEmailVerification" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="defaultUserRole">Default User Role</label>
+              <select id="defaultUserRole" class="setting-select">
+                <option value="user">User</option>
+                <option value="guest">Guest</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="settings-card">
+            <h3>Security Settings</h3>
+            <div class="setting-item">
+              <label for="enable2FA">Enable 2FA</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="enable2FA" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="sessionTimeout">Session Timeout (minutes)</label>
+              <input
+                type="number"
+                id="sessionTimeout"
+                value="30"
+                class="setting-input"
+              />
+            </div>
+            <div class="setting-item">
+              <label for="maxLoginAttempts">Max Login Attempts</label>
+              <input
+                type="number"
+                id="maxLoginAttempts"
+                value="5"
+                class="setting-input"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn btn-primary" id="saveSettings">
+            <i class="fas fa-save"></i>
+            Save Settings
+          </button>
+          <button class="btn btn-secondary" id="resetSettings">
+            <i class="fas fa-undo"></i>
+            Reset to Defaults
+          </button>
+        </div>
+      </section>
+
+      <!-- System Logs Section -->
+      <section id="logs" class="admin-section">
+        <div class="section-header">
+          <h1>System Logs</h1>
+          <p>Monitor system logs and events</p>
+        </div>
+
+        <!-- Log Filters -->
+        <div class="log-filters">
+          <div class="filter-group">
+            <select
+              id="logLevel"
+              class="filter-select"
+              aria-label="Filter by log level"
+            >
+              <option value="">All Levels</option>
+              <option value="error">Error</option>
+              <option value="warning">Warning</option>
+              <option value="info">Info</option>
+              <option value="debug">Debug</option>
+            </select>
+            <select
+              id="logSource"
+              class="filter-select"
+              aria-label="Filter by log source"
+            >
+              <option value="">All Sources</option>
+              <option value="auth">Authentication</option>
+              <option value="api">API</option>
+              <option value="system">System</option>
+              <option value="security">Security</option>
+            </select>
+            <input
+              type="datetime-local"
+              id="logDateFrom"
+              class="filter-input"
+              aria-label="Filter logs from date"
+            />
+            <input
+              type="datetime-local"
+              id="logDateTo"
+              class="filter-input"
+              aria-label="Filter logs to date"
+            />
+          </div>
+          <div class="filter-actions">
+            <button class="btn btn-secondary" id="refreshLogs">
+              <i class="fas fa-sync-alt"></i>
+              Refresh
+            </button>
+            <button class="btn btn-outline" id="exportLogs">
+              <i class="fas fa-download"></i>
+              Export
+            </button>
+          </div>
+        </div>
+
+        <!-- Logs Table -->
+        <div class="logs-container">
+          <table class="admin-table" id="logsTable">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Level</th>
+                <th>Source</th>
+                <th>Message</th>
+                <th>User</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <!-- Log entries will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay hidden">
-        <div class="loading-spinner">
-            <i class="fas fa-spinner fa-spin"></i>
-            <p>Loading...</p>
-        </div>
+      <div class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>Loading...</p>
+      </div>
     </div>
 
     <!-- Toast Notifications -->
@@ -735,5 +802,5 @@
     <script src="enhanced-chatbot.js"></script>
     <script src="mobile-platform.js"></script>
     <script src="cross-platform-config.js"></script>
-</body>
+  </body>
 </html>

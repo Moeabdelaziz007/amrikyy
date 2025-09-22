@@ -24,7 +24,9 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
   initialFilterLevel = 'all',
 }) => {
   const [query, setQuery] = useState('');
-  const [level, setLevel] = useState<'all' | LogEvent['level']>(initialFilterLevel);
+  const [level, setLevel] = useState<'all' | LogEvent['level']>(
+    initialFilterLevel
+  );
   const [events, setEvents] = useState<LogEvent[]>([]);
   const bottomRef = useRef<HTMLDivElement | null>(null);
   const [autoscroll, setAutoscroll] = useState(true);
@@ -33,21 +35,29 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
     if (!open) return;
     let canceled = false;
     // Mock stream: replace with real-time source integration
-    const levels: LogEvent['level'][] = ['info', 'warn', 'error', 'debug', 'success'];
+    const levels: LogEvent['level'][] = [
+      'info',
+      'warn',
+      'error',
+      'debug',
+      'success',
+    ];
     const interval = setInterval(() => {
       if (canceled) return;
       const lv = levels[Math.floor(Math.random() * levels.length)];
       const id = `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-      setEvents(prev => [
-        ...prev,
-        {
-          id,
-          ts: Date.now(),
-          level: lv,
-          source: clientId || 'system',
-          message: `${clientName || 'Client'}: ${lv.toUpperCase()} sample event ${id}`
-        }
-      ].slice(-500));
+      setEvents(prev =>
+        [
+          ...prev,
+          {
+            id,
+            ts: Date.now(),
+            level: lv,
+            source: clientId || 'system',
+            message: `${clientName || 'Client'}: ${lv.toUpperCase()} sample event ${id}`,
+          },
+        ].slice(-500)
+      );
     }, 900);
     return () => {
       canceled = true;
@@ -64,9 +74,11 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
     return events.filter(e => {
       const levelOk = level === 'all' ? true : e.level === level;
       const q = query.trim().toLowerCase();
-      const queryOk = q === '' ? true :
-        e.message.toLowerCase().includes(q) ||
-        (e.source || '').toLowerCase().includes(q);
+      const queryOk =
+        q === ''
+          ? true
+          : e.message.toLowerCase().includes(q) ||
+            (e.source || '').toLowerCase().includes(q);
       return levelOk && queryOk;
     });
   }, [events, level, query]);
@@ -84,7 +96,12 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
               {clientName ? `${clientName} (${clientId})` : 'All Sources'}
             </div>
           </div>
-          <button className="px-3 py-1.5 text-xs border rounded-md hover:bg-glass-secondary" onClick={onClose}>Close</button>
+          <button
+            className="px-3 py-1.5 text-xs border rounded-md hover:bg-glass-secondary"
+            onClick={onClose}
+          >
+            Close
+          </button>
         </div>
 
         <div className="p-3 border-b border-glass-border bg-glass-secondary">
@@ -108,7 +125,11 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
               <option value="debug">Debug</option>
             </select>
             <label className="inline-flex items-center gap-2 text-xs">
-              <input type="checkbox" checked={autoscroll} onChange={e => setAutoscroll(e.target.checked)} />
+              <input
+                type="checkbox"
+                checked={autoscroll}
+                onChange={e => setAutoscroll(e.target.checked)}
+              />
               Auto-scroll
             </label>
           </div>
@@ -116,27 +137,50 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
 
         <div className="h-[420px] overflow-auto cyber-scrollbar bg-bg-primary">
           {filtered.length === 0 ? (
-            <div className="p-6 text-center text-sm text-text-secondary">No events</div>
+            <div className="p-6 text-center text-sm text-text-secondary">
+              No events
+            </div>
           ) : (
             <ul className="divide-y divide-glass-border">
               {filtered.map(e => (
-                <li key={e.id} className="px-4 py-2 text-sm flex items-start gap-3">
-                  <span className={`mt-1 w-2 h-2 rounded-full ${
-                    e.level === 'success' ? 'bg-status-success' :
-                    e.level === 'info' ? 'bg-status-info' :
-                    e.level === 'warn' ? 'bg-status-warning' :
-                    e.level === 'error' ? 'bg-status-error' :
-                    'bg-glass-border'
-                  }`} />
+                <li
+                  key={e.id}
+                  className="px-4 py-2 text-sm flex items-start gap-3"
+                >
+                  <span
+                    className={`mt-1 w-2 h-2 rounded-full ${
+                      e.level === 'success'
+                        ? 'bg-status-success'
+                        : e.level === 'info'
+                          ? 'bg-status-info'
+                          : e.level === 'warn'
+                            ? 'bg-status-warning'
+                            : e.level === 'error'
+                              ? 'bg-status-error'
+                              : 'bg-glass-border'
+                    }`}
+                  />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <span className="font-mono text-xs text-text-secondary">
-                        {new Date(e.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                        {new Date(e.ts).toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          second: '2-digit',
+                        })}
                       </span>
-                      <span className="uppercase text-[10px] tracking-wider opacity-70">{e.level}</span>
-                      {e.source && <span className="text-[10px] px-1.5 py-0.5 rounded bg-glass-secondary border border-glass-border">{e.source}</span>}
+                      <span className="uppercase text-[10px] tracking-wider opacity-70">
+                        {e.level}
+                      </span>
+                      {e.source && (
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-glass-secondary border border-glass-border">
+                          {e.source}
+                        </span>
+                      )}
                     </div>
-                    <div className="whitespace-pre-wrap break-words">{e.message}</div>
+                    <div className="whitespace-pre-wrap break-words">
+                      {e.message}
+                    </div>
                   </div>
                 </li>
               ))}
@@ -150,5 +194,3 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
 };
 
 export default LiveLogsModal;
-
-

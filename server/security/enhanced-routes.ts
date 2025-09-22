@@ -1,26 +1,26 @@
 import { Express, Router } from 'express';
-import { 
-  authenticateToken, 
-  authorize, 
-  requireAdmin, 
+import {
+  authenticateToken,
+  authorize,
+  requireAdmin,
   rateLimitPerUser,
-  securityLogger 
+  securityLogger,
 } from './auth-middleware';
-import { 
-  validateInput, 
-  validateQuery, 
-  validateEmail, 
+import {
+  validateInput,
+  validateQuery,
+  validateEmail,
   validatePassword,
   validateFileUpload,
-  rateLimit 
+  rateLimit,
 } from './input-validation';
-import { 
-  securityHeaders, 
-  secureCORS, 
-  forceHTTPS, 
+import {
+  securityHeaders,
+  secureCORS,
+  forceHTTPS,
   securityMonitoring,
   requestSizeLimit,
-  ipFilter 
+  ipFilter,
 } from './security-headers';
 import { validationSchemas } from './input-validation';
 
@@ -35,9 +35,9 @@ export function setupSecureRoutes(app: Express) {
     requestSizeLimit(),
     ipFilter({
       blacklist: [], // Add known malicious IPs
-      blockSuspiciousIPs: true
+      blockSuspiciousIPs: true,
     }),
-    securityLogger
+    securityLogger,
   ]);
 
   // Rate limiting for all routes
@@ -50,13 +50,14 @@ export function setupSecureRoutes(app: Express) {
   /**
    * Enhanced authentication status check
    */
-  app.get('/api/auth/status', 
+  app.get(
+    '/api/auth/status',
     authenticateToken,
     rateLimitPerUser(10, 60000), // 10 requests per minute per user
     (req, res) => {
       try {
         const user = req.user;
-        
+
         res.json({
           authenticated: true,
           user: {
@@ -64,16 +65,16 @@ export function setupSecureRoutes(app: Express) {
             email: user.email,
             role: user.role,
             permissions: user.permissions,
-            sessionId: user.sessionId
+            sessionId: user.sessionId,
           },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       } catch (error) {
         console.error('Auth status error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Internal server error',
           message: 'Failed to check authentication status',
-          code: 'AUTH_STATUS_ERROR'
+          code: 'AUTH_STATUS_ERROR',
         });
       }
     }
@@ -82,7 +83,8 @@ export function setupSecureRoutes(app: Express) {
   /**
    * Enhanced login endpoint with proper validation
    */
-  app.post('/api/auth/login',
+  app.post(
+    '/api/auth/login',
     rateLimit(5, 15 * 60 * 1000), // 5 login attempts per 15 minutes
     validateInput(validationSchemas.user),
     validateEmail,
@@ -93,14 +95,14 @@ export function setupSecureRoutes(app: Express) {
 
         // In a real implementation, verify credentials against database
         // For now, we'll simulate successful authentication
-        
+
         // Mock user data (replace with actual authentication logic)
         const mockUser = {
           uid: 'user_' + Date.now(),
           email: email,
           name: 'Authenticated User',
           role: 'user',
-          emailVerified: true
+          emailVerified: true,
         };
 
         // Create session
@@ -113,18 +115,17 @@ export function setupSecureRoutes(app: Express) {
             id: mockUser.uid,
             email: mockUser.email,
             name: mockUser.name,
-            role: mockUser.role
+            role: mockUser.role,
           },
           sessionId: session.sessionId,
-          expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString() // 15 minutes
+          expiresAt: new Date(Date.now() + 15 * 60 * 1000).toISOString(), // 15 minutes
         });
-
       } catch (error) {
         console.error('Login error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Login failed',
           message: 'An error occurred during login',
-          code: 'LOGIN_ERROR'
+          code: 'LOGIN_ERROR',
         });
       }
     }
@@ -133,31 +134,27 @@ export function setupSecureRoutes(app: Express) {
   /**
    * Secure logout endpoint
    */
-  app.post('/api/auth/logout',
-    authenticateToken,
-    async (req, res) => {
-      try {
-        const user = req.user;
-        
-        // Destroy session
-        destroySession(user.uid);
+  app.post('/api/auth/logout', authenticateToken, async (req, res) => {
+    try {
+      const user = req.user;
 
-        res.json({
-          success: true,
-          message: 'Logout successful',
-          timestamp: new Date().toISOString()
-        });
+      // Destroy session
+      destroySession(user.uid);
 
-      } catch (error) {
-        console.error('Logout error:', error);
-        res.status(500).json({ 
-          error: 'Logout failed',
-          message: 'An error occurred during logout',
-          code: 'LOGOUT_ERROR'
-        });
-      }
+      res.json({
+        success: true,
+        message: 'Logout successful',
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+      res.status(500).json({
+        error: 'Logout failed',
+        message: 'An error occurred during logout',
+        code: 'LOGOUT_ERROR',
+      });
     }
-  );
+  });
 
   // =============================================================================
   // SECURE API ENDPOINTS
@@ -166,7 +163,8 @@ export function setupSecureRoutes(app: Express) {
   /**
    * Secure posts endpoints with proper authorization
    */
-  app.get('/api/posts',
+  app.get(
+    '/api/posts',
     authenticateToken,
     authorize('posts', 'read'),
     rateLimitPerUser(100, 60000), // 100 requests per minute
@@ -174,7 +172,7 @@ export function setupSecureRoutes(app: Express) {
     async (req, res) => {
       try {
         const { query, limit, offset } = req.query;
-        
+
         // Mock posts data (replace with actual database query)
         const posts = [
           {
@@ -182,8 +180,8 @@ export function setupSecureRoutes(app: Express) {
             title: 'Sample Post',
             content: 'This is a sample post content',
             author: req.user.email,
-            createdAt: new Date().toISOString()
-          }
+            createdAt: new Date().toISOString(),
+          },
         ];
 
         res.json({
@@ -192,22 +190,22 @@ export function setupSecureRoutes(app: Express) {
             limit,
             offset,
             total: posts.length,
-            hasMore: false
-          }
+            hasMore: false,
+          },
         });
-
       } catch (error) {
         console.error('Posts fetch error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to fetch posts',
           message: 'An error occurred while fetching posts',
-          code: 'POSTS_FETCH_ERROR'
+          code: 'POSTS_FETCH_ERROR',
         });
       }
     }
   );
 
-  app.post('/api/posts',
+  app.post(
+    '/api/posts',
     authenticateToken,
     authorize('posts', 'create'),
     rateLimitPerUser(10, 60000), // 10 posts per minute
@@ -215,7 +213,7 @@ export function setupSecureRoutes(app: Express) {
     async (req, res) => {
       try {
         const postData = req.body;
-        
+
         // Create post with proper validation
         const newPost = {
           id: 'post_' + Date.now(),
@@ -223,29 +221,29 @@ export function setupSecureRoutes(app: Express) {
           author: req.user.email,
           authorId: req.user.uid,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
 
         // In a real implementation, save to database
-        
+
         res.status(201).json({
           success: true,
           message: 'Post created successfully',
-          post: newPost
+          post: newPost,
         });
-
       } catch (error) {
         console.error('Post creation error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to create post',
           message: 'An error occurred while creating the post',
-          code: 'POST_CREATE_ERROR'
+          code: 'POST_CREATE_ERROR',
         });
       }
     }
   );
 
-  app.put('/api/posts/:id',
+  app.put(
+    '/api/posts/:id',
     authenticateToken,
     authorize('posts', 'update'),
     rateLimitPerUser(20, 60000), // 20 updates per minute
@@ -257,31 +255,31 @@ export function setupSecureRoutes(app: Express) {
 
         // Check if user owns the post (in real implementation)
         // For now, we'll allow updates
-        
+
         const updatedPost = {
           id,
           ...updateData,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
 
         res.json({
           success: true,
           message: 'Post updated successfully',
-          post: updatedPost
+          post: updatedPost,
         });
-
       } catch (error) {
         console.error('Post update error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to update post',
           message: 'An error occurred while updating the post',
-          code: 'POST_UPDATE_ERROR'
+          code: 'POST_UPDATE_ERROR',
         });
       }
     }
   );
 
-  app.delete('/api/posts/:id',
+  app.delete(
+    '/api/posts/:id',
     authenticateToken,
     authorize('posts', 'delete'),
     rateLimitPerUser(10, 60000), // 10 deletes per minute
@@ -295,15 +293,14 @@ export function setupSecureRoutes(app: Express) {
         res.json({
           success: true,
           message: 'Post deleted successfully',
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
-
       } catch (error) {
         console.error('Post deletion error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to delete post',
           message: 'An error occurred while deleting the post',
-          code: 'POST_DELETE_ERROR'
+          code: 'POST_DELETE_ERROR',
         });
       }
     }
@@ -313,7 +310,8 @@ export function setupSecureRoutes(app: Express) {
   // SECURE USER MANAGEMENT ENDPOINTS
   // =============================================================================
 
-  app.get('/api/users/profile',
+  app.get(
+    '/api/users/profile',
     authenticateToken,
     authorize('profile', 'read'),
     rateLimitPerUser(50, 60000), // 50 requests per minute
@@ -327,30 +325,32 @@ export function setupSecureRoutes(app: Express) {
           email: user.email,
           role: user.role,
           createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString()
+          lastLogin: new Date().toISOString(),
         };
 
         res.json(profile);
-
       } catch (error) {
         console.error('Profile fetch error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to fetch profile',
           message: 'An error occurred while fetching the profile',
-          code: 'PROFILE_FETCH_ERROR'
+          code: 'PROFILE_FETCH_ERROR',
         });
       }
     }
   );
 
-  app.put('/api/users/profile',
+  app.put(
+    '/api/users/profile',
     authenticateToken,
     authorize('profile', 'update'),
     rateLimitPerUser(10, 60000), // 10 updates per minute
-    validateInput(z.object({
-      name: z.string().min(2).max(50).optional(),
-      email: z.string().email().optional()
-    })),
+    validateInput(
+      z.object({
+        name: z.string().min(2).max(50).optional(),
+        email: z.string().email().optional(),
+      })
+    ),
     async (req, res) => {
       try {
         const updateData = req.body;
@@ -358,21 +358,20 @@ export function setupSecureRoutes(app: Express) {
         // Update user profile (in real implementation)
         const updatedProfile = {
           ...updateData,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
 
         res.json({
           success: true,
           message: 'Profile updated successfully',
-          profile: updatedProfile
+          profile: updatedProfile,
         });
-
       } catch (error) {
         console.error('Profile update error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to update profile',
           message: 'An error occurred while updating the profile',
-          code: 'PROFILE_UPDATE_ERROR'
+          code: 'PROFILE_UPDATE_ERROR',
         });
       }
     }
@@ -382,15 +381,18 @@ export function setupSecureRoutes(app: Express) {
   // SECURE ADMIN ENDPOINTS
   // =============================================================================
 
-  app.get('/api/admin/users',
+  app.get(
+    '/api/admin/users',
     authenticateToken,
     requireAdmin,
     rateLimitPerUser(100, 60000), // 100 requests per minute
-    validateQuery(z.object({
-      limit: z.number().int().min(1).max(100).default(10),
-      offset: z.number().int().min(0).default(0),
-      role: z.enum(['admin', 'user', 'moderator']).optional()
-    })),
+    validateQuery(
+      z.object({
+        limit: z.number().int().min(1).max(100).default(10),
+        offset: z.number().int().min(0).default(0),
+        role: z.enum(['admin', 'user', 'moderator']).optional(),
+      })
+    ),
     async (req, res) => {
       try {
         const { limit, offset, role } = req.query;
@@ -401,8 +403,8 @@ export function setupSecureRoutes(app: Express) {
             id: 'user_1',
             email: 'user1@example.com',
             role: 'user',
-            createdAt: new Date().toISOString()
-          }
+            createdAt: new Date().toISOString(),
+          },
         ];
 
         res.json({
@@ -411,16 +413,15 @@ export function setupSecureRoutes(app: Express) {
             limit,
             offset,
             total: users.length,
-            hasMore: false
-          }
+            hasMore: false,
+          },
         });
-
       } catch (error) {
         console.error('Admin users fetch error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to fetch users',
           message: 'An error occurred while fetching users',
-          code: 'ADMIN_USERS_FETCH_ERROR'
+          code: 'ADMIN_USERS_FETCH_ERROR',
         });
       }
     }
@@ -430,17 +431,21 @@ export function setupSecureRoutes(app: Express) {
   // SECURE FILE UPLOAD ENDPOINTS
   // =============================================================================
 
-  app.post('/api/upload',
+  app.post(
+    '/api/upload',
     authenticateToken,
     rateLimitPerUser(5, 60000), // 5 uploads per minute
-    validateFileUpload(['image/jpeg', 'image/png', 'image/gif', 'image/webp'], 5 * 1024 * 1024), // 5MB max
+    validateFileUpload(
+      ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      5 * 1024 * 1024
+    ), // 5MB max
     async (req, res) => {
       try {
         if (!req.file) {
           return res.status(400).json({
             error: 'No file uploaded',
             message: 'Please select a file to upload',
-            code: 'NO_FILE'
+            code: 'NO_FILE',
           });
         }
 
@@ -454,21 +459,20 @@ export function setupSecureRoutes(app: Express) {
           size,
           uploadedBy: req.user.uid,
           uploadedAt: new Date().toISOString(),
-          url: `/uploads/${filename}` // Mock URL
+          url: `/uploads/${filename}`, // Mock URL
         };
 
         res.status(201).json({
           success: true,
           message: 'File uploaded successfully',
-          file: uploadedFile
+          file: uploadedFile,
         });
-
       } catch (error) {
         console.error('File upload error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to upload file',
           message: 'An error occurred while uploading the file',
-          code: 'FILE_UPLOAD_ERROR'
+          code: 'FILE_UPLOAD_ERROR',
         });
       }
     }
@@ -478,7 +482,8 @@ export function setupSecureRoutes(app: Express) {
   // SECURE ANALYTICS ENDPOINTS
   // =============================================================================
 
-  app.get('/api/analytics/dashboard',
+  app.get(
+    '/api/analytics/dashboard',
     authenticateToken,
     authorize('analytics', 'read'),
     rateLimitPerUser(50, 60000), // 50 requests per minute
@@ -492,17 +497,16 @@ export function setupSecureRoutes(app: Express) {
           engagementRate: 12.5,
           topPosts: [],
           userGrowth: [],
-          generatedAt: new Date().toISOString()
+          generatedAt: new Date().toISOString(),
         };
 
         res.json(analytics);
-
       } catch (error) {
         console.error('Analytics fetch error:', error);
-        res.status(500).json({ 
+        res.status(500).json({
           error: 'Failed to fetch analytics',
           message: 'An error occurred while fetching analytics data',
-          code: 'ANALYTICS_FETCH_ERROR'
+          code: 'ANALYTICS_FETCH_ERROR',
         });
       }
     }
@@ -512,17 +516,15 @@ export function setupSecureRoutes(app: Express) {
   // HEALTH CHECK ENDPOINT
   // =============================================================================
 
-  app.get('/api/health',
-    (req, res) => {
-      res.json({
-        status: 'healthy',
-        timestamp: new Date().toISOString(),
-        uptime: process.uptime(),
-        version: process.env.npm_package_version || '1.0.0',
-        environment: process.env.NODE_ENV || 'development'
-      });
-    }
-  );
+  app.get('/api/health', (req, res) => {
+    res.json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      version: process.env.npm_package_version || '1.0.0',
+      environment: process.env.NODE_ENV || 'development',
+    });
+  });
 
   // =============================================================================
   // ERROR HANDLING MIDDLEWARE
@@ -533,7 +535,7 @@ export function setupSecureRoutes(app: Express) {
     res.status(404).json({
       error: 'Not Found',
       message: `Route ${req.method} ${req.originalUrl} not found`,
-      code: 'ROUTE_NOT_FOUND'
+      code: 'ROUTE_NOT_FOUND',
     });
   });
 
@@ -548,7 +550,7 @@ export function setupSecureRoutes(app: Express) {
       error: 'Internal Server Error',
       message: isDevelopment ? error.message : 'An unexpected error occurred',
       code: 'INTERNAL_ERROR',
-      ...(isDevelopment && { stack: error.stack })
+      ...(isDevelopment && { stack: error.stack }),
     });
   });
 }

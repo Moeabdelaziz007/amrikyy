@@ -10,10 +10,14 @@ export default function Workflows() {
         <Header />
         <main className="flex-1 overflow-auto p-6">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-foreground mb-8">Workflows</h1>
-              <div className="space-y-6">
+            <h1 className="text-3xl font-bold text-foreground mb-8">
+              Workflows
+            </h1>
+            <div className="space-y-6">
               <div className="bg-card p-6 rounded-lg border">
-                <p className="text-muted-foreground">Workflow management interface will be displayed here.</p>
+                <p className="text-muted-foreground">
+                  Workflow management interface will be displayed here.
+                </p>
               </div>
             </div>
           </div>

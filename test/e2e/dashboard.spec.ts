@@ -4,11 +4,14 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Mock authenticated state
     await page.addInitScript(() => {
-      window.localStorage.setItem('auth-user', JSON.stringify({
-        uid: 'test-uid',
-        email: 'test@example.com',
-        displayName: 'Test User'
-      }));
+      window.localStorage.setItem(
+        'auth-user',
+        JSON.stringify({
+          uid: 'test-uid',
+          email: 'test@example.com',
+          displayName: 'Test User',
+        })
+      );
     });
 
     await page.goto('http://localhost:3000/dashboard');
@@ -16,7 +19,9 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
 
   test('should display dashboard overview', async ({ page }) => {
     await expect(page.locator('h1')).toContainText('Dashboard');
-    await expect(page.locator('[data-testid="welcome-message"]')).toContainText('Welcome back, Test User');
+    await expect(page.locator('[data-testid="welcome-message"]')).toContainText(
+      'Welcome back, Test User'
+    );
   });
 
   test('should show user statistics', async ({ page }) => {
@@ -43,15 +48,15 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
     // Test Create Workflow
     await page.click('text=Create Workflow');
     await expect(page).toHaveURL(/.*workflows.*create/);
-    
+
     await page.goBack();
-    
+
     // Test Add AI Agent
     await page.click('text=Add AI Agent');
     await expect(page).toHaveURL(/.*ai-agents.*create/);
-    
+
     await page.goBack();
-    
+
     // Test View Analytics
     await page.click('text=View Analytics');
     await expect(page).toHaveURL(/.*analytics/);
@@ -70,15 +75,15 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
     // Navigate to AI Agents
     await page.click('[data-testid="sidebar"] >> text=AI Agents');
     await expect(page).toHaveURL(/.*ai-agents/);
-    
+
     // Navigate to Workflows
     await page.click('[data-testid="sidebar"] >> text=Workflows');
     await expect(page).toHaveURL(/.*workflows/);
-    
+
     // Navigate to Analytics
     await page.click('[data-testid="sidebar"] >> text=Analytics');
     await expect(page).toHaveURL(/.*analytics/);
-    
+
     // Navigate back to Dashboard
     await page.click('[data-testid="sidebar"] >> text=Dashboard');
     await expect(page).toHaveURL(/.*dashboard/);
@@ -94,13 +99,13 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
 
   test('should handle user menu actions', async ({ page }) => {
     await page.click('[data-testid="user-avatar"]');
-    
+
     // Test Profile
     await page.click('[data-testid="user-menu"] >> text=Profile');
     await expect(page).toHaveURL(/.*profile/);
-    
+
     await page.goBack();
-    
+
     // Test Settings
     await page.click('[data-testid="user-avatar"]');
     await page.click('[data-testid="user-menu"] >> text=Settings');
@@ -109,14 +114,16 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
 
   test('should be responsive on mobile', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // Check mobile menu
-    await expect(page.locator('[data-testid="mobile-menu-button"]')).toBeVisible();
-    
+    await expect(
+      page.locator('[data-testid="mobile-menu-button"]')
+    ).toBeVisible();
+
     // Open mobile menu
     await page.click('[data-testid="mobile-menu-button"]');
     await expect(page.locator('[data-testid="mobile-menu"]')).toBeVisible();
-    
+
     // Test mobile navigation
     await page.click('[data-testid="mobile-menu"] >> text=AI Agents');
     await expect(page).toHaveURL(/.*ai-agents/);
@@ -125,7 +132,7 @@ test.describe('AuraOS Dashboard E2E Tests', () => {
   test('should handle search functionality', async ({ page }) => {
     await page.fill('[data-testid="search-input"]', 'workflow');
     await page.press('[data-testid="search-input"]', 'Enter');
-    
+
     await expect(page).toHaveURL(/.*search.*workflow/);
     await expect(page.locator('text=Search Results')).toBeVisible();
   });

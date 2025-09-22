@@ -57,7 +57,13 @@ export interface AutomationTask {
   workspaceId: string;
   userId: string;
   type: 'workflow' | 'trigger' | 'action' | 'condition' | 'ai' | 'mcp';
-  category: 'social_media' | 'email' | 'data' | 'ai' | 'integration' | 'notification';
+  category:
+    | 'social_media'
+    | 'email'
+    | 'data'
+    | 'ai'
+    | 'integration'
+    | 'notification';
   status: 'active' | 'inactive' | 'draft' | 'error' | 'running' | 'paused';
   priority: 'low' | 'medium' | 'high' | 'critical';
   tags: string[];
@@ -87,7 +93,13 @@ export interface TaskExecution {
   id: string;
   taskId: string;
   userId: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'retrying';
+  status:
+    | 'pending'
+    | 'running'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | 'retrying';
   startedAt: Date;
   completedAt?: Date;
   duration?: number;
@@ -124,7 +136,14 @@ export interface MCPTool {
   id: string;
   name: string;
   description: string;
-  category: 'development' | 'data' | 'database' | 'web' | 'ai' | 'automation' | 'integration';
+  category:
+    | 'development'
+    | 'data'
+    | 'database'
+    | 'web'
+    | 'ai'
+    | 'automation'
+    | 'integration';
   icon: string;
   version: string;
   status: 'active' | 'inactive' | 'error' | 'updating';
@@ -205,7 +224,13 @@ export interface WorkflowSuggestion {
   id: string;
   title: string;
   description: string;
-  category: 'optimization' | 'automation' | 'integration' | 'performance' | 'security' | 'scalability';
+  category:
+    | 'optimization'
+    | 'automation'
+    | 'integration'
+    | 'performance'
+    | 'security'
+    | 'scalability';
   priority: 'low' | 'medium' | 'high' | 'critical';
   impact: 'low' | 'medium' | 'high' | 'transformational';
   effort: 'low' | 'medium' | 'high' | 'extensive';
@@ -302,7 +327,16 @@ export interface WorkflowTemplate {
 export interface WorkflowNode {
   id: string;
   workflowId: string;
-  type: 'trigger' | 'action' | 'condition' | 'delay' | 'webhook' | 'ai' | 'data' | 'loop' | 'merge';
+  type:
+    | 'trigger'
+    | 'action'
+    | 'condition'
+    | 'delay'
+    | 'webhook'
+    | 'ai'
+    | 'data'
+    | 'loop'
+    | 'merge';
   name: string;
   description: string;
   position: { x: number; y: number };
@@ -458,15 +492,24 @@ export const CreateTaskSchema = z.object({
   description: z.string().max(1000),
   workspaceId: z.string().uuid(),
   type: z.enum(['workflow', 'trigger', 'action', 'condition', 'ai', 'mcp']),
-  category: z.enum(['social_media', 'email', 'data', 'ai', 'integration', 'notification']),
+  category: z.enum([
+    'social_media',
+    'email',
+    'data',
+    'ai',
+    'integration',
+    'notification',
+  ]),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   tags: z.array(z.string()).default([]),
   config: z.record(z.any()).default({}),
-  schedule: z.object({
-    enabled: z.boolean(),
-    cron: z.string(),
-    timezone: z.string(),
-  }).optional(),
+  schedule: z
+    .object({
+      enabled: z.boolean(),
+      cron: z.string(),
+      timezone: z.string(),
+    })
+    .optional(),
   variables: z.record(z.any()).default({}),
 });
 
@@ -505,7 +548,14 @@ export const ExecuteTaskSchema = z.object({
 export const CreateSuggestionSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().max(1000),
-  category: z.enum(['optimization', 'automation', 'integration', 'performance', 'security', 'scalability']),
+  category: z.enum([
+    'optimization',
+    'automation',
+    'integration',
+    'performance',
+    'security',
+    'scalability',
+  ]),
   priority: z.enum(['low', 'medium', 'high', 'critical']),
   impact: z.enum(['low', 'medium', 'high', 'transformational']),
   effort: z.enum(['low', 'medium', 'high', 'extensive']),

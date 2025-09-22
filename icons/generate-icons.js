@@ -14,17 +14,20 @@ const iconSizes = [
   { size: 152, name: 'icon-152x152.png' },
   { size: 192, name: 'icon-192x192.png' },
   { size: 384, name: 'icon-384x384.png' },
-  { size: 512, name: 'icon-512x512.png' }
+  { size: 512, name: 'icon-512x512.png' },
 ];
 
 // Read the SVG content
-const svgContent = fs.readFileSync(path.join(__dirname, 'auraos-logo.svg'), 'utf8');
+const svgContent = fs.readFileSync(
+  path.join(__dirname, 'auraos-logo.svg'),
+  'utf8'
+);
 
 // Create a simple PNG generator using Canvas (if available) or fallback to base64
 function generatePNGIcon(size, filename) {
   // For now, we'll create a simple HTML file that can be used to generate PNGs
   // This is a fallback approach since we don't have canvas available in this environment
-  
+
   const htmlContent = `
 <!DOCTYPE html>
 <html>
@@ -46,8 +49,11 @@ function generatePNGIcon(size, filename) {
   </div>
 </body>
 </html>`;
-  
-  fs.writeFileSync(path.join(__dirname, `${filename.replace('.png', '.html')}`), htmlContent);
+
+  fs.writeFileSync(
+    path.join(__dirname, `${filename.replace('.png', '.html')}`),
+    htmlContent
+  );
   console.log(`Generated HTML template for ${filename}`);
 }
 
@@ -57,4 +63,6 @@ iconSizes.forEach(({ size, name }) => {
 });
 
 console.log('Icon generation complete!');
-console.log('Note: To convert HTML templates to PNG, use a tool like Puppeteer or screenshot the HTML files.');
+console.log(
+  'Note: To convert HTML templates to PNG, use a tool like Puppeteer or screenshot the HTML files.'
+);

@@ -1,4 +1,3 @@
-
 import { User, users } from '../shared/schema.js';
 import { UserPersona } from '../shared/personas.js';
 import { storage } from './storage.js';
@@ -51,7 +50,10 @@ interface SmartShoppingAgent {
 }
 
 // Helper function to calculate AI score based on persona
-const calculateAIScore = (service: TravelService | FoodService, persona: UserPersona | null): number => {
+const calculateAIScore = (
+  service: TravelService | FoodService,
+  persona: UserPersona | null
+): number => {
   if (!persona) {
     return Math.random() * 2 + 8; // Default score if no persona
   }
@@ -61,13 +63,28 @@ const calculateAIScore = (service: TravelService | FoodService, persona: UserPer
   // Travel persona scoring
   if ('travelStyle' in persona && persona.travel) {
     const travelPersona = persona.travel;
-    if (service.type === 'hotel' && travelPersona.preferredHotelChains.some(chain => service.name.includes(chain))) {
+    if (
+      service.type === 'hotel' &&
+      travelPersona.preferredHotelChains.some(chain =>
+        service.name.includes(chain)
+      )
+    ) {
       score += 1.5;
     }
-    if (service.type === 'flight' && travelPersona.preferredAirlines.some(airline => service.name.includes(airline))) {
+    if (
+      service.type === 'flight' &&
+      travelPersona.preferredAirlines.some(airline =>
+        service.name.includes(airline)
+      )
+    ) {
       score += 1.5;
     }
-    if (('interests' in service) && service.interests.some(interest => travelPersona.interests.includes(interest))) {
+    if (
+      'interests' in service &&
+      service.interests.some(interest =>
+        travelPersona.interests.includes(interest)
+      )
+    ) {
       score += 1.0;
     }
   }
@@ -75,10 +92,16 @@ const calculateAIScore = (service: TravelService | FoodService, persona: UserPer
   // Foodie persona scoring
   if ('favoriteCuisines' in persona && persona.foodie) {
     const foodiePersona = persona.foodie;
-    if ('cuisine' in service && service.cuisine.some(c => foodiePersona.favoriteCuisines.includes(c))) {
+    if (
+      'cuisine' in service &&
+      service.cuisine.some(c => foodiePersona.favoriteCuisines.includes(c))
+    ) {
       score += 1.5;
     }
-    if ('diningStyle' in service && foodiePersona.diningStyle === service.diningStyle) {
+    if (
+      'diningStyle' in service &&
+      foodiePersona.diningStyle === service.diningStyle
+    ) {
       score += 1.0;
     }
   }
@@ -103,7 +126,8 @@ export class TravelFoodServiceManager {
       id: 'flight_booking_agent',
       name: 'AI Flight Booking Assistant',
       type: 'flight',
-      description: 'Intelligent flight search and booking with price optimization and deal detection',
+      description:
+        'Intelligent flight search and booking with price optimization and deal detection',
       priceRange: { min: 50, max: 2000, currency: 'USD' },
       features: [
         'Real-time price monitoring',
@@ -111,7 +135,7 @@ export class TravelFoodServiceManager {
         'Flexible date suggestions',
         'Seat preference optimization',
         'Baggage fee calculation',
-        'Layover optimization'
+        'Layover optimization',
       ],
       aiCapabilities: [
         'Predictive pricing analysis',
@@ -119,7 +143,7 @@ export class TravelFoodServiceManager {
         'Route optimization',
         'Personalized recommendations',
         'Price drop alerts',
-        'Alternative route suggestions'
+        'Alternative route suggestions',
       ],
       automationTasks: [
         'Monitor price drops',
@@ -127,8 +151,8 @@ export class TravelFoodServiceManager {
         'Send price alerts',
         'Update travel calendar',
         'Manage seat preferences',
-        'Track flight status'
-      ]
+        'Track flight status',
+      ],
     });
 
     // Hotel Booking Agent
@@ -136,7 +160,8 @@ export class TravelFoodServiceManager {
       id: 'hotel_booking_agent',
       name: 'AI Hotel Booking Assistant',
       type: 'hotel',
-      description: 'Smart hotel search with location optimization and amenity matching',
+      description:
+        'Smart hotel search with location optimization and amenity matching',
       priceRange: { min: 30, max: 1000, currency: 'USD' },
       features: [
         'Location-based recommendations',
@@ -144,7 +169,7 @@ export class TravelFoodServiceManager {
         'Review sentiment analysis',
         'Cancellation policy optimization',
         'Loyalty program integration',
-        'Group booking management'
+        'Group booking management',
       ],
       aiCapabilities: [
         'Location scoring algorithm',
@@ -152,7 +177,7 @@ export class TravelFoodServiceManager {
         'Review sentiment analysis',
         'Price trend prediction',
         'Availability forecasting',
-        'Personalized recommendations'
+        'Personalized recommendations',
       ],
       automationTasks: [
         'Monitor hotel availability',
@@ -160,8 +185,8 @@ export class TravelFoodServiceManager {
         'Send deal notifications',
         'Manage cancellations',
         'Update preferences',
-        'Track loyalty points'
-      ]
+        'Track loyalty points',
+      ],
     });
 
     // Car Rental Agent
@@ -169,7 +194,8 @@ export class TravelFoodServiceManager {
       id: 'car_rental_agent',
       name: 'AI Car Rental Assistant',
       type: 'car_rental',
-      description: 'Intelligent car rental with route optimization and cost analysis',
+      description:
+        'Intelligent car rental with route optimization and cost analysis',
       priceRange: { min: 20, max: 200, currency: 'USD' },
       features: [
         'Vehicle type optimization',
@@ -177,7 +203,7 @@ export class TravelFoodServiceManager {
         'Fuel efficiency analysis',
         'Insurance optimization',
         'Pickup/dropoff optimization',
-        'Multi-day discount detection'
+        'Multi-day discount detection',
       ],
       aiCapabilities: [
         'Route optimization',
@@ -185,7 +211,7 @@ export class TravelFoodServiceManager {
         'Vehicle suitability analysis',
         'Insurance risk assessment',
         'Price trend analysis',
-        'Usage pattern learning'
+        'Usage pattern learning',
       ],
       automationTasks: [
         'Monitor rental prices',
@@ -193,8 +219,8 @@ export class TravelFoodServiceManager {
         'Send price alerts',
         'Manage reservations',
         'Track usage patterns',
-        'Optimize pickup times'
-      ]
+        'Optimize pickup times',
+      ],
     });
 
     // Travel Package Agent
@@ -202,7 +228,8 @@ export class TravelFoodServiceManager {
       id: 'travel_package_agent',
       name: 'AI Travel Package Assistant',
       type: 'package_deal',
-      description: 'Complete travel package optimization with AI-powered bundling',
+      description:
+        'Complete travel package optimization with AI-powered bundling',
       priceRange: { min: 200, max: 5000, currency: 'USD' },
       features: [
         'Multi-service bundling',
@@ -210,7 +237,7 @@ export class TravelFoodServiceManager {
         'Itinerary generation',
         'Activity recommendations',
         'Transportation coordination',
-        'Accommodation matching'
+        'Accommodation matching',
       ],
       aiCapabilities: [
         'Package optimization algorithm',
@@ -218,7 +245,7 @@ export class TravelFoodServiceManager {
         'Cost-benefit analysis',
         'Preference learning',
         'Seasonal optimization',
-        'Group coordination'
+        'Group coordination',
       ],
       automationTasks: [
         'Monitor package deals',
@@ -226,8 +253,8 @@ export class TravelFoodServiceManager {
         'Send deal alerts',
         'Manage bookings',
         'Update preferences',
-        'Coordinate services'
-      ]
+        'Coordinate services',
+      ],
     });
 
     // Activity Booking Agent
@@ -243,7 +270,7 @@ export class TravelFoodServiceManager {
         'Group size optimization',
         'Time slot optimization',
         'Review analysis',
-        'Local expert integration'
+        'Local expert integration',
       ],
       aiCapabilities: [
         'Interest matching',
@@ -251,7 +278,7 @@ export class TravelFoodServiceManager {
         'Crowd level analysis',
         'Review sentiment analysis',
         'Personalization engine',
-        'Optimal timing prediction'
+        'Optimal timing prediction',
       ],
       automationTasks: [
         'Monitor activity availability',
@@ -259,8 +286,8 @@ export class TravelFoodServiceManager {
         'Send recommendations',
         'Manage reservations',
         'Update preferences',
-        'Track activity history'
-      ]
+        'Track activity history',
+      ],
     });
   }
 
@@ -270,7 +297,8 @@ export class TravelFoodServiceManager {
       id: 'restaurant_discovery_agent',
       name: 'AI Restaurant Discovery Assistant',
       type: 'restaurant',
-      description: 'Intelligent restaurant discovery with cuisine matching and reservation automation',
+      description:
+        'Intelligent restaurant discovery with cuisine matching and reservation automation',
       priceRange: { min: 15, max: 200, currency: 'USD' },
       features: [
         'Cuisine preference learning',
@@ -278,7 +306,7 @@ export class TravelFoodServiceManager {
         'Dietary restriction handling',
         'Reservation management',
         'Review sentiment analysis',
-        'Menu optimization'
+        'Menu optimization',
       ],
       aiCapabilities: [
         'Cuisine preference learning',
@@ -286,7 +314,7 @@ export class TravelFoodServiceManager {
         'Dietary analysis',
         'Review sentiment analysis',
         'Menu recommendation',
-        'Optimal timing prediction'
+        'Optimal timing prediction',
       ],
       automationTasks: [
         'Monitor restaurant availability',
@@ -294,8 +322,8 @@ export class TravelFoodServiceManager {
         'Send recommendations',
         'Manage dietary preferences',
         'Track dining history',
-        'Update cuisine preferences'
-      ]
+        'Update cuisine preferences',
+      ],
     });
 
     // Food Delivery Agent
@@ -303,7 +331,8 @@ export class TravelFoodServiceManager {
       id: 'food_delivery_agent',
       name: 'AI Food Delivery Assistant',
       type: 'delivery',
-      description: 'Smart food delivery with order optimization and cost analysis',
+      description:
+        'Smart food delivery with order optimization and cost analysis',
       priceRange: { min: 10, max: 100, currency: 'USD' },
       features: [
         'Order optimization',
@@ -311,7 +340,7 @@ export class TravelFoodServiceManager {
         'Cost comparison',
         'Dietary filtering',
         'Repeat order automation',
-        'Group order coordination'
+        'Group order coordination',
       ],
       aiCapabilities: [
         'Order pattern learning',
@@ -319,7 +348,7 @@ export class TravelFoodServiceManager {
         'Cost optimization',
         'Dietary analysis',
         'Preference learning',
-        'Timing optimization'
+        'Timing optimization',
       ],
       automationTasks: [
         'Monitor delivery options',
@@ -327,8 +356,8 @@ export class TravelFoodServiceManager {
         'Send order suggestions',
         'Manage dietary preferences',
         'Track order history',
-        'Optimize delivery times'
-      ]
+        'Optimize delivery times',
+      ],
     });
 
     // Grocery Shopping Agent
@@ -336,7 +365,8 @@ export class TravelFoodServiceManager {
       id: 'grocery_shopping_agent',
       name: 'AI Grocery Shopping Assistant',
       type: 'grocery',
-      description: 'Intelligent grocery shopping with inventory management and cost optimization',
+      description:
+        'Intelligent grocery shopping with inventory management and cost optimization',
       priceRange: { min: 20, max: 300, currency: 'USD' },
       features: [
         'Inventory tracking',
@@ -344,7 +374,7 @@ export class TravelFoodServiceManager {
         'Meal planning integration',
         'Expiry date monitoring',
         'Bulk buying optimization',
-        'Nutritional analysis'
+        'Nutritional analysis',
       ],
       aiCapabilities: [
         'Inventory prediction',
@@ -352,7 +382,7 @@ export class TravelFoodServiceManager {
         'Meal planning algorithm',
         'Nutritional optimization',
         'Expiry prediction',
-        'Cost optimization'
+        'Cost optimization',
       ],
       automationTasks: [
         'Monitor grocery prices',
@@ -360,8 +390,8 @@ export class TravelFoodServiceManager {
         'Send shopping lists',
         'Manage inventory',
         'Track nutrition goals',
-        'Optimize shopping trips'
-      ]
+        'Optimize shopping trips',
+      ],
     });
 
     // Meal Planning Agent
@@ -369,7 +399,8 @@ export class TravelFoodServiceManager {
       id: 'meal_planning_agent',
       name: 'AI Meal Planning Assistant',
       type: 'meal_plan',
-      description: 'Smart meal planning with nutritional optimization and shopping automation',
+      description:
+        'Smart meal planning with nutritional optimization and shopping automation',
       priceRange: { min: 50, max: 500, currency: 'USD' },
       features: [
         'Nutritional optimization',
@@ -377,7 +408,7 @@ export class TravelFoodServiceManager {
         'Shopping list generation',
         'Recipe recommendations',
         'Budget optimization',
-        'Family coordination'
+        'Family coordination',
       ],
       aiCapabilities: [
         'Nutritional analysis',
@@ -385,7 +416,7 @@ export class TravelFoodServiceManager {
         'Recipe matching',
         'Budget optimization',
         'Family preference learning',
-        'Meal timing optimization'
+        'Meal timing optimization',
       ],
       automationTasks: [
         'Generate meal plans',
@@ -393,8 +424,8 @@ export class TravelFoodServiceManager {
         'Send recipe suggestions',
         'Manage dietary goals',
         'Track nutrition intake',
-        'Optimize meal timing'
-      ]
+        'Optimize meal timing',
+      ],
     });
 
     // Catering Service Agent
@@ -402,7 +433,8 @@ export class TravelFoodServiceManager {
       id: 'catering_service_agent',
       name: 'AI Catering Service Assistant',
       type: 'catering',
-      description: 'Intelligent catering coordination with event planning and cost optimization',
+      description:
+        'Intelligent catering coordination with event planning and cost optimization',
       priceRange: { min: 100, max: 2000, currency: 'USD' },
       features: [
         'Event planning integration',
@@ -410,7 +442,7 @@ export class TravelFoodServiceManager {
         'Guest count optimization',
         'Dietary accommodation',
         'Cost per person analysis',
-        'Vendor coordination'
+        'Vendor coordination',
       ],
       aiCapabilities: [
         'Event analysis',
@@ -418,7 +450,7 @@ export class TravelFoodServiceManager {
         'Guest preference learning',
         'Cost optimization',
         'Vendor matching',
-        'Timing coordination'
+        'Timing coordination',
       ],
       automationTasks: [
         'Monitor catering options',
@@ -426,8 +458,8 @@ export class TravelFoodServiceManager {
         'Send menu suggestions',
         'Manage guest preferences',
         'Track event history',
-        'Optimize catering costs'
-      ]
+        'Optimize catering costs',
+      ],
     });
   }
 
@@ -442,7 +474,7 @@ export class TravelFoodServiceManager {
         dealDetection: true,
         bookingAutomation: true,
         preferenceLearning: true,
-        budgetOptimization: true
+        budgetOptimization: true,
       },
       integrations: [
         'Skyscanner API',
@@ -450,7 +482,7 @@ export class TravelFoodServiceManager {
         'Expedia API',
         'Google Flights API',
         'Airbnb API',
-        'RentalCars API'
+        'RentalCars API',
       ],
       automationRules: [
         'Monitor price drops for watched flights',
@@ -458,8 +490,8 @@ export class TravelFoodServiceManager {
         'Send deal alerts for preferred destinations',
         'Optimize booking timing based on historical data',
         'Coordinate multi-service bookings',
-        'Manage loyalty program points'
-      ]
+        'Manage loyalty program points',
+      ],
     });
 
     // Food Shopping Agent
@@ -472,7 +504,7 @@ export class TravelFoodServiceManager {
         dealDetection: true,
         bookingAutomation: true,
         preferenceLearning: true,
-        budgetOptimization: true
+        budgetOptimization: true,
       },
       integrations: [
         'Uber Eats API',
@@ -480,7 +512,7 @@ export class TravelFoodServiceManager {
         'Grubhub API',
         'Instacart API',
         'Amazon Fresh API',
-        'Local restaurant APIs'
+        'Local restaurant APIs',
       ],
       automationRules: [
         'Monitor food delivery prices',
@@ -488,8 +520,8 @@ export class TravelFoodServiceManager {
         'Send restaurant recommendations',
         'Optimize grocery shopping lists',
         'Track dietary preferences',
-        'Manage meal planning schedules'
-      ]
+        'Manage meal planning schedules',
+      ],
     });
 
     // Universal Shopping Agent
@@ -502,7 +534,7 @@ export class TravelFoodServiceManager {
         dealDetection: true,
         bookingAutomation: true,
         preferenceLearning: true,
-        budgetOptimization: true
+        budgetOptimization: true,
       },
       integrations: [
         'Amazon API',
@@ -510,7 +542,7 @@ export class TravelFoodServiceManager {
         'Google Shopping API',
         'Price comparison APIs',
         'Deal aggregation APIs',
-        'Wishlist management APIs'
+        'Wishlist management APIs',
       ],
       automationRules: [
         'Monitor prices across multiple platforms',
@@ -518,8 +550,8 @@ export class TravelFoodServiceManager {
         'Send deal alerts for watched items',
         'Optimize shopping timing',
         'Manage wishlists and budgets',
-        'Track purchase history and preferences'
-      ]
+        'Track purchase history and preferences',
+      ],
     });
   }
 
@@ -560,7 +592,7 @@ export class TravelFoodServiceManager {
     automationRules: string[]
   ): SmartShoppingAgent {
     const id = `custom_${name.toLowerCase().replace(/\s+/g, '_')}_${Date.now()}`;
-    
+
     const agent: SmartShoppingAgent = {
       id,
       name,
@@ -570,10 +602,10 @@ export class TravelFoodServiceManager {
         dealDetection: capabilities.dealDetection || false,
         bookingAutomation: capabilities.bookingAutomation || false,
         preferenceLearning: capabilities.preferenceLearning || false,
-        budgetOptimization: capabilities.budgetOptimization || false
+        budgetOptimization: capabilities.budgetOptimization || false,
       },
       integrations,
-      automationRules
+      automationRules,
     };
 
     this.smartAgents.set(id, agent);
@@ -592,53 +624,79 @@ export class TravelFoodServiceManager {
     activities: any[];
     packages: any[];
   }> {
-    const user = await storage.select().from(users).where(eq(users.id, userId)).first();
+    const user = await storage
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .first();
     const persona = user?.persona ?? null;
     const allTravelServices = this.getTravelServices();
 
     const flights = allTravelServices
-      .filter(service => service.type === 'flight' && service.priceRange.max <= budget * 0.4)
+      .filter(
+        service =>
+          service.type === 'flight' && service.priceRange.max <= budget * 0.4
+      )
       .map(service => ({
         airline: service.name,
-        price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
         duration: '5h 30m', // Placeholder
         stops: Math.floor(Math.random() * 2), // Placeholder
         departure: '2024-01-15 08:00', // Placeholder
         arrival: '2024-01-15 13:30', // Placeholder
-        aiScore: calculateAIScore(service, persona)
+        aiScore: calculateAIScore(service, persona),
       }));
 
     const hotels = allTravelServices
-      .filter(service => service.type === 'hotel' && service.priceRange.max <= budget * 0.5)
+      .filter(
+        service =>
+          service.type === 'hotel' && service.priceRange.max <= budget * 0.5
+      )
       .map(service => ({
         name: service.name,
-        price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
         rating: Math.random() * 1 + 4, // 4.0-5.0
         location: 'City Center', // Placeholder
         amenities: service.features.slice(0, 4),
-        aiScore: calculateAIScore(service, persona)
+        aiScore: calculateAIScore(service, persona),
       }));
 
     const activities = allTravelServices
-      .filter(service => service.type === 'activity' && service.priceRange.max <= budget * 0.1)
+      .filter(
+        service =>
+          service.type === 'activity' && service.priceRange.max <= budget * 0.1
+      )
       .map(service => ({
         name: service.name,
-        price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
         duration: '3 hours', // Placeholder
         rating: Math.random() * 1 + 4, // 4.0-5.0
-        aiScore: calculateAIScore(service, persona)
+        aiScore: calculateAIScore(service, persona),
       }));
 
     const packages = allTravelServices
-      .filter(service => service.type === 'package_deal' && service.priceRange.max <= budget)
+      .filter(
+        service =>
+          service.type === 'package_deal' && service.priceRange.max <= budget
+      )
       .map(service => ({
-          name: service.name,
-          price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
-          savings: (service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min)) * 0.2,
-          includes: service.features.slice(0,4),
-          aiScore: calculateAIScore(service, persona)
+        name: service.name,
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
+        savings:
+          (service.priceRange.min +
+            Math.random() * (service.priceRange.max - service.priceRange.min)) *
+          0.2,
+        includes: service.features.slice(0, 4),
+        aiScore: calculateAIScore(service, persona),
       }));
-
 
     return { flights, hotels, activities, packages };
   }
@@ -655,52 +713,80 @@ export class TravelFoodServiceManager {
     groceries: any[];
     mealPlans: any[];
   }> {
-      const user = await storage.select().from(users).where(eq(users.id, userId)).first();
-      const persona = user?.persona ?? null;
-      const allFoodServices = this.getFoodServices();
+    const user = await storage
+      .select()
+      .from(users)
+      .where(eq(users.id, userId))
+      .first();
+    const persona = user?.persona ?? null;
+    const allFoodServices = this.getFoodServices();
 
-      const restaurants = allFoodServices
-          .filter(service => service.type === 'restaurant' && service.priceRange.max <= budget * 0.3)
-          .map(service => ({
-              name: service.name,
-              cuisine: service.cuisine.join(', '),
-              price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
-              rating: Math.random() * 1 + 4, // 4.0-5.0
-              distance: `${(Math.random() * 5).toFixed(1)} miles`, // Placeholder
-              aiScore: calculateAIScore(service, persona)
-          }));
+    const restaurants = allFoodServices
+      .filter(
+        service =>
+          service.type === 'restaurant' &&
+          service.priceRange.max <= budget * 0.3
+      )
+      .map(service => ({
+        name: service.name,
+        cuisine: service.cuisine.join(', '),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
+        rating: Math.random() * 1 + 4, // 4.0-5.0
+        distance: `${(Math.random() * 5).toFixed(1)} miles`, // Placeholder
+        aiScore: calculateAIScore(service, persona),
+      }));
 
-      const delivery = allFoodServices
-          .filter(service => service.type === 'delivery' && service.priceRange.max <= budget * 0.2)
-          .map(service => ({
-              name: service.name,
-              cuisine: service.cuisine.join(', '),
-              price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
-              deliveryTime: `${Math.floor(Math.random() * 30 + 15)} min`, // 15-45 min
-              rating: Math.random() * 1 + 4, // 4.0-5.0
-              aiScore: calculateAIScore(service, persona)
-          }));
+    const delivery = allFoodServices
+      .filter(
+        service =>
+          service.type === 'delivery' && service.priceRange.max <= budget * 0.2
+      )
+      .map(service => ({
+        name: service.name,
+        cuisine: service.cuisine.join(', '),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
+        deliveryTime: `${Math.floor(Math.random() * 30 + 15)} min`, // 15-45 min
+        rating: Math.random() * 1 + 4, // 4.0-5.0
+        aiScore: calculateAIScore(service, persona),
+      }));
 
-      const groceries = allFoodServices
-          .filter(service => service.type === 'grocery' && service.priceRange.max <= budget * 0.4)
-          .map(service => ({
-              name: service.name,
-              items: service.features.slice(0, 3),
-              price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
-              savings: (service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min)) * 0.1,
-              aiScore: calculateAIScore(service, persona)
-          }));
+    const groceries = allFoodServices
+      .filter(
+        service =>
+          service.type === 'grocery' && service.priceRange.max <= budget * 0.4
+      )
+      .map(service => ({
+        name: service.name,
+        items: service.features.slice(0, 3),
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
+        savings:
+          (service.priceRange.min +
+            Math.random() * (service.priceRange.max - service.priceRange.min)) *
+          0.1,
+        aiScore: calculateAIScore(service, persona),
+      }));
 
-      const mealPlans = allFoodServices
-          .filter(service => service.type === 'meal_plan' && service.priceRange.max <= budget * 0.5)
-          .map(service => ({
-              name: service.name,
-              duration: '7 days', // Placeholder
-              price: service.priceRange.min + Math.random() * (service.priceRange.max - service.priceRange.min),
-              meals: 21, // Placeholder
-              nutritionScore: Math.random() + 9, // 9.0-10.0
-              aiScore: calculateAIScore(service, persona)
-          }));
+    const mealPlans = allFoodServices
+      .filter(
+        service =>
+          service.type === 'meal_plan' && service.priceRange.max <= budget * 0.5
+      )
+      .map(service => ({
+        name: service.name,
+        duration: '7 days', // Placeholder
+        price:
+          service.priceRange.min +
+          Math.random() * (service.priceRange.max - service.priceRange.min),
+        meals: 21, // Placeholder
+        nutritionScore: Math.random() + 9, // 9.0-10.0
+        aiScore: calculateAIScore(service, persona),
+      }));
 
     return { restaurants, delivery, groceries, mealPlans };
   }

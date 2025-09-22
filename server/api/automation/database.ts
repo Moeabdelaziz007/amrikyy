@@ -15,7 +15,8 @@ if (isDevelopment) {
   connectionString = 'sqlite:./dev.db';
 } else {
   // Use PostgreSQL for production
-  connectionString = process.env.DATABASE_URL || 'postgresql://localhost:5432/auraos_automation';
+  connectionString =
+    process.env.DATABASE_URL || 'postgresql://localhost:5432/auraos_automation';
 
   // Create postgres client
   const client = postgres(connectionString, {
@@ -35,34 +36,34 @@ if (isDevelopment) {
     workspaces: [],
     tasks: [],
     executions: [],
-    users: []
+    users: [],
   };
 
   db = {
     select: () => ({
       from: () => ({
         where: () => ({
-          limit: () => mockData
-        })
-      })
+          limit: () => mockData,
+        }),
+      }),
     }),
     insert: () => ({
       values: () => ({
-        returning: () => []
-      })
+        returning: () => [],
+      }),
     }),
     update: () => ({
       set: () => ({
         where: () => ({
-          returning: () => []
-        })
-      })
+          returning: () => [],
+        }),
+      }),
     }),
     delete: () => ({
       where: () => ({
-        returning: () => []
-      })
-    })
+        returning: () => [],
+      }),
+    }),
   };
 }
 
@@ -169,18 +170,18 @@ export class DatabaseUtils {
   // Build search query
   public static buildSearchQuery(searchTerm: string, fields: string[]): string {
     if (!searchTerm || fields.length === 0) return '';
-    
-    const conditions = fields.map(field => 
-      `${field} ILIKE '%${this.escapeString(searchTerm)}%'`
-    ).join(' OR ');
-    
+
+    const conditions = fields
+      .map(field => `${field} ILIKE '%${this.escapeString(searchTerm)}%'`)
+      .join(' OR ');
+
     return `WHERE ${conditions}`;
   }
 
   // Build filter query
   public static buildFilterQuery(filters: Record<string, any>): string {
     if (!filters || Object.keys(filters).length === 0) return '';
-    
+
     const conditions = Object.entries(filters)
       .filter(([_, value]) => value !== undefined && value !== null)
       .map(([key, value]) => {
@@ -190,7 +191,7 @@ export class DatabaseUtils {
         return `${key} = '${this.escapeString(String(value))}'`;
       })
       .join(' AND ');
-    
+
     return conditions ? `WHERE ${conditions}` : '';
   }
 
@@ -200,14 +201,20 @@ export class DatabaseUtils {
     sortOrder: 'asc' | 'desc' = 'desc'
   ): string {
     const validSortFields = [
-      'createdAt', 'updatedAt', 'name', 'status', 'priority',
-      'executionCount', 'successRate', 'avgDuration'
+      'createdAt',
+      'updatedAt',
+      'name',
+      'status',
+      'priority',
+      'executionCount',
+      'successRate',
+      'avgDuration',
     ];
-    
+
     if (!validSortFields.includes(sortBy)) {
       sortBy = 'createdAt';
     }
-    
+
     return `ORDER BY ${sortBy} ${sortOrder.toUpperCase()}`;
   }
 
@@ -217,14 +224,14 @@ export class DatabaseUtils {
   ): Promise<T[]> {
     try {
       const results: T[] = [];
-      
+
       // Note: For actual transaction support, you'd need to use a transaction method
       // This is a simplified version for demonstration
       for (const operation of operations) {
         const result = await operation(db);
         results.push(result);
       }
-      
+
       return results;
     } catch (error) {
       console.error('Transaction failed:', error);
@@ -233,10 +240,7 @@ export class DatabaseUtils {
   }
 
   // Batch operations
-  public static async batchInsert<T>(
-    table: any,
-    data: T[]
-  ): Promise<void> {
+  public static async batchInsert<T>(table: any, data: T[]): Promise<void> {
     try {
       // Split into batches of 1000 records
       const batchSize = 1000;
@@ -251,15 +255,13 @@ export class DatabaseUtils {
   }
 
   // Soft delete
-  public static async softDelete(
-    table: any,
-    id: string
-  ): Promise<void> {
+  public static async softDelete(table: any, id: string): Promise<void> {
     try {
-      await db.update(table)
-        .set({ 
+      await db
+        .update(table)
+        .set({
           deletedAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         })
         .where(eq(table.id, id));
     } catch (error) {
@@ -269,15 +271,13 @@ export class DatabaseUtils {
   }
 
   // Restore soft deleted record
-  public static async restore(
-    table: any,
-    id: string
-  ): Promise<void> {
+  public static async restore(table: any, id: string): Promise<void> {
     try {
-      await db.update(table)
-        .set({ 
+      await db
+        .update(table)
+        .set({
           deletedAt: null,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         })
         .where(eq(table.id, id));
     } catch (error) {
@@ -296,7 +296,7 @@ export function withDatabaseErrorHandling<T extends any[], R>(
       return await fn(...args);
     } catch (error) {
       console.error('Database operation failed:', error);
-      
+
       // Handle specific database errors
       if (error instanceof Error) {
         if (error.message.includes('duplicate key')) {
@@ -309,7 +309,7 @@ export function withDatabaseErrorHandling<T extends any[], R>(
           throw new Error('Required field is missing');
         }
       }
-      
+
       throw error;
     }
   };

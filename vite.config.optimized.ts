@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -15,14 +15,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      '@': path.resolve(import.meta.dirname, 'client', 'src'),
+      '@shared': path.resolve(import.meta.dirname, 'shared'),
+      '@assets': path.resolve(import.meta.dirname, 'attached_assets'),
     },
   },
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(import.meta.dirname, 'client'),
   build: {
-    outDir: "dist",
+    outDir: 'dist',
     emptyOutDir: true,
     // تحسين الأداء المتقدم
     minify: 'terser',
@@ -47,7 +47,7 @@ export default defineConfig({
     // تقسيم الكود المحسن
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
+        manualChunks: id => {
           // فصل مكتبات React
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-vendor';
@@ -65,11 +65,19 @@ export default defineConfig({
             return 'ai-vendor';
           }
           // فصل مكتبات أخرى
-          if (id.includes('axios') || id.includes('date-fns') || id.includes('clsx')) {
+          if (
+            id.includes('axios') ||
+            id.includes('date-fns') ||
+            id.includes('clsx')
+          ) {
             return 'utils-vendor';
           }
           // فصل مكتبات التطوير
-          if (id.includes('node_modules') && !id.includes('react') && !id.includes('firebase')) {
+          if (
+            id.includes('node_modules') &&
+            !id.includes('react') &&
+            !id.includes('firebase')
+          ) {
             return 'vendor';
           }
         },
@@ -102,7 +110,7 @@ export default defineConfig({
   server: {
     fs: {
       strict: true,
-      deny: ["**/.*"],
+      deny: ['**/.*'],
     },
     // تحسين الأداء في التطوير
     hmr: {
@@ -124,9 +132,9 @@ export default defineConfig({
       'lucide-react',
     ],
     exclude: [
-      '@replit/vite-plugin-cartographer', 
+      '@replit/vite-plugin-cartographer',
       '@replit/vite-plugin-dev-banner',
-      'rollup-plugin-visualizer'
+      'rollup-plugin-visualizer',
     ],
     // تحسين التحميل
     force: true,

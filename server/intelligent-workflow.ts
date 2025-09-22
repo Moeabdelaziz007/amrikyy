@@ -8,7 +8,11 @@ interface WorkflowOrchestrator {
   orchestrationRules: OrchestrationRule[];
   aiCoordination: {
     enabled: boolean;
-    coordinationStrategy: 'sequential' | 'parallel' | 'adaptive' | 'ai_optimized';
+    coordinationStrategy:
+      | 'sequential'
+      | 'parallel'
+      | 'adaptive'
+      | 'ai_optimized';
     conflictResolution: 'priority' | 'ai_decision' | 'user_choice';
     learningEnabled: boolean;
   };
@@ -24,11 +28,20 @@ interface OrchestrationRule {
   id: string;
   name: string;
   condition: {
-    type: 'workflow_completion' | 'data_change' | 'user_action' | 'system_event' | 'ai_prediction';
+    type:
+      | 'workflow_completion'
+      | 'data_change'
+      | 'user_action'
+      | 'system_event'
+      | 'ai_prediction';
     parameters: any;
   };
   action: {
-    type: 'trigger_workflow' | 'modify_workflow' | 'coordinate_workflows' | 'ai_decision';
+    type:
+      | 'trigger_workflow'
+      | 'modify_workflow'
+      | 'coordinate_workflows'
+      | 'ai_decision';
     parameters: any;
   };
   priority: number;
@@ -38,7 +51,12 @@ interface OrchestrationRule {
 interface IntelligentWorkflow {
   id: string;
   name: string;
-  type: 'content_automation' | 'travel_optimization' | 'food_management' | 'shopping_intelligence' | 'system_optimization';
+  type:
+    | 'content_automation'
+    | 'travel_optimization'
+    | 'food_management'
+    | 'shopping_intelligence'
+    | 'system_optimization';
   steps: WorkflowStep[];
   aiEnhancement: {
     enabled: boolean;
@@ -55,7 +73,13 @@ interface IntelligentWorkflow {
 interface WorkflowStep {
   id: string;
   name: string;
-  type: 'ai_analysis' | 'data_processing' | 'api_integration' | 'user_interaction' | 'system_action' | 'decision_point';
+  type:
+    | 'ai_analysis'
+    | 'data_processing'
+    | 'api_integration'
+    | 'user_interaction'
+    | 'system_action'
+    | 'decision_point';
   parameters: any;
   aiEnhancement: {
     enabled: boolean;
@@ -69,7 +93,12 @@ interface WorkflowStep {
 
 interface WorkflowTrigger {
   id: string;
-  type: 'schedule' | 'event' | 'data_threshold' | 'user_action' | 'ai_prediction';
+  type:
+    | 'schedule'
+    | 'event'
+    | 'data_threshold'
+    | 'user_action'
+    | 'ai_prediction';
   parameters: any;
   enabled: boolean;
 }
@@ -110,7 +139,7 @@ export class IntelligentWorkflowOrchestrator {
   private initializeLiveMode() {
     this.isLive = true;
     console.log('🚀 Intelligent Workflow Orchestrator is now LIVE');
-    
+
     // Start real-time monitoring
     setInterval(() => {
       this.broadcastWorkflowStatus();
@@ -129,57 +158,100 @@ export class IntelligentWorkflowOrchestrator {
           name: 'AI Trend Analysis',
           type: 'ai_analysis',
           parameters: { model: 'trend_analysis_model', timeframe: '24h' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: [],
           timeout: 30000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 1000 }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 1000,
+          },
         },
         {
           id: 'generate_content',
           name: 'AI Content Generation',
           type: 'ai_analysis',
           parameters: { model: 'content_generation_model', style: 'adaptive' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['analyze_trends'],
           timeout: 60000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 2000 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 2000,
+          },
         },
         {
           id: 'optimize_content',
           name: 'AI Content Optimization',
           type: 'ai_analysis',
-          parameters: { model: 'content_optimization_model', goals: ['engagement', 'reach'] },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            model: 'content_optimization_model',
+            goals: ['engagement', 'reach'],
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['generate_content'],
           timeout: 45000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'exponential', retryDelay: 1500 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'exponential',
+            retryDelay: 1500,
+          },
         },
         {
           id: 'schedule_distribution',
           name: 'AI Distribution Scheduling',
           type: 'system_action',
-          parameters: { platforms: ['telegram', 'social_media'], optimization: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            platforms: ['telegram', 'social_media'],
+            optimization: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['optimize_content'],
           timeout: 30000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'fixed', retryDelay: 1000 }
-        }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'fixed',
+            retryDelay: 1000,
+          },
+        },
       ],
-      aiEnhancement: { enabled: true, learningRate: 0.1, optimizationEnabled: true, adaptiveExecution: true },
+      aiEnhancement: {
+        enabled: true,
+        learningRate: 0.1,
+        optimizationEnabled: true,
+        adaptiveExecution: true,
+      },
       dependencies: [],
       triggers: [
         {
           id: 'daily_content_trigger',
           type: 'schedule',
           parameters: { schedule: 'daily', time: '09:00' },
-          enabled: true
+          enabled: true,
         },
         {
           id: 'trend_alert_trigger',
           type: 'ai_prediction',
           parameters: { model: 'trend_detection_model', threshold: 0.8 },
-          enabled: true
-        }
+          enabled: true,
+        },
       ],
       status: 'active',
       performance: {
@@ -188,8 +260,8 @@ export class IntelligentWorkflowOrchestrator {
         averageExecutionTime: 0,
         errorRate: 0.0,
         userSatisfaction: 0.0,
-        resourceEfficiency: 0.0
-      }
+        resourceEfficiency: 0.0,
+      },
     });
 
     // Travel Optimization Workflow
@@ -202,58 +274,101 @@ export class IntelligentWorkflowOrchestrator {
           id: 'analyze_travel_preferences',
           name: 'AI Travel Preference Analysis',
           type: 'ai_analysis',
-          parameters: { model: 'preference_learning_model', dataSource: 'user_history' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            model: 'preference_learning_model',
+            dataSource: 'user_history',
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: [],
           timeout: 20000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1000 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1000,
+          },
         },
         {
           id: 'search_optimal_options',
           name: 'AI Multi-Source Search',
           type: 'api_integration',
-          parameters: { sources: ['flights', 'hotels', 'activities'], optimization: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            sources: ['flights', 'hotels', 'activities'],
+            optimization: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['analyze_travel_preferences'],
           timeout: 120000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 2000 }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 2000,
+          },
         },
         {
           id: 'price_optimization',
           name: 'AI Price Optimization',
           type: 'ai_analysis',
           parameters: { model: 'price_prediction_model', strategy: 'dynamic' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['search_optimal_options'],
           timeout: 30000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1500 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1500,
+          },
         },
         {
           id: 'auto_booking',
           name: 'AI Automated Booking',
           type: 'system_action',
           parameters: { autoConfirm: true, userNotification: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['price_optimization'],
           timeout: 60000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 3000 }
-        }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 3000,
+          },
+        },
       ],
-      aiEnhancement: { enabled: true, learningRate: 0.15, optimizationEnabled: true, adaptiveExecution: true },
+      aiEnhancement: {
+        enabled: true,
+        learningRate: 0.15,
+        optimizationEnabled: true,
+        adaptiveExecution: true,
+      },
       dependencies: [],
       triggers: [
         {
           id: 'price_drop_trigger',
           type: 'data_threshold',
           parameters: { metric: 'price_change', threshold: -0.15 },
-          enabled: true
+          enabled: true,
         },
         {
           id: 'user_request_trigger',
           type: 'user_action',
           parameters: { action: 'travel_planning_request' },
-          enabled: true
-        }
+          enabled: true,
+        },
       ],
       status: 'active',
       performance: {
@@ -262,8 +377,8 @@ export class IntelligentWorkflowOrchestrator {
         averageExecutionTime: 0,
         errorRate: 0.0,
         userSatisfaction: 0.0,
-        resourceEfficiency: 0.0
-      }
+        resourceEfficiency: 0.0,
+      },
     });
 
     // Food Management Workflow
@@ -276,58 +391,104 @@ export class IntelligentWorkflowOrchestrator {
           id: 'analyze_dietary_preferences',
           name: 'AI Dietary Analysis',
           type: 'ai_analysis',
-          parameters: { model: 'dietary_preference_model', includeNutrition: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            model: 'dietary_preference_model',
+            includeNutrition: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: [],
           timeout: 15000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1000 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1000,
+          },
         },
         {
           id: 'generate_meal_plan',
           name: 'AI Meal Planning',
           type: 'ai_analysis',
           parameters: { model: 'meal_planning_model', duration: 'weekly' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['analyze_dietary_preferences'],
           timeout: 45000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'exponential', retryDelay: 2000 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'exponential',
+            retryDelay: 2000,
+          },
         },
         {
           id: 'optimize_grocery_list',
           name: 'AI Grocery Optimization',
           type: 'ai_analysis',
-          parameters: { model: 'grocery_optimization_model', budgetOptimization: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            model: 'grocery_optimization_model',
+            budgetOptimization: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['generate_meal_plan'],
           timeout: 30000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1500 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1500,
+          },
         },
         {
           id: 'coordinate_delivery',
           name: 'AI Delivery Coordination',
           type: 'api_integration',
-          parameters: { services: ['grocery', 'restaurant'], optimization: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            services: ['grocery', 'restaurant'],
+            optimization: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['optimize_grocery_list'],
           timeout: 60000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 2000 }
-        }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 2000,
+          },
+        },
       ],
-      aiEnhancement: { enabled: true, learningRate: 0.12, optimizationEnabled: true, adaptiveExecution: true },
+      aiEnhancement: {
+        enabled: true,
+        learningRate: 0.12,
+        optimizationEnabled: true,
+        adaptiveExecution: true,
+      },
       dependencies: [],
       triggers: [
         {
           id: 'weekly_meal_planning',
           type: 'schedule',
           parameters: { schedule: 'weekly', day: 'sunday', time: '10:00' },
-          enabled: true
+          enabled: true,
         },
         {
           id: 'low_inventory_trigger',
           type: 'data_threshold',
           parameters: { metric: 'inventory_level', threshold: 0.2 },
-          enabled: true
-        }
+          enabled: true,
+        },
       ],
       status: 'active',
       performance: {
@@ -336,8 +497,8 @@ export class IntelligentWorkflowOrchestrator {
         averageExecutionTime: 0,
         errorRate: 0.0,
         userSatisfaction: 0.0,
-        resourceEfficiency: 0.0
-      }
+        resourceEfficiency: 0.0,
+      },
     });
 
     // Shopping Intelligence Workflow
@@ -351,57 +512,104 @@ export class IntelligentWorkflowOrchestrator {
           name: 'AI Shopping Pattern Analysis',
           type: 'ai_analysis',
           parameters: { model: 'shopping_pattern_model', timeframe: '30d' },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: [],
           timeout: 25000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1000 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1000,
+          },
         },
         {
           id: 'monitor_deals',
           name: 'AI Deal Monitoring',
           type: 'api_integration',
-          parameters: { sources: ['price_comparison', 'deal_sites'], realTime: true },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            sources: ['price_comparison', 'deal_sites'],
+            realTime: true,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['analyze_shopping_patterns'],
           timeout: 90000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 2000 }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 2000,
+          },
         },
         {
           id: 'predict_optimal_timing',
           name: 'AI Purchase Timing Prediction',
           type: 'ai_analysis',
-          parameters: { model: 'timing_prediction_model', factors: ['price', 'demand', 'seasonality'] },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            model: 'timing_prediction_model',
+            factors: ['price', 'demand', 'seasonality'],
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['monitor_deals'],
           timeout: 20000,
-          retryPolicy: { maxRetries: 2, backoffStrategy: 'linear', retryDelay: 1500 }
+          retryPolicy: {
+            maxRetries: 2,
+            backoffStrategy: 'linear',
+            retryDelay: 1500,
+          },
         },
         {
           id: 'execute_auto_purchase',
           name: 'AI Automated Purchase',
           type: 'system_action',
-          parameters: { autoPurchase: true, budgetLimit: true, userConfirmation: false },
-          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          parameters: {
+            autoPurchase: true,
+            budgetLimit: true,
+            userConfirmation: false,
+          },
+          aiEnhancement: {
+            enabled: true,
+            learningEnabled: true,
+            optimizationEnabled: true,
+          },
           dependencies: ['predict_optimal_timing'],
           timeout: 45000,
-          retryPolicy: { maxRetries: 3, backoffStrategy: 'exponential', retryDelay: 3000 }
-        }
+          retryPolicy: {
+            maxRetries: 3,
+            backoffStrategy: 'exponential',
+            retryDelay: 3000,
+          },
+        },
       ],
-      aiEnhancement: { enabled: true, learningRate: 0.08, optimizationEnabled: true, adaptiveExecution: true },
+      aiEnhancement: {
+        enabled: true,
+        learningRate: 0.08,
+        optimizationEnabled: true,
+        adaptiveExecution: true,
+      },
       dependencies: [],
       triggers: [
         {
           id: 'deal_alert_trigger',
           type: 'data_threshold',
           parameters: { metric: 'price_drop', threshold: 0.2 },
-          enabled: true
+          enabled: true,
         },
         {
           id: 'wishlist_item_available',
           type: 'event',
           parameters: { event: 'item_available', source: 'wishlist' },
-          enabled: true
-        }
+          enabled: true,
+        },
       ],
       status: 'active',
       performance: {
@@ -410,8 +618,8 @@ export class IntelligentWorkflowOrchestrator {
         averageExecutionTime: 0,
         errorRate: 0.0,
         userSatisfaction: 0.0,
-        resourceEfficiency: 0.0
-      }
+        resourceEfficiency: 0.0,
+      },
     });
   }
 
@@ -429,27 +637,36 @@ export class IntelligentWorkflowOrchestrator {
 
   // Execute workflow orchestration
   private async executeWorkflowOrchestration() {
-    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === 'active');
-    
+    const activeWorkflows = Array.from(this.workflows.values()).filter(
+      w => w.status === 'active'
+    );
+
     for (const workflow of activeWorkflows) {
       try {
         // Check triggers
-        const shouldExecute = await this.checkWorkflowTriggers(workflow.triggers);
-        
+        const shouldExecute = await this.checkWorkflowTriggers(
+          workflow.triggers
+        );
+
         if (shouldExecute) {
           await this.executeWorkflow(workflow);
         }
       } catch (error) {
-        console.error(`❌ Workflow orchestration error for ${workflow.name}:`, error);
+        console.error(
+          `❌ Workflow orchestration error for ${workflow.name}:`,
+          error
+        );
       }
     }
   }
 
   // Check workflow triggers
-  private async checkWorkflowTriggers(triggers: WorkflowTrigger[]): Promise<boolean> {
+  private async checkWorkflowTriggers(
+    triggers: WorkflowTrigger[]
+  ): Promise<boolean> {
     for (const trigger of triggers) {
       if (!trigger.enabled) continue;
-      
+
       switch (trigger.type) {
         case 'schedule':
           if (this.checkScheduleTrigger(trigger.parameters)) return true;
@@ -458,13 +675,16 @@ export class IntelligentWorkflowOrchestrator {
           if (await this.checkEventTrigger(trigger.parameters)) return true;
           break;
         case 'data_threshold':
-          if (await this.checkDataThresholdTrigger(trigger.parameters)) return true;
+          if (await this.checkDataThresholdTrigger(trigger.parameters))
+            return true;
           break;
         case 'user_action':
-          if (await this.checkUserActionTrigger(trigger.parameters)) return true;
+          if (await this.checkUserActionTrigger(trigger.parameters))
+            return true;
           break;
         case 'ai_prediction':
-          if (await this.checkAIPredictionTrigger(trigger.parameters)) return true;
+          if (await this.checkAIPredictionTrigger(trigger.parameters))
+            return true;
           break;
       }
     }
@@ -475,17 +695,29 @@ export class IntelligentWorkflowOrchestrator {
     const now = new Date();
     const schedule = parameters.schedule;
     const time = parameters.time;
-    
+
     if (schedule === 'daily') {
       const [hours, minutes] = time.split(':').map(Number);
       return now.getHours() === hours && now.getMinutes() === minutes;
     } else if (schedule === 'weekly') {
       const day = parameters.day;
-      const dayMap: Record<string, number> = { sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6 };
+      const dayMap: Record<string, number> = {
+        sunday: 0,
+        monday: 1,
+        tuesday: 2,
+        wednesday: 3,
+        thursday: 4,
+        friday: 5,
+        saturday: 6,
+      };
       const [hours, minutes] = time.split(':').map(Number);
-      return now.getDay() === dayMap[day] && now.getHours() === hours && now.getMinutes() === minutes;
+      return (
+        now.getDay() === dayMap[day] &&
+        now.getHours() === hours &&
+        now.getMinutes() === minutes
+      );
     }
-    
+
     return false;
   }
 
@@ -512,45 +744,65 @@ export class IntelligentWorkflowOrchestrator {
   // Execute workflow with AI enhancement and error recovery
   private async executeWorkflow(workflow: IntelligentWorkflow): Promise<void> {
     console.log(`🚀 Executing workflow: ${workflow.name}`);
-    
+
     const startTime = Date.now();
     let success = true;
     const executionId = `exec_${Date.now()}_${workflow.id}`;
-    
+
     try {
       // Execute workflow steps with AI coordination and error recovery
       for (const step of workflow.steps) {
-        const stepResult = await this.executeWorkflowStepWithRecovery(step, executionId);
+        const stepResult = await this.executeWorkflowStepWithRecovery(
+          step,
+          executionId
+        );
         if (!stepResult.success) {
           success = false;
-          
+
           // Try to recover from error
-          const recoveryResult = await this.attemptErrorRecovery(workflow, step, executionId);
+          const recoveryResult = await this.attemptErrorRecovery(
+            workflow,
+            step,
+            executionId
+          );
           if (!recoveryResult.success) {
-            console.error(`❌ Failed to recover from error in step: ${step.name}`);
+            console.error(
+              `❌ Failed to recover from error in step: ${step.name}`
+            );
             break;
           } else {
-            console.log(`🔧 Successfully recovered from error in step: ${step.name}`);
+            console.log(
+              `🔧 Successfully recovered from error in step: ${step.name}`
+            );
             success = true;
           }
         }
       }
-      
+
       // Update workflow performance
       const executionTime = Date.now() - startTime;
       workflow.performance.executions++;
       workflow.performance.lastExecution = new Date();
-      
+
       if (success) {
-        workflow.performance.successRate = Math.min(1.0, workflow.performance.successRate + 0.01);
-        workflow.performance.userSatisfaction = Math.min(1.0, workflow.performance.userSatisfaction + 0.02);
+        workflow.performance.successRate = Math.min(
+          1.0,
+          workflow.performance.successRate + 0.01
+        );
+        workflow.performance.userSatisfaction = Math.min(
+          1.0,
+          workflow.performance.userSatisfaction + 0.02
+        );
       } else {
-        workflow.performance.errorRate = Math.min(1.0, workflow.performance.errorRate + 0.01);
+        workflow.performance.errorRate = Math.min(
+          1.0,
+          workflow.performance.errorRate + 0.01
+        );
       }
-      
-      workflow.performance.averageExecutionTime = 
+
+      workflow.performance.averageExecutionTime =
         (workflow.performance.averageExecutionTime + executionTime) / 2;
-      
+
       // Log execution history
       this.executionHistory.push({
         executionId,
@@ -559,15 +811,19 @@ export class IntelligentWorkflowOrchestrator {
         timestamp: new Date(),
         success,
         executionTime,
-        steps: workflow.steps.length
+        steps: workflow.steps.length,
       });
-      
-      console.log(`✅ Workflow completed: ${workflow.name} - Success: ${success} (${executionTime}ms)`);
-      
+
+      console.log(
+        `✅ Workflow completed: ${workflow.name} - Success: ${success} (${executionTime}ms)`
+      );
     } catch (error) {
       console.error(`❌ Workflow execution error: ${workflow.name}`, error);
-      workflow.performance.errorRate = Math.min(1.0, workflow.performance.errorRate + 0.02);
-      
+      workflow.performance.errorRate = Math.min(
+        1.0,
+        workflow.performance.errorRate + 0.02
+      );
+
       // Log failed execution
       this.executionHistory.push({
         executionId,
@@ -576,19 +832,21 @@ export class IntelligentWorkflowOrchestrator {
         timestamp: new Date(),
         success: false,
         error: error.message,
-        executionTime: Date.now() - startTime
+        executionTime: Date.now() - startTime,
       });
     }
   }
 
   // Execute individual workflow step with enhanced error handling
-  private async executeWorkflowStep(step: WorkflowStep): Promise<{ success: boolean; data?: any }> {
+  private async executeWorkflowStep(
+    step: WorkflowStep
+  ): Promise<{ success: boolean; data?: any }> {
     console.log(`  📋 Executing step: ${step.name}`);
-    
+
     try {
       // Real AI-powered step execution
       const { generateContent } = await import('./gemini.js');
-      
+
       let prompt = '';
       switch (step.type) {
         case 'ai_analysis':
@@ -614,41 +872,49 @@ export class IntelligentWorkflowOrchestrator {
         default:
           prompt = `Execute workflow step: ${step.name} with parameters: ${JSON.stringify(step.parameters)}`;
       }
-      
+
       const response = await generateContent(prompt);
       const success = Boolean(response && response.length > 0);
-      
-      return { 
-        success, 
-        data: { 
-          stepId: step.id, 
+
+      return {
+        success,
+        data: {
+          stepId: step.id,
           response: response,
           executionTime: Date.now(),
-          type: step.type
-        } 
+          type: step.type,
+        },
       };
     } catch (error) {
       console.error(`Step execution error: ${step.name}`, error);
-      return { success: false, data: error instanceof Error ? error.message : 'Unknown error' };
+      return {
+        success: false,
+        data: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 
   // Execute step with recovery capabilities
-  private async executeWorkflowStepWithRecovery(step: WorkflowStep, executionId: string): Promise<{ success: boolean; data?: any }> {
+  private async executeWorkflowStepWithRecovery(
+    step: WorkflowStep,
+    executionId: string
+  ): Promise<{ success: boolean; data?: any }> {
     let attempts = 0;
     const maxAttempts = step.retryPolicy.maxRetries + 1;
-    
+
     while (attempts < maxAttempts) {
       try {
         const result = await this.executeWorkflowStep(step);
         if (result.success) {
           return result;
         }
-        
+
         attempts++;
         if (attempts < maxAttempts) {
           const delay = this.calculateRetryDelay(attempts, step.retryPolicy);
-          console.log(`  🔄 Retrying step ${step.name} (attempt ${attempts + 1}/${maxAttempts}) in ${delay}ms`);
+          console.log(
+            `  🔄 Retrying step ${step.name} (attempt ${attempts + 1}/${maxAttempts}) in ${delay}ms`
+          );
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       } catch (error) {
@@ -658,11 +924,14 @@ export class IntelligentWorkflowOrchestrator {
         }
       }
     }
-    
+
     return { success: false, data: 'Max retry attempts exceeded' };
   }
 
-  private calculateRetryDelay(attempt: number, retryPolicy: RetryPolicy): number {
+  private calculateRetryDelay(
+    attempt: number,
+    retryPolicy: RetryPolicy
+  ): number {
     switch (retryPolicy.backoffStrategy) {
       case 'exponential':
         return retryPolicy.retryDelay * Math.pow(2, attempt - 1);
@@ -675,10 +944,14 @@ export class IntelligentWorkflowOrchestrator {
   }
 
   // Attempt error recovery using AI
-  private async attemptErrorRecovery(workflow: IntelligentWorkflow, failedStep: WorkflowStep, executionId: string): Promise<{ success: boolean; data?: any }> {
+  private async attemptErrorRecovery(
+    workflow: IntelligentWorkflow,
+    failedStep: WorkflowStep,
+    executionId: string
+  ): Promise<{ success: boolean; data?: any }> {
     try {
       const { generateContent } = await import('./gemini.js');
-      
+
       const prompt = `Workflow step failed: ${failedStep.name}
       Workflow: ${workflow.name}
       Step type: ${failedStep.type}
@@ -690,32 +963,35 @@ export class IntelligentWorkflowOrchestrator {
       3. Fallback mechanisms
       
       Provide specific recovery recommendations.`;
-      
+
       const recoveryResponse = await generateContent(prompt);
-      
+
       // Store recovery attempt
       this.errorRecovery.set(executionId, {
         workflowId: workflow.id,
         stepId: failedStep.id,
         timestamp: new Date(),
         recoveryStrategy: recoveryResponse,
-        success: Boolean(recoveryResponse && recoveryResponse.length > 0)
+        success: Boolean(recoveryResponse && recoveryResponse.length > 0),
       });
-      
-      return { 
-        success: Boolean(recoveryResponse && recoveryResponse.length > 0), 
-        data: recoveryResponse 
+
+      return {
+        success: Boolean(recoveryResponse && recoveryResponse.length > 0),
+        data: recoveryResponse,
       };
     } catch (error) {
       console.error('Error recovery failed:', error);
-      return { success: false, data: error instanceof Error ? error.message : 'Unknown error' };
+      return {
+        success: false,
+        data: error instanceof Error ? error.message : 'Unknown error',
+      };
     }
   }
 
   // Optimize workflows using AI
   private async optimizeWorkflows() {
     console.log('🧠 Optimizing workflows with AI...');
-    
+
     for (const workflow of Array.from(this.workflows.values())) {
       if (workflow.aiEnhancement.optimizationEnabled) {
         await this.optimizeWorkflow(workflow);
@@ -730,19 +1006,29 @@ export class IntelligentWorkflowOrchestrator {
       'Improving resource allocation',
       'Enhancing error handling',
       'Adjusting timeout values',
-      'Optimizing retry policies'
+      'Optimizing retry policies',
     ];
-    
-    const randomOptimization = optimizations[Math.floor(Math.random() * optimizations.length)];
+
+    const randomOptimization =
+      optimizations[Math.floor(Math.random() * optimizations.length)];
     console.log(`  🧠 ${workflow.name}: ${randomOptimization}`);
   }
 
   // Get workflow statistics
   getWorkflowStats(): any {
     const totalWorkflows = this.workflows.size;
-    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === 'active').length;
-    const totalExecutions = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.executions, 0);
-    const averageSuccessRate = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.successRate, 0) / totalWorkflows;
+    const activeWorkflows = Array.from(this.workflows.values()).filter(
+      w => w.status === 'active'
+    ).length;
+    const totalExecutions = Array.from(this.workflows.values()).reduce(
+      (sum, w) => sum + w.performance.executions,
+      0
+    );
+    const averageSuccessRate =
+      Array.from(this.workflows.values()).reduce(
+        (sum, w) => sum + w.performance.successRate,
+        0
+      ) / totalWorkflows;
 
     return {
       totalWorkflows,
@@ -754,8 +1040,8 @@ export class IntelligentWorkflowOrchestrator {
         name: w.name,
         type: w.type,
         status: w.status,
-        performance: w.performance
-      }))
+        performance: w.performance,
+      })),
     };
   }
 
@@ -775,7 +1061,7 @@ export class IntelligentWorkflowOrchestrator {
         enabled: true,
         learningRate: 0.1,
         optimizationEnabled: true,
-        adaptiveExecution: true
+        adaptiveExecution: true,
       },
       dependencies: [],
       triggers,
@@ -786,12 +1072,14 @@ export class IntelligentWorkflowOrchestrator {
         averageExecutionTime: 0,
         errorRate: 0.0,
         userSatisfaction: 0.0,
-        resourceEfficiency: 0.0
-      }
+        resourceEfficiency: 0.0,
+      },
     };
 
     this.workflows.set(workflow.id, workflow);
-    console.log(`🆕 Custom workflow created: ${workflow.name} (ID: ${workflow.id})`);
+    console.log(
+      `🆕 Custom workflow created: ${workflow.name} (ID: ${workflow.id})`
+    );
     return workflow;
   }
 
@@ -807,7 +1095,9 @@ export class IntelligentWorkflowOrchestrator {
     const status = {
       timestamp: new Date().toISOString(),
       isLive: this.isLive,
-      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.status === 'active').length,
+      activeWorkflows: Array.from(this.workflows.values()).filter(
+        w => w.status === 'active'
+      ).length,
       totalWorkflows: this.workflows.size,
       recentExecutions: this.executionHistory.slice(-5),
       systemHealth: this.getWorkflowSystemHealth(),
@@ -816,8 +1106,8 @@ export class IntelligentWorkflowOrchestrator {
         name: w.name,
         type: w.type,
         status: w.status,
-        performance: w.performance
-      }))
+        performance: w.performance,
+      })),
     };
 
     this.monitoringSubscribers.forEach(callback => {
@@ -831,16 +1121,30 @@ export class IntelligentWorkflowOrchestrator {
 
   private getWorkflowSystemHealth(): any {
     const totalWorkflows = this.workflows.size;
-    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === 'active').length;
-    const averageSuccessRate = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.successRate, 0) / totalWorkflows;
-    
+    const activeWorkflows = Array.from(this.workflows.values()).filter(
+      w => w.status === 'active'
+    ).length;
+    const averageSuccessRate =
+      Array.from(this.workflows.values()).reduce(
+        (sum, w) => sum + w.performance.successRate,
+        0
+      ) / totalWorkflows;
+
     return {
-      status: averageSuccessRate > 0.8 ? 'healthy' : averageSuccessRate > 0.6 ? 'warning' : 'critical',
+      status:
+        averageSuccessRate > 0.8
+          ? 'healthy'
+          : averageSuccessRate > 0.6
+            ? 'warning'
+            : 'critical',
       averageSuccessRate,
       activeWorkflows,
       totalWorkflows,
-      totalExecutions: Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.executions, 0),
-      recentErrors: this.executionHistory.filter(h => !h.success).slice(-3)
+      totalExecutions: Array.from(this.workflows.values()).reduce(
+        (sum, w) => sum + w.performance.executions,
+        0
+      ),
+      recentErrors: this.executionHistory.filter(h => !h.success).slice(-3),
     };
   }
 
@@ -877,7 +1181,9 @@ export class IntelligentWorkflowOrchestrator {
       type: workflow.type,
       status: workflow.status,
       performance: workflow.performance,
-      recentExecutions: this.executionHistory.filter(h => h.workflowId === workflowId).slice(-5)
+      recentExecutions: this.executionHistory
+        .filter(h => h.workflowId === workflowId)
+        .slice(-5),
     };
   }
 
@@ -885,16 +1191,19 @@ export class IntelligentWorkflowOrchestrator {
     return {
       isLive: this.isLive,
       totalWorkflows: this.workflows.size,
-      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.status === 'active').length,
+      activeWorkflows: Array.from(this.workflows.values()).filter(
+        w => w.status === 'active'
+      ).length,
       systemHealth: this.getWorkflowSystemHealth(),
       recentActivity: this.executionHistory.slice(-10),
-      errorRecovery: Array.from(this.errorRecovery.entries()).slice(-5)
+      errorRecovery: Array.from(this.errorRecovery.entries()).slice(-5),
     };
   }
 }
 
 // Export singleton instance
-let intelligentWorkflowOrchestrator: IntelligentWorkflowOrchestrator | null = null;
+let intelligentWorkflowOrchestrator: IntelligentWorkflowOrchestrator | null =
+  null;
 
 export function getIntelligentWorkflowOrchestrator(): IntelligentWorkflowOrchestrator {
   if (!intelligentWorkflowOrchestrator) {

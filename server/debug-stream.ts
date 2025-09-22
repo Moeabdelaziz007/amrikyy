@@ -13,7 +13,7 @@ class DebugStream {
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      Connection: 'keep-alive',
     });
     res.write('\n'); // Initial empty message to open the connection
 

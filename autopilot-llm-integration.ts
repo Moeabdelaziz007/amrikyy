@@ -5,7 +5,11 @@
  * ربط نظام الأوتوبايلوت مع نماذج اللغة الكبيرة من Cursor
  */
 
-import { CursorLLMIntegration, LLMConfig, LLMProvider } from './cursor-llm-integration';
+import {
+  CursorLLMIntegration,
+  LLMConfig,
+  LLMProvider,
+} from './cursor-llm-integration';
 import { Command } from 'commander';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
@@ -57,7 +61,7 @@ class AutopilotLLMIntegration {
     this.baseUrl = process.env.AURAOS_API_URL || 'http://localhost:5000';
     this.config = this.loadAutopilotLLMConfig();
     this.llmIntegration = new CursorLLMIntegration();
-    
+
     console.log(chalk.blue('🤖 Autopilot-LLM Integration initialized'));
   }
 
@@ -67,7 +71,8 @@ class AutopilotLLMIntegration {
   private loadAutopilotLLMConfig(): AutopilotLLMConfig {
     return {
       enabled: process.env.AUTOPILOT_LLM_ENABLED === 'true' || true,
-      defaultProvider: (process.env.AUTOPILOT_LLM_PROVIDER as LLMProvider) || 'gemini',
+      defaultProvider:
+        (process.env.AUTOPILOT_LLM_PROVIDER as LLMProvider) || 'gemini',
       fallbackProviders: ['openai', 'anthropic', 'groq'],
       context: {
         autopilot: `You are an advanced AI assistant integrated with the AuraOS Autopilot system. 
@@ -83,13 +88,13 @@ class AutopilotLLMIntegration {
         - Provide clear, actionable responses
         - Suggest optimizations and improvements
         - Explain complex automation concepts simply
-        - Offer proactive assistance based on context`
+        - Offer proactive assistance based on context`,
       },
       limits: {
         maxTokens: parseInt(process.env.AUTOPILOT_LLM_MAX_TOKENS || '4000'),
         timeout: parseInt(process.env.AUTOPILOT_LLM_TIMEOUT || '30000'),
-        retries: parseInt(process.env.AUTOPILOT_LLM_RETRIES || '3')
-      }
+        retries: parseInt(process.env.AUTOPILOT_LLM_RETRIES || '3'),
+      },
     };
   }
 
@@ -125,7 +130,7 @@ class AutopilotLLMIntegration {
       `;
 
       const response = await this.llmIntegration.sendMessage(
-        prompt, 
+        prompt,
         this.config.context.autopilot
       );
 
@@ -133,38 +138,40 @@ class AutopilotLLMIntegration {
         const analysis = JSON.parse(response.content);
         task.llmAnalysis = analysis;
         task.llmResponse = response.content;
-        
+
         console.log(chalk.green(`✅ Task ${task.id} analyzed successfully`));
         return analysis;
       } catch (parseError) {
         // Fallback if JSON parsing fails
         task.llmAnalysis = {
-          intent: "general task processing",
-          category: "general",
-          complexity: "medium",
-          estimated_duration: "minutes",
+          intent: 'general task processing',
+          category: 'general',
+          complexity: 'medium',
+          estimated_duration: 'minutes',
           required_resources: [],
-          suggested_agent: "gemini_ai",
+          suggested_agent: 'gemini_ai',
           optimization_suggestions: [],
-          risk_assessment: "low",
-          dependencies: []
+          risk_assessment: 'low',
+          dependencies: [],
         };
         task.llmResponse = response.content;
         return task.llmAnalysis;
       }
-
     } catch (error) {
-      console.error(chalk.red(`❌ Task analysis failed for ${task.id}:`), error);
+      console.error(
+        chalk.red(`❌ Task analysis failed for ${task.id}:`),
+        error
+      );
       return {
-        intent: "general task processing",
-        category: "general", 
-        complexity: "medium",
-        estimated_duration: "minutes",
+        intent: 'general task processing',
+        category: 'general',
+        complexity: 'medium',
+        estimated_duration: 'minutes',
         required_resources: [],
-        suggested_agent: "gemini_ai",
+        suggested_agent: 'gemini_ai',
         optimization_suggestions: [],
-        risk_assessment: "low",
-        dependencies: []
+        risk_assessment: 'low',
+        dependencies: [],
       };
     }
   }
@@ -172,17 +179,26 @@ class AutopilotLLMIntegration {
   /**
    * Generate intelligent response for autopilot decision making
    */
-  async generateIntelligentResponse(query: string, context?: any): Promise<string> {
+  async generateIntelligentResponse(
+    query: string,
+    context?: any
+  ): Promise<string> {
     try {
       const systemContext = this.config.context.system;
       const userContext = this.config.context.user;
-      
+
       const fullContext = `${systemContext}\n\nCurrent System Context:\n${JSON.stringify(context, null, 2)}\n\nUser Context: ${userContext}`;
 
-      const response = await this.llmIntegration.sendMessage(query, fullContext);
+      const response = await this.llmIntegration.sendMessage(
+        query,
+        fullContext
+      );
       return response.content;
     } catch (error) {
-      console.error(chalk.red('❌ Intelligent response generation failed:'), error);
+      console.error(
+        chalk.red('❌ Intelligent response generation failed:'),
+        error
+      );
       return 'I apologize, but I encountered an error while processing your request. Please try again.';
     }
   }
@@ -220,12 +236,12 @@ class AutopilotLLMIntegration {
         return JSON.parse(response.content);
       } catch (parseError) {
         return {
-          performance_improvements: ["Review task prioritization"],
-          efficiency_gains: ["Optimize agent allocation"],
-          resource_optimization: ["Monitor resource usage"],
-          error_reduction: ["Improve error handling"],
-          scalability_suggestions: ["Consider load balancing"],
-          priority_recommendations: ["Focus on high-priority tasks"]
+          performance_improvements: ['Review task prioritization'],
+          efficiency_gains: ['Optimize agent allocation'],
+          resource_optimization: ['Monitor resource usage'],
+          error_reduction: ['Improve error handling'],
+          scalability_suggestions: ['Consider load balancing'],
+          priority_recommendations: ['Focus on high-priority tasks'],
         };
       }
     } catch (error) {
@@ -236,7 +252,7 @@ class AutopilotLLMIntegration {
         resource_optimization: [],
         error_reduction: [],
         scalability_suggestions: [],
-        priority_recommendations: []
+        priority_recommendations: [],
       };
     }
   }
@@ -249,10 +265,14 @@ class AutopilotLLMIntegration {
       // Get current autopilot status for context
       let autopilotContext = {};
       try {
-        const response = await axios.get(`${this.baseUrl}/api/autopilot/status`);
+        const response = await axios.get(
+          `${this.baseUrl}/api/autopilot/status`
+        );
         autopilotContext = response.data;
       } catch (error) {
-        console.log(chalk.yellow('⚠️ Could not fetch autopilot status for context'));
+        console.log(
+          chalk.yellow('⚠️ Could not fetch autopilot status for context')
+        );
       }
 
       const contextPrompt = `
@@ -318,33 +338,33 @@ class AutopilotLLMIntegration {
         return JSON.parse(response.content);
       } catch (parseError) {
         return {
-          overall_health: "good",
+          overall_health: 'good',
           performance_score: 75,
           key_metrics: {
-            efficiency: "80%",
-            reliability: "85%",
-            scalability: "70%"
+            efficiency: '80%',
+            reliability: '85%',
+            scalability: '70%',
           },
-          bottlenecks: ["Resource allocation"],
-          recommendations: ["Monitor system resources"],
-          optimization_opportunities: ["Improve task scheduling"],
-          risk_factors: ["High load periods"]
+          bottlenecks: ['Resource allocation'],
+          recommendations: ['Monitor system resources'],
+          optimization_opportunities: ['Improve task scheduling'],
+          risk_factors: ['High load periods'],
         };
       }
     } catch (error) {
       console.error(chalk.red('❌ System performance analysis failed:'), error);
       return {
-        overall_health: "unknown",
+        overall_health: 'unknown',
         performance_score: 0,
         key_metrics: {
-          efficiency: "unknown",
-          reliability: "unknown",
-          scalability: "unknown"
+          efficiency: 'unknown',
+          reliability: 'unknown',
+          scalability: 'unknown',
         },
         bottlenecks: [],
-        recommendations: ["Check system status"],
+        recommendations: ['Check system status'],
         optimization_opportunities: [],
-        risk_factors: []
+        risk_factors: [],
       };
     }
   }
@@ -359,12 +379,14 @@ class AutopilotLLMIntegration {
       system_status: null,
       task_queue: this.taskQueue.length,
       active_tasks: this.activeTasks.size,
-      llm_config: this.config
+      llm_config: this.config,
     };
 
     try {
       // Get autopilot status
-      const autopilotResponse = await axios.get(`${this.baseUrl}/api/autopilot/status`);
+      const autopilotResponse = await axios.get(
+        `${this.baseUrl}/api/autopilot/status`
+      );
       systemData.autopilot_status = autopilotResponse.data;
     } catch (error) {
       console.log(chalk.yellow('⚠️ Could not fetch autopilot status'));
@@ -372,7 +394,9 @@ class AutopilotLLMIntegration {
 
     try {
       // Get system status
-      const systemResponse = await axios.get(`${this.baseUrl}/api/system/status`);
+      const systemResponse = await axios.get(
+        `${this.baseUrl}/api/system/status`
+      );
       systemData.system_status = systemResponse.data;
     } catch (error) {
       console.log(chalk.yellow('⚠️ Could not fetch system status'));
@@ -386,7 +410,11 @@ class AutopilotLLMIntegration {
    */
   async interactiveChat() {
     console.log(chalk.blue.bold('\n🤖 Autopilot LLM Assistant\n'));
-    console.log(chalk.gray('Type "exit" to quit, "help" for commands, "analyze" for system analysis\n'));
+    console.log(
+      chalk.gray(
+        'Type "exit" to quit, "help" for commands, "analyze" for system analysis\n'
+      )
+    );
 
     while (true) {
       const { message } = await inquirer.prompt([
@@ -394,8 +422,9 @@ class AutopilotLLMIntegration {
           type: 'input',
           name: 'message',
           message: chalk.cyan('You:'),
-          validate: (input) => input.trim().length > 0 || 'Please enter a message'
-        }
+          validate: input =>
+            input.trim().length > 0 || 'Please enter a message',
+        },
       ]);
 
       if (message.toLowerCase() === 'exit') {
@@ -420,11 +449,10 @@ class AutopilotLLMIntegration {
 
       try {
         console.log(chalk.blue('🤖 Autopilot AI:'), 'Thinking...');
-        
+
         const response = await this.autopilotChat(message);
         console.log(chalk.green('🤖 Autopilot AI:'), response);
         console.log(''); // Empty line for readability
-
       } catch (error: any) {
         console.error(chalk.red('❌ Error:'), error.message);
       }
@@ -456,32 +484,37 @@ class AutopilotLLMIntegration {
    */
   private async performSystemAnalysis() {
     console.log(chalk.blue.bold('\n📊 System Analysis\n'));
-    
+
     try {
       console.log(chalk.yellow('🔍 Analyzing system performance...'));
       const analysis = await this.analyzeSystemPerformance();
-      
+
       console.log(chalk.green('📊 Analysis Results:\n'));
       console.log(`Overall Health: ${chalk.blue(analysis.overall_health)}`);
-      console.log(`Performance Score: ${chalk.blue(analysis.performance_score + '/100')}`);
+      console.log(
+        `Performance Score: ${chalk.blue(analysis.performance_score + '/100')}`
+      );
       console.log(`Efficiency: ${chalk.blue(analysis.key_metrics.efficiency)}`);
-      console.log(`Reliability: ${chalk.blue(analysis.key_metrics.reliability)}`);
-      console.log(`Scalability: ${chalk.blue(analysis.key_metrics.scalability)}`);
-      
+      console.log(
+        `Reliability: ${chalk.blue(analysis.key_metrics.reliability)}`
+      );
+      console.log(
+        `Scalability: ${chalk.blue(analysis.key_metrics.scalability)}`
+      );
+
       if (analysis.bottlenecks.length > 0) {
         console.log(chalk.yellow('\n🚧 Bottlenecks:'));
         analysis.bottlenecks.forEach((bottleneck, index) => {
           console.log(`  ${index + 1}. ${bottleneck}`);
         });
       }
-      
+
       if (analysis.recommendations.length > 0) {
         console.log(chalk.green('\n💡 Recommendations:'));
         analysis.recommendations.forEach((rec, index) => {
           console.log(`  ${index + 1}. ${rec}`);
         });
       }
-      
     } catch (error: any) {
       console.error(chalk.red('❌ Analysis failed:'), error.message);
     }
@@ -492,21 +525,29 @@ class AutopilotLLMIntegration {
    */
   private async showAutopilotStatus() {
     console.log(chalk.blue.bold('\n🤖 Autopilot Status\n'));
-    
+
     try {
       const response = await axios.get(`${this.baseUrl}/api/autopilot/status`);
       const status = response.data;
-      
+
       console.log(chalk.green('📊 Autopilot Information:'));
-      console.log(`Status: ${status.active ? chalk.green('✅ Active') : chalk.red('❌ Inactive')}`);
+      console.log(
+        `Status: ${status.active ? chalk.green('✅ Active') : chalk.red('❌ Inactive')}`
+      );
       console.log(`Active Rules: ${chalk.blue(status.rules || 0)}`);
       console.log(`Active Workflows: ${chalk.blue(status.workflows || 0)}`);
-      console.log(`Last Execution: ${chalk.yellow(status.lastExecution || 'N/A')}`);
-      console.log(`LLM Integration: ${this.config.enabled ? chalk.green('✅ Enabled') : chalk.red('❌ Disabled')}`);
+      console.log(
+        `Last Execution: ${chalk.yellow(status.lastExecution || 'N/A')}`
+      );
+      console.log(
+        `LLM Integration: ${this.config.enabled ? chalk.green('✅ Enabled') : chalk.red('❌ Disabled')}`
+      );
       console.log(`LLM Provider: ${chalk.blue(this.config.defaultProvider)}`);
-      
     } catch (error: any) {
-      console.error(chalk.red('❌ Failed to get autopilot status:'), error.message);
+      console.error(
+        chalk.red('❌ Failed to get autopilot status:'),
+        error.message
+      );
     }
   }
 
@@ -564,7 +605,7 @@ program
 program
   .command('ask <question>')
   .description('Ask a question to the autopilot LLM')
-  .action(async (question) => {
+  .action(async question => {
     try {
       console.log(chalk.blue('🤔 Thinking...'));
       const response = await autopilotLLM.autopilotChat(question);

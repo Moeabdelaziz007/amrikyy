@@ -4,209 +4,215 @@
  */
 
 class AdvancedToolsSuite {
-    constructor() {
-        this.tools = new Map();
-        this.initializeTools();
-        this.setupEventListeners();
+  constructor() {
+    this.tools = new Map();
+    this.initializeTools();
+    this.setupEventListeners();
+  }
+
+  /**
+   * تهيئة جميع الأدوات المتقدمة
+   */
+  initializeTools() {
+    // أدوات الإنتاجية المتقدمة
+    this.registerTool('productivity-suite', {
+      name: 'Productivity Suite',
+      description: 'مجموعة أدوات الإنتاجية المتقدمة',
+      category: 'productivity',
+      icon: 'fas fa-rocket',
+      features: [
+        'Task Management',
+        'Time Tracking',
+        'Goal Setting',
+        'Progress Monitoring',
+        'Team Collaboration',
+      ],
+    });
+
+    // أداة تحليل البيانات المتقدمة
+    this.registerTool('advanced-analytics', {
+      name: 'Advanced Analytics',
+      description: 'تحليل البيانات المتقدم مع الذكاء الاصطناعي',
+      category: 'analytics',
+      icon: 'fas fa-chart-line',
+      features: [
+        'Predictive Analytics',
+        'Real-time Dashboards',
+        'Custom Reports',
+        'Data Visualization',
+        'Machine Learning Insights',
+      ],
+    });
+
+    // أداة الأمان المتقدمة
+    this.registerTool('security-suite', {
+      name: 'Security Suite',
+      description: 'مجموعة أدوات الأمان المتقدمة',
+      category: 'security',
+      icon: 'fas fa-shield-alt',
+      features: [
+        'Threat Detection',
+        'Vulnerability Scanning',
+        'Access Control',
+        'Audit Logging',
+        'Compliance Monitoring',
+      ],
+    });
+
+    // أداة التطوير المتقدمة
+    this.registerTool('dev-tools-pro', {
+      name: 'Dev Tools Pro',
+      description: 'أدوات التطوير المتقدمة للمطورين',
+      category: 'development',
+      icon: 'fas fa-code',
+      features: [
+        'Code Analysis',
+        'Performance Profiling',
+        'Debugging Tools',
+        'Testing Automation',
+        'Deployment Pipeline',
+      ],
+    });
+
+    // أداة الذكاء الاصطناعي المتقدمة
+    this.registerTool('ai-workspace', {
+      name: 'AI Workspace',
+      description: 'مساحة عمل الذكاء الاصطناعي المتقدمة',
+      category: 'ai',
+      icon: 'fas fa-brain',
+      features: [
+        'Model Training',
+        'Data Processing',
+        'Neural Networks',
+        'Natural Language Processing',
+        'Computer Vision',
+      ],
+    });
+
+    // أداة إدارة المشاريع
+    this.registerTool('project-manager', {
+      name: 'Project Manager',
+      description: 'أداة إدارة المشاريع المتقدمة',
+      category: 'management',
+      icon: 'fas fa-project-diagram',
+      features: [
+        'Project Planning',
+        'Resource Management',
+        'Timeline Tracking',
+        'Risk Assessment',
+        'Team Coordination',
+      ],
+    });
+
+    // أداة التسويق الرقمي
+    this.registerTool('digital-marketing', {
+      name: 'Digital Marketing',
+      description: 'أدوات التسويق الرقمي المتقدمة',
+      category: 'marketing',
+      icon: 'fas fa-bullhorn',
+      features: [
+        'Campaign Management',
+        'Social Media Analytics',
+        'SEO Optimization',
+        'Content Creation',
+        'Performance Tracking',
+      ],
+    });
+
+    // أداة إدارة المحتوى
+    this.registerTool('content-management', {
+      name: 'Content Management',
+      description: 'أداة إدارة المحتوى المتقدمة',
+      category: 'content',
+      icon: 'fas fa-file-alt',
+      features: [
+        'Content Creation',
+        'Publishing Workflow',
+        'Version Control',
+        'SEO Optimization',
+        'Analytics Integration',
+      ],
+    });
+  }
+
+  /**
+   * تسجيل أداة جديدة
+   */
+  registerTool(id, config) {
+    this.tools.set(id, {
+      id,
+      ...config,
+      status: 'active',
+      lastUsed: null,
+      successRate: 95,
+      version: '1.0.0',
+      dependencies: [],
+      permissions: ['read', 'write', 'execute'],
+    });
+  }
+
+  /**
+   * إعداد مستمعي الأحداث
+   */
+  setupEventListeners() {
+    // تحديث الأدوات كل 30 ثانية
+    setInterval(() => {
+      this.updateToolsStatus();
+    }, 30000);
+
+    // إضافة مستمع للنقر على الأدوات
+    document.addEventListener('click', e => {
+      if (e.target.closest('.tool-card')) {
+        const toolId = e.target.closest('.tool-card').dataset.toolId;
+        this.openTool(toolId);
+      }
+    });
+  }
+
+  /**
+   * تحديث حالة الأدوات
+   */
+  updateToolsStatus() {
+    this.tools.forEach((tool, id) => {
+      // محاكاة تحديث الحالة
+      tool.lastUsed = this.getRandomTimeAgo();
+      tool.successRate = Math.floor(Math.random() * 10) + 90;
+    });
+  }
+
+  /**
+   * الحصول على وقت عشوائي
+   */
+  getRandomTimeAgo() {
+    const times = [
+      '1 min ago',
+      '5 min ago',
+      '10 min ago',
+      '30 min ago',
+      '1 hour ago',
+    ];
+    return times[Math.floor(Math.random() * times.length)];
+  }
+
+  /**
+   * فتح أداة
+   */
+  openTool(toolId) {
+    const tool = this.tools.get(toolId);
+    if (tool) {
+      console.log(`🔧 فتح أداة: ${tool.name}`);
+      this.showToolInterface(tool);
     }
+  }
 
-    /**
-     * تهيئة جميع الأدوات المتقدمة
-     */
-    initializeTools() {
-        // أدوات الإنتاجية المتقدمة
-        this.registerTool('productivity-suite', {
-            name: 'Productivity Suite',
-            description: 'مجموعة أدوات الإنتاجية المتقدمة',
-            category: 'productivity',
-            icon: 'fas fa-rocket',
-            features: [
-                'Task Management',
-                'Time Tracking',
-                'Goal Setting',
-                'Progress Monitoring',
-                'Team Collaboration'
-            ]
-        });
-
-        // أداة تحليل البيانات المتقدمة
-        this.registerTool('advanced-analytics', {
-            name: 'Advanced Analytics',
-            description: 'تحليل البيانات المتقدم مع الذكاء الاصطناعي',
-            category: 'analytics',
-            icon: 'fas fa-chart-line',
-            features: [
-                'Predictive Analytics',
-                'Real-time Dashboards',
-                'Custom Reports',
-                'Data Visualization',
-                'Machine Learning Insights'
-            ]
-        });
-
-        // أداة الأمان المتقدمة
-        this.registerTool('security-suite', {
-            name: 'Security Suite',
-            description: 'مجموعة أدوات الأمان المتقدمة',
-            category: 'security',
-            icon: 'fas fa-shield-alt',
-            features: [
-                'Threat Detection',
-                'Vulnerability Scanning',
-                'Access Control',
-                'Audit Logging',
-                'Compliance Monitoring'
-            ]
-        });
-
-        // أداة التطوير المتقدمة
-        this.registerTool('dev-tools-pro', {
-            name: 'Dev Tools Pro',
-            description: 'أدوات التطوير المتقدمة للمطورين',
-            category: 'development',
-            icon: 'fas fa-code',
-            features: [
-                'Code Analysis',
-                'Performance Profiling',
-                'Debugging Tools',
-                'Testing Automation',
-                'Deployment Pipeline'
-            ]
-        });
-
-        // أداة الذكاء الاصطناعي المتقدمة
-        this.registerTool('ai-workspace', {
-            name: 'AI Workspace',
-            description: 'مساحة عمل الذكاء الاصطناعي المتقدمة',
-            category: 'ai',
-            icon: 'fas fa-brain',
-            features: [
-                'Model Training',
-                'Data Processing',
-                'Neural Networks',
-                'Natural Language Processing',
-                'Computer Vision'
-            ]
-        });
-
-        // أداة إدارة المشاريع
-        this.registerTool('project-manager', {
-            name: 'Project Manager',
-            description: 'أداة إدارة المشاريع المتقدمة',
-            category: 'management',
-            icon: 'fas fa-project-diagram',
-            features: [
-                'Project Planning',
-                'Resource Management',
-                'Timeline Tracking',
-                'Risk Assessment',
-                'Team Coordination'
-            ]
-        });
-
-        // أداة التسويق الرقمي
-        this.registerTool('digital-marketing', {
-            name: 'Digital Marketing',
-            description: 'أدوات التسويق الرقمي المتقدمة',
-            category: 'marketing',
-            icon: 'fas fa-bullhorn',
-            features: [
-                'Campaign Management',
-                'Social Media Analytics',
-                'SEO Optimization',
-                'Content Creation',
-                'Performance Tracking'
-            ]
-        });
-
-        // أداة إدارة المحتوى
-        this.registerTool('content-management', {
-            name: 'Content Management',
-            description: 'أداة إدارة المحتوى المتقدمة',
-            category: 'content',
-            icon: 'fas fa-file-alt',
-            features: [
-                'Content Creation',
-                'Publishing Workflow',
-                'Version Control',
-                'SEO Optimization',
-                'Analytics Integration'
-            ]
-        });
-    }
-
-    /**
-     * تسجيل أداة جديدة
-     */
-    registerTool(id, config) {
-        this.tools.set(id, {
-            id,
-            ...config,
-            status: 'active',
-            lastUsed: null,
-            successRate: 95,
-            version: '1.0.0',
-            dependencies: [],
-            permissions: ['read', 'write', 'execute']
-        });
-    }
-
-    /**
-     * إعداد مستمعي الأحداث
-     */
-    setupEventListeners() {
-        // تحديث الأدوات كل 30 ثانية
-        setInterval(() => {
-            this.updateToolsStatus();
-        }, 30000);
-
-        // إضافة مستمع للنقر على الأدوات
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.tool-card')) {
-                const toolId = e.target.closest('.tool-card').dataset.toolId;
-                this.openTool(toolId);
-            }
-        });
-    }
-
-    /**
-     * تحديث حالة الأدوات
-     */
-    updateToolsStatus() {
-        this.tools.forEach((tool, id) => {
-            // محاكاة تحديث الحالة
-            tool.lastUsed = this.getRandomTimeAgo();
-            tool.successRate = Math.floor(Math.random() * 10) + 90;
-        });
-    }
-
-    /**
-     * الحصول على وقت عشوائي
-     */
-    getRandomTimeAgo() {
-        const times = ['1 min ago', '5 min ago', '10 min ago', '30 min ago', '1 hour ago'];
-        return times[Math.floor(Math.random() * times.length)];
-    }
-
-    /**
-     * فتح أداة
-     */
-    openTool(toolId) {
-        const tool = this.tools.get(toolId);
-        if (tool) {
-            console.log(`🔧 فتح أداة: ${tool.name}`);
-            this.showToolInterface(tool);
-        }
-    }
-
-    /**
-     * عرض واجهة الأداة
-     */
-    showToolInterface(tool) {
-        // إنشاء نافذة الأداة
-        const toolWindow = document.createElement('div');
-        toolWindow.className = 'tool-window';
-        toolWindow.innerHTML = `
+  /**
+   * عرض واجهة الأداة
+   */
+  showToolInterface(tool) {
+    // إنشاء نافذة الأداة
+    const toolWindow = document.createElement('div');
+    toolWindow.className = 'tool-window';
+    toolWindow.innerHTML = `
             <div class="tool-header">
                 <div class="tool-title">
                     <i class="${tool.icon}"></i>
@@ -237,8 +243,8 @@ class AdvancedToolsSuite {
             </div>
         `;
 
-        // إضافة الأنماط
-        toolWindow.style.cssText = `
+    // إضافة الأنماط
+    toolWindow.style.cssText = `
             position: fixed;
             top: 50%;
             left: 50%;
@@ -253,32 +259,32 @@ class AdvancedToolsSuite {
             backdrop-filter: var(--glass-backdrop);
         `;
 
-        document.body.appendChild(toolWindow);
+    document.body.appendChild(toolWindow);
 
-        // إضافة مستمعي الأحداث
-        toolWindow.querySelector('.close-btn').addEventListener('click', () => {
-            document.body.removeChild(toolWindow);
-        });
+    // إضافة مستمعي الأحداث
+    toolWindow.querySelector('.close-btn').addEventListener('click', () => {
+      document.body.removeChild(toolWindow);
+    });
+  }
+
+  /**
+   * تشغيل أداة
+   */
+  executeTool(toolId) {
+    const tool = this.tools.get(toolId);
+    if (tool) {
+      console.log(`🚀 تشغيل أداة: ${tool.name}`);
+      this.showExecutionProgress(tool);
     }
+  }
 
-    /**
-     * تشغيل أداة
-     */
-    executeTool(toolId) {
-        const tool = this.tools.get(toolId);
-        if (tool) {
-            console.log(`🚀 تشغيل أداة: ${tool.name}`);
-            this.showExecutionProgress(tool);
-        }
-    }
-
-    /**
-     * عرض تقدم التنفيذ
-     */
-    showExecutionProgress(tool) {
-        const progressModal = document.createElement('div');
-        progressModal.className = 'progress-modal';
-        progressModal.innerHTML = `
+  /**
+   * عرض تقدم التنفيذ
+   */
+  showExecutionProgress(tool) {
+    const progressModal = document.createElement('div');
+    progressModal.className = 'progress-modal';
+    progressModal.innerHTML = `
             <div class="progress-content">
                 <div class="progress-header">
                     <h3>تشغيل ${tool.name}</h3>
@@ -290,7 +296,7 @@ class AdvancedToolsSuite {
             </div>
         `;
 
-        progressModal.style.cssText = `
+    progressModal.style.cssText = `
             position: fixed;
             top: 0;
             left: 0;
@@ -303,35 +309,35 @@ class AdvancedToolsSuite {
             z-index: 10001;
         `;
 
-        document.body.appendChild(progressModal);
+    document.body.appendChild(progressModal);
 
-        // محاكاة التقدم
-        let progress = 0;
-        const interval = setInterval(() => {
-            progress += Math.random() * 20;
-            if (progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                setTimeout(() => {
-                    document.body.removeChild(progressModal);
-                    this.showToolResult(tool);
-                }, 500);
-            }
-            
-            const progressFill = progressModal.querySelector('.progress-fill');
-            const progressText = progressModal.querySelector('.progress-text');
-            progressFill.style.width = progress + '%';
-            progressText.textContent = `جاري التحميل... ${Math.floor(progress)}%`;
-        }, 200);
-    }
+    // محاكاة التقدم
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 20;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        setTimeout(() => {
+          document.body.removeChild(progressModal);
+          this.showToolResult(tool);
+        }, 500);
+      }
 
-    /**
-     * عرض نتيجة الأداة
-     */
-    showToolResult(tool) {
-        const resultModal = document.createElement('div');
-        resultModal.className = 'result-modal';
-        resultModal.innerHTML = `
+      const progressFill = progressModal.querySelector('.progress-fill');
+      const progressText = progressModal.querySelector('.progress-text');
+      progressFill.style.width = progress + '%';
+      progressText.textContent = `جاري التحميل... ${Math.floor(progress)}%`;
+    }, 200);
+  }
+
+  /**
+   * عرض نتيجة الأداة
+   */
+  showToolResult(tool) {
+    const resultModal = document.createElement('div');
+    resultModal.className = 'result-modal';
+    resultModal.innerHTML = `
             <div class="result-content">
                 <div class="result-header">
                     <h3>✅ تم تشغيل ${tool.name} بنجاح</h3>
@@ -350,7 +356,7 @@ class AdvancedToolsSuite {
             </div>
         `;
 
-        resultModal.style.cssText = `
+    resultModal.style.cssText = `
             position: fixed;
             top: 50%;
             left: 50%;
@@ -364,55 +370,60 @@ class AdvancedToolsSuite {
             backdrop-filter: var(--glass-backdrop);
         `;
 
-        document.body.appendChild(resultModal);
-    }
+    document.body.appendChild(resultModal);
+  }
 
-    /**
-     * فتح لوحة تحكم الأداة
-     */
-    openToolDashboard(toolId) {
-        const tool = this.tools.get(toolId);
-        if (tool) {
-            console.log(`📊 فتح لوحة تحكم: ${tool.name}`);
-            // هنا يمكن إضافة منطق فتح لوحة التحكم
-        }
+  /**
+   * فتح لوحة تحكم الأداة
+   */
+  openToolDashboard(toolId) {
+    const tool = this.tools.get(toolId);
+    if (tool) {
+      console.log(`📊 فتح لوحة تحكم: ${tool.name}`);
+      // هنا يمكن إضافة منطق فتح لوحة التحكم
     }
+  }
 
-    /**
-     * إعدادات الأداة
-     */
-    configureTool(toolId) {
-        const tool = this.tools.get(toolId);
-        if (tool) {
-            console.log(`⚙️ إعدادات أداة: ${tool.name}`);
-            // هنا يمكن إضافة منطق الإعدادات
-        }
+  /**
+   * إعدادات الأداة
+   */
+  configureTool(toolId) {
+    const tool = this.tools.get(toolId);
+    if (tool) {
+      console.log(`⚙️ إعدادات أداة: ${tool.name}`);
+      // هنا يمكن إضافة منطق الإعدادات
     }
+  }
 
-    /**
-     * الحصول على جميع الأدوات
-     */
-    getAllTools() {
-        return Array.from(this.tools.values());
-    }
+  /**
+   * الحصول على جميع الأدوات
+   */
+  getAllTools() {
+    return Array.from(this.tools.values());
+  }
 
-    /**
-     * الحصول على أدوات حسب الفئة
-     */
-    getToolsByCategory(category) {
-        return Array.from(this.tools.values()).filter(tool => tool.category === category);
-    }
+  /**
+   * الحصول على أدوات حسب الفئة
+   */
+  getToolsByCategory(category) {
+    return Array.from(this.tools.values()).filter(
+      tool => tool.category === category
+    );
+  }
 
-    /**
-     * البحث في الأدوات
-     */
-    searchTools(query) {
-        return Array.from(this.tools.values()).filter(tool => 
-            tool.name.toLowerCase().includes(query.toLowerCase()) ||
-            tool.description.toLowerCase().includes(query.toLowerCase()) ||
-            tool.features.some(feature => feature.toLowerCase().includes(query.toLowerCase()))
-        );
-    }
+  /**
+   * البحث في الأدوات
+   */
+  searchTools(query) {
+    return Array.from(this.tools.values()).filter(
+      tool =>
+        tool.name.toLowerCase().includes(query.toLowerCase()) ||
+        tool.description.toLowerCase().includes(query.toLowerCase()) ||
+        tool.features.some(feature =>
+          feature.toLowerCase().includes(query.toLowerCase())
+        )
+    );
+  }
 }
 
 // تهيئة مجموعة الأدوات المتقدمة
@@ -420,14 +431,16 @@ const advancedTools = new AdvancedToolsSuite();
 
 // إضافة الأدوات إلى الواجهة
 function renderAdvancedTools() {
-    const toolsContainer = document.getElementById('advanced-tools-container');
-    if (!toolsContainer) return;
+  const toolsContainer = document.getElementById('advanced-tools-container');
+  if (!toolsContainer) return;
 
-    const tools = advancedTools.getAllTools();
-    
-    toolsContainer.innerHTML = `
+  const tools = advancedTools.getAllTools();
+
+  toolsContainer.innerHTML = `
         <div class="tools-grid">
-            ${tools.map(tool => `
+            ${tools
+              .map(
+                tool => `
                 <div class="tool-card" data-tool-id="${tool.id}">
                     <div class="tool-icon">
                         <i class="${tool.icon}"></i>
@@ -440,7 +453,13 @@ function renderAdvancedTools() {
                             <span class="tool-status ${tool.status}">${tool.status}</span>
                         </div>
                         <div class="tool-features-preview">
-                            ${tool.features.slice(0, 3).map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+                            ${tool.features
+                              .slice(0, 3)
+                              .map(
+                                feature =>
+                                  `<span class="feature-tag">${feature}</span>`
+                              )
+                              .join('')}
                             ${tool.features.length > 3 ? `<span class="more-features">+${tool.features.length - 3} أكثر</span>` : ''}
                         </div>
                     </div>
@@ -453,15 +472,17 @@ function renderAdvancedTools() {
                         </button>
                     </div>
                 </div>
-            `).join('')}
+            `
+              )
+              .join('')}
         </div>
     `;
 }
 
 // إضافة الأنماط للأدوات المتقدمة
 function addAdvancedToolsStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
+  const style = document.createElement('style');
+  style.textContent = `
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -650,13 +671,13 @@ function addAdvancedToolsStyles() {
             border: 1px solid var(--cyber-secondary);
         }
     `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
 }
 
 // تهيئة الأدوات عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
-    addAdvancedToolsStyles();
-    renderAdvancedTools();
+  addAdvancedToolsStyles();
+  renderAdvancedTools();
 });
 
 // تصدير الكلاس للاستخدام العام

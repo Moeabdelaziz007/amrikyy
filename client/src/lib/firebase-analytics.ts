@@ -1,11 +1,11 @@
 // Firebase Integration for Advanced Analytics
 // Complete Firebase setup and integration for the analytics system
 
-import { 
+import {
   logEvent,
   setUserId,
   setUserProperties,
-  setCurrentScreen
+  setCurrentScreen,
 } from 'firebase/analytics';
 import { signInAnonymously, onAuthStateChanged, User } from 'firebase/auth';
 import { enableNetwork, disableNetwork } from 'firebase/firestore';
@@ -24,13 +24,14 @@ export class FirebaseAnalyticsIntegration {
 
   public static getInstance(): FirebaseAnalyticsIntegration {
     if (!FirebaseAnalyticsIntegration.instance) {
-      FirebaseAnalyticsIntegration.instance = new FirebaseAnalyticsIntegration();
+      FirebaseAnalyticsIntegration.instance =
+        new FirebaseAnalyticsIntegration();
     }
     return FirebaseAnalyticsIntegration.instance;
   }
 
   private setupAuthListener() {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, user => {
       this.currentUser = user;
       if (!user) {
         // Fallback to anonymous auth to satisfy Firestore rules that require auth
@@ -42,7 +43,7 @@ export class FirebaseAnalyticsIntegration {
         setUserId(analytics, user.uid);
         setUserProperties(analytics, {
           user_type: user.isAnonymous ? 'anonymous' : 'authenticated',
-          login_method: user.providerData[0]?.providerId || 'unknown'
+          login_method: user.providerData[0]?.providerId || 'unknown',
         });
       }
     });
@@ -54,7 +55,7 @@ export class FirebaseAnalyticsIntegration {
       logEvent(analytics, eventName, {
         ...parameters,
         timestamp: Date.now(),
-        user_id: this.currentUser?.uid || 'anonymous'
+        user_id: this.currentUser?.uid || 'anonymous',
       });
     }
   }
@@ -66,17 +67,21 @@ export class FirebaseAnalyticsIntegration {
       logEvent(analytics, 'page_view', {
         page_name: pageName,
         page_title: pageTitle || pageName,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
   }
 
   // Track user interactions
-  public trackUserInteraction(action: string, target: string, details?: Record<string, any>) {
+  public trackUserInteraction(
+    action: string,
+    target: string,
+    details?: Record<string, any>
+  ) {
     this.trackEvent('user_interaction', {
       action,
       target,
-      ...details
+      ...details,
     });
   }
 
@@ -86,7 +91,7 @@ export class FirebaseAnalyticsIntegration {
       metric_name: metricName,
       value,
       unit: unit || 'count',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 
@@ -96,7 +101,7 @@ export class FirebaseAnalyticsIntegration {
       error_message: error.message,
       error_stack: error.stack,
       context: context || 'unknown',
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
 }
@@ -114,7 +119,7 @@ export const COLLECTIONS = {
   ANALYTICS_DASHBOARDS: 'analytics_dashboards',
   USER_INTERACTIONS: 'user_interactions',
   SYSTEM_EVENTS: 'system_events',
-  ERROR_LOGS: 'error_logs'
+  ERROR_LOGS: 'error_logs',
 } as const;
 
 // Firestore Types
@@ -164,7 +169,12 @@ export interface FirestoreUserSession {
 export interface FirestorePredictiveInsight {
   id: string;
   userId: string;
-  type: 'user_behavior' | 'performance' | 'engagement' | 'retention' | 'conversion';
+  type:
+    | 'user_behavior'
+    | 'performance'
+    | 'engagement'
+    | 'retention'
+    | 'conversion';
   prediction: string;
   confidence: number;
   timeframe: 'short' | 'medium' | 'long';
@@ -220,16 +230,19 @@ export class FirebaseAnalyticsService {
       // Track initialization event
       this.analyticsIntegration.trackEvent('analytics_initialized', {
         user_id: userId,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
 
       // Create initial user session
       await this.createUserSession(userId);
-      
+
       console.log('User analytics initialized successfully');
     } catch (error) {
       console.error('Failed to initialize user analytics:', error);
-      this.analyticsIntegration.trackError(error as Error, 'analytics_initialization');
+      this.analyticsIntegration.trackError(
+        error as Error,
+        'analytics_initialization'
+      );
       throw error;
     }
   }
@@ -238,7 +251,7 @@ export class FirebaseAnalyticsService {
   public async createUserSession(userId: string): Promise<string> {
     try {
       const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+
       const sessionData: FirestoreUserSession = {
         id: sessionId,
         userId,
@@ -247,16 +260,20 @@ export class FirebaseAnalyticsService {
         location: await this.getLocationInfo(),
         actions: 0,
         lastActivity: new Date(),
-        isActive: true
+        isActive: true,
       };
 
       // Save to Firestore
-      await this.saveToFirestore(COLLECTIONS.USER_SESSIONS, sessionId, sessionData);
-      
+      await this.saveToFirestore(
+        COLLECTIONS.USER_SESSIONS,
+        sessionId,
+        sessionData
+      );
+
       // Track session creation
       this.analyticsIntegration.trackEvent('session_created', {
         session_id: sessionId,
-        user_id: userId
+        user_id: userId,
       });
 
       return sessionId;
@@ -284,7 +301,7 @@ export class FirebaseAnalyticsService {
   ): Promise<void> {
     try {
       const historyId = `history_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+
       const historyData: FirestoreUserHistory = {
         id: historyId,
         userId,
@@ -292,18 +309,26 @@ export class FirebaseAnalyticsService {
         timestamp: new Date(),
         sessionId: sessionId || 'unknown',
         success,
-        errorMessage
+        errorMessage,
       };
 
       // Save to Firestore
-      await this.saveToFirestore(COLLECTIONS.USER_HISTORY, historyId, historyData);
-      
+      await this.saveToFirestore(
+        COLLECTIONS.USER_HISTORY,
+        historyId,
+        historyData
+      );
+
       // Track in Firebase Analytics
-      this.analyticsIntegration.trackUserInteraction(action.type, action.target || 'unknown', {
-        category: action.category,
-        success,
-        session_id: sessionId
-      });
+      this.analyticsIntegration.trackUserInteraction(
+        action.type,
+        action.target || 'unknown',
+        {
+          category: action.category,
+          success,
+          session_id: sessionId,
+        }
+      );
 
       // Update session activity
       if (sessionId) {
@@ -316,15 +341,21 @@ export class FirebaseAnalyticsService {
   }
 
   // Save predictive insight
-  public async savePredictiveInsight(insight: FirestorePredictiveInsight): Promise<void> {
+  public async savePredictiveInsight(
+    insight: FirestorePredictiveInsight
+  ): Promise<void> {
     try {
-      await this.saveToFirestore(COLLECTIONS.PREDICTIVE_INSIGHTS, insight.id, insight);
-      
+      await this.saveToFirestore(
+        COLLECTIONS.PREDICTIVE_INSIGHTS,
+        insight.id,
+        insight
+      );
+
       // Track insight generation
       this.analyticsIntegration.trackEvent('predictive_insight_generated', {
         insight_type: insight.type,
         confidence: insight.confidence,
-        user_id: insight.userId
+        user_id: insight.userId,
       });
     } catch (error) {
       console.error('Failed to save predictive insight:', error);
@@ -333,12 +364,22 @@ export class FirebaseAnalyticsService {
   }
 
   // Save performance metric
-  public async savePerformanceMetric(metric: FirestorePerformanceMetric): Promise<void> {
+  public async savePerformanceMetric(
+    metric: FirestorePerformanceMetric
+  ): Promise<void> {
     try {
-      await this.saveToFirestore(COLLECTIONS.PERFORMANCE_METRICS, metric.id, metric);
-      
+      await this.saveToFirestore(
+        COLLECTIONS.PERFORMANCE_METRICS,
+        metric.id,
+        metric
+      );
+
       // Track performance metric
-      this.analyticsIntegration.trackPerformance(metric.metric, metric.value, metric.unit);
+      this.analyticsIntegration.trackPerformance(
+        metric.metric,
+        metric.value,
+        metric.unit
+      );
     } catch (error) {
       console.error('Failed to save performance metric:', error);
       this.analyticsIntegration.trackError(error as Error, 'metric_saving');
@@ -349,12 +390,12 @@ export class FirebaseAnalyticsService {
   public async saveSecurityAlert(alert: FirestoreSecurityAlert): Promise<void> {
     try {
       await this.saveToFirestore(COLLECTIONS.SECURITY_ALERTS, alert.id, alert);
-      
+
       // Track security alert
       this.analyticsIntegration.trackEvent('security_alert_created', {
         alert_type: alert.type,
         severity: alert.severity,
-        user_id: alert.userId
+        user_id: alert.userId,
       });
     } catch (error) {
       console.error('Failed to save security alert:', error);
@@ -363,10 +404,20 @@ export class FirebaseAnalyticsService {
   }
 
   // Get user analytics data
-  public async getUserAnalyticsData(userId: string, limit: number = 1000): Promise<any[]> {
+  public async getUserAnalyticsData(
+    userId: string,
+    limit: number = 1000
+  ): Promise<any[]> {
     try {
-      const { getDocs, query, collection, where, orderBy, limit: limitQuery } = await import('firebase/firestore');
-      
+      const {
+        getDocs,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit: limitQuery,
+      } = await import('firebase/firestore');
+
       const q = query(
         collection(db, COLLECTIONS.USER_HISTORY),
         where('userId', '==', userId),
@@ -378,7 +429,7 @@ export class FirebaseAnalyticsService {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        timestamp: doc.data().timestamp.toDate()
+        timestamp: doc.data().timestamp.toDate(),
       }));
     } catch (error) {
       console.error('Failed to get user analytics data:', error);
@@ -388,10 +439,20 @@ export class FirebaseAnalyticsService {
   }
 
   // Get user sessions
-  public async getUserSessions(userId: string, limit: number = 100): Promise<FirestoreUserSession[]> {
+  public async getUserSessions(
+    userId: string,
+    limit: number = 100
+  ): Promise<FirestoreUserSession[]> {
     try {
-      const { getDocs, query, collection, where, orderBy, limit: limitQuery } = await import('firebase/firestore');
-      
+      const {
+        getDocs,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit: limitQuery,
+      } = await import('firebase/firestore');
+
       const q = query(
         collection(db, COLLECTIONS.USER_SESSIONS),
         where('userId', '==', userId),
@@ -405,20 +466,33 @@ export class FirebaseAnalyticsService {
         ...doc.data(),
         startTime: doc.data().startTime.toDate(),
         endTime: doc.data().endTime?.toDate(),
-        lastActivity: doc.data().lastActivity.toDate()
+        lastActivity: doc.data().lastActivity.toDate(),
       })) as FirestoreUserSession[];
     } catch (error) {
       console.error('Failed to get user sessions:', error);
-      this.analyticsIntegration.trackError(error as Error, 'sessions_retrieval');
+      this.analyticsIntegration.trackError(
+        error as Error,
+        'sessions_retrieval'
+      );
       return [];
     }
   }
 
   // Get predictive insights
-  public async getPredictiveInsights(userId: string, limit: number = 50): Promise<FirestorePredictiveInsight[]> {
+  public async getPredictiveInsights(
+    userId: string,
+    limit: number = 50
+  ): Promise<FirestorePredictiveInsight[]> {
     try {
-      const { getDocs, query, collection, where, orderBy, limit: limitQuery } = await import('firebase/firestore');
-      
+      const {
+        getDocs,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit: limitQuery,
+      } = await import('firebase/firestore');
+
       const q = query(
         collection(db, COLLECTIONS.PREDICTIVE_INSIGHTS),
         where('userId', '==', userId),
@@ -431,20 +505,33 @@ export class FirebaseAnalyticsService {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt.toDate(),
-        expiresAt: doc.data().expiresAt.toDate()
+        expiresAt: doc.data().expiresAt.toDate(),
       })) as FirestorePredictiveInsight[];
     } catch (error) {
       console.error('Failed to get predictive insights:', error);
-      this.analyticsIntegration.trackError(error as Error, 'insights_retrieval');
+      this.analyticsIntegration.trackError(
+        error as Error,
+        'insights_retrieval'
+      );
       return [];
     }
   }
 
   // Get performance metrics
-  public async getPerformanceMetrics(userId: string, limit: number = 100): Promise<FirestorePerformanceMetric[]> {
+  public async getPerformanceMetrics(
+    userId: string,
+    limit: number = 100
+  ): Promise<FirestorePerformanceMetric[]> {
     try {
-      const { getDocs, query, collection, where, orderBy, limit: limitQuery } = await import('firebase/firestore');
-      
+      const {
+        getDocs,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit: limitQuery,
+      } = await import('firebase/firestore');
+
       const q = query(
         collection(db, COLLECTIONS.PERFORMANCE_METRICS),
         where('userId', '==', userId),
@@ -456,7 +543,7 @@ export class FirebaseAnalyticsService {
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        timestamp: doc.data().timestamp.toDate()
+        timestamp: doc.data().timestamp.toDate(),
       })) as FirestorePerformanceMetric[];
     } catch (error) {
       console.error('Failed to get performance metrics:', error);
@@ -466,10 +553,20 @@ export class FirebaseAnalyticsService {
   }
 
   // Get security alerts
-  public async getSecurityAlerts(userId: string, limit: number = 50): Promise<FirestoreSecurityAlert[]> {
+  public async getSecurityAlerts(
+    userId: string,
+    limit: number = 50
+  ): Promise<FirestoreSecurityAlert[]> {
     try {
-      const { getDocs, query, collection, where, orderBy, limit: limitQuery } = await import('firebase/firestore');
-      
+      const {
+        getDocs,
+        query,
+        collection,
+        where,
+        orderBy,
+        limit: limitQuery,
+      } = await import('firebase/firestore');
+
       const q = query(
         collection(db, COLLECTIONS.SECURITY_ALERTS),
         where('userId', '==', userId),
@@ -482,7 +579,7 @@ export class FirebaseAnalyticsService {
         id: doc.id,
         ...doc.data(),
         timestamp: doc.data().timestamp.toDate(),
-        resolvedAt: doc.data().resolvedAt?.toDate()
+        resolvedAt: doc.data().resolvedAt?.toDate(),
       })) as FirestoreSecurityAlert[];
     } catch (error) {
       console.error('Failed to get security alerts:', error);
@@ -494,11 +591,13 @@ export class FirebaseAnalyticsService {
   // Update session activity
   private async updateSessionActivity(sessionId: string): Promise<void> {
     try {
-      const { updateDoc, doc, increment, serverTimestamp } = await import('firebase/firestore');
-      
+      const { updateDoc, doc, increment, serverTimestamp } = await import(
+        'firebase/firestore'
+      );
+
       await updateDoc(doc(db, COLLECTIONS.USER_SESSIONS, sessionId), {
         actions: increment(1),
-        lastActivity: serverTimestamp()
+        lastActivity: serverTimestamp(),
       });
     } catch (error) {
       console.error('Failed to update session activity:', error);
@@ -506,17 +605,23 @@ export class FirebaseAnalyticsService {
   }
 
   // Save data to Firestore
-  private async saveToFirestore(collection: string, docId: string, data: any): Promise<void> {
+  private async saveToFirestore(
+    collection: string,
+    docId: string,
+    data: any
+  ): Promise<void> {
     try {
-      const { setDoc, doc, serverTimestamp } = await import('firebase/firestore');
-      
+      const { setDoc, doc, serverTimestamp } = await import(
+        'firebase/firestore'
+      );
+
       // Convert Date objects to Firestore Timestamps
       const processedData = this.processDataForFirestore(data);
-      
+
       await setDoc(doc(db, collection, docId), {
         ...processedData,
         createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
     } catch (error) {
       console.error('Failed to save to Firestore:', error);
@@ -527,14 +632,14 @@ export class FirebaseAnalyticsService {
   // Process data for Firestore (convert Date objects to Timestamps)
   private processDataForFirestore(data: any): any {
     const processed = { ...data };
-    
+
     // Convert Date objects to Firestore Timestamps
     Object.keys(processed).forEach(key => {
       if (processed[key] instanceof Date) {
         processed[key] = processed[key];
       }
     });
-    
+
     return processed;
   }
 
@@ -547,7 +652,7 @@ export class FirebaseAnalyticsService {
         language: 'Unknown',
         timezone: 'Unknown',
         screenResolution: 'Unknown',
-        viewport: 'Unknown'
+        viewport: 'Unknown',
       };
     }
 
@@ -557,7 +662,7 @@ export class FirebaseAnalyticsService {
       language: navigator.language,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       screenResolution: `${screen.width}x${screen.height}`,
-      viewport: `${window.innerWidth}x${window.innerHeight}`
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
     };
   }
 
@@ -567,7 +672,7 @@ export class FirebaseAnalyticsService {
     return {
       country: 'Unknown',
       region: 'Unknown',
-      city: 'Unknown'
+      city: 'Unknown',
     };
   }
 
@@ -604,5 +709,5 @@ export default {
   analytics,
   firebaseAnalyticsService,
   firebaseAnalytics,
-  COLLECTIONS
+  COLLECTIONS,
 };

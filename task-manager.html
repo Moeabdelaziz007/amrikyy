@@ -1,622 +1,671 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Task Manager - AuraOS</title>
-    
+
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#00d9ff">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    
+    <meta name="theme-color" content="#00d9ff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
-    
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <style>
-        .task-manager-page {
-            min-height: 100vh;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
-            background-attachment: fixed;
-            position: relative;
-        }
+      .task-manager-page {
+        min-height: 100vh;
+        background: linear-gradient(
+          135deg,
+          var(--bg-dark) 0%,
+          var(--bg-primary) 25%,
+          var(--bg-secondary) 50%,
+          var(--bg-tertiary) 75%,
+          var(--bg-primary) 100%
+        );
+        background-attachment: fixed;
+        position: relative;
+      }
 
-        .task-manager-page::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.06) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
-            animation: ambient-glow 8s ease-in-out infinite alternate;
-        }
+      .task-manager-page::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(0, 217, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 107, 157, 0.08) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(157, 78, 221, 0.06) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+        z-index: -1;
+        animation: ambient-glow 8s ease-in-out infinite alternate;
+      }
 
-        .task-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 100px 20px 20px;
-        }
+      .task-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 100px 20px 20px;
+      }
 
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            animation: fadeInUp 0.8s ease;
-        }
+      .task-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        animation: fadeInUp 0.8s ease;
+      }
 
-        .task-title {
-            font-size: 36px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+      .task-title {
+        font-size: 36px;
+        font-weight: 700;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--accent-color)
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
 
-        .task-actions {
-            display: flex;
-            gap: 12px;
-        }
+      .task-actions {
+        display: flex;
+        gap: 12px;
+      }
 
-        .action-btn {
-            padding: 10px 20px;
-            background: var(--bg-glass);
-            border: 1px solid var(--border-light);
-            border-radius: 10px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
+      .action-btn {
+        padding: 10px 20px;
+        background: var(--bg-glass);
+        border: 1px solid var(--border-light);
+        border-radius: 10px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
 
-        .action-btn:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-        }
+      .action-btn:hover {
+        background: rgba(0, 217, 255, 0.1);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+      }
 
-        .action-btn.danger:hover {
-            background: rgba(255, 71, 87, 0.1);
-            border-color: var(--error-color);
-            color: var(--error-color);
-        }
+      .action-btn.danger:hover {
+        background: rgba(255, 71, 87, 0.1);
+        border-color: var(--error-color);
+        color: var(--error-color);
+      }
 
-        .tabs-container {
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            padding: 8px;
-            backdrop-filter: blur(20px);
-            margin-bottom: 20px;
-            display: flex;
-            gap: 8px;
-            animation: fadeInUp 0.8s ease backwards;
-            animation-delay: 0.1s;
-        }
+      .tabs-container {
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        padding: 8px;
+        backdrop-filter: blur(20px);
+        margin-bottom: 20px;
+        display: flex;
+        gap: 8px;
+        animation: fadeInUp 0.8s ease backwards;
+        animation-delay: 0.1s;
+      }
 
-        .tab-btn {
-            padding: 10px 20px;
-            background: transparent;
-            border: none;
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
+      .tab-btn {
+        padding: 10px 20px;
+        background: transparent;
+        border: none;
+        border-radius: 8px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
 
-        .tab-btn:hover {
-            background: var(--bg-glass);
-        }
+      .tab-btn:hover {
+        background: var(--bg-glass);
+      }
 
-        .tab-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-        }
+      .tab-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+      }
 
-        .task-content {
-            background: var(--bg-card);
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-            animation: fadeInUp 0.8s ease backwards;
-            animation-delay: 0.2s;
-        }
+      .task-content {
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        backdrop-filter: blur(20px);
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease backwards;
+        animation-delay: 0.2s;
+      }
 
-        .task-table {
-            width: 100%;
-            border-spacing: 0;
-        }
+      .task-table {
+        width: 100%;
+        border-spacing: 0;
+      }
 
-        .task-table th {
-            background: rgba(0, 217, 255, 0.05);
-            padding: 16px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-light);
-            border-bottom: 1px solid var(--border-light);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+      .task-table th {
+        background: rgba(0, 217, 255, 0.05);
+        padding: 16px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-light);
+        border-bottom: 1px solid var(--border-light);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
 
-        .task-table th:hover {
-            background: rgba(0, 217, 255, 0.1);
-            color: var(--primary-color);
-        }
+      .task-table th:hover {
+        background: rgba(0, 217, 255, 0.1);
+        color: var(--primary-color);
+      }
 
-        .task-table td {
-            padding: 16px;
-            color: var(--text-secondary);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-        }
+      .task-table td {
+        padding: 16px;
+        color: var(--text-secondary);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      }
 
-        .task-table tr:hover td {
-            background: var(--bg-glass);
-        }
+      .task-table tr:hover td {
+        background: var(--bg-glass);
+      }
 
-        .task-table tr.selected td {
-            background: rgba(0, 217, 255, 0.1);
-        }
+      .task-table tr.selected td {
+        background: rgba(0, 217, 255, 0.1);
+      }
 
-        .app-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+      .app-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
 
-        .app-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--bg-glass);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-        }
+      .app-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--bg-glass);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+      }
 
-        .app-name {
-            font-weight: 500;
-            color: var(--text-primary);
-        }
+      .app-name {
+        font-weight: 500;
+        color: var(--text-primary);
+      }
 
-        .app-type {
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+      .app-type {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
 
-        .usage-bar {
-            width: 80px;
-            height: 6px;
-            background: var(--bg-glass);
-            border-radius: 3px;
-            overflow: hidden;
-        }
+      .usage-bar {
+        width: 80px;
+        height: 6px;
+        background: var(--bg-glass);
+        border-radius: 3px;
+        overflow: hidden;
+      }
 
-        .usage-fill {
-            height: 100%;
-            background: var(--primary-gradient);
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
+      .usage-fill {
+        height: 100%;
+        background: var(--primary-gradient);
+        border-radius: 3px;
+        transition: width 0.3s ease;
+      }
 
-        .usage-fill.high {
-            background: var(--error-gradient);
-        }
+      .usage-fill.high {
+        background: var(--error-gradient);
+      }
 
-        .usage-fill.medium {
-            background: var(--warning-gradient);
-        }
+      .usage-fill.medium {
+        background: var(--warning-gradient);
+      }
 
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-        }
+      .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+      }
 
-        .status-badge.running {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--success-color);
-        }
+      .status-badge.running {
+        background: rgba(0, 255, 136, 0.1);
+        color: var(--success-color);
+      }
 
-        .status-badge.suspended {
-            background: rgba(255, 179, 71, 0.1);
-            color: var(--warning-color);
-        }
+      .status-badge.suspended {
+        background: rgba(255, 179, 71, 0.1);
+        color: var(--warning-color);
+      }
 
-        .status-badge.stopped {
-            background: rgba(255, 71, 87, 0.1);
-            color: var(--error-color);
-        }
+      .status-badge.stopped {
+        background: rgba(255, 71, 87, 0.1);
+        color: var(--error-color);
+      }
 
-        .task-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            background: var(--bg-glass);
-            border-top: 1px solid var(--border-light);
-        }
+      .task-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        background: var(--bg-glass);
+        border-top: 1px solid var(--border-light);
+      }
 
-        .footer-info {
-            display: flex;
-            gap: 20px;
-        }
+      .footer-info {
+        display: flex;
+        gap: 20px;
+      }
 
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        .info-label {
-            font-size: 14px;
-            color: var(--text-light);
-        }
+      .info-label {
+        font-size: 14px;
+        color: var(--text-light);
+      }
 
-        .info-value {
-            font-weight: 600;
-            color: var(--text-primary);
-        }
+      .info-value {
+        font-weight: 600;
+        color: var(--text-primary);
+      }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-        @keyframes ambient-glow {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
+      @keyframes ambient-glow {
+        0% {
+          opacity: 0.5;
         }
+        100% {
+          opacity: 1;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="task-manager-page">
-        <!-- Navigation -->
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="nav-logo">
-                    <i class="fas fa-cube"></i>
-                    <span>AuraOS</span>
-                </div>
-                <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-                    <li><a href="task-manager.html" class="nav-link active">Task Manager</a></li>
-                    <li><a href="settings.html" class="nav-link">Settings</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <button class="theme-toggle" onclick="toggleTheme()">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    <button class="notification-btn">
-                        <i class="fas fa-bell"></i>
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <div class="task-container">
-            <!-- Header -->
-            <div class="task-header">
-                <h1 class="task-title">Task Manager</h1>
-                <div class="task-actions">
-                    <button class="action-btn" onclick="launchNew()">
-                        <i class="fas fa-plus"></i> New Task
-                    </button>
-                    <button class="action-btn danger" onclick="endSelected()">
-                        <i class="fas fa-stop"></i> End Task
-                    </button>
-                </div>
-            </div>
-
-            <!-- Tabs -->
-            <div class="tabs-container">
-                <button class="tab-btn active" onclick="switchTab('apps')">Applications</button>
-                <button class="tab-btn" onclick="switchTab('processes')">Processes</button>
-                <button class="tab-btn" onclick="switchTab('services')">Services</button>
-                <button class="tab-btn" onclick="switchTab('performance')">Performance</button>
-                <button class="tab-btn" onclick="switchTab('startup')">Startup</button>
-            </div>
-
-            <!-- Task Table -->
-            <div class="task-content">
-                <table class="task-table">
-                    <thead>
-                        <tr>
-                            <th onclick="sortTable('name')">Name <i class="fas fa-sort"></i></th>
-                            <th onclick="sortTable('status')">Status</th>
-                            <th onclick="sortTable('cpu')">CPU</th>
-                            <th onclick="sortTable('memory')">Memory</th>
-                            <th onclick="sortTable('disk')">Disk</th>
-                            <th onclick="sortTable('network')">Network</th>
-                            <th onclick="sortTable('gpu')">GPU</th>
-                        </tr>
-                    </thead>
-                    <tbody id="taskList">
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon">
-                                        <i class="fas fa-chrome"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Chrome Browser</div>
-                                        <div class="app-type">Web Browser</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge running">Running</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill" style="width: 25%"></div>
-                                </div>
-                                <span style="margin-left: 8px">25%</span>
-                            </td>
-                            <td>2.1 GB</td>
-                            <td>125 MB/s</td>
-                            <td>45 Mbps</td>
-                            <td>12%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon" style="color: #007ACC">
-                                        <i class="fas fa-code"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Visual Studio Code</div>
-                                        <div class="app-type">Development</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge running">Running</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill medium" style="width: 45%"></div>
-                                </div>
-                                <span style="margin-left: 8px">45%</span>
-                            </td>
-                            <td>1.8 GB</td>
-                            <td>45 MB/s</td>
-                            <td>0 Mbps</td>
-                            <td>8%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon" style="color: #1DB954">
-                                        <i class="fab fa-spotify"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Spotify</div>
-                                        <div class="app-type">Music</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge running">Running</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill" style="width: 5%"></div>
-                                </div>
-                                <span style="margin-left: 8px">5%</span>
-                            </td>
-                            <td>256 MB</td>
-                            <td>2 MB/s</td>
-                            <td>2 Mbps</td>
-                            <td>0%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon" style="color: #FF4500">
-                                        <i class="fas fa-gamepad"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Steam</div>
-                                        <div class="app-type">Gaming Platform</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge suspended">Suspended</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill" style="width: 0%"></div>
-                                </div>
-                                <span style="margin-left: 8px">0%</span>
-                            </td>
-                            <td>512 MB</td>
-                            <td>0 MB/s</td>
-                            <td>0 Mbps</td>
-                            <td>0%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon" style="color: #5865F2">
-                                        <i class="fab fa-discord"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Discord</div>
-                                        <div class="app-type">Communication</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge running">Running</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill" style="width: 15%"></div>
-                                </div>
-                                <span style="margin-left: 8px">15%</span>
-                            </td>
-                            <td>385 MB</td>
-                            <td>8 MB/s</td>
-                            <td>1 Mbps</td>
-                            <td>2%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="app-info">
-                                    <div class="app-icon" style="color: var(--error-color)">
-                                        <i class="fas fa-database"></i>
-                                    </div>
-                                    <div>
-                                        <div class="app-name">Database Service</div>
-                                        <div class="app-type">Background Service</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="status-badge running">Running</span></td>
-                            <td>
-                                <div class="usage-bar">
-                                    <div class="usage-fill high" style="width: 75%"></div>
-                                </div>
-                                <span style="margin-left: 8px">75%</span>
-                            </td>
-                            <td>4.2 GB</td>
-                            <td>200 MB/s</td>
-                            <td>10 Mbps</td>
-                            <td>0%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="task-footer">
-                    <div class="footer-info">
-                        <div class="info-item">
-                            <span class="info-label">Processes:</span>
-                            <span class="info-value">142</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">CPU Usage:</span>
-                            <span class="info-value">45%</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Memory:</span>
-                            <span class="info-value">8.2 / 16 GB (51%)</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Disk:</span>
-                            <span class="info-value">125 MB/s</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Network:</span>
-                            <span class="info-value">58 Mbps</span>
-                        </div>
-                    </div>
-                    <button class="action-btn" onclick="refreshList()">
-                        <i class="fas fa-sync"></i> Refresh
-                    </button>
-                </div>
-            </div>
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="nav-container">
+          <div class="nav-logo">
+            <i class="fas fa-cube"></i>
+            <span>AuraOS</span>
+          </div>
+          <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+            <li>
+              <a href="task-manager.html" class="nav-link active"
+                >Task Manager</a
+              >
+            </li>
+            <li><a href="settings.html" class="nav-link">Settings</a></li>
+          </ul>
+          <div class="nav-actions">
+            <button class="theme-toggle" onclick="toggleTheme()">
+              <i class="fas fa-moon"></i>
+            </button>
+            <button class="notification-btn">
+              <i class="fas fa-bell"></i>
+            </button>
+          </div>
         </div>
+      </nav>
+
+      <div class="task-container">
+        <!-- Header -->
+        <div class="task-header">
+          <h1 class="task-title">Task Manager</h1>
+          <div class="task-actions">
+            <button class="action-btn" onclick="launchNew()">
+              <i class="fas fa-plus"></i> New Task
+            </button>
+            <button class="action-btn danger" onclick="endSelected()">
+              <i class="fas fa-stop"></i> End Task
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+          <button class="tab-btn active" onclick="switchTab('apps')">
+            Applications
+          </button>
+          <button class="tab-btn" onclick="switchTab('processes')">
+            Processes
+          </button>
+          <button class="tab-btn" onclick="switchTab('services')">
+            Services
+          </button>
+          <button class="tab-btn" onclick="switchTab('performance')">
+            Performance
+          </button>
+          <button class="tab-btn" onclick="switchTab('startup')">
+            Startup
+          </button>
+        </div>
+
+        <!-- Task Table -->
+        <div class="task-content">
+          <table class="task-table">
+            <thead>
+              <tr>
+                <th onclick="sortTable('name')">
+                  Name <i class="fas fa-sort"></i>
+                </th>
+                <th onclick="sortTable('status')">Status</th>
+                <th onclick="sortTable('cpu')">CPU</th>
+                <th onclick="sortTable('memory')">Memory</th>
+                <th onclick="sortTable('disk')">Disk</th>
+                <th onclick="sortTable('network')">Network</th>
+                <th onclick="sortTable('gpu')">GPU</th>
+              </tr>
+            </thead>
+            <tbody id="taskList">
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon">
+                      <i class="fas fa-chrome"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Chrome Browser</div>
+                      <div class="app-type">Web Browser</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge running">Running</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width: 25%"></div>
+                  </div>
+                  <span style="margin-left: 8px">25%</span>
+                </td>
+                <td>2.1 GB</td>
+                <td>125 MB/s</td>
+                <td>45 Mbps</td>
+                <td>12%</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon" style="color: #007acc">
+                      <i class="fas fa-code"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Visual Studio Code</div>
+                      <div class="app-type">Development</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge running">Running</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill medium" style="width: 45%"></div>
+                  </div>
+                  <span style="margin-left: 8px">45%</span>
+                </td>
+                <td>1.8 GB</td>
+                <td>45 MB/s</td>
+                <td>0 Mbps</td>
+                <td>8%</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon" style="color: #1db954">
+                      <i class="fab fa-spotify"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Spotify</div>
+                      <div class="app-type">Music</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge running">Running</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width: 5%"></div>
+                  </div>
+                  <span style="margin-left: 8px">5%</span>
+                </td>
+                <td>256 MB</td>
+                <td>2 MB/s</td>
+                <td>2 Mbps</td>
+                <td>0%</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon" style="color: #ff4500">
+                      <i class="fas fa-gamepad"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Steam</div>
+                      <div class="app-type">Gaming Platform</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge suspended">Suspended</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width: 0%"></div>
+                  </div>
+                  <span style="margin-left: 8px">0%</span>
+                </td>
+                <td>512 MB</td>
+                <td>0 MB/s</td>
+                <td>0 Mbps</td>
+                <td>0%</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon" style="color: #5865f2">
+                      <i class="fab fa-discord"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Discord</div>
+                      <div class="app-type">Communication</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge running">Running</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width: 15%"></div>
+                  </div>
+                  <span style="margin-left: 8px">15%</span>
+                </td>
+                <td>385 MB</td>
+                <td>8 MB/s</td>
+                <td>1 Mbps</td>
+                <td>2%</td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="app-info">
+                    <div class="app-icon" style="color: var(--error-color)">
+                      <i class="fas fa-database"></i>
+                    </div>
+                    <div>
+                      <div class="app-name">Database Service</div>
+                      <div class="app-type">Background Service</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="status-badge running">Running</span></td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill high" style="width: 75%"></div>
+                  </div>
+                  <span style="margin-left: 8px">75%</span>
+                </td>
+                <td>4.2 GB</td>
+                <td>200 MB/s</td>
+                <td>10 Mbps</td>
+                <td>0%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="task-footer">
+            <div class="footer-info">
+              <div class="info-item">
+                <span class="info-label">Processes:</span>
+                <span class="info-value">142</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">CPU Usage:</span>
+                <span class="info-value">45%</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Memory:</span>
+                <span class="info-value">8.2 / 16 GB (51%)</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Disk:</span>
+                <span class="info-value">125 MB/s</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">Network:</span>
+                <span class="info-value">58 Mbps</span>
+              </div>
+            </div>
+            <button class="action-btn" onclick="refreshList()">
+              <i class="fas fa-sync"></i> Refresh
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        // Tab switching
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            console.log('Switching to tab:', tab);
-            // Load different content based on tab
-        }
-
-        // Sort table
-        function sortTable(column) {
-            console.log('Sorting by:', column);
-            // Implement sorting logic
-        }
-
-        // Row selection
-        document.querySelectorAll('.task-table tbody tr').forEach(row => {
-            row.addEventListener('click', function() {
-                this.classList.toggle('selected');
-            });
+      // Tab switching
+      function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          btn.classList.remove('active');
         });
+        event.target.classList.add('active');
+        console.log('Switching to tab:', tab);
+        // Load different content based on tab
+      }
 
-        // Actions
-        function launchNew() {
-            console.log('Launch new task');
+      // Sort table
+      function sortTable(column) {
+        console.log('Sorting by:', column);
+        // Implement sorting logic
+      }
+
+      // Row selection
+      document.querySelectorAll('.task-table tbody tr').forEach(row => {
+        row.addEventListener('click', function () {
+          this.classList.toggle('selected');
+        });
+      });
+
+      // Actions
+      function launchNew() {
+        console.log('Launch new task');
+      }
+
+      function endSelected() {
+        const selected = document.querySelectorAll('.task-table tr.selected');
+        if (selected.length > 0) {
+          if (confirm('End selected tasks?')) {
+            selected.forEach(row => row.remove());
+          }
+        } else {
+          alert('Please select tasks to end');
         }
+      }
 
-        function endSelected() {
-            const selected = document.querySelectorAll('.task-table tr.selected');
-            if (selected.length > 0) {
-                if (confirm('End selected tasks?')) {
-                    selected.forEach(row => row.remove());
-                }
-            } else {
-                alert('Please select tasks to end');
-            }
-        }
+      function refreshList() {
+        console.log('Refreshing task list');
+        // Simulate refresh
+        const btn = event.target;
+        btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Refreshing...';
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fas fa-sync"></i> Refresh';
+        }, 1000);
+      }
 
-        function refreshList() {
-            console.log('Refreshing task list');
-            // Simulate refresh
-            const btn = event.target;
-            btn.innerHTML = '<i class="fas fa-sync fa-spin"></i> Refreshing...';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fas fa-sync"></i> Refresh';
-            }, 1000);
-        }
+      // Theme toggle
+      function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.querySelector('.theme-toggle i');
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+      }
 
-        // Theme toggle
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.querySelector('.theme-toggle i');
-            icon.classList.toggle('fa-moon');
-            icon.classList.toggle('fa-sun');
-        }
+      // Auto-update values
+      setInterval(() => {
+        // Update CPU usage bars
+        document.querySelectorAll('.usage-fill').forEach(bar => {
+          const randomWidth = Math.floor(Math.random() * 80 + 5);
+          bar.style.width = randomWidth + '%';
 
-        // Auto-update values
-        setInterval(() => {
-            // Update CPU usage bars
-            document.querySelectorAll('.usage-fill').forEach(bar => {
-                const randomWidth = Math.floor(Math.random() * 80 + 5);
-                bar.style.width = randomWidth + '%';
-                
-                // Update color based on usage
-                bar.classList.remove('high', 'medium');
-                if (randomWidth > 70) bar.classList.add('high');
-                else if (randomWidth > 40) bar.classList.add('medium');
-                
-                // Update percentage text
-                const percentText = bar.parentElement.nextElementSibling;
-                if (percentText) {
-                    percentText.textContent = randomWidth + '%';
-                }
-            });
-        }, 3000);
+          // Update color based on usage
+          bar.classList.remove('high', 'medium');
+          if (randomWidth > 70) bar.classList.add('high');
+          else if (randomWidth > 40) bar.classList.add('medium');
+
+          // Update percentage text
+          const percentText = bar.parentElement.nextElementSibling;
+          if (percentText) {
+            percentText.textContent = randomWidth + '%';
+          }
+        });
+      }, 3000);
     </script>
-</body>
+  </body>
 </html>

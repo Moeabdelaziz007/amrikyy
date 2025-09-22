@@ -7,7 +7,7 @@ export enum LogLevel {
   INFO = 1,
   WARN = 2,
   ERROR = 3,
-  CRITICAL = 4
+  CRITICAL = 4,
 }
 
 export interface LogEntry {
@@ -55,7 +55,7 @@ class EnhancedLogger {
       enableColors: true,
       enableTimestamp: true,
       enableSource: true,
-      ...config
+      ...config,
     };
 
     this.initializeLogging();
@@ -88,8 +88,8 @@ class EnhancedLogger {
         level: LogLevel[this.config.level],
         enableConsole: this.config.enableConsole,
         enableFile: this.config.enableFile,
-        enableDatabase: this.config.enableDatabase
-      }
+        enableDatabase: this.config.enableDatabase,
+      },
     });
   }
 
@@ -98,7 +98,10 @@ class EnhancedLogger {
    */
   private setupLogFile(): void {
     const timestamp = new Date().toISOString().split('T')[0];
-    this.currentLogFile = path.join(this.config.logDirectory, `auraos-${timestamp}.log`);
+    this.currentLogFile = path.join(
+      this.config.logDirectory,
+      `auraos-${timestamp}.log`
+    );
 
     // Close existing stream
     if (this.logStream) {
@@ -131,7 +134,10 @@ class EnhancedLogger {
    */
   private rotateLogFile(): void {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const rotatedFile = path.join(this.config.logDirectory, `auraos-${timestamp}.log`);
+    const rotatedFile = path.join(
+      this.config.logDirectory,
+      `auraos-${timestamp}.log`
+    );
 
     // Rename current file
     fs.renameSync(this.currentLogFile, rotatedFile);
@@ -148,12 +154,13 @@ class EnhancedLogger {
    */
   private cleanupOldLogs(): void {
     try {
-      const files = fs.readdirSync(this.config.logDirectory)
+      const files = fs
+        .readdirSync(this.config.logDirectory)
         .filter(file => file.startsWith('auraos-') && file.endsWith('.log'))
         .map(file => ({
           name: file,
           path: path.join(this.config.logDirectory, file),
-          mtime: fs.statSync(path.join(this.config.logDirectory, file)).mtime
+          mtime: fs.statSync(path.join(this.config.logDirectory, file)).mtime,
         }))
         .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 
@@ -172,7 +179,13 @@ class EnhancedLogger {
   /**
    * Log a message with specified level
    */
-  private log(level: LogLevel, message: string, source: string = 'system', context?: Record<string, any>, error?: Error): void {
+  private log(
+    level: LogLevel,
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>,
+    error?: Error
+  ): void {
     if (level < this.config.level) return;
 
     const entry: LogEntry = {
@@ -184,7 +197,7 @@ class EnhancedLogger {
       stack: error?.stack,
       userId: context?.userId,
       sessionId: context?.sessionId,
-      requestId: context?.requestId
+      requestId: context?.requestId,
     };
 
     // Console logging
@@ -214,10 +227,14 @@ class EnhancedLogger {
     const timestamp = this.config.enableTimestamp ? `[${entry.timestamp}]` : '';
     const source = this.config.enableSource ? `[${entry.source}]` : '';
     const levelColor = this.getLevelColor(entry.level);
-    const message = entry.context ? `${entry.message} ${JSON.stringify(entry.context)}` : entry.message;
+    const message = entry.context
+      ? `${entry.message} ${JSON.stringify(entry.context)}`
+      : entry.message;
 
     if (this.config.enableColors) {
-      console.log(`${levelColor}${levelName}${timestamp}${source} ${message}\x1b[0m`);
+      console.log(
+        `${levelColor}${levelName}${timestamp}${source} ${message}\x1b[0m`
+      );
     } else {
       console.log(`${levelName}${timestamp}${source} ${message}`);
     }
@@ -234,17 +251,18 @@ class EnhancedLogger {
   private logToFile(entry: LogEntry): void {
     if (!this.logStream) return;
 
-    const logLine = JSON.stringify({
-      timestamp: entry.timestamp,
-      level: LogLevel[entry.level],
-      message: entry.message,
-      source: entry.source,
-      context: entry.context,
-      stack: entry.stack,
-      userId: entry.userId,
-      sessionId: entry.sessionId,
-      requestId: entry.requestId
-    }) + '\n';
+    const logLine =
+      JSON.stringify({
+        timestamp: entry.timestamp,
+        level: LogLevel[entry.level],
+        message: entry.message,
+        source: entry.source,
+        context: entry.context,
+        stack: entry.stack,
+        userId: entry.userId,
+        sessionId: entry.sessionId,
+        requestId: entry.requestId,
+      }) + '\n';
 
     this.logStream.write(logLine);
   }
@@ -266,10 +284,10 @@ class EnhancedLogger {
   private getLevelColor(level: LogLevel): string {
     const colors = {
       [LogLevel.DEBUG]: '\x1b[36m', // Cyan
-      [LogLevel.INFO]: '\x1b[32m',  // Green
-      [LogLevel.WARN]: '\x1b[33m',  // Yellow
+      [LogLevel.INFO]: '\x1b[32m', // Green
+      [LogLevel.WARN]: '\x1b[33m', // Yellow
       [LogLevel.ERROR]: '\x1b[31m', // Red
-      [LogLevel.CRITICAL]: '\x1b[35m' // Magenta
+      [LogLevel.CRITICAL]: '\x1b[35m', // Magenta
     };
     return colors[level] || '';
   }
@@ -277,85 +295,129 @@ class EnhancedLogger {
   /**
    * Debug level logging
    */
-  debug(message: string, source: string = 'system', context?: Record<string, any>): void {
+  debug(
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>
+  ): void {
     this.log(LogLevel.DEBUG, message, source, context);
   }
 
   /**
    * Info level logging
    */
-  info(message: string, source: string = 'system', context?: Record<string, any>): void {
+  info(
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>
+  ): void {
     this.log(LogLevel.INFO, message, source, context);
   }
 
   /**
    * Warning level logging
    */
-  warn(message: string, source: string = 'system', context?: Record<string, any>): void {
+  warn(
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>
+  ): void {
     this.log(LogLevel.WARN, message, source, context);
   }
 
   /**
    * Error level logging
    */
-  error(message: string, source: string = 'system', context?: Record<string, any>, error?: Error): void {
+  error(
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>,
+    error?: Error
+  ): void {
     this.log(LogLevel.ERROR, message, source, context, error);
   }
 
   /**
    * Critical level logging
    */
-  critical(message: string, source: string = 'system', context?: Record<string, any>, error?: Error): void {
+  critical(
+    message: string,
+    source: string = 'system',
+    context?: Record<string, any>,
+    error?: Error
+  ): void {
     this.log(LogLevel.CRITICAL, message, source, context, error);
   }
 
   /**
    * Log HTTP requests
    */
-  logRequest(method: string, url: string, statusCode: number, duration: number, userId?: string, requestId?: string): void {
+  logRequest(
+    method: string,
+    url: string,
+    statusCode: number,
+    duration: number,
+    userId?: string,
+    requestId?: string
+  ): void {
     this.info(`HTTP ${method} ${url}`, 'http', {
       method,
       url,
       statusCode,
       duration,
       userId,
-      requestId
+      requestId,
     });
   }
 
   /**
    * Log AI agent activities
    */
-  logAgentActivity(agentId: string, action: string, result: any, context?: Record<string, any>): void {
+  logAgentActivity(
+    agentId: string,
+    action: string,
+    result: any,
+    context?: Record<string, any>
+  ): void {
     this.info(`Agent ${agentId}: ${action}`, 'ai-agent', {
       agentId,
       action,
       result,
-      ...context
+      ...context,
     });
   }
 
   /**
    * Log autopilot activities
    */
-  logAutopilotActivity(action: string, ruleId?: string, workflowId?: string, context?: Record<string, any>): void {
+  logAutopilotActivity(
+    action: string,
+    ruleId?: string,
+    workflowId?: string,
+    context?: Record<string, any>
+  ): void {
     this.info(`Autopilot: ${action}`, 'autopilot', {
       action,
       ruleId,
       workflowId,
-      ...context
+      ...context,
     });
   }
 
   /**
    * Log system performance metrics
    */
-  logPerformance(metric: string, value: number, unit: string, context?: Record<string, any>): void {
+  logPerformance(
+    metric: string,
+    value: number,
+    unit: string,
+    context?: Record<string, any>
+  ): void {
     this.info(`Performance: ${metric} = ${value}${unit}`, 'performance', {
       metric,
       value,
       unit,
-      ...context
+      ...context,
     });
   }
 
@@ -371,7 +433,12 @@ class EnhancedLogger {
   /**
    * Search logs
    */
-  searchLogs(query: string, startDate?: Date, endDate?: Date, level?: LogLevel): LogEntry[] {
+  searchLogs(
+    query: string,
+    startDate?: Date,
+    endDate?: Date,
+    level?: LogLevel
+  ): LogEntry[] {
     // This would search through your database or log files
     // For now, return empty array
     return [];
@@ -404,17 +471,16 @@ class EnhancedLogger {
 
 // Create singleton instance
 const enhancedLogger = new EnhancedLogger({
-  level: process.env.LOG_LEVEL ? parseInt(process.env.LOG_LEVEL) : LogLevel.INFO,
+  level: process.env.LOG_LEVEL
+    ? parseInt(process.env.LOG_LEVEL)
+    : LogLevel.INFO,
   enableConsole: process.env.NODE_ENV !== 'production',
   enableFile: true,
   enableDatabase: false, // Set to true when you want to store logs in database
   logDirectory: './logs',
   maxFileSize: 10,
-  maxFiles: 5
+  maxFiles: 5,
 });
 
 export { enhancedLogger, EnhancedLogger };
 export default enhancedLogger;
-
-
-

@@ -1,17 +1,17 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 import { NodeType } from '../../types/workflow';
-import { 
-  Play, 
-  Square, 
-  Settings, 
-  GitBranch, 
-  MessageSquare, 
-  Github, 
-  Clock, 
+import {
+  Play,
+  Square,
+  Settings,
+  GitBranch,
+  MessageSquare,
+  Github,
+  Clock,
   Filter,
   Workflow,
-  Merge
+  Merge,
 } from 'lucide-react';
 
 interface DraggableNodeProps {
@@ -22,17 +22,17 @@ interface DraggableNodeProps {
   color: string;
 }
 
-const DraggableNode: React.FC<DraggableNodeProps> = ({ 
-  type, 
-  label, 
-  icon, 
-  description, 
-  color 
+const DraggableNode: React.FC<DraggableNodeProps> = ({
+  type,
+  label,
+  icon,
+  description,
+  color,
 }) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'node',
     item: { type, label },
-    collect: (monitor) => ({
+    collect: monitor => ({
       isDragging: monitor.isDragging(),
     }),
   }));
@@ -47,9 +47,7 @@ const DraggableNode: React.FC<DraggableNodeProps> = ({
         ${color}
       `}
     >
-      <div className="flex-shrink-0">
-        {icon}
-      </div>
+      <div className="flex-shrink-0">{icon}</div>
       <div className="flex-1 min-w-0">
         <div className="font-medium text-white text-sm">{label}</div>
         <div className="text-gray-400 text-xs truncate">{description}</div>
@@ -142,7 +140,9 @@ export const NodePalette: React.FC = () => {
   return (
     <div className="w-80 bg-gray-800 border-r border-gray-700 p-4 overflow-y-auto">
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-white mb-2">عناصر سير العمل</h2>
+        <h2 className="text-lg font-semibold text-white mb-2">
+          عناصر سير العمل
+        </h2>
         <p className="text-gray-400 text-sm">
           اسحب العناصر إلى لوحة الرسم لإنشاء سير العمل
         </p>
@@ -151,9 +151,11 @@ export const NodePalette: React.FC = () => {
       <div className="space-y-3">
         {/* عقد أساسية */}
         <div>
-          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">عقد أساسية</h3>
+          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">
+            عقد أساسية
+          </h3>
           <div className="space-y-2">
-            {nodeTypes.slice(0, 4).map((node) => (
+            {nodeTypes.slice(0, 4).map(node => (
               <DraggableNode key={node.type} {...node} />
             ))}
           </div>
@@ -161,9 +163,11 @@ export const NodePalette: React.FC = () => {
 
         {/* تكاملات APIs */}
         <div>
-          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">تكاملات APIs</h3>
+          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">
+            تكاملات APIs
+          </h3>
           <div className="space-y-2">
-            {nodeTypes.slice(4, 7).map((node) => (
+            {nodeTypes.slice(4, 7).map(node => (
               <DraggableNode key={node.type} {...node} />
             ))}
           </div>
@@ -171,9 +175,11 @@ export const NodePalette: React.FC = () => {
 
         {/* عقد متقدمة */}
         <div>
-          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">عقد متقدمة</h3>
+          <h3 className="text-sm font-medium text-gray-300 mb-3 px-1">
+            عقد متقدمة
+          </h3>
           <div className="space-y-2">
-            {nodeTypes.slice(7).map((node) => (
+            {nodeTypes.slice(7).map(node => (
               <DraggableNode key={node.type} {...node} />
             ))}
           </div>

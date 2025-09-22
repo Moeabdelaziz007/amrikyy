@@ -23,12 +23,12 @@ const subWorkflows: Record<string, SubWorkflow> = {
         position: [0, 0],
         parameters: {
           rule: {
-            interval: [{ "field": "hours", "value": 6 }]
-          }
-        }
-      }
+            interval: [{ field: 'hours', value: 6 }],
+          },
+        },
+      },
     ],
-    connections: []
+    connections: [],
   },
   aiContentGeneration: {
     id: 'ai-content-generation',
@@ -48,18 +48,20 @@ const subWorkflows: Record<string, SubWorkflow> = {
             values: [
               {
                 role: 'system',
-                content: 'You are a social media content creator. Generate engaging posts for various platforms.'
+                content:
+                  'You are a social media content creator. Generate engaging posts for various platforms.',
               },
               {
                 role: 'user',
-                content: 'Generate a post about {{ $json.topic || "technology trends" }}'
-              }
-            ]
-          }
-        }
-      }
+                content:
+                  'Generate a post about {{ $json.topic || "technology trends" }}',
+              },
+            ],
+          },
+        },
+      },
     ],
-    connections: []
+    connections: [],
   },
   tweet: {
     id: 'tweet',
@@ -72,12 +74,12 @@ const subWorkflows: Record<string, SubWorkflow> = {
         typeVersion: 1,
         position: [500, 0],
         parameters: {
-          text: '{{ $json.content }}'
+          text: '{{ $json.content }}',
         },
-        credentials: { xApi: 'aura-x' }
-      }
+        credentials: { xApi: 'aura-x' },
+      },
     ],
-    connections: []
+    connections: [],
   },
   linkedInPost: {
     id: 'linkedInPost',
@@ -90,12 +92,12 @@ const subWorkflows: Record<string, SubWorkflow> = {
         typeVersion: 2,
         position: [500, 150],
         parameters: {
-          content: '{{ $json.content }}'
+          content: '{{ $json.content }}',
         },
-        credentials: { linkedInApi: 'aura-linkedin' }
-      }
+        credentials: { linkedInApi: 'aura-linkedin' },
+      },
     ],
-    connections: []
+    connections: [],
   },
   setData: {
     id: 'setData',
@@ -109,13 +111,13 @@ const subWorkflows: Record<string, SubWorkflow> = {
         position: [250, 0],
         parameters: {
           values: {
-            string: [{ name: 'topic', value: 'AI in 2024' }]
+            string: [{ name: 'topic', value: 'AI in 2024' }],
           },
-          options: {}
-        }
-      }
+          options: {},
+        },
+      },
     ],
-    connections: []
+    connections: [],
   },
   ifNode: {
     id: 'ifNode',
@@ -129,12 +131,18 @@ const subWorkflows: Record<string, SubWorkflow> = {
         position: [500, 0],
         parameters: {
           conditions: {
-            string: [{ value1: '{{ $json.topic }}', operation: 'contains', value2: 'AI' }]
-          }
-        }
-      }
+            string: [
+              {
+                value1: '{{ $json.topic }}',
+                operation: 'contains',
+                value2: 'AI',
+              },
+            ],
+          },
+        },
+      },
     ],
-    connections: []
+    connections: [],
   },
   httpRequest: {
     id: 'httpRequest',
@@ -148,11 +156,11 @@ const subWorkflows: Record<string, SubWorkflow> = {
         position: [250, 0],
         parameters: {
           url: 'https://api.example.com/data?topic={{ $json.topic }}',
-          options: {}
-        }
-      }
+          options: {},
+        },
+      },
     ],
-    connections: []
+    connections: [],
   },
   executeWorkflow: {
     id: 'executeWorkflow',
@@ -165,12 +173,12 @@ const subWorkflows: Record<string, SubWorkflow> = {
         typeVersion: 1,
         position: [750, 0],
         parameters: {
-          workflowId: '{{ $json.workflowId }}'
-        }
-      }
+          workflowId: '{{ $json.workflowId }}',
+        },
+      },
     ],
-    connections: []
-  }
+    connections: [],
+  },
 };
 
 export class DynamicTemplateBuilder {
@@ -181,7 +189,10 @@ export class DynamicTemplateBuilder {
 
   constructor(private workflowName: string) {}
 
-  add(subWorkflowId: string, connectionType: 'main' | 'true' | 'false' = 'main'): this {
+  add(
+    subWorkflowId: string,
+    connectionType: 'main' | 'true' | 'false' = 'main'
+  ): this {
     const subWorkflow = subWorkflows[subWorkflowId];
     if (!subWorkflow) {
       throw new Error(`Sub-workflow with id ${subWorkflowId} not found.`);
@@ -191,18 +202,23 @@ export class DynamicTemplateBuilder {
     const newNode: N8nNode = {
       ...subWorkflow.nodes[0],
       id: newNodeId,
-      position: [this.lastNodePosition[0] + 250, this.lastNodePosition[1]]
+      position: [this.lastNodePosition[0] + 250, this.lastNodePosition[1]],
     };
-    
+
     this.nodes.push(newNode);
-    
+
     if (this.lastNodeId) {
-      const outputType = connectionType === 'main' ? 'main' : (connectionType === 'true' ? 'output_0' : 'output_1');
-      this.connections.push({ 
-        source: this.lastNodeId, 
-        target: newNodeId, 
-        type: outputType, 
-        index: 0 
+      const outputType =
+        connectionType === 'main'
+          ? 'main'
+          : connectionType === 'true'
+            ? 'output_0'
+            : 'output_1';
+      this.connections.push({
+        source: this.lastNodeId,
+        target: newNodeId,
+        type: outputType,
+        index: 0,
       } as any);
     }
 
@@ -211,16 +227,20 @@ export class DynamicTemplateBuilder {
 
     return this;
   }
-  
+
   build(): Omit<N8nWorkflowTemplate, 'id' | 'createdAt' | 'usageCount'> {
     return {
       name: this.workflowName,
       description: `A dynamically generated workflow for ${this.workflowName}`,
       category: 'automation',
-      tags: ['dynamic', 'automation', this.workflowName.toLowerCase().replace(/\s/g, '-')],
+      tags: [
+        'dynamic',
+        'automation',
+        this.workflowName.toLowerCase().replace(/\s/g, '-'),
+      ],
       isPublic: false,
       nodes: this.nodes,
-      connections: this.connections
+      connections: this.connections,
     };
   }
 }
@@ -233,14 +253,18 @@ export class N8nTemplateService {
   }
 
   private initializeTemplates() {
-    const socialMediaContent = new DynamicTemplateBuilder('Scheduled Social Media Content')
+    const socialMediaContent = new DynamicTemplateBuilder(
+      'Scheduled Social Media Content'
+    )
       .add('scheduleTrigger')
       .add('setData')
       .add('aiContentGeneration')
       .add('tweet')
       .build();
 
-    const conditionalWorkflow = new DynamicTemplateBuilder('Conditional Content Posting')
+    const conditionalWorkflow = new DynamicTemplateBuilder(
+      'Conditional Content Posting'
+    )
       .add('scheduleTrigger')
       .add('httpRequest')
       .add('ifNode')

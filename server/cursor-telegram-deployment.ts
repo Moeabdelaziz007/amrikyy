@@ -17,7 +17,7 @@ class CursorTelegramDeployment {
     this.app = express();
     this.port = process.env.PORT || 3000;
     this.isProduction = process.env.NODE_ENV === 'production';
-    
+
     this.setupMiddleware();
     this.setupRoutes();
     this.initializeTelegramIntegration();
@@ -25,14 +25,18 @@ class CursorTelegramDeployment {
 
   private setupMiddleware() {
     // CORS configuration
-    this.app.use(cors({
-      origin: this.isProduction ? [
-        'https://aios-97581.web.app',
-        'https://aios-97581.firebaseapp.com',
-        'https://amrikyyybot.vercel.app'
-      ] : ['http://localhost:3000', 'http://localhost:5173'],
-      credentials: true
-    }));
+    this.app.use(
+      cors({
+        origin: this.isProduction
+          ? [
+              'https://aios-97581.web.app',
+              'https://aios-97581.firebaseapp.com',
+              'https://amrikyyybot.vercel.app',
+            ]
+          : ['http://localhost:3000', 'http://localhost:5173'],
+        credentials: true,
+      })
+    );
 
     // Body parsing
     this.app.use(express.json({ limit: '10mb' }));
@@ -63,7 +67,9 @@ class CursorTelegramDeployment {
         status: 'healthy',
         timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development',
-        telegram: this.telegramIntegration?.getStatus() || { isConnected: false }
+        telegram: this.telegramIntegration?.getStatus() || {
+          isConnected: false,
+        },
       });
     });
 
@@ -79,8 +85,8 @@ class CursorTelegramDeployment {
         endpoints: {
           health: '/health',
           cursorTelegram: '/api/cursor-telegram',
-          documentation: '/api/cursor-telegram/commands'
-        }
+          documentation: '/api/cursor-telegram/commands',
+        },
       });
     });
 
@@ -92,20 +98,27 @@ class CursorTelegramDeployment {
         availableEndpoints: [
           '/health',
           '/api/cursor-telegram/status',
-          '/api/cursor-telegram/commands'
-        ]
+          '/api/cursor-telegram/commands',
+        ],
       });
     });
 
     // Error handler
-    this.app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-      console.error('Error:', error);
-      res.status(500).json({
-        error: 'Internal Server Error',
-        message: this.isProduction ? 'Something went wrong' : error.message,
-        timestamp: new Date().toISOString()
-      });
-    });
+    this.app.use(
+      (
+        error: any,
+        req: express.Request,
+        res: express.Response,
+        next: express.NextFunction
+      ) => {
+        console.error('Error:', error);
+        res.status(500).json({
+          error: 'Internal Server Error',
+          message: this.isProduction ? 'Something went wrong' : error.message,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    );
   }
 
   private createCursorTelegramRoutes() {
@@ -128,14 +141,14 @@ class CursorTelegramDeployment {
               debugging: true,
               testGeneration: true,
               generalQueries: true,
-              fallbackMode: true
-            }
-          }
+              fallbackMode: true,
+            },
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -144,25 +157,61 @@ class CursorTelegramDeployment {
     router.get('/commands', (req, res) => {
       try {
         const commands = [
-          { command: 'cursor', description: 'Ask Cursor AI anything', category: 'AI' },
-          { command: 'code', description: 'Generate code based on description', category: 'AI' },
-          { command: 'explain', description: 'Explain how code works', category: 'AI' },
-          { command: 'refactor', description: 'Refactor code for better quality', category: 'AI' },
-          { command: 'debug', description: 'Debug and fix code issues', category: 'AI' },
-          { command: 'test', description: 'Generate comprehensive tests', category: 'AI' },
-          { command: 'connect', description: 'Connect this chat to Cursor', category: 'Connection' },
-          { command: 'help', description: 'Show help message', category: 'Connection' },
-          { command: 'status', description: 'Check integration status', category: 'Connection' }
+          {
+            command: 'cursor',
+            description: 'Ask Cursor AI anything',
+            category: 'AI',
+          },
+          {
+            command: 'code',
+            description: 'Generate code based on description',
+            category: 'AI',
+          },
+          {
+            command: 'explain',
+            description: 'Explain how code works',
+            category: 'AI',
+          },
+          {
+            command: 'refactor',
+            description: 'Refactor code for better quality',
+            category: 'AI',
+          },
+          {
+            command: 'debug',
+            description: 'Debug and fix code issues',
+            category: 'AI',
+          },
+          {
+            command: 'test',
+            description: 'Generate comprehensive tests',
+            category: 'AI',
+          },
+          {
+            command: 'connect',
+            description: 'Connect this chat to Cursor',
+            category: 'Connection',
+          },
+          {
+            command: 'help',
+            description: 'Show help message',
+            category: 'Connection',
+          },
+          {
+            command: 'status',
+            description: 'Check integration status',
+            category: 'Connection',
+          },
         ];
 
         res.json({
           success: true,
-          data: commands
+          data: commands,
         });
       } catch (error) {
         res.status(500).json({
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -175,7 +224,7 @@ class CursorTelegramDeployment {
         if (!message) {
           return res.status(400).json({
             success: false,
-            error: 'message is required'
+            error: 'message is required',
           });
         }
 
@@ -183,12 +232,12 @@ class CursorTelegramDeployment {
 
         res.json({
           success: true,
-          message: 'Message sent to Cursor chat successfully'
+          message: 'Message sent to Cursor chat successfully',
         });
       } catch (error) {
         res.status(500).json({
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -201,19 +250,19 @@ class CursorTelegramDeployment {
         if (!chatId) {
           return res.status(400).json({
             success: false,
-            error: 'chatId is required'
+            error: 'chatId is required',
           });
         }
 
         res.json({
           success: true,
           message: 'Chat connected to Cursor successfully',
-          chatId
+          chatId,
         });
       } catch (error) {
         res.status(500).json({
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -225,12 +274,12 @@ class CursorTelegramDeployment {
 
         res.json({
           success: true,
-          message: 'Chat disconnected from Cursor successfully'
+          message: 'Chat disconnected from Cursor successfully',
         });
       } catch (error) {
         res.status(500).json({
           success: false,
-          error: error.message
+          error: error.message,
         });
       }
     });
@@ -240,11 +289,17 @@ class CursorTelegramDeployment {
 
   private initializeTelegramIntegration() {
     try {
-      const telegramToken = process.env.TELEGRAM_BOT_TOKEN || '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0';
-      const geminiApiKey = process.env.GEMINI_API_KEY || 'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU';
+      const telegramToken =
+        process.env.TELEGRAM_BOT_TOKEN ||
+        '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0';
+      const geminiApiKey =
+        process.env.GEMINI_API_KEY || 'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU';
 
-      this.telegramIntegration = new EnhancedCursorTelegramIntegration(telegramToken, geminiApiKey);
-      
+      this.telegramIntegration = new EnhancedCursorTelegramIntegration(
+        telegramToken,
+        geminiApiKey
+      );
+
       console.log('✅ Telegram integration initialized successfully');
       console.log(`🤖 Bot Token: ${telegramToken.substring(0, 10)}...`);
       console.log(`🔑 Gemini API: ${geminiApiKey.substring(0, 10)}...`);
@@ -257,7 +312,7 @@ class CursorTelegramDeployment {
   public start() {
     this.app.listen(this.port, () => {
       console.log('🚀 Cursor-Telegram Integration Server Started');
-      console.log('=' .repeat(50));
+      console.log('='.repeat(50));
       console.log(`🌐 Server: http://localhost:${this.port}`);
       console.log(`📊 Health: http://localhost:${this.port}/health`);
       console.log(`🔌 API: http://localhost:${this.port}/api/cursor-telegram`);
@@ -265,7 +320,7 @@ class CursorTelegramDeployment {
       console.log(`👨‍💻 Cursor Integration: Active`);
       console.log(`🔑 Gemini API: Connected`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log('=' .repeat(50));
+      console.log('='.repeat(50));
       console.log('✅ Ready for production deployment!');
     });
   }
@@ -289,4 +344,3 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 }
 
 export default CursorTelegramDeployment;
-

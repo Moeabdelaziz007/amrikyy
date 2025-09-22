@@ -18,7 +18,7 @@ const tests = {
   cli: true,
   logging: true,
   monitoring: true,
-  api: true
+  api: true,
 };
 
 // Colors for console output
@@ -30,7 +30,7 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
 };
 
 function log(message, color = colors.reset) {
@@ -63,14 +63,14 @@ async function makeRequest(url, options = {}) {
     const response = await axios({
       url: `${BASE_URL}${url}`,
       timeout: TEST_TIMEOUT,
-      ...options
+      ...options,
     });
     return { success: true, data: response.data, status: response.status };
   } catch (error) {
-    return { 
-      success: false, 
-      error: error.message, 
-      status: error.response?.status 
+    return {
+      success: false,
+      error: error.message,
+      status: error.response?.status,
     };
   }
 }
@@ -78,7 +78,7 @@ async function makeRequest(url, options = {}) {
 // Test functions
 async function testServerConnection() {
   logInfo('Testing server connection...');
-  
+
   const result = await makeRequest('/api/system/health');
   if (result.success) {
     logSuccess('Server is running and responding');
@@ -91,14 +91,14 @@ async function testServerConnection() {
 
 async function testCLIAPI() {
   logInfo('Testing CLI-specific API endpoints...');
-  
+
   const endpoints = [
     { url: '/api/system/status', name: 'System Status' },
     { url: '/api/system/health', name: 'System Health' },
     { url: '/api/autopilot/status', name: 'Autopilot Status' },
     { url: '/api/ai/agents/status', name: 'AI Agents Status' },
     { url: '/api/workflows/templates', name: 'Workflow Templates' },
-    { url: '/api/system/logs', name: 'System Logs' }
+    { url: '/api/system/logs', name: 'System Logs' },
   ];
 
   let passed = 0;
@@ -122,13 +122,13 @@ async function testCLIAPI() {
 
 async function testAIChat() {
   logInfo('Testing AI chat endpoint...');
-  
+
   const result = await makeRequest('/api/ai/chat', {
     method: 'POST',
     data: {
       message: 'Hello, this is a test message from the integration test.',
-      context: 'test'
-    }
+      context: 'test',
+    },
   });
 
   if (result.success) {
@@ -143,7 +143,7 @@ async function testAIChat() {
 
 async function testLoggingSystem() {
   logInfo('Testing enhanced logging system...');
-  
+
   // Check if log directory exists
   const logDir = './logs';
   if (!fs.existsSync(logDir)) {
@@ -155,28 +155,36 @@ async function testLoggingSystem() {
   const logFiles = fs.readdirSync(logDir).filter(file => file.endsWith('.log'));
   if (logFiles.length > 0) {
     logSuccess(`Found ${logFiles.length} log files in ${logDir}`);
-    
+
     // Check the most recent log file
     const recentLogFile = path.join(logDir, logFiles[logFiles.length - 1]);
     const logContent = fs.readFileSync(recentLogFile, 'utf8');
     const logLines = logContent.trim().split('\n');
-    
+
     if (logLines.length > 0) {
       logSuccess(`Recent log file has ${logLines.length} entries`);
-      
+
       // Check if the log contains structured JSON
       try {
         const lastLogEntry = JSON.parse(logLines[logLines.length - 1]);
-        if (lastLogEntry.timestamp && lastLogEntry.level && lastLogEntry.message) {
+        if (
+          lastLogEntry.timestamp &&
+          lastLogEntry.level &&
+          lastLogEntry.message
+        ) {
           logSuccess('Log entries are properly structured JSON');
           return true;
         }
       } catch (error) {
-        logWarning('Log entries are not in JSON format (this might be expected)');
+        logWarning(
+          'Log entries are not in JSON format (this might be expected)'
+        );
       }
     }
   } else {
-    logWarning('No log files found (server might not have started logging yet)');
+    logWarning(
+      'No log files found (server might not have started logging yet)'
+    );
   }
 
   return true; // Logging system exists and is functional
@@ -184,24 +192,30 @@ async function testLoggingSystem() {
 
 async function testSystemStatus() {
   logInfo('Testing system status endpoint...');
-  
+
   const result = await makeRequest('/api/system/status');
   if (result.success) {
     const data = result.data;
-    
+
     // Validate system status structure
-    const requiredFields = ['system', 'autopilot', 'ai', 'performance', 'timestamp'];
+    const requiredFields = [
+      'system',
+      'autopilot',
+      'ai',
+      'performance',
+      'timestamp',
+    ];
     const missingFields = requiredFields.filter(field => !(field in data));
-    
+
     if (missingFields.length === 0) {
       logSuccess('System status has all required fields');
-      
+
       // Log some key metrics
       logInfo(`System uptime: ${Math.round(data.system.uptime)}s`);
       logInfo(`Memory usage: ${data.performance.memory}%`);
       logInfo(`Active AI agents: ${data.ai.activeAgents}/${data.ai.agents}`);
       logInfo(`Autopilot active: ${data.autopilot.active}`);
-      
+
       return true;
     } else {
       logError(`System status missing fields: ${missingFields.join(', ')}`);
@@ -215,26 +229,26 @@ async function testSystemStatus() {
 
 async function testCLICommands() {
   logInfo('Testing CLI commands...');
-  
+
   // Test CLI help command
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const cliProcess = spawn('npm', ['run', 'cli', '--', '--help'], {
       stdio: ['pipe', 'pipe', 'pipe'],
-      shell: true
+      shell: true,
     });
 
     let output = '';
     let errorOutput = '';
 
-    cliProcess.stdout.on('data', (data) => {
+    cliProcess.stdout.on('data', data => {
       output += data.toString();
     });
 
-    cliProcess.stderr.on('data', (data) => {
+    cliProcess.stderr.on('data', data => {
       errorOutput += data.toString();
     });
 
-    cliProcess.on('close', (code) => {
+    cliProcess.on('close', code => {
       if (code === 0 && output.includes('AuraOS Command Line Interface')) {
         logSuccess('CLI help command working');
         resolve(true);
@@ -247,7 +261,7 @@ async function testCLICommands() {
       }
     });
 
-    cliProcess.on('error', (error) => {
+    cliProcess.on('error', error => {
       logError(`CLI command failed to start: ${error.message}`);
       resolve(false);
     });
@@ -263,14 +277,19 @@ async function testCLICommands() {
 
 // Main test runner
 async function runTests() {
-  log(colors.bright + colors.cyan + '\n🚀 AuraOS ZentixAI Integration Test Suite\n' + colors.reset);
-  
+  log(
+    colors.bright +
+      colors.cyan +
+      '\n🚀 AuraOS ZentixAI Integration Test Suite\n' +
+      colors.reset
+  );
+
   const startTime = Date.now();
   let totalTests = 0;
   let passedTests = 0;
 
   // Test server connection first
-  if (!await testServerConnection()) {
+  if (!(await testServerConnection())) {
     logError('Cannot proceed with tests - server is not running');
     logInfo('Please start the server with: npm run dev');
     process.exit(1);
@@ -282,7 +301,7 @@ async function runTests() {
     { name: 'CLI API Endpoints', fn: testCLIAPI, enabled: tests.api },
     { name: 'AI Chat', fn: testAIChat, enabled: tests.api },
     { name: 'Logging System', fn: testLoggingSystem, enabled: tests.logging },
-    { name: 'CLI Commands', fn: testCLICommands, enabled: tests.cli }
+    { name: 'CLI Commands', fn: testCLICommands, enabled: tests.cli },
   ];
 
   for (const test of testFunctions) {
@@ -293,7 +312,7 @@ async function runTests() {
 
     totalTests++;
     log(colors.bright + `\n📋 Running ${test.name} Test` + colors.reset);
-    
+
     try {
       const result = await test.fn();
       if (result) {
@@ -314,12 +333,16 @@ async function runTests() {
   log(`Passed: ${passedTests}`, colors.green);
   log(`Failed: ${totalTests - passedTests}`, colors.red);
   log(`Duration: ${duration}ms`);
-  
+
   if (passedTests === totalTests) {
-    logSuccess('\n🎉 All tests passed! ZentixAI integration is working correctly.');
+    logSuccess(
+      '\n🎉 All tests passed! ZentixAI integration is working correctly.'
+    );
     process.exit(0);
   } else {
-    logError(`\n💥 ${totalTests - passedTests} tests failed. Please check the errors above.`);
+    logError(
+      `\n💥 ${totalTests - passedTests} tests failed. Please check the errors above.`
+    );
     process.exit(1);
   }
 }
@@ -330,7 +353,7 @@ process.on('SIGINT', () => {
   process.exit(1);
 });
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
   logError(`Uncaught exception: ${error.message}`);
   process.exit(1);
 });
@@ -340,6 +363,3 @@ runTests().catch(error => {
   logError(`Test runner error: ${error.message}`);
   process.exit(1);
 });
-
-
-

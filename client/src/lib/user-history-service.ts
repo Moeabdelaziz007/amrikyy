@@ -2,32 +2,32 @@
 // Comprehensive tracking of all user actions and behaviors
 
 import { db } from './firebase';
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  setDoc, 
-  getDoc, 
-  getDocs, 
-  query, 
-  where, 
-  orderBy, 
-  limit, 
-  updateDoc, 
+import {
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit,
+  updateDoc,
   increment,
   writeBatch,
   Timestamp,
   onSnapshot,
-  startAfter
+  startAfter,
 } from 'firebase/firestore';
-import { 
-  UserHistory, 
-  UserAction, 
-  UserSession, 
+import {
+  UserHistory,
+  UserAction,
+  UserSession,
   UserAnalytics,
   ActionType,
   ActionCategory,
-  COLLECTIONS 
+  COLLECTIONS,
 } from './firestore-types';
 
 /**
@@ -48,7 +48,7 @@ export class UserHistoryService {
     try {
       // Start a new session
       await this.startSession(userId);
-      
+
       // Set up periodic buffer flushing
       setInterval(() => {
         if (this.actionBuffer.length > 0) {
@@ -64,14 +64,14 @@ export class UserHistoryService {
               type: 'navigate',
               category: 'navigation',
               description: 'Page hidden',
-              details: { visibility: 'hidden' }
+              details: { visibility: 'hidden' },
             });
           } else {
             this.trackAction(userId, {
               type: 'navigate',
               category: 'navigation',
               description: 'Page visible',
-              details: { visibility: 'visible' }
+              details: { visibility: 'visible' },
             });
           }
         });
@@ -82,7 +82,7 @@ export class UserHistoryService {
             type: 'navigate',
             category: 'navigation',
             description: 'Page unload',
-            details: { event: 'beforeunload' }
+            details: { event: 'beforeunload' },
           });
           this.endSession(userId);
         });
@@ -101,7 +101,7 @@ export class UserHistoryService {
     try {
       const sessionId = this.generateSessionId();
       const startTime = new Date();
-      
+
       const session: UserSession = {
         id: sessionId,
         userId,
@@ -110,14 +110,14 @@ export class UserHistoryService {
         location: await this.getLocationInfo(),
         actions: 0,
         lastActivity: startTime,
-        isActive: true
+        isActive: true,
       };
 
       // Save session to Firestore
       await setDoc(doc(db, COLLECTIONS.USER_SESSIONS, sessionId), {
         ...session,
         startTime: Timestamp.fromDate(session.startTime),
-        lastActivity: Timestamp.fromDate(session.lastActivity)
+        lastActivity: Timestamp.fromDate(session.lastActivity),
       });
 
       this.currentSession = session;
@@ -138,14 +138,18 @@ export class UserHistoryService {
       if (!this.currentSession) return;
 
       const endTime = new Date();
-      const duration = endTime.getTime() - this.currentSession.startTime.getTime();
+      const duration =
+        endTime.getTime() - this.currentSession.startTime.getTime();
 
-      await updateDoc(doc(db, COLLECTIONS.USER_SESSIONS, this.currentSession.id), {
-        endTime: Timestamp.fromDate(endTime),
-        duration,
-        isActive: false,
-        lastActivity: Timestamp.fromDate(endTime)
-      });
+      await updateDoc(
+        doc(db, COLLECTIONS.USER_SESSIONS, this.currentSession.id),
+        {
+          endTime: Timestamp.fromDate(endTime),
+          duration,
+          isActive: false,
+          lastActivity: Timestamp.fromDate(endTime),
+        }
+      );
 
       this.currentSession = null;
       this.sessionStartTime = null;
@@ -163,8 +167,8 @@ export class UserHistoryService {
    * Track a user action
    */
   static async trackAction(
-    userId: string, 
-    action: UserAction, 
+    userId: string,
+    action: UserAction,
     metadata?: Record<string, any>,
     success: boolean = true,
     errorMessage?: string
@@ -178,7 +182,7 @@ export class UserHistoryService {
         sessionId: this.currentSession?.id || 'unknown',
         metadata,
         success,
-        errorMessage
+        errorMessage,
       };
 
       // Add to buffer for batch processing
@@ -186,10 +190,13 @@ export class UserHistoryService {
 
       // Update session activity
       if (this.currentSession) {
-        await updateDoc(doc(db, COLLECTIONS.USER_SESSIONS, this.currentSession.id), {
-          actions: increment(1),
-          lastActivity: Timestamp.fromDate(new Date())
-        });
+        await updateDoc(
+          doc(db, COLLECTIONS.USER_SESSIONS, this.currentSession.id),
+          {
+            actions: increment(1),
+            lastActivity: Timestamp.fromDate(new Date()),
+          }
+        );
       }
 
       // Flush buffer if it's full
@@ -205,8 +212,8 @@ export class UserHistoryService {
    * Track page navigation
    */
   static async trackNavigation(
-    userId: string, 
-    page: string, 
+    userId: string,
+    page: string,
     previousPage?: string,
     duration?: number
   ): Promise<void> {
@@ -214,11 +221,11 @@ export class UserHistoryService {
       type: 'navigate',
       category: 'navigation',
       description: `Navigated to ${page}`,
-      details: { 
-        page, 
+      details: {
+        page,
         previousPage,
-        duration 
-      }
+        duration,
+      },
     });
   }
 
@@ -238,7 +245,7 @@ export class UserHistoryService {
       description: `${actionType} ${targetType}`,
       target: targetId,
       targetType,
-      details
+      details,
     });
   }
 
@@ -257,7 +264,7 @@ export class UserHistoryService {
       description: `AI ${actionType}`,
       target: agentId,
       targetType: 'agent',
-      details
+      details,
     });
   }
 
@@ -276,7 +283,7 @@ export class UserHistoryService {
       description: `Social ${actionType}`,
       target: targetId,
       targetType: 'post',
-      details
+      details,
     });
   }
 
@@ -295,7 +302,7 @@ export class UserHistoryService {
       description: `Workflow ${actionType}`,
       target: workflowId,
       targetType: 'workflow',
-      details
+      details,
     });
   }
 
@@ -311,7 +318,7 @@ export class UserHistoryService {
       type: actionType,
       category: 'authentication',
       description: `User ${actionType}`,
-      details
+      details,
     });
   }
 
@@ -324,17 +331,23 @@ export class UserHistoryService {
     context?: string,
     details?: Record<string, any>
   ): Promise<void> {
-    await this.trackAction(userId, {
-      type: 'error',
-      category: 'system',
-      description: `Error: ${error.message}`,
-      details: {
-        ...details,
-        context,
-        stack: error.stack,
-        name: error.name
-      }
-    }, undefined, false, error.message);
+    await this.trackAction(
+      userId,
+      {
+        type: 'error',
+        category: 'system',
+        description: `Error: ${error.message}`,
+        details: {
+          ...details,
+          context,
+          stack: error.stack,
+          name: error.name,
+        },
+      },
+      undefined,
+      false,
+      error.message
+    );
   }
 
   /**
@@ -374,7 +387,7 @@ export class UserHistoryService {
       const history = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-        timestamp: doc.data().timestamp.toDate()
+        timestamp: doc.data().timestamp.toDate(),
       })) as UserHistory[];
 
       const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
@@ -407,7 +420,7 @@ export class UserHistoryService {
         ...doc.data(),
         startTime: doc.data().startTime.toDate(),
         endTime: doc.data().endTime?.toDate(),
-        lastActivity: doc.data().lastActivity.toDate()
+        lastActivity: doc.data().lastActivity.toDate(),
       })) as UserSession[];
     } catch (error) {
       console.error('Failed to get user sessions:', error);
@@ -425,10 +438,10 @@ export class UserHistoryService {
     try {
       const now = new Date();
       const startDate = this.getPeriodStartDate(now, period);
-      
+
       // Get history for the period
       const { history } = await this.getUserHistory(userId, {
-        dateRange: { start: startDate, end: now }
+        dateRange: { start: startDate, end: now },
       });
 
       // Get sessions for the period
@@ -441,21 +454,26 @@ export class UserHistoryService {
         stats: {
           totalSessions: sessions.length,
           totalActions: history.length,
-          averageSessionDuration: this.calculateAverageSessionDuration(sessions),
+          averageSessionDuration:
+            this.calculateAverageSessionDuration(sessions),
           mostUsedFeatures: this.calculateMostUsedFeatures(history),
           topPages: this.calculateTopPages(history),
           deviceBreakdown: this.calculateDeviceBreakdown(sessions),
           errorRate: this.calculateErrorRate(history),
-          retentionRate: this.calculateRetentionRate(sessions)
-        }
+          retentionRate: this.calculateRetentionRate(sessions),
+        },
       };
 
       // Save analytics
       await setDoc(
-        doc(db, COLLECTIONS.USER_ANALYTICS, `${userId}_${period}_${now.getTime()}`),
+        doc(
+          db,
+          COLLECTIONS.USER_ANALYTICS,
+          `${userId}_${period}_${now.getTime()}`
+        ),
         {
           ...analytics,
-          date: Timestamp.fromDate(analytics.date)
+          date: Timestamp.fromDate(analytics.date),
         }
       );
 
@@ -474,12 +492,12 @@ export class UserHistoryService {
 
     try {
       const batch = writeBatch(db);
-      
+
       this.actionBuffer.forEach(action => {
         const docRef = doc(collection(db, COLLECTIONS.USER_HISTORY));
         batch.set(docRef, {
           ...action,
-          timestamp: Timestamp.fromDate(action.timestamp)
+          timestamp: Timestamp.fromDate(action.timestamp),
         });
       });
 
@@ -515,7 +533,7 @@ export class UserHistoryService {
         language: 'Unknown',
         timezone: 'Unknown',
         screenResolution: 'Unknown',
-        viewport: 'Unknown'
+        viewport: 'Unknown',
       };
     }
 
@@ -525,7 +543,7 @@ export class UserHistoryService {
       language: navigator.language,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       screenResolution: `${screen.width}x${screen.height}`,
-      viewport: `${window.innerWidth}x${window.innerHeight}`
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
     };
   }
 
@@ -538,7 +556,7 @@ export class UserHistoryService {
     return {
       country: 'Unknown',
       region: 'Unknown',
-      city: 'Unknown'
+      city: 'Unknown',
     };
   }
 
@@ -547,7 +565,7 @@ export class UserHistoryService {
    */
   private static getPeriodStartDate(date: Date, period: string): Date {
     const start = new Date(date);
-    
+
     switch (period) {
       case 'daily':
         start.setHours(0, 0, 0, 0);
@@ -562,21 +580,24 @@ export class UserHistoryService {
         start.setFullYear(start.getFullYear() - 1);
         break;
     }
-    
+
     return start;
   }
 
   /**
    * Calculate average session duration
    */
-  private static calculateAverageSessionDuration(sessions: UserSession[]): number {
+  private static calculateAverageSessionDuration(
+    sessions: UserSession[]
+  ): number {
     const sessionsWithDuration = sessions.filter(s => s.duration);
     if (sessionsWithDuration.length === 0) return 0;
-    
-    const totalDuration = sessionsWithDuration.reduce((sum, session) => 
-      sum + (session.duration || 0), 0
+
+    const totalDuration = sessionsWithDuration.reduce(
+      (sum, session) => sum + (session.duration || 0),
+      0
     );
-    
+
     return totalDuration / sessionsWithDuration.length;
   }
 
@@ -585,18 +606,18 @@ export class UserHistoryService {
    */
   private static calculateMostUsedFeatures(history: UserHistory[]) {
     const featureCounts: Record<string, number> = {};
-    
+
     history.forEach(action => {
       const feature = action.action.category;
       featureCounts[feature] = (featureCounts[feature] || 0) + 1;
     });
-    
+
     const total = history.length;
     return Object.entries(featureCounts)
       .map(([feature, count]) => ({
         feature,
         count,
-        percentage: (count / total) * 100
+        percentage: (count / total) * 100,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
@@ -606,8 +627,9 @@ export class UserHistoryService {
    * Calculate top pages
    */
   private static calculateTopPages(history: UserHistory[]) {
-    const pageCounts: Record<string, { visits: number; totalTime: number }> = {};
-    
+    const pageCounts: Record<string, { visits: number; totalTime: number }> =
+      {};
+
     history
       .filter(action => action.action.type === 'navigate')
       .forEach(action => {
@@ -620,12 +642,12 @@ export class UserHistoryService {
           pageCounts[page].totalTime += action.duration || 0;
         }
       });
-    
+
     return Object.entries(pageCounts)
       .map(([page, data]) => ({
         page,
         visits: data.visits,
-        averageTime: data.totalTime / data.visits
+        averageTime: data.totalTime / data.visits,
       }))
       .sort((a, b) => b.visits - a.visits)
       .slice(0, 10);
@@ -636,18 +658,18 @@ export class UserHistoryService {
    */
   private static calculateDeviceBreakdown(sessions: UserSession[]) {
     const deviceCounts: Record<string, number> = {};
-    
+
     sessions.forEach(session => {
       const device = session.deviceInfo.platform;
       deviceCounts[device] = (deviceCounts[device] || 0) + 1;
     });
-    
+
     const total = sessions.length;
     return Object.entries(deviceCounts)
       .map(([device, count]) => ({
         device,
         count,
-        percentage: (count / total) * 100
+        percentage: (count / total) * 100,
       }))
       .sort((a, b) => b.count - a.count);
   }

@@ -23,7 +23,13 @@ export interface TaskDefinition {
 export interface TaskExecution {
   id: string;
   taskId: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'retrying';
+  status:
+    | 'pending'
+    | 'running'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | 'retrying';
   input: any;
   output?: any;
   startedAt?: Date;
@@ -126,7 +132,10 @@ export interface ResourceAllocation {
 }
 
 export interface TaskProcessor {
-  execute: (config: TaskConfig, context: ExecutionContext) => Promise<ExecutionResult>;
+  execute: (
+    config: TaskConfig,
+    context: ExecutionContext
+  ) => Promise<ExecutionResult>;
   validate: (config: TaskConfig) => Promise<ValidationResult>;
   estimateResources: (config: TaskConfig) => Promise<ResourceRequirement[]>;
 }
@@ -205,30 +214,37 @@ export class TaskAutomationEngine extends EventEmitter {
   /**
    * Create a new task
    */
-  async createTask(definition: Omit<TaskDefinition, 'id' | 'createdAt' | 'updatedAt'>): Promise<TaskDefinition> {
+  async createTask(
+    definition: Omit<TaskDefinition, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<TaskDefinition> {
     const task: TaskDefinition = {
       ...definition,
       id: uuidv4(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     // Validate task definition
     const validation = await this.validateTask(task);
     if (!validation.valid) {
-      throw new Error(`Invalid task definition: ${validation.errors.join(', ')}`);
+      throw new Error(
+        `Invalid task definition: ${validation.errors.join(', ')}`
+      );
     }
 
     this.tasks.set(task.id, task);
     this.emit('task:created', task);
-    
+
     return task;
   }
 
   /**
    * Update an existing task
    */
-  async updateTask(id: string, updates: Partial<TaskDefinition>): Promise<TaskDefinition> {
+  async updateTask(
+    id: string,
+    updates: Partial<TaskDefinition>
+  ): Promise<TaskDefinition> {
     const existing = this.tasks.get(id);
     if (!existing) {
       throw new Error(`Task ${id} not found`);
@@ -238,18 +254,20 @@ export class TaskAutomationEngine extends EventEmitter {
       ...existing,
       ...updates,
       id,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     // Validate updated task
     const validation = await this.validateTask(updated);
     if (!validation.valid) {
-      throw new Error(`Invalid task definition: ${validation.errors.join(', ')}`);
+      throw new Error(
+        `Invalid task definition: ${validation.errors.join(', ')}`
+      );
     }
 
     this.tasks.set(id, updated);
     this.emit('task:updated', updated);
-    
+
     return updated;
   }
 
@@ -263,17 +281,21 @@ export class TaskAutomationEngine extends EventEmitter {
     }
 
     // Check if task is currently running
-    const runningExecutions = Array.from(this.executions.values())
-      .filter(exec => exec.taskId === id && exec.status === 'running');
-    
+    const runningExecutions = Array.from(this.executions.values()).filter(
+      exec => exec.taskId === id && exec.status === 'running'
+    );
+
     if (runningExecutions.length > 0) {
-      throw new Error(`Cannot delete task ${id}: ${runningExecutions.length} executions are still running`);
+      throw new Error(
+        `Cannot delete task ${id}: ${runningExecutions.length} executions are still running`
+      );
     }
 
     // Remove associated schedules
-    const taskSchedules = Array.from(this.schedules.values())
-      .filter(schedule => schedule.taskId === id);
-    
+    const taskSchedules = Array.from(this.schedules.values()).filter(
+      schedule => schedule.taskId === id
+    );
+
     for (const schedule of taskSchedules) {
       this.schedules.delete(schedule.id);
     }
@@ -296,15 +318,17 @@ export class TaskAutomationEngine extends EventEmitter {
   /**
    * List tasks with optional filters
    */
-  async listTasks(filters: {
-    type?: string;
-    status?: string;
-    category?: string;
-    author?: string;
-    tags?: string[];
-    limit?: number;
-    offset?: number;
-  } = {}): Promise<TaskDefinition[]> {
+  async listTasks(
+    filters: {
+      type?: string;
+      status?: string;
+      category?: string;
+      author?: string;
+      tags?: string[];
+      limit?: number;
+      offset?: number;
+    } = {}
+  ): Promise<TaskDefinition[]> {
     let tasks = Array.from(this.tasks.values());
 
     // Apply filters
@@ -318,7 +342,7 @@ export class TaskAutomationEngine extends EventEmitter {
       tasks = tasks.filter(t => t.metadata.author === filters.author);
     }
     if (filters.tags && filters.tags.length > 0) {
-      tasks = tasks.filter(t => 
+      tasks = tasks.filter(t =>
         filters.tags!.some(tag => t.tags.includes(tag))
       );
     }
@@ -326,20 +350,23 @@ export class TaskAutomationEngine extends EventEmitter {
     // Apply pagination
     const offset = filters.offset || 0;
     const limit = filters.limit || 50;
-    
+
     return tasks.slice(offset, offset + limit);
   }
 
   /**
    * Schedule a task
    */
-  async scheduleTask(taskId: string, schedule: {
-    cronExpression: string;
-    timezone?: string;
-    maxRuns?: number;
-  }): Promise<TaskSchedule> {
+  async scheduleTask(
+    taskId: string,
+    schedule: {
+      cronExpression: string;
+      timezone?: string;
+      maxRuns?: number;
+    }
+  ): Promise<TaskSchedule> {
     const task = await this.getTask(taskId);
-    
+
     // Validate cron expression
     if (!cron.validate(schedule.cronExpression)) {
       throw new Error(`Invalid cron expression: ${schedule.cronExpression}`);
@@ -350,16 +377,19 @@ export class TaskAutomationEngine extends EventEmitter {
       taskId,
       cronExpression: schedule.cronExpression,
       timezone: schedule.timezone || 'UTC',
-      nextRunAt: this.calculateNextRun(schedule.cronExpression, schedule.timezone),
+      nextRunAt: this.calculateNextRun(
+        schedule.cronExpression,
+        schedule.timezone
+      ),
       isActive: true,
       runCount: 0,
       maxRuns: schedule.maxRuns,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.schedules.set(taskSchedule.id, taskSchedule);
     this.emit('task:scheduled', taskSchedule);
-    
+
     return taskSchedule;
   }
 
@@ -367,9 +397,10 @@ export class TaskAutomationEngine extends EventEmitter {
    * Unschedule a task
    */
   async unscheduleTask(taskId: string): Promise<void> {
-    const taskSchedules = Array.from(this.schedules.values())
-      .filter(schedule => schedule.taskId === taskId);
-    
+    const taskSchedules = Array.from(this.schedules.values()).filter(
+      schedule => schedule.taskId === taskId
+    );
+
     for (const schedule of taskSchedules) {
       schedule.isActive = false;
       this.schedules.delete(schedule.id);
@@ -382,8 +413,9 @@ export class TaskAutomationEngine extends EventEmitter {
    * Get task schedule
    */
   async getTaskSchedule(taskId: string): Promise<TaskSchedule[]> {
-    return Array.from(this.schedules.values())
-      .filter(schedule => schedule.taskId === taskId);
+    return Array.from(this.schedules.values()).filter(
+      schedule => schedule.taskId === taskId
+    );
   }
 
   /**
@@ -391,11 +423,13 @@ export class TaskAutomationEngine extends EventEmitter {
    */
   async executeTask(taskId: string, input: any = {}): Promise<TaskExecution> {
     const task = await this.getTask(taskId);
-    
+
     // Check dependencies
     const dependencyStatus = await this.checkDependencies(task.dependencies);
     if (!dependencyStatus.allSatisfied) {
-      throw new Error(`Task dependencies not satisfied: ${dependencyStatus.failedDependencies.join(', ')}`);
+      throw new Error(
+        `Task dependencies not satisfied: ${dependencyStatus.failedDependencies.join(', ')}`
+      );
     }
 
     // Allocate resources
@@ -415,18 +449,18 @@ export class TaskAutomationEngine extends EventEmitter {
         cpuUsage: 0,
         networkCalls: 0,
         diskIO: 0,
-        customMetrics: {}
+        customMetrics: {},
       },
       resources: resources.allocation,
       retryCount: 0,
-      maxRetries: task.retryPolicy.maxRetries
+      maxRetries: task.retryPolicy.maxRetries,
     };
 
     this.executions.set(execution.id, execution);
     this.executionQueue.push(execution);
-    
+
     this.emit('task:execution:started', execution);
-    
+
     return execution;
   }
 
@@ -440,15 +474,17 @@ export class TaskAutomationEngine extends EventEmitter {
     }
 
     if (execution.status === 'completed' || execution.status === 'failed') {
-      throw new Error(`Cannot cancel execution ${executionId}: status is ${execution.status}`);
+      throw new Error(
+        `Cannot cancel execution ${executionId}: status is ${execution.status}`
+      );
     }
 
     execution.status = 'cancelled';
     execution.completedAt = new Date();
-    
+
     // Release resources
     await this.releaseResources(execution.resources);
-    
+
     this.emit('task:execution:cancelled', execution);
   }
 
@@ -462,11 +498,15 @@ export class TaskAutomationEngine extends EventEmitter {
     }
 
     if (execution.status !== 'failed') {
-      throw new Error(`Cannot retry execution ${executionId}: status is ${execution.status}`);
+      throw new Error(
+        `Cannot retry execution ${executionId}: status is ${execution.status}`
+      );
     }
 
     if (execution.retryCount >= execution.maxRetries) {
-      throw new Error(`Maximum retry count reached for execution ${executionId}`);
+      throw new Error(
+        `Maximum retry count reached for execution ${executionId}`
+      );
     }
 
     // Create new execution with incremented retry count
@@ -477,14 +517,14 @@ export class TaskAutomationEngine extends EventEmitter {
       retryCount: execution.retryCount + 1,
       startedAt: undefined,
       completedAt: undefined,
-      error: undefined
+      error: undefined,
     };
 
     this.executions.set(retryExecution.id, retryExecution);
     this.executionQueue.push(retryExecution);
-    
+
     this.emit('task:execution:retrying', retryExecution);
-    
+
     return retryExecution;
   }
 
@@ -518,30 +558,34 @@ export class TaskAutomationEngine extends EventEmitter {
     if (!execution) {
       throw new Error(`Execution ${executionId} not found`);
     }
-    
+
     // In a real implementation, this would fetch from a logging service
-    return [{
-      timestamp: new Date(),
-      level: 'info',
-      message: `Task execution ${execution.status}`,
-      executionId,
-      taskId: execution.taskId
-    }];
+    return [
+      {
+        timestamp: new Date(),
+        level: 'info',
+        message: `Task execution ${execution.status}`,
+        executionId,
+        taskId: execution.taskId,
+      },
+    ];
   }
 
   /**
    * Register a worker
    */
-  async registerWorker(worker: Omit<Worker, 'id' | 'lastHeartbeat'>): Promise<Worker> {
+  async registerWorker(
+    worker: Omit<Worker, 'id' | 'lastHeartbeat'>
+  ): Promise<Worker> {
     const registeredWorker: Worker = {
       ...worker,
       id: uuidv4(),
-      lastHeartbeat: new Date()
+      lastHeartbeat: new Date(),
     };
 
     this.workers.set(registeredWorker.id, registeredWorker);
     this.emit('worker:registered', registeredWorker);
-    
+
     return registeredWorker;
   }
 
@@ -555,9 +599,10 @@ export class TaskAutomationEngine extends EventEmitter {
     }
 
     // Cancel any running tasks on this worker
-    const runningExecutions = Array.from(this.executions.values())
-      .filter(exec => exec.status === 'running');
-    
+    const runningExecutions = Array.from(this.executions.values()).filter(
+      exec => exec.status === 'running'
+    );
+
     for (const execution of runningExecutions) {
       // In a real implementation, you would check which worker is handling this execution
       await this.cancelExecution(execution.id);
@@ -628,7 +673,7 @@ export class TaskAutomationEngine extends EventEmitter {
     return {
       valid: errors.length === 0,
       errors,
-      warnings
+      warnings,
     };
   }
 
@@ -642,16 +687,18 @@ export class TaskAutomationEngine extends EventEmitter {
     const failedDependencies: string[] = [];
 
     for (const dependency of dependencies) {
-      const dependentExecutions = Array.from(this.executions.values())
-        .filter(exec => exec.taskId === dependency.taskId);
-      
+      const dependentExecutions = Array.from(this.executions.values()).filter(
+        exec => exec.taskId === dependency.taskId
+      );
+
       if (dependentExecutions.length === 0) {
         failedDependencies.push(dependency.taskId);
         continue;
       }
 
-      const latestExecution = dependentExecutions
-        .sort((a, b) => (b.startedAt?.getTime() || 0) - (a.startedAt?.getTime() || 0))[0];
+      const latestExecution = dependentExecutions.sort(
+        (a, b) => (b.startedAt?.getTime() || 0) - (a.startedAt?.getTime() || 0)
+      )[0];
 
       switch (dependency.condition) {
         case 'completed':
@@ -674,27 +721,29 @@ export class TaskAutomationEngine extends EventEmitter {
 
     return {
       allSatisfied: failedDependencies.length === 0,
-      failedDependencies
+      failedDependencies,
     };
   }
 
   /**
    * Allocate resources for task execution
    */
-  private async allocateResources(requirements: ResourceRequirement[]): Promise<{
+  private async allocateResources(
+    requirements: ResourceRequirement[]
+  ): Promise<{
     success: boolean;
     allocation?: ResourceAllocation;
     error?: string;
   }> {
     // In a real implementation, this would check available resources
     // and allocate them from a resource pool
-    
+
     const allocation: ResourceAllocation = {
       cpu: 0,
       memory: 0,
       storage: 0,
       network: 0,
-      custom: {}
+      custom: {},
     };
 
     for (const requirement of requirements) {
@@ -719,14 +768,16 @@ export class TaskAutomationEngine extends EventEmitter {
 
     return {
       success: true,
-      allocation
+      allocation,
     };
   }
 
   /**
    * Release resources after task completion
    */
-  private async releaseResources(allocation: ResourceAllocation): Promise<void> {
+  private async releaseResources(
+    allocation: ResourceAllocation
+  ): Promise<void> {
     // In a real implementation, this would release resources back to the pool
     console.log('Releasing resources:', allocation);
   }
@@ -754,55 +805,67 @@ export class TaskAutomationEngine extends EventEmitter {
         type: 'object',
         properties: {
           url: { type: 'string' },
-          method: { type: 'string', enum: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] },
+          method: {
+            type: 'string',
+            enum: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+          },
           headers: { type: 'object' },
           body: { type: 'object' },
-          timeout: { type: 'number' }
+          timeout: { type: 'number' },
         },
-        required: ['url']
+        required: ['url'],
       },
       processor: {
         execute: async (config, context) => {
-          const { url, method = 'GET', headers = {}, body, timeout = 30000 } = config;
-          
+          const {
+            url,
+            method = 'GET',
+            headers = {},
+            body,
+            timeout = 30000,
+          } = config;
+
           try {
             const response = await fetch(url, {
               method,
               headers: {
                 'Content-Type': 'application/json',
-                ...headers
+                ...headers,
               },
               body: body ? JSON.stringify(body) : undefined,
-              signal: AbortSignal.timeout(timeout)
+              signal: AbortSignal.timeout(timeout),
             });
 
             const responseData = await response.json();
-            
+
             return {
               success: response.ok,
               output: { response: responseData, status: response.status },
-              error: response.ok ? undefined : `HTTP ${response.status}: ${response.statusText}`
+              error: response.ok
+                ? undefined
+                : `HTTP ${response.status}: ${response.statusText}`,
             };
           } catch (error) {
             return {
               success: false,
-              error: error.message
+              error: error.message,
             };
           }
         },
-        validate: async (config) => {
+        validate: async config => {
           const errors: string[] = [];
           if (!config.url) errors.push('URL is required');
-          if (config.timeout && config.timeout <= 0) errors.push('Timeout must be positive');
+          if (config.timeout && config.timeout <= 0)
+            errors.push('Timeout must be positive');
           return { valid: errors.length === 0, errors, warnings: [] };
         },
-        estimateResources: async (config) => {
+        estimateResources: async config => {
           return [
             { type: 'network', amount: 1, unit: 'MB' },
-            { type: 'cpu', amount: 0.1, unit: 'cores' }
+            { type: 'cpu', amount: 0.1, unit: 'cores' },
           ];
-        }
-      }
+        },
+      },
     });
 
     // Database Query Task Type
@@ -814,30 +877,30 @@ export class TaskAutomationEngine extends EventEmitter {
         properties: {
           query: { type: 'string' },
           parameters: { type: 'array' },
-          timeout: { type: 'number' }
+          timeout: { type: 'number' },
         },
-        required: ['query']
+        required: ['query'],
       },
       processor: {
         execute: async (config, context) => {
           // This would integrate with your database service
           return {
             success: true,
-            output: { query: config.query, result: 'mock_result' }
+            output: { query: config.query, result: 'mock_result' },
           };
         },
-        validate: async (config) => {
+        validate: async config => {
           const errors: string[] = [];
           if (!config.query) errors.push('Query is required');
           return { valid: errors.length === 0, errors, warnings: [] };
         },
-        estimateResources: async (config) => {
+        estimateResources: async config => {
           return [
             { type: 'cpu', amount: 0.2, unit: 'cores' },
-            { type: 'memory', amount: 50, unit: 'MB' }
+            { type: 'memory', amount: 50, unit: 'MB' },
           ];
-        }
-      }
+        },
+      },
     });
 
     // File Operation Task Type
@@ -847,36 +910,43 @@ export class TaskAutomationEngine extends EventEmitter {
       configSchema: {
         type: 'object',
         properties: {
-          operation: { type: 'string', enum: ['read', 'write', 'delete', 'copy', 'move'] },
+          operation: {
+            type: 'string',
+            enum: ['read', 'write', 'delete', 'copy', 'move'],
+          },
           sourcePath: { type: 'string' },
           targetPath: { type: 'string' },
-          content: { type: 'string' }
+          content: { type: 'string' },
         },
-        required: ['operation']
+        required: ['operation'],
       },
       processor: {
         execute: async (config, context) => {
           // This would integrate with your file service
           return {
             success: true,
-            output: { operation: config.operation, path: config.sourcePath }
+            output: { operation: config.operation, path: config.sourcePath },
           };
         },
-        validate: async (config) => {
+        validate: async config => {
           const errors: string[] = [];
           if (!config.operation) errors.push('Operation is required');
-          if (['write', 'copy', 'move'].includes(config.operation) && !config.content && !config.sourcePath) {
+          if (
+            ['write', 'copy', 'move'].includes(config.operation) &&
+            !config.content &&
+            !config.sourcePath
+          ) {
             errors.push('Content or source path required for this operation');
           }
           return { valid: errors.length === 0, errors, warnings: [] };
         },
-        estimateResources: async (config) => {
+        estimateResources: async config => {
           return [
             { type: 'storage', amount: 1, unit: 'MB' },
-            { type: 'cpu', amount: 0.1, unit: 'cores' }
+            { type: 'cpu', amount: 0.1, unit: 'cores' },
           ];
-        }
-      }
+        },
+      },
     });
 
     // Custom Function Task Type
@@ -887,9 +957,9 @@ export class TaskAutomationEngine extends EventEmitter {
         type: 'object',
         properties: {
           functionCode: { type: 'string' },
-          parameters: { type: 'object' }
+          parameters: { type: 'object' },
         },
-        required: ['functionCode']
+        required: ['functionCode'],
       },
       processor: {
         execute: async (config, context) => {
@@ -898,27 +968,27 @@ export class TaskAutomationEngine extends EventEmitter {
             const result = eval(config.functionCode);
             return {
               success: true,
-              output: { result }
+              output: { result },
             };
           } catch (error) {
             return {
               success: false,
-              error: error.message
+              error: error.message,
             };
           }
         },
-        validate: async (config) => {
+        validate: async config => {
           const errors: string[] = [];
           if (!config.functionCode) errors.push('Function code is required');
           return { valid: errors.length === 0, errors, warnings: [] };
         },
-        estimateResources: async (config) => {
+        estimateResources: async config => {
           return [
             { type: 'cpu', amount: 0.5, unit: 'cores' },
-            { type: 'memory', amount: 100, unit: 'MB' }
+            { type: 'memory', amount: 100, unit: 'MB' },
           ];
-        }
-      }
+        },
+      },
     });
   }
 
@@ -936,7 +1006,7 @@ export class TaskAutomationEngine extends EventEmitter {
    */
   private processScheduledTasks(): void {
     const now = new Date();
-    
+
     for (const schedule of this.schedules.values()) {
       if (!schedule.isActive) continue;
       if (schedule.nextRunAt > now) continue;
@@ -944,13 +1014,19 @@ export class TaskAutomationEngine extends EventEmitter {
 
       // Execute the scheduled task
       this.executeTask(schedule.taskId).catch(error => {
-        console.error(`Error executing scheduled task ${schedule.taskId}:`, error);
+        console.error(
+          `Error executing scheduled task ${schedule.taskId}:`,
+          error
+        );
       });
 
       // Update schedule
       schedule.lastRunAt = now;
       schedule.runCount++;
-      schedule.nextRunAt = this.calculateNextRun(schedule.cronExpression, schedule.timezone);
+      schedule.nextRunAt = this.calculateNextRun(
+        schedule.cronExpression,
+        schedule.timezone
+      );
     }
   }
 
@@ -964,7 +1040,7 @@ export class TaskAutomationEngine extends EventEmitter {
       }
 
       this.isProcessing = true;
-      
+
       try {
         const execution = this.executionQueue.shift();
         if (execution) {
@@ -1003,7 +1079,7 @@ export class TaskAutomationEngine extends EventEmitter {
         variables: {},
         environment: task.metadata.environment,
         userId: task.metadata.author,
-        sessionId: execution.id
+        sessionId: execution.id,
       };
 
       const startTime = Date.now();
@@ -1014,13 +1090,13 @@ export class TaskAutomationEngine extends EventEmitter {
       execution.status = result.success ? 'completed' : 'failed';
       execution.completedAt = new Date();
       execution.output = result.output;
-      
+
       if (!result.success) {
         execution.error = {
           code: 'EXECUTION_ERROR',
           message: result.error || 'Unknown error',
           timestamp: new Date(),
-          retryable: true
+          retryable: true,
         };
       }
 
@@ -1028,7 +1104,6 @@ export class TaskAutomationEngine extends EventEmitter {
       await this.releaseResources(execution.resources);
 
       this.emit('task:execution:completed', execution);
-
     } catch (error) {
       execution.status = 'failed';
       execution.error = {
@@ -1036,13 +1111,13 @@ export class TaskAutomationEngine extends EventEmitter {
         message: error.message,
         stack: error.stack,
         timestamp: new Date(),
-        retryable: true
+        retryable: true,
       };
       execution.completedAt = new Date();
-      
+
       // Release resources
       await this.releaseResources(execution.resources);
-      
+
       this.emit('task:execution:failed', execution);
     }
   }

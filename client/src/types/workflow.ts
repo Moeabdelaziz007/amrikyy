@@ -32,7 +32,7 @@ export enum NodeType {
   DELAY = 'delay',
   CONDITION = 'condition',
   PARALLEL = 'parallel',
-  MERGE = 'merge'
+  MERGE = 'merge',
 }
 
 export enum NodeStatus {
@@ -41,7 +41,7 @@ export enum NodeStatus {
   SUCCESS = 'success',
   FAILED = 'failed',
   SKIPPED = 'skipped',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export interface NodeConfig {
@@ -54,7 +54,13 @@ export interface NodeConfig {
 
 export interface Condition {
   field: string;
-  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'not_contains';
+  operator:
+    | 'equals'
+    | 'not_equals'
+    | 'greater_than'
+    | 'less_than'
+    | 'contains'
+    | 'not_contains';
   value: any;
 }
 
@@ -73,7 +79,7 @@ export enum ConnectionType {
   SUCCESS = 'success',
   FAILURE = 'failure',
   CONDITIONAL = 'conditional',
-  DEFAULT = 'default'
+  DEFAULT = 'default',
 }
 
 export interface Workflow {
@@ -94,7 +100,7 @@ export enum WorkflowStatus {
   DRAFT = 'draft',
   ACTIVE = 'active',
   PAUSED = 'paused',
-  ARCHIVED = 'archived'
+  ARCHIVED = 'archived',
 }
 
 export interface WorkflowSettings {
@@ -122,7 +128,7 @@ export enum NotificationEvent {
   WORKFLOW_COMPLETED = 'workflow_completed',
   WORKFLOW_FAILED = 'workflow_failed',
   NODE_FAILED = 'node_failed',
-  WORKFLOW_PAUSED = 'workflow_paused'
+  WORKFLOW_PAUSED = 'workflow_paused',
 }
 
 export interface Execution {
@@ -142,7 +148,7 @@ export enum ExecutionStatus {
   COMPLETED = 'completed',
   FAILED = 'failed',
   CANCELLED = 'cancelled',
-  PAUSED = 'paused'
+  PAUSED = 'paused',
 }
 
 export interface NodeExecution {
@@ -181,7 +187,7 @@ export enum ApiProvider {
   GITHUB_ACTIONS = 'github_actions',
   TELEGRAM = 'telegram',
   EMAIL = 'email',
-  WEBHOOK = 'webhook'
+  WEBHOOK = 'webhook',
 }
 
 // DAG Types

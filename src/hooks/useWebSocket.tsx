@@ -45,7 +45,7 @@ export class WebSocketIntegration {
           resolve();
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = event => {
           try {
             const message: WebSocketMessage = JSON.parse(event.data);
             this.handleMessage(message);
@@ -54,20 +54,22 @@ export class WebSocketIntegration {
           }
         };
 
-        this.ws.onclose = (event) => {
+        this.ws.onclose = event => {
           console.log('WebSocket disconnected:', event.code, event.reason);
           this.options.onConnectionChange?.(false);
-          
-          if (this.options.autoReconnect !== false && this.reconnectAttempts < this.maxReconnectAttempts) {
+
+          if (
+            this.options.autoReconnect !== false &&
+            this.reconnectAttempts < this.maxReconnectAttempts
+          ) {
             this.scheduleReconnect();
           }
         };
 
-        this.ws.onerror = (error) => {
+        this.ws.onerror = error => {
           console.error('WebSocket error:', error);
           reject(error);
         };
-
       } catch (error) {
         reject(error);
       }
@@ -76,10 +78,13 @@ export class WebSocketIntegration {
 
   private scheduleReconnect(): void {
     this.reconnectAttempts++;
-    const delay = this.reconnectInterval * Math.pow(2, this.reconnectAttempts - 1);
-    
-    console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
-    
+    const delay =
+      this.reconnectInterval * Math.pow(2, this.reconnectAttempts - 1);
+
+    console.log(
+      `Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`
+    );
+
     this.reconnectTimeout = setTimeout(() => {
       this.connect().catch(console.error);
     }, delay);
@@ -96,7 +101,7 @@ export class WebSocketIntegration {
 
   private handleMessage(message: WebSocketMessage): void {
     this.options.onMessage?.(message);
-    
+
     // Emit to specific listeners
     const listeners = this.listeners.get(message.type) || [];
     listeners.forEach(listener => listener(message));
@@ -138,7 +143,7 @@ export class WebSocketIntegration {
       clearTimeout(this.reconnectTimeout);
       this.reconnectTimeout = null;
     }
-    
+
     if (this.ws) {
       this.ws.close();
       this.ws = null;
@@ -159,22 +164,23 @@ export const useWebSocket = (
   useEffect(() => {
     const websocket = new WebSocketIntegration(url, {
       ...options,
-      onConnectionChange: (isConnected) => {
+      onConnectionChange: isConnected => {
         setConnected(isConnected);
         options.onConnectionChange?.(isConnected);
       },
-      onMessage: (message) => {
+      onMessage: message => {
         setMessages(prev => [...prev.slice(-99), message]);
         options.onMessage?.(message);
-      }
+      },
     });
 
-    websocket.connect()
+    websocket
+      .connect()
       .then(() => {
         setWs(websocket);
         setError(null);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message);
       });
 
@@ -187,7 +193,7 @@ export const useWebSocket = (
     if (ws) {
       ws.send({
         ...message,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       });
     }
   };
@@ -202,7 +208,7 @@ export const useWebSocket = (
     error,
     sendMessage,
     subscribe,
-    ws
+    ws,
   };
 };
 
@@ -213,19 +219,25 @@ export const RealtimeDataProvider: React.FC<{
   onSystemUpdate?: (data: any) => void;
   onAgentUpdate?: (data: any) => void;
   onAutomationUpdate?: (data: any) => void;
-}> = ({ children, wsUrl, onSystemUpdate, onAgentUpdate, onAutomationUpdate }) => {
+}> = ({
+  children,
+  wsUrl,
+  onSystemUpdate,
+  onAgentUpdate,
+  onAutomationUpdate,
+}) => {
   const { connected, messages, sendMessage, subscribe } = useWebSocket(wsUrl);
 
   useEffect(() => {
-    const unsubscribeSystem = subscribe?.('system', (data) => {
+    const unsubscribeSystem = subscribe?.('system', data => {
       onSystemUpdate?.(data);
     });
 
-    const unsubscribeAgent = subscribe?.('agent', (data) => {
+    const unsubscribeAgent = subscribe?.('agent', data => {
       onAgentUpdate?.(data);
     });
 
-    const unsubscribeAutomation = subscribe?.('automation', (data) => {
+    const unsubscribeAutomation = subscribe?.('automation', data => {
       onAutomationUpdate?.(data);
     });
 
@@ -239,14 +251,16 @@ export const RealtimeDataProvider: React.FC<{
   return (
     <div className="realtime-provider">
       {/* Connection Status Indicator */}
-      <div className={`fixed top-4 right-4 z-50 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
-        connected 
-          ? 'bg-status-success text-white shadow-glow-green-sm' 
-          : 'bg-status-error text-white shadow-glow-red-sm'
-      }`}>
+      <div
+        className={`fixed top-4 right-4 z-50 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
+          connected
+            ? 'bg-status-success text-white shadow-glow-green-sm'
+            : 'bg-status-error text-white shadow-glow-red-sm'
+        }`}
+      >
         {connected ? '🟢 Connected' : '🔴 Disconnected'}
       </div>
-      
+
       {children}
     </div>
   );
@@ -264,7 +278,7 @@ export const LiveDataDisplay: React.FC<{
   const { subscribe } = useWebSocket('ws://localhost:8080/ws');
 
   useEffect(() => {
-    const unsubscribe = subscribe?.(type, (newData) => {
+    const unsubscribe = subscribe?.(type, newData => {
       setData(newData);
       setLastUpdate(new Date());
     });
@@ -273,13 +287,17 @@ export const LiveDataDisplay: React.FC<{
   }, [subscribe, type]);
 
   return (
-    <div className={`p-4 bg-glass-primary border border-glass-border rounded-lg ${className}`}>
+    <div
+      className={`p-4 bg-glass-primary border border-glass-border rounded-lg ${className}`}
+    >
       <div className="flex items-center justify-between mb-2">
         <h3 className="cyberpunk-heading-2">{title}</h3>
         <div className="flex items-center gap-2">
-          <div className={`w-2 h-2 rounded-full ${
-            data ? 'bg-status-success animate-pulse' : 'bg-glass-border'
-          }`} />
+          <div
+            className={`w-2 h-2 rounded-full ${
+              data ? 'bg-status-success animate-pulse' : 'bg-glass-border'
+            }`}
+          />
           {lastUpdate && (
             <span className="text-xs text-text-secondary">
               {lastUpdate.toLocaleTimeString()}
@@ -287,7 +305,7 @@ export const LiveDataDisplay: React.FC<{
           )}
         </div>
       </div>
-      
+
       {data ? (
         <div className="space-y-2">
           <pre className="text-xs text-text-primary font-mono bg-glass-secondary p-2 rounded overflow-auto max-h-32">

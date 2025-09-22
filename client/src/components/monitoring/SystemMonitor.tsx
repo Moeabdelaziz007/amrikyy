@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Activity, 
-  Cpu, 
-  MemoryStick, 
-  Zap, 
-  Bot, 
-  Brain, 
-  TrendingUp, 
+import {
+  Activity,
+  Cpu,
+  MemoryStick,
+  Zap,
+  Bot,
+  Brain,
+  TrendingUp,
   AlertTriangle,
   CheckCircle,
   XCircle,
@@ -22,7 +28,7 @@ import {
   Database,
   Globe,
   LogIn,
-  User
+  User,
 } from 'lucide-react';
 
 interface SystemStatus {
@@ -193,7 +199,7 @@ export const SystemMonitor: React.FC = () => {
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     if (days > 0) return `${days}d ${hours}h ${minutes}m`;
     if (hours > 0) return `${hours}h ${minutes}m`;
     return `${minutes}m`;
@@ -203,7 +209,7 @@ export const SystemMonitor: React.FC = () => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const getStatusColor = (status: string): string => {
@@ -266,14 +272,19 @@ export const SystemMonitor: React.FC = () => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-2">
                 <User className="h-4 w-4" />
-                <span className="text-sm font-medium">{user?.email || user?.name || 'User'}</span>
+                <span className="text-sm font-medium">
+                  {user?.email || user?.name || 'User'}
+                </span>
               </div>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 Logout
               </Button>
             </div>
           ) : (
-            <Button onClick={handleLogin} className="flex items-center space-x-2">
+            <Button
+              onClick={handleLogin}
+              className="flex items-center space-x-2"
+            >
               <LogIn className="h-4 w-4" />
               <span>Login</span>
             </Button>
@@ -323,12 +334,16 @@ export const SystemMonitor: React.FC = () => {
             {/* System Status */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">System Status</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  System Status
+                </CardTitle>
                 <Server className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="flex items-center space-x-2">
-                  <div className={`w-2 h-2 rounded-full ${getStatusColor(systemStatus?.system.status || 'unknown')}`} />
+                  <div
+                    className={`w-2 h-2 rounded-full ${getStatusColor(systemStatus?.system.status || 'unknown')}`}
+                  />
                   <span className="text-2xl font-bold capitalize">
                     {systemStatus?.system.status || 'Unknown'}
                   </span>
@@ -347,7 +362,9 @@ export const SystemMonitor: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {systemStatus ? formatUptime(systemStatus.system.uptime) : 'N/A'}
+                  {systemStatus
+                    ? formatUptime(systemStatus.system.uptime)
+                    : 'N/A'}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Since last restart
@@ -363,7 +380,8 @@ export const SystemMonitor: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {systemStatus?.ai.activeAgents || 0}/{systemStatus?.ai.agents || 0}
+                  {systemStatus?.ai.activeAgents || 0}/
+                  {systemStatus?.ai.agents || 0}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   Active agents
@@ -389,7 +407,8 @@ export const SystemMonitor: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  {systemStatus?.autopilot.rules || 0} rules, {systemStatus?.autopilot.workflows || 0} workflows
+                  {systemStatus?.autopilot.rules || 0} rules,{' '}
+                  {systemStatus?.autopilot.workflows || 0} workflows
                 </p>
               </CardContent>
             </Card>
@@ -404,15 +423,28 @@ export const SystemMonitor: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {Object.entries(healthStatus.services).map(([service, status]) => (
-                    <div key={service} className="flex items-center space-x-2">
-                      <div className={`w-2 h-2 rounded-full ${getStatusColor(status)}`} />
-                      <span className="text-sm capitalize">{service}</span>
-                      <Badge variant={status === 'connected' || status === 'operational' ? 'default' : 'destructive'}>
-                        {status}
-                      </Badge>
-                    </div>
-                  ))}
+                  {Object.entries(healthStatus.services).map(
+                    ([service, status]) => (
+                      <div
+                        key={service}
+                        className="flex items-center space-x-2"
+                      >
+                        <div
+                          className={`w-2 h-2 rounded-full ${getStatusColor(status)}`}
+                        />
+                        <span className="text-sm capitalize">{service}</span>
+                        <Badge
+                          variant={
+                            status === 'connected' || status === 'operational'
+                              ? 'default'
+                              : 'destructive'
+                          }
+                        >
+                          {status}
+                        </Badge>
+                      </div>
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -434,15 +466,23 @@ export const SystemMonitor: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Heap Used</span>
-                    <span>{systemStatus ? formatBytes(systemStatus.system.memory.heapUsed) : 'N/A'}</span>
+                    <span>
+                      {systemStatus
+                        ? formatBytes(systemStatus.system.memory.heapUsed)
+                        : 'N/A'}
+                    </span>
                   </div>
-                  <Progress 
-                    value={systemStatus?.performance.memory || 0} 
+                  <Progress
+                    value={systemStatus?.performance.memory || 0}
                     className="h-2"
                   />
                   <div className="flex justify-between text-sm">
                     <span>Total</span>
-                    <span>{systemStatus ? formatBytes(systemStatus.system.memory.heapTotal) : 'N/A'}</span>
+                    <span>
+                      {systemStatus
+                        ? formatBytes(systemStatus.system.memory.heapTotal)
+                        : 'N/A'}
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -461,8 +501,8 @@ export const SystemMonitor: React.FC = () => {
                   <div className="text-2xl font-bold">
                     {systemStatus?.performance.cpu || 0}%
                   </div>
-                  <Progress 
-                    value={systemStatus?.performance.cpu || 0} 
+                  <Progress
+                    value={systemStatus?.performance.cpu || 0}
                     className="h-2"
                   />
                   <p className="text-xs text-muted-foreground">
@@ -508,15 +548,21 @@ export const SystemMonitor: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span>Total Agents</span>
-                  <Badge variant="outline">{systemStatus?.ai.agents || 0}</Badge>
+                  <Badge variant="outline">
+                    {systemStatus?.ai.agents || 0}
+                  </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Active Agents</span>
-                  <Badge variant="outline">{systemStatus?.ai.activeAgents || 0}</Badge>
+                  <Badge variant="outline">
+                    {systemStatus?.ai.activeAgents || 0}
+                  </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Total Tasks</span>
-                  <Badge variant="outline">{systemStatus?.ai.totalTasks || 0}</Badge>
+                  <Badge variant="outline">
+                    {systemStatus?.ai.totalTasks || 0}
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
@@ -532,25 +578,34 @@ export const SystemMonitor: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
                   <span>Status</span>
-                  <Badge variant={systemStatus?.autopilot.active ? 'default' : 'destructive'}>
+                  <Badge
+                    variant={
+                      systemStatus?.autopilot.active ? 'default' : 'destructive'
+                    }
+                  >
                     {systemStatus?.autopilot.active ? 'Active' : 'Inactive'}
                   </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Active Rules</span>
-                  <Badge variant="outline">{systemStatus?.autopilot.rules || 0}</Badge>
+                  <Badge variant="outline">
+                    {systemStatus?.autopilot.rules || 0}
+                  </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Active Workflows</span>
-                  <Badge variant="outline">{systemStatus?.autopilot.workflows || 0}</Badge>
+                  <Badge variant="outline">
+                    {systemStatus?.autopilot.workflows || 0}
+                  </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Last Execution</span>
                   <span className="text-sm text-muted-foreground">
-                    {systemStatus?.autopilot.lastExecution ? 
-                      new Date(systemStatus.autopilot.lastExecution).toLocaleString() : 
-                      'Never'
-                    }
+                    {systemStatus?.autopilot.lastExecution
+                      ? new Date(
+                          systemStatus.autopilot.lastExecution
+                        ).toLocaleString()
+                      : 'Never'}
                   </span>
                 </div>
               </CardContent>
@@ -575,9 +630,14 @@ export const SystemMonitor: React.FC = () => {
                   </p>
                 ) : (
                   logs.map((log, index) => (
-                    <div key={index} className="flex items-start space-x-3 p-2 rounded border">
+                    <div
+                      key={index}
+                      className="flex items-start space-x-3 p-2 rounded border"
+                    >
                       <div className="flex-shrink-0">
-                        <span className={`text-xs font-mono ${getLogLevelColor(log.level)}`}>
+                        <span
+                          className={`text-xs font-mono ${getLogLevelColor(log.level)}`}
+                        >
                           {log.level.toUpperCase()}
                         </span>
                       </div>

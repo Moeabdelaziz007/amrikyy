@@ -1,7 +1,12 @@
 // AI-Powered Personalization System
 // Machine learning for user preferences and behavior analysis
 
-import { UserHistory, UserAction, ActionType, ActionCategory } from './firestore-types';
+import {
+  UserHistory,
+  UserAction,
+  ActionType,
+  ActionCategory,
+} from './firestore-types';
 // import { UserHistoryService } from './user-history-service';
 
 export interface UserPreference {
@@ -70,7 +75,11 @@ export interface Recommendation {
 }
 
 export interface PersonalizationInsight {
-  type: 'usage_pattern' | 'preference_change' | 'new_interest' | 'behavior_anomaly';
+  type:
+    | 'usage_pattern'
+    | 'preference_change'
+    | 'new_interest'
+    | 'behavior_anomaly';
   title: string;
   description: string;
   confidence: number;
@@ -97,13 +106,17 @@ export class AIPersonalizationEngine {
 
       // Analyze behavior patterns
       const behaviorPatterns = this.extractBehaviorPatterns(userId, history);
-      
+
       // Infer preferences from behavior
-      const preferences = this.inferPreferences(userId, history, behaviorPatterns);
-      
+      const preferences = this.inferPreferences(
+        userId,
+        history,
+        behaviorPatterns
+      );
+
       // Identify interests
       const interests = this.identifyInterests(userId, history);
-      
+
       // Analyze personality traits
       const personalityTraits = this.analyzePersonalityTraits(userId, history);
 
@@ -115,7 +128,7 @@ export class AIPersonalizationEngine {
         personalityTraits,
         lastAnalyzed: new Date(),
         mlModel: 'v1.0',
-        version: 1
+        version: 1,
       };
 
       return profile;
@@ -129,7 +142,7 @@ export class AIPersonalizationEngine {
    * Generate personalized recommendations
    */
   static async generateRecommendations(
-    userId: string, 
+    userId: string,
     type: 'content' | 'feature' | 'workflow' | 'agent',
     limit: number = 10
   ): Promise<Recommendation[]> {
@@ -139,22 +152,28 @@ export class AIPersonalizationEngine {
 
       switch (type) {
         case 'content':
-          recommendations.push(...await this.recommendContent(userId, profile));
+          recommendations.push(
+            ...(await this.recommendContent(userId, profile))
+          );
           break;
         case 'feature':
-          recommendations.push(...await this.recommendFeatures(userId, profile));
+          recommendations.push(
+            ...(await this.recommendFeatures(userId, profile))
+          );
           break;
         case 'workflow':
-          recommendations.push(...await this.recommendWorkflows(userId, profile));
+          recommendations.push(
+            ...(await this.recommendWorkflows(userId, profile))
+          );
           break;
         case 'agent':
-          recommendations.push(...await this.recommendAgents(userId, profile));
+          recommendations.push(
+            ...(await this.recommendAgents(userId, profile))
+          );
           break;
       }
 
-      return recommendations
-        .sort((a, b) => b.score - a.score)
-        .slice(0, limit);
+      return recommendations.sort((a, b) => b.score - a.score).slice(0, limit);
     } catch (error) {
       console.error('Error generating recommendations:', error);
       return [];
@@ -173,13 +192,18 @@ export class AIPersonalizationEngine {
     try {
       // Get current profile
       const profile = await this.getUserProfile(userId);
-      
+
       // Update preferences based on feedback
-      await this.updatePreferencesFromFeedback(profile, itemId, feedback, context);
-      
+      await this.updatePreferencesFromFeedback(
+        profile,
+        itemId,
+        feedback,
+        context
+      );
+
       // Retrain ML model if needed
       await this.retrainModel(userId, profile);
-      
+
       // Generate new insights
       await this.generateInsights(userId, profile);
     } catch (error) {
@@ -190,22 +214,29 @@ export class AIPersonalizationEngine {
   /**
    * Generate personalization insights
    */
-  static async generateInsights(userId: string, profile?: UserProfile): Promise<PersonalizationInsight[]> {
+  static async generateInsights(
+    userId: string,
+    profile?: UserProfile
+  ): Promise<PersonalizationInsight[]> {
     try {
-      const userProfile = profile || await this.getUserProfile(userId);
+      const userProfile = profile || (await this.getUserProfile(userId));
       const insights: PersonalizationInsight[] = [];
 
       // Analyze usage patterns
-      insights.push(...await this.analyzeUsagePatterns(userId, userProfile));
-      
+      insights.push(...(await this.analyzeUsagePatterns(userId, userProfile)));
+
       // Detect preference changes
-      insights.push(...await this.detectPreferenceChanges(userId, userProfile));
-      
+      insights.push(
+        ...(await this.detectPreferenceChanges(userId, userProfile))
+      );
+
       // Identify new interests
-      insights.push(...await this.identifyNewInterests(userId, userProfile));
-      
+      insights.push(...(await this.identifyNewInterests(userId, userProfile)));
+
       // Detect behavior anomalies
-      insights.push(...await this.detectBehaviorAnomalies(userId, userProfile));
+      insights.push(
+        ...(await this.detectBehaviorAnomalies(userId, userProfile))
+      );
 
       return insights.filter(insight => insight.confidence > 0.6);
     } catch (error) {
@@ -217,17 +248,20 @@ export class AIPersonalizationEngine {
   /**
    * Extract behavior patterns from user history
    */
-  private static extractBehaviorPatterns(userId: string, history: UserHistory[]): BehaviorPattern[] {
+  private static extractBehaviorPatterns(
+    userId: string,
+    history: UserHistory[]
+  ): BehaviorPattern[] {
     const patterns: BehaviorPattern[] = [];
-    
+
     // Time-based patterns
     const timePatterns = this.extractTimePatterns(userId, history);
     patterns.push(...timePatterns);
-    
+
     // Action sequence patterns
     const sequencePatterns = this.extractSequencePatterns(userId, history);
     patterns.push(...sequencePatterns);
-    
+
     // Frequency patterns
     const frequencyPatterns = this.extractFrequencyPatterns(userId, history);
     patterns.push(...frequencyPatterns);
@@ -238,7 +272,10 @@ export class AIPersonalizationEngine {
   /**
    * Extract time-based behavior patterns
    */
-  private static extractTimePatterns(userId: string, history: UserHistory[]): BehaviorPattern[] {
+  private static extractTimePatterns(
+    userId: string,
+    history: UserHistory[]
+  ): BehaviorPattern[] {
     const patterns: BehaviorPattern[] = [];
     const timeStats: Record<string, number[]> = {};
 
@@ -247,17 +284,18 @@ export class AIPersonalizationEngine {
       const hour = new Date(action.timestamp).getHours();
       const actionType = action.action.type;
       const key = `${actionType}_hour_${hour}`;
-      
+
       if (!timeStats[key]) timeStats[key] = [];
       timeStats[key].push(hour);
     });
 
     // Identify patterns
     Object.entries(timeStats).forEach(([key, hours]) => {
-      if (hours.length >= 5) { // Minimum frequency threshold
+      if (hours.length >= 5) {
+        // Minimum frequency threshold
         const [actionType, , hourStr] = key.split('_');
         const hour = parseInt(hourStr);
-        
+
         patterns.push({
           id: `time_${userId}_${key}`,
           userId,
@@ -265,7 +303,7 @@ export class AIPersonalizationEngine {
           frequency: hours.length,
           confidence: Math.min(hours.length / 20, 1), // Normalize to 0-1
           timeOfDay: this.getTimeOfDay(hour),
-          lastSeen: new Date()
+          lastSeen: new Date(),
         });
       }
     });
@@ -276,7 +314,10 @@ export class AIPersonalizationEngine {
   /**
    * Extract action sequence patterns
    */
-  private static extractSequencePatterns(userId: string, history: UserHistory[]): BehaviorPattern[] {
+  private static extractSequencePatterns(
+    userId: string,
+    history: UserHistory[]
+  ): BehaviorPattern[] {
     const patterns: BehaviorPattern[] = [];
     const sequences: Record<string, number> = {};
 
@@ -290,14 +331,15 @@ export class AIPersonalizationEngine {
 
     // Identify significant sequences
     Object.entries(sequences).forEach(([sequence, count]) => {
-      if (count >= 3) { // Minimum sequence frequency
+      if (count >= 3) {
+        // Minimum sequence frequency
         patterns.push({
           id: `sequence_${userId}_${sequence}`,
           userId,
           pattern: `User often follows ${sequence.split('->')[0]} with ${sequence.split('->')[1]}`,
           frequency: count,
           confidence: Math.min(count / 10, 1),
-          lastSeen: new Date()
+          lastSeen: new Date(),
         });
       }
     });
@@ -308,7 +350,10 @@ export class AIPersonalizationEngine {
   /**
    * Extract frequency patterns
    */
-  private static extractFrequencyPatterns(userId: string, history: UserHistory[]): BehaviorPattern[] {
+  private static extractFrequencyPatterns(
+    userId: string,
+    history: UserHistory[]
+  ): BehaviorPattern[] {
     const patterns: BehaviorPattern[] = [];
     const actionCounts: Record<string, number> = {};
 
@@ -320,14 +365,15 @@ export class AIPersonalizationEngine {
 
     // Identify high-frequency actions
     Object.entries(actionCounts).forEach(([action, count]) => {
-      if (count >= 10) { // High frequency threshold
+      if (count >= 10) {
+        // High frequency threshold
         patterns.push({
           id: `frequency_${userId}_${action}`,
           userId,
           pattern: `User frequently performs ${action} (${count} times)`,
           frequency: count,
           confidence: Math.min(count / 50, 1),
-          lastSeen: new Date()
+          lastSeen: new Date(),
         });
       }
     });
@@ -339,8 +385,8 @@ export class AIPersonalizationEngine {
    * Infer user preferences from behavior
    */
   private static inferPreferences(
-    userId: string, 
-    history: UserHistory[], 
+    userId: string,
+    history: UserHistory[],
     patterns: BehaviorPattern[]
   ): UserPreference[] {
     const preferences: UserPreference[] = [];
@@ -358,8 +404,8 @@ export class AIPersonalizationEngine {
           source: 'behavioral',
           metadata: {
             patternId: pattern.id,
-            frequency: pattern.frequency
-          }
+            frequency: pattern.frequency,
+          },
         });
       }
     });
@@ -381,7 +427,7 @@ export class AIPersonalizationEngine {
           confidence: Math.min(count / 20, 1),
           lastUpdated: new Date(),
           source: 'behavioral',
-          metadata: { category, count }
+          metadata: { category, count },
         });
       }
     });
@@ -392,7 +438,10 @@ export class AIPersonalizationEngine {
   /**
    * Identify user interests from behavior
    */
-  private static identifyInterests(userId: string, history: UserHistory[]): Interest[] {
+  private static identifyInterests(
+    userId: string,
+    history: UserHistory[]
+  ): Interest[] {
     const interests: Interest[] = [];
     const topicCounts: Record<string, number> = {};
 
@@ -403,9 +452,10 @@ export class AIPersonalizationEngine {
           topicCounts[tag] = (topicCounts[tag] || 0) + 1;
         });
       }
-      
+
       if (action.action.targetType) {
-        topicCounts[action.action.targetType] = (topicCounts[action.action.targetType] || 0) + 1;
+        topicCounts[action.action.targetType] =
+          (topicCounts[action.action.targetType] || 0) + 1;
       }
     });
 
@@ -419,7 +469,7 @@ export class AIPersonalizationEngine {
           score: Math.min(count / 10, 1),
           category: 'behavioral',
           sources: ['user_actions'],
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         });
       }
     });
@@ -430,13 +480,20 @@ export class AIPersonalizationEngine {
   /**
    * Analyze personality traits from behavior
    */
-  private static analyzePersonalityTraits(userId: string, history: UserHistory[]): PersonalityTrait[] {
+  private static analyzePersonalityTraits(
+    userId: string,
+    history: UserHistory[]
+  ): PersonalityTrait[] {
     const traits: PersonalityTrait[] = [];
 
     // Analyze action patterns for personality indicators
-    const socialActions = history.filter(h => h.action.category === 'social').length;
+    const socialActions = history.filter(
+      h => h.action.category === 'social'
+    ).length;
     const aiActions = history.filter(h => h.action.category === 'ai').length;
-    const workflowActions = history.filter(h => h.action.category === 'workflow').length;
+    const workflowActions = history.filter(
+      h => h.action.category === 'workflow'
+    ).length;
     const totalActions = history.length;
 
     // Social personality
@@ -445,7 +502,7 @@ export class AIPersonalizationEngine {
         trait: 'Social',
         score: socialActions / totalActions,
         confidence: 0.8,
-        evidence: [`${socialActions} social interactions`]
+        evidence: [`${socialActions} social interactions`],
       });
     }
 
@@ -455,7 +512,7 @@ export class AIPersonalizationEngine {
         trait: 'Tech-Savvy',
         score: aiActions / totalActions,
         confidence: 0.9,
-        evidence: [`${aiActions} AI interactions`]
+        evidence: [`${aiActions} AI interactions`],
       });
     }
 
@@ -465,7 +522,7 @@ export class AIPersonalizationEngine {
         trait: 'Efficiency-Focused',
         score: workflowActions / totalActions,
         confidence: 0.7,
-        evidence: [`${workflowActions} workflow interactions`]
+        evidence: [`${workflowActions} workflow interactions`],
       });
     }
 
@@ -475,7 +532,10 @@ export class AIPersonalizationEngine {
   /**
    * Recommend content based on user profile
    */
-  private static async recommendContent(userId: string, profile: UserProfile): Promise<Recommendation[]> {
+  private static async recommendContent(
+    userId: string,
+    profile: UserProfile
+  ): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
     // Recommend based on interests
@@ -491,7 +551,7 @@ export class AIPersonalizationEngine {
           score: interest.score,
           reason: `You've shown interest in ${interest.topic}`,
           category: interest.category,
-          createdAt: new Date()
+          createdAt: new Date(),
         });
       }
     });
@@ -502,7 +562,10 @@ export class AIPersonalizationEngine {
   /**
    * Recommend features based on user profile
    */
-  private static async recommendFeatures(userId: string, profile: UserProfile): Promise<Recommendation[]> {
+  private static async recommendFeatures(
+    userId: string,
+    profile: UserProfile
+  ): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
     // Recommend features based on personality traits
@@ -518,7 +581,7 @@ export class AIPersonalizationEngine {
           score: trait.score,
           reason: 'You frequently use AI features',
           category: 'ai',
-          createdAt: new Date()
+          createdAt: new Date(),
         });
       }
     });
@@ -529,7 +592,10 @@ export class AIPersonalizationEngine {
   /**
    * Recommend workflows based on user profile
    */
-  private static async recommendWorkflows(userId: string, profile: UserProfile): Promise<Recommendation[]> {
+  private static async recommendWorkflows(
+    userId: string,
+    profile: UserProfile
+  ): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
     // Recommend workflows based on behavior patterns
@@ -545,7 +611,7 @@ export class AIPersonalizationEngine {
           score: pattern.confidence,
           reason: `You frequently ${pattern.pattern}`,
           category: 'automation',
-          createdAt: new Date()
+          createdAt: new Date(),
         });
       }
     });
@@ -556,7 +622,10 @@ export class AIPersonalizationEngine {
   /**
    * Recommend agents based on user profile
    */
-  private static async recommendAgents(userId: string, profile: UserProfile): Promise<Recommendation[]> {
+  private static async recommendAgents(
+    userId: string,
+    profile: UserProfile
+  ): Promise<Recommendation[]> {
     const recommendations: Recommendation[] = [];
 
     // Recommend agents based on interests and traits
@@ -572,7 +641,7 @@ export class AIPersonalizationEngine {
           score: interest.score,
           reason: `You're interested in ${interest.topic}`,
           category: interest.category,
-          createdAt: new Date()
+          createdAt: new Date(),
         });
       }
     });
@@ -594,7 +663,7 @@ export class AIPersonalizationEngine {
       personalityTraits: [],
       lastAnalyzed: new Date(),
       mlModel: 'v1.0',
-      version: 1
+      version: 1,
     };
   }
 
@@ -608,8 +677,8 @@ export class AIPersonalizationEngine {
     context?: Record<string, any>
   ): Promise<void> {
     // Update preference confidence based on feedback
-    const relevantPreferences = profile.preferences.filter(p => 
-      p.metadata?.itemId === itemId
+    const relevantPreferences = profile.preferences.filter(
+      p => p.metadata?.itemId === itemId
     );
 
     relevantPreferences.forEach(preference => {
@@ -625,7 +694,10 @@ export class AIPersonalizationEngine {
   /**
    * Retrain ML model
    */
-  private static async retrainModel(userId: string, profile: UserProfile): Promise<void> {
+  private static async retrainModel(
+    userId: string,
+    profile: UserProfile
+  ): Promise<void> {
     // In a real implementation, this would trigger ML model retraining
     console.log(`Retraining ML model for user ${userId}`);
   }
@@ -634,7 +706,7 @@ export class AIPersonalizationEngine {
    * Generate insights from analysis
    */
   private static async analyzeUsagePatterns(
-    userId: string, 
+    userId: string,
     profile: UserProfile
   ): Promise<PersonalizationInsight[]> {
     const insights: PersonalizationInsight[] = [];
@@ -648,7 +720,7 @@ export class AIPersonalizationEngine {
         confidence: 0.8,
         actionable: true,
         recommendations: ['Create automated workflows', 'Set up notifications'],
-        metadata: { patternCount: profile.behaviorPatterns.length }
+        metadata: { patternCount: profile.behaviorPatterns.length },
       });
     }
 
@@ -659,7 +731,7 @@ export class AIPersonalizationEngine {
    * Detect preference changes
    */
   private static async detectPreferenceChanges(
-    userId: string, 
+    userId: string,
     profile: UserProfile
   ): Promise<PersonalizationInsight[]> {
     // Mock implementation - would compare with historical data
@@ -670,7 +742,7 @@ export class AIPersonalizationEngine {
    * Identify new interests
    */
   private static async identifyNewInterests(
-    userId: string, 
+    userId: string,
     profile: UserProfile
   ): Promise<PersonalizationInsight[]> {
     const insights: PersonalizationInsight[] = [];
@@ -684,7 +756,7 @@ export class AIPersonalizationEngine {
           confidence: interest.score,
           actionable: true,
           recommendations: [`Explore more ${interest.topic} content`],
-          metadata: { topic: interest.topic, score: interest.score }
+          metadata: { topic: interest.topic, score: interest.score },
         });
       }
     });
@@ -696,7 +768,7 @@ export class AIPersonalizationEngine {
    * Detect behavior anomalies
    */
   private static async detectBehaviorAnomalies(
-    userId: string, 
+    userId: string,
     profile: UserProfile
   ): Promise<PersonalizationInsight[]> {
     // Mock implementation - would detect unusual patterns

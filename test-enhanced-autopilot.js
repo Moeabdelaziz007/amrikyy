@@ -20,7 +20,7 @@ async function testAutopilotSystem() {
       alwaysActive: status.alwaysActive,
       uptime: `${Math.floor(status.uptime / 3600)}h ${Math.floor((status.uptime % 3600) / 60)}m`,
       memorySize: status.memorySize,
-      backgroundTasks: status.backgroundTasks.length
+      backgroundTasks: status.backgroundTasks.length,
     });
 
     // Test 2: Check growth metrics
@@ -32,7 +32,7 @@ async function testAutopilotSystem() {
       learningCycles: growthMetrics.learningCycles,
       efficiency: `${(growthMetrics.efficiency * 100).toFixed(1)}%`,
       adaptability: `${(growthMetrics.adaptability * 100).toFixed(1)}%`,
-      growthRate: `${growthMetrics.growthRate.toFixed(2)}/hour`
+      growthRate: `${growthMetrics.growthRate.toFixed(2)}/hour`,
     });
 
     // Test 3: Check memory summary
@@ -57,7 +57,7 @@ async function testAutopilotSystem() {
       id: task.id,
       title: task.title,
       priority: task.priority,
-      status: task.status
+      status: task.status,
     });
 
     // Test 6: Check task status
@@ -67,7 +67,7 @@ async function testAutopilotSystem() {
       id: taskStatus.id,
       title: taskStatus.title,
       status: taskStatus.status,
-      assignedAt: taskStatus.assignedAt.toLocaleTimeString()
+      assignedAt: taskStatus.assignedAt.toLocaleTimeString(),
     });
 
     // Test 7: Get all tasks
@@ -75,7 +75,9 @@ async function testAutopilotSystem() {
     const allTasks = autopilotAgent.getAllTasks();
     console.log(`✅ Total Tasks: ${allTasks.length}`);
     allTasks.forEach((t, index) => {
-      console.log(`  ${index + 1}. ${t.title} (${t.status}) - Priority: ${t.priority}`);
+      console.log(
+        `  ${index + 1}. ${t.title} (${t.status}) - Priority: ${t.priority}`
+      );
     });
 
     // Test 8: Force self-improvement cycle
@@ -94,7 +96,10 @@ async function testAutopilotSystem() {
       await autopilotAgent.forceTelegramUpdate();
       console.log('✅ Telegram update sent');
     } catch (error) {
-      console.log('⚠️ Telegram update failed (Telegram service may not be initialized):', error.message);
+      console.log(
+        '⚠️ Telegram update failed (Telegram service may not be initialized):',
+        error.message
+      );
     }
 
     // Wait a bit for background processes
@@ -107,11 +112,11 @@ async function testAutopilotSystem() {
     const updatedGrowth = autopilotAgent.getGrowthMetrics();
     console.log('✅ Updated Status:', {
       memorySize: updatedStatus.memorySize,
-      backgroundTasks: updatedStatus.backgroundTasks.length
+      backgroundTasks: updatedStatus.backgroundTasks.length,
     });
     console.log('✅ Updated Growth:', {
       learningCycles: updatedGrowth.learningCycles,
-      experiencePoints: updatedGrowth.experiencePoints
+      experiencePoints: updatedGrowth.experiencePoints,
     });
 
     console.log('\n🎉 All tests completed successfully!');
@@ -121,46 +126,59 @@ async function testAutopilotSystem() {
     console.log('✅ Task assignment and processing system is functional');
     console.log('✅ Telegram integration is ready (if service is available)');
     console.log('✅ Background processes are running continuously');
-
   } catch (error) {
     console.error('❌ Test failed:', error);
   }
 }
 
 // Set up event listeners for autopilot events
-autopilotAgent.on('autopilotStarted', (data) => {
+autopilotAgent.on('autopilotStarted', data => {
   console.log('🚀 Autopilot started:', data);
 });
 
-autopilotAgent.on('taskAssigned', (data) => {
+autopilotAgent.on('taskAssigned', data => {
   console.log('🎯 Task assigned:', data.task.title);
 });
 
-autopilotAgent.on('taskCompleted', (data) => {
+autopilotAgent.on('taskCompleted', data => {
   console.log('✅ Task completed:', data.task.title);
 });
 
-autopilotAgent.on('selfImprovementCompleted', (data) => {
-  console.log('🧠 Self-improvement completed:', data.improvementsApplied, 'improvements applied');
+autopilotAgent.on('selfImprovementCompleted', data => {
+  console.log(
+    '🧠 Self-improvement completed:',
+    data.improvementsApplied,
+    'improvements applied'
+  );
 });
 
-autopilotAgent.on('knowledgeAccumulated', (data) => {
+autopilotAgent.on('knowledgeAccumulated', data => {
   console.log('📚 Knowledge accumulated:', data.newKnowledge, 'new items');
 });
 
-autopilotAgent.on('optimizationCompleted', (data) => {
-  console.log('⚡ Optimization completed:', data.optimizationCount, 'total optimizations');
+autopilotAgent.on('optimizationCompleted', data => {
+  console.log(
+    '⚡ Optimization completed:',
+    data.optimizationCount,
+    'total optimizations'
+  );
 });
 
-autopilotAgent.on('growthMetricsUpdated', (data) => {
-  console.log('📈 Growth metrics updated:', data.metrics.growthRate.toFixed(2), '/hour');
+autopilotAgent.on('growthMetricsUpdated', data => {
+  console.log(
+    '📈 Growth metrics updated:',
+    data.metrics.growthRate.toFixed(2),
+    '/hour'
+  );
 });
 
 // Run the tests
-testAutopilotSystem().then(() => {
-  console.log('\n🔚 Test script completed');
-  process.exit(0);
-}).catch((error) => {
-  console.error('💥 Test script failed:', error);
-  process.exit(1);
-});
+testAutopilotSystem()
+  .then(() => {
+    console.log('\n🔚 Test script completed');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('💥 Test script failed:', error);
+    process.exit(1);
+  });

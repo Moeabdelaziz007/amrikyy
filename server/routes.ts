@@ -1,30 +1,55 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { WebSocketServer, WebSocket } from "ws";
-import { generateContent, generatePostContent, chatWithAssistant, analyzeWorkflow } from "./gemini.js";
-import { storage } from "./storage";
-import { insertPostSchema, insertWorkflowSchema, insertUserAgentSchema, insertChatMessageSchema } from "../shared/schema.js";
-import { initializeTelegramBot, getTelegramService } from "./telegram.js";
-import { initializeSmartTelegramBot, getSmartTelegramBot } from "./smart-telegram-bot.js";
-import { getTravelFoodServiceManager } from "./travel-food-services.js";
-import { getSmartLearningAI } from "./smart-learning-ai.js";
-import { getMCPProtocol, initializeMCP } from "./mcp-protocol.js";
-import { getAdvancedAIToolsManager } from "./advanced-ai-tools.js";
-import { getAdvancedAIAgentSystem } from "./advanced-ai-agents.js";
-import { getAdvancedAutomationEngine } from "./advanced-automation.js";
-import { getIntelligentWorkflowOrchestrator } from "./intelligent-workflow.js";
-import { initializeMultiModalAI, getMultiModalAIEngine } from "./multi-modal-ai.js";
-import { initializeRealTimeAIStreaming, getRealTimeAIStreaming } from "./real-time-streaming.js";
-import { initializeAIModelManagement, getAIModelManagementSystem } from "./ai-model-management.js";
-import { initializeLearningSystem, getLearningSystem } from "./learning-automation.js";
-import { getEnterpriseTeamManager } from "./enterprise-team-management.js";
-import { getEnterpriseAdminDashboard } from "./enterprise-admin-dashboard.js";
-import { getEnterpriseCollaborationSystem } from "./enterprise-collaboration.js";
-import { getEnhancedTravelAgency } from "./enhanced-travel-agency.js";
-import { getTravelDashboard } from "./travel-dashboard.js";
-import { getN8nNodeSystem } from "./n8n-node-system.js";
-import { getN8nIntegrationManager } from "./n8n-integrations.js";
-import { getAIPromptManager } from "./ai-prompt-manager.js";
+import type { Express } from 'express';
+import { createServer, type Server } from 'http';
+import { WebSocketServer, WebSocket } from 'ws';
+import {
+  generateContent,
+  generatePostContent,
+  chatWithAssistant,
+  analyzeWorkflow,
+} from './gemini.js';
+import { storage } from './storage';
+import {
+  insertPostSchema,
+  insertWorkflowSchema,
+  insertUserAgentSchema,
+  insertChatMessageSchema,
+} from '../shared/schema.js';
+import { initializeTelegramBot, getTelegramService } from './telegram.js';
+import {
+  initializeSmartTelegramBot,
+  getSmartTelegramBot,
+} from './smart-telegram-bot.js';
+import { getTravelFoodServiceManager } from './travel-food-services.js';
+import { getSmartLearningAI } from './smart-learning-ai.js';
+import { getMCPProtocol, initializeMCP } from './mcp-protocol.js';
+import { getAdvancedAIToolsManager } from './advanced-ai-tools.js';
+import { getAdvancedAIAgentSystem } from './advanced-ai-agents.js';
+import { getAdvancedAutomationEngine } from './advanced-automation.js';
+import { getIntelligentWorkflowOrchestrator } from './intelligent-workflow.js';
+import {
+  initializeMultiModalAI,
+  getMultiModalAIEngine,
+} from './multi-modal-ai.js';
+import {
+  initializeRealTimeAIStreaming,
+  getRealTimeAIStreaming,
+} from './real-time-streaming.js';
+import {
+  initializeAIModelManagement,
+  getAIModelManagementSystem,
+} from './ai-model-management.js';
+import {
+  initializeLearningSystem,
+  getLearningSystem,
+} from './learning-automation.js';
+import { getEnterpriseTeamManager } from './enterprise-team-management.js';
+import { getEnterpriseAdminDashboard } from './enterprise-admin-dashboard.js';
+import { getEnterpriseCollaborationSystem } from './enterprise-collaboration.js';
+import { getEnhancedTravelAgency } from './enhanced-travel-agency.js';
+import { getTravelDashboard } from './travel-dashboard.js';
+import { getN8nNodeSystem } from './n8n-node-system.js';
+import { getN8nIntegrationManager } from './n8n-integrations.js';
+import { getAIPromptManager } from './ai-prompt-manager.js';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
@@ -103,27 +128,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }
 
   // WebSocket server for real-time updates
-  const wss = new WebSocketServer({ 
-    server: httpServer, 
+  const wss = new WebSocketServer({
+    server: httpServer,
     path: '/ws',
-    perMessageDeflate: true
+    perMessageDeflate: true,
   });
-  
+
   const clients = new Set<WebSocket>();
 
   wss.on('connection', (ws, request) => {
-    console.log('🔗 New WebSocket connection from:', request.headers.origin || request.socket.remoteAddress);
+    console.log(
+      '🔗 New WebSocket connection from:',
+      request.headers.origin || request.socket.remoteAddress
+    );
     clients.add(ws);
-    
+
     // Send welcome message
-    ws.send(JSON.stringify({
-      type: 'connection',
-      message: 'Connected to AuraOS WebSocket',
-      timestamp: new Date().toISOString()
-    }));
+    ws.send(
+      JSON.stringify({
+        type: 'connection',
+        message: 'Connected to AuraOS WebSocket',
+        timestamp: new Date().toISOString(),
+      })
+    );
 
     // Handle ping/pong for heartbeat
-    ws.on('message', (data) => {
+    ws.on('message', data => {
       try {
         const message = JSON.parse(data.toString());
         if (message.type === 'ping') {
@@ -133,13 +163,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.error('Error parsing WebSocket message:', error);
       }
     });
-    
+
     ws.on('close', (code, reason) => {
       console.log('🔌 WebSocket disconnected:', code, reason.toString());
       clients.delete(ws);
     });
 
-    ws.on('error', (error) => {
+    ws.on('error', error => {
       console.error('❌ WebSocket error:', error);
       clients.delete(ws);
     });
@@ -164,56 +194,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     broadcast({
       type: 'heartbeat',
       timestamp: Date.now(),
-      activeConnections: clients.size
+      activeConnections: clients.size,
     });
   }, 30000); // Every 30 seconds
 
   // Learning System Integration with WebSocket
   const learningSystem = getLearningSystem();
-  
+
   // Listen for learning events and broadcast them
-  learningSystem.on('levelUp', (data) => {
+  learningSystem.on('levelUp', data => {
     broadcast({
       type: 'levelUp',
       ...data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
-  learningSystem.on('badgeUnlocked', (data) => {
+  learningSystem.on('badgeUnlocked', data => {
     broadcast({
       type: 'badgeUnlocked',
       ...data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
-  learningSystem.on('achievementUnlocked', (data) => {
+  learningSystem.on('achievementUnlocked', data => {
     broadcast({
       type: 'achievementUnlocked',
       ...data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
   // Autopilot System Integration with WebSocket
   const automationEngine = getAdvancedAutomationEngine();
   const orchestrator = getIntelligentWorkflowOrchestrator();
-  
+
   // Subscribe to autopilot updates and broadcast them
-  automationEngine.subscribeToUpdates((status) => {
+  automationEngine.subscribeToUpdates(status => {
     broadcast({
       type: 'autopilot_update',
       data: status,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
-  orchestrator.subscribeToWorkflowUpdates((status) => {
+  orchestrator.subscribeToWorkflowUpdates(status => {
     broadcast({
       type: 'workflow_update',
       data: status,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
@@ -225,27 +255,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const travelDashboard = getTravelDashboard();
 
   // Subscribe to enterprise updates and broadcast them
-  adminDashboard.subscribeToUpdates((update) => {
+  adminDashboard.subscribeToUpdates(update => {
     broadcast({
       type: 'admin_dashboard_update',
       data: update,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
-  collaborationSystem.subscribeToUpdates((update) => {
+  collaborationSystem.subscribeToUpdates(update => {
     broadcast({
       type: 'collaboration_update',
       data: update,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
-  travelDashboard.subscribeToUpdates((update) => {
+  travelDashboard.subscribeToUpdates(update => {
     broadcast({
       type: 'travel_dashboard_update',
       data: update,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   });
 
@@ -301,7 +331,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const recommendations = learningSystem.getUserRecommendations(userId);
       res.json(recommendations);
     } catch (error) {
-      res.status(500).json({ message: 'Failed to get learning recommendations' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get learning recommendations' });
     }
   });
 
@@ -348,10 +380,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertPostSchema.parse(req.body);
       const post = await storage.createPost(validatedData);
-      
+
       // Broadcast new post to all connected clients
       broadcast({ type: 'new_post', data: post });
-      
+
       res.status(201).json(post);
     } catch (error) {
       res.status(400).json({ message: 'Invalid post data' });
@@ -365,12 +397,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!post) {
         return res.status(404).json({ message: 'Post not found' });
       }
-      
+
       const newLikes = post.likes + 1;
       await storage.updatePostStats(id, newLikes, post.shares, post.comments);
-      
+
       broadcast({ type: 'post_liked', data: { postId: id, likes: newLikes } });
-      
+
       res.json({ likes: newLikes });
     } catch (error) {
       res.status(500).json({ message: 'Failed to like post' });
@@ -381,23 +413,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/generate-content', async (req, res) => {
     try {
       const { prompt, type = 'post' } = req.body;
-      
+
       if (!prompt) {
         return res.status(400).json({ message: 'Prompt is required' });
       }
 
-      const systemPrompt = type === 'post' 
-        ? 'You are a social media content creator. Generate engaging, professional social media posts. Respond with JSON in this format: {"content": "your generated content", "hashtags": ["tag1", "tag2"]}'
-        : 'You are a helpful AI assistant. Provide helpful and informative responses. Respond with JSON in this format: {"response": "your response"}';
+      const systemPrompt =
+        type === 'post'
+          ? 'You are a social media content creator. Generate engaging, professional social media posts. Respond with JSON in this format: {"content": "your generated content", "hashtags": ["tag1", "tag2"]}'
+          : 'You are a helpful AI assistant. Provide helpful and informative responses. Respond with JSON in this format: {"response": "your response"}';
 
       // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
       const response = await openai.chat.completions.create({
-        model: "gpt-5",
+        model: 'gpt-5',
         messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: prompt }
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt },
         ],
-        response_format: { type: "json_object" },
+        response_format: { type: 'json_object' },
       });
 
       const result = JSON.parse(response.choices[0].message.content || '{}');
@@ -431,7 +464,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // User Agents routes
   app.get('/api/user-agents', async (req, res) => {
     try {
-      const userId = req.query.userId as string || 'user-1';
+      const userId = (req.query.userId as string) || 'user-1';
       const agents = await storage.getUserAgents(userId);
       res.json(agents);
     } catch (error) {
@@ -452,7 +485,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Workflows routes
   app.get('/api/workflows', async (req, res) => {
     try {
-      const userId = req.query.userId as string || 'user-1';
+      const userId = (req.query.userId as string) || 'user-1';
       const workflows = await storage.getWorkflowsByUser(userId);
       res.json(workflows);
     } catch (error) {
@@ -495,31 +528,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/chat', async (req, res) => {
     try {
       const { message, userId = 'user-1' } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ message: 'Message is required' });
       }
 
       // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
       const response = await openai.chat.completions.create({
-        model: "gpt-5",
+        model: 'gpt-5',
         messages: [
-          { 
-            role: "system", 
-            content: "You are a helpful AI assistant for AIFlow, a social media automation platform. Help users with content creation, automation setup, and platform features. Respond with JSON in this format: {\"response\": \"your helpful response\"}" 
+          {
+            role: 'system',
+            content:
+              'You are a helpful AI assistant for AIFlow, a social media automation platform. Help users with content creation, automation setup, and platform features. Respond with JSON in this format: {"response": "your helpful response"}',
           },
-          { role: "user", content: message }
+          { role: 'user', content: message },
         ],
-        response_format: { type: "json_object" },
+        response_format: { type: 'json_object' },
       });
 
-      const aiResponse = JSON.parse(response.choices[0].message.content || '{}');
-      
+      const aiResponse = JSON.parse(
+        response.choices[0].message.content || '{}'
+      );
+
       // Save chat message
       await storage.createChatMessage({
         userId,
         message,
-        response: aiResponse.response
+        response: aiResponse.response,
       });
 
       res.json(aiResponse);
@@ -531,7 +567,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/chat/history', async (req, res) => {
     try {
-      const userId = req.query.userId as string || 'user-1';
+      const userId = (req.query.userId as string) || 'user-1';
       const limit = parseInt(req.query.limit as string) || 20;
       const messages = await storage.getChatMessages(userId, limit);
       res.json(messages);
@@ -545,7 +581,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const telegramService = getTelegramService();
       if (!telegramService) {
-        return res.status(404).json({ message: 'Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Telegram bot not initialized' });
       }
 
       const botInfo = await telegramService.getBotInfo();
@@ -558,8 +596,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           username: botInfo.username,
           firstName: botInfo.first_name,
           canJoinGroups: botInfo.can_join_groups,
-          canReadAllGroupMessages: botInfo.can_read_all_group_messages
-        }
+          canReadAllGroupMessages: botInfo.can_read_all_group_messages,
+        },
       });
     } catch (error) {
       res.status(500).json({ message: 'Failed to get Telegram bot status' });
@@ -569,17 +607,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/telegram/send-message', async (req, res) => {
     try {
       const { chatId, message, options } = req.body;
-      
+
       if (!chatId || !message) {
-        return res.status(400).json({ message: 'chatId and message are required' });
+        return res
+          .status(400)
+          .json({ message: 'chatId and message are required' });
       }
 
       const telegramService = getTelegramService();
       if (!telegramService) {
-        return res.status(404).json({ message: 'Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Telegram bot not initialized' });
       }
 
-      const result = await telegramService.sendMessage(chatId, message, options);
+      const result = await telegramService.sendMessage(
+        chatId,
+        message,
+        options
+      );
       res.json({ success: true, messageId: result.message_id });
     } catch (error) {
       console.error('Telegram send message error:', error);
@@ -590,17 +636,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/telegram/send-photo', async (req, res) => {
     try {
       const { chatId, photo, caption, options } = req.body;
-      
+
       if (!chatId || !photo) {
-        return res.status(400).json({ message: 'chatId and photo are required' });
+        return res
+          .status(400)
+          .json({ message: 'chatId and photo are required' });
       }
 
       const telegramService = getTelegramService();
       if (!telegramService) {
-        return res.status(404).json({ message: 'Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Telegram bot not initialized' });
       }
 
-      const result = await telegramService.sendPhoto(chatId, photo, { caption, ...options });
+      const result = await telegramService.sendPhoto(chatId, photo, {
+        caption,
+        ...options,
+      });
       res.json({ success: true, messageId: result.message_id });
     } catch (error) {
       console.error('Telegram send photo error:', error);
@@ -611,20 +664,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/telegram/broadcast', async (req, res) => {
     try {
       const { message, chatIds, options } = req.body;
-      
+
       if (!message || !Array.isArray(chatIds)) {
-        return res.status(400).json({ message: 'message and chatIds array are required' });
+        return res
+          .status(400)
+          .json({ message: 'message and chatIds array are required' });
       }
 
       const telegramService = getTelegramService();
       if (!telegramService) {
-        return res.status(404).json({ message: 'Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Telegram bot not initialized' });
       }
 
       const results = [];
       for (const chatId of chatIds) {
         try {
-          const result = await telegramService.sendMessage(chatId, message, options);
+          const result = await telegramService.sendMessage(
+            chatId,
+            message,
+            options
+          );
           results.push({ chatId, success: true, messageId: result.message_id });
         } catch (error) {
           results.push({ chatId, success: false, error: error.message });
@@ -634,17 +695,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, results });
     } catch (error) {
       console.error('Telegram broadcast error:', error);
-      res.status(500).json({ message: 'Failed to broadcast Telegram messages' });
+      res
+        .status(500)
+        .json({ message: 'Failed to broadcast Telegram messages' });
     }
   });
 
   // Smart Learning AI Meta Loop API routes
   app.post('/api/ai/smart-learning', async (req, res) => {
     try {
-      const { userId, taskType, inputData, expectedOutput, metadata } = req.body;
-      
+      const { userId, taskType, inputData, expectedOutput, metadata } =
+        req.body;
+
       if (!userId || !taskType || !inputData) {
-        return res.status(400).json({ message: 'userId, taskType, and inputData are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId, taskType, and inputData are required' });
       }
 
       const smartAI = getSmartLearningAI();
@@ -655,14 +721,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         inputData,
         expectedOutput,
         timestamp: new Date(),
-        metadata: metadata || {}
+        metadata: metadata || {},
       };
 
       const result = await smartAI.processLearningRequest(context);
       res.json(result);
     } catch (error) {
       console.error('Smart learning error:', error);
-      res.status(500).json({ message: 'Failed to process smart learning request' });
+      res
+        .status(500)
+        .json({ message: 'Failed to process smart learning request' });
     }
   });
 
@@ -671,7 +739,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { userId } = req.params;
       const smartAI = getSmartLearningAI();
       const state = await smartAI.getLearningState(userId);
-      
+
       if (!state) {
         return res.status(404).json({ message: 'Learning state not found' });
       }
@@ -688,9 +756,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { userId } = req.params;
       const smartAI = getSmartLearningAI();
       const metrics = await smartAI.getPerformanceMetrics(userId);
-      
+
       if (!metrics) {
-        return res.status(404).json({ message: 'Performance metrics not found' });
+        return res
+          .status(404)
+          .json({ message: 'Performance metrics not found' });
       }
 
       res.json(metrics);
@@ -703,9 +773,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/zero-shot/content-generation', async (req, res) => {
     try {
       const { userId, prompt, topic, style } = req.body;
-      
+
       if (!userId || !prompt) {
-        return res.status(400).json({ message: 'userId and prompt are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId and prompt are required' });
       }
 
       const smartAI = getSmartLearningAI();
@@ -715,7 +787,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         taskType: 'content_generation',
         inputData: prompt,
         timestamp: new Date(),
-        metadata: { topic, style }
+        metadata: { topic, style },
       };
 
       const result = await smartAI.processLearningRequest(context);
@@ -729,9 +801,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/zero-shot/sentiment-analysis', async (req, res) => {
     try {
       const { userId, text } = req.body;
-      
+
       if (!userId || !text) {
-        return res.status(400).json({ message: 'userId and text are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId and text are required' });
       }
 
       const smartAI = getSmartLearningAI();
@@ -741,7 +815,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         taskType: 'sentiment_analysis',
         inputData: text,
         timestamp: new Date(),
-        metadata: {}
+        metadata: {},
       };
 
       const result = await smartAI.processLearningRequest(context);
@@ -755,9 +829,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/zero-shot/intent-classification', async (req, res) => {
     try {
       const { userId, text } = req.body;
-      
+
       if (!userId || !text) {
-        return res.status(400).json({ message: 'userId and text are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId and text are required' });
       }
 
       const smartAI = getSmartLearningAI();
@@ -767,7 +843,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         taskType: 'intent_classification',
         inputData: text,
         timestamp: new Date(),
-        metadata: {}
+        metadata: {},
       };
 
       const result = await smartAI.processLearningRequest(context);
@@ -781,9 +857,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/zero-shot/style-transfer', async (req, res) => {
     try {
       const { userId, text, targetStyle } = req.body;
-      
+
       if (!userId || !text || !targetStyle) {
-        return res.status(400).json({ message: 'userId, text, and targetStyle are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId, text, and targetStyle are required' });
       }
 
       const smartAI = getSmartLearningAI();
@@ -793,7 +871,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         taskType: 'style_transfer',
         inputData: text,
         timestamp: new Date(),
-        metadata: { style: targetStyle }
+        metadata: { style: targetStyle },
       };
 
       const result = await smartAI.processLearningRequest(context);
@@ -807,14 +885,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/feedback', async (req, res) => {
     try {
       const { userId, sessionId, feedback, taskType } = req.body;
-      
+
       if (!userId || !sessionId || feedback === undefined) {
-        return res.status(400).json({ message: 'userId, sessionId, and feedback are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId, sessionId, and feedback are required' });
       }
 
       const smartAI = getSmartLearningAI();
       const state = await smartAI.getLearningState(userId);
-      
+
       if (!state) {
         return res.status(404).json({ message: 'Learning state not found' });
       }
@@ -827,7 +907,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         inputData: {},
         feedback: feedback,
         timestamp: new Date(),
-        metadata: { feedbackType: 'user_feedback' }
+        metadata: { feedbackType: 'user_feedback' },
       };
 
       // This would update the learning state with feedback
@@ -842,7 +922,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const smartAI = getSmartLearningAI();
-      
+
       await smartAI.resetLearningState(userId);
       res.json({ success: true, message: 'Learning state reset successfully' });
     } catch (error) {
@@ -855,7 +935,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const smartAI = getSmartLearningAI();
-      
+
       const data = await smartAI.exportLearningData(userId);
       res.json({ data });
     } catch (error) {
@@ -868,15 +948,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { userId } = req.params;
       const { data } = req.body;
-      
+
       if (!data) {
         return res.status(400).json({ message: 'Data is required' });
       }
 
       const smartAI = getSmartLearningAI();
       await smartAI.importLearningData(userId, data);
-      
-      res.json({ success: true, message: 'Learning data imported successfully' });
+
+      res.json({
+        success: true,
+        message: 'Learning data imported successfully',
+      });
     } catch (error) {
       console.error('Import learning error:', error);
       res.status(500).json({ message: 'Failed to import learning data' });
@@ -899,11 +982,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { id } = req.params;
       const travelServiceManager = getTravelFoodServiceManager();
       const service = travelServiceManager.getTravelService(id);
-      
+
       if (!service) {
         return res.status(404).json({ message: 'Travel service not found' });
       }
-      
+
       res.json(service);
     } catch (error) {
       res.status(500).json({ message: 'Failed to get travel service' });
@@ -913,22 +996,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/travel/recommendations', async (req, res) => {
     try {
       const { destination, budget, preferences } = req.body;
-      
+
       if (!destination || !budget) {
-        return res.status(400).json({ message: 'destination and budget are required' });
+        return res
+          .status(400)
+          .json({ message: 'destination and budget are required' });
       }
 
       const travelServiceManager = getTravelFoodServiceManager();
-      const recommendations = await travelServiceManager.generateTravelRecommendations(
-        destination, 
-        budget, 
-        preferences || {}
-      );
-      
+      const recommendations =
+        await travelServiceManager.generateTravelRecommendations(
+          destination,
+          budget,
+          preferences || {}
+        );
+
       res.json(recommendations);
     } catch (error) {
       console.error('Travel recommendations error:', error);
-      res.status(500).json({ message: 'Failed to generate travel recommendations' });
+      res
+        .status(500)
+        .json({ message: 'Failed to generate travel recommendations' });
     }
   });
 
@@ -948,11 +1036,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { id } = req.params;
       const travelFoodServiceManager = getTravelFoodServiceManager();
       const service = travelFoodServiceManager.getFoodService(id);
-      
+
       if (!service) {
         return res.status(404).json({ message: 'Food service not found' });
       }
-      
+
       res.json(service);
     } catch (error) {
       res.status(500).json({ message: 'Failed to get food service' });
@@ -962,22 +1050,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/food/recommendations', async (req, res) => {
     try {
       const { location, budget, preferences } = req.body;
-      
+
       if (!location || !budget) {
-        return res.status(400).json({ message: 'location and budget are required' });
+        return res
+          .status(400)
+          .json({ message: 'location and budget are required' });
       }
 
       const travelFoodServiceManager = getTravelFoodServiceManager();
-      const recommendations = await travelFoodServiceManager.generateFoodRecommendations(
-        location, 
-        budget, 
-        preferences || {}
-      );
-      
+      const recommendations =
+        await travelFoodServiceManager.generateFoodRecommendations(
+          location,
+          budget,
+          preferences || {}
+        );
+
       res.json(recommendations);
     } catch (error) {
       console.error('Food recommendations error:', error);
-      res.status(500).json({ message: 'Failed to generate food recommendations' });
+      res
+        .status(500)
+        .json({ message: 'Failed to generate food recommendations' });
     }
   });
 
@@ -997,11 +1090,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { id } = req.params;
       const travelFoodServiceManager = getTravelFoodServiceManager();
       const agent = travelFoodServiceManager.getSmartAgent(id);
-      
+
       if (!agent) {
         return res.status(404).json({ message: 'Smart agent not found' });
       }
-      
+
       res.json(agent);
     } catch (error) {
       res.status(500).json({ message: 'Failed to get smart agent' });
@@ -1010,10 +1103,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/shopping/agents', async (req, res) => {
     try {
-      const { name, category, capabilities, integrations, automationRules } = req.body;
-      
+      const { name, category, capabilities, integrations, automationRules } =
+        req.body;
+
       if (!name || !category) {
-        return res.status(400).json({ message: 'name and category are required' });
+        return res
+          .status(400)
+          .json({ message: 'name and category are required' });
       }
 
       const travelFoodServiceManager = getTravelFoodServiceManager();
@@ -1024,7 +1120,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         integrations || [],
         automationRules || []
       );
-      
+
       res.status(201).json(agent);
     } catch (error) {
       console.error('Create smart agent error:', error);
@@ -1036,9 +1132,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/automation/travel-workflow', async (req, res) => {
     try {
       const { destination, budget, preferences, automationRules } = req.body;
-      
+
       if (!destination || !budget) {
-        return res.status(400).json({ message: 'destination and budget are required' });
+        return res
+          .status(400)
+          .json({ message: 'destination and budget are required' });
       }
 
       // Create travel automation workflow
@@ -1054,10 +1152,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Auto-book when price drops',
           'Send deal alerts',
           'Manage hotel reservations',
-          'Coordinate activities'
+          'Coordinate activities',
         ],
         status: 'active',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       // Save workflow to database
@@ -1068,7 +1166,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         steps: workflow.automationRules,
         isActive: true,
         triggerType: 'schedule',
-        triggerConfig: JSON.stringify({ frequency: 'daily' })
+        triggerConfig: JSON.stringify({ frequency: 'daily' }),
       });
 
       res.status(201).json(workflow);
@@ -1081,9 +1179,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/automation/food-workflow', async (req, res) => {
     try {
       const { location, budget, preferences, automationRules } = req.body;
-      
+
       if (!location || !budget) {
-        return res.status(400).json({ message: 'location and budget are required' });
+        return res
+          .status(400)
+          .json({ message: 'location and budget are required' });
       }
 
       // Create food automation workflow
@@ -1099,10 +1199,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           'Auto-order repeat meals',
           'Send food recommendations',
           'Manage grocery lists',
-          'Track dietary preferences'
+          'Track dietary preferences',
         ],
         status: 'active',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       // Save workflow to database
@@ -1113,7 +1213,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         steps: workflow.automationRules,
         isActive: true,
         triggerType: 'schedule',
-        triggerConfig: JSON.stringify({ frequency: 'daily' })
+        triggerConfig: JSON.stringify({ frequency: 'daily' }),
       });
 
       res.status(201).json(workflow);
@@ -1147,9 +1247,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/automation/engine/rules', async (req, res) => {
     try {
       const { name, condition, action, enabled } = req.body;
-      
+
       if (!name || !condition || !action) {
-        return res.status(400).json({ message: 'name, condition, and action are required' });
+        return res
+          .status(400)
+          .json({ message: 'name, condition, and action are required' });
       }
 
       const automationEngine = getAdvancedAutomationEngine();
@@ -1160,7 +1262,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         action,
         enabled: enabled !== false,
         successRate: 0.0,
-        executionCount: 0
+        executionCount: 0,
       };
 
       automationEngine.addAutomationRule(rule);
@@ -1176,13 +1278,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const automationEngine = getAdvancedAutomationEngine();
       const orchestrator = getIntelligentWorkflowOrchestrator();
-      
+
       const liveStatus = {
         automation: automationEngine.getLiveStatus(),
         workflows: orchestrator.getLiveStatus(),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
-      
+
       res.json(liveStatus);
     } catch (error) {
       console.error('Get live status error:', error);
@@ -1193,18 +1295,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/autopilot/emergency-stop', async (req, res) => {
     try {
       const { stop } = req.body;
-      
+
       if (typeof stop !== 'boolean') {
-        return res.status(400).json({ message: 'stop parameter must be a boolean' });
+        return res
+          .status(400)
+          .json({ message: 'stop parameter must be a boolean' });
       }
 
       const automationEngine = getAdvancedAutomationEngine();
       automationEngine.setEmergencyStop(stop);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         emergencyStop: stop,
-        message: `Autopilot ${stop ? 'stopped' : 'resumed'}` 
+        message: `Autopilot ${stop ? 'stopped' : 'resumed'}`,
       });
     } catch (error) {
       console.error('Emergency stop error:', error);
@@ -1216,20 +1320,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { ruleId } = req.params;
       const { enabled } = req.body;
-      
+
       if (typeof enabled !== 'boolean') {
-        return res.status(400).json({ message: 'enabled parameter must be a boolean' });
+        return res
+          .status(400)
+          .json({ message: 'enabled parameter must be a boolean' });
       }
 
       const automationEngine = getAdvancedAutomationEngine();
       const success = automationEngine.toggleRule(ruleId, enabled);
-      
+
       if (success) {
-        res.json({ 
-          success: true, 
-          ruleId, 
+        res.json({
+          success: true,
+          ruleId,
           enabled,
-          message: `Rule ${enabled ? 'enabled' : 'disabled'}` 
+          message: `Rule ${enabled ? 'enabled' : 'disabled'}`,
         });
       } else {
         res.status(404).json({ message: 'Rule not found' });
@@ -1244,15 +1350,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { ruleId } = req.params;
       const { override } = req.body;
-      
+
       const automationEngine = getAdvancedAutomationEngine();
       automationEngine.setUserOverride(ruleId, override);
-      
-      res.json({ 
-        success: true, 
-        ruleId, 
+
+      res.json({
+        success: true,
+        ruleId,
         override,
-        message: 'User override set successfully' 
+        message: 'User override set successfully',
       });
     } catch (error) {
       console.error('Set override error:', error);
@@ -1263,14 +1369,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete('/api/autopilot/rule/:ruleId/override', async (req, res) => {
     try {
       const { ruleId } = req.params;
-      
+
       const automationEngine = getAdvancedAutomationEngine();
       automationEngine.clearUserOverride(ruleId);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         ruleId,
-        message: 'User override cleared successfully' 
+        message: 'User override cleared successfully',
       });
     } catch (error) {
       console.error('Clear override error:', error);
@@ -1282,15 +1388,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/workflows/:workflowId/pause', async (req, res) => {
     try {
       const { workflowId } = req.params;
-      
+
       const orchestrator = getIntelligentWorkflowOrchestrator();
       const success = orchestrator.pauseWorkflow(workflowId);
-      
+
       if (success) {
-        res.json({ 
-          success: true, 
+        res.json({
+          success: true,
           workflowId,
-          message: 'Workflow paused successfully' 
+          message: 'Workflow paused successfully',
         });
       } else {
         res.status(404).json({ message: 'Workflow not found' });
@@ -1304,15 +1410,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/workflows/:workflowId/resume', async (req, res) => {
     try {
       const { workflowId } = req.params;
-      
+
       const orchestrator = getIntelligentWorkflowOrchestrator();
       const success = orchestrator.resumeWorkflow(workflowId);
-      
+
       if (success) {
-        res.json({ 
-          success: true, 
+        res.json({
+          success: true,
           workflowId,
-          message: 'Workflow resumed successfully' 
+          message: 'Workflow resumed successfully',
         });
       } else {
         res.status(404).json({ message: 'Workflow not found' });
@@ -1326,10 +1432,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/workflows/:workflowId/status', async (req, res) => {
     try {
       const { workflowId } = req.params;
-      
+
       const orchestrator = getIntelligentWorkflowOrchestrator();
       const status = orchestrator.getWorkflowStatus(workflowId);
-      
+
       if (status) {
         res.json(status);
       } else {
@@ -1355,18 +1461,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/workflows/intelligent/create', async (req, res) => {
     try {
       const { name, type, steps, triggers } = req.body;
-      
+
       if (!name || !type || !steps || !triggers) {
-        return res.status(400).json({ message: 'name, type, steps, and triggers are required' });
+        return res
+          .status(400)
+          .json({ message: 'name, type, steps, and triggers are required' });
       }
 
       const orchestrator = getIntelligentWorkflowOrchestrator();
-      const workflow = await orchestrator.createCustomWorkflow(name, type, steps, triggers);
-      
+      const workflow = await orchestrator.createCustomWorkflow(
+        name,
+        type,
+        steps,
+        triggers
+      );
+
       res.status(201).json(workflow);
     } catch (error) {
       console.error('Create intelligent workflow error:', error);
-      res.status(500).json({ message: 'Failed to create intelligent workflow' });
+      res
+        .status(500)
+        .json({ message: 'Failed to create intelligent workflow' });
     }
   });
 
@@ -1375,7 +1490,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const automationEngine = getAdvancedAutomationEngine();
       const orchestrator = getIntelligentWorkflowOrchestrator();
-      
+
       const overview = {
         automation: automationEngine.getAutomationStats(),
         workflows: orchestrator.getWorkflowStats(),
@@ -1383,35 +1498,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
           status: 'excellent',
           uptime: '99.9%',
           performance: 'optimal',
-          aiLearning: 'active'
+          aiLearning: 'active',
         },
         capabilities: {
           predictiveAnalytics: true,
           intelligentAutomation: true,
           selfOptimization: true,
           adaptiveLearning: true,
-          realTimeDecisionMaking: true
+          realTimeDecisionMaking: true,
         },
         metrics: {
           totalAutomations: automationEngine.getAutomationStats().totalRules,
           activeWorkflows: orchestrator.getWorkflowStats().activeWorkflows,
           aiAccuracy: 0.94,
           systemEfficiency: 0.96,
-          userSatisfaction: 0.92
-        }
+          userSatisfaction: 0.92,
+        },
       };
 
       res.json(overview);
     } catch (error) {
       console.error('System intelligence overview error:', error);
-      res.status(500).json({ message: 'Failed to get system intelligence overview' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get system intelligence overview' });
     }
   });
 
   app.post('/api/system/intelligence/optimize', async (req, res) => {
     try {
       const { category, parameters } = req.body;
-      
+
       if (!category) {
         return res.status(400).json({ message: 'category is required' });
       }
@@ -1424,7 +1541,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         status: 'running',
         estimatedTime: '5-10 minutes',
         expectedImprovement: '15-25%',
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
 
       res.status(201).json(optimization);
@@ -1438,9 +1555,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/decision', async (req, res) => {
     try {
       const { context, options, criteria } = req.body;
-      
+
       if (!context || !options) {
-        return res.status(400).json({ message: 'context and options are required' });
+        return res
+          .status(400)
+          .json({ message: 'context and options are required' });
       }
 
       // Simulate AI decision making
@@ -1453,14 +1572,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           option: options[Math.floor(Math.random() * options.length)],
           confidence: Math.random() * 0.3 + 0.7, // 70-100% confidence
           reasoning: 'AI analysis based on historical data and current context',
-          expectedOutcome: 'Optimized performance with minimal risk'
+          expectedOutcome: 'Optimized performance with minimal risk',
         },
         alternatives: options.slice(0, 2).map(opt => ({
           option: opt,
           confidence: Math.random() * 0.2 + 0.6,
-          tradeoffs: ['Lower efficiency', 'Higher cost']
+          tradeoffs: ['Lower efficiency', 'Higher cost'],
         })),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       res.json(decision);
@@ -1474,9 +1593,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/analytics/predict', async (req, res) => {
     try {
       const { type, timeframe, parameters } = req.body;
-      
+
       if (!type || !timeframe) {
-        return res.status(400).json({ message: 'type and timeframe are required' });
+        return res
+          .status(400)
+          .json({ message: 'type and timeframe are required' });
       }
 
       // Simulate predictive analytics
@@ -1490,36 +1611,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
             metric: 'user_engagement',
             value: Math.random() * 20 + 80, // 80-100
             confidence: Math.random() * 0.2 + 0.8,
-            trend: 'increasing'
+            trend: 'increasing',
           },
           {
             metric: 'system_load',
             value: Math.random() * 30 + 40, // 40-70
             confidence: Math.random() * 0.15 + 0.85,
-            trend: 'stable'
+            trend: 'stable',
           },
           {
             metric: 'cost_optimization',
             value: Math.random() * 15 + 10, // 10-25
             confidence: Math.random() * 0.25 + 0.75,
-            trend: 'decreasing'
-          }
+            trend: 'decreasing',
+          },
         ],
         recommendations: [
           {
             action: 'Scale up automation workflows',
             priority: 'high',
             expectedImpact: '20% improvement in efficiency',
-            confidence: 0.87
+            confidence: 0.87,
           },
           {
             action: 'Optimize resource allocation',
             priority: 'medium',
             expectedImpact: '15% cost reduction',
-            confidence: 0.82
-          }
+            confidence: 0.82,
+          },
         ],
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       res.json(prediction);
@@ -1534,7 +1655,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const smartBot = getSmartTelegramBot();
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContexts = smartBot.getAllUserContexts();
@@ -1544,18 +1667,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         connected: true,
         activeUsers: userContexts.length,
         learningData: {
-          conversationPatterns: Array.from(learningData.get('conversation_patterns')?.keys() || []),
-          userPreferences: Array.from(learningData.get('user_preferences')?.keys() || []),
-          responseEffectiveness: Array.from(learningData.get('response_effectiveness')?.keys() || [])
+          conversationPatterns: Array.from(
+            learningData.get('conversation_patterns')?.keys() || []
+          ),
+          userPreferences: Array.from(
+            learningData.get('user_preferences')?.keys() || []
+          ),
+          responseEffectiveness: Array.from(
+            learningData.get('response_effectiveness')?.keys() || []
+          ),
         },
         botInfo: {
           name: 'Smart Learning Bot',
-          capabilities: ['learning', 'ai_tools', 'personalization', 'continuous_improvement']
-        }
+          capabilities: [
+            'learning',
+            'ai_tools',
+            'personalization',
+            'continuous_improvement',
+          ],
+        },
       });
     } catch (error) {
       console.error('Smart Telegram status error:', error);
-      res.status(500).json({ message: 'Failed to get smart Telegram bot status' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get smart Telegram bot status' });
     }
   });
 
@@ -1563,7 +1699,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const smartBot = getSmartTelegramBot();
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContexts = smartBot.getAllUserContexts();
@@ -1578,7 +1716,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalMessages: context.conversationHistory.length,
         lastInteraction: context.lastInteraction,
         topics: context.preferences.topics,
-        goals: context.learningProfile.goals
+        goals: context.learningProfile.goals,
       }));
 
       res.json(users);
@@ -1592,9 +1730,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { chatId } = req.params;
       const smartBot = getSmartTelegramBot();
-      
+
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContext = smartBot.getUserContext(parseInt(chatId));
@@ -1618,7 +1758,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         strengths: userContext.learningProfile.strengths,
         weaknesses: userContext.learningProfile.weaknesses,
         conversationHistory: userContext.conversationHistory.slice(-10), // Last 10 messages
-        lastInteraction: userContext.lastInteraction
+        lastInteraction: userContext.lastInteraction,
       });
     } catch (error) {
       console.error('Smart Telegram user error:', error);
@@ -1629,24 +1769,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/telegram/smart/learn', async (req, res) => {
     try {
       const { chatId, message, context } = req.body;
-      
+
       if (!chatId || !message) {
-        return res.status(400).json({ message: 'chatId and message are required' });
+        return res
+          .status(400)
+          .json({ message: 'chatId and message are required' });
       }
 
       const smartBot = getSmartTelegramBot();
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContext = smartBot.getUserContext(chatId);
       if (!userContext) {
-        return res.status(404).json({ message: 'User not found. Please start the bot first.' });
+        return res
+          .status(404)
+          .json({ message: 'User not found. Please start the bot first.' });
       }
 
       // Process message with smart learning
-      const response = await smartBot.processMessageWithAI(userContext, message);
-      
+      const response = await smartBot.processMessageWithAI(
+        userContext,
+        message
+      );
+
       res.json({
         success: true,
         response: response.text,
@@ -1655,8 +1804,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         learningInsights: {
           experienceLevel: userContext.learningProfile.experienceLevel,
           topics: userContext.preferences.topics,
-          communicationStyle: userContext.preferences.communicationStyle
-        }
+          communicationStyle: userContext.preferences.communicationStyle,
+        },
       });
     } catch (error) {
       console.error('Smart Telegram learn error:', error);
@@ -1667,14 +1816,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/telegram/smart/feedback', async (req, res) => {
     try {
       const { chatId, messageId, feedback, rating } = req.body;
-      
+
       if (!chatId || !messageId || feedback === undefined) {
-        return res.status(400).json({ message: 'chatId, messageId, and feedback are required' });
+        return res
+          .status(400)
+          .json({ message: 'chatId, messageId, and feedback are required' });
       }
 
       const smartBot = getSmartTelegramBot();
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContext = smartBot.getUserContext(chatId);
@@ -1683,9 +1836,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Update conversation history with feedback
-      const message = userContext.conversationHistory.find(m => m.id === messageId);
+      const message = userContext.conversationHistory.find(
+        m => m.id === messageId
+      );
       if (message) {
-        message.satisfaction = rating || (feedback === 'positive' ? 1 : feedback === 'negative' ? -1 : 0);
+        message.satisfaction =
+          rating ||
+          (feedback === 'positive' ? 1 : feedback === 'negative' ? -1 : 0);
       }
 
       res.json({ success: true, message: 'Feedback recorded successfully' });
@@ -1699,7 +1856,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const smartBot = getSmartTelegramBot();
       if (!smartBot) {
-        return res.status(404).json({ message: 'Smart Telegram bot not initialized' });
+        return res
+          .status(404)
+          .json({ message: 'Smart Telegram bot not initialized' });
       }
 
       const userContexts = smartBot.getAllUserContexts();
@@ -1707,24 +1866,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Calculate analytics
       const totalUsers = userContexts.length;
-      const totalMessages = userContexts.reduce((sum, user) => sum + user.conversationHistory.length, 0);
-      const avgMessagesPerUser = totalUsers > 0 ? totalMessages / totalUsers : 0;
-      
-      const experienceLevels = userContexts.reduce((acc, user) => {
-        acc[user.learningProfile.experienceLevel] = (acc[user.learningProfile.experienceLevel] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const totalMessages = userContexts.reduce(
+        (sum, user) => sum + user.conversationHistory.length,
+        0
+      );
+      const avgMessagesPerUser =
+        totalUsers > 0 ? totalMessages / totalUsers : 0;
 
-      const communicationStyles = userContexts.reduce((acc, user) => {
-        acc[user.preferences.communicationStyle] = (acc[user.preferences.communicationStyle] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const experienceLevels = userContexts.reduce(
+        (acc, user) => {
+          acc[user.learningProfile.experienceLevel] =
+            (acc[user.learningProfile.experienceLevel] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
+
+      const communicationStyles = userContexts.reduce(
+        (acc, user) => {
+          acc[user.preferences.communicationStyle] =
+            (acc[user.preferences.communicationStyle] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       const allTopics = userContexts.flatMap(user => user.preferences.topics);
-      const topicFrequency = allTopics.reduce((acc, topic) => {
-        acc[topic] = (acc[topic] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
+      const topicFrequency = allTopics.reduce(
+        (acc, topic) => {
+          acc[topic] = (acc[topic] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>
+      );
 
       res.json({
         totalUsers,
@@ -1734,14 +1908,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         communicationStyles,
         topicFrequency,
         learningData: {
-          conversationPatterns: learningData.get('conversation_patterns')?.size || 0,
+          conversationPatterns:
+            learningData.get('conversation_patterns')?.size || 0,
           userPreferences: learningData.get('user_preferences')?.size || 0,
-          responseEffectiveness: learningData.get('response_effectiveness')?.size || 0
-        }
+          responseEffectiveness:
+            learningData.get('response_effectiveness')?.size || 0,
+        },
       });
     } catch (error) {
       console.error('Smart Telegram analytics error:', error);
-      res.status(500).json({ message: 'Failed to get smart Telegram analytics' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get smart Telegram analytics' });
     }
   });
 
@@ -1749,14 +1927,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/mcp/message', async (req, res) => {
     try {
       const { message } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ message: 'Message is required' });
       }
 
       const mcpProtocol = getMCPProtocol();
       const response = await mcpProtocol.sendMessage(message);
-      
+
       res.json(response);
     } catch (error) {
       console.error('MCP message error:', error);
@@ -1825,11 +2003,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { toolId } = req.params;
       const aiToolsManager = getAdvancedAIToolsManager();
       const tool = aiToolsManager.getTool(toolId);
-      
+
       if (!tool) {
         return res.status(404).json({ message: 'AI tool not found' });
       }
-      
+
       res.json(tool);
     } catch (error) {
       console.error('AI tool error:', error);
@@ -1841,7 +2019,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { toolId } = req.params;
       const { params, context } = req.body;
-      
+
       if (!params) {
         return res.status(400).json({ message: 'Parameters are required' });
       }
@@ -1852,10 +2030,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessionId: context?.sessionId || `session_${Date.now()}`,
         requestId: `req_${Date.now()}`,
         timestamp: new Date(),
-        metadata: context?.metadata || {}
+        metadata: context?.metadata || {},
       };
 
-      const result = await aiToolsManager.executeTool(toolId, params, toolContext);
+      const result = await aiToolsManager.executeTool(
+        toolId,
+        params,
+        toolContext
+      );
       res.json(result);
     } catch (error) {
       console.error('AI tool execution error:', error);
@@ -1878,7 +2060,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai-tools/discover', async (req, res) => {
     try {
       const { query, category } = req.body;
-      
+
       if (!query) {
         return res.status(400).json({ message: 'Query is required' });
       }
@@ -1909,11 +2091,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { agentId } = req.params;
       const aiAgentSystem = getAdvancedAIAgentSystem();
       const agent = aiAgentSystem.getAgent(agentId);
-      
+
       if (!agent) {
         return res.status(404).json({ message: 'AI agent not found' });
       }
-      
+
       res.json(agent);
     } catch (error) {
       console.error('AI agent error:', error);
@@ -1923,10 +2105,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/ai-agents', async (req, res) => {
     try {
-      const { name, description, type, capabilities, tools, personality, knowledge } = req.body;
-      
+      const {
+        name,
+        description,
+        type,
+        capabilities,
+        tools,
+        personality,
+        knowledge,
+      } = req.body;
+
       if (!name || !description || !type) {
-        return res.status(400).json({ message: 'name, description, and type are required' });
+        return res
+          .status(400)
+          .json({ message: 'name, description, and type are required' });
       }
 
       const aiAgentSystem = getAdvancedAIAgentSystem();
@@ -1941,20 +2133,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           communicationStyle: 'concise',
           expertise: [],
           limitations: [],
-          preferences: {}
+          preferences: {},
         },
         knowledge: knowledge || {
           domains: [],
           skills: [],
           experience: 50,
           certifications: [],
-          specializations: []
+          specializations: [],
         },
         memory: {
           shortTerm: new Map(),
           longTerm: new Map(),
           episodic: [],
-          semantic: new Map()
+          semantic: new Map(),
         },
         performance: {
           tasksCompleted: 0,
@@ -1962,8 +2154,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           averageResponseTime: 0,
           userSatisfaction: 0,
           learningProgress: 0,
-          efficiency: 0
-        }
+          efficiency: 0,
+        },
       });
 
       res.status(201).json(agent);
@@ -1977,9 +2169,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { agentId } = req.params;
       const { type, description, parameters, priority } = req.body;
-      
+
       if (!type || !description) {
-        return res.status(400).json({ message: 'type and description are required' });
+        return res
+          .status(400)
+          .json({ message: 'type and description are required' });
       }
 
       const aiAgentSystem = getAdvancedAIAgentSystem();
@@ -1987,7 +2181,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type,
         description,
         parameters: parameters || {},
-        priority: priority || 'medium'
+        priority: priority || 'medium',
       });
 
       res.status(201).json(task);
@@ -2012,15 +2206,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai-agents/collaboration', async (req, res) => {
     try {
       const { agents, task, coordination } = req.body;
-      
+
       if (!agents || !Array.isArray(agents) || !task) {
-        return res.status(400).json({ message: 'agents array and task are required' });
+        return res
+          .status(400)
+          .json({ message: 'agents array and task are required' });
       }
 
       const aiAgentSystem = getAdvancedAIAgentSystem();
       const collaboration = await aiAgentSystem.createCollaboration(
-        agents, 
-        task, 
+        agents,
+        task,
         coordination || 'parallel'
       );
 
@@ -2047,32 +2243,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { agentId } = req.params;
       const { toAgentId, message } = req.body;
-      
+
       if (!toAgentId || !message) {
-        return res.status(400).json({ message: 'toAgentId and message are required' });
+        return res
+          .status(400)
+          .json({ message: 'toAgentId and message are required' });
       }
 
       const aiAgentSystem = getAdvancedAIAgentSystem();
       await aiAgentSystem.sendMessage(agentId, toAgentId, message);
-      
+
       res.json({ success: true, message: 'Message sent successfully' });
     } catch (error) {
       console.error('Agent communication error:', error);
-      res.status(500).json({ message: 'Failed to send message between agents' });
+      res
+        .status(500)
+        .json({ message: 'Failed to send message between agents' });
     }
   });
 
-  app.get('/api/ai-agents/:agentId1/:agentId2/communication', async (req, res) => {
-    try {
-      const { agentId1, agentId2 } = req.params;
-      const aiAgentSystem = getAdvancedAIAgentSystem();
-      const history = aiAgentSystem.getCommunicationHistory(agentId1, agentId2);
-      res.json(history);
-    } catch (error) {
-      console.error('Agent communication history error:', error);
-      res.status(500).json({ message: 'Failed to get communication history' });
+  app.get(
+    '/api/ai-agents/:agentId1/:agentId2/communication',
+    async (req, res) => {
+      try {
+        const { agentId1, agentId2 } = req.params;
+        const aiAgentSystem = getAdvancedAIAgentSystem();
+        const history = aiAgentSystem.getCommunicationHistory(
+          agentId1,
+          agentId2
+        );
+        res.json(history);
+      } catch (error) {
+        console.error('Agent communication history error:', error);
+        res
+          .status(500)
+          .json({ message: 'Failed to get communication history' });
+      }
     }
-  });
+  );
 
   // Multi-Modal AI Engine API Routes
   app.get('/api/ai/multimodal/models', async (req, res) => {
@@ -2100,11 +2308,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { modelId } = req.params;
       const multiModalAI = getMultiModalAIEngine();
       const model = multiModalAI.getModel(modelId);
-      
+
       if (!model) {
         return res.status(404).json({ error: 'Model not found' });
       }
-      
+
       res.json(model);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2200,32 +2408,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { modelId } = req.params;
       const modelManagement = getAIModelManagementSystem();
       const version = modelManagement.getLatestModelVersion(modelId);
-      
+
       if (!version) {
         return res.status(404).json({ error: 'No versions found' });
       }
-      
+
       res.json(version);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   });
 
-  app.post('/api/ai/models/:modelId/versions/:versionId/activate', async (req, res) => {
-    try {
-      const { modelId, versionId } = req.params;
-      const modelManagement = getAIModelManagementSystem();
-      const success = modelManagement.activateModelVersion(modelId, versionId);
-      
-      if (!success) {
-        return res.status(404).json({ error: 'Version not found' });
+  app.post(
+    '/api/ai/models/:modelId/versions/:versionId/activate',
+    async (req, res) => {
+      try {
+        const { modelId, versionId } = req.params;
+        const modelManagement = getAIModelManagementSystem();
+        const success = modelManagement.activateModelVersion(
+          modelId,
+          versionId
+        );
+
+        if (!success) {
+          return res.status(404).json({ error: 'Version not found' });
+        }
+
+        res.json({ success: true, message: 'Version activated successfully' });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
       }
-      
-      res.json({ success: true, message: 'Version activated successfully' });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
     }
-  });
+  );
 
   app.get('/api/ai/deployments', async (req, res) => {
     try {
@@ -2251,7 +2465,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { modelId, versionId, environment, config } = req.body;
       const modelManagement = getAIModelManagementSystem();
-      const deployment = await modelManagement.deployModel(modelId, versionId, environment, config);
+      const deployment = await modelManagement.deployModel(
+        modelId,
+        versionId,
+        environment,
+        config
+      );
       res.status(201).json(deployment);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2263,11 +2482,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { deploymentId } = req.params;
       const modelManagement = getAIModelManagementSystem();
       const success = await modelManagement.undeployModel(deploymentId);
-      
+
       if (!success) {
         return res.status(404).json({ error: 'Deployment not found' });
       }
-      
+
       res.json({ success: true, message: 'Model undeployed successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2310,12 +2529,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { jobId } = req.params;
       const modelManagement = getAIModelManagementSystem();
       const success = await modelManagement.cancelTrainingJob(jobId);
-      
+
       if (!success) {
-        return res.status(404).json({ error: 'Training job not found or not running' });
+        return res
+          .status(404)
+          .json({ error: 'Training job not found or not running' });
       }
-      
-      res.json({ success: true, message: 'Training job cancelled successfully' });
+
+      res.json({
+        success: true,
+        message: 'Training job cancelled successfully',
+      });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -2345,7 +2569,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { modelId, participants } = req.body;
       const modelManagement = getAIModelManagementSystem();
-      const round = await modelManagement.startFederatedLearningRound(modelId, participants);
+      const round = await modelManagement.startFederatedLearningRound(
+        modelId,
+        participants
+      );
       res.status(201).json(round);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2367,7 +2594,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { modelId } = req.params;
       const { optimizationConfig } = req.body;
       const modelManagement = getAIModelManagementSystem();
-      const result = await modelManagement.optimizeModel(modelId, optimizationConfig);
+      const result = await modelManagement.optimizeModel(
+        modelId,
+        optimizationConfig
+      );
       res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2379,11 +2609,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { modelId } = req.params;
       const modelManagement = getAIModelManagementSystem();
       const success = await modelManagement.archiveModel(modelId);
-      
+
       if (!success) {
         return res.status(404).json({ error: 'Model not found' });
       }
-      
+
       res.json({ success: true, message: 'Model archived successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2395,11 +2625,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { modelId } = req.params;
       const modelManagement = getAIModelManagementSystem();
       const success = await modelManagement.restoreModel(modelId);
-      
+
       if (!success) {
         return res.status(404).json({ error: 'Model not found' });
       }
-      
+
       res.json({ success: true, message: 'Model restored successfully' });
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -2410,12 +2640,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/enterprise/teams', async (req, res) => {
     try {
       const { name, description, organizationId, creatorId } = req.body;
-      
+
       if (!name || !creatorId) {
-        return res.status(400).json({ message: 'name and creatorId are required' });
+        return res
+          .status(400)
+          .json({ message: 'name and creatorId are required' });
       }
 
-      const team = await teamManager.createTeam(name, description, organizationId, creatorId);
+      const team = await teamManager.createTeam(
+        name,
+        description,
+        organizationId,
+        creatorId
+      );
       res.status(201).json(team);
     } catch (error) {
       console.error('Create team error:', error);
@@ -2438,11 +2675,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { teamId } = req.params;
       const team = await teamManager.getTeam(teamId);
-      
+
       if (!team) {
         return res.status(404).json({ message: 'Team not found' });
       }
-      
+
       res.json(team);
     } catch (error) {
       console.error('Get team error:', error);
@@ -2454,12 +2691,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { teamId } = req.params;
       const { userId, email, name, roleId, metadata } = req.body;
-      
+
       if (!userId || !email || !name || !roleId) {
-        return res.status(400).json({ message: 'userId, email, name, and roleId are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId, email, name, and roleId are required' });
       }
 
-      const member = await teamManager.addTeamMember(teamId, userId, email, name, roleId, metadata);
+      const member = await teamManager.addTeamMember(
+        teamId,
+        userId,
+        email,
+        name,
+        roleId,
+        metadata
+      );
       res.status(201).json(member);
     } catch (error) {
       console.error('Add team member error:', error);
@@ -2510,27 +2756,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/enterprise/admin/dashboard/alerts/:alertId/acknowledge', async (req, res) => {
-    try {
-      const { alertId } = req.params;
-      const { acknowledgedBy } = req.body;
-      
-      if (!acknowledgedBy) {
-        return res.status(400).json({ message: 'acknowledgedBy is required' });
-      }
+  app.post(
+    '/api/enterprise/admin/dashboard/alerts/:alertId/acknowledge',
+    async (req, res) => {
+      try {
+        const { alertId } = req.params;
+        const { acknowledgedBy } = req.body;
 
-      const success = await adminDashboard.acknowledgeAlert(alertId, acknowledgedBy);
-      
-      if (!success) {
-        return res.status(404).json({ message: 'Alert not found' });
+        if (!acknowledgedBy) {
+          return res
+            .status(400)
+            .json({ message: 'acknowledgedBy is required' });
+        }
+
+        const success = await adminDashboard.acknowledgeAlert(
+          alertId,
+          acknowledgedBy
+        );
+
+        if (!success) {
+          return res.status(404).json({ message: 'Alert not found' });
+        }
+
+        res.json({ success: true, message: 'Alert acknowledged successfully' });
+      } catch (error) {
+        console.error('Acknowledge alert error:', error);
+        res.status(500).json({ message: 'Failed to acknowledge alert' });
       }
-      
-      res.json({ success: true, message: 'Alert acknowledged successfully' });
-    } catch (error) {
-      console.error('Acknowledge alert error:', error);
-      res.status(500).json({ message: 'Failed to acknowledge alert' });
     }
-  });
+  );
 
   // Enhanced Travel Agency API Routes
   app.get('/api/travel/destinations', async (req, res) => {
@@ -2547,11 +2801,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const destination = await travelAgency.getDestination(id);
-      
+
       if (!destination) {
         return res.status(404).json({ message: 'Destination not found' });
       }
-      
+
       res.json(destination);
     } catch (error) {
       console.error('Get destination error:', error);
@@ -2584,12 +2838,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/travel/recommendations', async (req, res) => {
     try {
       const { userId, destination } = req.body;
-      
+
       if (!userId || !destination) {
-        return res.status(400).json({ message: 'userId and destination are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId and destination are required' });
       }
 
-      const recommendations = await travelAgency.getPersonalizedRecommendations(userId, destination);
+      const recommendations = await travelAgency.getPersonalizedRecommendations(
+        userId,
+        destination
+      );
       res.json(recommendations);
     } catch (error) {
       console.error('Get travel recommendations error:', error);
@@ -2623,11 +2882,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { bookingId } = req.params;
       const booking = await travelAgency.getBooking(bookingId);
-      
+
       if (!booking) {
         return res.status(404).json({ message: 'Booking not found' });
       }
-      
+
       res.json(booking);
     } catch (error) {
       console.error('Get booking error:', error);
@@ -2642,7 +2901,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(metrics);
     } catch (error) {
       console.error('Get travel dashboard metrics error:', error);
-      res.status(500).json({ message: 'Failed to get travel dashboard metrics' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get travel dashboard metrics' });
     }
   });
 
@@ -2652,26 +2913,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(widgets);
     } catch (error) {
       console.error('Get travel dashboard widgets error:', error);
-      res.status(500).json({ message: 'Failed to get travel dashboard widgets' });
+      res
+        .status(500)
+        .json({ message: 'Failed to get travel dashboard widgets' });
     }
   });
 
   // Enterprise Collaboration API Routes
   app.post('/api/collaboration/sessions', async (req, res) => {
     try {
-      const { type, resourceId, resourceName, teamId, creatorId, permissions } = req.body;
-      
+      const { type, resourceId, resourceName, teamId, creatorId, permissions } =
+        req.body;
+
       if (!type || !resourceId || !resourceName || !teamId || !creatorId) {
-        return res.status(400).json({ message: 'type, resourceId, resourceName, teamId, and creatorId are required' });
+        return res
+          .status(400)
+          .json({
+            message:
+              'type, resourceId, resourceName, teamId, and creatorId are required',
+          });
       }
 
       const session = await collaborationSystem.createCollaborationSession(
-        type, resourceId, resourceName, teamId, creatorId, permissions
+        type,
+        resourceId,
+        resourceName,
+        teamId,
+        creatorId,
+        permissions
       );
       res.status(201).json(session);
     } catch (error) {
       console.error('Create collaboration session error:', error);
-      res.status(500).json({ message: 'Failed to create collaboration session' });
+      res
+        .status(500)
+        .json({ message: 'Failed to create collaboration session' });
     }
   });
 
@@ -2679,12 +2955,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { sessionId } = req.params;
       const { userId, teamId } = req.body;
-      
+
       if (!userId || !teamId) {
-        return res.status(400).json({ message: 'userId and teamId are required' });
+        return res
+          .status(400)
+          .json({ message: 'userId and teamId are required' });
       }
 
-      const participant = await collaborationSystem.joinCollaborationSession(sessionId, userId, teamId);
+      const participant = await collaborationSystem.joinCollaborationSession(
+        sessionId,
+        userId,
+        teamId
+      );
       res.json(participant);
     } catch (error) {
       console.error('Join collaboration session error:', error);
@@ -2696,51 +2978,74 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { sessionId } = req.params;
       const { userId } = req.body;
-      
+
       if (!userId) {
         return res.status(400).json({ message: 'userId is required' });
       }
 
-      const success = await collaborationSystem.leaveCollaborationSession(sessionId, userId);
-      
+      const success = await collaborationSystem.leaveCollaborationSession(
+        sessionId,
+        userId
+      );
+
       if (!success) {
         return res.status(404).json({ message: 'Session not found' });
       }
-      
-      res.json({ success: true, message: 'Left collaboration session successfully' });
+
+      res.json({
+        success: true,
+        message: 'Left collaboration session successfully',
+      });
     } catch (error) {
       console.error('Leave collaboration session error:', error);
-      res.status(500).json({ message: 'Failed to leave collaboration session' });
+      res
+        .status(500)
+        .json({ message: 'Failed to leave collaboration session' });
     }
   });
 
-  app.get('/api/collaboration/sessions/:sessionId/comments', async (req, res) => {
-    try {
-      const { sessionId } = req.params;
-      const comments = await collaborationSystem.getSessionComments(sessionId);
-      res.json(comments);
-    } catch (error) {
-      console.error('Get session comments error:', error);
-      res.status(500).json({ message: 'Failed to get session comments' });
-    }
-  });
-
-  app.post('/api/collaboration/sessions/:sessionId/comments', async (req, res) => {
-    try {
-      const { sessionId } = req.params;
-      const { userId, content, type, position } = req.body;
-      
-      if (!userId || !content) {
-        return res.status(400).json({ message: 'userId and content are required' });
+  app.get(
+    '/api/collaboration/sessions/:sessionId/comments',
+    async (req, res) => {
+      try {
+        const { sessionId } = req.params;
+        const comments =
+          await collaborationSystem.getSessionComments(sessionId);
+        res.json(comments);
+      } catch (error) {
+        console.error('Get session comments error:', error);
+        res.status(500).json({ message: 'Failed to get session comments' });
       }
-
-      const comment = await collaborationSystem.addComment(sessionId, userId, content, type, position);
-      res.status(201).json(comment);
-    } catch (error) {
-      console.error('Add comment error:', error);
-      res.status(500).json({ message: 'Failed to add comment' });
     }
-  });
+  );
+
+  app.post(
+    '/api/collaboration/sessions/:sessionId/comments',
+    async (req, res) => {
+      try {
+        const { sessionId } = req.params;
+        const { userId, content, type, position } = req.body;
+
+        if (!userId || !content) {
+          return res
+            .status(400)
+            .json({ message: 'userId and content are required' });
+        }
+
+        const comment = await collaborationSystem.addComment(
+          sessionId,
+          userId,
+          content,
+          type,
+          position
+        );
+        res.status(201).json(comment);
+      } catch (error) {
+        console.error('Add comment error:', error);
+        res.status(500).json({ message: 'Failed to add comment' });
+      }
+    }
+  );
 
   // =============================================================================
   // CLI-SPECIFIC API ENDPOINTS (Inspired by ZentixAI)
@@ -2752,7 +3057,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/system/status', async (req, res) => {
     try {
       const startTime = Date.now();
-      
+
       // Get system information
       const systemInfo = {
         status: 'operational',
@@ -2761,7 +3066,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         nodeVersion: process.version,
         platform: process.platform,
         memory: process.memoryUsage(),
-        pid: process.pid
+        pid: process.pid,
       };
 
       // Get autopilot status
@@ -2770,7 +3075,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         active: automationEngine.isActive(),
         rules: automationEngine.getActiveRulesCount(),
         workflows: automationEngine.getActiveWorkflowsCount(),
-        lastExecution: automationEngine.getLastExecutionTime()
+        lastExecution: automationEngine.getLastExecutionTime(),
       };
 
       // Get AI agents status
@@ -2778,14 +3083,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const aiInfo = {
         agents: agentSystem.getTotalAgentsCount(),
         activeAgents: agentSystem.getActiveAgentsCount(),
-        totalTasks: agentSystem.getTotalTasksCount()
+        totalTasks: agentSystem.getTotalTasksCount(),
       };
 
       // Get performance metrics
       const performanceInfo = {
-        memory: Math.round((process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100),
+        memory: Math.round(
+          (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) *
+            100
+        ),
         cpu: Math.round(process.cpuUsage().user / 1000000), // Convert to percentage approximation
-        responseTime: Date.now() - startTime
+        responseTime: Date.now() - startTime,
       };
 
       res.json({
@@ -2793,7 +3101,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         autopilot: autopilotInfo,
         ai: aiInfo,
         performance: performanceInfo,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       console.error('System status error:', error);
@@ -2807,18 +3115,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/chat', async (req, res) => {
     try {
       const { message, context = 'cli' } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ message: 'Message is required' });
       }
 
       // Use the existing chat functionality
       const response = await chatWithAssistant(message, context);
-      
+
       res.json({
         response: response,
         timestamp: new Date().toISOString(),
-        context: context
+        context: context,
       });
     } catch (error) {
       console.error('AI chat error:', error);
@@ -2833,14 +3141,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const automationEngine = getAdvancedAutomationEngine();
       const status = automationEngine.getStatus();
-      
+
       res.json({
         active: status.active,
         rules: status.rules,
         workflows: status.workflows,
         performance: status.performance,
         lastExecution: status.lastExecution,
-        nextExecution: status.nextExecution
+        nextExecution: status.nextExecution,
       });
     } catch (error) {
       console.error('Autopilot status error:', error);
@@ -2855,7 +3163,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const workflowOrchestrator = getIntelligentWorkflowOrchestrator();
       const templates = workflowOrchestrator.getAvailableTemplates();
-      
+
       res.json(templates);
     } catch (error) {
       console.error('Workflow templates error:', error);
@@ -2870,7 +3178,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const agentSystem = getAdvancedAIAgentSystem();
       const agents = agentSystem.getAllAgents();
-      
+
       const status = {
         total: agents.length,
         active: agents.filter(agent => agent.status === 'active').length,
@@ -2880,10 +3188,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           type: agent.type,
           status: agent.status,
           tasksCompleted: agent.performance.tasksCompleted,
-          successRate: agent.performance.successRate
-        }))
+          successRate: agent.performance.successRate,
+        })),
       };
-      
+
       res.json(status);
     } catch (error) {
       console.error('AI agents status error:', error);
@@ -2903,20 +3211,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           database: 'connected',
           ai: 'operational',
           autopilot: 'active',
-          websocket: 'connected'
+          websocket: 'connected',
         },
         uptime: process.uptime(),
         memory: process.memoryUsage(),
-        version: '1.0.0'
+        version: '1.0.0',
       };
 
       res.json(health);
     } catch (error) {
       console.error('Health check error:', error);
-      res.status(500).json({ 
+      res.status(500).json({
         status: 'unhealthy',
         message: 'Health check failed',
-        error: error.message 
+        error: error.message,
       });
     }
   });
@@ -2927,7 +3235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/system/logs', async (req, res) => {
     try {
       const { limit = 100, level = 'all' } = req.query;
-      
+
       // This would integrate with your existing logging system
       // For now, return a mock response
       const logs = [
@@ -2935,20 +3243,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
           timestamp: new Date().toISOString(),
           level: 'info',
           message: 'System started successfully',
-          source: 'system'
+          source: 'system',
         },
         {
           timestamp: new Date(Date.now() - 60000).toISOString(),
           level: 'info',
           message: 'Autopilot engine activated',
-          source: 'autopilot'
-        }
+          source: 'autopilot',
+        },
       ];
 
       res.json({
         logs: logs.slice(0, parseInt(limit as string)),
         total: logs.length,
-        level: level
+        level: level,
       });
     } catch (error) {
       console.error('System logs error:', error);
@@ -2982,7 +3290,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const workflow = n8nNodeSystem.getWorkflow(req.params.id);
       if (!workflow) {
-        return res.status(404).json({ success: false, error: 'Workflow not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Workflow not found' });
       }
       res.json({ success: true, workflow });
     } catch (error) {
@@ -2992,7 +3302,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/n8n/workflows/:id/execute', async (req, res) => {
     try {
-      const executionId = await n8nNodeSystem.executeWorkflowManually(req.params.id);
+      const executionId = await n8nNodeSystem.executeWorkflowManually(
+        req.params.id
+      );
       res.json({ success: true, executionId });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -3003,7 +3315,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const execution = n8nNodeSystem.getExecution(req.params.id);
       if (!execution) {
-        return res.status(404).json({ success: false, error: 'Execution not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Execution not found' });
       }
       res.json({ success: true, execution });
     } catch (error) {
@@ -3043,7 +3357,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const connector = n8nIntegrationManager.getConnector(req.params.id);
       if (!connector) {
-        return res.status(404).json({ success: false, error: 'Connector not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Connector not found' });
       }
       res.json({ success: true, connector });
     } catch (error) {
@@ -3053,7 +3369,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/integrations/connectors/category/:category', (req, res) => {
     try {
-      const connectors = n8nIntegrationManager.getConnectorsByCategory(req.params.category as any);
+      const connectors = n8nIntegrationManager.getConnectorsByCategory(
+        req.params.category as any
+      );
       res.json({ success: true, connectors });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -3081,7 +3399,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/integrations/connectors/:id/test', async (req, res) => {
     try {
       const { credentialName } = req.body;
-      const result = await n8nIntegrationManager.testConnector(req.params.id, credentialName);
+      const result = await n8nIntegrationManager.testConnector(
+        req.params.id,
+        credentialName
+      );
       res.json({ success: true, result });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -3102,7 +3423,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const prompt = aiPromptManager.getPrompt(req.params.id);
       if (!prompt) {
-        return res.status(404).json({ success: false, error: 'Prompt not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Prompt not found' });
       }
       res.json({ success: true, prompt });
     } catch (error) {
@@ -3112,7 +3435,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/ai/prompts/category/:category', (req, res) => {
     try {
-      const prompts = aiPromptManager.getPromptsByCategory(req.params.category as any);
+      const prompts = aiPromptManager.getPromptsByCategory(
+        req.params.category as any
+      );
       res.json({ success: true, prompts });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -3123,7 +3448,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { q } = req.query;
       if (!q || typeof q !== 'string') {
-        return res.status(400).json({ success: false, error: 'Query parameter required' });
+        return res
+          .status(400)
+          .json({ success: false, error: 'Query parameter required' });
       }
       const prompts = aiPromptManager.searchPrompts(q);
       res.json({ success: true, prompts });
@@ -3146,7 +3473,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/ai/prompts/:id/execute', async (req, res) => {
     try {
       const { variables, userId } = req.body;
-      const result = await aiPromptManager.executePrompt(req.params.id, variables, userId);
+      const result = await aiPromptManager.executePrompt(
+        req.params.id,
+        variables,
+        userId
+      );
       res.json({ success: true, result });
     } catch (error) {
       res.status(500).json({ success: false, error: error.message });
@@ -3160,7 +3491,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId: req.body.userId || 'anonymous',
         rating,
         comment,
-        improvements
+        improvements,
       });
       res.json({ success });
     } catch (error) {
@@ -3172,7 +3503,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const statistics = aiPromptManager.getPromptStatistics(req.params.id);
       if (!statistics) {
-        return res.status(404).json({ success: false, error: 'Prompt not found' });
+        return res
+          .status(404)
+          .json({ success: false, error: 'Prompt not found' });
       }
       res.json({ success: true, statistics });
     } catch (error) {
@@ -3210,7 +3543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check if user is authenticated (you can implement your auth logic here)
       const authHeader = req.headers.authorization;
       const sessionToken = req.headers['x-session-token'];
-      
+
       // Mock authentication check - replace with your actual auth logic
       if (authHeader || sessionToken) {
         // Mock user data
@@ -3218,9 +3551,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           id: '1',
           email: 'user@example.com',
           name: 'System User',
-          role: 'admin'
+          role: 'admin',
         };
-        
+
         res.json(user);
       } else {
         res.status(401).json({ message: 'Not authenticated' });
@@ -3237,7 +3570,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/login', async (req, res) => {
     try {
       const { email, password } = req.body;
-      
+
       // Mock login - replace with your actual auth logic
       if (email && password) {
         const user = {
@@ -3245,13 +3578,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email: email,
           name: 'System User',
           role: 'admin',
-          token: 'mock-jwt-token-' + Date.now()
+          token: 'mock-jwt-token-' + Date.now(),
         };
-        
+
         res.json({
           success: true,
           user,
-          message: 'Login successful'
+          message: 'Login successful',
         });
       } else {
         res.status(400).json({ message: 'Email and password required' });
@@ -3270,7 +3603,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Mock logout - replace with your actual auth logic
       res.json({
         success: true,
-        message: 'Logout successful'
+        message: 'Logout successful',
       });
     } catch (error) {
       console.error('Logout error:', error);

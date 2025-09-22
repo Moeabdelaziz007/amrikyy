@@ -89,9 +89,10 @@ export const ControlButton: React.FC<ControlButtonProps> = ({
     }
   };
 
-  const disabledClasses = disabled || loading 
-    ? 'opacity-50 cursor-not-allowed hover:bg-glass-primary hover:text-current hover:shadow-none' 
-    : 'cursor-pointer';
+  const disabledClasses =
+    disabled || loading
+      ? 'opacity-50 cursor-not-allowed hover:bg-glass-primary hover:text-current hover:shadow-none'
+      : 'cursor-pointer';
 
   return (
     <button
@@ -122,7 +123,7 @@ export const ControlButton: React.FC<ControlButtonProps> = ({
       {loading && (
         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
       )}
-      
+
       {children}
     </button>
   );

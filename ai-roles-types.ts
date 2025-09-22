@@ -1,7 +1,7 @@
 /**
  * AI Development Roles TypeScript Interfaces
  * Provides type safety for AI role configurations in Cursor IDE + Gemini integration
- * 
+ *
  * @fileoverview Type definitions for AI development roles system
  * @version 1.0.0
  * @author AuraOS Development Team
@@ -125,12 +125,12 @@ export interface KnowledgeAdvisorRole extends AIRole {
 }
 
 // Union type for all specific roles
-export type SpecificAIRole = 
-  | CodeExplainerRole 
-  | CodeGeneratorRole 
-  | CodeFixerRole 
-  | TestGeneratorRole 
-  | RefactorAssistantRole 
+export type SpecificAIRole =
+  | CodeExplainerRole
+  | CodeGeneratorRole
+  | CodeFixerRole
+  | TestGeneratorRole
+  | RefactorAssistantRole
   | KnowledgeAdvisorRole;
 
 // Utility types for role management
@@ -216,12 +216,12 @@ export interface KnowledgeResponse {
 }
 
 // Union type for all role responses
-export type RoleResponse = 
-  | CodeExplanationResponse 
-  | CodeGenerationResponse 
-  | CodeFixResponse 
-  | TestGenerationResponse 
-  | RefactorResponse 
+export type RoleResponse =
+  | CodeExplanationResponse
+  | CodeGenerationResponse
+  | CodeFixResponse
+  | TestGenerationResponse
+  | RefactorResponse
   | KnowledgeResponse;
 
 // Configuration loader interface
@@ -249,7 +249,7 @@ export const ROLE_NAMES = {
   CODE_FIXER: 'Code_Fixer',
   TEST_GENERATOR: 'Test_Generator',
   REFACTOR_ASSISTANT: 'Refactor_Assistant',
-  KNOWLEDGE_ADVISOR: 'Knowledge_Advisor'
+  KNOWLEDGE_ADVISOR: 'Knowledge_Advisor',
 } as const;
 
 // Constants for priorities
@@ -257,7 +257,7 @@ export const ROLE_PRIORITIES = {
   CRITICAL: 'critical',
   HIGH: 'high',
   MEDIUM: 'medium',
-  LOW: 'low'
+  LOW: 'low',
 } as const;
 
 // Constants for output formats
@@ -267,7 +267,7 @@ export const OUTPUT_FORMATS = {
   FIX_WITH_EXPLANATION: 'fix_with_explanation',
   TEST_FILES_WITH_COVERAGE: 'test_files_with_coverage',
   REFACTORED_CODE_WITH_CHANGES: 'refactored_code_with_changes',
-  KNOWLEDGE_SUMMARY_WITH_LINKS: 'knowledge_summary_with_links'
+  KNOWLEDGE_SUMMARY_WITH_LINKS: 'knowledge_summary_with_links',
 } as const;
 
 // Type guards
@@ -287,11 +287,15 @@ export function isTestGeneratorRole(role: AIRole): role is TestGeneratorRole {
   return role.name === 'Test_Generator';
 }
 
-export function isRefactorAssistantRole(role: AIRole): role is RefactorAssistantRole {
+export function isRefactorAssistantRole(
+  role: AIRole
+): role is RefactorAssistantRole {
   return role.name === 'Refactor_Assistant';
 }
 
-export function isKnowledgeAdvisorRole(role: AIRole): role is KnowledgeAdvisorRole {
+export function isKnowledgeAdvisorRole(
+  role: AIRole
+): role is KnowledgeAdvisorRole {
   return role.name === 'Knowledge_Advisor';
 }
 

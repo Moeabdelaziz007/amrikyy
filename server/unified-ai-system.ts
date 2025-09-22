@@ -83,19 +83,25 @@ export class UnifiedAISystem {
         name: 'Default Recommendation Algorithm',
         type: 'hybrid',
       });
-      
-      recommendations = await this.recommendationSystem.generateRecommendations(userId, defaultAlgorithm.id);
+
+      recommendations = await this.recommendationSystem.generateRecommendations(
+        userId,
+        defaultAlgorithm.id
+      );
     } catch (error) {
       // إنشاء ملف تعريف المستخدم إذا لم يكن موجوداً
       await this.recommendationSystem.createUserProfile(userId);
-      
+
       // إنشاء خوارزمية توصية افتراضية
       const defaultAlgorithm = await this.recommendationSystem.createAlgorithm({
         name: 'Default Recommendation Algorithm',
         type: 'hybrid',
       });
-      
-      recommendations = await this.recommendationSystem.generateRecommendations(userId, defaultAlgorithm.id);
+
+      recommendations = await this.recommendationSystem.generateRecommendations(
+        userId,
+        defaultAlgorithm.id
+      );
     }
 
     // 5. تحديث التعلم المستمر
@@ -127,7 +133,11 @@ export class UnifiedAISystem {
       agentId: adaptiveProfile.id,
       input,
       response: unifiedResponse,
-      confidence: this.calculateOverallConfidence(nlpAnalysis, adaptiveResponse, recommendations),
+      confidence: this.calculateOverallConfidence(
+        nlpAnalysis,
+        adaptiveResponse,
+        recommendations
+      ),
       processingTime,
       components: {
         nlp: nlpAnalysis,
@@ -156,7 +166,7 @@ export class UnifiedAISystem {
 
     // إضافة معلومات من تحليل NLP
     if (components.nlp.sentiment.label === 'positive') {
-      response += ' I can see you\'re feeling positive about this topic.';
+      response += " I can see you're feeling positive about this topic.";
     } else if (components.nlp.sentiment.label === 'negative') {
       response += ' I understand this might be challenging for you.';
     }
@@ -164,7 +174,9 @@ export class UnifiedAISystem {
     // إضافة التوصيات إذا كانت متاحة
     if (components.recommendations.length > 0) {
       response += ' Based on your interests, I recommend checking out: ';
-      response += components.recommendations.map((rec: any) => rec.reason).join(', ');
+      response += components.recommendations
+        .map((rec: any) => rec.reason)
+        .join(', ');
     }
 
     // إضافة معلومات التعلم
@@ -193,9 +205,9 @@ export class UnifiedAISystem {
 
     // تأثير التوصيات
     if (recommendations.length > 0) {
-      const avgRecommendationConfidence = recommendations.reduce(
-        (sum, rec) => sum + rec.confidence, 0
-      ) / recommendations.length;
+      const avgRecommendationConfidence =
+        recommendations.reduce((sum, rec) => sum + rec.confidence, 0) /
+        recommendations.length;
       confidence += avgRecommendationConfidence * 0.3;
     }
 
@@ -209,7 +221,8 @@ export class UnifiedAISystem {
     const personality = adaptiveProfile?.personality || {};
 
     // تحليل التفضيلات
-    const userProfile = this.recommendationSystem.getUserProfileByUserId(userId);
+    const userProfile =
+      this.recommendationSystem.getUserProfileByUserId(userId);
     const preferences = userProfile?.preferences || {};
 
     // تحليل أنماط السلوك
@@ -223,15 +236,19 @@ export class UnifiedAISystem {
     // الحصول على التوصيات
     let recommendations = [];
     try {
-      recommendations = await this.recommendationSystem.generateRecommendations(userId);
+      recommendations =
+        await this.recommendationSystem.generateRecommendations(userId);
     } catch (error) {
       // إنشاء خوارزمية توصية افتراضية
       const defaultAlgorithm = await this.recommendationSystem.createAlgorithm({
         name: 'Default Recommendation Algorithm',
         type: 'hybrid',
       });
-      
-      recommendations = await this.recommendationSystem.generateRecommendations(userId, defaultAlgorithm.id);
+
+      recommendations = await this.recommendationSystem.generateRecommendations(
+        userId,
+        defaultAlgorithm.id
+      );
     }
 
     return {
@@ -294,29 +311,41 @@ export class UnifiedAISystem {
     return {
       ai: {
         totalAgents: this.aiSystem.getAllAgents().length,
-        totalMemories: Array.from(this.aiSystem.exportSystemData().memories).length,
-        totalLearningData: Array.from(this.aiSystem.exportSystemData().learningData).length,
+        totalMemories: Array.from(this.aiSystem.exportSystemData().memories)
+          .length,
+        totalLearningData: Array.from(
+          this.aiSystem.exportSystemData().learningData
+        ).length,
       },
       ml: {
         totalModels: this.mlEngine.getAllModels().length,
-        averageAccuracy: this.mlEngine.getAllModels().reduce(
-          (sum, model) => sum + model.accuracy, 0
-        ) / this.mlEngine.getAllModels().length || 0,
+        averageAccuracy:
+          this.mlEngine
+            .getAllModels()
+            .reduce((sum, model) => sum + model.accuracy, 0) /
+            this.mlEngine.getAllModels().length || 0,
       },
       adaptive: {
         totalProfiles: this.adaptiveAI.getAllProfiles().length,
-        totalResponses: Array.from(this.adaptiveAI.exportAdaptiveData().responses).length,
+        totalResponses: Array.from(
+          this.adaptiveAI.exportAdaptiveData().responses
+        ).length,
       },
       nlp: {
         totalModels: this.nlpSystem.getAllModels().length,
         totalPipelines: this.nlpSystem.getAllPipelines().length,
-        totalAnalyses: Array.from(this.nlpSystem.exportNLPData().analyses).length,
+        totalAnalyses: Array.from(this.nlpSystem.exportNLPData().analyses)
+          .length,
       },
       recommendations: this.recommendationSystem.analyzeSystemPerformance(),
       learning: {
-        totalSessions: Array.from(this.learningSystem.exportLearningData().sessions).length,
+        totalSessions: Array.from(
+          this.learningSystem.exportLearningData().sessions
+        ).length,
         totalPaths: this.learningSystem.getAllLearningPaths().length,
-        totalProgress: Array.from(this.learningSystem.exportLearningData().progress).length,
+        totalProgress: Array.from(
+          this.learningSystem.exportLearningData().progress
+        ).length,
       },
     };
   }
@@ -345,14 +374,14 @@ export class UnifiedAISystem {
     if (data.ai) {
       await this.aiSystem.importSystemData(data.ai);
     }
-    
+
     if (data.adaptive) {
       // استيراد البيانات التكيفية
       data.adaptive.profiles.forEach((profile: any) => {
         this.adaptiveAI.createProfile(profile.userId, profile);
       });
     }
-    
+
     if (data.recommendations) {
       // استيراد بيانات التوصيات
       data.recommendations.items.forEach((item: any) => {
@@ -368,7 +397,9 @@ export class UnifiedAISystem {
     cutoffDate.setDate(cutoffDate.getDate() - 30); // 30 يوم
 
     // تنظيف الجلسات القديمة
-    const allSessions = Array.from(this.learningSystem.exportLearningData().sessions);
+    const allSessions = Array.from(
+      this.learningSystem.exportLearningData().sessions
+    );
     for (const session of allSessions) {
       if (session.startTime < cutoffDate && session.status === 'completed') {
         await this.learningSystem.deleteLearningSession(session.id);

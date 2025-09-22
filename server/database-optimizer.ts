@@ -1,7 +1,14 @@
 // تحسين قاعدة البيانات والأداء
 import { db } from './db';
 import { sql } from 'drizzle-orm';
-import { users, posts, workflows, agentTemplates, userAgents, chatMessages } from '@shared/schema';
+import {
+  users,
+  posts,
+  workflows,
+  agentTemplates,
+  userAgents,
+  chatMessages,
+} from '@shared/schema';
 
 // تحسين الاستعلامات
 export class DatabaseOptimizer {
@@ -58,7 +65,10 @@ export class DatabaseOptimizer {
   }
 
   // تحسين استعلام قوالب الوكلاء
-  static async getAgentTemplatesOptimized(limit: number = 20, offset: number = 0) {
+  static async getAgentTemplatesOptimized(
+    limit: number = 20,
+    offset: number = 0
+  ) {
     return await db
       .select({
         id: agentTemplates.id,
@@ -95,7 +105,10 @@ export class DatabaseOptimizer {
   }
 
   // تحسين استعلام رسائل الدردشة
-  static async getChatMessagesOptimized(limit: number = 50, offset: number = 0) {
+  static async getChatMessagesOptimized(
+    limit: number = 50,
+    offset: number = 0
+  ) {
     return await db
       .select({
         id: chatMessages.id,
@@ -118,7 +131,7 @@ export class DatabaseOptimizer {
     limit: number = 20
   ) {
     const searchTerm = `%${query}%`;
-    
+
     switch (table) {
       case 'users':
         return await db
@@ -126,35 +139,41 @@ export class DatabaseOptimizer {
           .from(users)
           .where(sql`username ILIKE ${searchTerm} OR email ILIKE ${searchTerm}`)
           .limit(limit);
-      
+
       case 'posts':
         return await db
           .select()
           .from(posts)
           .where(sql`title ILIKE ${searchTerm} OR content ILIKE ${searchTerm}`)
           .limit(limit);
-      
+
       case 'workflows':
         return await db
           .select()
           .from(workflows)
-          .where(sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`)
+          .where(
+            sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`
+          )
           .limit(limit);
-      
+
       case 'agentTemplates':
         return await db
           .select()
           .from(agentTemplates)
-          .where(sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`)
+          .where(
+            sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`
+          )
           .limit(limit);
-      
+
       case 'userAgents':
         return await db
           .select()
           .from(userAgents)
-          .where(sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`)
+          .where(
+            sql`name ILIKE ${searchTerm} OR description ILIKE ${searchTerm}`
+          )
           .limit(limit);
-      
+
       default:
         throw new Error(`Unsupported table: ${table}`);
     }
@@ -162,13 +181,14 @@ export class DatabaseOptimizer {
 
   // تحسين الإحصائيات
   static async getStatsOptimized() {
-    const [userCount, postCount, workflowCount, agentCount, messageCount] = await Promise.all([
-      db.select({ count: sql<number>`count(*)` }).from(users),
-      db.select({ count: sql<number>`count(*)` }).from(posts),
-      db.select({ count: sql<number>`count(*)` }).from(workflows),
-      db.select({ count: sql<number>`count(*)` }).from(userAgents),
-      db.select({ count: sql<number>`count(*)` }).from(chatMessages),
-    ]);
+    const [userCount, postCount, workflowCount, agentCount, messageCount] =
+      await Promise.all([
+        db.select({ count: sql<number>`count(*)` }).from(users),
+        db.select({ count: sql<number>`count(*)` }).from(posts),
+        db.select({ count: sql<number>`count(*)` }).from(workflows),
+        db.select({ count: sql<number>`count(*)` }).from(userAgents),
+        db.select({ count: sql<number>`count(*)` }).from(chatMessages),
+      ]);
 
     return {
       users: userCount[0]?.count || 0,
@@ -185,25 +205,40 @@ export class DatabaseOptimizer {
     updates: Array<{ id: string; data: any }>
   ) {
     const results = [];
-    
+
     for (const update of updates) {
       try {
         let result;
         switch (table) {
           case 'users':
-            result = await db.update(users).set(update.data).where(sql`id = ${update.id}`);
+            result = await db
+              .update(users)
+              .set(update.data)
+              .where(sql`id = ${update.id}`);
             break;
           case 'posts':
-            result = await db.update(posts).set(update.data).where(sql`id = ${update.id}`);
+            result = await db
+              .update(posts)
+              .set(update.data)
+              .where(sql`id = ${update.id}`);
             break;
           case 'workflows':
-            result = await db.update(workflows).set(update.data).where(sql`id = ${update.id}`);
+            result = await db
+              .update(workflows)
+              .set(update.data)
+              .where(sql`id = ${update.id}`);
             break;
           case 'agentTemplates':
-            result = await db.update(agentTemplates).set(update.data).where(sql`id = ${update.id}`);
+            result = await db
+              .update(agentTemplates)
+              .set(update.data)
+              .where(sql`id = ${update.id}`);
             break;
           case 'userAgents':
-            result = await db.update(userAgents).set(update.data).where(sql`id = ${update.id}`);
+            result = await db
+              .update(userAgents)
+              .set(update.data)
+              .where(sql`id = ${update.id}`);
             break;
           default:
             throw new Error(`Unsupported table: ${table}`);
@@ -213,7 +248,7 @@ export class DatabaseOptimizer {
         results.push({ success: false, id: update.id, error });
       }
     }
-    
+
     return results;
   }
 
@@ -223,7 +258,7 @@ export class DatabaseOptimizer {
     ids: string[]
   ) {
     const results = [];
-    
+
     for (const id of ids) {
       try {
         let result;
@@ -251,14 +286,17 @@ export class DatabaseOptimizer {
         results.push({ success: false, id, error });
       }
     }
-    
+
     return results;
   }
 }
 
 // تحسين التخزين المؤقت
 export class CacheManager {
-  private static cache = new Map<string, { data: any; timestamp: number; ttl: number }>();
+  private static cache = new Map<
+    string,
+    { data: any; timestamp: number; ttl: number }
+  >();
 
   static set(key: string, data: any, ttl: number = 5 * 60 * 1000) {
     this.cache.set(key, {
@@ -304,9 +342,9 @@ export class ConnectionPool {
       this.currentConnections++;
       return db;
     }
-    
+
     // انتظار الاتصال المتاح
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       const checkConnection = () => {
         if (this.currentConnections < this.maxConnections) {
           this.currentConnections++;

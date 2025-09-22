@@ -1,264 +1,263 @@
 // AuraOS Router System
 class AuraRouter {
-    constructor() {
-        this.routes = new Map();
-        this.currentRoute = '';
-        this.isTransitioning = false;
-        this.transitionDuration = 500;
-        this.init();
-    }
+  constructor() {
+    this.routes = new Map();
+    this.currentRoute = '';
+    this.isTransitioning = false;
+    this.transitionDuration = 500;
+    this.init();
+  }
 
-    init() {
-        // Define routes
-        this.addRoute('/', 'index.html');
-        this.addRoute('/home', 'index.html');
-        this.addRoute('/login', 'login.html');
-        this.addRoute('/signup', 'signup.html');
-        this.addRoute('/loading', 'loading.html');
-        this.addRoute('/dashboard', 'dashboard.html');
-        this.addRoute('/settings', 'settings.html');
-        this.addRoute('/about', 'about.html');
+  init() {
+    // Define routes
+    this.addRoute('/', 'index.html');
+    this.addRoute('/home', 'index.html');
+    this.addRoute('/login', 'login.html');
+    this.addRoute('/signup', 'signup.html');
+    this.addRoute('/loading', 'loading.html');
+    this.addRoute('/dashboard', 'dashboard.html');
+    this.addRoute('/settings', 'settings.html');
+    this.addRoute('/about', 'about.html');
 
-        // Additional routes
-        this.addRoute('/help', 'help.html');
-        this.addRoute('/app-store', 'app-store.html');
-        this.addRoute('/file-manager', 'file-manager.html');
-        this.addRoute('/task-manager', 'task-manager.html');
-        this.addRoute('/network-manager', 'network-manager.html');
-        this.addRoute('/notifications', 'notifications.html');
-        this.addRoute('/terminal', 'terminal.html');
-        this.addRoute('/profile', 'profile.html');
-        this.addRoute('/system-monitor', 'system-monitor.html');
-        this.addRoute('/admin', 'admin-panel.html');
-        this.addRoute('/autopilot-dashboard', 'autopilot-dashboard.html');
-        this.addRoute('/test-dashboard', 'test-dashboard.html');
-        this.addRoute('/offline', 'offline.html');
+    // Additional routes
+    this.addRoute('/help', 'help.html');
+    this.addRoute('/app-store', 'app-store.html');
+    this.addRoute('/file-manager', 'file-manager.html');
+    this.addRoute('/task-manager', 'task-manager.html');
+    this.addRoute('/network-manager', 'network-manager.html');
+    this.addRoute('/notifications', 'notifications.html');
+    this.addRoute('/terminal', 'terminal.html');
+    this.addRoute('/profile', 'profile.html');
+    this.addRoute('/system-monitor', 'system-monitor.html');
+    this.addRoute('/admin', 'admin-panel.html');
+    this.addRoute('/autopilot-dashboard', 'autopilot-dashboard.html');
+    this.addRoute('/test-dashboard', 'test-dashboard.html');
+    this.addRoute('/offline', 'offline.html');
 
-        // New pages
-        this.addRoute('/chat', 'chat.html');
-        this.addRoute('/share', 'share.html');
-        this.addRoute('/file-handler', 'file-handler.html');
-        this.addRoute('/protocol', 'protocol.html');
+    // New pages
+    this.addRoute('/chat', 'chat.html');
+    this.addRoute('/share', 'share.html');
+    this.addRoute('/file-handler', 'file-handler.html');
+    this.addRoute('/protocol', 'protocol.html');
 
-        // Setup event listeners
-        this.setupEventListeners();
-        
-        // Handle initial route
-        this.handleRoute();
-    }
+    // Setup event listeners
+    this.setupEventListeners();
 
-    addRoute(path, page) {
-        this.routes.set(path, page);
-    }
+    // Handle initial route
+    this.handleRoute();
+  }
 
-    setupEventListeners() {
-        // Handle popstate (back/forward buttons)
-        window.addEventListener('popstate', (e) => {
-            this.handleRoute();
-        });
+  addRoute(path, page) {
+    this.routes.set(path, page);
+  }
 
-        // Intercept link clicks
-        document.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href]');
-            if (link && this.shouldIntercept(link)) {
-                e.preventDefault();
-                const href = link.getAttribute('href');
-                this.navigate(href);
-            }
-        });
+  setupEventListeners() {
+    // Handle popstate (back/forward buttons)
+    window.addEventListener('popstate', e => {
+      this.handleRoute();
+    });
 
-        // Handle form submissions that redirect
-        document.addEventListener('submit', (e) => {
-            const form = e.target;
-            const redirectTo = form.getAttribute('data-redirect');
-            if (redirectTo) {
-                e.preventDefault();
-                setTimeout(() => {
-                    this.navigate(redirectTo);
-                }, 1000); // Allow form processing time
-            }
-        });
-    }
-
-    shouldIntercept(link) {
+    // Intercept link clicks
+    document.addEventListener('click', e => {
+      const link = e.target.closest('a[href]');
+      if (link && this.shouldIntercept(link)) {
+        e.preventDefault();
         const href = link.getAttribute('href');
-        
-        // Don't intercept external links
-        if (href.startsWith('http') || href.startsWith('//')) {
-            return false;
-        }
+        this.navigate(href);
+      }
+    });
 
-        // Don't intercept hash links
-        if (href.startsWith('#')) {
-            return false;
-        }
+    // Handle form submissions that redirect
+    document.addEventListener('submit', e => {
+      const form = e.target;
+      const redirectTo = form.getAttribute('data-redirect');
+      if (redirectTo) {
+        e.preventDefault();
+        setTimeout(() => {
+          this.navigate(redirectTo);
+        }, 1000); // Allow form processing time
+      }
+    });
+  }
 
-        // Don't intercept mailto/tel links
-        if (href.startsWith('mailto:') || href.startsWith('tel:')) {
-            return false;
-        }
+  shouldIntercept(link) {
+    const href = link.getAttribute('href');
 
-        // Don't intercept if target="_blank"
-        if (link.getAttribute('target') === '_blank') {
-            return false;
-        }
-
-        return true;
+    // Don't intercept external links
+    if (href.startsWith('http') || href.startsWith('//')) {
+      return false;
     }
 
-    navigate(path, options = {}) {
-        if (this.isTransitioning && !options.force) {
-            return;
-        }
-
-        // Clean path
-        const cleanPath = this.cleanPath(path);
-        
-        // Check if route exists
-        const page = this.getPageForPath(cleanPath);
-        if (!page) {
-            console.warn(`Route not found: ${cleanPath}`);
-            return;
-        }
-
-        // Don't navigate to same page
-        if (cleanPath === this.currentRoute && !options.force) {
-            return;
-        }
-
-        // Update history if not a replace
-        if (!options.replace) {
-            history.pushState({ path: cleanPath }, '', cleanPath);
-        }
-
-        // Perform transition
-        this.transitionToPage(page, cleanPath, options);
+    // Don't intercept hash links
+    if (href.startsWith('#')) {
+      return false;
     }
 
-    cleanPath(path) {
-        // Remove .html extension and normalize
-        let cleanPath = path.replace(/\.html$/, '');
-        
-        // Handle special cases
-        if (cleanPath === '/index' || cleanPath === '') {
-            cleanPath = '/';
-        }
-
-        return cleanPath;
+    // Don't intercept mailto/tel links
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) {
+      return false;
     }
 
-    getPageForPath(path) {
-        // Try exact match first
-        if (this.routes.has(path)) {
-            return this.routes.get(path);
-        }
-
-        // Try with .html extension
-        const htmlPath = path + '.html';
-        for (const [route, page] of this.routes.entries()) {
-            if (page === htmlPath || page === path + '.html') {
-                return page;
-            }
-        }
-
-        return null;
+    // Don't intercept if target="_blank"
+    if (link.getAttribute('target') === '_blank') {
+      return false;
     }
 
-    async transitionToPage(page, path, options = {}) {
-        if (this.isTransitioning) return;
-        
-        this.isTransitioning = true;
-        
-        try {
-            // Start exit transition
-            await this.exitTransition();
-            
-            // Load new page
-            await this.loadPage(page, options);
-            
-            // Update current route
-            this.currentRoute = path;
-            
-            // Start enter transition
-            await this.enterTransition();
-            
-        } catch (error) {
-            console.error('Transition error:', error);
-            // Fallback to direct navigation
-            window.location.href = page;
-        } finally {
-            this.isTransitioning = false;
-        }
+    return true;
+  }
+
+  navigate(path, options = {}) {
+    if (this.isTransitioning && !options.force) {
+      return;
     }
 
-    async exitTransition() {
-        return new Promise((resolve) => {
-            const body = document.body;
-            
-            // Add exit class
-            body.classList.add('page-exit');
-            
-            // Wait for animation
-            setTimeout(() => {
-                resolve();
-            }, this.transitionDuration / 2);
-        });
+    // Clean path
+    const cleanPath = this.cleanPath(path);
+
+    // Check if route exists
+    const page = this.getPageForPath(cleanPath);
+    if (!page) {
+      console.warn(`Route not found: ${cleanPath}`);
+      return;
     }
 
-    async loadPage(page, options = {}) {
-        return new Promise((resolve, reject) => {
-            // For now, use traditional navigation
-            // In a real SPA, you would fetch and replace content
-            window.location.href = page + (options.search || '');
-            resolve();
-        });
+    // Don't navigate to same page
+    if (cleanPath === this.currentRoute && !options.force) {
+      return;
     }
 
-    async enterTransition() {
-        return new Promise((resolve) => {
-            const body = document.body;
-            
-            // Remove exit class and add enter class
-            body.classList.remove('page-exit');
-            body.classList.add('page-enter');
-            
-            // Wait for animation
-            setTimeout(() => {
-                body.classList.remove('page-enter');
-                resolve();
-            }, this.transitionDuration / 2);
-        });
+    // Update history if not a replace
+    if (!options.replace) {
+      history.pushState({ path: cleanPath }, '', cleanPath);
     }
 
-    handleRoute() {
-        const path = this.cleanPath(window.location.pathname);
-        this.currentRoute = path;
+    // Perform transition
+    this.transitionToPage(page, cleanPath, options);
+  }
+
+  cleanPath(path) {
+    // Remove .html extension and normalize
+    let cleanPath = path.replace(/\.html$/, '');
+
+    // Handle special cases
+    if (cleanPath === '/index' || cleanPath === '') {
+      cleanPath = '/';
     }
 
-    // Utility methods
-    back() {
-        history.back();
+    return cleanPath;
+  }
+
+  getPageForPath(path) {
+    // Try exact match first
+    if (this.routes.has(path)) {
+      return this.routes.get(path);
     }
 
-    forward() {
-        history.forward();
+    // Try with .html extension
+    const htmlPath = path + '.html';
+    for (const [route, page] of this.routes.entries()) {
+      if (page === htmlPath || page === path + '.html') {
+        return page;
+      }
     }
 
-    replace(path) {
-        this.navigate(path, { replace: true });
+    return null;
+  }
+
+  async transitionToPage(page, path, options = {}) {
+    if (this.isTransitioning) return;
+
+    this.isTransitioning = true;
+
+    try {
+      // Start exit transition
+      await this.exitTransition();
+
+      // Load new page
+      await this.loadPage(page, options);
+
+      // Update current route
+      this.currentRoute = path;
+
+      // Start enter transition
+      await this.enterTransition();
+    } catch (error) {
+      console.error('Transition error:', error);
+      // Fallback to direct navigation
+      window.location.href = page;
+    } finally {
+      this.isTransitioning = false;
     }
+  }
 
-    getCurrentRoute() {
-        return this.currentRoute;
-    }
+  async exitTransition() {
+    return new Promise(resolve => {
+      const body = document.body;
 
-    // Page transition effects
-    static addTransitionStyles() {
-        if (document.getElementById('aura-router-styles')) return;
+      // Add exit class
+      body.classList.add('page-exit');
 
-        const style = document.createElement('style');
-        style.id = 'aura-router-styles';
-        style.textContent = `
+      // Wait for animation
+      setTimeout(() => {
+        resolve();
+      }, this.transitionDuration / 2);
+    });
+  }
+
+  async loadPage(page, options = {}) {
+    return new Promise((resolve, reject) => {
+      // For now, use traditional navigation
+      // In a real SPA, you would fetch and replace content
+      window.location.href = page + (options.search || '');
+      resolve();
+    });
+  }
+
+  async enterTransition() {
+    return new Promise(resolve => {
+      const body = document.body;
+
+      // Remove exit class and add enter class
+      body.classList.remove('page-exit');
+      body.classList.add('page-enter');
+
+      // Wait for animation
+      setTimeout(() => {
+        body.classList.remove('page-enter');
+        resolve();
+      }, this.transitionDuration / 2);
+    });
+  }
+
+  handleRoute() {
+    const path = this.cleanPath(window.location.pathname);
+    this.currentRoute = path;
+  }
+
+  // Utility methods
+  back() {
+    history.back();
+  }
+
+  forward() {
+    history.forward();
+  }
+
+  replace(path) {
+    this.navigate(path, { replace: true });
+  }
+
+  getCurrentRoute() {
+    return this.currentRoute;
+  }
+
+  // Page transition effects
+  static addTransitionStyles() {
+    if (document.getElementById('aura-router-styles')) return;
+
+    const style = document.createElement('style');
+    style.id = 'aura-router-styles';
+    style.textContent = `
             /* Page transition styles */
             body {
                 transition: opacity 0.3s ease, transform 0.3s ease;
@@ -376,126 +375,132 @@ class AuraRouter {
                 }
             }
         `;
-        
-        document.head.appendChild(style);
-    }
+
+    document.head.appendChild(style);
+  }
 }
 
 // Enhanced Page Transitions
 class PageTransitions {
-    constructor() {
-        this.transitionOverlay = null;
-        this.init();
-    }
+  constructor() {
+    this.transitionOverlay = null;
+    this.init();
+  }
 
-    init() {
-        this.createOverlay();
-        this.setupGlobalTransitions();
-    }
+  init() {
+    this.createOverlay();
+    this.setupGlobalTransitions();
+  }
 
-    createOverlay() {
-        this.transitionOverlay = document.createElement('div');
-        this.transitionOverlay.className = 'page-transition-overlay';
-        this.transitionOverlay.innerHTML = `
+  createOverlay() {
+    this.transitionOverlay = document.createElement('div');
+    this.transitionOverlay.className = 'page-transition-overlay';
+    this.transitionOverlay.innerHTML = `
             <div class="transition-spinner"></div>
         `;
-        document.body.appendChild(this.transitionOverlay);
+    document.body.appendChild(this.transitionOverlay);
+  }
+
+  setupGlobalTransitions() {
+    // Intercept form submissions for smooth transitions
+    document.addEventListener('submit', e => {
+      const form = e.target;
+      if (
+        form.method === 'post' ||
+        form.getAttribute('data-transition') === 'true'
+      ) {
+        this.showTransition();
+      }
+    });
+
+    // Add transition to external navigation
+    window.addEventListener('beforeunload', () => {
+      this.showTransition();
+    });
+  }
+
+  showTransition() {
+    if (this.transitionOverlay) {
+      this.transitionOverlay.classList.add('active');
+    }
+  }
+
+  hideTransition() {
+    if (this.transitionOverlay) {
+      this.transitionOverlay.classList.remove('active');
+    }
+  }
+
+  // Smooth scroll to element
+  scrollToElement(element, offset = 0) {
+    if (typeof element === 'string') {
+      element = document.querySelector(element);
     }
 
-    setupGlobalTransitions() {
-        // Intercept form submissions for smooth transitions
-        document.addEventListener('submit', (e) => {
-            const form = e.target;
-            if (form.method === 'post' || form.getAttribute('data-transition') === 'true') {
-                this.showTransition();
-            }
+    if (element) {
+      const elementTop = element.offsetTop - offset;
+      window.scrollTo({
+        top: elementTop,
+        behavior: 'smooth',
+      });
+    }
+  }
+
+  // Fade in elements when they come into view
+  observeElements(selector = '.animate-on-scroll') {
+    const observer = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animated');
+          }
         });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
 
-        // Add transition to external navigation
-        window.addEventListener('beforeunload', () => {
-            this.showTransition();
-        });
-    }
-
-    showTransition() {
-        if (this.transitionOverlay) {
-            this.transitionOverlay.classList.add('active');
-        }
-    }
-
-    hideTransition() {
-        if (this.transitionOverlay) {
-            this.transitionOverlay.classList.remove('active');
-        }
-    }
-
-    // Smooth scroll to element
-    scrollToElement(element, offset = 0) {
-        if (typeof element === 'string') {
-            element = document.querySelector(element);
-        }
-
-        if (element) {
-            const elementTop = element.offsetTop - offset;
-            window.scrollTo({
-                top: elementTop,
-                behavior: 'smooth'
-            });
-        }
-    }
-
-    // Fade in elements when they come into view
-    observeElements(selector = '.animate-on-scroll') {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animated');
-                }
-            });
-        }, {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        });
-
-        document.querySelectorAll(selector).forEach(el => {
-            observer.observe(el);
-        });
-    }
+    document.querySelectorAll(selector).forEach(el => {
+      observer.observe(el);
+    });
+  }
 }
 
 // Initialize router and transitions when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Add transition styles
-    AuraRouter.addTransitionStyles();
-    
-    // Initialize router
-    window.auraRouter = new AuraRouter();
-    
-    // Initialize transitions
-    window.pageTransitions = new PageTransitions();
-    
-    // Setup smooth scrolling for hash links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const href = this.getAttribute('href');
-            
-            if (href && href !== '#' && href.length > 1) {
-                const target = document.querySelector(href);
-                if (target) {
-                    window.pageTransitions.scrollToElement(target, 80);
-                }
-            }
-        });
+  // Add transition styles
+  AuraRouter.addTransitionStyles();
+
+  // Initialize router
+  window.auraRouter = new AuraRouter();
+
+  // Initialize transitions
+  window.pageTransitions = new PageTransitions();
+
+  // Setup smooth scrolling for hash links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const href = this.getAttribute('href');
+
+      if (href && href !== '#' && href.length > 1) {
+        const target = document.querySelector(href);
+        if (target) {
+          window.pageTransitions.scrollToElement(target, 80);
+        }
+      }
     });
-    
-    // Observe elements for animations
-    window.pageTransitions.observeElements();
-    
-    console.log('AuraOS Router initialized successfully!');
+  });
+
+  // Observe elements for animations
+  window.pageTransitions.observeElements();
+
+  console.log('AuraOS Router initialized successfully!');
 });
 
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { AuraRouter, PageTransitions };
+  module.exports = { AuraRouter, PageTransitions };
 }

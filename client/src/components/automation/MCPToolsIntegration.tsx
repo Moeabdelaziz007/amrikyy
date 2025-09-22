@@ -1,19 +1,61 @@
 // Advanced MCP (Model Context Protocol) Tools Integration
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Code, Database, Globe, Search, Download, Upload, Settings, 
-  Play, Pause, Square, RefreshCw, CheckCircle, XCircle, AlertCircle,
-  Activity, TrendingUp, Users, Shield, Lock, Eye, EyeOff, 
-  Plus, Edit3, Trash2, Copy, Share2, Zap, Bot, Cpu, Network,
-  ChevronDown, ChevronRight, Star, Heart, MessageSquare,
-  Calendar, Timer, Target, Lightbulb, Cloud, Archive
+import {
+  Code,
+  Database,
+  Globe,
+  Search,
+  Download,
+  Upload,
+  Settings,
+  Play,
+  Pause,
+  Square,
+  RefreshCw,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Activity,
+  TrendingUp,
+  Users,
+  Shield,
+  Lock,
+  Eye,
+  EyeOff,
+  Plus,
+  Edit3,
+  Trash2,
+  Copy,
+  Share2,
+  Zap,
+  Bot,
+  Cpu,
+  Network,
+  ChevronDown,
+  ChevronRight,
+  Star,
+  Heart,
+  MessageSquare,
+  Calendar,
+  Timer,
+  Target,
+  Lightbulb,
+  Cloud,
+  Archive,
 } from 'lucide-react';
 
 interface MCPTool {
   id: string;
   name: string;
   description: string;
-  category: 'development' | 'data' | 'database' | 'web' | 'ai' | 'automation' | 'integration';
+  category:
+    | 'development'
+    | 'data'
+    | 'database'
+    | 'web'
+    | 'ai'
+    | 'automation'
+    | 'integration';
   icon: string;
   version: string;
   status: 'active' | 'inactive' | 'error' | 'updating';
@@ -100,12 +142,14 @@ export default function MCPToolsIntegration({
   onToolUninstall,
   onToolConfigure,
   onToolExecute,
-  onToolUpdate
+  onToolUpdate,
 }: MCPToolsIntegrationProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<'name' | 'usage' | 'rating' | 'updated'>('usage');
+  const [sortBy, setSortBy] = useState<'name' | 'usage' | 'rating' | 'updated'>(
+    'usage'
+  );
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedTool, setSelectedTool] = useState<MCPTool | null>(null);
   const [showDetails, setShowDetails] = useState<boolean>(false);
@@ -114,21 +158,61 @@ export default function MCPToolsIntegration({
 
   const categories = [
     { id: 'all', name: 'All Tools', icon: '🔧', count: tools.length },
-    { id: 'development', name: 'Development', icon: '💻', count: tools.filter(t => t.category === 'development').length },
-    { id: 'data', name: 'Data Processing', icon: '📊', count: tools.filter(t => t.category === 'data').length },
-    { id: 'database', name: 'Database', icon: '🗄️', count: tools.filter(t => t.category === 'database').length },
-    { id: 'web', name: 'Web Tools', icon: '🌐', count: tools.filter(t => t.category === 'web').length },
-    { id: 'ai', name: 'AI & ML', icon: '🤖', count: tools.filter(t => t.category === 'ai').length },
-    { id: 'automation', name: 'Automation', icon: '⚡', count: tools.filter(t => t.category === 'automation').length },
-    { id: 'integration', name: 'Integration', icon: '🔗', count: tools.filter(t => t.category === 'integration').length }
+    {
+      id: 'development',
+      name: 'Development',
+      icon: '💻',
+      count: tools.filter(t => t.category === 'development').length,
+    },
+    {
+      id: 'data',
+      name: 'Data Processing',
+      icon: '📊',
+      count: tools.filter(t => t.category === 'data').length,
+    },
+    {
+      id: 'database',
+      name: 'Database',
+      icon: '🗄️',
+      count: tools.filter(t => t.category === 'database').length,
+    },
+    {
+      id: 'web',
+      name: 'Web Tools',
+      icon: '🌐',
+      count: tools.filter(t => t.category === 'web').length,
+    },
+    {
+      id: 'ai',
+      name: 'AI & ML',
+      icon: '🤖',
+      count: tools.filter(t => t.category === 'ai').length,
+    },
+    {
+      id: 'automation',
+      name: 'Automation',
+      icon: '⚡',
+      count: tools.filter(t => t.category === 'automation').length,
+    },
+    {
+      id: 'integration',
+      name: 'Integration',
+      icon: '🔗',
+      count: tools.filter(t => t.category === 'integration').length,
+    },
   ];
 
   const filteredTools = tools.filter(tool => {
-    const matchesCategory = selectedCategory === 'all' || tool.category === selectedCategory;
-    const matchesSearch = tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         tool.capabilities.some(cap => cap.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesFilter = filterStatus === 'all' || tool.status === filterStatus;
+    const matchesCategory =
+      selectedCategory === 'all' || tool.category === selectedCategory;
+    const matchesSearch =
+      tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tool.capabilities.some(cap =>
+        cap.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    const matchesFilter =
+      filterStatus === 'all' || tool.status === filterStatus;
     return matchesCategory && matchesSearch && matchesFilter;
   });
 
@@ -141,7 +225,9 @@ export default function MCPToolsIntegration({
       case 'rating':
         return b.rating - a.rating;
       case 'updated':
-        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+        return (
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
       default:
         return 0;
     }
@@ -219,8 +305,12 @@ export default function MCPToolsIntegration({
             <Code className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">MCP Tools Integration</h2>
-            <p className="text-gray-600">Connect and manage Model Context Protocol tools</p>
+            <h2 className="text-2xl font-bold text-gray-900">
+              MCP Tools Integration
+            </h2>
+            <p className="text-gray-600">
+              Connect and manage Model Context Protocol tools
+            </p>
           </div>
         </div>
         <div className="flex items-center space-x-3">
@@ -243,7 +333,9 @@ export default function MCPToolsIntegration({
         <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Total Tools</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                Total Tools
+              </p>
               <p className="text-3xl font-bold text-gray-900">{tools.length}</p>
               <p className="text-xs text-green-600 mt-1">+3 this week</p>
             </div>
@@ -256,7 +348,9 @@ export default function MCPToolsIntegration({
         <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Active Tools</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                Active Tools
+              </p>
               <p className="text-3xl font-bold text-gray-900">
                 {tools.filter(t => t.status === 'active').length}
               </p>
@@ -271,9 +365,17 @@ export default function MCPToolsIntegration({
         <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Avg Performance</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                Avg Performance
+              </p>
               <p className="text-3xl font-bold text-gray-900">
-                {Math.round(tools.reduce((acc, tool) => acc + tool.performance.successRate, 0) / tools.length || 0)}%
+                {Math.round(
+                  tools.reduce(
+                    (acc, tool) => acc + tool.performance.successRate,
+                    0
+                  ) / tools.length || 0
+                )}
+                %
               </p>
               <p className="text-xs text-blue-600 mt-1">+2.1% improvement</p>
             </div>
@@ -286,9 +388,15 @@ export default function MCPToolsIntegration({
         <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600 mb-1">Total Usage</p>
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                Total Usage
+              </p>
               <p className="text-3xl font-bold text-gray-900">
-                {Math.round(tools.reduce((acc, tool) => acc + tool.usage, 0) / tools.length || 0)}%
+                {Math.round(
+                  tools.reduce((acc, tool) => acc + tool.usage, 0) /
+                    tools.length || 0
+                )}
+                %
               </p>
               <p className="text-xs text-orange-600 mt-1">Peak efficiency</p>
             </div>
@@ -309,13 +417,13 @@ export default function MCPToolsIntegration({
                 type="text"
                 placeholder="Search tools..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={e => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
             <select
               value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
+              onChange={e => setFilterStatus(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="all">All Status</option>
@@ -327,10 +435,12 @@ export default function MCPToolsIntegration({
           </div>
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-2">
-              <label className="text-sm font-medium text-gray-700">Sort by:</label>
+              <label className="text-sm font-medium text-gray-700">
+                Sort by:
+              </label>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={e => setSortBy(e.target.value as any)}
                 className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="usage">Usage</option>
@@ -375,13 +485,13 @@ export default function MCPToolsIntegration({
           <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
             <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
             <div className="space-y-2">
-              {categories.map((category) => (
+              {categories.map(category => (
                 <button
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-left transition-colors ${
-                    selectedCategory === category.id 
-                      ? 'bg-blue-600 text-white' 
+                    selectedCategory === category.id
+                      ? 'bg-blue-600 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -389,9 +499,13 @@ export default function MCPToolsIntegration({
                     <span className="text-lg">{category.icon}</span>
                     <span>{category.name}</span>
                   </div>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    selectedCategory === category.id ? 'bg-white/20' : 'bg-gray-100'
-                  }`}>
+                  <span
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      selectedCategory === category.id
+                        ? 'bg-white/20'
+                        : 'bg-gray-100'
+                    }`}
+                  >
                     {category.count}
                   </span>
                 </button>
@@ -404,13 +518,18 @@ export default function MCPToolsIntegration({
         <div className="lg:col-span-3">
           {viewMode === 'grid' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {sortedTools.map((tool) => (
-                <div key={tool.id} className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
+              {sortedTools.map(tool => (
+                <div
+                  key={tool.id}
+                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200"
+                >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
                       <span className="text-2xl">{tool.icon}</span>
                       <div>
-                        <h3 className="font-semibold text-gray-900">{tool.name}</h3>
+                        <h3 className="font-semibold text-gray-900">
+                          {tool.name}
+                        </h3>
                         <p className="text-sm text-gray-500">v{tool.version}</p>
                       </div>
                     </div>
@@ -424,15 +543,21 @@ export default function MCPToolsIntegration({
                     </div>
                   </div>
 
-                  <p className="text-gray-600 mb-4 text-sm line-clamp-2">{tool.description}</p>
+                  <p className="text-gray-600 mb-4 text-sm line-clamp-2">
+                    {tool.description}
+                  </p>
 
                   <div className="flex items-center justify-between mb-4">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(tool.category)}`}>
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(tool.category)}`}
+                    >
                       {tool.category}
                     </span>
                     <div className="flex items-center space-x-1">
                       <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                      <span className="text-sm font-medium text-gray-700">{tool.rating.toFixed(1)}</span>
+                      <span className="text-sm font-medium text-gray-700">
+                        {tool.rating.toFixed(1)}
+                      </span>
                     </div>
                   </div>
 
@@ -442,7 +567,7 @@ export default function MCPToolsIntegration({
                       <span className="font-medium">{tool.usage}%</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                         style={{ width: `${tool.usage}%` }}
                       ></div>
@@ -450,13 +575,18 @@ export default function MCPToolsIntegration({
                   </div>
 
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {tool.capabilities.slice(0, 3).map((capability) => (
-                      <span key={capability} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                    {tool.capabilities.slice(0, 3).map(capability => (
+                      <span
+                        key={capability}
+                        className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
+                      >
                         {capability}
                       </span>
                     ))}
                     {tool.capabilities.length > 3 && (
-                      <span className="text-xs text-gray-500">+{tool.capabilities.length - 3}</span>
+                      <span className="text-xs text-gray-500">
+                        +{tool.capabilities.length - 3}
+                      </span>
                     )}
                   </div>
 
@@ -485,8 +615,11 @@ export default function MCPToolsIntegration({
             </div>
           ) : (
             <div className="space-y-4">
-              {sortedTools.map((tool) => (
-                <div key={tool.id} className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
+              {sortedTools.map(tool => (
+                <div
+                  key={tool.id}
+                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4 flex-1">
                       <div className="flex-shrink-0">
@@ -494,11 +627,17 @@ export default function MCPToolsIntegration({
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="font-semibold text-gray-900">{tool.name}</h3>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(tool.status)}`}>
+                          <h3 className="font-semibold text-gray-900">
+                            {tool.name}
+                          </h3>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(tool.status)}`}
+                          >
                             {tool.status}
                           </span>
-                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(tool.category)}`}>
+                          <span
+                            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(tool.category)}`}
+                          >
                             {tool.category}
                           </span>
                           {tool.isVerified && (
@@ -507,7 +646,9 @@ export default function MCPToolsIntegration({
                             </div>
                           )}
                         </div>
-                        <p className="text-gray-600 mb-2 text-sm">{tool.description}</p>
+                        <p className="text-gray-600 mb-2 text-sm">
+                          {tool.description}
+                        </p>
                         <div className="flex items-center space-x-4 text-sm text-gray-500">
                           <span>v{tool.version}</span>
                           <span>Usage: {tool.usage}%</span>
@@ -515,13 +656,18 @@ export default function MCPToolsIntegration({
                           <span>Downloads: {tool.downloads}</span>
                         </div>
                         <div className="flex flex-wrap gap-1 mt-2">
-                          {tool.capabilities.slice(0, 4).map((capability) => (
-                            <span key={capability} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800">
+                          {tool.capabilities.slice(0, 4).map(capability => (
+                            <span
+                              key={capability}
+                              className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-blue-100 text-blue-800"
+                            >
                               {capability}
                             </span>
                           ))}
                           {tool.capabilities.length > 4 && (
-                            <span className="text-xs text-gray-500">+{tool.capabilities.length - 4}</span>
+                            <span className="text-xs text-gray-500">
+                              +{tool.capabilities.length - 4}
+                            </span>
                           )}
                         </div>
                       </div>
@@ -563,8 +709,12 @@ export default function MCPToolsIntegration({
                 <div className="flex items-center space-x-4">
                   <span className="text-3xl">{selectedTool.icon}</span>
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900">{selectedTool.name}</h3>
-                    <p className="text-gray-600">v{selectedTool.version} by {selectedTool.author.name}</p>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {selectedTool.name}
+                    </h3>
+                    <p className="text-gray-600">
+                      v{selectedTool.version} by {selectedTool.author.name}
+                    </p>
                   </div>
                 </div>
                 <button
@@ -579,34 +729,54 @@ export default function MCPToolsIntegration({
             <div className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2">
-                  <h4 className="font-semibold text-gray-900 mb-3">Description</h4>
-                  <p className="text-gray-600 mb-6">{selectedTool.description}</p>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Description
+                  </h4>
+                  <p className="text-gray-600 mb-6">
+                    {selectedTool.description}
+                  </p>
 
-                  <h4 className="font-semibold text-gray-900 mb-3">Capabilities</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Capabilities
+                  </h4>
                   <div className="flex flex-wrap gap-2 mb-6">
-                    {selectedTool.capabilities.map((capability) => (
-                      <span key={capability} className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    {selectedTool.capabilities.map(capability => (
+                      <span
+                        key={capability}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                      >
                         {capability}
                       </span>
                     ))}
                   </div>
 
-                  <h4 className="font-semibold text-gray-900 mb-3">Performance Metrics</h4>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    Performance Metrics
+                  </h4>
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="bg-gray-50 rounded-lg p-4">
                       <p className="text-sm text-gray-600">Success Rate</p>
-                      <p className="text-2xl font-bold text-gray-900">{(selectedTool.performance.successRate * 100).toFixed(1)}%</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {(selectedTool.performance.successRate * 100).toFixed(
+                          1
+                        )}
+                        %
+                      </p>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4">
                       <p className="text-sm text-gray-600">Avg Response Time</p>
-                      <p className="text-2xl font-bold text-gray-900">{selectedTool.performance.avgResponseTime}ms</p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {selectedTool.performance.avgResponseTime}ms
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-3">Quick Actions</h4>
+                    <h4 className="font-semibold text-gray-900 mb-3">
+                      Quick Actions
+                    </h4>
                     <div className="space-y-2">
                       <button
                         onClick={() => onToolExecute(selectedTool.id, {})}
@@ -630,26 +800,36 @@ export default function MCPToolsIntegration({
                   </div>
 
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <h4 className="font-semibold text-gray-900 mb-3">Statistics</h4>
+                    <h4 className="font-semibold text-gray-900 mb-3">
+                      Statistics
+                    </h4>
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Usage</span>
-                        <span className="font-medium">{selectedTool.usage}%</span>
+                        <span className="font-medium">
+                          {selectedTool.usage}%
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Rating</span>
                         <div className="flex items-center space-x-1">
                           <Star className="w-4 h-4 text-yellow-400 fill-current" />
-                          <span className="font-medium">{selectedTool.rating.toFixed(1)}</span>
+                          <span className="font-medium">
+                            {selectedTool.rating.toFixed(1)}
+                          </span>
                         </div>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Downloads</span>
-                        <span className="font-medium">{selectedTool.downloads}</span>
+                        <span className="font-medium">
+                          {selectedTool.downloads}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-sm text-gray-600">Last Used</span>
-                        <span className="font-medium">{new Date(selectedTool.lastUsed).toLocaleDateString()}</span>
+                        <span className="font-medium">
+                          {new Date(selectedTool.lastUsed).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
                   </div>

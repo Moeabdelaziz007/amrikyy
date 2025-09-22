@@ -35,11 +35,22 @@ export interface AIPrompt {
   };
 }
 
-export type PromptCategory = 
-  | 'technical' | 'creative' | 'business' | 'productivity' 
-  | 'education' | 'health' | 'marketing' | 'development'
-  | 'ai_ml' | 'security' | 'content' | 'social_media'
-  | 'analytics' | 'automation' | 'communication';
+export type PromptCategory =
+  | 'technical'
+  | 'creative'
+  | 'business'
+  | 'productivity'
+  | 'education'
+  | 'health'
+  | 'marketing'
+  | 'development'
+  | 'ai_ml'
+  | 'security'
+  | 'content'
+  | 'social_media'
+  | 'analytics'
+  | 'automation'
+  | 'communication';
 
 export interface PromptVariable {
   name: string;
@@ -115,7 +126,7 @@ export class AIPromptManager {
   private initializeLiveMode() {
     this.isLive = true;
     console.log('🤖 AI Prompt Manager is now LIVE');
-    
+
     // Start usage analytics
     setInterval(() => {
       this.updateUsageAnalytics();
@@ -127,7 +138,8 @@ export class AIPromptManager {
     this.registerPrompt({
       id: 'devops_engineer',
       title: 'Act as DevOps Engineer',
-      description: 'Expert DevOps engineer providing scalable, efficient, and automated solutions',
+      description:
+        'Expert DevOps engineer providing scalable, efficient, and automated solutions',
       category: 'technical',
       subcategory: 'devops',
       tags: ['devops', 'automation', 'infrastructure', 'ci-cd'],
@@ -139,7 +151,7 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['Junior', 'Mid-Level', 'Senior', 'Lead', 'Principal'],
-          defaultValue: 'Senior'
+          defaultValue: 'Senior',
         },
         {
           name: 'companyType',
@@ -147,7 +159,7 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['Startup', 'Mid-size Company', 'Big Company', 'Enterprise'],
-          defaultValue: 'Big Company'
+          defaultValue: 'Big Company',
         },
         {
           name: 'problem',
@@ -155,14 +167,14 @@ export class AIPromptManager {
           type: 'textarea',
           required: true,
           placeholder: 'Describe the DevOps challenge...',
-          defaultValue: 'Creating an MVP quickly for an e-commerce web app'
-        }
+          defaultValue: 'Creating an MVP quickly for an e-commerce web app',
+        },
       ],
       usage: {
         complexity: 'advanced',
         estimatedTime: 15,
         successRate: 0.92,
-        popularity: 85
+        popularity: 85,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -172,20 +184,21 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // AI/ML Prompts
     this.registerPrompt({
       id: 'ai_security_specialist',
       title: 'Act as Large Language Models Security Specialist',
-      description: 'Security specialist for identifying vulnerabilities in LLMs',
+      description:
+        'Security specialist for identifying vulnerabilities in LLMs',
       category: 'ai_ml',
       subcategory: 'security',
       tags: ['ai', 'security', 'llm', 'vulnerabilities', 'testing'],
@@ -197,14 +210,15 @@ export class AIPromptManager {
           type: 'textarea',
           required: true,
           placeholder: 'Describe your security testing needs...',
-          defaultValue: 'Help me develop a set of example prompts to test the security and robustness of an LLM system.'
-        }
+          defaultValue:
+            'Help me develop a set of example prompts to test the security and robustness of an LLM system.',
+        },
       ],
       usage: {
         complexity: 'advanced',
         estimatedTime: 20,
         successRate: 0.88,
-        popularity: 72
+        popularity: 72,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -214,20 +228,21 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // Business/Marketing Prompts
     this.registerPrompt({
       id: 'seo_expert',
       title: 'Act as SEO Expert',
-      description: 'Expert SEO specialist for content optimization and strategy',
+      description:
+        'Expert SEO specialist for content optimization and strategy',
       category: 'business',
       subcategory: 'marketing',
       tags: ['seo', 'marketing', 'content', 'optimization', 'strategy'],
@@ -239,14 +254,14 @@ export class AIPromptManager {
           type: 'string',
           required: true,
           placeholder: 'Enter your target keyword...',
-          defaultValue: 'Best SEO Prompts'
-        }
+          defaultValue: 'Best SEO Prompts',
+        },
       ],
       usage: {
         complexity: 'intermediate',
         estimatedTime: 25,
-        successRate: 0.90,
-        popularity: 78
+        successRate: 0.9,
+        popularity: 78,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -256,20 +271,21 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // Creative/Content Prompts
     this.registerPrompt({
       id: 'content_generator',
       title: 'Act as Content Generator',
-      description: 'Generate engaging content for various platforms and audiences',
+      description:
+        'Generate engaging content for various platforms and audiences',
       category: 'creative',
       subcategory: 'content',
       tags: ['content', 'writing', 'creative', 'social-media', 'marketing'],
@@ -280,24 +296,44 @@ export class AIPromptManager {
           displayName: 'Platform',
           type: 'multiselect',
           required: true,
-          options: ['Instagram', 'Twitter', 'LinkedIn', 'Facebook', 'TikTok', 'YouTube'],
-          defaultValue: ['Instagram', 'Twitter']
+          options: [
+            'Instagram',
+            'Twitter',
+            'LinkedIn',
+            'Facebook',
+            'TikTok',
+            'YouTube',
+          ],
+          defaultValue: ['Instagram', 'Twitter'],
         },
         {
           name: 'goal',
           displayName: 'Content Goal',
           type: 'select',
           required: true,
-          options: ['increase engagement', 'drive traffic', 'build brand awareness', 'generate leads', 'educate audience'],
-          defaultValue: 'increase engagement'
+          options: [
+            'increase engagement',
+            'drive traffic',
+            'build brand awareness',
+            'generate leads',
+            'educate audience',
+          ],
+          defaultValue: 'increase engagement',
         },
         {
           name: 'tone',
           displayName: 'Tone',
           type: 'select',
           required: true,
-          options: ['professional', 'casual', 'friendly', 'authoritative', 'humorous', 'inspirational'],
-          defaultValue: 'professional'
+          options: [
+            'professional',
+            'casual',
+            'friendly',
+            'authoritative',
+            'humorous',
+            'inspirational',
+          ],
+          defaultValue: 'professional',
         },
         {
           name: 'audience',
@@ -305,22 +341,29 @@ export class AIPromptManager {
           type: 'string',
           required: true,
           placeholder: 'Describe your target audience...',
-          defaultValue: 'young professionals aged 25-35'
+          defaultValue: 'young professionals aged 25-35',
         },
         {
           name: 'elements',
           displayName: 'Required Elements',
           type: 'multiselect',
           required: false,
-          options: ['hashtags', 'call-to-actions', 'emojis', 'mentions', 'links', 'images'],
-          defaultValue: ['hashtags', 'call-to-actions']
-        }
+          options: [
+            'hashtags',
+            'call-to-actions',
+            'emojis',
+            'mentions',
+            'links',
+            'images',
+          ],
+          defaultValue: ['hashtags', 'call-to-actions'],
+        },
       ],
       usage: {
         complexity: 'beginner',
         estimatedTime: 10,
         successRate: 0.95,
-        popularity: 92
+        popularity: 92,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -330,20 +373,21 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // Productivity Prompts
     this.registerPrompt({
       id: 'note_taking_assistant',
       title: 'Act as Note-Taking Assistant',
-      description: 'Professional note-taking assistant for lectures and meetings',
+      description:
+        'Professional note-taking assistant for lectures and meetings',
       category: 'productivity',
       subcategory: 'organization',
       tags: ['productivity', 'notes', 'lecture', 'meeting', 'organization'],
@@ -354,21 +398,21 @@ export class AIPromptManager {
           displayName: 'Lecture Content',
           type: 'textarea',
           required: true,
-          placeholder: 'Paste the lecture content here...'
+          placeholder: 'Paste the lecture content here...',
         },
         {
           name: 'subject',
           displayName: 'Subject/Topic',
           type: 'string',
           required: false,
-          placeholder: 'e.g., Computer Science, Business, etc.'
-        }
+          placeholder: 'e.g., Computer Science, Business, etc.',
+        },
       ],
       usage: {
         complexity: 'beginner',
         estimatedTime: 8,
         successRate: 0.93,
-        popularity: 68
+        popularity: 68,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -378,13 +422,13 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // Development Prompts
@@ -402,28 +446,28 @@ export class AIPromptManager {
           displayName: 'Workflow Description',
           type: 'textarea',
           required: true,
-          placeholder: 'Describe the workflow you want to automate...'
+          placeholder: 'Describe the workflow you want to automate...',
         },
         {
           name: 'scriptName',
           displayName: 'Script Name',
           type: 'string',
           required: false,
-          placeholder: 'e.g., backup-system.sh'
+          placeholder: 'e.g., backup-system.sh',
         },
         {
           name: 'requirements',
           displayName: 'Special Requirements',
           type: 'textarea',
           required: false,
-          placeholder: 'Any specific requirements or constraints...'
-        }
+          placeholder: 'Any specific requirements or constraints...',
+        },
       ],
       usage: {
         complexity: 'advanced',
         estimatedTime: 30,
         successRate: 0.89,
-        popularity: 76
+        popularity: 76,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -433,13 +477,13 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
     // Health/Wellness Prompts
@@ -458,15 +502,23 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['breakfast', 'lunch', 'dinner', 'snack', 'dessert'],
-          defaultValue: 'dinner'
+          defaultValue: 'dinner',
         },
         {
           name: 'dietaryRestrictions',
           displayName: 'Dietary Restrictions',
           type: 'multiselect',
           required: false,
-          options: ['vegan', 'vegetarian', 'gluten-free', 'dairy-free', 'keto', 'paleo', 'low-carb'],
-          defaultValue: ['vegan']
+          options: [
+            'vegan',
+            'vegetarian',
+            'gluten-free',
+            'dairy-free',
+            'keto',
+            'paleo',
+            'low-carb',
+          ],
+          defaultValue: ['vegan'],
         },
         {
           name: 'difficulty',
@@ -474,14 +526,14 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['very easy', 'easy', 'moderate', 'challenging'],
-          defaultValue: 'easy'
-        }
+          defaultValue: 'easy',
+        },
       ],
       usage: {
         complexity: 'beginner',
         estimatedTime: 12,
         successRate: 0.94,
-        popularity: 58
+        popularity: 58,
       },
       metadata: {
         author: 'Amrikyy Team',
@@ -491,16 +543,18 @@ export class AIPromptManager {
         source: 'awesome-chatgpt-prompts',
         isCommunity: false,
         isOfficial: true,
-        isPremium: false
+        isPremium: false,
       },
       performance: {
         totalUses: 0,
         averageRating: 0,
-        feedback: []
-      }
+        feedback: [],
+      },
     });
 
-    console.log(`🤖 Initialized ${this.prompts.size} AI prompts across ${this.categories.size} categories`);
+    console.log(
+      `🤖 Initialized ${this.prompts.size} AI prompts across ${this.categories.size} categories`
+    );
   }
 
   private initializePromptTemplates() {
@@ -517,7 +571,7 @@ export class AIPromptManager {
           displayName: 'Content Topic',
           type: 'string',
           required: true,
-          placeholder: 'Enter your content topic...'
+          placeholder: 'Enter your content topic...',
         },
         {
           name: 'platform',
@@ -525,8 +579,8 @@ export class AIPromptManager {
           type: 'multiselect',
           required: true,
           options: ['Blog', 'Social Media', 'Email', 'Website'],
-          defaultValue: ['Blog']
-        }
+          defaultValue: ['Blog'],
+        },
       ],
       workflow: {
         steps: [
@@ -535,19 +589,19 @@ export class AIPromptManager {
             name: 'SEO Research',
             promptId: 'seo_expert',
             dependencies: [],
-            outputMapping: { 'outline': 'seo_outline', 'keywords': 'seo_keywords' }
+            outputMapping: { outline: 'seo_outline', keywords: 'seo_keywords' },
           },
           {
             id: 'content_creation',
             name: 'Content Creation',
             promptId: 'content_generator',
             dependencies: ['seo_research'],
-            outputMapping: { 'content': 'final_content' }
-          }
+            outputMapping: { content: 'final_content' },
+          },
         ],
         parallel: false,
-        timeout: 300000 // 5 minutes
-      }
+        timeout: 300000, // 5 minutes
+      },
     });
 
     // Technical Development Workflow Template
@@ -564,7 +618,7 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['Web Application', 'Mobile App', 'API', 'Infrastructure'],
-          defaultValue: 'Web Application'
+          defaultValue: 'Web Application',
         },
         {
           name: 'complexity',
@@ -572,8 +626,8 @@ export class AIPromptManager {
           type: 'select',
           required: true,
           options: ['MVP', 'Production', 'Enterprise'],
-          defaultValue: 'Production'
-        }
+          defaultValue: 'Production',
+        },
       ],
       workflow: {
         steps: [
@@ -582,32 +636,32 @@ export class AIPromptManager {
             name: 'DevOps Planning',
             promptId: 'devops_engineer',
             dependencies: [],
-            outputMapping: { 'strategy': 'devops_strategy' }
+            outputMapping: { strategy: 'devops_strategy' },
           },
           {
             id: 'script_development',
             name: 'Script Development',
             promptId: 'linux_script_developer',
             dependencies: ['devops_planning'],
-            outputMapping: { 'script': 'automation_script' }
-          }
+            outputMapping: { script: 'automation_script' },
+          },
         ],
         parallel: false,
-        timeout: 600000 // 10 minutes
-      }
+        timeout: 600000, // 10 minutes
+      },
     });
   }
 
   // Public API Methods
   registerPrompt(prompt: AIPrompt): void {
     this.prompts.set(prompt.id, prompt);
-    
+
     // Add to category
     if (!this.categories.has(prompt.category)) {
       this.categories.set(prompt.category, []);
     }
     this.categories.get(prompt.category)!.push(prompt);
-    
+
     console.log(`📝 Registered prompt: ${prompt.title}`);
   }
 
@@ -642,16 +696,21 @@ export class AIPromptManager {
 
   searchPrompts(query: string): AIPrompt[] {
     const lowercaseQuery = query.toLowerCase();
-    return Array.from(this.prompts.values()).filter(prompt =>
-      prompt.title.toLowerCase().includes(lowercaseQuery) ||
-      prompt.description.toLowerCase().includes(lowercaseQuery) ||
-      prompt.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery)) ||
-      prompt.category.toLowerCase().includes(lowercaseQuery)
+    return Array.from(this.prompts.values()).filter(
+      prompt =>
+        prompt.title.toLowerCase().includes(lowercaseQuery) ||
+        prompt.description.toLowerCase().includes(lowercaseQuery) ||
+        prompt.tags.some(tag => tag.toLowerCase().includes(lowercaseQuery)) ||
+        prompt.category.toLowerCase().includes(lowercaseQuery)
     );
   }
 
   // Prompt Execution
-  async executePrompt(promptId: string, variables: Record<string, any>, userId?: string): Promise<{ success: boolean; result?: string; error?: string }> {
+  async executePrompt(
+    promptId: string,
+    variables: Record<string, any>,
+    userId?: string
+  ): Promise<{ success: boolean; result?: string; error?: string }> {
     const prompt = this.getPrompt(promptId);
     if (!prompt) {
       return { success: false, error: 'Prompt not found' };
@@ -659,7 +718,7 @@ export class AIPromptManager {
 
     try {
       console.log(`🚀 Executing prompt: ${prompt.title}`);
-      
+
       // Replace variables in prompt
       let processedPrompt = prompt.prompt;
       for (const [key, value] of Object.entries(variables)) {
@@ -677,14 +736,22 @@ export class AIPromptManager {
       return { success: true, result };
     } catch (error) {
       console.error(`Prompt execution error: ${prompt.title}`, error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
 
-  async executeTemplate(templateId: string, variables: Record<string, any>, userId?: string): Promise<{ success: boolean; results?: Record<string, any>; error?: string }> {
+  async executeTemplate(
+    templateId: string,
+    variables: Record<string, any>,
+    userId?: string
+  ): Promise<{
+    success: boolean;
+    results?: Record<string, any>;
+    error?: string;
+  }> {
     const template = this.templates.get(templateId);
     if (!template) {
       return { success: false, error: 'Template not found' };
@@ -698,19 +765,33 @@ export class AIPromptManager {
       // Execute steps in order
       for (const step of template.workflow.steps) {
         // Check dependencies
-        const dependenciesMet = step.dependencies.every(dep => completedSteps.has(dep));
+        const dependenciesMet = step.dependencies.every(dep =>
+          completedSteps.has(dep)
+        );
         if (!dependenciesMet) {
-          return { success: false, error: `Dependencies not met for step: ${step.name}` };
+          return {
+            success: false,
+            error: `Dependencies not met for step: ${step.name}`,
+          };
         }
 
         // Execute step
-        const stepResult = await this.executePrompt(step.promptId, {
-          ...variables,
-          ...(step.outputMapping ? this.mapOutputs(results, step.outputMapping) : {})
-        }, userId);
+        const stepResult = await this.executePrompt(
+          step.promptId,
+          {
+            ...variables,
+            ...(step.outputMapping
+              ? this.mapOutputs(results, step.outputMapping)
+              : {}),
+          },
+          userId
+        );
 
         if (!stepResult.success) {
-          return { success: false, error: `Step failed: ${step.name} - ${stepResult.error}` };
+          return {
+            success: false,
+            error: `Step failed: ${step.name} - ${stepResult.error}`,
+          };
         }
 
         results[step.id] = stepResult.result;
@@ -720,14 +801,17 @@ export class AIPromptManager {
       return { success: true, results };
     } catch (error) {
       console.error(`Template execution error: ${template.name}`, error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
 
-  private mapOutputs(results: Record<string, any>, outputMapping: Record<string, string>): Record<string, any> {
+  private mapOutputs(
+    results: Record<string, any>,
+    outputMapping: Record<string, string>
+  ): Record<string, any> {
     const mapped: Record<string, any> = {};
     for (const [source, target] of Object.entries(outputMapping)) {
       if (results[source]) {
@@ -747,7 +831,10 @@ export class AIPromptManager {
 
     // Update usage stats
     const statsKey = `prompt_${promptId}`;
-    const stats = this.usageStats.get(statsKey) || { totalUses: 0, uniqueUsers: new Set() };
+    const stats = this.usageStats.get(statsKey) || {
+      totalUses: 0,
+      uniqueUsers: new Set(),
+    };
     stats.totalUses++;
     if (userId) {
       stats.uniqueUsers.add(userId);
@@ -758,10 +845,13 @@ export class AIPromptManager {
   private updateUsageAnalytics(): void {
     // Update popularity based on recent usage
     const now = Date.now();
-    const oneDayAgo = now - (24 * 60 * 60 * 1000);
+    const oneDayAgo = now - 24 * 60 * 60 * 1000;
 
     for (const prompt of this.prompts.values()) {
-      if (prompt.performance.lastUsed && prompt.performance.lastUsed.getTime() > oneDayAgo) {
+      if (
+        prompt.performance.lastUsed &&
+        prompt.performance.lastUsed.getTime() > oneDayAgo
+      ) {
         // Increase popularity for recently used prompts
         prompt.usage.popularity = Math.min(100, prompt.usage.popularity + 1);
       }
@@ -769,20 +859,24 @@ export class AIPromptManager {
   }
 
   // Feedback System
-  submitFeedback(promptId: string, feedback: Omit<PromptFeedback, 'timestamp'>): boolean {
+  submitFeedback(
+    promptId: string,
+    feedback: Omit<PromptFeedback, 'timestamp'>
+  ): boolean {
     const prompt = this.getPrompt(promptId);
     if (!prompt) return false;
 
     const feedbackWithTimestamp: PromptFeedback = {
       ...feedback,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     prompt.performance.feedback.push(feedbackWithTimestamp);
-    
+
     // Update average rating
     const ratings = prompt.performance.feedback.map(f => f.rating);
-    prompt.performance.averageRating = ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
+    prompt.performance.averageRating =
+      ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length;
 
     console.log(`📝 Feedback submitted for prompt: ${prompt.title}`);
     return true;
@@ -792,13 +886,15 @@ export class AIPromptManager {
   getSystemStatistics(): any {
     const prompts = Array.from(this.prompts.values());
     const categories = Array.from(this.categories.keys());
-    
+
     return {
       totalPrompts: prompts.length,
       totalTemplates: this.templates.size,
       categories: categories.length,
       totalUses: prompts.reduce((sum, p) => sum + p.performance.totalUses, 0),
-      averageRating: prompts.reduce((sum, p) => sum + p.performance.averageRating, 0) / prompts.length,
+      averageRating:
+        prompts.reduce((sum, p) => sum + p.performance.averageRating, 0) /
+        prompts.length,
       mostPopularCategory: categories.reduce((max, cat) => {
         const catPrompts = this.categories.get(cat) || [];
         const maxPrompts = this.categories.get(max) || [];
@@ -808,8 +904,8 @@ export class AIPromptManager {
         id: p.id,
         title: p.title,
         uses: p.performance.totalUses,
-        rating: p.performance.averageRating
-      }))
+        rating: p.performance.averageRating,
+      })),
     };
   }
 
@@ -818,23 +914,23 @@ export class AIPromptManager {
     if (!prompt) return null;
 
     const stats = this.usageStats.get(`prompt_${promptId}`);
-    
+
     return {
       prompt: {
         id: prompt.id,
         title: prompt.title,
-        category: prompt.category
+        category: prompt.category,
       },
       usage: {
         totalUses: prompt.performance.totalUses,
         uniqueUsers: stats?.uniqueUsers.size || 0,
         lastUsed: prompt.performance.lastUsed,
-        averageRating: prompt.performance.averageRating
+        averageRating: prompt.performance.averageRating,
       },
       feedback: {
         totalFeedback: prompt.performance.feedback.length,
-        recentFeedback: prompt.performance.feedback.slice(-5)
-      }
+        recentFeedback: prompt.performance.feedback.slice(-5),
+      },
     };
   }
 
@@ -843,7 +939,7 @@ export class AIPromptManager {
       isLive: this.isLive,
       statistics: this.getSystemStatistics(),
       categories: Array.from(this.categories.keys()),
-      templates: Array.from(this.templates.keys())
+      templates: Array.from(this.templates.keys()),
     };
   }
 

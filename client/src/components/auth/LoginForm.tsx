@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -11,7 +17,10 @@ interface LoginFormProps {
   onCancel?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({
+  onSuccess,
+  onCancel,
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -57,7 +66,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
             <LogIn className="h-6 w-6 text-blue-600" />
           </div>
-          <CardTitle className="text-2xl font-bold">Welcome to AuraOS</CardTitle>
+          <CardTitle className="text-2xl font-bold">
+            Welcome to AuraOS
+          </CardTitle>
           <CardDescription>
             Sign in to access the system monitor and AI tools
           </CardDescription>
@@ -69,7 +80,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
-            
+
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <div className="relative">
@@ -79,7 +90,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
                   type="email"
                   placeholder="Enter your email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   className="pl-10"
                   required
                 />
@@ -95,7 +106,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
                   type="password"
                   placeholder="Enter your password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   className="pl-10"
                   required
                 />
@@ -114,11 +125,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
                   Cancel
                 </Button>
               )}
-              <Button
-                type="submit"
-                className="flex-1"
-                disabled={loading}
-              >
+              <Button type="submit" className="flex-1" disabled={loading}>
                 {loading ? (
                   <>
                     <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -137,7 +144,8 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess, onCancel }) => 
           <div className="mt-6 text-center text-sm text-gray-600">
             <p>Demo credentials:</p>
             <p className="font-mono text-xs mt-1">
-              Email: admin@auraos.com<br />
+              Email: admin@auraos.com
+              <br />
               Password: any password
             </p>
           </div>

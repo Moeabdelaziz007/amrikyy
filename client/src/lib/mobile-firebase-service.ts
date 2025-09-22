@@ -1,17 +1,17 @@
 // Mobile Firebase Integration
 // Firebase integration optimized for mobile devices
 
-import { 
+import {
   firebaseAnalyticsService,
   firebaseAnalytics,
-  COLLECTIONS 
+  COLLECTIONS,
 } from '../lib/firebase-analytics';
-import { 
+import {
   FirestoreUserHistory,
   FirestoreUserSession,
   FirestorePredictiveInsight,
   FirestorePerformanceMetric,
-  FirestoreSecurityAlert
+  FirestoreSecurityAlert,
 } from '../lib/firebase-analytics';
 
 // Mobile-specific Firebase operations
@@ -111,12 +111,17 @@ export class MobileFirebaseService {
       action,
       sessionId,
       success,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     if (this.isOnline) {
       try {
-        await firebaseAnalyticsService.trackUserAction(userId, action, sessionId, success);
+        await firebaseAnalyticsService.trackUserAction(
+          userId,
+          action,
+          sessionId,
+          success
+        );
       } catch (error) {
         this.offlineQueue.push(operation);
         throw error;
@@ -127,11 +132,13 @@ export class MobileFirebaseService {
   }
 
   // Save predictive insight (with offline support)
-  public async savePredictiveInsight(insight: FirestorePredictiveInsight): Promise<void> {
+  public async savePredictiveInsight(
+    insight: FirestorePredictiveInsight
+  ): Promise<void> {
     const operation = {
       type: 'saveInsight',
       insight,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     if (this.isOnline) {
@@ -147,11 +154,13 @@ export class MobileFirebaseService {
   }
 
   // Save performance metric (with offline support)
-  public async savePerformanceMetric(metric: FirestorePerformanceMetric): Promise<void> {
+  public async savePerformanceMetric(
+    metric: FirestorePerformanceMetric
+  ): Promise<void> {
     const operation = {
       type: 'saveMetric',
       metric,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     if (this.isOnline) {
@@ -171,7 +180,7 @@ export class MobileFirebaseService {
     const operation = {
       type: 'saveAlert',
       alert,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     if (this.isOnline) {
@@ -187,9 +196,12 @@ export class MobileFirebaseService {
   }
 
   // Get user analytics data (with caching)
-  public async getUserAnalyticsData(userId: string, limit: number = 1000): Promise<any[]> {
+  public async getUserAnalyticsData(
+    userId: string,
+    limit: number = 1000
+  ): Promise<any[]> {
     const cacheKey = `user_analytics_${userId}_${limit}`;
-    
+
     // Check cache first
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -201,14 +213,20 @@ export class MobileFirebaseService {
     }
 
     try {
-      const data = await firebaseAnalyticsService.getUserAnalyticsData(userId, limit);
-      
+      const data = await firebaseAnalyticsService.getUserAnalyticsData(
+        userId,
+        limit
+      );
+
       // Cache the data
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
+
       return data;
     } catch (error) {
       // Return cached data if available
@@ -221,9 +239,12 @@ export class MobileFirebaseService {
   }
 
   // Get user sessions (with caching)
-  public async getUserSessions(userId: string, limit: number = 100): Promise<FirestoreUserSession[]> {
+  public async getUserSessions(
+    userId: string,
+    limit: number = 100
+  ): Promise<FirestoreUserSession[]> {
     const cacheKey = `user_sessions_${userId}_${limit}`;
-    
+
     // Check cache first
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -235,14 +256,20 @@ export class MobileFirebaseService {
     }
 
     try {
-      const data = await firebaseAnalyticsService.getUserSessions(userId, limit);
-      
+      const data = await firebaseAnalyticsService.getUserSessions(
+        userId,
+        limit
+      );
+
       // Cache the data
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
+
       return data;
     } catch (error) {
       // Return cached data if available
@@ -255,9 +282,12 @@ export class MobileFirebaseService {
   }
 
   // Get predictive insights (with caching)
-  public async getPredictiveInsights(userId: string, limit: number = 50): Promise<FirestorePredictiveInsight[]> {
+  public async getPredictiveInsights(
+    userId: string,
+    limit: number = 50
+  ): Promise<FirestorePredictiveInsight[]> {
     const cacheKey = `predictive_insights_${userId}_${limit}`;
-    
+
     // Check cache first
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -269,14 +299,20 @@ export class MobileFirebaseService {
     }
 
     try {
-      const data = await firebaseAnalyticsService.getPredictiveInsights(userId, limit);
-      
+      const data = await firebaseAnalyticsService.getPredictiveInsights(
+        userId,
+        limit
+      );
+
       // Cache the data
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
+
       return data;
     } catch (error) {
       // Return cached data if available
@@ -289,9 +325,12 @@ export class MobileFirebaseService {
   }
 
   // Get performance metrics (with caching)
-  public async getPerformanceMetrics(userId: string, limit: number = 100): Promise<FirestorePerformanceMetric[]> {
+  public async getPerformanceMetrics(
+    userId: string,
+    limit: number = 100
+  ): Promise<FirestorePerformanceMetric[]> {
     const cacheKey = `performance_metrics_${userId}_${limit}`;
-    
+
     // Check cache first
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -303,14 +342,20 @@ export class MobileFirebaseService {
     }
 
     try {
-      const data = await firebaseAnalyticsService.getPerformanceMetrics(userId, limit);
-      
+      const data = await firebaseAnalyticsService.getPerformanceMetrics(
+        userId,
+        limit
+      );
+
       // Cache the data
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
+
       return data;
     } catch (error) {
       // Return cached data if available
@@ -323,9 +368,12 @@ export class MobileFirebaseService {
   }
 
   // Get security alerts (with caching)
-  public async getSecurityAlerts(userId: string, limit: number = 50): Promise<FirestoreSecurityAlert[]> {
+  public async getSecurityAlerts(
+    userId: string,
+    limit: number = 50
+  ): Promise<FirestoreSecurityAlert[]> {
     const cacheKey = `security_alerts_${userId}_${limit}`;
-    
+
     // Check cache first
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
@@ -337,14 +385,20 @@ export class MobileFirebaseService {
     }
 
     try {
-      const data = await firebaseAnalyticsService.getSecurityAlerts(userId, limit);
-      
+      const data = await firebaseAnalyticsService.getSecurityAlerts(
+        userId,
+        limit
+      );
+
       // Cache the data
-      localStorage.setItem(cacheKey, JSON.stringify({
-        data,
-        timestamp: Date.now()
-      }));
-      
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          data,
+          timestamp: Date.now(),
+        })
+      );
+
       return data;
     } catch (error) {
       // Return cached data if available
@@ -360,11 +414,13 @@ export class MobileFirebaseService {
   public clearCache(): void {
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
-      if (key.startsWith('user_analytics_') || 
-          key.startsWith('user_sessions_') || 
-          key.startsWith('predictive_insights_') || 
-          key.startsWith('performance_metrics_') || 
-          key.startsWith('security_alerts_')) {
+      if (
+        key.startsWith('user_analytics_') ||
+        key.startsWith('user_sessions_') ||
+        key.startsWith('predictive_insights_') ||
+        key.startsWith('performance_metrics_') ||
+        key.startsWith('security_alerts_')
+      ) {
         localStorage.removeItem(key);
       }
     });
@@ -375,11 +431,13 @@ export class MobileFirebaseService {
     let size = 0;
     const keys = Object.keys(localStorage);
     keys.forEach(key => {
-      if (key.startsWith('user_analytics_') || 
-          key.startsWith('user_sessions_') || 
-          key.startsWith('predictive_insights_') || 
-          key.startsWith('performance_metrics_') || 
-          key.startsWith('security_alerts_')) {
+      if (
+        key.startsWith('user_analytics_') ||
+        key.startsWith('user_sessions_') ||
+        key.startsWith('predictive_insights_') ||
+        key.startsWith('performance_metrics_') ||
+        key.startsWith('security_alerts_')
+      ) {
         size += localStorage.getItem(key)?.length || 0;
       }
     });
@@ -392,11 +450,15 @@ export class MobileFirebaseService {
   }
 
   // Get network status
-  public getNetworkStatus(): { isOnline: boolean; queueSize: number; cacheSize: number } {
+  public getNetworkStatus(): {
+    isOnline: boolean;
+    queueSize: number;
+    cacheSize: number;
+  } {
     return {
       isOnline: this.isOnline,
       queueSize: this.offlineQueue.length,
-      cacheSize: this.getCacheSize()
+      cacheSize: this.getCacheSize(),
     };
   }
 }

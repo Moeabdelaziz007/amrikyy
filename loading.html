@@ -1,672 +1,776 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Loading - AuraOS</title>
-    
+
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#00d9ff">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    
+    <meta name="theme-color" content="#00d9ff" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
     <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json">
-    
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
-    
+    <link rel="icon" type="image/x-icon" href="/icons/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
     <style>
-        .loading-page {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
-            background-attachment: fixed;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+      .loading-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+          135deg,
+          var(--bg-dark) 0%,
+          var(--bg-primary) 25%,
+          var(--bg-secondary) 50%,
+          var(--bg-tertiary) 75%,
+          var(--bg-primary) 100%
+        );
+        background-attachment: fixed;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
 
-        .loading-page::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.08) 0%, transparent 50%);
-            animation: ambient-glow 8s ease-in-out infinite alternate;
-            z-index: -1;
-        }
+      .loading-page::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(0, 217, 255, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(255, 107, 157, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 60%,
+            rgba(157, 78, 221, 0.08) 0%,
+            transparent 50%
+          );
+        animation: ambient-glow 8s ease-in-out infinite alternate;
+        z-index: -1;
+      }
 
+      .loading-container {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(20px);
+        border-radius: var(--radius-2xl);
+        padding: var(--spacing-12);
+        box-shadow: var(--glow-lg), var(--shadow-2xl);
+        border: 1px solid var(--border-color);
+        position: relative;
+        overflow: hidden;
+        max-width: 500px;
+        width: 90%;
+        animation: fadeInScale 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .loading-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--primary-gradient);
+        box-shadow: var(--glow-sm);
+      }
+
+      .loading-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-3);
+        margin-bottom: var(--spacing-8);
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--primary-color);
+        text-shadow: var(--neon-glow-sm);
+      }
+
+      .loading-logo i {
+        font-size: var(--font-size-4xl);
+        animation: logoSpin 3s ease-in-out infinite;
+      }
+
+      .loading-title {
+        font-size: var(--font-size-3xl);
+        font-weight: 700;
+        margin-bottom: var(--spacing-4);
+        color: var(--text-primary);
+        text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        animation: textGlow 2s ease-in-out infinite alternate;
+      }
+
+      .loading-subtitle {
+        color: var(--text-secondary);
+        font-size: var(--font-size-lg);
+        margin-bottom: var(--spacing-8);
+        opacity: 0.8;
+      }
+
+      .loading-spinner {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto var(--spacing-8);
+      }
+
+      .spinner-ring {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 3px solid transparent;
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+      }
+
+      .spinner-ring:nth-child(1) {
+        border-top: 3px solid var(--primary-color);
+        animation-duration: 2s;
+        box-shadow: 0 0 20px var(--primary-color);
+      }
+
+      .spinner-ring:nth-child(2) {
+        border-right: 3px solid var(--secondary-color);
+        animation-duration: 2.5s;
+        animation-direction: reverse;
+        box-shadow: 0 0 20px var(--secondary-color);
+      }
+
+      .spinner-ring:nth-child(3) {
+        border-bottom: 3px solid var(--accent-color);
+        animation-duration: 3s;
+        box-shadow: 0 0 20px var(--accent-color);
+      }
+
+      .spinner-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #000000;
+        font-size: var(--font-size-lg);
+        box-shadow: var(--glow-md);
+        animation: centerPulse 2s ease-in-out infinite;
+      }
+
+      .progress-container {
+        width: 100%;
+        margin-bottom: var(--spacing-6);
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: var(--spacing-3);
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: var(--primary-gradient);
+        border-radius: 4px;
+        width: 0%;
+        transition: width 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--glow-sm);
+      }
+
+      .progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        animation: progressShimmer 2s infinite;
+      }
+
+      .progress-text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--text-secondary);
+        font-size: var(--font-size-sm);
+      }
+
+      .progress-percentage {
+        font-weight: 600;
+        color: var(--primary-color);
+      }
+
+      .loading-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+      }
+
+      .loading-step {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-3);
+        padding: var(--spacing-2) 0;
+        color: var(--text-light);
+        font-size: var(--font-size-sm);
+        transition: all var(--transition-normal);
+        opacity: 0.5;
+      }
+
+      .loading-step.active {
+        color: var(--primary-color);
+        opacity: 1;
+        transform: translateX(5px);
+      }
+
+      .loading-step.completed {
+        color: var(--success-color);
+        opacity: 0.8;
+      }
+
+      .step-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: transparent;
+        border: 2px solid currentColor;
+        font-size: var(--font-size-xs);
+        transition: all var(--transition-normal);
+      }
+
+      .loading-step.active .step-icon {
+        background: var(--primary-color);
+        color: #000000;
+        box-shadow: var(--glow-sm);
+        animation: stepPulse 1s ease-in-out infinite;
+      }
+
+      .loading-step.completed .step-icon {
+        background: var(--success-color);
+        color: #000000;
+        border-color: var(--success-color);
+      }
+
+      .loading-messages {
+        margin-top: var(--spacing-6);
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .loading-message {
+        color: var(--text-secondary);
+        font-size: var(--font-size-base);
+        opacity: 0;
+        animation: fadeInOut 3s ease-in-out infinite;
+        position: absolute;
+      }
+
+      .loading-message:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .loading-message:nth-child(2) {
+        animation-delay: 3s;
+      }
+      .loading-message:nth-child(3) {
+        animation-delay: 6s;
+      }
+      .loading-message:nth-child(4) {
+        animation-delay: 9s;
+      }
+
+      .cancel-button {
+        position: absolute;
+        bottom: var(--spacing-6);
+        right: var(--spacing-6);
+        padding: var(--spacing-2) var(--spacing-4);
+        background: transparent;
+        color: var(--text-light);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-sm);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2);
+      }
+
+      .cancel-button:hover {
+        color: var(--error-color);
+        border-color: var(--error-color);
+        background: rgba(255, 71, 87, 0.1);
+      }
+
+      /* Animations */
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.8) translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes logoSpin {
+        0%,
+        100% {
+          transform: rotateY(0deg);
+        }
+        50% {
+          transform: rotateY(180deg);
+        }
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes centerPulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+      }
+
+      @keyframes stepPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      @keyframes progressShimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      @keyframes fadeInOut {
+        0%,
+        20% {
+          opacity: 0;
+        }
+        40%,
+        60% {
+          opacity: 1;
+        }
+        80%,
+        100% {
+          opacity: 0;
+        }
+      }
+
+      /* Mobile Responsiveness */
+      @media (max-width: 768px) {
         .loading-container {
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: var(--radius-2xl);
-            padding: var(--spacing-12);
-            box-shadow: var(--glow-lg), var(--shadow-2xl);
-            border: 1px solid var(--border-color);
-            position: relative;
-            overflow: hidden;
-            max-width: 500px;
-            width: 90%;
-            animation: fadeInScale 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .loading-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--primary-gradient);
-            box-shadow: var(--glow-sm);
-        }
-
-        .loading-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-3);
-            margin-bottom: var(--spacing-8);
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            color: var(--primary-color);
-            text-shadow: var(--neon-glow-sm);
-        }
-
-        .loading-logo i {
-            font-size: var(--font-size-4xl);
-            animation: logoSpin 3s ease-in-out infinite;
+          padding: var(--spacing-8);
+          margin: var(--spacing-4);
         }
 
         .loading-title {
-            font-size: var(--font-size-3xl);
-            font-weight: 700;
-            margin-bottom: var(--spacing-4);
-            color: var(--text-primary);
-            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
-            animation: textGlow 2s ease-in-out infinite alternate;
-        }
-
-        .loading-subtitle {
-            color: var(--text-secondary);
-            font-size: var(--font-size-lg);
-            margin-bottom: var(--spacing-8);
-            opacity: 0.8;
+          font-size: var(--font-size-2xl);
         }
 
         .loading-spinner {
-            position: relative;
-            width: 120px;
-            height: 120px;
-            margin: 0 auto var(--spacing-8);
+          width: 100px;
+          height: 100px;
         }
-
-        .spinner-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 3px solid transparent;
-            border-radius: 50%;
-            animation: spin 2s linear infinite;
-        }
-
-        .spinner-ring:nth-child(1) {
-            border-top: 3px solid var(--primary-color);
-            animation-duration: 2s;
-            box-shadow: 0 0 20px var(--primary-color);
-        }
-
-        .spinner-ring:nth-child(2) {
-            border-right: 3px solid var(--secondary-color);
-            animation-duration: 2.5s;
-            animation-direction: reverse;
-            box-shadow: 0 0 20px var(--secondary-color);
-        }
-
-        .spinner-ring:nth-child(3) {
-            border-bottom: 3px solid var(--accent-color);
-            animation-duration: 3s;
-            box-shadow: 0 0 20px var(--accent-color);
-        }
-
-        .spinner-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000000;
-            font-size: var(--font-size-lg);
-            box-shadow: var(--glow-md);
-            animation: centerPulse 2s ease-in-out infinite;
-        }
-
-        .progress-container {
-            width: 100%;
-            margin-bottom: var(--spacing-6);
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: var(--spacing-3);
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary-gradient);
-            border-radius: 4px;
-            width: 0%;
-            transition: width 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--glow-sm);
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: progressShimmer 2s infinite;
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-secondary);
-            font-size: var(--font-size-sm);
-        }
-
-        .progress-percentage {
-            font-weight: 600;
-            color: var(--primary-color);
-        }
-
-        .loading-steps {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: left;
-        }
-
-        .loading-step {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-3);
-            padding: var(--spacing-2) 0;
-            color: var(--text-light);
-            font-size: var(--font-size-sm);
-            transition: all var(--transition-normal);
-            opacity: 0.5;
-        }
-
-        .loading-step.active {
-            color: var(--primary-color);
-            opacity: 1;
-            transform: translateX(5px);
-        }
-
-        .loading-step.completed {
-            color: var(--success-color);
-            opacity: 0.8;
-        }
-
-        .step-icon {
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: transparent;
-            border: 2px solid currentColor;
-            font-size: var(--font-size-xs);
-            transition: all var(--transition-normal);
-        }
-
-        .loading-step.active .step-icon {
-            background: var(--primary-color);
-            color: #000000;
-            box-shadow: var(--glow-sm);
-            animation: stepPulse 1s ease-in-out infinite;
-        }
-
-        .loading-step.completed .step-icon {
-            background: var(--success-color);
-            color: #000000;
-            border-color: var(--success-color);
-        }
-
-        .loading-messages {
-            margin-top: var(--spacing-6);
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-message {
-            color: var(--text-secondary);
-            font-size: var(--font-size-base);
-            opacity: 0;
-            animation: fadeInOut 3s ease-in-out infinite;
-            position: absolute;
-        }
-
-        .loading-message:nth-child(1) { animation-delay: 0s; }
-        .loading-message:nth-child(2) { animation-delay: 3s; }
-        .loading-message:nth-child(3) { animation-delay: 6s; }
-        .loading-message:nth-child(4) { animation-delay: 9s; }
 
         .cancel-button {
-            position: absolute;
-            bottom: var(--spacing-6);
-            right: var(--spacing-6);
-            padding: var(--spacing-2) var(--spacing-4);
-            background: transparent;
-            color: var(--text-light);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-sm);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-2);
+          position: static;
+          margin-top: var(--spacing-6);
+          align-self: center;
         }
+      }
 
-        .cancel-button:hover {
-            color: var(--error-color);
-            border-color: var(--error-color);
-            background: rgba(255, 71, 87, 0.1);
+      /* Particle effects */
+      .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+        box-shadow: 0 0 6px var(--primary-color);
+      }
+
+      .particle:nth-child(odd) {
+        background: var(--secondary-color);
+        box-shadow: 0 0 6px var(--secondary-color);
+        animation-duration: 8s;
+      }
+
+      .particle:nth-child(3n) {
+        background: var(--accent-color);
+        box-shadow: 0 0 6px var(--accent-color);
+        animation-duration: 10s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(100vh) translateX(0);
+          opacity: 0;
         }
-
-        /* Animations */
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        10% {
+          opacity: 1;
         }
-
-        @keyframes logoSpin {
-            0%, 100% { transform: rotateY(0deg); }
-            50% { transform: rotateY(180deg); }
+        90% {
+          opacity: 1;
         }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        50% {
+          transform: translateY(50vh) translateX(50px);
         }
-
-        @keyframes centerPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.1); }
-        }
-
-        @keyframes stepPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        @keyframes progressShimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        @keyframes fadeInOut {
-            0%, 20% { opacity: 0; }
-            40%, 60% { opacity: 1; }
-            80%, 100% { opacity: 0; }
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .loading-container {
-                padding: var(--spacing-8);
-                margin: var(--spacing-4);
-            }
-
-            .loading-title {
-                font-size: var(--font-size-2xl);
-            }
-
-            .loading-spinner {
-                width: 100px;
-                height: 100px;
-            }
-
-            .cancel-button {
-                position: static;
-                margin-top: var(--spacing-6);
-                align-self: center;
-            }
-        }
-
-        /* Particle effects */
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
-            box-shadow: 0 0 6px var(--primary-color);
-        }
-
-        .particle:nth-child(odd) {
-            background: var(--secondary-color);
-            box-shadow: 0 0 6px var(--secondary-color);
-            animation-duration: 8s;
-        }
-
-        .particle:nth-child(3n) {
-            background: var(--accent-color);
-            box-shadow: 0 0 6px var(--accent-color);
-            animation-duration: 10s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(50vh) translateX(50px);
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="loading-page">
-        <!-- Floating Particles -->
-        <div class="particles-container" id="particlesContainer"></div>
+      <!-- Floating Particles -->
+      <div class="particles-container" id="particlesContainer"></div>
 
-        <div class="loading-container">
-            <div class="loading-logo">
-                <i class="fas fa-cube"></i>
-                <span>AuraOS</span>
-            </div>
-
-            <h1 class="loading-title" id="loadingTitle">Initializing...</h1>
-            <p class="loading-subtitle" id="loadingSubtitle">Setting up your experience</p>
-
-            <div class="loading-spinner">
-                <div class="spinner-ring"></div>
-                <div class="spinner-ring"></div>
-                <div class="spinner-ring"></div>
-                <div class="spinner-center">
-                    <i class="fas fa-rocket"></i>
-                </div>
-            </div>
-
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-text">
-                    <span id="currentStep">Loading system components...</span>
-                    <span class="progress-percentage" id="progressPercentage">0%</span>
-                </div>
-            </div>
-
-            <ul class="loading-steps" id="loadingSteps">
-                <li class="loading-step active" data-step="0">
-                    <div class="step-icon">
-                        <i class="fas fa-cog"></i>
-                    </div>
-                    <span>Initializing core systems</span>
-                </li>
-                <li class="loading-step" data-step="1">
-                    <div class="step-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span>Setting up user profile</span>
-                </li>
-                <li class="loading-step" data-step="2">
-                    <div class="step-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <span>Configuring security</span>
-                </li>
-                <li class="loading-step" data-step="3">
-                    <div class="step-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <span>Loading interface</span>
-                </li>
-                <li class="loading-step" data-step="4">
-                    <div class="step-icon">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <span>Finalizing setup</span>
-                </li>
-            </ul>
-
-            <div class="loading-messages">
-                <div class="loading-message">Welcome to the future of computing</div>
-                <div class="loading-message">Your personalized workspace is being prepared</div>
-                <div class="loading-message">Advanced AI systems are coming online</div>
-                <div class="loading-message">Almost ready to launch your experience</div>
-            </div>
+      <div class="loading-container">
+        <div class="loading-logo">
+          <i class="fas fa-cube"></i>
+          <span>AuraOS</span>
         </div>
 
-        <a href="index.html" class="cancel-button">
-            <i class="fas fa-times"></i>
-            <span>Cancel</span>
-        </a>
+        <h1 class="loading-title" id="loadingTitle">Initializing...</h1>
+        <p class="loading-subtitle" id="loadingSubtitle">
+          Setting up your experience
+        </p>
+
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-center">
+            <i class="fas fa-rocket"></i>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-text">
+            <span id="currentStep">Loading system components...</span>
+            <span class="progress-percentage" id="progressPercentage">0%</span>
+          </div>
+        </div>
+
+        <ul class="loading-steps" id="loadingSteps">
+          <li class="loading-step active" data-step="0">
+            <div class="step-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <span>Initializing core systems</span>
+          </li>
+          <li class="loading-step" data-step="1">
+            <div class="step-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <span>Setting up user profile</span>
+          </li>
+          <li class="loading-step" data-step="2">
+            <div class="step-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <span>Configuring security</span>
+          </li>
+          <li class="loading-step" data-step="3">
+            <div class="step-icon">
+              <i class="fas fa-palette"></i>
+            </div>
+            <span>Loading interface</span>
+          </li>
+          <li class="loading-step" data-step="4">
+            <div class="step-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <span>Finalizing setup</span>
+          </li>
+        </ul>
+
+        <div class="loading-messages">
+          <div class="loading-message">Welcome to the future of computing</div>
+          <div class="loading-message">
+            Your personalized workspace is being prepared
+          </div>
+          <div class="loading-message">
+            Advanced AI systems are coming online
+          </div>
+          <div class="loading-message">
+            Almost ready to launch your experience
+          </div>
+        </div>
+      </div>
+
+      <a href="index.html" class="cancel-button">
+        <i class="fas fa-times"></i>
+        <span>Cancel</span>
+      </a>
     </div>
 
     <script>
-        // Create floating particles
-        function createParticles() {
-            const container = document.getElementById('particlesContainer');
-            const particleCount = 15;
+      // Create floating particles
+      function createParticles() {
+        const container = document.getElementById('particlesContainer');
+        const particleCount = 15;
 
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
-                container.appendChild(particle);
-            }
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.animationDelay = Math.random() * 6 + 's';
+          particle.style.animationDuration = Math.random() * 4 + 6 + 's';
+          container.appendChild(particle);
+        }
+      }
+
+      // Initialize particles
+      createParticles();
+
+      // Loading simulation
+      class LoadingSimulator {
+        constructor() {
+          this.progress = 0;
+          this.currentStep = 0;
+          this.steps = [
+            {
+              title: 'Initializing...',
+              subtitle: 'Starting core systems',
+              message: 'Initializing core systems',
+            },
+            {
+              title: 'Loading Profile...',
+              subtitle: 'Setting up your account',
+              message: 'Setting up user profile',
+            },
+            {
+              title: 'Securing...',
+              subtitle: 'Applying security protocols',
+              message: 'Configuring security',
+            },
+            {
+              title: 'Customizing...',
+              subtitle: 'Preparing your interface',
+              message: 'Loading interface',
+            },
+            {
+              title: 'Finalizing...',
+              subtitle: 'Almost ready!',
+              message: 'Finalizing setup',
+            },
+          ];
+          this.init();
         }
 
-        // Initialize particles
-        createParticles();
-
-        // Loading simulation
-        class LoadingSimulator {
-            constructor() {
-                this.progress = 0;
-                this.currentStep = 0;
-                this.steps = [
-                    { title: 'Initializing...', subtitle: 'Starting core systems', message: 'Initializing core systems' },
-                    { title: 'Loading Profile...', subtitle: 'Setting up your account', message: 'Setting up user profile' },
-                    { title: 'Securing...', subtitle: 'Applying security protocols', message: 'Configuring security' },
-                    { title: 'Customizing...', subtitle: 'Preparing your interface', message: 'Loading interface' },
-                    { title: 'Finalizing...', subtitle: 'Almost ready!', message: 'Finalizing setup' }
-                ];
-                this.init();
-            }
-
-            init() {
-                this.updateProgress();
-                this.startLoading();
-            }
-
-            updateProgress() {
-                const progressFill = document.getElementById('progressFill');
-                const progressPercentage = document.getElementById('progressPercentage');
-                const currentStepText = document.getElementById('currentStep');
-                const loadingTitle = document.getElementById('loadingTitle');
-                const loadingSubtitle = document.getElementById('loadingSubtitle');
-
-                // Update progress bar
-                progressFill.style.width = this.progress + '%';
-                progressPercentage.textContent = Math.round(this.progress) + '%';
-
-                // Update current step
-                const step = this.steps[this.currentStep];
-                if (step) {
-                    currentStepText.textContent = step.message;
-                    loadingTitle.textContent = step.title;
-                    loadingSubtitle.textContent = step.subtitle;
-                }
-
-                // Update step indicators
-                this.updateStepIndicators();
-            }
-
-            updateStepIndicators() {
-                const stepElements = document.querySelectorAll('.loading-step');
-                stepElements.forEach((element, index) => {
-                    element.classList.remove('active', 'completed');
-                    
-                    if (index < this.currentStep) {
-                        element.classList.add('completed');
-                        const icon = element.querySelector('.step-icon i');
-                        icon.className = 'fas fa-check';
-                    } else if (index === this.currentStep) {
-                        element.classList.add('active');
-                    }
-                });
-            }
-
-            startLoading() {
-                const interval = setInterval(() => {
-                    // Simulate variable loading speeds
-                    const increment = Math.random() * 3 + 1;
-                    this.progress += increment;
-
-                    // Update step based on progress
-                    const stepProgress = this.progress / 100 * this.steps.length;
-                    const newStep = Math.floor(stepProgress);
-                    
-                    if (newStep !== this.currentStep && newStep < this.steps.length) {
-                        this.currentStep = newStep;
-                    }
-
-                    this.updateProgress();
-
-                    // Complete loading
-                    if (this.progress >= 100) {
-                        clearInterval(interval);
-                        this.completeLoading();
-                    }
-                }, 100 + Math.random() * 200); // Variable timing
-            }
-
-            completeLoading() {
-                // Mark all steps as completed
-                this.currentStep = this.steps.length - 1;
-                this.updateStepIndicators();
-                
-                // Show completion message
-                document.getElementById('loadingTitle').textContent = 'Ready!';
-                document.getElementById('loadingSubtitle').textContent = 'Launching your AuraOS experience';
-                document.getElementById('currentStep').textContent = 'Setup complete';
-
-                // Redirect after a short delay
-                setTimeout(() => {
-                    this.redirect();
-                }, 1500);
-            }
-
-            redirect() {
-                // Get URL parameters
-                const urlParams = new URLSearchParams(window.location.search);
-                const redirectUrl = urlParams.get('redirect') || 'dashboard.html';
-                const isGuest = urlParams.get('guest') === 'true';
-                const provider = urlParams.get('provider');
-
-                // Add parameters to redirect URL if needed
-                let finalUrl = redirectUrl;
-                const params = new URLSearchParams();
-                
-                if (isGuest) params.append('guest', 'true');
-                if (provider) params.append('provider', provider);
-                
-                if (params.toString()) {
-                    finalUrl += '?' + params.toString();
-                }
-
-                // Smooth transition
-                document.body.style.opacity = '0';
-                document.body.style.transition = 'opacity 0.5s ease';
-                
-                setTimeout(() => {
-                    window.location.href = finalUrl;
-                }, 500);
-            }
+        init() {
+          this.updateProgress();
+          this.startLoading();
         }
 
-        // Start loading simulation
-        new LoadingSimulator();
+        updateProgress() {
+          const progressFill = document.getElementById('progressFill');
+          const progressPercentage =
+            document.getElementById('progressPercentage');
+          const currentStepText = document.getElementById('currentStep');
+          const loadingTitle = document.getElementById('loadingTitle');
+          const loadingSubtitle = document.getElementById('loadingSubtitle');
 
-        // Handle page visibility changes
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                // Pause animations when tab is not visible
-                document.body.style.animationPlayState = 'paused';
-            } else {
-                // Resume animations
-                document.body.style.animationPlayState = 'running';
+          // Update progress bar
+          progressFill.style.width = this.progress + '%';
+          progressPercentage.textContent = Math.round(this.progress) + '%';
+
+          // Update current step
+          const step = this.steps[this.currentStep];
+          if (step) {
+            currentStepText.textContent = step.message;
+            loadingTitle.textContent = step.title;
+            loadingSubtitle.textContent = step.subtitle;
+          }
+
+          // Update step indicators
+          this.updateStepIndicators();
+        }
+
+        updateStepIndicators() {
+          const stepElements = document.querySelectorAll('.loading-step');
+          stepElements.forEach((element, index) => {
+            element.classList.remove('active', 'completed');
+
+            if (index < this.currentStep) {
+              element.classList.add('completed');
+              const icon = element.querySelector('.step-icon i');
+              icon.className = 'fas fa-check';
+            } else if (index === this.currentStep) {
+              element.classList.add('active');
             }
-        });
+          });
+        }
 
-        // Preload next page
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectUrl = urlParams.get('redirect') || 'dashboard.html';
-        
-        // Create a hidden link to preload the next page
-        const preloadLink = document.createElement('link');
-        preloadLink.rel = 'preload';
-        preloadLink.as = 'document';
-        preloadLink.href = redirectUrl;
-        document.head.appendChild(preloadLink);
+        startLoading() {
+          const interval = setInterval(
+            () => {
+              // Simulate variable loading speeds
+              const increment = Math.random() * 3 + 1;
+              this.progress += increment;
+
+              // Update step based on progress
+              const stepProgress = (this.progress / 100) * this.steps.length;
+              const newStep = Math.floor(stepProgress);
+
+              if (newStep !== this.currentStep && newStep < this.steps.length) {
+                this.currentStep = newStep;
+              }
+
+              this.updateProgress();
+
+              // Complete loading
+              if (this.progress >= 100) {
+                clearInterval(interval);
+                this.completeLoading();
+              }
+            },
+            100 + Math.random() * 200
+          ); // Variable timing
+        }
+
+        completeLoading() {
+          // Mark all steps as completed
+          this.currentStep = this.steps.length - 1;
+          this.updateStepIndicators();
+
+          // Show completion message
+          document.getElementById('loadingTitle').textContent = 'Ready!';
+          document.getElementById('loadingSubtitle').textContent =
+            'Launching your AuraOS experience';
+          document.getElementById('currentStep').textContent = 'Setup complete';
+
+          // Redirect after a short delay
+          setTimeout(() => {
+            this.redirect();
+          }, 1500);
+        }
+
+        redirect() {
+          // Get URL parameters
+          const urlParams = new URLSearchParams(window.location.search);
+          const redirectUrl = urlParams.get('redirect') || 'dashboard.html';
+          const isGuest = urlParams.get('guest') === 'true';
+          const provider = urlParams.get('provider');
+
+          // Add parameters to redirect URL if needed
+          let finalUrl = redirectUrl;
+          const params = new URLSearchParams();
+
+          if (isGuest) params.append('guest', 'true');
+          if (provider) params.append('provider', provider);
+
+          if (params.toString()) {
+            finalUrl += '?' + params.toString();
+          }
+
+          // Smooth transition
+          document.body.style.opacity = '0';
+          document.body.style.transition = 'opacity 0.5s ease';
+
+          setTimeout(() => {
+            window.location.href = finalUrl;
+          }, 500);
+        }
+      }
+
+      // Start loading simulation
+      new LoadingSimulator();
+
+      // Handle page visibility changes
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          // Pause animations when tab is not visible
+          document.body.style.animationPlayState = 'paused';
+        } else {
+          // Resume animations
+          document.body.style.animationPlayState = 'running';
+        }
+      });
+
+      // Preload next page
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect') || 'dashboard.html';
+
+      // Create a hidden link to preload the next page
+      const preloadLink = document.createElement('link');
+      preloadLink.rel = 'preload';
+      preloadLink.as = 'document';
+      preloadLink.href = redirectUrl;
+      document.head.appendChild(preloadLink);
     </script>
-</body>
+  </body>
 </html>

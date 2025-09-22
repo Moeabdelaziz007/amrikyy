@@ -2,7 +2,15 @@
 import { automationApi } from './automation-api';
 
 export interface WebSocketMessage {
-  type: 'task_update' | 'execution_update' | 'workspace_update' | 'system_health' | 'alert' | 'notification' | 'data_response' | 'error';
+  type:
+    | 'task_update'
+    | 'execution_update'
+    | 'workspace_update'
+    | 'system_health'
+    | 'alert'
+    | 'notification'
+    | 'data_response'
+    | 'error';
   data: any;
   timestamp: string;
   userId?: string;
@@ -36,7 +44,11 @@ export class AutomationWebSocketClient {
   private isConnecting = false;
   private isManualDisconnect = false;
 
-  constructor(serverUrl: string = 'ws://localhost:3001', token: string, workspaceId?: string) {
+  constructor(
+    serverUrl: string = 'ws://localhost:3001',
+    token: string,
+    workspaceId?: string
+  ) {
     this.url = `${serverUrl}/ws/automation`;
     this.token = token;
     this.workspaceId = workspaceId;
@@ -44,7 +56,10 @@ export class AutomationWebSocketClient {
 
   public connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (this.isConnecting || (this.ws && this.ws.readyState === WebSocket.OPEN)) {
+      if (
+        this.isConnecting ||
+        (this.ws && this.ws.readyState === WebSocket.OPEN)
+      ) {
         resolve();
         return;
       }
@@ -70,28 +85,30 @@ export class AutomationWebSocketClient {
           resolve();
         };
 
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = event => {
           this.handleMessage(event.data);
         };
 
-        this.ws.onclose = (event) => {
+        this.ws.onclose = event => {
           console.log('🔌 WebSocket disconnected:', event.code, event.reason);
           this.isConnecting = false;
           this.stopHeartbeat();
           this.handlers.onDisconnect?.();
-          
-          if (!this.isManualDisconnect && this.reconnectAttempts < this.maxReconnectAttempts) {
+
+          if (
+            !this.isManualDisconnect &&
+            this.reconnectAttempts < this.maxReconnectAttempts
+          ) {
             this.scheduleReconnect();
           }
         };
 
-        this.ws.onerror = (error) => {
+        this.ws.onerror = error => {
           console.error('🔌 WebSocket error:', error);
           this.isConnecting = false;
           this.handlers.onError?.(error);
           reject(error);
         };
-
       } catch (error) {
         this.isConnecting = false;
         reject(error);
@@ -102,7 +119,7 @@ export class AutomationWebSocketClient {
   public disconnect(): void {
     this.isManualDisconnect = true;
     this.stopHeartbeat();
-    
+
     if (this.ws) {
       this.ws.close(1000, 'Client disconnect');
       this.ws = null;
@@ -112,28 +129,28 @@ export class AutomationWebSocketClient {
   public subscribe(subscriptions: string[]): void {
     this.sendMessage({
       type: 'subscribe',
-      data: { subscriptions }
+      data: { subscriptions },
     });
   }
 
   public unsubscribe(subscriptions: string[]): void {
     this.sendMessage({
       type: 'unsubscribe',
-      data: { subscriptions }
+      data: { subscriptions },
     });
   }
 
   public requestData(type: string, params?: any): void {
     this.sendMessage({
       type: 'get_data',
-      data: { type, params }
+      data: { type, params },
     });
   }
 
   public ping(): void {
     this.sendMessage({
       type: 'ping',
-      data: {}
+      data: {},
     });
   }
 
@@ -144,7 +161,7 @@ export class AutomationWebSocketClient {
   private handleMessage(data: string): void {
     try {
       const message: WebSocketMessage = JSON.parse(data);
-      
+
       switch (message.type) {
         case 'task_update':
           this.handlers.onTaskUpdate?.(message.data);
@@ -165,7 +182,10 @@ export class AutomationWebSocketClient {
           this.handlers.onNotification?.(message.data);
           break;
         case 'data_response':
-          this.handlers.onDataResponse?.(message.data.requestType, message.data.data);
+          this.handlers.onDataResponse?.(
+            message.data.requestType,
+            message.data.data
+          );
           break;
         case 'error':
           this.handlers.onError?.(message.data);
@@ -193,17 +213,22 @@ export class AutomationWebSocketClient {
 
   private scheduleReconnect(): void {
     this.reconnectAttempts++;
-    const delay = this.reconnectInterval * Math.pow(2, this.reconnectAttempts - 1);
-    
-    console.log(`🔄 Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-    
+    const delay =
+      this.reconnectInterval * Math.pow(2, this.reconnectAttempts - 1);
+
+    console.log(
+      `🔄 Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`
+    );
+
     setTimeout(() => {
       if (!this.isManualDisconnect) {
-        this.connect().then(() => {
-          this.handlers.onReconnect?.();
-        }).catch((error) => {
-          console.error('Reconnection failed:', error);
-        });
+        this.connect()
+          .then(() => {
+            this.handlers.onReconnect?.();
+          })
+          .catch(error => {
+            console.error('Reconnection failed:', error);
+          });
       }
     }, delay);
   }
@@ -261,8 +286,12 @@ export function useAutomationWebSocket(
   const connect = useCallback(async () => {
     try {
       const token = localStorage.getItem('auth_token') || 'demo-token';
-      wsClientRef.current = new AutomationWebSocketClient(serverUrl, token, workspaceId);
-      
+      wsClientRef.current = new AutomationWebSocketClient(
+        serverUrl,
+        token,
+        workspaceId
+      );
+
       wsClientRef.current.setEventHandlers({
         ...handlers,
         onConnect: () => {
@@ -274,7 +303,7 @@ export function useAutomationWebSocket(
           setIsConnected(false);
           handlers?.onDisconnect?.();
         },
-        onError: (error) => {
+        onError: error => {
           setConnectionError(error.message || 'WebSocket error');
           handlers?.onError?.(error);
         },
@@ -282,11 +311,11 @@ export function useAutomationWebSocket(
           setIsConnected(true);
           setConnectionError(null);
           handlers?.onReconnect?.();
-        }
+        },
       });
 
       await wsClientRef.current.connect();
-      
+
       // Subscribe to common events
       wsClientRef.current.subscribe([
         'task_update',
@@ -294,12 +323,13 @@ export function useAutomationWebSocket(
         'workspace_update',
         'system_health',
         'alert',
-        'notification'
+        'notification',
       ]);
-
     } catch (error) {
       console.error('Failed to connect WebSocket:', error);
-      setConnectionError(error instanceof Error ? error.message : 'Connection failed');
+      setConnectionError(
+        error instanceof Error ? error.message : 'Connection failed'
+      );
     }
   }, [serverUrl, workspaceId, handlers]);
 
@@ -326,7 +356,7 @@ export function useAutomationWebSocket(
 
   useEffect(() => {
     connect();
-    
+
     return () => {
       disconnect();
     };
@@ -346,7 +376,7 @@ export function useAutomationWebSocket(
     subscribe,
     unsubscribe,
     requestData,
-    ping
+    ping,
   };
 }
 
@@ -357,7 +387,10 @@ export function getGlobalWebSocketClient(): AutomationWebSocketClient | null {
   return globalWsClient;
 }
 
-export function initializeGlobalWebSocketClient(serverUrl?: string, workspaceId?: string): AutomationWebSocketClient {
+export function initializeGlobalWebSocketClient(
+  serverUrl?: string,
+  workspaceId?: string
+): AutomationWebSocketClient {
   const token = localStorage.getItem('auth_token') || 'demo-token';
   globalWsClient = new AutomationWebSocketClient(serverUrl, token, workspaceId);
   return globalWsClient;

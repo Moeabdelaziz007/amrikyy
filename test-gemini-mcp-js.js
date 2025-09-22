@@ -7,7 +7,7 @@ class GeminiTestSuite {
     this.results = {
       passed: 0,
       failed: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -17,9 +17,11 @@ class GeminiTestSuite {
 
   async runTests() {
     console.log('🚀 Starting Gemini MCP Integration Tests\n');
-    console.log('=' .repeat(60));
-    console.log('🔑 Using Gemini API Key: AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
+    console.log(
+      '🔑 Using Gemini API Key: AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
+    );
+    console.log('='.repeat(60));
 
     for (const test of this.tests) {
       try {
@@ -39,12 +41,14 @@ class GeminiTestSuite {
   }
 
   printSummary() {
-    console.log('\n' + '=' .repeat(60));
+    console.log('\n' + '='.repeat(60));
     console.log('📊 GEMINI MCP TEST SUMMARY');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log(`✅ Passed: ${this.results.passed}`);
     console.log(`❌ Failed: ${this.results.failed}`);
-    console.log(`📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`);
+    console.log(
+      `📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`
+    );
 
     if (this.results.errors.length > 0) {
       console.log('\n🔍 FAILED TESTS:');
@@ -63,19 +67,19 @@ const testSuite = new GeminiTestSuite();
 // Test 1: Gemini API Connection
 testSuite.addTest('Gemini API Connection', async () => {
   const config = geminiMCP.getConfig();
-  
+
   if (!config.apiKey) {
     throw new Error('Gemini API key not configured');
   }
-  
+
   if (config.apiKey !== 'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU') {
     throw new Error('Incorrect API key');
   }
-  
+
   if (!config.model) {
     throw new Error('Gemini model not configured');
   }
-  
+
   console.log(`   📋 Model: ${config.model}`);
   console.log(`   🔑 API Key: ${config.apiKey.substring(0, 10)}...`);
 });
@@ -83,11 +87,11 @@ testSuite.addTest('Gemini API Connection', async () => {
 // Test 2: Tool Registration
 testSuite.addTest('Gemini Tool Registration', async () => {
   const tools = geminiMCP.getGeminiTools();
-  
+
   if (tools.length === 0) {
     throw new Error('No Gemini tools registered');
   }
-  
+
   const expectedTools = [
     'gemini_sentiment_analysis',
     'gemini_text_summarization',
@@ -96,9 +100,9 @@ testSuite.addTest('Gemini Tool Registration', async () => {
     'gemini_content_generation',
     'gemini_data_analysis',
     'gemini_question_answering',
-    'gemini_text_enhancement'
+    'gemini_text_enhancement',
   ];
-  
+
   for (const expected of expectedTools) {
     const tool = tools.find(t => t.name === expected);
     if (!tool) {
@@ -108,7 +112,7 @@ testSuite.addTest('Gemini Tool Registration', async () => {
       throw new Error(`Tool ${expected} should use Gemini`);
     }
   }
-  
+
   console.log(`   📊 Total Gemini Tools: ${tools.length}`);
 });
 
@@ -117,7 +121,7 @@ testSuite.addTest('Gemini Sentiment Analysis', async () => {
   const result = await geminiMCP.executeTool('gemini_sentiment_analysis', {
     text: 'I absolutely love this new AI system! It is amazing, wonderful, and fantastic. The features are incredible!',
     detail: 'simple',
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -132,7 +136,9 @@ testSuite.addTest('Gemini Sentiment Analysis', async () => {
     throw new Error('Missing execution duration');
   }
 
-  console.log(`   📊 Result: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   📊 Result: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
   console.log(`   ⏱️ Duration: ${result.duration}ms`);
 });
 
@@ -152,7 +158,7 @@ testSuite.addTest('Gemini Text Summarization', async () => {
     text: longText,
     maxLength: 50,
     style: 'concise',
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -163,7 +169,9 @@ testSuite.addTest('Gemini Text Summarization', async () => {
     throw new Error('No summarization result');
   }
 
-  console.log(`   📝 Summary: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   📝 Summary: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 5: Translation
@@ -173,7 +181,7 @@ testSuite.addTest('Gemini Translation', async () => {
     from: 'en',
     to: 'es',
     context: 'casual conversation',
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -184,7 +192,9 @@ testSuite.addTest('Gemini Translation', async () => {
     throw new Error('No translation result');
   }
 
-  console.log(`   🌍 Translation: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   🌍 Translation: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
 });
 
 // Test 6: Code Explanation
@@ -203,7 +213,7 @@ testSuite.addTest('Gemini Code Explanation', async () => {
     language: 'javascript',
     detail: 'detailed',
     includeExamples: true,
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -214,7 +224,9 @@ testSuite.addTest('Gemini Code Explanation', async () => {
     throw new Error('No code explanation result');
   }
 
-  console.log(`   💻 Explanation: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   💻 Explanation: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 7: Content Generation
@@ -224,7 +236,7 @@ testSuite.addTest('Gemini Content Generation', async () => {
     type: 'article',
     length: 'short',
     tone: 'professional',
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -235,7 +247,9 @@ testSuite.addTest('Gemini Content Generation', async () => {
     throw new Error('No content generation result');
   }
 
-  console.log(`   ✍️ Generated Content: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   ✍️ Generated Content: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 8: Data Analysis
@@ -259,7 +273,7 @@ testSuite.addTest('Gemini Data Analysis', async () => {
     analysisType: 'trends',
     context: 'Quarterly business performance',
     format: 'text',
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -270,17 +284,20 @@ testSuite.addTest('Gemini Data Analysis', async () => {
     throw new Error('No data analysis result');
   }
 
-  console.log(`   📊 Analysis: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   📊 Analysis: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 9: Question Answering
 testSuite.addTest('Gemini Question Answering', async () => {
   const result = await geminiMCP.executeTool('gemini_question_answering', {
-    question: 'What are the main advantages of using machine learning in business?',
+    question:
+      'What are the main advantages of using machine learning in business?',
     context: 'Business applications and automation',
     detail: 'detailed',
     includeSources: false,
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -291,19 +308,22 @@ testSuite.addTest('Gemini Question Answering', async () => {
     throw new Error('No question answering result');
   }
 
-  console.log(`   ❓ Answer: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   ❓ Answer: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 10: Text Enhancement
 testSuite.addTest('Gemini Text Enhancement', async () => {
-  const text = 'this is a badly writen text with lots of errors and poor grammar. it needs improvment.';
+  const text =
+    'this is a badly writen text with lots of errors and poor grammar. it needs improvment.';
 
   const result = await geminiMCP.executeTool('gemini_text_enhancement', {
     text: text,
     enhancement: 'all',
     targetAudience: 'professional',
     preserveOriginal: true,
-    useCache: false
+    useCache: false,
   });
 
   if (!result.success) {
@@ -314,7 +334,9 @@ testSuite.addTest('Gemini Text Enhancement', async () => {
     throw new Error('No text enhancement result');
   }
 
-  console.log(`   ✨ Enhanced Text: ${JSON.stringify(result.result).substring(0, 150)}...`);
+  console.log(
+    `   ✨ Enhanced Text: ${JSON.stringify(result.result).substring(0, 150)}...`
+  );
 });
 
 // Test 11: Caching Mechanism
@@ -322,14 +344,20 @@ testSuite.addTest('Gemini Caching Mechanism', async () => {
   const params = {
     text: 'This is a test for Gemini caching',
     detail: 'simple',
-    useCache: true
+    useCache: true,
   };
 
   // First call
-  const result1 = await geminiMCP.executeTool('gemini_sentiment_analysis', params);
-  
+  const result1 = await geminiMCP.executeTool(
+    'gemini_sentiment_analysis',
+    params
+  );
+
   // Second call (should use cache)
-  const result2 = await geminiMCP.executeTool('gemini_sentiment_analysis', params);
+  const result2 = await geminiMCP.executeTool(
+    'gemini_sentiment_analysis',
+    params
+  );
 
   if (!result1.success || !result2.success) {
     throw new Error('Caching test failed');
@@ -339,7 +367,9 @@ testSuite.addTest('Gemini Caching Mechanism', async () => {
     throw new Error('Second call should have used cache');
   }
 
-  console.log(`   💾 Cache Test: First call ${result1.duration}ms, Second call ${result2.duration}ms`);
+  console.log(
+    `   💾 Cache Test: First call ${result1.duration}ms, Second call ${result2.duration}ms`
+  );
 });
 
 // Test 12: Error Handling
@@ -347,7 +377,7 @@ testSuite.addTest('Gemini Error Handling', async () => {
   try {
     await geminiMCP.executeTool('gemini_sentiment_analysis', {
       // Missing required 'text' parameter
-      detail: 'simple'
+      detail: 'simple',
     });
     throw new Error('Should have thrown validation error');
   } catch (error) {
@@ -361,7 +391,7 @@ testSuite.addTest('Gemini Error Handling', async () => {
 // Test 13: Rate Limiting
 testSuite.addTest('Gemini Rate Limiting', async () => {
   const tool = geminiMCP.getTool('gemini_sentiment_analysis');
-  
+
   if (!tool || !tool.rateLimit) {
     throw new Error('Tool should have rate limit');
   }
@@ -379,11 +409,11 @@ testSuite.addTest('Gemini Metrics Collection', async () => {
   await geminiMCP.executeTool('gemini_sentiment_analysis', {
     text: 'Test metrics collection',
     detail: 'simple',
-    useCache: false
+    useCache: false,
   });
 
   const metrics = geminiMCP.getMetrics();
-  
+
   if (typeof metrics.gemini_api_calls !== 'number') {
     throw new Error('Missing gemini_api_calls metric');
   }
@@ -392,14 +422,16 @@ testSuite.addTest('Gemini Metrics Collection', async () => {
     throw new Error('Gemini API calls metric not incremented');
   }
 
-  console.log(`   📈 Metrics: ${Object.keys(metrics).length} metrics collected`);
+  console.log(
+    `   📈 Metrics: ${Object.keys(metrics).length} metrics collected`
+  );
   console.log(`   🔢 API Calls: ${metrics.gemini_api_calls || 0}`);
 });
 
 // Test 15: Configuration Validation
 testSuite.addTest('Gemini Configuration Validation', async () => {
   const config = geminiMCP.getConfig();
-  
+
   if (!config.apiKey) {
     throw new Error('Missing API key configuration');
   }
@@ -416,29 +448,31 @@ testSuite.addTest('Gemini Configuration Validation', async () => {
     throw new Error('Missing generation config');
   }
 
-  console.log(`   ⚙️ Config: Model=${config.model}, Safety=${config.safetySettings.length} settings`);
+  console.log(
+    `   ⚙️ Config: Model=${config.model}, Safety=${config.safetySettings.length} settings`
+  );
 });
 
 // Test 16: Performance Test
 testSuite.addTest('Gemini Performance Test', async () => {
   const startTime = Date.now();
-  
+
   const promises = [
     geminiMCP.executeTool('gemini_sentiment_analysis', {
       text: 'Performance test 1',
       detail: 'simple',
-      useCache: false
+      useCache: false,
     }),
     geminiMCP.executeTool('gemini_sentiment_analysis', {
       text: 'Performance test 2',
       detail: 'simple',
-      useCache: false
+      useCache: false,
     }),
     geminiMCP.executeTool('gemini_sentiment_analysis', {
       text: 'Performance test 3',
       detail: 'simple',
-      useCache: false
-    })
+      useCache: false,
+    }),
   ];
 
   const results = await Promise.all(promises);
@@ -450,7 +484,9 @@ testSuite.addTest('Gemini Performance Test', async () => {
     }
   }
 
-  console.log(`   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime/3)}ms per operation)`);
+  console.log(
+    `   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime / 3)}ms per operation)`
+  );
 });
 
 // Run all tests

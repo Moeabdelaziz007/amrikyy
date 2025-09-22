@@ -14,17 +14,17 @@ router.get('/status', async (req, res) => {
       totalUsers: analytics.totalUsers,
       totalChats: analytics.totalChats,
       queueLength: analytics.queueLength,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     res.json({
       success: true,
-      data: botInfo
+      data: botInfo,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -37,23 +37,23 @@ router.post('/send-message', async (req, res) => {
     if (!chatId || !text) {
       return res.status(400).json({
         success: false,
-        error: 'chatId and text are required'
+        error: 'chatId and text are required',
       });
     }
 
     await enhancedTelegramService.sendMessageToUser(chatId, text, {
       parseMode,
-      ...options
+      ...options,
     });
 
     res.json({
       success: true,
-      message: 'Message sent successfully'
+      message: 'Message sent successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -66,7 +66,7 @@ router.post('/broadcast', async (req, res) => {
     if (!message) {
       return res.status(400).json({
         success: false,
-        error: 'message is required'
+        error: 'message is required',
       });
     }
 
@@ -74,12 +74,12 @@ router.post('/broadcast', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Broadcast sent successfully'
+      message: 'Broadcast sent successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -92,7 +92,7 @@ router.post('/ai-message', async (req, res) => {
     if (!chatId || !question) {
       return res.status(400).json({
         success: false,
-        error: 'chatId and question are required'
+        error: 'chatId and question are required',
       });
     }
 
@@ -101,30 +101,35 @@ router.post('/ai-message', async (req, res) => {
       context: context || 'Telegram user query',
       detail: 'detailed',
       includeSources: false,
-      useCache: true
+      useCache: true,
     });
 
     if (result.success) {
-      const answer = typeof result.result === 'string' ? result.result : result.result.text;
-      await enhancedTelegramService.sendMessageToUser(chatId, `🤖 AI Response:\n\n${answer}`, {
-        parseMode: 'Markdown'
-      });
+      const answer =
+        typeof result.result === 'string' ? result.result : result.result.text;
+      await enhancedTelegramService.sendMessageToUser(
+        chatId,
+        `🤖 AI Response:\n\n${answer}`,
+        {
+          parseMode: 'Markdown',
+        }
+      );
 
       res.json({
         success: true,
         message: 'AI response sent successfully',
-        answer: answer.substring(0, 100) + '...'
+        answer: answer.substring(0, 100) + '...',
       });
     } else {
       res.status(500).json({
         success: false,
-        error: 'Failed to generate AI response'
+        error: 'Failed to generate AI response',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -137,7 +142,7 @@ router.post('/translate', async (req, res) => {
     if (!chatId || !text || !to) {
       return res.status(400).json({
         success: false,
-        error: 'chatId, text, and to are required'
+        error: 'chatId, text, and to are required',
       });
     }
 
@@ -145,28 +150,32 @@ router.post('/translate', async (req, res) => {
       text,
       from: from || 'auto',
       to,
-      useCache: true
+      useCache: true,
     });
 
     if (result.success) {
-      const translation = typeof result.result === 'string' ? result.result : result.result.text;
-      await enhancedTelegramService.sendMessageToUser(chatId, `🌍 Translation to ${to}:\n\n${translation}`);
+      const translation =
+        typeof result.result === 'string' ? result.result : result.result.text;
+      await enhancedTelegramService.sendMessageToUser(
+        chatId,
+        `🌍 Translation to ${to}:\n\n${translation}`
+      );
 
       res.json({
         success: true,
         message: 'Translation sent successfully',
-        translation: translation.substring(0, 100) + '...'
+        translation: translation.substring(0, 100) + '...',
       });
     } else {
       res.status(500).json({
         success: false,
-        error: 'Failed to translate text'
+        error: 'Failed to translate text',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -179,37 +188,44 @@ router.post('/analyze-sentiment', async (req, res) => {
     if (!chatId || !text) {
       return res.status(400).json({
         success: false,
-        error: 'chatId and text are required'
+        error: 'chatId and text are required',
       });
     }
 
     const result = await geminiMCP.executeTool('gemini_sentiment_analysis', {
       text,
       detail: 'detailed',
-      useCache: true
+      useCache: true,
     });
 
     if (result.success) {
-      const analysis = typeof result.result === 'string' ? result.result : JSON.stringify(result.result);
-      await enhancedTelegramService.sendMessageToUser(chatId, `📊 Sentiment Analysis:\n\n${analysis}`, {
-        parseMode: 'Markdown'
-      });
+      const analysis =
+        typeof result.result === 'string'
+          ? result.result
+          : JSON.stringify(result.result);
+      await enhancedTelegramService.sendMessageToUser(
+        chatId,
+        `📊 Sentiment Analysis:\n\n${analysis}`,
+        {
+          parseMode: 'Markdown',
+        }
+      );
 
       res.json({
         success: true,
         message: 'Sentiment analysis sent successfully',
-        analysis: analysis.substring(0, 100) + '...'
+        analysis: analysis.substring(0, 100) + '...',
       });
     } else {
       res.status(500).json({
         success: false,
-        error: 'Failed to analyze sentiment'
+        error: 'Failed to analyze sentiment',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -222,7 +238,7 @@ router.post('/generate-content', async (req, res) => {
     if (!chatId || !prompt) {
       return res.status(400).json({
         success: false,
-        error: 'chatId and prompt are required'
+        error: 'chatId and prompt are required',
       });
     }
 
@@ -231,30 +247,35 @@ router.post('/generate-content', async (req, res) => {
       type: type || 'article',
       length: length || 'medium',
       tone: tone || 'professional',
-      useCache: true
+      useCache: true,
     });
 
     if (result.success) {
-      const content = typeof result.result === 'string' ? result.result : result.result.text;
-      await enhancedTelegramService.sendMessageToUser(chatId, `✍️ Generated Content:\n\n${content}`, {
-        parseMode: 'Markdown'
-      });
+      const content =
+        typeof result.result === 'string' ? result.result : result.result.text;
+      await enhancedTelegramService.sendMessageToUser(
+        chatId,
+        `✍️ Generated Content:\n\n${content}`,
+        {
+          parseMode: 'Markdown',
+        }
+      );
 
       res.json({
         success: true,
         message: 'Content generated successfully',
-        content: content.substring(0, 100) + '...'
+        content: content.substring(0, 100) + '...',
       });
     } else {
       res.status(500).json({
         success: false,
-        error: 'Failed to generate content'
+        error: 'Failed to generate content',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -268,7 +289,7 @@ router.get('/analytics/:chatId', async (req, res) => {
     if (isNaN(chatIdNum)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid chatId'
+        error: 'Invalid chatId',
       });
     }
 
@@ -280,13 +301,13 @@ router.get('/analytics/:chatId', async (req, res) => {
       data: {
         analytics,
         session,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -299,22 +320,25 @@ router.post('/send-photo', async (req, res) => {
     if (!chatId || !photo) {
       return res.status(400).json({
         success: false,
-        error: 'chatId and photo are required'
+        error: 'chatId and photo are required',
       });
     }
 
     // This would need to be implemented with the actual bot instance
     // For now, we'll send a text message
-    await enhancedTelegramService.sendMessageToUser(chatId, `📸 Photo received${caption ? `: ${caption}` : ''}`);
+    await enhancedTelegramService.sendMessageToUser(
+      chatId,
+      `📸 Photo received${caption ? `: ${caption}` : ''}`
+    );
 
     res.json({
       success: true,
-      message: 'Photo message sent successfully'
+      message: 'Photo message sent successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -327,7 +351,7 @@ router.post('/schedule', async (req, res) => {
     if (!chatId || !message || !scheduledTime) {
       return res.status(400).json({
         success: false,
-        error: 'chatId, message, and scheduledTime are required'
+        error: 'chatId, message, and scheduledTime are required',
       });
     }
 
@@ -335,7 +359,7 @@ router.post('/schedule', async (req, res) => {
     if (isNaN(scheduleTime.getTime())) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid scheduledTime format'
+        error: 'Invalid scheduledTime format',
       });
     }
 
@@ -343,19 +367,22 @@ router.post('/schedule', async (req, res) => {
     const delay = scheduleTime.getTime() - Date.now();
     if (delay > 0) {
       setTimeout(async () => {
-        await enhancedTelegramService.sendMessageToUser(chatId, `⏰ Scheduled Message:\n\n${message}`);
+        await enhancedTelegramService.sendMessageToUser(
+          chatId,
+          `⏰ Scheduled Message:\n\n${message}`
+        );
       }, delay);
     }
 
     res.json({
       success: true,
       message: 'Message scheduled successfully',
-      scheduledFor: scheduleTime.toISOString()
+      scheduledFor: scheduleTime.toISOString(),
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -365,7 +392,7 @@ router.post('/webhook', async (req, res) => {
   try {
     // Telegram webhook handling
     const update = req.body;
-    
+
     if (update.message) {
       // Message will be handled by the bot's event handlers
       console.log('Webhook message received:', update.message.text);
@@ -376,7 +403,7 @@ router.post('/webhook', async (req, res) => {
     console.error('Webhook error:', error);
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -385,26 +412,32 @@ router.post('/webhook', async (req, res) => {
 router.get('/commands', async (req, res) => {
   try {
     const commands = [
-      { command: 'start', description: 'Start the bot and get welcome message' },
+      {
+        command: 'start',
+        description: 'Start the bot and get welcome message',
+      },
       { command: 'help', description: 'Get help and available commands' },
       { command: 'menu', description: 'Show interactive menu' },
       { command: 'status', description: 'Get system status' },
       { command: 'ai', description: 'Ask AI anything' },
-      { command: 'translate', description: 'Translate text to another language' },
+      {
+        command: 'translate',
+        description: 'Translate text to another language',
+      },
       { command: 'analyze', description: 'Analyze text sentiment' },
       { command: 'generate', description: 'Generate content with AI' },
       { command: 'schedule', description: 'Schedule a message' },
-      { command: 'broadcast', description: 'Broadcast message (admin only)' }
+      { command: 'broadcast', description: 'Broadcast message (admin only)' },
     ];
 
     res.json({
       success: true,
-      data: commands
+      data: commands,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

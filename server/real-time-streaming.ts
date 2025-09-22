@@ -1,7 +1,11 @@
 import { EventEmitter } from 'events';
 import { WebSocket, WebSocketServer } from 'ws';
 import { v4 as uuidv4 } from 'uuid';
-import { getMultiModalAIEngine, MultiModalInput, MultiModalOutput } from './multi-modal-ai.js';
+import {
+  getMultiModalAIEngine,
+  MultiModalInput,
+  MultiModalOutput,
+} from './multi-modal-ai.js';
 import { Server as HttpServer } from 'http';
 import { verifyToken } from './firebase.js'; // Import Firebase token verification
 
@@ -58,13 +62,17 @@ export class RealTimeAIStreaming extends EventEmitter {
       try {
         // Use a different port to avoid conflicts with main WebSocket server
         const aiStreamingPort = this.config.port + 1; // Use port 8081 instead of 8080
-        
+
         this.wss = new WebSocketServer({
           port: aiStreamingPort,
           path: this.config.path, // Use the path from config
           perMessageDeflate: this.config.enableCompression,
-          verifyClient: async (info, done) => { // Add client verification
-            const token = new URL(info.req.url, `http://${info.req.headers.host}`).searchParams.get('token');
+          verifyClient: async (info, done) => {
+            // Add client verification
+            const token = new URL(
+              info.req.url,
+              `http://${info.req.headers.host}`
+            ).searchParams.get('token');
             if (!token) {
               return done(false, 401, 'Unauthorized');
             }
@@ -75,14 +83,14 @@ export class RealTimeAIStreaming extends EventEmitter {
             } catch (error) {
               done(false, 401, 'Unauthorized');
             }
-          }
+          },
         });
 
         this.wss.on('connection', (ws: WebSocket, request) => {
           this.handleNewConnection(ws, request);
         });
 
-        this.wss.on('error', (error) => {
+        this.wss.on('error', error => {
           console.error('❌ Real-Time AI Streaming WebSocket error:', error);
           this.emit('error', error);
           // Don't reject here as it might be a port conflict
@@ -91,12 +99,16 @@ export class RealTimeAIStreaming extends EventEmitter {
         this.startHeartbeat();
         this.startCleanup();
 
-        console.log(`🚀 Real-Time AI Streaming started on port ${aiStreamingPort}`);
+        console.log(
+          `🚀 Real-Time AI Streaming started on port ${aiStreamingPort}`
+        );
         this.emit('started');
         resolve();
-
       } catch (error) {
-        console.warn('⚠️ Real-Time AI Streaming failed to start (likely port conflict):', error.message);
+        console.warn(
+          '⚠️ Real-Time AI Streaming failed to start (likely port conflict):',
+          error.message
+        );
         // Don't reject - let the main WebSocket server handle connections
         resolve();
       }
@@ -126,7 +138,7 @@ export class RealTimeAIStreaming extends EventEmitter {
   private handleNewConnection(ws: WebSocket, request: any): void {
     const connectionId = uuidv4();
     const userId = (request as any).user.uid;
-    
+
     const connection: StreamingConnection = {
       id: connectionId,
       userId,
@@ -134,7 +146,7 @@ export class RealTimeAIStreaming extends EventEmitter {
       isActive: true,
       connectedAt: new Date(),
       lastActivity: new Date(),
-      messageCount: 0
+      messageCount: 0,
     };
 
     this.connections.set(connectionId, connection);
@@ -147,7 +159,7 @@ export class RealTimeAIStreaming extends EventEmitter {
       this.handleDisconnection(connectionId);
     });
 
-    ws.on('error', (error) => {
+    ws.on('error', error => {
       this.handleConnectionError(connectionId, error);
     });
 
@@ -158,16 +170,21 @@ export class RealTimeAIStreaming extends EventEmitter {
         message: 'Connected to Real-Time AI Streaming',
         connectionId,
         userId,
-        timestamp: new Date()
+        timestamp: new Date(),
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     this.emit('connectionEstablished', connection);
-    console.log(`🔗 New streaming connection: ${connectionId} (User: ${userId})`);
+    console.log(
+      `🔗 New streaming connection: ${connectionId} (User: ${userId})`
+    );
   }
 
-  private async handleMessage(connectionId: string, data: Buffer): Promise<void> {
+  private async handleMessage(
+    connectionId: string,
+    data: Buffer
+  ): Promise<void> {
     const connection = this.connections.get(connectionId);
     if (!connection || !connection.isActive) {
       return;
@@ -197,21 +214,29 @@ export class RealTimeAIStreaming extends EventEmitter {
         default:
           this.sendError(connectionId, `Unknown message type: ${message.type}`);
       }
-
     } catch (error) {
-      this.sendError(connectionId, `Message processing error: ${(error as Error).message}`);
+      this.sendError(
+        connectionId,
+        `Message processing error: ${(error as Error).message}`
+      );
     }
   }
 
   // ... (rest of the methods remain the same)
-  private async handleStartSession(connectionId: string, data: any): Promise<void> {
+  private async handleStartSession(
+    connectionId: string,
+    data: any
+  ): Promise<void> {
     const connection = this.connections.get(connectionId);
     if (!connection) return;
 
     try {
       const { modelId, userId } = data;
-      const sessionId = await this.aiEngine.startStreamingSession(userId || connection.userId, modelId);
-      
+      const sessionId = await this.aiEngine.startStreamingSession(
+        userId || connection.userId,
+        modelId
+      );
+
       connection.sessionId = sessionId;
 
       this.sendMessage(connectionId, {
@@ -221,19 +246,24 @@ export class RealTimeAIStreaming extends EventEmitter {
           message: 'Streaming session started',
           sessionId,
           modelId,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       this.emit('sessionStarted', { connectionId, sessionId, modelId });
-
     } catch (error) {
-      this.sendError(connectionId, `Failed to start session: ${(error as Error).message}`);
+      this.sendError(
+        connectionId,
+        `Failed to start session: ${(error as Error).message}`
+      );
     }
   }
 
-  private async handleProcessInput(connectionId: string, data: any): Promise<void> {
+  private async handleProcessInput(
+    connectionId: string,
+    data: any
+  ): Promise<void> {
     const connection = this.connections.get(connectionId);
     if (!connection || !connection.sessionId) {
       this.sendError(connectionId, 'No active session');
@@ -245,8 +275,11 @@ export class RealTimeAIStreaming extends EventEmitter {
       const startTime = Date.now();
 
       // Process input through AI engine
-      const output = await this.aiEngine.processStreamingInput(connection.sessionId, input);
-      
+      const output = await this.aiEngine.processStreamingInput(
+        connection.sessionId,
+        input
+      );
+
       const processingTime = Date.now() - startTime;
 
       this.sendMessage(connectionId, {
@@ -256,9 +289,9 @@ export class RealTimeAIStreaming extends EventEmitter {
           input,
           output,
           processingTime,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       this.emit('inputProcessed', {
@@ -266,15 +299,20 @@ export class RealTimeAIStreaming extends EventEmitter {
         sessionId: connection.sessionId,
         input,
         output,
-        processingTime
+        processingTime,
       });
-
     } catch (error) {
-      this.sendError(connectionId, `Input processing failed: ${(error as Error).message}`);
+      this.sendError(
+        connectionId,
+        `Input processing failed: ${(error as Error).message}`
+      );
     }
   }
 
-  private async handleEndSession(connectionId: string, data: any): Promise<void> {
+  private async handleEndSession(
+    connectionId: string,
+    data: any
+  ): Promise<void> {
     const connection = this.connections.get(connectionId);
     if (!connection || !connection.sessionId) {
       this.sendError(connectionId, 'No active session');
@@ -283,23 +321,28 @@ export class RealTimeAIStreaming extends EventEmitter {
 
     try {
       await this.aiEngine.endStreamingSession(connection.sessionId);
-      
+
       this.sendMessage(connectionId, {
         id: uuidv4(),
         type: 'status',
         data: {
           message: 'Streaming session ended',
           sessionId: connection.sessionId,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
-      this.emit('sessionEnded', { connectionId, sessionId: connection.sessionId });
+      this.emit('sessionEnded', {
+        connectionId,
+        sessionId: connection.sessionId,
+      });
       connection.sessionId = undefined;
-
     } catch (error) {
-      this.sendError(connectionId, `Failed to end session: ${(error as Error).message}`);
+      this.sendError(
+        connectionId,
+        `Failed to end session: ${(error as Error).message}`
+      );
     }
   }
 
@@ -312,9 +355,9 @@ export class RealTimeAIStreaming extends EventEmitter {
         type: 'heartbeat',
         data: {
           timestamp: new Date(),
-          status: 'alive'
+          status: 'alive',
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -331,14 +374,14 @@ export class RealTimeAIStreaming extends EventEmitter {
       connectedAt: connection.connectedAt,
       lastActivity: connection.lastActivity,
       messageCount: connection.messageCount,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.sendMessage(connectionId, {
       id: uuidv4(),
       type: 'status',
       data: status,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -346,7 +389,7 @@ export class RealTimeAIStreaming extends EventEmitter {
     const connection = this.connections.get(connectionId);
     if (connection) {
       connection.isActive = false;
-      
+
       if (connection.sessionId) {
         this.aiEngine.endStreamingSession(connection.sessionId);
       }
@@ -367,7 +410,11 @@ export class RealTimeAIStreaming extends EventEmitter {
 
   private sendMessage(connectionId: string, message: StreamingMessage): void {
     const connection = this.connections.get(connectionId);
-    if (connection && connection.isActive && connection.ws.readyState === WebSocket.OPEN) {
+    if (
+      connection &&
+      connection.isActive &&
+      connection.ws.readyState === WebSocket.OPEN
+    ) {
       try {
         connection.ws.send(JSON.stringify(message));
       } catch (error) {
@@ -382,27 +429,27 @@ export class RealTimeAIStreaming extends EventEmitter {
       type: 'error',
       data: {
         error: errorMessage,
-        timestamp: new Date()
+        timestamp: new Date(),
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
   private startHeartbeat(): void {
     this.heartbeatInterval = setInterval(() => {
-    for (const connection of Array.from(this.connections.values())) {
-      if (connection.isActive) {
-        this.sendMessage(connection.id, {
-          id: uuidv4(),
-          type: 'heartbeat',
-          data: {
+      for (const connection of Array.from(this.connections.values())) {
+        if (connection.isActive) {
+          this.sendMessage(connection.id, {
+            id: uuidv4(),
+            type: 'heartbeat',
+            data: {
+              timestamp: new Date(),
+              status: 'ping',
+            },
             timestamp: new Date(),
-            status: 'ping'
-          },
-          timestamp: new Date()
-        });
+          });
+        }
       }
-    }
     }, this.config.heartbeatInterval);
   }
 
@@ -411,15 +458,17 @@ export class RealTimeAIStreaming extends EventEmitter {
       const now = Date.now();
       const timeout = this.config.connectionTimeout;
 
-    for (const [connectionId, connection] of Array.from(this.connections.entries())) {
-      const lastActivity = connection.lastActivity.getTime();
-      if (now - lastActivity > timeout) {
-        console.log(`🧹 Cleaning up inactive connection: ${connectionId}`);
-        connection.ws.close();
-        this.connections.delete(connectionId);
+      for (const [connectionId, connection] of Array.from(
+        this.connections.entries()
+      )) {
+        const lastActivity = connection.lastActivity.getTime();
+        if (now - lastActivity > timeout) {
+          console.log(`🧹 Cleaning up inactive connection: ${connectionId}`);
+          connection.ws.close();
+          this.connections.delete(connectionId);
+        }
       }
-    }
-    }, 60000); 
+    }, 60000);
   }
 
   private setupAIEngineListeners(): void {
@@ -462,14 +511,22 @@ export class RealTimeAIStreaming extends EventEmitter {
       total: connections.length,
       active: connections.filter(conn => conn.isActive).length,
       inactive: connections.filter(conn => !conn.isActive).length,
-      totalMessages: connections.reduce((sum, conn) => sum + conn.messageCount, 0),
-      averageMessagesPerConnection: connections.length > 0 
-        ? connections.reduce((sum, conn) => sum + conn.messageCount, 0) / connections.length 
-        : 0
+      totalMessages: connections.reduce(
+        (sum, conn) => sum + conn.messageCount,
+        0
+      ),
+      averageMessagesPerConnection:
+        connections.length > 0
+          ? connections.reduce((sum, conn) => sum + conn.messageCount, 0) /
+            connections.length
+          : 0,
     };
   }
 
-  broadcastMessage(message: StreamingMessage, excludeConnectionId?: string): void {
+  broadcastMessage(
+    message: StreamingMessage,
+    excludeConnectionId?: string
+  ): void {
     for (const connection of Array.from(this.connections.values())) {
       if (connection.isActive && connection.id !== excludeConnectionId) {
         this.sendMessage(connection.id, message);
@@ -488,30 +545,32 @@ export class RealTimeAIStreaming extends EventEmitter {
   getStreamingMetrics(): any {
     const stats = this.getConnectionStats();
     const aiMetrics = this.aiEngine.getPerformanceMetrics();
-    
+
     return {
       connections: stats,
       aiEngine: {
         models: this.aiEngine.getAllModels().length,
         activeModels: this.aiEngine.getActiveModels().length,
         sessions: this.aiEngine.getActiveStreamingSessions().length,
-        performance: Object.fromEntries(aiMetrics)
+        performance: Object.fromEntries(aiMetrics),
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 }
 
 let realTimeAIStreaming: RealTimeAIStreaming | null = null;
 
-export function initializeRealTimeAIStreaming(server: HttpServer): RealTimeAIStreaming {
+export function initializeRealTimeAIStreaming(
+  server: HttpServer
+): RealTimeAIStreaming {
   if (!realTimeAIStreaming) {
     const config: StreamingConfig = {
       maxConnections: 1000,
       heartbeatInterval: 30000,
       connectionTimeout: 300000,
       enableCompression: true,
-      path: '/api/ws' // Define a specific path for WebSocket
+      path: '/api/ws', // Define a specific path for WebSocket
     };
     realTimeAIStreaming = new RealTimeAIStreaming(config);
     realTimeAIStreaming.start(server);
@@ -521,7 +580,9 @@ export function initializeRealTimeAIStreaming(server: HttpServer): RealTimeAIStr
 
 export function getRealTimeAIStreaming(): RealTimeAIStreaming {
   if (!realTimeAIStreaming) {
-    throw new Error('RealTimeAIStreaming is not initialized. Call initializeRealTimeAIStreaming first.');
+    throw new Error(
+      'RealTimeAIStreaming is not initialized. Call initializeRealTimeAIStreaming first.'
+    );
   }
   return realTimeAIStreaming;
 }

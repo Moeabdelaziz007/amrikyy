@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import path from "path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -15,14 +15,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      '@': path.resolve(import.meta.dirname, 'client', 'src'),
+      '@shared': path.resolve(import.meta.dirname, 'shared'),
+      '@assets': path.resolve(import.meta.dirname, 'attached_assets'),
     },
   },
-  root: path.resolve(import.meta.dirname, "client"),
+  root: path.resolve(import.meta.dirname, 'client'),
   build: {
-    outDir: "dist",
+    outDir: 'dist',
     emptyOutDir: true,
     // Skip TypeScript checks for now
     target: 'esnext',
@@ -42,7 +42,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
+        manualChunks: id => {
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-vendor';
           }
@@ -70,7 +70,7 @@ export default defineConfig({
   server: {
     fs: {
       strict: true,
-      deny: ["**/.*"],
+      deny: ['**/.*'],
     },
     hmr: {
       overlay: false,
@@ -89,9 +89,9 @@ export default defineConfig({
       'lucide-react',
     ],
     exclude: [
-      '@replit/vite-plugin-cartographer', 
+      '@replit/vite-plugin-cartographer',
       '@replit/vite-plugin-dev-banner',
-      'rollup-plugin-visualizer'
+      'rollup-plugin-visualizer',
     ],
     force: true,
   },

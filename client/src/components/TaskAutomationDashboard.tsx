@@ -1,19 +1,19 @@
 // Task Automation Dashboard - React Component
 import React, { useState, useEffect } from 'react';
-import { 
-  Play, 
-  Pause, 
-  Square, 
-  RefreshCw, 
-  Clock, 
-  CheckCircle, 
-  XCircle, 
+import {
+  Play,
+  Pause,
+  Square,
+  RefreshCw,
+  Clock,
+  CheckCircle,
+  XCircle,
   AlertCircle,
   Activity,
   Settings,
   Plus,
   Filter,
-  Search
+  Search,
 } from 'lucide-react';
 
 interface Task {
@@ -21,7 +21,13 @@ interface Task {
   name: string;
   description: string;
   type: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'retrying';
+  status:
+    | 'pending'
+    | 'running'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | 'retrying';
   priority: number;
   createdAt: string;
   updatedAt: string;
@@ -32,7 +38,13 @@ interface Task {
 interface TaskExecution {
   id: string;
   taskId: string;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled' | 'retrying';
+  status:
+    | 'pending'
+    | 'running'
+    | 'completed'
+    | 'failed'
+    | 'cancelled'
+    | 'retrying';
   startedAt?: string;
   completedAt?: string;
   error?: string;
@@ -73,8 +85,12 @@ export default function TaskAutomationDashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [executions, setExecutions] = useState<TaskExecution[]>([]);
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
-  const [workflowExecutions, setWorkflowExecutions] = useState<WorkflowExecution[]>([]);
-  const [selectedTab, setSelectedTab] = useState<'tasks' | 'workflows' | 'executions'>('tasks');
+  const [workflowExecutions, setWorkflowExecutions] = useState<
+    WorkflowExecution[]
+  >([]);
+  const [selectedTab, setSelectedTab] = useState<
+    'tasks' | 'workflows' | 'executions'
+  >('tasks');
   const [filter, setFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -92,7 +108,7 @@ export default function TaskAutomationDashboard() {
         createdAt: '2024-12-20T09:00:00Z',
         updatedAt: '2024-12-20T09:15:00Z',
         createdBy: 'admin',
-        tags: ['reporting', 'daily']
+        tags: ['reporting', 'daily'],
       },
       {
         id: '2',
@@ -104,7 +120,7 @@ export default function TaskAutomationDashboard() {
         createdAt: '2024-12-20T08:00:00Z',
         updatedAt: '2024-12-20T10:30:00Z',
         createdBy: 'system',
-        tags: ['monitoring', 'health-check']
+        tags: ['monitoring', 'health-check'],
       },
       {
         id: '3',
@@ -116,8 +132,8 @@ export default function TaskAutomationDashboard() {
         createdAt: '2024-12-20T07:00:00Z',
         updatedAt: '2024-12-20T07:45:00Z',
         createdBy: 'admin',
-        tags: ['backup', 'data']
-      }
+        tags: ['backup', 'data'],
+      },
     ];
 
     const mockExecutions: TaskExecution[] = [
@@ -130,10 +146,10 @@ export default function TaskAutomationDashboard() {
         metrics: {
           executionTime: 900000, // 15 minutes
           memoryUsage: 256,
-          cpuUsage: 45
+          cpuUsage: 45,
         },
         retryCount: 0,
-        maxRetries: 3
+        maxRetries: 3,
       },
       {
         id: 'exec2',
@@ -143,10 +159,10 @@ export default function TaskAutomationDashboard() {
         metrics: {
           executionTime: 1800000, // 30 minutes
           memoryUsage: 128,
-          cpuUsage: 25
+          cpuUsage: 25,
         },
         retryCount: 0,
-        maxRetries: 3
+        maxRetries: 3,
       },
       {
         id: 'exec3',
@@ -158,11 +174,11 @@ export default function TaskAutomationDashboard() {
         metrics: {
           executionTime: 2700000, // 45 minutes
           memoryUsage: 512,
-          cpuUsage: 80
+          cpuUsage: 80,
         },
         retryCount: 2,
-        maxRetries: 3
-      }
+        maxRetries: 3,
+      },
     ];
 
     const mockWorkflows: Workflow[] = [
@@ -173,7 +189,7 @@ export default function TaskAutomationDashboard() {
         status: 'active',
         createdAt: '2024-12-19T10:00:00Z',
         updatedAt: '2024-12-20T08:00:00Z',
-        createdBy: 'system'
+        createdBy: 'system',
       },
       {
         id: 'wf2',
@@ -182,8 +198,8 @@ export default function TaskAutomationDashboard() {
         status: 'active',
         createdAt: '2024-12-18T14:00:00Z',
         updatedAt: '2024-12-19T16:00:00Z',
-        createdBy: 'admin'
-      }
+        createdBy: 'admin',
+      },
     ];
 
     const mockWorkflowExecutions: WorkflowExecution[] = [
@@ -195,8 +211,8 @@ export default function TaskAutomationDashboard() {
         metrics: {
           totalNodes: 5,
           executedNodes: 3,
-          executionTime: 120000
-        }
+          executionTime: 120000,
+        },
       },
       {
         id: 'wfexec2',
@@ -207,9 +223,9 @@ export default function TaskAutomationDashboard() {
         metrics: {
           totalNodes: 4,
           executedNodes: 4,
-          executionTime: 300000
-        }
-      }
+          executionTime: 300000,
+        },
+      },
     ];
 
     setTasks(mockTasks);
@@ -262,25 +278,27 @@ export default function TaskAutomationDashboard() {
 
   const filteredTasks = tasks.filter(task => {
     const matchesFilter = filter === 'all' || task.status === filter;
-    const matchesSearch = task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   const filteredExecutions = executions.filter(execution => {
     const matchesFilter = filter === 'all' || execution.status === filter;
     const task = tasks.find(t => t.id === execution.taskId);
-    const matchesSearch = task && (
-      task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const matchesSearch =
+      task &&
+      (task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesFilter && matchesSearch;
   });
 
   const filteredWorkflows = workflows.filter(workflow => {
     const matchesFilter = filter === 'all' || workflow.status === filter;
-    const matchesSearch = workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         workflow.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      workflow.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workflow.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -299,7 +317,9 @@ export default function TaskAutomationDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Task Automation Dashboard</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                Task Automation Dashboard
+              </h1>
               <p className="mt-1 text-sm text-gray-500">
                 Monitor and manage your automated tasks and workflows
               </p>
@@ -329,7 +349,9 @@ export default function TaskAutomationDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Active Tasks</dt>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Active Tasks
+                    </dt>
                     <dd className="text-lg font-medium text-gray-900">
                       {tasks.filter(t => t.status === 'running').length}
                     </dd>
@@ -347,7 +369,9 @@ export default function TaskAutomationDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Completed Today</dt>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Completed Today
+                    </dt>
                     <dd className="text-lg font-medium text-gray-900">
                       {executions.filter(e => e.status === 'completed').length}
                     </dd>
@@ -365,7 +389,9 @@ export default function TaskAutomationDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Failed Tasks</dt>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Failed Tasks
+                    </dt>
                     <dd className="text-lg font-medium text-gray-900">
                       {tasks.filter(t => t.status === 'failed').length}
                     </dd>
@@ -383,9 +409,17 @@ export default function TaskAutomationDashboard() {
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">Success Rate</dt>
+                    <dt className="text-sm font-medium text-gray-500 truncate">
+                      Success Rate
+                    </dt>
                     <dd className="text-lg font-medium text-gray-900">
-                      {Math.round((executions.filter(e => e.status === 'completed').length / executions.length) * 100)}%
+                      {Math.round(
+                        (executions.filter(e => e.status === 'completed')
+                          .length /
+                          executions.length) *
+                          100
+                      )}
+                      %
                     </dd>
                   </dl>
                 </div>
@@ -441,13 +475,13 @@ export default function TaskAutomationDashboard() {
                     type="text"
                     placeholder="Search..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
                 <select
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
+                  onChange={e => setFilter(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="all">All Status</option>
@@ -471,22 +505,35 @@ export default function TaskAutomationDashboard() {
           <div className="p-6">
             {selectedTab === 'tasks' && (
               <div className="space-y-4">
-                {filteredTasks.map((task) => (
-                  <div key={task.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                {filteredTasks.map(task => (
+                  <div
+                    key={task.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         {getStatusIcon(task.status)}
                         <div>
-                          <h3 className="text-lg font-medium text-gray-900">{task.name}</h3>
-                          <p className="text-sm text-gray-500">{task.description}</p>
+                          <h3 className="text-lg font-medium text-gray-900">
+                            {task.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {task.description}
+                          </p>
                           <div className="flex items-center space-x-2 mt-1">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(task.status)}`}
+                            >
                               {task.status}
                             </span>
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(task.priority)}`}>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getPriorityColor(task.priority)}`}
+                            >
                               Priority {task.priority}
                             </span>
-                            <span className="text-xs text-gray-500">{task.type}</span>
+                            <span className="text-xs text-gray-500">
+                              {task.type}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -509,19 +556,30 @@ export default function TaskAutomationDashboard() {
 
             {selectedTab === 'workflows' && (
               <div className="space-y-4">
-                {filteredWorkflows.map((workflow) => (
-                  <div key={workflow.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                {filteredWorkflows.map(workflow => (
+                  <div
+                    key={workflow.id}
+                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         {getStatusIcon(workflow.status)}
                         <div>
-                          <h3 className="text-lg font-medium text-gray-900">{workflow.name}</h3>
-                          <p className="text-sm text-gray-500">{workflow.description}</p>
+                          <h3 className="text-lg font-medium text-gray-900">
+                            {workflow.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            {workflow.description}
+                          </p>
                           <div className="flex items-center space-x-2 mt-1">
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(workflow.status)}`}>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(workflow.status)}`}
+                            >
                               {workflow.status}
                             </span>
-                            <span className="text-xs text-gray-500">Created by {workflow.createdBy}</span>
+                            <span className="text-xs text-gray-500">
+                              Created by {workflow.createdBy}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -541,10 +599,13 @@ export default function TaskAutomationDashboard() {
 
             {selectedTab === 'executions' && (
               <div className="space-y-4">
-                {filteredExecutions.map((execution) => {
+                {filteredExecutions.map(execution => {
                   const task = tasks.find(t => t.id === execution.taskId);
                   return (
-                    <div key={execution.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                    <div
+                      key={execution.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           {getStatusIcon(execution.status)}
@@ -553,24 +614,37 @@ export default function TaskAutomationDashboard() {
                               {task?.name || `Execution ${execution.id}`}
                             </h3>
                             <p className="text-sm text-gray-500">
-                              Started: {execution.startedAt ? new Date(execution.startedAt).toLocaleString() : 'N/A'}
-                              {execution.completedAt && ` • Completed: ${new Date(execution.completedAt).toLocaleString()}`}
+                              Started:{' '}
+                              {execution.startedAt
+                                ? new Date(execution.startedAt).toLocaleString()
+                                : 'N/A'}
+                              {execution.completedAt &&
+                                ` • Completed: ${new Date(execution.completedAt).toLocaleString()}`}
                             </p>
                             <div className="flex items-center space-x-2 mt-1">
-                              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(execution.status)}`}>
+                              <span
+                                className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(execution.status)}`}
+                              >
                                 {execution.status}
                               </span>
                               <span className="text-xs text-gray-500">
-                                Duration: {Math.round(execution.metrics.executionTime / 1000)}s
+                                Duration:{' '}
+                                {Math.round(
+                                  execution.metrics.executionTime / 1000
+                                )}
+                                s
                               </span>
                               {execution.retryCount > 0 && (
                                 <span className="text-xs text-orange-600">
-                                  Retries: {execution.retryCount}/{execution.maxRetries}
+                                  Retries: {execution.retryCount}/
+                                  {execution.maxRetries}
                                 </span>
                               )}
                             </div>
                             {execution.error && (
-                              <p className="text-xs text-red-600 mt-1">{execution.error}</p>
+                              <p className="text-xs text-red-600 mt-1">
+                                {execution.error}
+                              </p>
                             )}
                           </div>
                         </div>

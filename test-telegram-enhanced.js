@@ -3,22 +3,24 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 async function testEnhancedTelegramFeatures() {
   console.log('🚀 Testing Enhanced Telegram Features\n');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
   console.log('🤖 Bot Token: 8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0');
   console.log('📱 Bot Username: @Amrikyyybot');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
 
   try {
     // Initialize Gemini for AI features
-    const genAI = new GoogleGenerativeAI('AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-    const model = genAI.getGenerativeModel({ 
+    const genAI = new GoogleGenerativeAI(
+      'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
+    );
+    const model = genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
       generationConfig: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: 1024
-      }
+        maxOutputTokens: 1024,
+      },
     });
 
     console.log('✅ Gemini AI initialized for Telegram integration');
@@ -32,7 +34,7 @@ Format your response for a Telegram message (max 200 characters).`;
     const aiResult = await model.generateContent(aiPrompt);
     const aiResponse = await aiResult.response;
     const aiText = aiResponse.text();
-    
+
     console.log('✅ AI Question Answering successful');
     console.log(`🤖 AI Response: ${aiText.substring(0, 100)}...`);
 
@@ -45,7 +47,7 @@ Provide only the Spanish translation.`;
     const translateResult = await model.generateContent(translatePrompt);
     const translateResponse = await translateResult.response;
     const translateText = translateResponse.text();
-    
+
     console.log('✅ Translation feature successful');
     console.log(`🌍 Translation: ${translateText.substring(0, 100)}...`);
 
@@ -63,7 +65,7 @@ Format as a brief Telegram message.`;
     const sentimentResult = await model.generateContent(sentimentPrompt);
     const sentimentResponse = await sentimentResult.response;
     const sentimentText = sentimentResponse.text();
-    
+
     console.log('✅ Sentiment analysis successful');
     console.log(`📊 Sentiment Analysis: ${sentimentText.substring(0, 100)}...`);
 
@@ -82,7 +84,7 @@ Format as a brief message.`;
     const contentResult = await model.generateContent(contentPrompt);
     const contentResponse = await contentResult.response;
     const contentText = contentResponse.text();
-    
+
     console.log('✅ Content generation successful');
     console.log(`✍️ Generated Content: ${contentText.substring(0, 100)}...`);
 
@@ -100,7 +102,7 @@ Keep explanation under 150 characters.`;
     const codeResult = await model.generateContent(codePrompt);
     const codeResponse = await codeResult.response;
     const codeText = codeResponse.text();
-    
+
     console.log('✅ Code explanation successful');
     console.log(`💻 Code Explanation: ${codeText.substring(0, 100)}...`);
 
@@ -123,25 +125,27 @@ Keep under 200 characters.`;
     const dataResult = await model.generateContent(dataPrompt);
     const dataResponse = await dataResult.response;
     const dataText = dataResponse.text();
-    
+
     console.log('✅ Data analysis successful');
     console.log(`📊 Data Analysis: ${dataText.substring(0, 100)}...`);
 
     // Test 7: Performance Test
     console.log('\n🧪 Test 7: Performance Test');
     const startTime = Date.now();
-    
+
     const performancePromises = [
       model.generateContent('What is AI?'),
       model.generateContent('What is machine learning?'),
-      model.generateContent('What is deep learning?')
+      model.generateContent('What is deep learning?'),
     ];
 
     const performanceResults = await Promise.all(performancePromises);
     const totalTime = Date.now() - startTime;
 
     console.log('✅ Performance test successful');
-    console.log(`⚡ 3 AI operations in ${totalTime}ms (avg: ${Math.round(totalTime/3)}ms per operation)`);
+    console.log(
+      `⚡ 3 AI operations in ${totalTime}ms (avg: ${Math.round(totalTime / 3)}ms per operation)`
+    );
 
     // Test 8: Enhanced Commands
     console.log('\n🧪 Test 8: Enhanced Commands');
@@ -155,7 +159,7 @@ Keep under 200 characters.`;
       '/generate <prompt> - Generate content',
       '/schedule <time> <msg> - Schedule messages',
       '/broadcast <msg> - Broadcast (admin only)',
-      '/status - System status with analytics'
+      '/status - System status with analytics',
     ];
 
     console.log('✅ Enhanced commands defined');
@@ -176,7 +180,7 @@ Keep under 200 characters.`;
       rateLimiting: 'API rate limiting protection',
       multiLanguage: 'Multi-language support',
       scheduling: 'Message scheduling system',
-      broadcasting: 'Admin broadcast capabilities'
+      broadcasting: 'Admin broadcast capabilities',
     };
 
     console.log('✅ Integration features defined');
@@ -186,9 +190,9 @@ Keep under 200 characters.`;
     });
 
     // Summary
-    console.log('\n' + '=' .repeat(50));
+    console.log('\n' + '='.repeat(50));
     console.log('📊 ENHANCED TELEGRAM INTEGRATION SUMMARY');
-    console.log('=' .repeat(50));
+    console.log('='.repeat(50));
     console.log('✅ All AI features tested successfully!');
     console.log('🤖 Gemini AI: Fully integrated');
     console.log('📱 Telegram Bot: Enhanced with AI capabilities');
@@ -200,7 +204,9 @@ Keep under 200 characters.`;
     console.log('🎉 Enhanced Telegram integration is ready!');
 
     console.log('\n🚀 **Key Improvements Made:**');
-    console.log('• 🤖 AI-powered commands (/ai, /translate, /analyze, /generate)');
+    console.log(
+      '• 🤖 AI-powered commands (/ai, /translate, /analyze, /generate)'
+    );
     console.log('• 📊 Advanced analytics and user session tracking');
     console.log('• ⚡ Message queue system with priority handling');
     console.log('• 🔒 Enhanced error handling and rate limiting');
@@ -210,7 +216,6 @@ Keep under 200 characters.`;
     console.log('• 💾 Caching system for improved performance');
     console.log('• 📈 Comprehensive metrics and monitoring');
     console.log('• 🛡️ Security features and admin controls');
-
   } catch (error) {
     console.error('❌ Enhanced Telegram test failed:', error.message);
     console.error('🔍 Error details:', error);

@@ -6,12 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
+import {
   AlertTriangle,
   Loader2,
   Smartphone,
   Tablet,
-  Monitor
+  Monitor,
 } from 'lucide-react';
 
 // Mobile Performance Chart Component
@@ -30,7 +30,7 @@ interface MobilePerformanceChartProps {
 export const MobilePerformanceChart: React.FC<MobilePerformanceChartProps> = ({
   data,
   title,
-  className = ''
+  className = '',
 }) => {
   return (
     <Card className={`p-4 ${className}`}>
@@ -42,19 +42,19 @@ export const MobilePerformanceChart: React.FC<MobilePerformanceChartProps> = ({
           <div key={index} className="space-y-2">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">{item.label}</span>
-              <Badge 
-                variant="outline" 
+              <Badge
+                variant="outline"
                 style={{ backgroundColor: item.color, color: 'white' }}
               >
                 {item.value}%
               </Badge>
             </div>
-            <Progress 
-              value={item.value} 
+            <Progress
+              value={item.value}
               className="h-2"
-              style={{ 
+              style={{
                 backgroundColor: `${item.color}20`,
-                '--progress-background': item.color
+                '--progress-background': item.color,
               }}
             />
           </div>
@@ -84,7 +84,7 @@ export const MobileActionButton: React.FC<MobileActionButtonProps> = ({
   size = 'md',
   className = '',
   disabled = false,
-  loading = false
+  loading = false,
 }) => {
   return (
     <Button
@@ -94,11 +94,7 @@ export const MobileActionButton: React.FC<MobileActionButtonProps> = ({
       disabled={disabled || loading}
       className={`flex items-center gap-2 ${className}`}
     >
-      {loading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
-      ) : (
-        icon
-      )}
+      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : icon}
       <span className="text-sm">{label}</span>
     </Button>
   );
@@ -112,7 +108,7 @@ interface MobileLoadingSkeletonProps {
 
 export const MobileLoadingSkeleton: React.FC<MobileLoadingSkeletonProps> = ({
   lines = 3,
-  className = ''
+  className = '',
 }) => {
   return (
     <div className={`space-y-3 ${className}`}>
@@ -141,10 +137,12 @@ export const MobileErrorState: React.FC<MobileErrorStateProps> = ({
   title,
   message,
   onRetry,
-  className = ''
+  className = '',
 }) => {
   return (
-    <div className={`flex flex-col items-center justify-center p-8 text-center ${className}`}>
+    <div
+      className={`flex flex-col items-center justify-center p-8 text-center ${className}`}
+    >
       <AlertTriangle className="w-12 h-12 text-destructive mb-4" />
       <h3 className="text-lg font-semibold mb-2">{title}</h3>
       <p className="text-muted-foreground mb-4">{message}</p>
@@ -165,7 +163,7 @@ export const MobileDeviceInfo: React.FC = () => {
     language: '',
     timezone: '',
     screenResolution: '',
-    viewport: ''
+    viewport: '',
   });
 
   useEffect(() => {
@@ -175,7 +173,7 @@ export const MobileDeviceInfo: React.FC = () => {
       language: navigator.language,
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       screenResolution: `${screen.width}x${screen.height}`,
-      viewport: `${window.innerWidth}x${window.innerHeight}`
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
     });
   }, []);
 
@@ -234,5 +232,3 @@ export const MobileDeviceInfo: React.FC = () => {
     </Card>
   );
 };
-
-

@@ -18,7 +18,7 @@ async function testAutopilot() {
       active: status.active,
       alwaysActive: status.alwaysActive,
       backgroundTasks: status.backgroundTasks,
-      memorySize: status.memorySize
+      memorySize: status.memorySize,
     });
 
     // Test 2: Get growth metrics
@@ -28,7 +28,7 @@ async function testAutopilot() {
       knowledgeBaseSize: growthMetrics.knowledgeBaseSize,
       efficiency: growthMetrics.efficiency,
       adaptability: growthMetrics.adaptability,
-      learningCycles: growthMetrics.learningCycles
+      learningCycles: growthMetrics.learningCycles,
     });
 
     // Test 3: Get memory summary
@@ -45,28 +45,32 @@ async function testAutopilot() {
     console.log('\n🎯 Test 5: Assigning a test task...');
     const testTask = await autopilotAgent.assignTask({
       title: 'Test Task - System Analysis',
-      description: 'Analyze system performance and generate optimization recommendations',
+      description:
+        'Analyze system performance and generate optimization recommendations',
       priority: 'medium',
       assignedBy: 'Test Script',
       tags: ['test', 'analysis', 'optimization'],
-      metadata: { testRun: true, timestamp: new Date().toISOString() }
+      metadata: { testRun: true, timestamp: new Date().toISOString() },
     });
     console.log('✅ Task assigned:', {
       id: testTask.id,
       title: testTask.title,
       priority: testTask.priority,
-      status: testTask.status
+      status: testTask.status,
     });
 
     // Test 6: Get pending tasks
     console.log('\n📋 Test 6: Getting pending tasks...');
     const pendingTasks = autopilotAgent.getPendingTasks();
-    console.log('✅ Pending Tasks:', pendingTasks.map(task => ({
-      title: task.title,
-      priority: task.priority,
-      status: task.status,
-      progress: task.progress
-    })));
+    console.log(
+      '✅ Pending Tasks:',
+      pendingTasks.map(task => ({
+        title: task.title,
+        priority: task.priority,
+        status: task.status,
+        progress: task.progress,
+      }))
+    );
 
     // Test 7: Force self-improvement
     console.log('\n🧠 Test 7: Forcing self-improvement...');
@@ -84,46 +88,52 @@ async function testAutopilot() {
     const updatedGrowthMetrics = autopilotAgent.getGrowthMetrics();
     console.log('✅ Updated Status:', {
       memorySize: updatedStatus.memorySize,
-      backgroundTasks: updatedStatus.backgroundTasks.length
+      backgroundTasks: updatedStatus.backgroundTasks.length,
     });
     console.log('✅ Updated Growth Metrics:', {
       knowledgeBaseSize: updatedGrowthMetrics.knowledgeBaseSize,
-      learningCycles: updatedGrowthMetrics.learningCycles
+      learningCycles: updatedGrowthMetrics.learningCycles,
     });
 
     // Test 10: Get task history
     console.log('\n📜 Test 10: Getting task history...');
     const taskHistory = autopilotAgent.getTaskHistory(5);
-    console.log('✅ Task History:', taskHistory.map(task => ({
-      title: task.title,
-      status: task.status,
-      assignedAt: task.assignedAt.toISOString()
-    })));
+    console.log(
+      '✅ Task History:',
+      taskHistory.map(task => ({
+        title: task.title,
+        status: task.status,
+        assignedAt: task.assignedAt.toISOString(),
+      }))
+    );
 
     console.log('\n🎉 All tests completed successfully!');
-    console.log('\n📱 The autopilot agent is now running in Always Active mode with:');
+    console.log(
+      '\n📱 The autopilot agent is now running in Always Active mode with:'
+    );
     console.log('   • Continuous self-improvement every 5 minutes');
     console.log('   • Knowledge accumulation every 2 minutes');
     console.log('   • Optimization cycles every 10 minutes');
     console.log('   • Growth monitoring every 30 minutes');
     console.log('   • Memory consolidation every hour');
     console.log('   • Telegram integration for updates and task assignment');
-    
+
     console.log('\n🚀 Autopilot is ready to receive tasks via Telegram!');
     console.log('   Use /autopilot_subscribe to get updates');
     console.log('   Use /autopilot_assign to give tasks');
     console.log('   Use /autopilot_status to check status');
-
   } catch (error) {
     console.error('❌ Test failed:', error);
   }
 }
 
 // Run the tests
-testAutopilot().then(() => {
-  console.log('\n✅ Test script completed');
-  process.exit(0);
-}).catch(error => {
-  console.error('❌ Test script failed:', error);
-  process.exit(1);
-});
+testAutopilot()
+  .then(() => {
+    console.log('\n✅ Test script completed');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('❌ Test script failed:', error);
+    process.exit(1);
+  });

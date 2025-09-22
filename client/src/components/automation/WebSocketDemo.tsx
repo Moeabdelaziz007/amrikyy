@@ -1,15 +1,15 @@
 // WebSocket Demo Component for Testing Real-Time Features
 import React, { useState, useEffect } from 'react';
 import { useAutomationWebSocket } from '@/services/websocket-client';
-import { 
-  Wifi, 
-  WifiOff, 
-  Activity, 
-  Bell, 
-  Zap, 
+import {
+  Wifi,
+  WifiOff,
+  Activity,
+  Bell,
+  Zap,
   RefreshCw,
   Send,
-  MessageSquare
+  MessageSquare,
 } from 'lucide-react';
 
 interface WebSocketDemoProps {
@@ -17,13 +17,15 @@ interface WebSocketDemoProps {
 }
 
 export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
-  const [messages, setMessages] = useState<Array<{
-    id: string;
-    type: string;
-    data: any;
-    timestamp: string;
-  }>>([]);
-  
+  const [messages, setMessages] = useState<
+    Array<{
+      id: string;
+      type: string;
+      data: any;
+      timestamp: string;
+    }>
+  >([]);
+
   const [testMessage, setTestMessage] = useState('');
 
   const {
@@ -34,55 +36,58 @@ export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
     subscribe,
     unsubscribe,
     requestData,
-    ping
-  } = useAutomationWebSocket(
-    'ws://localhost:3001',
-    workspaceId,
-    {
-      onTaskUpdate: (data) => {
-        addMessage('Task Update', data);
-      },
-      onExecutionUpdate: (data) => {
-        addMessage('Execution Update', data);
-      },
-      onWorkspaceUpdate: (data) => {
-        addMessage('Workspace Update', data);
-      },
-      onSystemHealth: (data) => {
-        addMessage('System Health', data);
-      },
-      onAlert: (data) => {
-        addMessage('Alert', data);
-      },
-      onNotification: (data) => {
-        addMessage('Notification', data);
-      },
-      onDataResponse: (requestType, data) => {
-        addMessage(`Data Response: ${requestType}`, data);
-      },
-      onError: (error) => {
-        addMessage('Error', error);
-      },
-      onConnect: () => {
-        addMessage('System', { message: 'WebSocket connected successfully' });
-        // Subscribe to all events for demo
-        subscribe(['task_update', 'execution_update', 'workspace_update', 'system_health', 'alert', 'notification']);
-      },
-      onDisconnect: () => {
-        addMessage('System', { message: 'WebSocket disconnected' });
-      },
-      onReconnect: () => {
-        addMessage('System', { message: 'WebSocket reconnected' });
-      }
-    }
-  );
+    ping,
+  } = useAutomationWebSocket('ws://localhost:3001', workspaceId, {
+    onTaskUpdate: data => {
+      addMessage('Task Update', data);
+    },
+    onExecutionUpdate: data => {
+      addMessage('Execution Update', data);
+    },
+    onWorkspaceUpdate: data => {
+      addMessage('Workspace Update', data);
+    },
+    onSystemHealth: data => {
+      addMessage('System Health', data);
+    },
+    onAlert: data => {
+      addMessage('Alert', data);
+    },
+    onNotification: data => {
+      addMessage('Notification', data);
+    },
+    onDataResponse: (requestType, data) => {
+      addMessage(`Data Response: ${requestType}`, data);
+    },
+    onError: error => {
+      addMessage('Error', error);
+    },
+    onConnect: () => {
+      addMessage('System', { message: 'WebSocket connected successfully' });
+      // Subscribe to all events for demo
+      subscribe([
+        'task_update',
+        'execution_update',
+        'workspace_update',
+        'system_health',
+        'alert',
+        'notification',
+      ]);
+    },
+    onDisconnect: () => {
+      addMessage('System', { message: 'WebSocket disconnected' });
+    },
+    onReconnect: () => {
+      addMessage('System', { message: 'WebSocket reconnected' });
+    },
+  });
 
   const addMessage = (type: string, data: any) => {
     const message = {
       id: Date.now().toString(),
       type,
       data,
-      timestamp: new Date().toLocaleTimeString()
+      timestamp: new Date().toLocaleTimeString(),
     };
     setMessages(prev => [message, ...prev.slice(0, 49)]); // Keep last 50 messages
   };
@@ -124,23 +129,25 @@ export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
               WebSocket Demo
             </h3>
             <p className="text-sm text-gray-500">
-              {isConnected ? 'Connected and receiving live updates' : 'Disconnected'}
+              {isConnected
+                ? 'Connected and receiving live updates'
+                : 'Disconnected'}
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <button
             onClick={isConnected ? disconnect : connect}
             className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-              isConnected 
-                ? 'bg-red-100 text-red-700 hover:bg-red-200' 
+              isConnected
+                ? 'bg-red-100 text-red-700 hover:bg-red-200'
                 : 'bg-green-100 text-green-700 hover:bg-green-200'
             }`}
           >
             {isConnected ? 'Disconnect' : 'Connect'}
           </button>
-          
+
           <button
             onClick={handlePing}
             disabled={!isConnected}
@@ -239,10 +246,10 @@ export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
           <input
             type="text"
             value={testMessage}
-            onChange={(e) => setTestMessage(e.target.value)}
+            onChange={e => setTestMessage(e.target.value)}
             placeholder="Send a test message..."
             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onKeyPress={(e) => e.key === 'Enter' && handleSendTestMessage()}
+            onKeyPress={e => e.key === 'Enter' && handleSendTestMessage()}
           />
           <button
             onClick={handleSendTestMessage}
@@ -262,7 +269,7 @@ export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
             Live Messages ({messages.length})
           </h4>
         </div>
-        
+
         {messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <Activity className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -270,7 +277,7 @@ export default function WebSocketDemo({ workspaceId }: WebSocketDemoProps) {
           </div>
         ) : (
           <div className="space-y-2">
-            {messages.map((message) => (
+            {messages.map(message => (
               <div
                 key={message.id}
                 className="bg-white rounded-lg p-3 border border-gray-200"

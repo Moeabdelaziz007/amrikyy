@@ -7,10 +7,21 @@ interface SecurityHeadersConfig {
   xContentTypeOptions: 'nosniff';
   strictTransportSecurity: string;
   xXSSProtection: string;
-  referrerPolicy: 'no-referrer' | 'no-referrer-when-downgrade' | 'origin' | 'origin-when-cross-origin' | 'same-origin' | 'strict-origin' | 'strict-origin-when-cross-origin' | 'unsafe-url';
+  referrerPolicy:
+    | 'no-referrer'
+    | 'no-referrer-when-downgrade'
+    | 'origin'
+    | 'origin-when-cross-origin'
+    | 'same-origin'
+    | 'strict-origin'
+    | 'strict-origin-when-cross-origin'
+    | 'unsafe-url';
   permissionsPolicy: string;
   crossOriginEmbedderPolicy: 'unsafe-none' | 'require-corp';
-  crossOriginOpenerPolicy: 'unsafe-none' | 'same-origin-allow-popups' | 'same-origin';
+  crossOriginOpenerPolicy:
+    | 'unsafe-none'
+    | 'same-origin-allow-popups'
+    | 'same-origin';
   crossOriginResourcePolicy: 'same-site' | 'same-origin' | 'cross-origin';
 }
 
@@ -28,7 +39,7 @@ const defaultSecurityHeaders: SecurityHeadersConfig = {
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-ancestors 'none'"
+    "frame-ancestors 'none'",
   ].join('; '),
 
   xFrameOptions: 'DENY',
@@ -44,15 +55,17 @@ const defaultSecurityHeaders: SecurityHeadersConfig = {
     'usb=()',
     'magnetometer=()',
     'accelerometer=()',
-    'gyroscope=()'
+    'gyroscope=()',
   ].join(', '),
   crossOriginEmbedderPolicy: 'require-corp',
   crossOriginOpenerPolicy: 'same-origin',
-  crossOriginResourcePolicy: 'same-origin'
+  crossOriginResourcePolicy: 'same-origin',
 };
 
 // Security headers middleware
-export const securityHeaders = (config: Partial<SecurityHeadersConfig> = {}) => {
+export const securityHeaders = (
+  config: Partial<SecurityHeadersConfig> = {}
+) => {
   const headers = { ...defaultSecurityHeaders, ...config };
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -67,7 +80,10 @@ export const securityHeaders = (config: Partial<SecurityHeadersConfig> = {}) => 
 
     // HTTPS enforcement (only in production)
     if (process.env.NODE_ENV === 'production') {
-      res.setHeader('Strict-Transport-Security', headers.strictTransportSecurity);
+      res.setHeader(
+        'Strict-Transport-Security',
+        headers.strictTransportSecurity
+      );
     }
 
     // XSS protection
@@ -80,9 +96,18 @@ export const securityHeaders = (config: Partial<SecurityHeadersConfig> = {}) => 
     res.setHeader('Permissions-Policy', headers.permissionsPolicy);
 
     // Cross-Origin policies
-    res.setHeader('Cross-Origin-Embedder-Policy', headers.crossOriginEmbedderPolicy);
-    res.setHeader('Cross-Origin-Opener-Policy', headers.crossOriginOpenerPolicy);
-    res.setHeader('Cross-Origin-Resource-Policy', headers.crossOriginResourcePolicy);
+    res.setHeader(
+      'Cross-Origin-Embedder-Policy',
+      headers.crossOriginEmbedderPolicy
+    );
+    res.setHeader(
+      'Cross-Origin-Opener-Policy',
+      headers.crossOriginOpenerPolicy
+    );
+    res.setHeader(
+      'Cross-Origin-Resource-Policy',
+      headers.crossOriginResourcePolicy
+    );
 
     // Additional security headers
     res.setHeader('X-DNS-Prefetch-Control', 'off');
@@ -103,14 +128,14 @@ export const secureCORS = (allowedOrigins: string[] = []) => {
     'https://aios-97581.web.app',
     'https://aios-97581.firebaseapp.com',
     'http://localhost:3000',
-    'http://localhost:5173'
+    'http://localhost:5173',
   ];
 
   const origins = [...defaultOrigins, ...allowedOrigins];
 
   return (req: Request, res: Response, next: NextFunction) => {
     const origin = req.headers.origin;
-    
+
     // Check if origin is allowed
     if (origin && origins.includes(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin);
@@ -120,8 +145,14 @@ export const secureCORS = (allowedOrigins: string[] = []) => {
     }
 
     // CORS headers
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-Session-Token');
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+    );
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization, X-Requested-With, X-Session-Token'
+    );
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Max-Age', '86400'); // 24 hours
 
@@ -143,9 +174,10 @@ export const forceHTTPS = (req: Request, res: Response, next: NextFunction) => {
   }
 
   // Check if request is secure
-  const isSecure = req.secure || 
-                   req.headers['x-forwarded-proto'] === 'https' ||
-                   req.connection.encrypted;
+  const isSecure =
+    req.secure ||
+    req.headers['x-forwarded-proto'] === 'https' ||
+    req.connection.encrypted;
 
   if (!isSecure) {
     const httpsUrl = `https://${req.get('host')}${req.url}`;
@@ -156,17 +188,21 @@ export const forceHTTPS = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // Security monitoring middleware
-export const securityMonitoring = (req: Request, res: Response, next: NextFunction) => {
+export const securityMonitoring = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const startTime = Date.now();
-  
+
   // Log suspicious patterns
   const suspiciousPatterns = [
-    /\.\.\//,  // Path traversal
-    /<script/i,  // XSS attempts
-    /union.*select/i,  // SQL injection
-    /eval\(/i,  // Code injection
-    /javascript:/i,  // JavaScript injection
-    /on\w+\s*=/i  // Event handler injection
+    /\.\.\//, // Path traversal
+    /<script/i, // XSS attempts
+    /union.*select/i, // SQL injection
+    /eval\(/i, // Code injection
+    /javascript:/i, // JavaScript injection
+    /on\w+\s*=/i, // Event handler injection
   ];
 
   const userAgent = req.get('User-Agent') || '';
@@ -181,14 +217,14 @@ export const securityMonitoring = (req: Request, res: Response, next: NextFuncti
         userAgent,
         url,
         timestamp: new Date().toISOString(),
-        pattern: pattern.toString()
+        pattern: pattern.toString(),
       });
-      
+
       // Block suspicious requests
       return res.status(400).json({
         error: 'Bad Request',
         message: 'Request contains suspicious content',
-        code: 'SUSPICIOUS_REQUEST'
+        code: 'SUSPICIOUS_REQUEST',
       });
     }
   }
@@ -196,9 +232,13 @@ export const securityMonitoring = (req: Request, res: Response, next: NextFuncti
   // Monitor response
   res.on('finish', () => {
     const duration = Date.now() - startTime;
-    
+
     // Log security events
-    if (res.statusCode === 401 || res.statusCode === 403 || res.statusCode === 429) {
+    if (
+      res.statusCode === 401 ||
+      res.statusCode === 403 ||
+      res.statusCode === 429
+    ) {
       console.warn('Security event:', {
         ip: req.ip,
         method: req.method,
@@ -206,7 +246,7 @@ export const securityMonitoring = (req: Request, res: Response, next: NextFuncti
         statusCode: res.statusCode,
         userAgent,
         duration,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   });
@@ -215,15 +255,16 @@ export const securityMonitoring = (req: Request, res: Response, next: NextFuncti
 };
 
 // Request size limiting
-export const requestSizeLimit = (maxSize: number = 10 * 1024 * 1024) => { // 10MB default
+export const requestSizeLimit = (maxSize: number = 10 * 1024 * 1024) => {
+  // 10MB default
   return (req: Request, res: Response, next: NextFunction) => {
     const contentLength = parseInt(req.get('Content-Length') || '0');
-    
+
     if (contentLength > maxSize) {
       return res.status(413).json({
         error: 'Payload Too Large',
         message: `Request body size exceeds maximum allowed size of ${maxSize} bytes`,
-        code: 'PAYLOAD_TOO_LARGE'
+        code: 'PAYLOAD_TOO_LARGE',
       });
     }
 
@@ -241,9 +282,9 @@ export const ipFilter = (options: {
 
   // Common suspicious IP patterns (example - in production, use a proper IP reputation service)
   const suspiciousIPPatterns = [
-    /^10\./,  // Private networks (adjust as needed)
-    /^192\.168\./,  // Private networks
-    /^127\./,  // Localhost
+    /^10\./, // Private networks (adjust as needed)
+    /^192\.168\./, // Private networks
+    /^127\./, // Localhost
   ];
 
   return (req: Request, res: Response, next: NextFunction) => {
@@ -255,7 +296,7 @@ export const ipFilter = (options: {
       return res.status(403).json({
         error: 'Forbidden',
         message: 'Access denied from this IP address',
-        code: 'IP_BLOCKED'
+        code: 'IP_BLOCKED',
       });
     }
 
@@ -265,7 +306,7 @@ export const ipFilter = (options: {
       return res.status(403).json({
         error: 'Forbidden',
         message: 'Access denied from this IP address',
-        code: 'IP_NOT_WHITELISTED'
+        code: 'IP_NOT_WHITELISTED',
       });
     }
 
@@ -277,7 +318,7 @@ export const ipFilter = (options: {
           return res.status(403).json({
             error: 'Forbidden',
             message: 'Access denied from this IP address',
-            code: 'SUSPICIOUS_IP'
+            code: 'SUSPICIOUS_IP',
           });
         }
       }
@@ -294,7 +335,7 @@ export const comprehensiveSecurity = () => {
     secureCORS(),
     forceHTTPS(),
     securityMonitoring(),
-    requestSizeLimit()
+    requestSizeLimit(),
   ];
 };
 
@@ -306,5 +347,5 @@ export const securityMiddleware = {
   securityMonitoring,
   requestSizeLimit,
   ipFilter,
-  comprehensiveSecurity
+  comprehensiveSecurity,
 };

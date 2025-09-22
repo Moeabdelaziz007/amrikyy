@@ -1,12 +1,52 @@
 // Advanced Automation Tasks Page - Professional Template Better than n8n
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  Play, Pause, Square, RefreshCw, Clock, CheckCircle, XCircle, AlertCircle,
-  Activity, Settings, Plus, Filter, Search, Zap, Bot, Code, Database,
-  Workflow, Globe, Shield, TrendingUp, Users, BarChart3, Smartphone,
-  Download, Upload, Copy, Edit, Trash2, Eye, PlayCircle, PauseCircle,
-  ChevronDown, ChevronRight, Star, Heart, Share2, MessageSquare,
-  Calendar, Timer, Target, Lightbulb, Cpu, Network, Cloud, Lock
+import {
+  Play,
+  Pause,
+  Square,
+  RefreshCw,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Activity,
+  Settings,
+  Plus,
+  Filter,
+  Search,
+  Zap,
+  Bot,
+  Code,
+  Database,
+  Workflow,
+  Globe,
+  Shield,
+  TrendingUp,
+  Users,
+  BarChart3,
+  Smartphone,
+  Download,
+  Upload,
+  Copy,
+  Edit,
+  Trash2,
+  Eye,
+  PlayCircle,
+  PauseCircle,
+  ChevronDown,
+  ChevronRight,
+  Star,
+  Heart,
+  Share2,
+  MessageSquare,
+  Calendar,
+  Timer,
+  Target,
+  Lightbulb,
+  Cpu,
+  Network,
+  Cloud,
+  Lock,
 } from 'lucide-react';
 
 // Import our custom automation components
@@ -16,7 +56,7 @@ import AIWorkflowOptimizer from '@/components/automation/AIWorkflowOptimizer';
 import WorkflowBuilder from '@/components/automation/WorkflowBuilder';
 import RealTimeMonitor from '@/components/automation/RealTimeMonitor';
 import WebSocketDemo from '@/components/automation/WebSocketDemo';
-y
+y;
 
 // Import API service and WebSocket
 import { automationApi } from '@/services/automation-api';
@@ -28,7 +68,13 @@ interface AutomationTask {
   name: string;
   description: string;
   type: 'workflow' | 'trigger' | 'action' | 'condition' | 'ai' | 'mcp';
-  category: 'social_media' | 'email' | 'data' | 'ai' | 'integration' | 'notification';
+  category:
+    | 'social_media'
+    | 'email'
+    | 'data'
+    | 'ai'
+    | 'integration'
+    | 'notification';
   status: 'active' | 'inactive' | 'draft' | 'error' | 'running' | 'paused';
   priority: 'low' | 'medium' | 'high' | 'critical';
   workspace: string;
@@ -106,7 +152,14 @@ interface MCPTool {
   id: string;
   name: string;
   description: string;
-  category: 'development' | 'data' | 'database' | 'web' | 'ai' | 'automation' | 'integration';
+  category:
+    | 'development'
+    | 'data'
+    | 'database'
+    | 'web'
+    | 'ai'
+    | 'automation'
+    | 'integration';
   icon: string;
   version: string;
   status: 'active' | 'inactive' | 'error' | 'updating';
@@ -192,71 +245,90 @@ export default function AutomationTasksPage() {
   const [mcpTools, setMcpTools] = useState<MCPTool[]>([]);
   const [aiAssistants, setAiAssistants] = useState<AIAssistant[]>([]);
   const [selectedWorkspace, setSelectedWorkspace] = useState<string>('all');
-  const [selectedTab, setSelectedTab] = useState<'dashboard' | 'tasks' | 'workflows' | 'mcp' | 'ai' | 'analytics' | 'builder' | 'monitor' | 'workspace' | 'websocket'>('dashboard');
+  const [selectedTab, setSelectedTab] = useState<
+    | 'dashboard'
+    | 'tasks'
+    | 'workflows'
+    | 'mcp'
+    | 'ai'
+    | 'analytics'
+    | 'builder'
+    | 'monitor'
+    | 'workspace'
+    | 'websocket'
+  >('dashboard');
   const [filter, setFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<AutomationTask | null>(null);
-  
+
   // API Data State
   const [apiTasks, setApiTasks] = useState<AutomationTask[]>([]);
   const [apiWorkspaces, setApiWorkspaces] = useState<Workspace[]>([]);
   const [apiMcpTools, setApiMcpTools] = useState<MCPTool[]>([]);
   const [apiExecutions, setApiExecutions] = useState<TaskExecution[]>([]);
-  const [apiSuggestions, setApiSuggestions] = useState<WorkflowSuggestion[]>([]);
+  const [apiSuggestions, setApiSuggestions] = useState<WorkflowSuggestion[]>(
+    []
+  );
   const [apiHealth, setApiHealth] = useState<SystemHealth | null>(null);
   const [apiAnalytics, setApiAnalytics] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   // WebSocket connection for real-time updates
   const {
     isConnected: wsConnected,
     connectionError: wsError,
     subscribe: wsSubscribe,
-    requestData: wsRequestData
+    requestData: wsRequestData,
   } = useAutomationWebSocket(
     'ws://localhost:3001',
     selectedWorkspace !== 'all' ? selectedWorkspace : undefined,
     {
-      onTaskUpdate: (data) => {
+      onTaskUpdate: data => {
         console.log('📡 Real-time task update:', data);
-        setApiTasks(prev => prev.map(task => 
-          task.id === data.id ? { ...task, ...data } : task
-        ));
+        setApiTasks(prev =>
+          prev.map(task => (task.id === data.id ? { ...task, ...data } : task))
+        );
       },
-      onExecutionUpdate: (data) => {
+      onExecutionUpdate: data => {
         console.log('📡 Real-time execution update:', data);
-        setApiExecutions(prev => prev.map(exec => 
-          exec.id === data.id ? { ...exec, ...data } : exec
-        ));
+        setApiExecutions(prev =>
+          prev.map(exec => (exec.id === data.id ? { ...exec, ...data } : exec))
+        );
       },
-      onWorkspaceUpdate: (data) => {
+      onWorkspaceUpdate: data => {
         console.log('📡 Real-time workspace update:', data);
-        setApiWorkspaces(prev => prev.map(ws => 
-          ws.id === data.id ? { ...ws, ...data } : ws
-        ));
+        setApiWorkspaces(prev =>
+          prev.map(ws => (ws.id === data.id ? { ...ws, ...data } : ws))
+        );
       },
-      onSystemHealth: (data) => {
+      onSystemHealth: data => {
         console.log('📡 Real-time system health update:', data);
         setApiHealth(data);
       },
-      onAlert: (data) => {
+      onAlert: data => {
         console.log('📡 Real-time alert:', data);
         // Handle alerts (show notifications, update UI, etc.)
       },
-      onNotification: (data) => {
+      onNotification: data => {
         console.log('📡 Real-time notification:', data);
         // Handle notifications
       },
       onConnect: () => {
         console.log('🔌 WebSocket connected - subscribing to updates');
         // Subscribe to relevant updates
-        wsSubscribe(['task_update', 'execution_update', 'workspace_update', 'system_health', 'alert']);
+        wsSubscribe([
+          'task_update',
+          'execution_update',
+          'workspace_update',
+          'system_health',
+          'alert',
+        ]);
       },
       onDisconnect: () => {
         console.log('🔌 WebSocket disconnected');
-      }
+      },
     }
   );
 
@@ -265,7 +337,7 @@ export default function AutomationTasksPage() {
     const loadData = async () => {
       setIsLoading(true);
       setError(null);
-      
+
       try {
         // Load data from API in parallel
         const [
@@ -275,7 +347,7 @@ export default function AutomationTasksPage() {
           executionsResponse,
           suggestionsResponse,
           healthResponse,
-          analyticsResponse
+          analyticsResponse,
         ] = await Promise.allSettled([
           automationApi.getWorkspaces(),
           automationApi.getTasks(),
@@ -283,7 +355,7 @@ export default function AutomationTasksPage() {
           automationApi.getTaskExecutions(),
           automationApi.getWorkflowSuggestions(),
           automationApi.getSystemHealth(),
-          automationApi.getAnalytics()
+          automationApi.getAnalytics(),
         ]);
 
         // Handle workspaces
@@ -329,7 +401,7 @@ export default function AutomationTasksPage() {
           executionsResponse,
           suggestionsResponse,
           healthResponse,
-          analyticsResponse
+          analyticsResponse,
         ].filter(result => result.status === 'rejected');
 
         if (failures.length > 0) {
@@ -337,7 +409,6 @@ export default function AutomationTasksPage() {
           // Fall back to mock data if API fails
           initializeMockData();
         }
-
       } catch (error) {
         console.error('Failed to load data from API:', error);
         setError('Failed to load data from API');
@@ -367,10 +438,11 @@ export default function AutomationTasksPage() {
               id: 'user-1',
               name: 'John Doe',
               email: 'john@example.com',
-              avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face',
+              avatar:
+                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face',
               role: 'owner',
-              joinedAt: '2024-01-01T00:00:00Z'
-            }
+              joinedAt: '2024-01-01T00:00:00Z',
+            },
           ],
           settings: {
             autoSave: true,
@@ -378,10 +450,10 @@ export default function AutomationTasksPage() {
             theme: 'light',
             layout: 'grid',
             sortBy: 'name',
-            groupBy: 'status'
+            groupBy: 'status',
           },
           createdAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-20T10:00:00Z'
+          updatedAt: '2024-01-20T10:00:00Z',
         },
         {
           id: 'ws-2',
@@ -399,10 +471,11 @@ export default function AutomationTasksPage() {
               id: 'user-2',
               name: 'Jane Smith',
               email: 'jane@example.com',
-              avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face',
+              avatar:
+                'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40&h=40&fit=crop&crop=face',
               role: 'admin',
-              joinedAt: '2024-01-05T00:00:00Z'
-            }
+              joinedAt: '2024-01-05T00:00:00Z',
+            },
           ],
           settings: {
             autoSave: true,
@@ -410,10 +483,10 @@ export default function AutomationTasksPage() {
             theme: 'dark',
             layout: 'list',
             sortBy: 'date',
-            groupBy: 'priority'
+            groupBy: 'priority',
           },
           createdAt: '2024-01-05T00:00:00Z',
-          updatedAt: '2024-01-18T15:30:00Z'
+          updatedAt: '2024-01-18T15:30:00Z',
         },
         {
           id: 'ws-3',
@@ -431,10 +504,11 @@ export default function AutomationTasksPage() {
               id: 'user-3',
               name: 'Mike Johnson',
               email: 'mike@example.com',
-              avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
+              avatar:
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face',
               role: 'editor',
-              joinedAt: '2024-01-10T00:00:00Z'
-            }
+              joinedAt: '2024-01-10T00:00:00Z',
+            },
           ],
           settings: {
             autoSave: false,
@@ -442,11 +516,11 @@ export default function AutomationTasksPage() {
             theme: 'auto',
             layout: 'kanban',
             sortBy: 'priority',
-            groupBy: 'category'
+            groupBy: 'category',
           },
           createdAt: '2024-01-10T00:00:00Z',
-          updatedAt: '2024-01-19T09:15:00Z'
-        }
+          updatedAt: '2024-01-19T09:15:00Z',
+        },
       ];
 
       // Mock MCP tools
@@ -459,7 +533,11 @@ export default function AutomationTasksPage() {
           icon: '⌨️',
           version: '1.2.0',
           status: 'active',
-          capabilities: ['code_generation', 'file_operations', 'git_integration'],
+          capabilities: [
+            'code_generation',
+            'file_operations',
+            'git_integration',
+          ],
           usage: 95,
           lastUsed: '2024-01-20T10:30:00Z',
           performance: {
@@ -467,7 +545,7 @@ export default function AutomationTasksPage() {
             successRate: 0.98,
             errorRate: 0.02,
             uptime: 0.99,
-            resourceUsage: { cpu: 25, memory: 128, storage: 256 }
+            resourceUsage: { cpu: 25, memory: 128, storage: 256 },
           },
           settings: {
             autoUpdate: true,
@@ -476,7 +554,11 @@ export default function AutomationTasksPage() {
             rateLimit: 1000,
             timeout: 30000,
             retryAttempts: 3,
-            security: { encryption: true, authentication: true, authorization: true }
+            security: {
+              encryption: true,
+              authentication: true,
+              authorization: true,
+            },
           },
           dependencies: ['nodejs', 'git'],
           integrations: [
@@ -486,8 +568,8 @@ export default function AutomationTasksPage() {
               type: 'api',
               status: 'connected',
               config: { token: '***' },
-              lastSync: '2024-01-20T10:30:00Z'
-            }
+              lastSync: '2024-01-20T10:30:00Z',
+            },
           ],
           documentation: 'https://docs.example.com/cursor-cli',
           examples: [
@@ -499,8 +581,12 @@ export default function AutomationTasksPage() {
               language: 'javascript',
               complexity: 'simple',
               successRate: 0.95,
-              performance: { executionTime: 2000, resourceUsage: 50, accuracy: 0.95 }
-            }
+              performance: {
+                executionTime: 2000,
+                resourceUsage: 50,
+                accuracy: 0.95,
+              },
+            },
           ],
           isOfficial: true,
           isVerified: true,
@@ -510,10 +596,10 @@ export default function AutomationTasksPage() {
             id: 'author-1',
             name: 'Cursor Team',
             avatar: 'https://cursor.sh/logo.png',
-            verified: true
+            verified: true,
           },
           createdAt: '2024-01-01T00:00:00Z',
-          updatedAt: '2024-01-20T10:30:00Z'
+          updatedAt: '2024-01-20T10:30:00Z',
         },
         {
           id: 'mcp-2',
@@ -531,7 +617,7 @@ export default function AutomationTasksPage() {
             successRate: 0.92,
             errorRate: 0.08,
             uptime: 0.98,
-            resourceUsage: { cpu: 40, memory: 256, storage: 512 }
+            resourceUsage: { cpu: 40, memory: 256, storage: 512 },
           },
           settings: {
             autoUpdate: true,
@@ -540,7 +626,11 @@ export default function AutomationTasksPage() {
             rateLimit: 100,
             timeout: 60000,
             retryAttempts: 2,
-            security: { encryption: true, authentication: false, authorization: true }
+            security: {
+              encryption: true,
+              authentication: false,
+              authorization: true,
+            },
           },
           dependencies: ['puppeteer', 'cheerio'],
           integrations: [],
@@ -554,11 +644,11 @@ export default function AutomationTasksPage() {
             id: 'author-2',
             name: 'Data Tools Inc',
             avatar: 'https://example.com/avatar.png',
-            verified: true
+            verified: true,
           },
           createdAt: '2024-01-05T00:00:00Z',
-          updatedAt: '2024-01-20T09:45:00Z'
-        }
+          updatedAt: '2024-01-20T09:45:00Z',
+        },
       ];
 
       // Mock AI assistants
@@ -568,10 +658,14 @@ export default function AutomationTasksPage() {
           name: 'Content Optimizer',
           description: 'AI-powered content optimization and enhancement',
           model: 'GPT-4',
-          capabilities: ['content_optimization', 'seo_analysis', 'readability_check'],
+          capabilities: [
+            'content_optimization',
+            'seo_analysis',
+            'readability_check',
+          ],
           status: 'active',
           usage: 89,
-          accuracy: 94
+          accuracy: 94,
         },
         {
           id: 'ai-2',
@@ -581,8 +675,8 @@ export default function AutomationTasksPage() {
           capabilities: ['workflow_design', 'optimization', 'error_detection'],
           status: 'active',
           usage: 76,
-          accuracy: 91
-        }
+          accuracy: 91,
+        },
       ];
 
       // Mock tasks
@@ -590,7 +684,8 @@ export default function AutomationTasksPage() {
         {
           id: 'task-1',
           name: 'Smart Social Media Scheduler',
-          description: 'AI-powered social media content scheduling with optimal timing',
+          description:
+            'AI-powered social media content scheduling with optimal timing',
           type: 'workflow',
           category: 'social_media',
           status: 'active',
@@ -617,13 +712,14 @@ export default function AutomationTasksPage() {
             failedRuns: 1,
             avgExecutionTime: 120,
             lastExecutionTime: 115,
-            resourceUsage: { cpu: 25, memory: 128, storage: 256 }
-          }
+            resourceUsage: { cpu: 25, memory: 128, storage: 256 },
+          },
         },
         {
           id: 'task-2',
           name: 'Email Campaign Automation',
-          description: 'Automated email marketing campaigns with personalization',
+          description:
+            'Automated email marketing campaigns with personalization',
           type: 'workflow',
           category: 'email',
           status: 'running',
@@ -649,9 +745,9 @@ export default function AutomationTasksPage() {
             failedRuns: 2,
             avgExecutionTime: 180,
             lastExecutionTime: 175,
-            resourceUsage: { cpu: 15, memory: 96, storage: 512 }
-          }
-        }
+            resourceUsage: { cpu: 15, memory: 96, storage: 512 },
+          },
+        },
       ];
 
       setWorkspaces(mockWorkspaces);
@@ -720,11 +816,13 @@ export default function AutomationTasksPage() {
       if (response.success && response.data) {
         setApiTasks(prev => [response.data, ...prev]);
         // Update workspace task count
-        setApiWorkspaces(prev => prev.map(ws => 
-          ws.id === taskData.workspaceId 
-            ? { ...ws, taskCount: ws.taskCount + 1 }
-            : ws
-        ));
+        setApiWorkspaces(prev =>
+          prev.map(ws =>
+            ws.id === taskData.workspaceId
+              ? { ...ws, taskCount: ws.taskCount + 1 }
+              : ws
+          )
+        );
       }
     } catch (error) {
       console.error('Failed to create task:', error);
@@ -746,15 +844,20 @@ export default function AutomationTasksPage() {
 
   // Use API data when available, fall back to mock data
   const currentTasks = apiTasks.length > 0 ? apiTasks : tasks;
-  const currentWorkspaces = apiWorkspaces.length > 0 ? apiWorkspaces : workspaces;
+  const currentWorkspaces =
+    apiWorkspaces.length > 0 ? apiWorkspaces : workspaces;
   const currentMcpTools = apiMcpTools.length > 0 ? apiMcpTools : mcpTools;
 
   const filteredTasks = currentTasks.filter(task => {
-    const matchesWorkspace = selectedWorkspace === 'all' || task.workspace === selectedWorkspace;
+    const matchesWorkspace =
+      selectedWorkspace === 'all' || task.workspace === selectedWorkspace;
     const matchesFilter = filter === 'all' || task.status === filter;
-    const matchesSearch = task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         task.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch =
+      task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.tags.some(tag =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     return matchesWorkspace && matchesFilter && matchesSearch;
   });
 
@@ -763,7 +866,9 @@ export default function AutomationTasksPage() {
       <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-lg text-gray-600">Loading Automation Dashboard...</p>
+          <p className="text-lg text-gray-600">
+            Loading Automation Dashboard...
+          </p>
         </div>
       </div>
     );
@@ -793,13 +898,21 @@ export default function AutomationTasksPage() {
             <div className="flex items-center space-x-3">
               {/* WebSocket Connection Status */}
               <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-gray-100">
-                <div className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-                <span className={wsConnected ? 'text-green-700 font-medium' : 'text-red-700 font-medium'}>
+                <div
+                  className={`w-2 h-2 rounded-full ${wsConnected ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}
+                ></div>
+                <span
+                  className={
+                    wsConnected
+                      ? 'text-green-700 font-medium'
+                      : 'text-red-700 font-medium'
+                  }
+                >
                   {wsConnected ? 'Live Updates' : 'Offline'}
                 </span>
               </div>
-              
-              <button 
+
+              <button
                 onClick={() => setShowCreateModal(true)}
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
@@ -833,7 +946,7 @@ export default function AutomationTasksPage() {
                 {tasks.length}
               </span>
             </button>
-            {workspaces.map((workspace) => (
+            {workspaces.map(workspace => (
               <button
                 key={workspace.id}
                 onClick={() => setSelectedWorkspace(workspace.id)}
@@ -843,14 +956,21 @@ export default function AutomationTasksPage() {
                     : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
                 }`}
                 style={{
-                  backgroundColor: selectedWorkspace === workspace.id ? workspace.color : undefined
+                  backgroundColor:
+                    selectedWorkspace === workspace.id
+                      ? workspace.color
+                      : undefined,
                 }}
               >
                 <span className="text-lg">{workspace.icon}</span>
                 <span>{workspace.name}</span>
-                <span className={`text-xs px-2 py-1 rounded-full ${
-                  selectedWorkspace === workspace.id ? 'bg-white/20' : 'bg-gray-100'
-                }`}>
+                <span
+                  className={`text-xs px-2 py-1 rounded-full ${
+                    selectedWorkspace === workspace.id
+                      ? 'bg-white/20'
+                      : 'bg-gray-100'
+                  }`}
+                >
                   {workspace.taskCount}
                 </span>
               </button>
@@ -863,11 +983,19 @@ export default function AutomationTasksPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Active Tasks</p>
-                <p className="text-3xl font-bold text-gray-900">
-                  {tasks.filter(t => t.status === 'active' || t.status === 'running').length}
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Active Tasks
                 </p>
-                <p className="text-xs text-green-600 mt-1">+12% from last week</p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {
+                    tasks.filter(
+                      t => t.status === 'active' || t.status === 'running'
+                    ).length
+                  }
+                </p>
+                <p className="text-xs text-green-600 mt-1">
+                  +12% from last week
+                </p>
               </div>
               <div className="p-3 bg-green-100 rounded-xl">
                 <Activity className="w-6 h-6 text-green-600" />
@@ -878,9 +1006,15 @@ export default function AutomationTasksPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">Success Rate</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Success Rate
+                </p>
                 <p className="text-3xl font-bold text-gray-900">
-                  {Math.round(tasks.reduce((acc, task) => acc + task.successRate, 0) / tasks.length || 0)}%
+                  {Math.round(
+                    tasks.reduce((acc, task) => acc + task.successRate, 0) /
+                      tasks.length || 0
+                  )}
+                  %
                 </p>
                 <p className="text-xs text-blue-600 mt-1">+3.2% improvement</p>
               </div>
@@ -893,11 +1027,15 @@ export default function AutomationTasksPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">MCP Tools</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  MCP Tools
+                </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {mcpTools.filter(t => t.status === 'active').length}
                 </p>
-                <p className="text-xs text-purple-600 mt-1">All systems operational</p>
+                <p className="text-xs text-purple-600 mt-1">
+                  All systems operational
+                </p>
               </div>
               <div className="p-3 bg-purple-100 rounded-xl">
                 <Network className="w-6 h-6 text-purple-600" />
@@ -908,7 +1046,9 @@ export default function AutomationTasksPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 mb-1">AI Assistants</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  AI Assistants
+                </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {aiAssistants.filter(a => a.status === 'active').length}
                 </p>
@@ -935,8 +1075,8 @@ export default function AutomationTasksPage() {
                 { id: 'builder', label: 'Workflow Builder', icon: Settings },
                 { id: 'monitor', label: 'Real-Time Monitor', icon: Activity },
                 { id: 'websocket', label: 'WebSocket Demo', icon: Network },
-                { id: 'analytics', label: 'Analytics', icon: TrendingUp }
-              ].map((tab) => (
+                { id: 'analytics', label: 'Analytics', icon: TrendingUp },
+              ].map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setSelectedTab(tab.id as any)}
@@ -963,13 +1103,13 @@ export default function AutomationTasksPage() {
                     type="text"
                     placeholder="Search automations..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={e => setSearchTerm(e.target.value)}
                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50 backdrop-blur-sm"
                   />
                 </div>
                 <select
                   value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
+                  onChange={e => setFilter(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/50 backdrop-blur-sm"
                 >
                   <option value="all">All Status</option>
@@ -996,22 +1136,35 @@ export default function AutomationTasksPage() {
                 {/* Quick Actions */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2">Create New Workflow</h3>
-                    <p className="text-blue-100 mb-4">Build powerful automation workflows with our visual editor</p>
+                    <h3 className="text-lg font-semibold mb-2">
+                      Create New Workflow
+                    </h3>
+                    <p className="text-blue-100 mb-4">
+                      Build powerful automation workflows with our visual editor
+                    </p>
                     <button className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
                       Start Building
                     </button>
                   </div>
                   <div className="bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2">AI-Powered Suggestions</h3>
-                    <p className="text-green-100 mb-4">Get intelligent automation recommendations based on your usage</p>
+                    <h3 className="text-lg font-semibold mb-2">
+                      AI-Powered Suggestions
+                    </h3>
+                    <p className="text-green-100 mb-4">
+                      Get intelligent automation recommendations based on your
+                      usage
+                    </p>
                     <button className="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
                       View Suggestions
                     </button>
                   </div>
                   <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2">MCP Integration</h3>
-                    <p className="text-orange-100 mb-4">Connect with powerful MCP tools for enhanced automation</p>
+                    <h3 className="text-lg font-semibold mb-2">
+                      MCP Integration
+                    </h3>
+                    <p className="text-orange-100 mb-4">
+                      Connect with powerful MCP tools for enhanced automation
+                    </p>
                     <button className="bg-white text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition-colors">
                       Explore Tools
                     </button>
@@ -1020,18 +1173,29 @@ export default function AutomationTasksPage() {
 
                 {/* Recent Activity */}
                 <div className="bg-white rounded-2xl p-6 shadow-lg">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Recent Activity
+                  </h3>
                   <div className="space-y-4">
-                    {tasks.slice(0, 5).map((task) => (
-                      <div key={task.id} className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg">
+                    {tasks.slice(0, 5).map(task => (
+                      <div
+                        key={task.id}
+                        className="flex items-center space-x-4 p-4 bg-gray-50 rounded-lg"
+                      >
                         {getStatusIcon(task.status)}
                         <div className="flex-1">
-                          <h4 className="font-medium text-gray-900">{task.name}</h4>
-                          <p className="text-sm text-gray-600">{task.description}</p>
+                          <h4 className="font-medium text-gray-900">
+                            {task.name}
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            {task.description}
+                          </p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-medium text-gray-900">
-                            {task.lastRun ? new Date(task.lastRun).toLocaleDateString() : 'Never'}
+                            {task.lastRun
+                              ? new Date(task.lastRun).toLocaleDateString()
+                              : 'Never'}
                           </p>
                           <p className="text-xs text-gray-500">
                             {task.successRate.toFixed(1)}% success rate
@@ -1046,18 +1210,27 @@ export default function AutomationTasksPage() {
 
             {selectedTab === 'tasks' && (
               <div className="space-y-4">
-                {filteredTasks.map((task) => (
-                  <div key={task.id} className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200">
+                {filteredTasks.map(task => (
+                  <div
+                    key={task.id}
+                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200"
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         {getStatusIcon(task.status)}
                         <div className="flex-1">
                           <div className="flex items-center space-x-3 mb-2">
-                            <h3 className="text-lg font-semibold text-gray-900">{task.name}</h3>
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(task.status)}`}>
+                            <h3 className="text-lg font-semibold text-gray-900">
+                              {task.name}
+                            </h3>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(task.status)}`}
+                            >
                               {task.status}
                             </span>
-                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getPriorityColor(task.priority)}`}>
+                            <span
+                              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getPriorityColor(task.priority)}`}
+                            >
                               {task.priority}
                             </span>
                             {task.aiOptimized && (
@@ -1073,16 +1246,23 @@ export default function AutomationTasksPage() {
                               </span>
                             )}
                           </div>
-                          <p className="text-gray-600 mb-3">{task.description}</p>
+                          <p className="text-gray-600 mb-3">
+                            {task.description}
+                          </p>
                           <div className="flex items-center space-x-4 text-sm text-gray-500">
                             <span>Executions: {task.executionCount}</span>
-                            <span>Success Rate: {task.successRate.toFixed(1)}%</span>
+                            <span>
+                              Success Rate: {task.successRate.toFixed(1)}%
+                            </span>
                             <span>Avg Duration: {task.avgDuration}s</span>
                             <span>Complexity: {task.complexity}</span>
                           </div>
                           <div className="flex items-center space-x-2 mt-2">
-                            {task.tags.map((tag) => (
-                              <span key={tag} className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800">
+                            {task.tags.map(tag => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-800"
+                              >
                                 {tag}
                               </span>
                             ))}
@@ -1112,11 +1292,17 @@ export default function AutomationTasksPage() {
             {selectedTab === 'mcp' && (
               <MCPToolsIntegration
                 tools={currentMcpTools}
-                onToolInstall={(toolId) => automationApi.installMcpTool(toolId)}
-                onToolUninstall={(toolId) => automationApi.uninstallMcpTool(toolId)}
-                onToolConfigure={(toolId, settings) => automationApi.configureMcpTool(toolId, settings)}
-                onToolExecute={(toolId, parameters) => automationApi.executeMcpTool(toolId, parameters)}
-                onToolUpdate={(toolId) => automationApi.updateMcpTool(toolId)}
+                onToolInstall={toolId => automationApi.installMcpTool(toolId)}
+                onToolUninstall={toolId =>
+                  automationApi.uninstallMcpTool(toolId)
+                }
+                onToolConfigure={(toolId, settings) =>
+                  automationApi.configureMcpTool(toolId, settings)
+                }
+                onToolExecute={(toolId, parameters) =>
+                  automationApi.executeMcpTool(toolId, parameters)
+                }
+                onToolUpdate={toolId => automationApi.updateMcpTool(toolId)}
               />
             )}
 
@@ -1125,9 +1311,15 @@ export default function AutomationTasksPage() {
                 suggestions={[]}
                 optimizations={[]}
                 patterns={[]}
-                onApplySuggestion={(suggestionId) => console.log('Apply suggestion:', suggestionId)}
-                onOptimizeWorkflow={(workflowId) => console.log('Optimize workflow:', workflowId)}
-                onGenerateSuggestions={(workflowId) => console.log('Generate suggestions:', workflowId)}
+                onApplySuggestion={suggestionId =>
+                  console.log('Apply suggestion:', suggestionId)
+                }
+                onOptimizeWorkflow={workflowId =>
+                  console.log('Optimize workflow:', workflowId)
+                }
+                onGenerateSuggestions={workflowId =>
+                  console.log('Generate suggestions:', workflowId)
+                }
                 onAnalyzePatterns={() => console.log('Analyze patterns')}
               />
             )}
@@ -1138,9 +1330,13 @@ export default function AutomationTasksPage() {
                 tasks={currentTasks}
                 onWorkspaceSelect={setSelectedWorkspace}
                 onWorkspaceCreate={handleCreateWorkspace}
-                onWorkspaceUpdate={(id, updates) => automationApi.updateWorkspace(id, updates)}
-                onWorkspaceDelete={(id) => automationApi.deleteWorkspace(id)}
-                onTaskMove={(taskId, from, to) => console.log('Move task:', taskId, from, to)}
+                onWorkspaceUpdate={(id, updates) =>
+                  automationApi.updateWorkspace(id, updates)
+                }
+                onWorkspaceDelete={id => automationApi.deleteWorkspace(id)}
+                onTaskMove={(taskId, from, to) =>
+                  console.log('Move task:', taskId, from, to)
+                }
                 selectedWorkspace={selectedWorkspace}
               />
             )}
@@ -1148,30 +1344,104 @@ export default function AutomationTasksPage() {
             {selectedTab === 'builder' && (
               <WorkflowBuilder
                 workflow={undefined}
-                onSave={(workflow) => console.log('Save workflow:', workflow)}
-                onExecute={(workflow) => console.log('Execute workflow:', workflow)}
-                onExport={(workflow, format) => console.log('Export workflow:', workflow, format)}
-                onImport={(file) => console.log('Import workflow:', file)}
+                onSave={workflow => console.log('Save workflow:', workflow)}
+                onExecute={workflow =>
+                  console.log('Execute workflow:', workflow)
+                }
+                onExport={(workflow, format) =>
+                  console.log('Export workflow:', workflow, format)
+                }
+                onImport={file => console.log('Import workflow:', file)}
                 templates={[]}
-                onLoadTemplate={(templateId) => console.log('Load template:', templateId)}
+                onLoadTemplate={templateId =>
+                  console.log('Load template:', templateId)
+                }
               />
             )}
 
             {selectedTab === 'monitor' && (
               <RealTimeMonitor
                 executions={apiExecutions}
-                systemHealth={apiHealth || {
-                  overall: 'healthy',
-                  components: {
-                    cpu: { id: 'cpu', name: 'CPU', value: 45, unit: '%', trend: 'stable', change: 2, threshold: { warning: 80, critical: 95 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] },
-                    memory: { id: 'memory', name: 'Memory', value: 62, unit: '%', trend: 'up', change: 5, threshold: { warning: 85, critical: 95 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] },
-                    disk: { id: 'disk', name: 'Disk', value: 38, unit: '%', trend: 'stable', change: 1, threshold: { warning: 80, critical: 90 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] },
-                    network: { id: 'network', name: 'Network', value: 23, unit: '%', trend: 'down', change: -3, threshold: { warning: 70, critical: 85 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] },
-                    database: { id: 'database', name: 'Database', value: 67, unit: '%', trend: 'up', change: 8, threshold: { warning: 80, critical: 95 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] },
-                    queue: { id: 'queue', name: 'Queue', value: 12, unit: '%', trend: 'stable', change: 0, threshold: { warning: 70, critical: 90 }, status: 'healthy', timestamp: new Date().toISOString(), history: [] }
-                  },
-                  alerts: []
-                }}
+                systemHealth={
+                  apiHealth || {
+                    overall: 'healthy',
+                    components: {
+                      cpu: {
+                        id: 'cpu',
+                        name: 'CPU',
+                        value: 45,
+                        unit: '%',
+                        trend: 'stable',
+                        change: 2,
+                        threshold: { warning: 80, critical: 95 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                      memory: {
+                        id: 'memory',
+                        name: 'Memory',
+                        value: 62,
+                        unit: '%',
+                        trend: 'up',
+                        change: 5,
+                        threshold: { warning: 85, critical: 95 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                      disk: {
+                        id: 'disk',
+                        name: 'Disk',
+                        value: 38,
+                        unit: '%',
+                        trend: 'stable',
+                        change: 1,
+                        threshold: { warning: 80, critical: 90 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                      network: {
+                        id: 'network',
+                        name: 'Network',
+                        value: 23,
+                        unit: '%',
+                        trend: 'down',
+                        change: -3,
+                        threshold: { warning: 70, critical: 85 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                      database: {
+                        id: 'database',
+                        name: 'Database',
+                        value: 67,
+                        unit: '%',
+                        trend: 'up',
+                        change: 8,
+                        threshold: { warning: 80, critical: 95 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                      queue: {
+                        id: 'queue',
+                        name: 'Queue',
+                        value: 12,
+                        unit: '%',
+                        trend: 'stable',
+                        change: 0,
+                        threshold: { warning: 70, critical: 90 },
+                        status: 'healthy',
+                        timestamp: new Date().toISOString(),
+                        history: [],
+                      },
+                    },
+                    alerts: [],
+                  }
+                }
                 metrics={[]}
                 onExecutionControl={async (executionId, action) => {
                   try {
@@ -1188,13 +1458,19 @@ export default function AutomationTasksPage() {
                     console.error('Failed to resolve alert:', error);
                   }
                 }}
-                onMetricUpdate={(metricId) => console.log('Update metric:', metricId)}
+                onMetricUpdate={metricId =>
+                  console.log('Update metric:', metricId)
+                }
                 onRefresh={() => console.log('Refresh data')}
               />
             )}
 
             {selectedTab === 'websocket' && (
-              <WebSocketDemo workspaceId={selectedWorkspace !== 'all' ? selectedWorkspace : undefined} />
+              <WebSocketDemo
+                workspaceId={
+                  selectedWorkspace !== 'all' ? selectedWorkspace : undefined
+                }
+              />
             )}
           </div>
         </div>

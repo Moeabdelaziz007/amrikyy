@@ -5,9 +5,9 @@ import { COLLECTIONS } from './firestore-types';
 
 /**
  * Firestore Security Rules Template
- * 
+ *
  * Copy these rules to your Firebase Console > Firestore Database > Rules
- * 
+ *
  * rules_version = '2';
  * service cloud.firestore {
  *   match /databases/{database}/documents {
@@ -15,37 +15,37 @@ import { COLLECTIONS } from './firestore-types';
  *     match /users/{userId} {
  *       allow read, write: if request.auth != null && request.auth.uid == userId;
  *     }
- *     
+ *
  *     // Posts - users can create, read, update, delete their own posts
  *     match /posts/{postId} {
- *       allow read: if resource.data.visibility == 'public' || 
+ *       allow read: if resource.data.visibility == 'public' ||
  *                     (request.auth != null && request.auth.uid == resource.data.userId) ||
  *                     (request.auth != null && request.auth.uid in resource.data.sharedWith);
  *       allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
  *       allow update, delete: if request.auth != null && request.auth.uid == resource.data.userId;
  *     }
- *     
+ *
  *     // Workflows - users can manage their own workflows
  *     match /workflows/{workflowId} {
  *       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
  *     }
- *     
+ *
  *     // Agents - users can manage their own agents
  *     match /agents/{agentId} {
  *       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
  *     }
- *     
+ *
  *     // Chat Messages - users can manage their own messages
  *     match /chatMessages/{messageId} {
  *       allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
  *     }
- *     
+ *
  *     // Analytics - read-only for users, write for system
  *     match /analytics/{userId} {
  *       allow read: if request.auth != null && request.auth.uid == userId;
  *       allow write: if false; // Only system can write analytics
  *     }
- *     
+ *
  *     // Notifications - users can read their own notifications
  *     match /notifications/{notificationId} {
  *       allow read, update: if request.auth != null && request.auth.uid == resource.data.userId;
@@ -57,24 +57,24 @@ import { COLLECTIONS } from './firestore-types';
 
 /**
  * Firestore Indexes Configuration
- * 
+ *
  * Add these indexes in Firebase Console > Firestore Database > Indexes
- * 
+ *
  * Collection: posts
  * Fields: userId (Ascending), createdAt (Descending)
- * 
- * Collection: posts  
+ *
+ * Collection: posts
  * Fields: visibility (Ascending), createdAt (Descending)
- * 
+ *
  * Collection: workflows
  * Fields: userId (Ascending), status (Ascending), createdAt (Descending)
- * 
+ *
  * Collection: agents
  * Fields: userId (Ascending), status (Ascending), createdAt (Descending)
- * 
+ *
  * Collection: chatMessages
  * Fields: userId (Ascending), createdAt (Descending)
- * 
+ *
  * Collection: chatMessages
  * Fields: userId (Ascending), agentId (Ascending), createdAt (Descending)
  */
@@ -239,7 +239,7 @@ export class FirestoreConfig {
         await setDoc(backupRef, {
           ...userSnap.data(),
           backedUpAt: new Date(),
-          originalUserId: userId
+          originalUserId: userId,
         });
         console.log('User data backed up successfully');
       }

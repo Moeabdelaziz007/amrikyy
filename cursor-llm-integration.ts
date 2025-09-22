@@ -19,7 +19,13 @@ import path from 'path';
 dotenv.config();
 
 // LLM Provider Types
-type LLMProvider = 'openai' | 'anthropic' | 'gemini' | 'groq' | 'ollama' | 'cursor';
+type LLMProvider =
+  | 'openai'
+  | 'anthropic'
+  | 'gemini'
+  | 'groq'
+  | 'ollama'
+  | 'cursor';
 
 interface LLMConfig {
   provider: LLMProvider;
@@ -65,7 +71,7 @@ class CursorLLMIntegration {
       model: process.env.LLM_MODEL || 'gemini-pro',
       baseUrl: process.env.LLM_BASE_URL,
       temperature: parseFloat(process.env.LLM_TEMPERATURE || '0.7'),
-      maxTokens: parseInt(process.env.LLM_MAX_TOKENS || '2000')
+      maxTokens: parseInt(process.env.LLM_MAX_TOKENS || '2000'),
     };
 
     // Provider-specific configurations
@@ -88,7 +94,8 @@ class CursorLLMIntegration {
         config.baseUrl = 'https://api.groq.com/openai/v1';
         break;
       case 'ollama':
-        config.baseUrl = process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
+        config.baseUrl =
+          process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
         config.model = config.model || 'llama2';
         break;
       case 'cursor':
@@ -112,7 +119,7 @@ class CursorLLMIntegration {
         case 'cursor':
           this.openai = new OpenAI({
             apiKey: this.config.apiKey,
-            baseURL: this.config.baseUrl
+            baseURL: this.config.baseUrl,
           });
           break;
         case 'gemini':
@@ -139,7 +146,9 @@ class CursorLLMIntegration {
    */
   async sendMessage(message: string, context?: string): Promise<LLMResponse> {
     try {
-      console.log(chalk.blue(`🤖 Using ${this.config.provider} (${this.config.model})...`));
+      console.log(
+        chalk.blue(`🤖 Using ${this.config.provider} (${this.config.model})...`)
+      );
 
       switch (this.config.provider) {
         case 'openai':
@@ -164,74 +173,89 @@ class CursorLLMIntegration {
   /**
    * Send message via OpenAI-compatible API
    */
-  private async sendOpenAIMessage(message: string, context?: string): Promise<LLMResponse> {
+  private async sendOpenAIMessage(
+    message: string,
+    context?: string
+  ): Promise<LLMResponse> {
     if (!this.openai) {
       throw new Error('OpenAI client not initialized');
     }
 
-    const systemPrompt = context || 'You are a helpful AI assistant for the AuraOS Autopilot system.';
-    
+    const systemPrompt =
+      context ||
+      'You are a helpful AI assistant for the AuraOS Autopilot system.';
+
     const completion = await this.openai.chat.completions.create({
       model: this.config.model!,
       messages: [
         { role: 'system', content: systemPrompt },
-        { role: 'user', content: message }
+        { role: 'user', content: message },
       ],
       temperature: this.config.temperature,
-      max_tokens: this.config.maxTokens
+      max_tokens: this.config.maxTokens,
     });
 
     return {
       content: completion.choices[0].message.content || '',
       provider: this.config.provider,
       model: this.config.model!,
-      usage: completion.usage ? {
-        promptTokens: completion.usage.prompt_tokens,
-        completionTokens: completion.usage.completion_tokens,
-        totalTokens: completion.usage.total_tokens
-      } : undefined
+      usage: completion.usage
+        ? {
+            promptTokens: completion.usage.prompt_tokens,
+            completionTokens: completion.usage.completion_tokens,
+            totalTokens: completion.usage.total_tokens,
+          }
+        : undefined,
     };
   }
 
   /**
    * Send message via Gemini API
    */
-  private async sendGeminiMessage(message: string, context?: string): Promise<LLMResponse> {
+  private async sendGeminiMessage(
+    message: string,
+    context?: string
+  ): Promise<LLMResponse> {
     if (!this.gemini) {
       throw new Error('Gemini client not initialized');
     }
 
     const model = this.gemini.getGenerativeModel({ model: this.config.model! });
     const prompt = context ? `${context}\n\n${message}` : message;
-    
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
 
     return {
       content: response.text(),
       provider: 'gemini',
-      model: this.config.model!
+      model: this.config.model!,
     };
   }
 
   /**
    * Send message via Anthropic API
    */
-  private async sendAnthropicMessage(message: string, context?: string): Promise<LLMResponse> {
+  private async sendAnthropicMessage(
+    message: string,
+    context?: string
+  ): Promise<LLMResponse> {
     const response = await axios.post(
       'https://api.anthropic.com/v1/messages',
       {
         model: this.config.model,
         messages: [{ role: 'user', content: message }],
-        system: context || 'You are a helpful AI assistant for the AuraOS Autopilot system.',
-        max_tokens: this.config.maxTokens
+        system:
+          context ||
+          'You are a helpful AI assistant for the AuraOS Autopilot system.',
+        max_tokens: this.config.maxTokens,
       },
       {
         headers: {
           'x-api-key': this.config.apiKey,
           'anthropic-version': '2023-06-01',
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       }
     );
 
@@ -239,31 +263,35 @@ class CursorLLMIntegration {
       content: response.data.content[0].text,
       provider: 'anthropic',
       model: this.config.model!,
-      usage: response.data.usage ? {
-        promptTokens: response.data.usage.input_tokens,
-        completionTokens: response.data.usage.output_tokens,
-        totalTokens: response.data.usage.input_tokens + response.data.usage.output_tokens
-      } : undefined
+      usage: response.data.usage
+        ? {
+            promptTokens: response.data.usage.input_tokens,
+            completionTokens: response.data.usage.output_tokens,
+            totalTokens:
+              response.data.usage.input_tokens +
+              response.data.usage.output_tokens,
+          }
+        : undefined,
     };
   }
 
   /**
    * Send message via Ollama API
    */
-  private async sendOllamaMessage(message: string, context?: string): Promise<LLMResponse> {
-    const response = await axios.post(
-      `${this.config.baseUrl}/api/generate`,
-      {
-        model: this.config.model,
-        prompt: context ? `${context}\n\n${message}` : message,
-        stream: false
-      }
-    );
+  private async sendOllamaMessage(
+    message: string,
+    context?: string
+  ): Promise<LLMResponse> {
+    const response = await axios.post(`${this.config.baseUrl}/api/generate`, {
+      model: this.config.model,
+      prompt: context ? `${context}\n\n${message}` : message,
+      stream: false,
+    });
 
     return {
       content: response.data.response,
       provider: 'ollama',
-      model: this.config.model!
+      model: this.config.model!,
     };
   }
 
@@ -272,8 +300,16 @@ class CursorLLMIntegration {
    */
   async interactiveChat() {
     console.log(chalk.blue.bold('\n🤖 Cursor LLM Chat\n'));
-    console.log(chalk.gray(`Provider: ${this.config.provider} | Model: ${this.config.model}`));
-    console.log(chalk.gray('Type "exit" to quit, "help" for commands, "switch" to change provider\n'));
+    console.log(
+      chalk.gray(
+        `Provider: ${this.config.provider} | Model: ${this.config.model}`
+      )
+    );
+    console.log(
+      chalk.gray(
+        'Type "exit" to quit, "help" for commands, "switch" to change provider\n'
+      )
+    );
 
     const conversationHistory: Array<{ role: string; content: string }> = [];
 
@@ -283,8 +319,9 @@ class CursorLLMIntegration {
           type: 'input',
           name: 'message',
           message: chalk.cyan('You:'),
-          validate: (input) => input.trim().length > 0 || 'Please enter a message'
-        }
+          validate: input =>
+            input.trim().length > 0 || 'Please enter a message',
+        },
       ]);
 
       if (message.toLowerCase() === 'exit') {
@@ -309,17 +346,23 @@ class CursorLLMIntegration {
 
       try {
         console.log(chalk.blue('🤔 Thinking...'));
-        
+
         const response = await this.sendMessage(message);
         console.log(chalk.green('🤖 AI:'), response.content);
-        
+
         if (response.usage) {
-          console.log(chalk.gray(`   Tokens: ${response.usage.totalTokens} (Prompt: ${response.usage.promptTokens}, Completion: ${response.usage.completionTokens})`));
+          console.log(
+            chalk.gray(
+              `   Tokens: ${response.usage.totalTokens} (Prompt: ${response.usage.promptTokens}, Completion: ${response.usage.completionTokens})`
+            )
+          );
         }
 
         conversationHistory.push({ role: 'user', content: message });
-        conversationHistory.push({ role: 'assistant', content: response.content });
-
+        conversationHistory.push({
+          role: 'assistant',
+          content: response.content,
+        });
       } catch (error: any) {
         console.error(chalk.red('❌ Error:'), error.message);
       }
@@ -333,11 +376,11 @@ class CursorLLMIntegration {
    */
   async analyzeCode(filePath: string) {
     console.log(chalk.blue.bold('\n📝 Code Analysis with LLM\n'));
-    
+
     try {
       const code = await fs.readFile(filePath, 'utf-8');
       const fileName = path.basename(filePath);
-      
+
       const prompt = `Please analyze this code file (${fileName}) and provide:
 1. Summary of what the code does
 2. Potential issues or bugs
@@ -350,11 +393,13 @@ ${code}
 \`\`\``;
 
       console.log(chalk.yellow(`🔍 Analyzing ${fileName}...`));
-      const response = await this.sendMessage(prompt, 'You are an expert code reviewer.');
-      
+      const response = await this.sendMessage(
+        prompt,
+        'You are an expert code reviewer.'
+      );
+
       console.log(chalk.green('\n📊 Analysis Results:\n'));
       console.log(response.content);
-      
     } catch (error: any) {
       console.error(chalk.red('❌ Analysis failed:'), error.message);
     }
@@ -365,7 +410,7 @@ ${code}
    */
   async generateCode(description: string, language: string = 'typescript') {
     console.log(chalk.blue.bold('\n⚡ Code Generation with LLM\n'));
-    
+
     const prompt = `Generate ${language} code for: ${description}
 
 Requirements:
@@ -376,19 +421,22 @@ Requirements:
 
     try {
       console.log(chalk.yellow('🔨 Generating code...'));
-      const response = await this.sendMessage(prompt, `You are an expert ${language} developer.`);
-      
+      const response = await this.sendMessage(
+        prompt,
+        `You are an expert ${language} developer.`
+      );
+
       console.log(chalk.green('\n📄 Generated Code:\n'));
       console.log(response.content);
-      
+
       // Offer to save the code
       const { save } = await inquirer.prompt([
         {
           type: 'confirm',
           name: 'save',
           message: 'Save generated code to file?',
-          default: true
-        }
+          default: true,
+        },
       ]);
 
       if (save) {
@@ -397,14 +445,13 @@ Requirements:
             type: 'input',
             name: 'filename',
             message: 'Enter filename:',
-            default: `generated.${language === 'typescript' ? 'ts' : language === 'javascript' ? 'js' : language}`
-          }
+            default: `generated.${language === 'typescript' ? 'ts' : language === 'javascript' ? 'js' : language}`,
+          },
         ]);
 
         await fs.writeFile(filename, response.content);
         console.log(chalk.green(`✅ Code saved to ${filename}`));
       }
-      
     } catch (error: any) {
       console.error(chalk.red('❌ Generation failed:'), error.message);
     }
@@ -425,9 +472,9 @@ Requirements:
           { name: 'Google (Gemini)', value: 'gemini' },
           { name: 'Groq (Fast)', value: 'groq' },
           { name: 'Ollama (Local)', value: 'ollama' },
-          { name: 'Cursor API', value: 'cursor' }
-        ]
-      }
+          { name: 'Cursor API', value: 'cursor' },
+        ],
+      },
     ]);
 
     this.config.provider = provider;
@@ -439,8 +486,8 @@ Requirements:
           type: 'password',
           name: 'apiKey',
           message: `Enter API key for ${provider} (or press Enter to use existing):`,
-          mask: '*'
-        }
+          mask: '*',
+        },
       ]);
 
       if (apiKey) {
@@ -463,7 +510,9 @@ Requirements:
     console.log(`  Model: ${chalk.blue(this.config.model)}`);
     console.log(`  Temperature: ${chalk.blue(this.config.temperature)}`);
     console.log(`  Max Tokens: ${chalk.blue(this.config.maxTokens)}`);
-    console.log(`  API Key: ${chalk.blue(this.config.apiKey ? '***' + this.config.apiKey.slice(-4) : 'Not set')}`);
+    console.log(
+      `  API Key: ${chalk.blue(this.config.apiKey ? '***' + this.config.apiKey.slice(-4) : 'Not set')}`
+    );
     if (this.config.baseUrl) {
       console.log(`  Base URL: ${chalk.blue(this.config.baseUrl)}`);
     }
@@ -504,7 +553,7 @@ program
 program
   .command('analyze <file>')
   .description('Analyze code file with LLM')
-  .action(async (file) => {
+  .action(async file => {
     await llm.analyzeCode(file);
     process.exit(0);
   });
@@ -514,21 +563,22 @@ program
   .description('Generate code with LLM')
   .option('-l, --language <lang>', 'Programming language', 'typescript')
   .option('-d, --description <desc>', 'Code description')
-  .action(async (options) => {
+  .action(async options => {
     let description = options.description;
-    
+
     if (!description) {
       const { desc } = await inquirer.prompt([
         {
           type: 'input',
           name: 'desc',
           message: 'What code do you want to generate?',
-          validate: (input) => input.trim().length > 0 || 'Please enter a description'
-        }
+          validate: input =>
+            input.trim().length > 0 || 'Please enter a description',
+        },
       ]);
       description = desc;
     }
-    
+
     await llm.generateCode(description, options.language);
     process.exit(0);
   });
@@ -536,7 +586,7 @@ program
 program
   .command('ask <question>')
   .description('Ask a quick question to LLM')
-  .action(async (question) => {
+  .action(async question => {
     try {
       console.log(chalk.blue('🤔 Thinking...'));
       const response = await llm.sendMessage(question);

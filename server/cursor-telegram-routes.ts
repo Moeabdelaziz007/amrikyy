@@ -7,21 +7,21 @@ const router = Router();
 
 // Initialize Gemini for direct API calls
 const genAI = new GoogleGenerativeAI('AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-const model = genAI.getGenerativeModel({ 
+const model = genAI.getGenerativeModel({
   model: 'gemini-1.5-flash',
   generationConfig: {
     temperature: 0.7,
     topK: 40,
     topP: 0.95,
-    maxOutputTokens: 2048
-  }
+    maxOutputTokens: 2048,
+  },
 });
 
 // Get integration status
 router.get('/status', async (req, res) => {
   try {
     const status = cursorTelegramIntegration.getStatus();
-    
+
     res.json({
       success: true,
       data: {
@@ -33,14 +33,14 @@ router.get('/status', async (req, res) => {
           codeRefactoring: true,
           debugging: true,
           testGeneration: true,
-          generalQueries: true
-        }
-      }
+          generalQueries: true,
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -53,7 +53,7 @@ router.post('/send-to-cursor', async (req, res) => {
     if (!message) {
       return res.status(400).json({
         success: false,
-        error: 'message is required'
+        error: 'message is required',
       });
     }
 
@@ -61,12 +61,12 @@ router.post('/send-to-cursor', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Message sent to Cursor chat successfully'
+      message: 'Message sent to Cursor chat successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -79,7 +79,7 @@ router.post('/generate-code', async (req, res) => {
     if (!description) {
       return res.status(400).json({
         success: false,
-        error: 'description is required'
+        error: 'description is required',
       });
     }
 
@@ -106,13 +106,13 @@ Format the response with proper code blocks and explanations.`;
         code,
         description,
         language: language || 'JavaScript',
-        framework: framework || null
-      }
+        framework: framework || null,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -125,7 +125,7 @@ router.post('/explain-code', async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        error: 'code is required'
+        error: 'code is required',
       });
     }
 
@@ -153,13 +153,13 @@ Make it clear and educational for developers.`;
       data: {
         explanation,
         code,
-        language: language || 'JavaScript'
-      }
+        language: language || 'JavaScript',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -172,7 +172,7 @@ router.post('/refactor-code', async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        error: 'code is required'
+        error: 'code is required',
       });
     }
 
@@ -207,13 +207,13 @@ Focus on:
         refactored,
         originalCode: code,
         language: language || 'JavaScript',
-        focus: focus || 'general improvement'
-      }
+        focus: focus || 'general improvement',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -226,7 +226,7 @@ router.post('/debug-code', async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        error: 'code is required'
+        error: 'code is required',
       });
     }
 
@@ -262,13 +262,13 @@ Focus on common issues like:
         debugInfo,
         originalCode: code,
         language: language || 'JavaScript',
-        errorMessage: errorMessage || null
-      }
+        errorMessage: errorMessage || null,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -281,7 +281,7 @@ router.post('/generate-tests', async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        error: 'code is required'
+        error: 'code is required',
       });
     }
 
@@ -316,13 +316,13 @@ Use appropriate testing framework and include:
         tests,
         originalCode: code,
         language: language || 'JavaScript',
-        framework: framework || 'Jest'
-      }
+        framework: framework || 'Jest',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -335,7 +335,7 @@ router.post('/ask-cursor', async (req, res) => {
     if (!question) {
       return res.status(400).json({
         success: false,
-        error: 'question is required'
+        error: 'question is required',
       });
     }
 
@@ -355,13 +355,13 @@ Provide a helpful, technical response that would assist a developer using Cursor
       data: {
         answer,
         question,
-        context: context || null
-      }
+        context: context || null,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -374,7 +374,7 @@ router.post('/connect', async (req, res) => {
     if (!chatId) {
       return res.status(400).json({
         success: false,
-        error: 'chatId is required'
+        error: 'chatId is required',
       });
     }
 
@@ -383,12 +383,12 @@ router.post('/connect', async (req, res) => {
     res.json({
       success: true,
       message: 'Chat connected to Cursor successfully',
-      chatId
+      chatId,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -400,12 +400,12 @@ router.post('/disconnect', async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Chat disconnected from Cursor successfully'
+      message: 'Chat disconnected from Cursor successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -421,17 +421,17 @@ router.get('/commands', async (req, res) => {
       { command: 'debug', description: 'Debug and fix code issues' },
       { command: 'test', description: 'Generate comprehensive tests' },
       { command: 'connect', description: 'Connect this chat to Cursor' },
-      { command: 'help', description: 'Show help message' }
+      { command: 'help', description: 'Show help message' },
     ];
 
     res.json({
       success: true,
-      data: commands
+      data: commands,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

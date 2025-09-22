@@ -15,18 +15,21 @@ export class SmartLearningTelegramBot {
     this.aiToolsManager = getAdvancedAIToolsManager();
     this.aiAgentSystem = getAdvancedAIAgentSystem();
     this.mcpProtocol = getMCPProtocol();
-    
+
     this.setupBot();
     this.initializeLearningCapabilities();
   }
 
   private setupBot() {
     // ... (rest of the commands remain the same)
-    this.bot.command('test_learning', this.handleTestLearningCommand.bind(this));
+    this.bot.command(
+      'test_learning',
+      this.handleTestLearningCommand.bind(this)
+    );
 
     // ... (rest of the message handlers remain the same)
   }
-  
+
   // ... (rest of the functions remain the same)
 
   private async handleTestLearningCommand(ctx: Context) {
@@ -50,13 +53,16 @@ export class SmartLearningTelegramBot {
         timestamp: new Date(),
         metadata: {
           platform: 'telegram',
-          testName: 'learning_loop_verification'
-        }
+          testName: 'learning_loop_verification',
+        },
       };
 
-      const result = await this.smartLearningAI.processLearningRequest(testContext);
+      const result =
+        await this.smartLearningAI.processLearningRequest(testContext);
 
-      await ctx.reply(`Learning loop test completed!\n\nResult:\n- Success: ${result.success}\n- Confidence: ${result.confidence.toFixed(2)}\n- Strategy: ${result.strategy}\n- Explanation: ${result.explanation}\n\nThe AI processed the test scenario and updated its learning state.`);
+      await ctx.reply(
+        `Learning loop test completed!\n\nResult:\n- Success: ${result.success}\n- Confidence: ${result.confidence.toFixed(2)}\n- Strategy: ${result.strategy}\n- Explanation: ${result.explanation}\n\nThe AI processed the test scenario and updated its learning state.`
+      );
     } catch (error) {
       await ctx.reply(`Learning loop test failed: ${error.message}`);
     }
@@ -66,30 +72,37 @@ export class SmartLearningTelegramBot {
     const chatId = ctx.chat!.id;
     const userContext = this.userContexts.get(chatId);
     const messageText = ctx.message?.text || '';
-    
+
     if (!userContext) {
       await ctx.reply('Please start the bot first with /start');
       return;
     }
 
     try {
-        // Process message with AI
-        const response = await this.processMessageWithAI(userContext, messageText);
-        
-        // Send response
-        await ctx.reply(response.text, {
-          reply_markup: response.keyboard ? { inline_keyboard: response.keyboard } : undefined
-        });
+      // Process message with AI
+      const response = await this.processMessageWithAI(
+        userContext,
+        messageText
+      );
 
-        // Store interaction
-        await this.storeInteraction(userContext, 'text', 'user', messageText);
-        await this.storeInteraction(userContext, 'text', 'bot', response.text);
+      // Send response
+      await ctx.reply(response.text, {
+        reply_markup: response.keyboard
+          ? { inline_keyboard: response.keyboard }
+          : undefined,
+      });
 
-        // Learn from interaction
-        await this.learnFromInteraction(userContext, messageText, response);
+      // Store interaction
+      await this.storeInteraction(userContext, 'text', 'user', messageText);
+      await this.storeInteraction(userContext, 'text', 'bot', response.text);
+
+      // Learn from interaction
+      await this.learnFromInteraction(userContext, messageText, response);
     } catch (error) {
-        await ctx.reply('An error occurred while processing your message. Please try again later.');
-        console.error('Error in handleTextMessage:', error);
+      await ctx.reply(
+        'An error occurred while processing your message. Please try again later.'
+      );
+      console.error('Error in handleTextMessage:', error);
     }
   }
 
@@ -99,7 +112,9 @@ export class SmartLearningTelegramBot {
 // Export singleton instance
 let smartTelegramBot: SmartLearningTelegramBot | null = null;
 
-export function initializeSmartTelegramBot(token: string): SmartLearningTelegramBot {
+export function initializeSmartTelegramBot(
+  token: string
+): SmartLearningTelegramBot {
   if (!smartTelegramBot) {
     smartTelegramBot = new SmartLearningTelegramBot(token);
   }

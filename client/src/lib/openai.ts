@@ -12,7 +12,9 @@ export interface AIGenerationResponse {
   hashtags?: string[];
 }
 
-export async function generateContent(request: AIGenerationRequest): Promise<AIGenerationResponse> {
+export async function generateContent(
+  request: AIGenerationRequest
+): Promise<AIGenerationResponse> {
   const response = await fetch('/api/ai/generate-content', {
     method: 'POST',
     headers: {
@@ -28,7 +30,10 @@ export async function generateContent(request: AIGenerationRequest): Promise<AIG
   return response.json();
 }
 
-export async function sendChatMessage(message: string, userId: string = 'user-1'): Promise<{ response: string }> {
+export async function sendChatMessage(
+  message: string,
+  userId: string = 'user-1'
+): Promise<{ response: string }> {
   const response = await fetch('/api/chat', {
     method: 'POST',
     headers: {

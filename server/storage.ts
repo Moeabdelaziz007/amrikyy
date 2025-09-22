@@ -1,7 +1,7 @@
-import { 
-  type User, 
-  type InsertUser, 
-  type Post, 
+import {
+  type User,
+  type InsertUser,
+  type Post,
   type InsertPost,
   type PostWithAuthor,
   type Workflow,
@@ -11,9 +11,9 @@ import {
   type UserAgent,
   type InsertUserAgent,
   type ChatMessage,
-  type InsertChatMessage
-} from "@shared/schema";
-import { randomUUID } from "crypto";
+  type InsertChatMessage,
+} from '@shared/schema';
+import { randomUUID } from 'crypto';
 
 export interface IStorage {
   // Users
@@ -26,7 +26,12 @@ export interface IStorage {
   createPost(post: InsertPost): Promise<Post>;
   getPostsWithAuthor(limit?: number): Promise<PostWithAuthor[]>;
   getPost(id: string): Promise<Post | undefined>;
-  updatePostStats(id: string, likes: number, shares: number, comments: number): Promise<void>;
+  updatePostStats(
+    id: string,
+    likes: number,
+    shares: number,
+    comments: number
+  ): Promise<void>;
 
   // Workflows
   createWorkflow(workflow: InsertWorkflow): Promise<Workflow>;
@@ -76,62 +81,63 @@ export class MemStorage implements IStorage {
   private seedData() {
     // Create default user
     const defaultUser: User = {
-      id: "user-1",
-      username: "sarah_chen",
-      email: "sarah@aiflow.com",
-      password: "hashed_password",
-      identityName: "Sarah Chen",
-      identityIcon: "https://pixabay.com/get/g011ff5f5c9bd65a7bc140f57f12d8cfdf70bb92b9dd19ca90dce3197ce111976f37bb58b61f09efdc75e86cdc7ecbb61d7c6632c241ef7517650a98d2e8a979e_1280.jpg",
-      identityType: "personal",
+      id: 'user-1',
+      username: 'sarah_chen',
+      email: 'sarah@aiflow.com',
+      password: 'hashed_password',
+      identityName: 'Sarah Chen',
+      identityIcon:
+        'https://pixabay.com/get/g011ff5f5c9bd65a7bc140f57f12d8cfdf70bb92b9dd19ca90dce3197ce111976f37bb58b61f09efdc75e86cdc7ecbb61d7c6632c241ef7517650a98d2e8a979e_1280.jpg',
+      identityType: 'personal',
       verified: true,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.users.set(defaultUser.id, defaultUser);
 
     // Create sample agent templates
     const templates: AgentTemplate[] = [
       {
-        id: "template-1",
-        name: "Content Curator",
-        description: "Finds and curates trending content in your niche",
-        category: "Content",
-        icon: "fas fa-magic",
+        id: 'template-1',
+        name: 'Content Curator',
+        description: 'Finds and curates trending content in your niche',
+        category: 'Content',
+        icon: 'fas fa-magic',
         config: {
-          triggers: ["trending_topic", "keyword_mention"],
-          actions: ["create_post", "schedule_post"]
+          triggers: ['trending_topic', 'keyword_mention'],
+          actions: ['create_post', 'schedule_post'],
         },
         usageCount: 2300,
         isPopular: true,
-        createdAt: new Date()
+        createdAt: new Date(),
       },
       {
-        id: "template-2",
-        name: "Reply Assistant",
-        description: "Auto-responds to comments and mentions",
-        category: "Engagement",
-        icon: "fas fa-comments",
+        id: 'template-2',
+        name: 'Reply Assistant',
+        description: 'Auto-responds to comments and mentions',
+        category: 'Engagement',
+        icon: 'fas fa-comments',
         config: {
-          triggers: ["new_comment", "mention"],
-          actions: ["generate_reply", "send_notification"]
+          triggers: ['new_comment', 'mention'],
+          actions: ['generate_reply', 'send_notification'],
         },
         usageCount: 892,
         isPopular: false,
-        createdAt: new Date()
+        createdAt: new Date(),
       },
       {
-        id: "template-3",
-        name: "Trend Analyzer",
-        description: "Analyzes trends and suggests content ideas",
-        category: "Analytics",
-        icon: "fas fa-chart-line",
+        id: 'template-3',
+        name: 'Trend Analyzer',
+        description: 'Analyzes trends and suggests content ideas',
+        category: 'Analytics',
+        icon: 'fas fa-chart-line',
         config: {
-          triggers: ["daily_schedule"],
-          actions: ["analyze_trends", "suggest_content"]
+          triggers: ['daily_schedule'],
+          actions: ['analyze_trends', 'suggest_content'],
         },
         usageCount: 1500,
         isPopular: false,
-        createdAt: new Date()
-      }
+        createdAt: new Date(),
+      },
     ];
 
     templates.forEach(template => {
@@ -141,27 +147,30 @@ export class MemStorage implements IStorage {
     // Create sample posts
     const posts: Post[] = [
       {
-        id: "post-1",
-        authorId: "user-1",
-        content: "Just launched my new AI-powered workflow automation! 🤖 It automatically generates social media content based on trending topics and schedules posts at optimal times. The results have been incredible - 300% increase in engagement! #AIAutomation #SocialMedia #ProductivityHack",
-        imageUrl: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400",
+        id: 'post-1',
+        authorId: 'user-1',
+        content:
+          'Just launched my new AI-powered workflow automation! 🤖 It automatically generates social media content based on trending topics and schedules posts at optimal times. The results have been incredible - 300% increase in engagement! #AIAutomation #SocialMedia #ProductivityHack',
+        imageUrl:
+          'https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&h=400',
         isAiGenerated: true,
         likes: 247,
         shares: 18,
         comments: 32,
-        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
       },
       {
-        id: "post-2",
-        authorId: "user-1",
-        content: "Sharing my top 5 AI agent templates that have transformed my content strategy! These automation workflows handle everything from research to publishing. Who else is using AI to scale their social presence? 🚀",
+        id: 'post-2',
+        authorId: 'user-1',
+        content:
+          'Sharing my top 5 AI agent templates that have transformed my content strategy! These automation workflows handle everything from research to publishing. Who else is using AI to scale their social presence? 🚀',
         imageUrl: null,
         isAiGenerated: false,
         likes: 156,
         shares: 12,
         comments: 23,
-        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000) // 4 hours ago
-      }
+        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
+      },
     ];
 
     posts.forEach(post => {
@@ -170,34 +179,35 @@ export class MemStorage implements IStorage {
 
     // Create sample workflow
     const workflow: Workflow = {
-      id: "workflow-1",
-      userId: "user-1",
-      name: "Auto Engagement Responder",
-      description: "Automatically responds to mentions with AI-generated replies",
+      id: 'workflow-1',
+      userId: 'user-1',
+      name: 'Auto Engagement Responder',
+      description:
+        'Automatically responds to mentions with AI-generated replies',
       nodes: [
         {
-          id: "trigger-1",
-          type: "trigger",
+          id: 'trigger-1',
+          type: 'trigger',
           position: { x: 100, y: 100 },
-          data: { type: "new_mention" }
+          data: { type: 'new_mention' },
         },
         {
-          id: "ai-1",
-          type: "ai",
+          id: 'ai-1',
+          type: 'ai',
           position: { x: 300, y: 100 },
-          data: { type: "sentiment_analysis" }
+          data: { type: 'sentiment_analysis' },
         },
         {
-          id: "action-1",
-          type: "action",
+          id: 'action-1',
+          type: 'action',
           position: { x: 500, y: 100 },
-          data: { type: "auto_reply" }
-        }
+          data: { type: 'auto_reply' },
+        },
       ],
       isActive: true,
       runCount: 12,
       lastRun: new Date(Date.now() - 2 * 60 * 1000), // 2 minutes ago
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.workflows.set(workflow.id, workflow);
   }
@@ -207,7 +217,9 @@ export class MemStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(user => user.username === username);
+    return Array.from(this.users.values()).find(
+      user => user.username === username
+    );
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
@@ -216,13 +228,13 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = randomUUID();
-    const user: User = { 
-      ...insertUser, 
-      id, 
+    const user: User = {
+      ...insertUser,
+      id,
       identityIcon: insertUser.identityIcon || null,
-      identityType: insertUser.identityType || "personal",
+      identityType: insertUser.identityType || 'personal',
       verified: false,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.users.set(id, user);
     return user;
@@ -238,7 +250,7 @@ export class MemStorage implements IStorage {
       likes: 0,
       shares: 0,
       comments: 0,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.posts.set(id, post);
     return post;
@@ -246,7 +258,9 @@ export class MemStorage implements IStorage {
 
   async getPostsWithAuthor(limit = 10): Promise<PostWithAuthor[]> {
     const posts = Array.from(this.posts.values())
-      .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))
+      .sort(
+        (a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
+      )
       .slice(0, limit);
 
     return posts.map(post => {
@@ -260,7 +274,12 @@ export class MemStorage implements IStorage {
     return this.posts.get(id);
   }
 
-  async updatePostStats(id: string, likes: number, shares: number, comments: number): Promise<void> {
+  async updatePostStats(
+    id: string,
+    likes: number,
+    shares: number,
+    comments: number
+  ): Promise<void> {
     const post = this.posts.get(id);
     if (post) {
       this.posts.set(id, { ...post, likes, shares, comments });
@@ -276,7 +295,7 @@ export class MemStorage implements IStorage {
       isActive: insertWorkflow.isActive ?? false,
       runCount: 0,
       lastRun: null,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.workflows.set(id, workflow);
     return workflow;
@@ -309,14 +328,16 @@ export class MemStorage implements IStorage {
     return this.agentTemplates.get(id);
   }
 
-  async createAgentTemplate(insertTemplate: InsertAgentTemplate): Promise<AgentTemplate> {
+  async createAgentTemplate(
+    insertTemplate: InsertAgentTemplate
+  ): Promise<AgentTemplate> {
     const id = randomUUID();
     const template: AgentTemplate = {
       ...insertTemplate,
       id,
       usageCount: 0,
       isPopular: insertTemplate.isPopular ?? false,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.agentTemplates.set(id, template);
     return template;
@@ -325,9 +346,9 @@ export class MemStorage implements IStorage {
   async incrementTemplateUsage(id: string): Promise<void> {
     const template = this.agentTemplates.get(id);
     if (template) {
-      this.agentTemplates.set(id, { 
-        ...template, 
-        usageCount: template.usageCount + 1 
+      this.agentTemplates.set(id, {
+        ...template,
+        usageCount: template.usageCount + 1,
       });
     }
   }
@@ -340,21 +361,26 @@ export class MemStorage implements IStorage {
       isActive: insertAgent.isActive ?? true,
       runCount: 0,
       lastRun: null,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.userAgents.set(id, agent);
     return agent;
   }
 
   async getUserAgents(userId: string): Promise<UserAgent[]> {
-    return Array.from(this.userAgents.values()).filter(a => a.userId === userId);
+    return Array.from(this.userAgents.values()).filter(
+      a => a.userId === userId
+    );
   }
 
   async getUserAgent(id: string): Promise<UserAgent | undefined> {
     return this.userAgents.get(id);
   }
 
-  async updateUserAgent(id: string, updates: Partial<UserAgent>): Promise<void> {
+  async updateUserAgent(
+    id: string,
+    updates: Partial<UserAgent>
+  ): Promise<void> {
     const agent = this.userAgents.get(id);
     if (agent) {
       this.userAgents.set(id, { ...agent, ...updates });
@@ -365,12 +391,14 @@ export class MemStorage implements IStorage {
     this.userAgents.delete(id);
   }
 
-  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
+  async createChatMessage(
+    insertMessage: InsertChatMessage
+  ): Promise<ChatMessage> {
     const id = randomUUID();
     const message: ChatMessage = {
       ...insertMessage,
       id,
-      createdAt: new Date()
+      createdAt: new Date(),
     };
     this.chatMessages.set(id, message);
     return message;
@@ -379,7 +407,9 @@ export class MemStorage implements IStorage {
   async getChatMessages(userId: string, limit = 50): Promise<ChatMessage[]> {
     return Array.from(this.chatMessages.values())
       .filter(m => m.userId === userId)
-      .sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0))
+      .sort(
+        (a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0)
+      )
       .slice(0, limit);
   }
 
@@ -389,20 +419,29 @@ export class MemStorage implements IStorage {
     engagementRate: number;
     automationsRun: number;
   }> {
-    const userPosts = Array.from(this.posts.values()).filter(p => p.authorId === userId);
-    const userAgents = Array.from(this.userAgents.values()).filter(a => a.userId === userId && a.isActive);
-    const userWorkflows = Array.from(this.workflows.values()).filter(w => w.userId === userId);
-    
+    const userPosts = Array.from(this.posts.values()).filter(
+      p => p.authorId === userId
+    );
+    const userAgents = Array.from(this.userAgents.values()).filter(
+      a => a.userId === userId && a.isActive
+    );
+    const userWorkflows = Array.from(this.workflows.values()).filter(
+      w => w.userId === userId
+    );
+
     const totalLikes = userPosts.reduce((sum, post) => sum + post.likes, 0);
     const totalPosts = userPosts.length;
-    const engagementRate = totalPosts > 0 ? (totalLikes / totalPosts) / 100 : 0;
-    const automationsRun = userWorkflows.reduce((sum, w) => sum + w.runCount, 0);
+    const engagementRate = totalPosts > 0 ? totalLikes / totalPosts / 100 : 0;
+    const automationsRun = userWorkflows.reduce(
+      (sum, w) => sum + w.runCount,
+      0
+    );
 
     return {
       totalPosts,
       activeAgents: userAgents.length,
       engagementRate: Math.round(engagementRate * 100) / 100,
-      automationsRun
+      automationsRun,
     };
   }
 }

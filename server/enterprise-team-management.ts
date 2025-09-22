@@ -128,10 +128,10 @@ export class EnterpriseTeamManager {
         'manage_integrations',
         'access_advanced_features',
         'export_data',
-        'manage_automation'
+        'manage_automation',
       ],
       description: 'Full access to all team features',
-      isCustom: false
+      isCustom: false,
     });
 
     // Manager Role
@@ -145,10 +145,10 @@ export class EnterpriseTeamManager {
         'modify_workflows',
         'view_analytics',
         'manage_integrations',
-        'export_data'
+        'export_data',
       ],
       description: 'Manage team members and workflows',
-      isCustom: false
+      isCustom: false,
     });
 
     // Developer Role
@@ -160,10 +160,10 @@ export class EnterpriseTeamManager {
         'create_workflows',
         'modify_workflows',
         'manage_integrations',
-        'access_advanced_features'
+        'access_advanced_features',
       ],
       description: 'Create and modify workflows',
-      isCustom: false
+      isCustom: false,
     });
 
     // User Role
@@ -171,12 +171,9 @@ export class EnterpriseTeamManager {
       id: 'user',
       name: 'User',
       level: 40,
-      permissions: [
-        'create_workflows',
-        'modify_workflows'
-      ],
+      permissions: ['create_workflows', 'modify_workflows'],
       description: 'Basic workflow access',
-      isCustom: false
+      isCustom: false,
     });
 
     // Viewer Role
@@ -184,11 +181,9 @@ export class EnterpriseTeamManager {
       id: 'viewer',
       name: 'Viewer',
       level: 20,
-      permissions: [
-        'view_analytics'
-      ],
+      permissions: ['view_analytics'],
       description: 'Read-only access',
-      isCustom: false
+      isCustom: false,
     });
   }
 
@@ -209,24 +204,24 @@ export class EnterpriseTeamManager {
           notificationSettings: {
             emailNotifications: true,
             slackNotifications: false,
-            webhookNotifications: false
+            webhookNotifications: false,
           },
           collaborationSettings: {
             allowRealTimeEditing: true,
             enableVersionControl: true,
-            requireCommentsOnChanges: false
-          }
+            requireCommentsOnChanges: false,
+          },
         },
         securitySettings: {
           passwordPolicy: {
             minLength: 8,
             requireUppercase: true,
             requireNumbers: true,
-            requireSpecialChars: false
+            requireSpecialChars: false,
           },
           sessionTimeout: 3600000, // 1 hour
-          requireMFA: false
-        }
+          requireMFA: false,
+        },
       },
       teams: [],
       users: [],
@@ -239,15 +234,15 @@ export class EnterpriseTeamManager {
           'advanced_analytics',
           'custom_roles',
           'audit_logging',
-          'sso_integration'
+          'sso_integration',
         ],
         limits: {
           maxTeams: 100,
           maxUsers: 1000,
           maxWorkflows: 10000,
-          maxAutomations: 5000
-        }
-      }
+          maxAutomations: 5000,
+        },
+      },
     };
 
     this.organizations.set(defaultOrg.id, defaultOrg);
@@ -265,7 +260,9 @@ export class EnterpriseTeamManager {
       throw new Error('Organization not found');
     }
 
-    if (organization.teams.length >= organization.subscription.limits.maxTeams) {
+    if (
+      organization.teams.length >= organization.subscription.limits.maxTeams
+    ) {
       throw new Error('Team limit exceeded for organization');
     }
 
@@ -283,13 +280,13 @@ export class EnterpriseTeamManager {
         notificationSettings: {
           emailNotifications: true,
           slackNotifications: false,
-          webhookNotifications: false
+          webhookNotifications: false,
         },
         collaborationSettings: {
           allowRealTimeEditing: true,
           enableVersionControl: true,
-          requireCommentsOnChanges: false
-        }
+          requireCommentsOnChanges: false,
+        },
       },
       members: [],
       permissions: {
@@ -301,11 +298,11 @@ export class EnterpriseTeamManager {
         canManageIntegrations: false,
         canAccessAdvancedFeatures: false,
         canExportData: false,
-        canManageAutomation: false
+        canManageAutomation: false,
       },
       createdAt: new Date(),
       updatedAt: new Date(),
-      status: 'active'
+      status: 'active',
     };
 
     // Add creator as admin
@@ -319,7 +316,7 @@ export class EnterpriseTeamManager {
       joinedAt: new Date(),
       lastActiveAt: new Date(),
       status: 'active',
-      metadata: {}
+      metadata: {},
     };
 
     team.members.push(creatorMember);
@@ -333,7 +330,7 @@ export class EnterpriseTeamManager {
       teamId: team.id,
       userId: creatorId,
       timestamp: new Date(),
-      details: { teamName: name, organizationId }
+      details: { teamName: name, organizationId },
     });
 
     console.log(`🏢 Team created: ${name} (ID: ${team.id})`);
@@ -372,7 +369,7 @@ export class EnterpriseTeamManager {
       joinedAt: new Date(),
       lastActiveAt: new Date(),
       status: team.settings.requireApprovalForJoins ? 'pending' : 'active',
-      metadata
+      metadata,
     };
 
     team.members.push(member);
@@ -384,14 +381,18 @@ export class EnterpriseTeamManager {
       teamId,
       userId,
       timestamp: new Date(),
-      details: { memberEmail: email, role: role.name }
+      details: { memberEmail: email, role: role.name },
     });
 
     console.log(`👤 Team member added: ${name} to ${team.name}`);
     return member;
   }
 
-  async removeTeamMember(teamId: string, memberId: string, removedBy: string): Promise<boolean> {
+  async removeTeamMember(
+    teamId: string,
+    memberId: string,
+    removedBy: string
+  ): Promise<boolean> {
     const team = this.teams.get(teamId);
     if (!team) {
       throw new Error('Team not found');
@@ -412,7 +413,7 @@ export class EnterpriseTeamManager {
       teamId,
       userId: removedBy,
       timestamp: new Date(),
-      details: { memberEmail: member.email, memberName: member.name }
+      details: { memberEmail: member.email, memberName: member.name },
     });
 
     console.log(`👤 Team member removed: ${member.name} from ${team.name}`);
@@ -451,14 +452,16 @@ export class EnterpriseTeamManager {
       teamId,
       userId: updatedBy,
       timestamp: new Date(),
-      details: { 
-        memberEmail: member.email, 
-        oldRole, 
-        newRole: role.name 
-      }
+      details: {
+        memberEmail: member.email,
+        oldRole,
+        newRole: role.name,
+      },
     });
 
-    console.log(`👤 Member role updated: ${member.name} from ${oldRole} to ${role.name}`);
+    console.log(
+      `👤 Member role updated: ${member.name} from ${oldRole} to ${role.name}`
+    );
     return true;
   }
 
@@ -475,7 +478,7 @@ export class EnterpriseTeamManager {
       level: 50, // Custom role level
       permissions,
       description,
-      isCustom: true
+      isCustom: true,
     };
 
     this.roles.set(role.id, role);
@@ -485,7 +488,7 @@ export class EnterpriseTeamManager {
       type: 'custom_role_created',
       organizationId,
       timestamp: new Date(),
-      details: { roleName: name, permissions }
+      details: { roleName: name, permissions },
     });
 
     console.log(`🎭 Custom role created: ${name}`);
@@ -503,7 +506,9 @@ export class EnterpriseTeamManager {
       return false;
     }
 
-    const member = team.members.find(m => m.userId === userId && m.status === 'active');
+    const member = team.members.find(
+      m => m.userId === userId && m.status === 'active'
+    );
     if (!member) {
       return false;
     }
@@ -513,7 +518,7 @@ export class EnterpriseTeamManager {
 
   async getUserTeams(userId: string): Promise<Team[]> {
     const userTeams: Team[] = [];
-    
+
     for (const team of this.teams.values()) {
       const member = team.members.find(m => m.userId === userId);
       if (member && member.status === 'active') {
@@ -540,23 +545,26 @@ export class EnterpriseTeamManager {
       activeMembers: team.members.filter(m => m.status === 'active').length,
       pendingMembers: team.members.filter(m => m.status === 'pending').length,
       roleDistribution: {},
-      recentActivity: this.auditLog.filter(log => 
-        log.teamId === teamId && 
-        new Date(log.timestamp).getTime() > Date.now() - 7 * 24 * 60 * 60 * 1000 // Last 7 days
+      recentActivity: this.auditLog.filter(
+        log =>
+          log.teamId === teamId &&
+          new Date(log.timestamp).getTime() >
+            Date.now() - 7 * 24 * 60 * 60 * 1000 // Last 7 days
       ).length,
       memberActivity: team.members.map(member => ({
         name: member.name,
         email: member.email,
         role: member.role.name,
         lastActive: member.lastActiveAt,
-        status: member.status
-      }))
+        status: member.status,
+      })),
     };
 
     // Calculate role distribution
     team.members.forEach(member => {
       const roleName = member.role.name;
-      analytics.roleDistribution[roleName] = (analytics.roleDistribution[roleName] || 0) + 1;
+      analytics.roleDistribution[roleName] =
+        (analytics.roleDistribution[roleName] || 0) + 1;
     });
 
     return analytics;
@@ -565,7 +573,7 @@ export class EnterpriseTeamManager {
   // Audit and Logging Methods
   private logAuditEvent(event: any): void {
     this.auditLog.push(event);
-    
+
     // Keep only last 10000 events
     if (this.auditLog.length > 10000) {
       this.auditLog = this.auditLog.slice(-10000);
@@ -589,14 +597,21 @@ export class EnterpriseTeamManager {
     }
 
     if (startDate) {
-      filteredLog = filteredLog.filter(log => new Date(log.timestamp) >= startDate);
+      filteredLog = filteredLog.filter(
+        log => new Date(log.timestamp) >= startDate
+      );
     }
 
     if (endDate) {
-      filteredLog = filteredLog.filter(log => new Date(log.timestamp) <= endDate);
+      filteredLog = filteredLog.filter(
+        log => new Date(log.timestamp) <= endDate
+      );
     }
 
-    return filteredLog.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return filteredLog.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
   }
 
   // Utility Methods
@@ -610,14 +625,20 @@ export class EnterpriseTeamManager {
       return [];
     }
 
-    return organization.teams.map(teamId => this.teams.get(teamId)).filter(Boolean) as Team[];
+    return organization.teams
+      .map(teamId => this.teams.get(teamId))
+      .filter(Boolean) as Team[];
   }
 
   async getAvailableRoles(): Promise<TeamRole[]> {
     return Array.from(this.roles.values());
   }
 
-  async updateTeamSettings(teamId: string, settings: Partial<TeamSettings>, updatedBy: string): Promise<boolean> {
+  async updateTeamSettings(
+    teamId: string,
+    settings: Partial<TeamSettings>,
+    updatedBy: string
+  ): Promise<boolean> {
     const team = this.teams.get(teamId);
     if (!team) {
       throw new Error('Team not found');
@@ -632,7 +653,7 @@ export class EnterpriseTeamManager {
       teamId,
       userId: updatedBy,
       timestamp: new Date(),
-      details: { settings }
+      details: { settings },
     });
 
     console.log(`⚙️ Team settings updated for: ${team.name}`);

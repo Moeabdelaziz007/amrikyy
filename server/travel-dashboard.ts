@@ -106,10 +106,10 @@ export class TravelDashboard {
       position: { x: 0, y: 0, width: 4, height: 2 },
       config: {
         showTrends: true,
-        timeRange: '30d'
+        timeRange: '30d',
       },
       data: null,
-      refreshInterval: 30000
+      refreshInterval: 30000,
     });
 
     // Revenue Dashboard Widget
@@ -122,10 +122,10 @@ export class TravelDashboard {
       config: {
         chartType: 'line',
         showLegend: true,
-        timeRange: '90d'
+        timeRange: '90d',
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
 
     // Popular Destinations Widget
@@ -138,10 +138,10 @@ export class TravelDashboard {
       config: {
         chartType: 'bar',
         maxItems: 10,
-        sortBy: 'bookings'
+        sortBy: 'bookings',
       },
       data: null,
-      refreshInterval: 30000
+      refreshInterval: 30000,
     });
 
     // AI Performance Widget
@@ -153,10 +153,10 @@ export class TravelDashboard {
       position: { x: 0, y: 2, width: 3, height: 2 },
       config: {
         showDetails: true,
-        metrics: ['accuracy', 'uptime', 'satisfaction']
+        metrics: ['accuracy', 'uptime', 'satisfaction'],
       },
       data: null,
-      refreshInterval: 15000
+      refreshInterval: 15000,
     });
 
     // Customer Satisfaction Widget
@@ -168,10 +168,10 @@ export class TravelDashboard {
       position: { x: 3, y: 2, width: 3, height: 2 },
       config: {
         showTrends: true,
-        includeReviews: true
+        includeReviews: true,
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
 
     // Travel Calendar Widget
@@ -184,10 +184,10 @@ export class TravelDashboard {
       config: {
         view: 'month',
         showBookings: true,
-        showEvents: true
+        showEvents: true,
       },
       data: null,
-      refreshInterval: 30000
+      refreshInterval: 30000,
     });
 
     // Booking Trends Widget
@@ -200,10 +200,10 @@ export class TravelDashboard {
       config: {
         chartType: 'area',
         showForecast: true,
-        timeRange: '1y'
+        timeRange: '1y',
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
 
     // Recent Bookings Widget
@@ -216,10 +216,10 @@ export class TravelDashboard {
       config: {
         maxRows: 10,
         sortable: true,
-        filterable: true
+        filterable: true,
       },
       data: null,
-      refreshInterval: 15000
+      refreshInterval: 15000,
     });
 
     // Travel Map Widget
@@ -232,10 +232,10 @@ export class TravelDashboard {
       config: {
         showDestinations: true,
         showBookings: true,
-        showPrices: true
+        showPrices: true,
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
   }
 
@@ -273,15 +273,15 @@ export class TravelDashboard {
           flight: 45,
           hotel: 35,
           package: 15,
-          activity: 5
+          activity: 5,
         },
         bookingsByDestination: {
-          'Paris': 234,
-          'Tokyo': 189,
+          Paris: 234,
+          Tokyo: 189,
           'New York': 167,
-          'London': 145,
-          'Barcelona': 98
-        }
+          London: 145,
+          Barcelona: 98,
+        },
       };
 
       // Collect revenue metrics
@@ -296,39 +296,64 @@ export class TravelDashboard {
           flight: 0.45,
           hotel: 0.35,
           package: 0.15,
-          activity: 0.05
+          activity: 0.05,
         },
         revenueByDestination: {
-          'Paris': 292500,
-          'Tokyo': 236250,
+          Paris: 292500,
+          Tokyo: 236250,
           'New York': 208750,
-          'London': 181250,
-          'Barcelona': 122500
+          London: 181250,
+          Barcelona: 122500,
         },
-        profitMargin: 0.18
+        profitMargin: 0.18,
       };
 
       // Collect destination metrics
       const destinationMetrics: DestinationMetrics = {
         totalDestinations: 150,
         popularDestinations: [
-          { destination: 'Paris', bookings: 234, revenue: 292500, growth: 0.15 },
-          { destination: 'Tokyo', bookings: 189, revenue: 236250, growth: 0.22 },
-          { destination: 'New York', bookings: 167, revenue: 208750, growth: 0.08 },
-          { destination: 'London', bookings: 145, revenue: 181250, growth: 0.12 },
-          { destination: 'Barcelona', bookings: 98, revenue: 122500, growth: 0.18 }
+          {
+            destination: 'Paris',
+            bookings: 234,
+            revenue: 292500,
+            growth: 0.15,
+          },
+          {
+            destination: 'Tokyo',
+            bookings: 189,
+            revenue: 236250,
+            growth: 0.22,
+          },
+          {
+            destination: 'New York',
+            bookings: 167,
+            revenue: 208750,
+            growth: 0.08,
+          },
+          {
+            destination: 'London',
+            bookings: 145,
+            revenue: 181250,
+            growth: 0.12,
+          },
+          {
+            destination: 'Barcelona',
+            bookings: 98,
+            revenue: 122500,
+            growth: 0.18,
+          },
         ],
         seasonalTrends: {
           spring: { bookings: 0.28, revenue: 0.26 },
           summer: { bookings: 0.35, revenue: 0.38 },
           autumn: { bookings: 0.22, revenue: 0.21 },
-          winter: { bookings: 0.15, revenue: 0.15 }
+          winter: { bookings: 0.15, revenue: 0.15 },
         },
         destinationPerformance: {
-          'Paris': { rating: 4.6, satisfaction: 0.92 },
-          'Tokyo': { rating: 4.8, satisfaction: 0.94 },
-          'New York': { rating: 4.4, satisfaction: 0.89 }
-        }
+          Paris: { rating: 4.6, satisfaction: 0.92 },
+          Tokyo: { rating: 4.8, satisfaction: 0.94 },
+          'New York': { rating: 4.4, satisfaction: 0.89 },
+        },
       };
 
       // Collect satisfaction metrics
@@ -336,15 +361,15 @@ export class TravelDashboard {
         averageRating: 4.6,
         totalReviews: 3421,
         satisfactionByDestination: {
-          'Tokyo': 4.8,
-          'Paris': 4.6,
-          'Barcelona': 4.5,
-          'London': 4.4,
-          'New York': 4.4
+          Tokyo: 4.8,
+          Paris: 4.6,
+          Barcelona: 4.5,
+          London: 4.4,
+          'New York': 4.4,
         },
         complaintRate: 0.03,
         repeatBookingRate: 0.67,
-        netPromoterScore: 72
+        netPromoterScore: 72,
       };
 
       // Collect AI performance metrics
@@ -354,29 +379,35 @@ export class TravelDashboard {
         aiPriceOptimizationSavings: 0.15,
         aiCustomerSatisfaction: 4.6,
         aiProcessingTime: 2.3,
-        aiUptime: 0.999
+        aiUptime: 0.999,
       };
 
       // Collect travel trends
       const travelTrends: TravelTrends = {
-        trendingDestinations: ['Reykjavik', 'Lisbon', 'Prague', 'Bangkok', 'Sydney'],
+        trendingDestinations: [
+          'Reykjavik',
+          'Lisbon',
+          'Prague',
+          'Bangkok',
+          'Sydney',
+        ],
         seasonalPatterns: {
           currentSeason: 'autumn',
-          nextSeasonTrends: 'winter_destinations'
+          nextSeasonTrends: 'winter_destinations',
         },
         priceTrends: {
           averagePriceChange: 0.05,
-          priceVolatility: 0.12
+          priceVolatility: 0.12,
         },
         customerPreferences: {
           topInterests: ['culture', 'food', 'nature', 'adventure'],
           preferredDuration: '5-7 days',
-          averageBudget: 2000
+          averageBudget: 2000,
         },
         marketInsights: {
           emergingDestinations: ['Croatia', 'Portugal', 'Vietnam'],
-          travelStyleTrends: ['sustainable', 'experiential', 'remote_work']
-        }
+          travelStyleTrends: ['sustainable', 'experiential', 'remote_work'],
+        },
       };
 
       this.metrics = {
@@ -386,12 +417,11 @@ export class TravelDashboard {
         destinations: destinationMetrics,
         customerSatisfaction: satisfactionMetrics,
         aiPerformance: aiPerformanceMetrics,
-        trends: travelTrends
+        trends: travelTrends,
       };
 
       // Broadcast metrics update
       this.broadcastMetricsUpdate();
-
     } catch (error) {
       console.error('Error updating travel dashboard metrics:', error);
     }
@@ -404,7 +434,7 @@ export class TravelDashboard {
       try {
         const now = Date.now();
         const lastUpdate = widget.data?.lastUpdated || 0;
-        
+
         if (now - lastUpdate >= widget.refreshInterval) {
           await this.updateWidgetData(widget);
         }
@@ -424,7 +454,7 @@ export class TravelDashboard {
           bookingsToday: this.metrics.bookings.bookingsToday,
           averageValue: this.metrics.bookings.averageBookingValue,
           successRate: this.metrics.bookings.bookingSuccessRate,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -434,7 +464,7 @@ export class TravelDashboard {
           revenueToday: this.metrics.revenue.revenueToday,
           growth: this.metrics.revenue.revenueGrowth,
           chartData: this.generateRevenueChartData(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -442,7 +472,7 @@ export class TravelDashboard {
         widget.data = {
           destinations: this.metrics.destinations.popularDestinations,
           chartData: this.generateDestinationChartData(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -452,7 +482,7 @@ export class TravelDashboard {
           uptime: this.metrics.aiPerformance.aiUptime,
           satisfaction: this.metrics.aiPerformance.aiCustomerSatisfaction,
           processingTime: this.metrics.aiPerformance.aiProcessingTime,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -461,8 +491,9 @@ export class TravelDashboard {
           averageRating: this.metrics.customerSatisfaction.averageRating,
           totalReviews: this.metrics.customerSatisfaction.totalReviews,
           netPromoterScore: this.metrics.customerSatisfaction.netPromoterScore,
-          repeatBookingRate: this.metrics.customerSatisfaction.repeatBookingRate,
-          lastUpdated: Date.now()
+          repeatBookingRate:
+            this.metrics.customerSatisfaction.repeatBookingRate,
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -470,7 +501,7 @@ export class TravelDashboard {
         widget.data = {
           bookings: this.generateCalendarBookings(),
           events: this.generateCalendarEvents(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -478,14 +509,14 @@ export class TravelDashboard {
         widget.data = {
           trends: this.generateBookingTrendsData(),
           forecast: this.generateBookingForecast(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
       case 'recent_bookings':
         widget.data = {
           bookings: this.generateRecentBookings(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -493,7 +524,7 @@ export class TravelDashboard {
         widget.data = {
           destinations: this.generateMapDestinations(),
           bookings: this.generateMapBookings(),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
     }
@@ -506,13 +537,13 @@ export class TravelDashboard {
   private generateRevenueChartData(): any[] {
     const data = [];
     const now = Date.now();
-    
+
     for (let i = 29; i >= 0; i--) {
       const date = new Date(now - i * 24 * 60 * 60 * 1000);
       data.push({
         date: date.toISOString().split('T')[0],
         revenue: Math.floor(Math.random() * 50000) + 20000,
-        bookings: Math.floor(Math.random() * 50) + 20
+        bookings: Math.floor(Math.random() * 50) + 20,
       });
     }
 
@@ -520,18 +551,20 @@ export class TravelDashboard {
   }
 
   private generateDestinationChartData(): any[] {
-    return this.metrics?.destinations.popularDestinations.map(dest => ({
-      destination: dest.destination,
-      bookings: dest.bookings,
-      revenue: dest.revenue,
-      growth: dest.growth
-    })) || [];
+    return (
+      this.metrics?.destinations.popularDestinations.map(dest => ({
+        destination: dest.destination,
+        bookings: dest.bookings,
+        revenue: dest.revenue,
+        growth: dest.growth,
+      })) || []
+    );
   }
 
   private generateCalendarBookings(): any[] {
     const bookings = [];
     const now = new Date();
-    
+
     for (let i = 0; i < 30; i++) {
       const date = new Date(now.getTime() + i * 24 * 60 * 60 * 1000);
       if (Math.random() > 0.7) {
@@ -540,7 +573,7 @@ export class TravelDashboard {
           title: 'Travel Booking',
           destination: this.getRandomDestination(),
           type: this.getRandomBookingType(),
-          status: 'confirmed'
+          status: 'confirmed',
         });
       }
     }
@@ -552,20 +585,20 @@ export class TravelDashboard {
     return [
       { date: '2024-01-15', title: 'Travel Expo', type: 'event' },
       { date: '2024-01-20', title: 'Price Drop Alert', type: 'alert' },
-      { date: '2024-01-25', title: 'Customer Review Period', type: 'review' }
+      { date: '2024-01-25', title: 'Customer Review Period', type: 'review' },
     ];
   }
 
   private generateBookingTrendsData(): any[] {
     const data = [];
     const now = Date.now();
-    
+
     for (let i = 364; i >= 0; i--) {
       const date = new Date(now - i * 24 * 60 * 60 * 1000);
       data.push({
         date: date.toISOString().split('T')[0],
         bookings: Math.floor(Math.random() * 20) + 10,
-        revenue: Math.floor(Math.random() * 30000) + 15000
+        revenue: Math.floor(Math.random() * 30000) + 15000,
       });
     }
 
@@ -575,13 +608,13 @@ export class TravelDashboard {
   private generateBookingForecast(): any[] {
     const forecast = [];
     const now = Date.now();
-    
+
     for (let i = 1; i <= 30; i++) {
       const date = new Date(now + i * 24 * 60 * 60 * 1000);
       forecast.push({
         date: date.toISOString().split('T')[0],
         predictedBookings: Math.floor(Math.random() * 25) + 15,
-        confidence: 0.85
+        confidence: 0.85,
       });
     }
 
@@ -597,7 +630,7 @@ export class TravelDashboard {
         type: 'Package',
         amount: 1250,
         status: 'Confirmed',
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       },
       {
         id: 'booking_2',
@@ -606,7 +639,7 @@ export class TravelDashboard {
         type: 'Flight',
         amount: 850,
         status: 'Pending',
-        date: new Date(Date.now() - 3600000).toISOString()
+        date: new Date(Date.now() - 3600000).toISOString(),
       },
       {
         id: 'booking_3',
@@ -615,18 +648,20 @@ export class TravelDashboard {
         type: 'Hotel',
         amount: 450,
         status: 'Confirmed',
-        date: new Date(Date.now() - 7200000).toISOString()
-      }
+        date: new Date(Date.now() - 7200000).toISOString(),
+      },
     ];
   }
 
   private generateMapDestinations(): any[] {
-    return this.metrics?.destinations.popularDestinations.map(dest => ({
-      name: dest.destination,
-      coordinates: this.getDestinationCoordinates(dest.destination),
-      bookings: dest.bookings,
-      revenue: dest.revenue
-    })) || [];
+    return (
+      this.metrics?.destinations.popularDestinations.map(dest => ({
+        name: dest.destination,
+        coordinates: this.getDestinationCoordinates(dest.destination),
+        bookings: dest.bookings,
+        revenue: dest.revenue,
+      })) || []
+    );
   }
 
   private generateMapBookings(): any[] {
@@ -634,7 +669,7 @@ export class TravelDashboard {
       destination: booking.destination,
       coordinates: this.getDestinationCoordinates(booking.destination),
       amount: booking.amount,
-      status: booking.status
+      status: booking.status,
     }));
   }
 
@@ -648,16 +683,21 @@ export class TravelDashboard {
     return types[Math.floor(Math.random() * types.length)];
   }
 
-  private getDestinationCoordinates(destination: string): { lat: number; lng: number } {
+  private getDestinationCoordinates(destination: string): {
+    lat: number;
+    lng: number;
+  } {
     const coordinates = {
-      'Paris': { lat: 48.8566, lng: 2.3522 },
-      'Tokyo': { lat: 35.6762, lng: 139.6503 },
-      'New York': { lat: 40.7128, lng: -74.0060 },
-      'London': { lat: 51.5074, lng: -0.1278 },
-      'Barcelona': { lat: 41.3851, lng: 2.1734 }
+      Paris: { lat: 48.8566, lng: 2.3522 },
+      Tokyo: { lat: 35.6762, lng: 139.6503 },
+      'New York': { lat: 40.7128, lng: -74.006 },
+      London: { lat: 51.5074, lng: -0.1278 },
+      Barcelona: { lat: 41.3851, lng: 2.1734 },
     };
-    
-    return coordinates[destination as keyof typeof coordinates] || { lat: 0, lng: 0 };
+
+    return (
+      coordinates[destination as keyof typeof coordinates] || { lat: 0, lng: 0 }
+    );
   }
 
   // Public API Methods
@@ -684,7 +724,7 @@ export class TravelDashboard {
       position: { x: 0, y: 0, width: 4, height: 2 },
       config,
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     };
 
     this.widgets.set(id, widget);
@@ -702,7 +742,7 @@ export class TravelDashboard {
     const update = {
       type: 'travel_metrics_update',
       data: this.metrics,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.subscribers.forEach(callback => {
@@ -718,7 +758,7 @@ export class TravelDashboard {
     const update = {
       type: 'travel_widget_update',
       data: widget,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.subscribers.forEach(callback => {

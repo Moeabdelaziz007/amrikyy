@@ -45,8 +45,14 @@ const faviconSVG = `<?xml version="1.0" encoding="UTF-8"?>
 </svg>`;
 
 // Write logo SVG
-fs.writeFileSync(path.join(__dirname, 'client/public/icons/auraos-logo.svg'), logoSVG);
-fs.writeFileSync(path.join(__dirname, 'client/public/icons/favicon.svg'), faviconSVG);
+fs.writeFileSync(
+  path.join(__dirname, 'client/public/icons/auraos-logo.svg'),
+  logoSVG
+);
+fs.writeFileSync(
+  path.join(__dirname, 'client/public/icons/favicon.svg'),
+  faviconSVG
+);
 
 console.log('✅ AuraOS icons generated successfully!');
 console.log('📁 Icons saved to: client/public/icons/');

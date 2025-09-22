@@ -26,9 +26,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {children}
-      </BrowserRouter>
+      <BrowserRouter>{children}</BrowserRouter>
     </QueryClientProvider>
   );
 };
@@ -47,7 +45,9 @@ describe('Login Page Integration', () => {
 
     expect(screen.getByText('Welcome to AuraOS')).toBeInTheDocument();
     expect(screen.getByText('Sign in with Google')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign in with Google' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Sign in with Google' })
+    ).toBeInTheDocument();
   });
 
   it('should handle successful Google login', async () => {
@@ -65,7 +65,9 @@ describe('Login Page Integration', () => {
       </TestWrapper>
     );
 
-    const loginButton = screen.getByRole('button', { name: 'Sign in with Google' });
+    const loginButton = screen.getByRole('button', {
+      name: 'Sign in with Google',
+    });
     fireEvent.click(loginButton);
 
     await waitFor(() => {
@@ -83,7 +85,9 @@ describe('Login Page Integration', () => {
       </TestWrapper>
     );
 
-    const loginButton = screen.getByRole('button', { name: 'Sign in with Google' });
+    const loginButton = screen.getByRole('button', {
+      name: 'Sign in with Google',
+    });
     fireEvent.click(loginButton);
 
     await waitFor(() => {
@@ -100,7 +104,9 @@ describe('Login Page Integration', () => {
       </TestWrapper>
     );
 
-    const loginButton = screen.getByRole('button', { name: 'Sign in with Google' });
+    const loginButton = screen.getByRole('button', {
+      name: 'Sign in with Google',
+    });
     fireEvent.click(loginButton);
 
     await waitFor(() => {

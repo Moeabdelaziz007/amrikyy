@@ -2,17 +2,23 @@
 // Responsive dashboard specifically designed for mobile devices
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Brain, 
-  BarChart3, 
-  Shield, 
-  FileText, 
-  TrendingUp, 
+import {
+  Brain,
+  BarChart3,
+  Shield,
+  FileText,
+  TrendingUp,
   TrendingDown,
   Activity,
   Users,
@@ -33,7 +39,7 @@ import {
   Monitor,
   AlertTriangle,
   CheckCircle,
-  Info
+  Info,
 } from 'lucide-react';
 
 import { useFirebaseAnalytics } from '@/hooks/use-firebase-analytics';
@@ -46,20 +52,22 @@ import {
   MobileLoadingSkeleton,
   MobileErrorState,
   MobileDeviceInfo,
-  useMobileDetection
+  useMobileDetection,
 } from './mobile-analytics-components';
 
 interface MobileAdvancedAnalyticsDashboardProps {
   userId: string;
 }
 
-export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsDashboardProps> = ({ userId }) => {
+export const MobileAdvancedAnalyticsDashboard: React.FC<
+  MobileAdvancedAnalyticsDashboardProps
+> = ({ userId }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  
+
   const { isMobile, isTablet, isDesktop } = useMobileDetection();
-  
+
   // Use Firebase Analytics Hook
   const {
     userHistory,
@@ -75,7 +83,7 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
     analyzePatterns,
     monitorPerformance,
     detectAnomalies,
-    isInitialized
+    isInitialized,
   } = useFirebaseAnalytics();
 
   useEffect(() => {
@@ -198,7 +206,15 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
             <div key={index} className="space-y-2">
               <div className="flex justify-between items-center">
                 <span className="text-sm font-medium">{metric.name}</span>
-                <Badge variant={metric.value > 80 ? 'default' : metric.value > 60 ? 'secondary' : 'destructive'}>
+                <Badge
+                  variant={
+                    metric.value > 80
+                      ? 'default'
+                      : metric.value > 60
+                        ? 'secondary'
+                        : 'destructive'
+                  }
+                >
                   {metric.value}%
                 </Badge>
               </div>
@@ -220,11 +236,15 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-semibold">{insight.title}</h4>
-                  <Badge variant={insight.confidence > 80 ? 'default' : 'secondary'}>
+                  <Badge
+                    variant={insight.confidence > 80 ? 'default' : 'secondary'}
+                  >
                     {insight.confidence}%
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground">{insight.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  {insight.description}
+                </p>
                 <div className="flex items-center gap-2">
                   <Badge variant="outline" className="text-xs">
                     {insight.category}
@@ -261,13 +281,17 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h3 className="font-semibold text-sm">{insight.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">{insight.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {insight.description}
+                  </p>
                 </div>
-                <Badge variant={insight.confidence > 80 ? 'default' : 'secondary'}>
+                <Badge
+                  variant={insight.confidence > 80 ? 'default' : 'secondary'}
+                >
                   {insight.confidence}%
                 </Badge>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">
                   {insight.category}
@@ -277,18 +301,24 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
                 </span>
               </div>
 
-              {insight.recommendations && insight.recommendations.length > 0 && (
-                <div className="space-y-2">
-                  <h4 className="text-xs font-semibold">Recommendations:</h4>
-                  <ul className="space-y-1">
-                    {insight.recommendations.slice(0, 2).map((rec, recIndex) => (
-                      <li key={recIndex} className="text-xs text-muted-foreground">
-                        • {rec}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              {insight.recommendations &&
+                insight.recommendations.length > 0 && (
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-semibold">Recommendations:</h4>
+                    <ul className="space-y-1">
+                      {insight.recommendations
+                        .slice(0, 2)
+                        .map((rec, recIndex) => (
+                          <li
+                            key={recIndex}
+                            className="text-xs text-muted-foreground"
+                          >
+                            • {rec}
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                )}
             </div>
           </Card>
         ))}
@@ -317,11 +347,18 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
 
       {/* Performance Metrics */}
       <MobilePerformanceChart
-        data={performanceMetrics?.map(metric => ({
-          label: metric.name,
-          value: metric.value,
-          color: metric.value > 80 ? '#10b981' : metric.value > 60 ? '#f59e0b' : '#ef4444'
-        })) || []}
+        data={
+          performanceMetrics?.map(metric => ({
+            label: metric.name,
+            value: metric.value,
+            color:
+              metric.value > 80
+                ? '#10b981'
+                : metric.value > 60
+                  ? '#f59e0b'
+                  : '#ef4444',
+          })) || []
+        }
         title="Performance Metrics"
       />
 
@@ -332,17 +369,21 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
         defaultOpen={false}
       >
         <div className="space-y-2">
-          {performanceMetrics?.filter(metric => metric.value < 60).map((metric, index) => (
-            <Alert key={index} variant="destructive">
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="space-y-1">
-                  <h4 className="font-semibold text-sm">{metric.name}</h4>
-                  <p className="text-xs">Performance is below threshold: {metric.value}%</p>
-                </div>
-              </AlertDescription>
-            </Alert>
-          ))}
+          {performanceMetrics
+            ?.filter(metric => metric.value < 60)
+            .map((metric, index) => (
+              <Alert key={index} variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-sm">{metric.name}</h4>
+                    <p className="text-xs">
+                      Performance is below threshold: {metric.value}%
+                    </p>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            ))}
         </div>
       </MobileCollapsibleSection>
     </div>
@@ -368,13 +409,23 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h3 className="font-semibold text-sm">{alert.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">{alert.description}</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {alert.description}
+                  </p>
                 </div>
-                <Badge variant={alert.severity === 'high' ? 'destructive' : alert.severity === 'medium' ? 'secondary' : 'outline'}>
+                <Badge
+                  variant={
+                    alert.severity === 'high'
+                      ? 'destructive'
+                      : alert.severity === 'medium'
+                        ? 'secondary'
+                        : 'outline'
+                  }
+                >
                   {alert.severity}
                 </Badge>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Badge variant="outline" className="text-xs">
                   {alert.category}
@@ -389,7 +440,10 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
                   <h4 className="text-xs font-semibold">Recommendations:</h4>
                   <ul className="space-y-1">
                     {alert.recommendations.slice(0, 2).map((rec, recIndex) => (
-                      <li key={recIndex} className="text-xs text-muted-foreground">
+                      <li
+                        key={recIndex}
+                        className="text-xs text-muted-foreground"
+                      >
                         • {rec}
                       </li>
                     ))}
@@ -411,13 +465,17 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
         <MobileActionButton
           icon={<Download className="w-4 h-4" />}
           label="Export Report"
-          onClick={() => {/* Export logic */}}
+          onClick={() => {
+            /* Export logic */
+          }}
           variant="outline"
         />
         <MobileActionButton
           icon={<FileText className="w-4 h-4" />}
           label="Generate Report"
-          onClick={() => {/* Generate logic */}}
+          onClick={() => {
+            /* Generate logic */
+          }}
           variant="outline"
         />
       </div>
@@ -488,7 +546,9 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
           <div>
             <h1 className="text-lg font-semibold">Advanced Analytics</h1>
             <p className="text-sm text-muted-foreground">
-              {lastUpdated ? `Last updated: ${lastUpdated.toLocaleTimeString()}` : 'Loading...'}
+              {lastUpdated
+                ? `Last updated: ${lastUpdated.toLocaleTimeString()}`
+                : 'Loading...'}
             </p>
           </div>
           <Button
@@ -497,7 +557,9 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
             onClick={handleRefresh}
             disabled={isRefreshing}
           >
-            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`}
+            />
           </Button>
         </div>
       </div>
@@ -510,32 +572,32 @@ export const MobileAdvancedAnalyticsDashboard: React.FC<MobileAdvancedAnalyticsD
               id: 'overview',
               label: 'Overview',
               icon: <BarChart3 className="w-4 h-4" />,
-              content: <OverviewContent />
+              content: <OverviewContent />,
             },
             {
               id: 'insights',
               label: 'Insights',
               icon: <Brain className="w-4 h-4" />,
-              content: <InsightsContent />
+              content: <InsightsContent />,
             },
             {
               id: 'performance',
               label: 'Performance',
               icon: <Activity className="w-4 h-4" />,
-              content: <PerformanceContent />
+              content: <PerformanceContent />,
             },
             {
               id: 'security',
               label: 'Security',
               icon: <Shield className="w-4 h-4" />,
-              content: <SecurityContent />
+              content: <SecurityContent />,
             },
             {
               id: 'reports',
               label: 'Reports',
               icon: <FileText className="w-4 h-4" />,
-              content: <ReportsContent />
-            }
+              content: <ReportsContent />,
+            },
           ]}
           activeTab={activeTab}
           onTabChange={setActiveTab}

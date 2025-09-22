@@ -47,7 +47,3 @@ export interface TravelBookingRequest {
   details: Record<string, any>;
   price: { amount: number; currency: string };
 }
-
-
-
-

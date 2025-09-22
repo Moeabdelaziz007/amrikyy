@@ -8,11 +8,15 @@ export const validationSchemas = {
   // User validation
   user: z.object({
     email: z.string().email('Invalid email format').max(254),
-    password: z.string().min(8, 'Password must be at least 8 characters')
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/, 
-        'Password must contain uppercase, lowercase, number and special character'),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+        'Password must contain uppercase, lowercase, number and special character'
+      ),
     name: z.string().min(2, 'Name must be at least 2 characters').max(50),
-    role: z.enum(['admin', 'user', 'moderator']).optional()
+    role: z.enum(['admin', 'user', 'moderator']).optional(),
   }),
 
   // Post validation
@@ -20,29 +24,34 @@ export const validationSchemas = {
     title: z.string().min(1, 'Title is required').max(200),
     content: z.string().min(1, 'Content is required').max(5000),
     tags: z.array(z.string().max(30)).max(10),
-    visibility: z.enum(['public', 'private', 'friends']).default('public')
+    visibility: z.enum(['public', 'private', 'friends']).default('public'),
   }),
 
   // API request validation
   apiRequest: z.object({
     method: z.enum(['GET', 'POST', 'PUT', 'DELETE', 'PATCH']),
     endpoint: z.string().min(1).max(500),
-    data: z.record(z.any()).optional()
+    data: z.record(z.any()).optional(),
   }),
 
   // Search validation
   search: z.object({
     query: z.string().min(1, 'Search query is required').max(100),
     limit: z.number().int().min(1).max(100).default(10),
-    offset: z.number().int().min(0).default(0)
+    offset: z.number().int().min(0).default(0),
   }),
 
   // File upload validation
   fileUpload: z.object({
     filename: z.string().min(1).max(255),
-    mimetype: z.string().regex(/^image\/(jpeg|jpg|png|gif|webp)$/, 'Invalid file type'),
-    size: z.number().int().max(10 * 1024 * 1024, 'File size too large') // 10MB
-  })
+    mimetype: z
+      .string()
+      .regex(/^image\/(jpeg|jpg|png|gif|webp)$/, 'Invalid file type'),
+    size: z
+      .number()
+      .int()
+      .max(10 * 1024 * 1024, 'File size too large'), // 10MB
+  }),
 };
 
 // Sanitization options
@@ -59,28 +68,31 @@ const defaultSanitizationOptions: SanitizationOptions = {
   sqlInjection: true,
   xssProtection: true,
   pathTraversal: true,
-  maxLength: 1000
+  maxLength: 1000,
 };
 
 // Input validation middleware factory
-export const validateInput = (schema: ZodSchema, options: SanitizationOptions = defaultSanitizationOptions) => {
+export const validateInput = (
+  schema: ZodSchema,
+  options: SanitizationOptions = defaultSanitizationOptions
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       // Validate request body
       const validationResult = schema.safeParse(req.body);
-      
+
       if (!validationResult.success) {
         const errors = validationResult.error.errors.map(err => ({
           field: err.path.join('.'),
           message: err.message,
-          code: err.code
+          code: err.code,
         }));
 
         return res.status(400).json({
           error: 'Validation failed',
           message: 'Invalid input data',
           details: errors,
-          code: 'VALIDATION_ERROR'
+          code: 'VALIDATION_ERROR',
         });
       }
 
@@ -94,30 +106,33 @@ export const validateInput = (schema: ZodSchema, options: SanitizationOptions = 
       return res.status(500).json({
         error: 'Validation error',
         message: 'Failed to validate input data',
-        code: 'VALIDATION_SYSTEM_ERROR'
+        code: 'VALIDATION_SYSTEM_ERROR',
       });
     }
   };
 };
 
 // Query parameter validation
-export const validateQuery = (schema: ZodSchema, options: SanitizationOptions = defaultSanitizationOptions) => {
+export const validateQuery = (
+  schema: ZodSchema,
+  options: SanitizationOptions = defaultSanitizationOptions
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const validationResult = schema.safeParse(req.query);
-      
+
       if (!validationResult.success) {
         const errors = validationResult.error.errors.map(err => ({
           field: err.path.join('.'),
           message: err.message,
-          code: err.code
+          code: err.code,
         }));
 
         return res.status(400).json({
           error: 'Query validation failed',
           message: 'Invalid query parameters',
           details: errors,
-          code: 'QUERY_VALIDATION_ERROR'
+          code: 'QUERY_VALIDATION_ERROR',
         });
       }
 
@@ -131,7 +146,7 @@ export const validateQuery = (schema: ZodSchema, options: SanitizationOptions = 
       return res.status(500).json({
         error: 'Query validation error',
         message: 'Failed to validate query parameters',
-        code: 'QUERY_VALIDATION_SYSTEM_ERROR'
+        code: 'QUERY_VALIDATION_SYSTEM_ERROR',
       });
     }
   };
@@ -186,7 +201,17 @@ function sanitizeString(input: string, options: SanitizationOptions): string {
 
   // SQL injection protection
   if (options.sqlInjection) {
-    const sqlKeywords = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'DROP', 'CREATE', 'ALTER', 'EXEC', 'UNION'];
+    const sqlKeywords = [
+      'SELECT',
+      'INSERT',
+      'UPDATE',
+      'DELETE',
+      'DROP',
+      'CREATE',
+      'ALTER',
+      'EXEC',
+      'UNION',
+    ];
     for (const keyword of sqlKeywords) {
       const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
       sanitized = sanitized.replace(regex, '');
@@ -206,14 +231,18 @@ function sanitizeString(input: string, options: SanitizationOptions): string {
 }
 
 // Specific validation middleware for common use cases
-export const validateEmail = (req: Request, res: Response, next: NextFunction) => {
+export const validateEmail = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email } = req.body;
-  
+
   if (!email) {
     return res.status(400).json({
       error: 'Email required',
       message: 'Email address is required',
-      code: 'EMAIL_REQUIRED'
+      code: 'EMAIL_REQUIRED',
     });
   }
 
@@ -221,7 +250,7 @@ export const validateEmail = (req: Request, res: Response, next: NextFunction) =
     return res.status(400).json({
       error: 'Invalid email',
       message: 'Please provide a valid email address',
-      code: 'INVALID_EMAIL'
+      code: 'INVALID_EMAIL',
     });
   }
 
@@ -230,42 +259,57 @@ export const validateEmail = (req: Request, res: Response, next: NextFunction) =
   next();
 };
 
-export const validatePassword = (req: Request, res: Response, next: NextFunction) => {
+export const validatePassword = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { password } = req.body;
-  
+
   if (!password) {
     return res.status(400).json({
       error: 'Password required',
       message: 'Password is required',
-      code: 'PASSWORD_REQUIRED'
+      code: 'PASSWORD_REQUIRED',
     });
   }
 
   // Password strength validation
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   if (!passwordRegex.test(password)) {
     return res.status(400).json({
       error: 'Weak password',
-      message: 'Password must be at least 8 characters long and contain uppercase, lowercase, number and special character',
-      code: 'WEAK_PASSWORD'
+      message:
+        'Password must be at least 8 characters long and contain uppercase, lowercase, number and special character',
+      code: 'WEAK_PASSWORD',
     });
   }
 
   next();
 };
 
-export const validateUrl = (req: Request, res: Response, next: NextFunction) => {
+export const validateUrl = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { url } = req.body;
-  
+
   if (!url) {
     return next(); // URL is optional
   }
 
-  if (!validator.isURL(url, { protocols: ['http', 'https'], require_protocol: true })) {
+  if (
+    !validator.isURL(url, {
+      protocols: ['http', 'https'],
+      require_protocol: true,
+    })
+  ) {
     return res.status(400).json({
       error: 'Invalid URL',
       message: 'Please provide a valid URL starting with http:// or https://',
-      code: 'INVALID_URL'
+      code: 'INVALID_URL',
     });
   }
 
@@ -273,13 +317,16 @@ export const validateUrl = (req: Request, res: Response, next: NextFunction) => 
 };
 
 // File upload validation
-export const validateFileUpload = (allowedTypes: string[], maxSize: number = 10 * 1024 * 1024) => {
+export const validateFileUpload = (
+  allowedTypes: string[],
+  maxSize: number = 10 * 1024 * 1024
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.file) {
       return res.status(400).json({
         error: 'File required',
         message: 'Please upload a file',
-        code: 'FILE_REQUIRED'
+        code: 'FILE_REQUIRED',
       });
     }
 
@@ -290,7 +337,7 @@ export const validateFileUpload = (allowedTypes: string[], maxSize: number = 10 
       return res.status(400).json({
         error: 'Invalid file type',
         message: `File type ${mimetype} is not allowed. Allowed types: ${allowedTypes.join(', ')}`,
-        code: 'INVALID_FILE_TYPE'
+        code: 'INVALID_FILE_TYPE',
       });
     }
 
@@ -299,7 +346,7 @@ export const validateFileUpload = (allowedTypes: string[], maxSize: number = 10 
       return res.status(400).json({
         error: 'File too large',
         message: `File size ${size} bytes exceeds maximum allowed size ${maxSize} bytes`,
-        code: 'FILE_TOO_LARGE'
+        code: 'FILE_TOO_LARGE',
       });
     }
 
@@ -321,7 +368,10 @@ function sanitizeFilename(filename: string): string {
 // Rate limiting middleware
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
-export const rateLimit = (maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) => {
+export const rateLimit = (
+  maxRequests: number = 100,
+  windowMs: number = 15 * 60 * 1000
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const key = req.ip || 'unknown';
     const now = Date.now();
@@ -346,7 +396,7 @@ export const rateLimit = (maxRequests: number = 100, windowMs: number = 15 * 60 
         error: 'Too Many Requests',
         message: 'Rate limit exceeded. Please try again later.',
         code: 'RATE_LIMIT_EXCEEDED',
-        retryAfter: Math.ceil((current.resetTime - now) / 1000)
+        retryAfter: Math.ceil((current.resetTime - now) / 1000),
       });
     }
 
@@ -356,14 +406,18 @@ export const rateLimit = (maxRequests: number = 100, windowMs: number = 15 * 60 
 };
 
 // Content Security Policy validation
-export const validateCSP = (req: Request, res: Response, next: NextFunction) => {
+export const validateCSP = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const cspHeader = req.get('Content-Security-Policy');
-  
+
   if (!cspHeader) {
     return res.status(400).json({
       error: 'Missing CSP header',
       message: 'Content Security Policy header is required',
-      code: 'MISSING_CSP'
+      code: 'MISSING_CSP',
     });
   }
 
@@ -371,15 +425,16 @@ export const validateCSP = (req: Request, res: Response, next: NextFunction) => 
 };
 
 // Input size validation
-export const validateInputSize = (maxSize: number = 1024 * 1024) => { // 1MB default
+export const validateInputSize = (maxSize: number = 1024 * 1024) => {
+  // 1MB default
   return (req: Request, res: Response, next: NextFunction) => {
     const contentLength = parseInt(req.get('Content-Length') || '0');
-    
+
     if (contentLength > maxSize) {
       return res.status(413).json({
         error: 'Payload Too Large',
         message: `Request body size ${contentLength} bytes exceeds maximum allowed size ${maxSize} bytes`,
-        code: 'PAYLOAD_TOO_LARGE'
+        code: 'PAYLOAD_TOO_LARGE',
       });
     }
 
@@ -395,7 +450,8 @@ export const validationUtils = {
   validateEmail: validator.isEmail,
   validateUrl: validator.isURL,
   validatePassword: (password: string) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(password);
-  }
+  },
 };

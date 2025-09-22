@@ -2,19 +2,25 @@
 // Advanced security monitoring and threat detection
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Shield, 
-  AlertTriangle, 
-  Eye, 
-  Lock, 
-  Unlock, 
-  Activity, 
-  Clock, 
+import {
+  Shield,
+  AlertTriangle,
+  Eye,
+  Lock,
+  Unlock,
+  Activity,
+  Clock,
   CheckCircle,
   XCircle,
   RefreshCw,
@@ -27,15 +33,19 @@ import {
   Database,
   Network,
   FileText,
-  Search
+  Search,
 } from 'lucide-react';
-import AdvancedAnalyticsService, { SecurityAlert } from '../../lib/advanced-analytics-service';
+import AdvancedAnalyticsService, {
+  SecurityAlert,
+} from '../../lib/advanced-analytics-service';
 
 interface SecurityAnalyticsProps {
   userId: string;
 }
 
-export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) => {
+export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({
+  userId,
+}) => {
   const [alerts, setAlerts] = useState<SecurityAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,11 +62,14 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
     try {
       setLoading(true);
       setError(null);
-      
-      const data = await AdvancedAnalyticsService.detectSecurityAnomalies(userId);
+
+      const data =
+        await AdvancedAnalyticsService.detectSecurityAnomalies(userId);
       setAlerts(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load security alerts');
+      setError(
+        err instanceof Error ? err.message : 'Failed to load security alerts'
+      );
     } finally {
       setLoading(false);
     }
@@ -65,7 +78,8 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
   const setupRealTimeUpdates = () => {
     const interval = setInterval(async () => {
       try {
-        const data = await AdvancedAnalyticsService.detectSecurityAnomalies(userId);
+        const data =
+          await AdvancedAnalyticsService.detectSecurityAnomalies(userId);
         setAlerts(data);
       } catch (err) {
         console.error('Failed to update security alerts:', err);
@@ -87,11 +101,13 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
       filters: {
         severity: selectedSeverity,
         type: selectedType,
-        showResolved
-      }
+        showResolved,
+      },
     };
 
-    const blob = new Blob([JSON.stringify(alertsData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(alertsData, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -105,11 +121,13 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
   const handleResolveAlert = async (alertId: string) => {
     try {
       // In a real implementation, this would update the alert status in the database
-      setAlerts(prev => prev.map(alert => 
-        alert.id === alertId 
-          ? { ...alert, resolved: true, resolvedAt: new Date() }
-          : alert
-      ));
+      setAlerts(prev =>
+        prev.map(alert =>
+          alert.id === alertId
+            ? { ...alert, resolved: true, resolvedAt: new Date() }
+            : alert
+        )
+      );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to resolve alert');
     }
@@ -117,53 +135,76 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical': return <AlertTriangle className="h-5 w-5 text-red-500" />;
-      case 'high': return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case 'medium': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'low': return <Bell className="h-5 w-5 text-blue-500" />;
-      default: return <Bell className="h-5 w-5 text-gray-500" />;
+      case 'critical':
+        return <AlertTriangle className="h-5 w-5 text-red-500" />;
+      case 'high':
+        return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+      case 'medium':
+        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+      case 'low':
+        return <Bell className="h-5 w-5 text-blue-500" />;
+      default:
+        return <Bell className="h-5 w-5 text-gray-500" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-600 bg-red-50 border-red-200';
-      case 'high': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'medium': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
-      case 'low': return 'text-blue-600 bg-blue-50 border-blue-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+      case 'critical':
+        return 'text-red-600 bg-red-50 border-red-200';
+      case 'high':
+        return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-50 border-yellow-200';
+      case 'low':
+        return 'text-blue-600 bg-blue-50 border-blue-200';
+      default:
+        return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'suspicious_activity': return <Activity className="h-4 w-4" />;
-      case 'anomaly': return <Eye className="h-4 w-4" />;
-      case 'security_breach': return <Lock className="h-4 w-4" />;
-      case 'data_leak': return <Database className="h-4 w-4" />;
-      default: return <Shield className="h-4 w-4" />;
+      case 'suspicious_activity':
+        return <Activity className="h-4 w-4" />;
+      case 'anomaly':
+        return <Eye className="h-4 w-4" />;
+      case 'security_breach':
+        return <Lock className="h-4 w-4" />;
+      case 'data_leak':
+        return <Database className="h-4 w-4" />;
+      default:
+        return <Shield className="h-4 w-4" />;
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'suspicious_activity': return 'Suspicious Activity';
-      case 'anomaly': return 'Anomaly Detected';
-      case 'security_breach': return 'Security Breach';
-      case 'data_leak': return 'Data Leak';
-      default: return type;
+      case 'suspicious_activity':
+        return 'Suspicious Activity';
+      case 'anomaly':
+        return 'Anomaly Detected';
+      case 'security_breach':
+        return 'Security Breach';
+      case 'data_leak':
+        return 'Data Leak';
+      default:
+        return type;
     }
   };
 
   const filteredAlerts = alerts.filter(alert => {
-    const matchesSeverity = selectedSeverity === 'all' || alert.severity === selectedSeverity;
+    const matchesSeverity =
+      selectedSeverity === 'all' || alert.severity === selectedSeverity;
     const matchesType = selectedType === 'all' || alert.type === selectedType;
     const matchesResolved = showResolved || !alert.resolved;
-    
+
     return matchesSeverity && matchesType && matchesResolved;
   });
 
-  const criticalAlerts = alerts.filter(a => a.severity === 'critical' && !a.resolved);
+  const criticalAlerts = alerts.filter(
+    a => a.severity === 'critical' && !a.resolved
+  );
   const highAlerts = alerts.filter(a => a.severity === 'high' && !a.resolved);
   const totalActiveAlerts = alerts.filter(a => !a.resolved).length;
 
@@ -213,7 +254,10 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
           <AlertDescription>
             <div className="flex items-center justify-between">
               <div>
-                <strong>{criticalAlerts.length} Critical Security Alert{criticalAlerts.length > 1 ? 's' : ''}</strong> 
+                <strong>
+                  {criticalAlerts.length} Critical Security Alert
+                  {criticalAlerts.length > 1 ? 's' : ''}
+                </strong>
                 detected - Immediate action required
               </div>
               <Button size="sm" variant="destructive">
@@ -242,11 +286,15 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Critical Issues</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Critical Issues
+            </CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{criticalAlerts.length}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {criticalAlerts.length}
+            </div>
             <p className="text-xs text-muted-foreground">
               Require immediate attention
             </p>
@@ -259,7 +307,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
             <AlertTriangle className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{highAlerts.length}</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {highAlerts.length}
+            </div>
             <p className="text-xs text-muted-foreground">
               Should be addressed soon
             </p>
@@ -286,9 +336,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium">Severity:</label>
-          <select 
-            value={selectedSeverity} 
-            onChange={(e) => setSelectedSeverity(e.target.value)}
+          <select
+            value={selectedSeverity}
+            onChange={e => setSelectedSeverity(e.target.value)}
             className="px-3 py-2 border rounded-md text-sm"
           >
             <option value="all">All Severities</option>
@@ -298,12 +348,12 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
             <option value="low">Low</option>
           </select>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <label className="text-sm font-medium">Type:</label>
-          <select 
-            value={selectedType} 
-            onChange={(e) => setSelectedType(e.target.value)}
+          <select
+            value={selectedType}
+            onChange={e => setSelectedType(e.target.value)}
             className="px-3 py-2 border rounded-md text-sm"
           >
             <option value="all">All Types</option>
@@ -315,11 +365,11 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
         </div>
 
         <div className="flex items-center space-x-2">
-          <input 
-            type="checkbox" 
+          <input
+            type="checkbox"
             id="showResolved"
             checked={showResolved}
-            onChange={(e) => setShowResolved(e.target.checked)}
+            onChange={e => setShowResolved(e.target.checked)}
             className="rounded"
           />
           <label htmlFor="showResolved" className="text-sm font-medium">
@@ -339,10 +389,12 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
 
         <TabsContent value="alerts" className="space-y-6">
           <div className="space-y-4">
-            {filteredAlerts.map((alert) => (
-              <Alert 
-                key={alert.id} 
-                variant={alert.severity === 'critical' ? 'destructive' : 'default'}
+            {filteredAlerts.map(alert => (
+              <Alert
+                key={alert.id}
+                variant={
+                  alert.severity === 'critical' ? 'destructive' : 'default'
+                }
                 className={getSeverityColor(alert.severity)}
               >
                 <div className="flex items-start space-x-3">
@@ -351,8 +403,8 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <AlertDescription>
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
-                          <Badge 
-                            variant="outline" 
+                          <Badge
+                            variant="outline"
                             className={`text-xs ${getSeverityColor(alert.severity)}`}
                           >
                             {alert.severity}
@@ -371,8 +423,8 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                             {alert.timestamp.toLocaleString()}
                           </span>
                           {!alert.resolved && (
-                            <Button 
-                              size="sm" 
+                            <Button
+                              size="sm"
                               variant="outline"
                               onClick={() => handleResolveAlert(alert.id)}
                             >
@@ -400,12 +452,13 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
               <Card>
                 <CardContent className="flex flex-col items-center justify-center py-8">
                   <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No Security Alerts</h3>
+                  <h3 className="text-lg font-medium mb-2">
+                    No Security Alerts
+                  </h3>
                   <p className="text-muted-foreground text-center">
-                    {showResolved 
-                      ? 'No alerts match the current filters.' 
-                      : 'All security systems are operating normally. No active alerts detected.'
-                    }
+                    {showResolved
+                      ? 'No alerts match the current filters.'
+                      : 'All security systems are operating normally. No active alerts detected.'}
                   </p>
                 </CardContent>
               </Card>
@@ -427,7 +480,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Authentication Events</span>
+                    <span className="text-sm font-medium">
+                      Authentication Events
+                    </span>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                       <span className="text-sm text-green-600">Normal</span>
@@ -444,7 +499,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <span className="text-sm font-medium">Network Traffic</span>
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
-                      <span className="text-sm text-yellow-600">Monitoring</span>
+                      <span className="text-sm text-yellow-600">
+                        Monitoring
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
@@ -470,20 +527,32 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Threat Detection Rate</span>
-                    <span className="text-sm font-medium text-green-600">99.8%</span>
+                    <span className="text-sm font-medium">
+                      Threat Detection Rate
+                    </span>
+                    <span className="text-sm font-medium text-green-600">
+                      99.8%
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">False Positive Rate</span>
-                    <span className="text-sm font-medium text-blue-600">0.2%</span>
+                    <span className="text-sm font-medium">
+                      False Positive Rate
+                    </span>
+                    <span className="text-sm font-medium text-blue-600">
+                      0.2%
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">Response Time</span>
-                    <span className="text-sm font-medium text-green-600">2.3s</span>
+                    <span className="text-sm font-medium text-green-600">
+                      2.3s
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium">System Uptime</span>
-                    <span className="text-sm font-medium text-green-600">99.9%</span>
+                    <span className="text-sm font-medium text-green-600">
+                      99.9%
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -497,14 +566,18 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
             <Card>
               <CardHeader>
                 <CardTitle>Threat Categories</CardTitle>
-                <CardDescription>Types of security threats detected</CardDescription>
+                <CardDescription>
+                  Types of security threats detected
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Activity className="h-4 w-4" />
-                      <span className="text-sm font-medium">Suspicious Activity</span>
+                      <span className="text-sm font-medium">
+                        Suspicious Activity
+                      </span>
                     </div>
                     <Badge variant="outline">12</Badge>
                   </div>
@@ -518,7 +591,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Lock className="h-4 w-4" />
-                      <span className="text-sm font-medium">Security Breaches</span>
+                      <span className="text-sm font-medium">
+                        Security Breaches
+                      </span>
                     </div>
                     <Badge variant="outline">3</Badge>
                   </div>
@@ -542,23 +617,33 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
               <CardContent>
                 <div className="text-center space-y-4">
                   <div className="text-4xl font-bold text-green-600">LOW</div>
-                  <div className="text-sm text-muted-foreground">Overall Risk Level</div>
+                  <div className="text-sm text-muted-foreground">
+                    Overall Risk Level
+                  </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Authentication Risk</span>
-                      <Badge variant="outline" className="text-green-600">Low</Badge>
+                      <Badge variant="outline" className="text-green-600">
+                        Low
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Data Access Risk</span>
-                      <Badge variant="outline" className="text-green-600">Low</Badge>
+                      <Badge variant="outline" className="text-green-600">
+                        Low
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Network Risk</span>
-                      <Badge variant="outline" className="text-yellow-600">Medium</Badge>
+                      <Badge variant="outline" className="text-yellow-600">
+                        Medium
+                      </Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">System Risk</span>
-                      <Badge variant="outline" className="text-green-600">Low</Badge>
+                      <Badge variant="outline" className="text-green-600">
+                        Low
+                      </Badge>
                     </div>
                   </div>
                 </div>
@@ -581,8 +666,12 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <div className="flex items-center space-x-3">
                       <FileText className="h-4 w-4" />
                       <div>
-                        <div className="text-sm font-medium">Daily Security Report</div>
-                        <div className="text-xs text-muted-foreground">Generated 2 hours ago</div>
+                        <div className="text-sm font-medium">
+                          Daily Security Report
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Generated 2 hours ago
+                        </div>
                       </div>
                     </div>
                     <Button size="sm" variant="outline">
@@ -593,8 +682,12 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <div className="flex items-center space-x-3">
                       <FileText className="h-4 w-4" />
                       <div>
-                        <div className="text-sm font-medium">Weekly Threat Analysis</div>
-                        <div className="text-xs text-muted-foreground">Generated 1 day ago</div>
+                        <div className="text-sm font-medium">
+                          Weekly Threat Analysis
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Generated 1 day ago
+                        </div>
                       </div>
                     </div>
                     <Button size="sm" variant="outline">
@@ -605,8 +698,12 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <div className="flex items-center space-x-3">
                       <FileText className="h-4 w-4" />
                       <div>
-                        <div className="text-sm font-medium">Monthly Security Summary</div>
-                        <div className="text-xs text-muted-foreground">Generated 1 week ago</div>
+                        <div className="text-sm font-medium">
+                          Monthly Security Summary
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Generated 1 week ago
+                        </div>
                       </div>
                     </div>
                     <Button size="sm" variant="outline">
@@ -621,7 +718,9 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
             <Card>
               <CardHeader>
                 <CardTitle>Generate Report</CardTitle>
-                <CardDescription>Create custom security reports</CardDescription>
+                <CardDescription>
+                  Create custom security reports
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -647,11 +746,19 @@ export const SecurityAnalytics: React.FC<SecurityAnalyticsProps> = ({ userId }) 
                     <label className="text-sm font-medium">Include</label>
                     <div className="mt-1 space-y-2">
                       <label className="flex items-center space-x-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded"
+                        />
                         <span className="text-sm">Security Alerts</span>
                       </label>
                       <label className="flex items-center space-x-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input
+                          type="checkbox"
+                          defaultChecked
+                          className="rounded"
+                        />
                         <span className="text-sm">Threat Analysis</span>
                       </label>
                       <label className="flex items-center space-x-2">

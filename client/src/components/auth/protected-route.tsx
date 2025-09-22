@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useAuth } from "@/hooks/use-auth";
-import Loading from "@/pages/loading";
-import Login from "@/pages/login";
+import { useAuth } from '@/hooks/use-auth';
+import Loading from '@/pages/loading';
+import Login from '@/pages/login';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -20,7 +20,8 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   // Show guest mode indicator for guest users
-  const isGuestUser = user?.isAnonymous || localStorage.getItem('isGuestUser') === 'true';
+  const isGuestUser =
+    user?.isAnonymous || localStorage.getItem('isGuestUser') === 'true';
 
   return (
     <>
@@ -28,7 +29,11 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         <div className="bg-yellow-100 dark:bg-yellow-900/20 border-b border-yellow-200 dark:border-yellow-800 px-4 py-2 text-center">
           <span className="text-sm text-yellow-800 dark:text-yellow-200">
             <i className="fas fa-user mr-2"></i>
-            You're using Guest Mode. <a href="/login" className="underline hover:no-underline">Sign in</a> for full features.
+            You're using Guest Mode.{' '}
+            <a href="/login" className="underline hover:no-underline">
+              Sign in
+            </a>{' '}
+            for full features.
           </span>
         </div>
       )}

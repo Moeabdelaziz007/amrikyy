@@ -15,22 +15,26 @@ export class WebScrapingTools {
   /**
    * Scrape website content with intelligent parsing
    */
-  static async scrapeWebsite(url: string, options: ScrapingOptions = {}): Promise<ScrapingResult> {
+  static async scrapeWebsite(
+    url: string,
+    options: ScrapingOptions = {}
+  ): Promise<ScrapingResult> {
     try {
       const response = await axios.get(url, {
         headers: {
           'User-Agent': this.getRandomUserAgent(),
-          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+          Accept:
+            'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.5',
           'Accept-Encoding': 'gzip, deflate',
-          'Connection': 'keep-alive',
+          Connection: 'keep-alive',
         },
         timeout: options.timeout || 10000,
         maxRedirects: 5,
       });
 
       const $ = cheerio.load(response.data);
-      
+
       const result: ScrapingResult = {
         success: true,
         url,
@@ -56,7 +60,10 @@ export class WebScrapingTools {
   /**
    * Extract structured content from HTML
    */
-  private static extractContent($: cheerio.CheerioAPI, options: ScrapingOptions): ContentData {
+  private static extractContent(
+    $: cheerio.CheerioAPI,
+    options: ScrapingOptions
+  ): ContentData {
     const content: ContentData = {
       text: '',
       headings: [],
@@ -67,8 +74,14 @@ export class WebScrapingTools {
 
     // Extract main content (try different selectors)
     const mainSelectors = [
-      'main', 'article', '.content', '#content', '.main-content',
-      '.post-content', '.entry-content', '.page-content'
+      'main',
+      'article',
+      '.content',
+      '#content',
+      '.main-content',
+      '.post-content',
+      '.entry-content',
+      '.page-content',
     ];
 
     let mainContent = $('body');
@@ -96,7 +109,8 @@ export class WebScrapingTools {
     // Extract paragraphs
     $('p').each((_, element) => {
       const paragraph = $(element).text().trim();
-      if (paragraph.length > 20) { // Filter out short paragraphs
+      if (paragraph.length > 20) {
+        // Filter out short paragraphs
         content.paragraphs.push(paragraph);
       }
     });
@@ -118,12 +132,14 @@ export class WebScrapingTools {
     $('table').each((_, element) => {
       const table = $(element);
       const rows: string[][] = [];
-      
+
       table.find('tr').each((_, row) => {
         const cells: string[] = [];
-        $(row).find('td, th').each((_, cell) => {
-          cells.push($(cell).text().trim());
-        });
+        $(row)
+          .find('td, th')
+          .each((_, cell) => {
+            cells.push($(cell).text().trim());
+          });
         if (cells.length > 0) {
           rows.push(cells);
         }
@@ -143,7 +159,10 @@ export class WebScrapingTools {
   /**
    * Extract metadata from HTML
    */
-  private static extractMetadata($: cheerio.CheerioAPI, response: any): Metadata {
+  private static extractMetadata(
+    $: cheerio.CheerioAPI,
+    response: any
+  ): Metadata {
     const metadata: Metadata = {
       description: $('meta[name="description"]').attr('content') || '',
       keywords: $('meta[name="keywords"]').attr('content') || '',
@@ -167,14 +186,17 @@ export class WebScrapingTools {
   /**
    * Extract links from HTML
    */
-  private static extractLinks($: cheerio.CheerioAPI, baseUrl: string): LinkData[] {
+  private static extractLinks(
+    $: cheerio.CheerioAPI,
+    baseUrl: string
+  ): LinkData[] {
     const links: LinkData[] = [];
-    
+
     $('a[href]').each((_, element) => {
       const link = $(element);
       const href = link.attr('href');
       const text = link.text().trim();
-      
+
       if (href && text) {
         const absoluteUrl = this.resolveUrl(href, baseUrl);
         links.push({
@@ -192,14 +214,17 @@ export class WebScrapingTools {
   /**
    * Extract images from HTML
    */
-  private static extractImages($: cheerio.CheerioAPI, baseUrl: string): ImageData[] {
+  private static extractImages(
+    $: cheerio.CheerioAPI,
+    baseUrl: string
+  ): ImageData[] {
     const images: ImageData[] = [];
-    
+
     $('img[src]').each((_, element) => {
       const img = $(element);
       const src = img.attr('src');
       const alt = img.attr('alt') || '';
-      
+
       if (src) {
         const absoluteUrl = this.resolveUrl(src, baseUrl);
         images.push({
@@ -230,13 +255,18 @@ export class WebScrapingTools {
    * Get random user agent
    */
   private static getRandomUserAgent(): string {
-    return this.USER_AGENTS[Math.floor(Math.random() * this.USER_AGENTS.length)];
+    return this.USER_AGENTS[
+      Math.floor(Math.random() * this.USER_AGENTS.length)
+    ];
   }
 
   /**
    * Scrape multiple URLs in parallel
    */
-  static async scrapeMultipleUrls(urls: string[], options: ScrapingOptions = {}): Promise<ScrapingResult[]> {
+  static async scrapeMultipleUrls(
+    urls: string[],
+    options: ScrapingOptions = {}
+  ): Promise<ScrapingResult[]> {
     const promises = urls.map(url => this.scrapeWebsite(url, options));
     return Promise.all(promises);
   }
@@ -244,10 +274,13 @@ export class WebScrapingTools {
   /**
    * Scrape search results from Google (for educational purposes)
    */
-  static async scrapeGoogleSearch(query: string, options: SearchOptions = {}): Promise<SearchResult[]> {
+  static async scrapeGoogleSearch(
+    query: string,
+    options: SearchOptions = {}
+  ): Promise<SearchResult[]> {
     try {
       const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}&num=${options.limit || 10}`;
-      
+
       const response = await axios.get(searchUrl, {
         headers: {
           'User-Agent': this.getRandomUserAgent(),
@@ -291,7 +324,10 @@ export class WebScrapingTools {
   /**
    * Scrape social media posts (public data only)
    */
-  static async scrapeSocialMedia(platform: 'twitter' | 'reddit' | 'hackernews', query: string): Promise<SocialMediaPost[]> {
+  static async scrapeSocialMedia(
+    platform: 'twitter' | 'reddit' | 'hackernews',
+    query: string
+  ): Promise<SocialMediaPost[]> {
     try {
       switch (platform) {
         case 'twitter':
@@ -309,13 +345,15 @@ export class WebScrapingTools {
     }
   }
 
-  private static async scrapeTwitter(query: string): Promise<SocialMediaPost[]> {
+  private static async scrapeTwitter(
+    query: string
+  ): Promise<SocialMediaPost[]> {
     // Note: This is a simplified example. Real Twitter scraping requires API access
     const posts: SocialMediaPost[] = [];
-    
+
     // This would integrate with Twitter's public API or use alternative methods
     // For now, return a placeholder structure
-    
+
     return posts;
   }
 
@@ -323,7 +361,7 @@ export class WebScrapingTools {
     try {
       const subreddit = query.includes('/r/') ? query : `r/${query}`;
       const url = `https://www.reddit.com/${subreddit}.json`;
-      
+
       const response = await axios.get(url, {
         headers: {
           'User-Agent': 'AuraOS Bot 1.0',
@@ -331,7 +369,7 @@ export class WebScrapingTools {
       });
 
       const posts: SocialMediaPost[] = [];
-      
+
       if (response.data?.data?.children) {
         response.data.data.children.forEach((post: any) => {
           const data = post.data;
@@ -356,18 +394,24 @@ export class WebScrapingTools {
     }
   }
 
-  private static async scrapeHackerNews(query: string): Promise<SocialMediaPost[]> {
+  private static async scrapeHackerNews(
+    query: string
+  ): Promise<SocialMediaPost[]> {
     try {
-      const response = await axios.get('https://hacker-news.firebaseio.com/v0/topstories.json');
+      const response = await axios.get(
+        'https://hacker-news.firebaseio.com/v0/topstories.json'
+      );
       const storyIds = response.data.slice(0, 30); // Get top 30 stories
-      
+
       const posts: SocialMediaPost[] = [];
-      
+
       for (const id of storyIds) {
         try {
-          const storyResponse = await axios.get(`https://hacker-news.firebaseio.com/v0/item/${id}.json`);
+          const storyResponse = await axios.get(
+            `https://hacker-news.firebaseio.com/v0/item/${id}.json`
+          );
           const story = storyResponse.data;
-          
+
           if (story && story.title) {
             posts.push({
               id: story.id.toString(),
@@ -375,7 +419,8 @@ export class WebScrapingTools {
               content: story.text || '',
               author: story.by,
               score: story.score || 0,
-              url: story.url || `https://news.ycombinator.com/item?id=${story.id}`,
+              url:
+                story.url || `https://news.ycombinator.com/item?id=${story.id}`,
               platform: 'hackernews',
               timestamp: new Date(story.time * 1000).toISOString(),
             });
@@ -395,10 +440,13 @@ export class WebScrapingTools {
   /**
    * Save scraping results to Firestore
    */
-  static async saveScrapingResults(userId: string, results: ScrapingResult[]): Promise<string[]> {
+  static async saveScrapingResults(
+    userId: string,
+    results: ScrapingResult[]
+  ): Promise<string[]> {
     try {
       const postIds: string[] = [];
-      
+
       for (const result of results) {
         if (result.success) {
           const postData = {
@@ -413,12 +461,12 @@ export class WebScrapingTools {
             },
             visibility: 'private',
           };
-          
+
           const postId = await FirestoreService.createPost(userId, postData);
           postIds.push(postId);
         }
       }
-      
+
       return postIds;
     } catch (error) {
       throw new Error(`Failed to save scraping results: ${error.message}`);

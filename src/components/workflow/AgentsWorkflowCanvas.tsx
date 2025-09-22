@@ -16,7 +16,9 @@ interface WorkflowCanvasProps {
   className?: string;
 }
 
-export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className = '' }) => {
+export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
+  className = '',
+}) => {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [nodes, setNodes] = useState<AgentNode[]>([
     {
@@ -27,7 +29,7 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
       position: { x: 50, y: 100 },
       connections: ['processor-1'],
       progress: 75,
-      lastActivity: '2 min ago'
+      lastActivity: '2 min ago',
     },
     {
       id: 'processor-1',
@@ -37,7 +39,7 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
       position: { x: 300, y: 100 },
       connections: ['action-1'],
       progress: 45,
-      lastActivity: '1 min ago'
+      lastActivity: '1 min ago',
     },
     {
       id: 'action-1',
@@ -46,7 +48,7 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
       status: 'idle',
       position: { x: 550, y: 100 },
       connections: [],
-      lastActivity: '5 min ago'
+      lastActivity: '5 min ago',
     },
     {
       id: 'condition-1',
@@ -55,8 +57,8 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
       status: 'completed',
       position: { x: 300, y: 250 },
       connections: ['action-1'],
-      lastActivity: 'Just now'
-    }
+      lastActivity: 'Just now',
+    },
   ]);
 
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
@@ -65,50 +67,67 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
 
   const getNodeTypeColor = (type: AgentNode['type']) => {
     switch (type) {
-      case 'trigger': return 'from-cyan-400 to-blue-500';
-      case 'processor': return 'from-purple-400 to-pink-500';
-      case 'action': return 'from-green-400 to-emerald-500';
-      case 'condition': return 'from-yellow-400 to-orange-500';
-      default: return 'from-gray-400 to-gray-500';
+      case 'trigger':
+        return 'from-cyan-400 to-blue-500';
+      case 'processor':
+        return 'from-purple-400 to-pink-500';
+      case 'action':
+        return 'from-green-400 to-emerald-500';
+      case 'condition':
+        return 'from-yellow-400 to-orange-500';
+      default:
+        return 'from-gray-400 to-gray-500';
     }
   };
 
   const getStatusGlow = (status: AgentNode['status']) => {
     switch (status) {
-      case 'running': return 'shadow-glow-green-md animate-neon-pulse';
-      case 'completed': return 'shadow-glow-blue-sm';
-      case 'error': return 'shadow-[0_0_16px_rgba(255,0,64,0.7)]';
-      default: return 'shadow-glow-gray-sm';
+      case 'running':
+        return 'shadow-glow-green-md animate-neon-pulse';
+      case 'completed':
+        return 'shadow-glow-blue-sm';
+      case 'error':
+        return 'shadow-[0_0_16px_rgba(255,0,64,0.7)]';
+      default:
+        return 'shadow-glow-gray-sm';
     }
   };
 
-  const handleMouseDown = useCallback((e: React.MouseEvent, nodeId: string) => {
-    e.preventDefault();
-    setDraggedNode(nodeId);
-    const node = nodes.find(n => n.id === nodeId);
-    if (node) {
-      setDragOffset({
-        x: e.clientX - node.position.x,
-        y: e.clientY - node.position.y
-      });
-    }
-  }, [nodes]);
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent, nodeId: string) => {
+      e.preventDefault();
+      setDraggedNode(nodeId);
+      const node = nodes.find(n => n.id === nodeId);
+      if (node) {
+        setDragOffset({
+          x: e.clientX - node.position.x,
+          y: e.clientY - node.position.y,
+        });
+      }
+    },
+    [nodes]
+  );
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!draggedNode) return;
-    
-    setNodes(prev => prev.map(node => 
-      node.id === draggedNode 
-        ? {
-            ...node,
-            position: {
-              x: Math.max(0, Math.min(800, e.clientX - dragOffset.x)),
-              y: Math.max(0, Math.min(400, e.clientY - dragOffset.y))
-            }
-          }
-        : node
-    ));
-  }, [draggedNode, dragOffset]);
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!draggedNode) return;
+
+      setNodes(prev =>
+        prev.map(node =>
+          node.id === draggedNode
+            ? {
+                ...node,
+                position: {
+                  x: Math.max(0, Math.min(800, e.clientX - dragOffset.x)),
+                  y: Math.max(0, Math.min(400, e.clientY - dragOffset.y)),
+                },
+              }
+            : node
+        )
+      );
+    },
+    [draggedNode, dragOffset]
+  );
 
   const handleMouseUp = useCallback(() => {
     setDraggedNode(null);
@@ -134,7 +153,8 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
     const toX = toNode.position.x;
     const toY = toNode.position.y + 50;
 
-    const isActive = fromNode.status === 'running' || toNode.status === 'running';
+    const isActive =
+      fromNode.status === 'running' || toNode.status === 'running';
 
     return (
       <svg
@@ -143,7 +163,13 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
         style={{ zIndex: 1 }}
       >
         <defs>
-          <linearGradient id={`gradient-${fromNode.id}-${toNodeId}`} x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient
+            id={`gradient-${fromNode.id}-${toNodeId}`}
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+          >
             <stop offset="0%" stopColor="#00f5ff" />
             <stop offset="50%" stopColor="#ff00ff" />
             <stop offset="100%" stopColor="#00ff00" />
@@ -156,7 +182,9 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
           fill="none"
           className={`transition-all duration-300 ${isActive ? 'animate-pulse' : 'opacity-60'}`}
           style={{
-            filter: isActive ? 'drop-shadow(0 0 8px rgba(0, 245, 255, 0.8))' : 'none'
+            filter: isActive
+              ? 'drop-shadow(0 0 8px rgba(0, 245, 255, 0.8))'
+              : 'none',
           }}
         />
         {/* Animated dots */}
@@ -167,7 +195,7 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
             className="animate-ping"
             style={{
               animation: `moveAlongPath 2s linear infinite`,
-              animationDelay: '0s'
+              animationDelay: '0s',
             }}
           >
             <animateMotion dur="2s" repeatCount="indefinite">
@@ -202,8 +230,8 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
         style={{ minHeight: '400px' }}
       >
         {/* Connections */}
-        {nodes.map(node => 
-          node.connections.map(connectionId => 
+        {nodes.map(node =>
+          node.connections.map(connectionId =>
             renderConnection(node, connectionId)
           )
         )}
@@ -218,9 +246,9 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
             style={{
               left: node.position.x,
               top: node.position.y,
-              zIndex: 10
+              zIndex: 10,
             }}
-            onMouseDown={(e) => handleMouseDown(e, node.id)}
+            onMouseDown={e => handleMouseDown(e, node.id)}
             onClick={() => setSelectedNode(node.id)}
           >
             <div
@@ -236,19 +264,20 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
                 <div className="text-[10px] uppercase tracking-wider">
                   {node.type}
                 </div>
-                <div className="text-[8px] mt-1 opacity-90">
-                  {node.name}
-                </div>
+                <div className="text-[8px] mt-1 opacity-90">{node.name}</div>
               </div>
-              
+
               {/* Status Indicator */}
               <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full border border-white/50">
                 <div
                   className={`w-full h-full rounded-full ${
-                    node.status === 'running' ? 'bg-green-400 animate-pulse' :
-                    node.status === 'completed' ? 'bg-blue-400' :
-                    node.status === 'error' ? 'bg-red-400' :
-                    'bg-gray-400'
+                    node.status === 'running'
+                      ? 'bg-green-400 animate-pulse'
+                      : node.status === 'completed'
+                        ? 'bg-blue-400'
+                        : node.status === 'error'
+                          ? 'bg-red-400'
+                          : 'bg-gray-400'
                   }`}
                 />
               </div>
@@ -269,12 +298,18 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
               <div className="absolute top-20 left-0 bg-bg-primary border border-glass-border rounded-lg p-2 shadow-glow-blue-md z-20 min-w-32">
                 <div className="text-xs text-text-primary">
                   <div className="font-bold">{node.name}</div>
-                  <div className="text-text-secondary">Status: {node.status}</div>
+                  <div className="text-text-secondary">
+                    Status: {node.status}
+                  </div>
                   {node.progress && (
-                    <div className="text-text-secondary">Progress: {node.progress}%</div>
+                    <div className="text-text-secondary">
+                      Progress: {node.progress}%
+                    </div>
                   )}
                   {node.lastActivity && (
-                    <div className="text-text-secondary">Last: {node.lastActivity}</div>
+                    <div className="text-text-secondary">
+                      Last: {node.lastActivity}
+                    </div>
                   )}
                 </div>
               </div>
@@ -285,8 +320,18 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({ className 
         {/* Add Node Button */}
         <div className="absolute bottom-4 right-4">
           <button className="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 text-white shadow-glow-blue-md hover:shadow-glow-blue-lg transition-all duration-300 flex items-center justify-center">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              />
             </svg>
           </button>
         </div>

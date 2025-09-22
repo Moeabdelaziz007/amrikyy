@@ -12,22 +12,23 @@ const STATIC_ASSETS = [
   '/script.js',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
-  '/icons/favicon.ico'
+  '/icons/favicon.ico',
 ];
 
 // ملفات للتخزين المؤقت الديناميكي
 const DYNAMIC_PATTERNS = [
   /^https:\/\/fonts\.googleapis\.com/,
   /^https:\/\/cdnjs\.cloudflare\.com/,
-  /^https:\/\/www\.gstatic\.com\/firebasejs/
+  /^https:\/\/www\.gstatic\.com\/firebasejs/,
 ];
 
 // تثبيت Service Worker
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   console.log('🔧 Service Worker: تثبيت AuraOS');
   event.waitUntil(
-    caches.open(STATIC_CACHE)
-      .then((cache) => {
+    caches
+      .open(STATIC_CACHE)
+      .then(cache => {
         console.log('📦 Service Worker: تخزين الملفات الثابتة');
         return cache.addAll(STATIC_ASSETS);
       })
@@ -39,18 +40,18 @@ self.addEventListener('install', (event) => {
 });
 
 // تفعيل Service Worker
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   console.log('🚀 Service Worker: تفعيل AuraOS');
   event.waitUntil(
-    caches.keys()
-      .then((cacheNames) => {
+    caches
+      .keys()
+      .then(cacheNames => {
         return Promise.all(
           cacheNames
-            .filter((cacheName) => {
-              return cacheName !== STATIC_CACHE && 
-                     cacheName !== DYNAMIC_CACHE;
+            .filter(cacheName => {
+              return cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE;
             })
-            .map((cacheName) => {
+            .map(cacheName => {
               console.log('🗑️ Service Worker: حذف cache قديم:', cacheName);
               return caches.delete(cacheName);
             })
@@ -64,7 +65,7 @@ self.addEventListener('activate', (event) => {
 });
 
 // معالجة الطلبات
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
@@ -92,9 +93,11 @@ self.addEventListener('fetch', (event) => {
   }
 
   // استراتيجية Cache First للصور والملفات الأخرى
-  if (request.destination === 'image' || 
-      request.destination === 'font' ||
-      request.destination === 'style') {
+  if (
+    request.destination === 'image' ||
+    request.destination === 'font' ||
+    request.destination === 'style'
+  ) {
     event.respondWith(cacheFirst(request, DYNAMIC_CACHE));
     return;
   }
@@ -114,7 +117,7 @@ async function cacheFirst(request, cacheName) {
   try {
     const cache = await caches.open(cacheName);
     const cachedResponse = await cache.match(request);
-    
+
     if (cachedResponse) {
       console.log('📦 Service Worker: استرجاع من cache:', request.url);
       return cachedResponse;
@@ -135,7 +138,7 @@ async function cacheFirst(request, cacheName) {
 async function networkFirst(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
-    
+
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
       // فحص نوع الطلب قبل التخزين - Cache API لا يدعم POST
@@ -143,17 +146,17 @@ async function networkFirst(request, cacheName) {
         cache.put(request, networkResponse.clone());
       }
     }
-    
+
     return networkResponse;
   } catch (error) {
     console.log('🌐 Service Worker: محاولة الاسترجاع من cache:', request.url);
     const cache = await caches.open(cacheName);
     const cachedResponse = await cache.match(request);
-    
+
     if (cachedResponse) {
       return cachedResponse;
     }
-    
+
     return new Response('خطأ في الاتصال', { status: 503 });
   }
 }
@@ -162,8 +165,8 @@ async function networkFirst(request, cacheName) {
 async function staleWhileRevalidate(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
-  
-  const fetchPromise = fetch(request).then((networkResponse) => {
+
+  const fetchPromise = fetch(request).then(networkResponse => {
     if (networkResponse.ok && request.method === 'GET') {
       cache.put(request, networkResponse.clone());
     }
@@ -174,23 +177,23 @@ async function staleWhileRevalidate(request, cacheName) {
 }
 
 // معالجة رسائل الخلفية
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
-  
+
   if (event.data && event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage({ version: CACHE_NAME });
   }
 });
 
 // معالجة الأخطاء
-self.addEventListener('error', (event) => {
+self.addEventListener('error', event => {
   console.error('❌ Service Worker: خطأ:', event.error);
 });
 
 // معالجة الرفض غير المعالج
-self.addEventListener('unhandledrejection', (event) => {
+self.addEventListener('unhandledrejection', event => {
   console.error('❌ Service Worker: رفض غير معالج:', event.reason);
 });
 

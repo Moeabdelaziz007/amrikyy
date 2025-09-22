@@ -94,7 +94,7 @@ export class ImageOptimizer {
         outputDir,
         `${path.basename(inputPath, path.extname(inputPath))}-${suffix}.webp`
       );
-      
+
       await this.optimizeImage(inputPath, outputPath, {
         width,
         height,
@@ -113,7 +113,7 @@ export class ImageOptimizer {
     options: ImageOptimizationOptions = {}
   ): Promise<void> {
     const cacheKey = this.generateCacheKey(inputPath, options);
-    
+
     if (this.cache.has(cacheKey)) {
       const cachedBuffer = this.cache.get(cacheKey)!;
       await fs.writeFile(outputPath, cachedBuffer);
@@ -121,16 +121,21 @@ export class ImageOptimizer {
     }
 
     await this.optimizeImage(inputPath, outputPath, options);
-    
+
     // تخزين في التخزين المؤقت
     const optimizedBuffer = await fs.readFile(outputPath);
     this.cache.set(cacheKey, optimizedBuffer);
   }
 
   // إنشاء مفتاح التخزين المؤقت
-  private static generateCacheKey(inputPath: string, options: ImageOptimizationOptions): string {
+  private static generateCacheKey(
+    inputPath: string,
+    options: ImageOptimizationOptions
+  ): string {
     const optionsString = JSON.stringify(options);
-    const hash = createHash('md5').update(`${inputPath}:${optionsString}`).digest('hex');
+    const hash = createHash('md5')
+      .update(`${inputPath}:${optionsString}`)
+      .digest('hex');
     return hash;
   }
 
@@ -236,10 +241,13 @@ export class ImageOptimizer {
 
 export class AssetOptimizer {
   // تحسين ملف CSS
-  static async optimizeCSS(inputPath: string, outputPath: string): Promise<void> {
+  static async optimizeCSS(
+    inputPath: string,
+    outputPath: string
+  ): Promise<void> {
     try {
       const css = await fs.readFile(inputPath, 'utf8');
-      
+
       // إزالة التعليقات والمسافات الزائدة
       const optimizedCSS = css
         .replace(/\/\*[\s\S]*?\*\//g, '') // إزالة التعليقات
@@ -258,10 +266,13 @@ export class AssetOptimizer {
   }
 
   // تحسين ملف JavaScript
-  static async optimizeJS(inputPath: string, outputPath: string): Promise<void> {
+  static async optimizeJS(
+    inputPath: string,
+    outputPath: string
+  ): Promise<void> {
     try {
       const js = await fs.readFile(inputPath, 'utf8');
-      
+
       // إزالة التعليقات والمسافات الزائدة
       const optimizedJS = js
         .replace(/\/\*[\s\S]*?\*\//g, '') // إزالة التعليقات متعددة الأسطر
@@ -280,10 +291,13 @@ export class AssetOptimizer {
   }
 
   // تحسين ملف HTML
-  static async optimizeHTML(inputPath: string, outputPath: string): Promise<void> {
+  static async optimizeHTML(
+    inputPath: string,
+    outputPath: string
+  ): Promise<void> {
     try {
       const html = await fs.readFile(inputPath, 'utf8');
-      
+
       // إزالة المسافات الزائدة والتحسين
       const optimizedHTML = html
         .replace(/\s+/g, ' ') // ضغط المسافات
@@ -299,12 +313,15 @@ export class AssetOptimizer {
   }
 
   // تحسين ملف JSON
-  static async optimizeJSON(inputPath: string, outputPath: string): Promise<void> {
+  static async optimizeJSON(
+    inputPath: string,
+    outputPath: string
+  ): Promise<void> {
     try {
       const json = await fs.readFile(inputPath, 'utf8');
       const parsed = JSON.parse(json);
       const optimizedJSON = JSON.stringify(parsed);
-      
+
       await fs.writeFile(outputPath, optimizedJSON);
     } catch (error) {
       console.error('Error optimizing JSON:', error);
@@ -319,13 +336,13 @@ export class AssetOptimizer {
     options: AssetOptimizationOptions = {}
   ): Promise<void> {
     const files = await fs.readdir(inputDir);
-    
+
     for (const file of files) {
       const inputPath = path.join(inputDir, file);
       const outputPath = path.join(outputDir, file);
-      
+
       const ext = path.extname(file).toLowerCase();
-      
+
       try {
         switch (ext) {
           case '.css':
@@ -353,16 +370,19 @@ export class AssetOptimizer {
 
 export class FontOptimizer {
   // تحسين الخطوط
-  static async optimizeFonts(inputDir: string, outputDir: string): Promise<void> {
+  static async optimizeFonts(
+    inputDir: string,
+    outputDir: string
+  ): Promise<void> {
     const files = await fs.readdir(inputDir);
-    
+
     for (const file of files) {
       const ext = path.extname(file).toLowerCase();
-      
+
       if (['.woff', '.woff2', '.ttf', '.otf'].includes(ext)) {
         const inputPath = path.join(inputDir, file);
         const outputPath = path.join(outputDir, file);
-        
+
         try {
           // نسخ الخطوط المحسنة
           await fs.copyFile(inputPath, outputPath);
@@ -392,19 +412,27 @@ export class AssetOptimizationManager {
       // تحسين الصور
       const imageDir = path.join(inputDir, 'images');
       const outputImageDir = path.join(outputDir, 'images');
-      
+
       if (await this.directoryExists(imageDir)) {
         await fs.mkdir(outputImageDir, { recursive: true });
-        await this.optimizeImagesInDirectory(imageDir, outputImageDir, options.images);
+        await this.optimizeImagesInDirectory(
+          imageDir,
+          outputImageDir,
+          options.images
+        );
       }
 
       // تحسين الأصول الأخرى
-      await AssetOptimizer.optimizeAssetsInDirectory(inputDir, outputDir, options.assets);
+      await AssetOptimizer.optimizeAssetsInDirectory(
+        inputDir,
+        outputDir,
+        options.assets
+      );
 
       // تحسين الخطوط
       const fontDir = path.join(inputDir, 'fonts');
       const outputFontDir = path.join(outputDir, 'fonts');
-      
+
       if (await this.directoryExists(fontDir)) {
         await fs.mkdir(outputFontDir, { recursive: true });
         await FontOptimizer.optimizeFonts(fontDir, outputFontDir);
@@ -424,14 +452,14 @@ export class AssetOptimizationManager {
     options: ImageOptimizationOptions = {}
   ): Promise<void> {
     const files = await fs.readdir(inputDir);
-    
+
     for (const file of files) {
       const ext = path.extname(file).toLowerCase();
-      
+
       if (['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff'].includes(ext)) {
         const inputPath = path.join(inputDir, file);
         const outputPath = path.join(outputDir, file.replace(ext, '.webp'));
-        
+
         try {
           await ImageOptimizer.optimizeImage(inputPath, outputPath, options);
         } catch (error) {

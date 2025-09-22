@@ -6,35 +6,35 @@ console.log('💬 Getting Telegram Chat ID...');
 console.log('='.repeat(50));
 
 try {
-    // Read current .env
-    let envContent = '';
-    if (fs.existsSync('.env')) {
-        envContent = fs.readFileSync('.env', 'utf8');
-    }
+  // Read current .env
+  let envContent = '';
+  if (fs.existsSync('.env')) {
+    envContent = fs.readFileSync('.env', 'utf8');
+  }
 
-    console.log('📝 To get your Chat ID:');
-    console.log('='.repeat(50));
-    console.log('1. Open Telegram');
-    console.log('2. Search for @RawDataBot');
-    console.log('3. Send /start');
-    console.log('4. You will receive a message with your Chat ID');
-    console.log('5. Copy the Chat ID (it looks like: 123456789)');
-    console.log('='.repeat(50));
-    console.log('📝 Alternative method:');
-    console.log('1. Open Telegram');
-    console.log('2. Search for your bot: @Amrikyybot');
-    console.log('3. Send /start to your bot');
-    console.log('4. Send /get_chat_id to your bot');
-    console.log('5. Your bot will reply with your Chat ID');
-    console.log('='.repeat(50));
-    console.log('🚀 After getting Chat ID:');
-    console.log('1. Update TELEGRAM_ADMIN_CHAT_ID in .env file');
-    console.log('2. Run: node test-telegram.cjs');
-    console.log('3. Run: node test-complete-system.cjs');
-    console.log('='.repeat(50));
+  console.log('📝 To get your Chat ID:');
+  console.log('='.repeat(50));
+  console.log('1. Open Telegram');
+  console.log('2. Search for @RawDataBot');
+  console.log('3. Send /start');
+  console.log('4. You will receive a message with your Chat ID');
+  console.log('5. Copy the Chat ID (it looks like: 123456789)');
+  console.log('='.repeat(50));
+  console.log('📝 Alternative method:');
+  console.log('1. Open Telegram');
+  console.log('2. Search for your bot: @Amrikyybot');
+  console.log('3. Send /start to your bot');
+  console.log('4. Send /get_chat_id to your bot');
+  console.log('5. Your bot will reply with your Chat ID');
+  console.log('='.repeat(50));
+  console.log('🚀 After getting Chat ID:');
+  console.log('1. Update TELEGRAM_ADMIN_CHAT_ID in .env file');
+  console.log('2. Run: node test-telegram.cjs');
+  console.log('3. Run: node test-complete-system.cjs');
+  console.log('='.repeat(50));
 
-    // Create a simple test script
-    const testScript = `
+  // Create a simple test script
+  const testScript = `
 #!/usr/bin/env node
 
 require('dotenv').config();
@@ -72,11 +72,10 @@ bot.sendMessage(process.env.TELEGRAM_ADMIN_CHAT_ID,
 });
 `;
 
-    fs.writeFileSync('test-telegram-chat.cjs', testScript);
+  fs.writeFileSync('test-telegram-chat.cjs', testScript);
 
-    console.log('📁 Created test-telegram-chat.cjs');
-    console.log('📝 Run it after updating Chat ID: node test-telegram-chat.cjs');
-
+  console.log('📁 Created test-telegram-chat.cjs');
+  console.log('📝 Run it after updating Chat ID: node test-telegram-chat.cjs');
 } catch (error) {
-    console.error('❌ Setup failed:', error.message);
+  console.error('❌ Setup failed:', error.message);
 }

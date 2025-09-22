@@ -64,8 +64,18 @@ export interface AnalyticsConfig {
     schedules: {
       daily: { enabled: boolean; time: string; timezone: string };
       weekly: { enabled: boolean; day: string; time: string; timezone: string };
-      monthly: { enabled: boolean; day: number; time: string; timezone: string };
-      quarterly: { enabled: boolean; day: number; time: string; timezone: string };
+      monthly: {
+        enabled: boolean;
+        day: number;
+        time: string;
+        timezone: string;
+      };
+      quarterly: {
+        enabled: boolean;
+        day: number;
+        time: string;
+        timezone: string;
+      };
     };
     templates: {
       performance: boolean;
@@ -199,7 +209,13 @@ export const defaultAnalyticsConfig: AnalyticsConfig = {
 
   predictive: {
     enabled: true,
-    modelTypes: ['user_behavior', 'performance', 'engagement', 'retention', 'conversion'],
+    modelTypes: [
+      'user_behavior',
+      'performance',
+      'engagement',
+      'retention',
+      'conversion',
+    ],
     predictionHorizons: {
       short: 7, // days
       medium: 4, // weeks
@@ -425,7 +441,7 @@ export class AnalyticsConfigManager {
 // Environment-specific configurations
 export const getEnvironmentConfig = (): Partial<AnalyticsConfig> => {
   const env = process.env.NODE_ENV;
-  
+
   switch (env) {
     case 'development':
       return {
@@ -512,7 +528,9 @@ export const getEnvironmentConfig = (): Partial<AnalyticsConfig> => {
 };
 
 // Validation functions
-export const validateConfig = (config: AnalyticsConfig): { valid: boolean; errors: string[] } => {
+export const validateConfig = (
+  config: AnalyticsConfig
+): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
   // Validate AI configuration
@@ -523,7 +541,10 @@ export const validateConfig = (config: AnalyticsConfig): { valid: boolean; error
     if (config.ai.timeout < 1000) {
       errors.push('AI timeout must be at least 1000ms');
     }
-    if (config.ai.confidenceThreshold < 0 || config.ai.confidenceThreshold > 100) {
+    if (
+      config.ai.confidenceThreshold < 0 ||
+      config.ai.confidenceThreshold > 100
+    ) {
       errors.push('AI confidence threshold must be between 0 and 100');
     }
   }
@@ -543,7 +564,10 @@ export const validateConfig = (config: AnalyticsConfig): { valid: boolean; error
     if (config.security.alertThresholds.suspiciousActivity < 1) {
       errors.push('Suspicious activity threshold must be at least 1');
     }
-    if (config.security.alertThresholds.errorSpike < 0 || config.security.alertThresholds.errorSpike > 100) {
+    if (
+      config.security.alertThresholds.errorSpike < 0 ||
+      config.security.alertThresholds.errorSpike > 100
+    ) {
       errors.push('Error spike threshold must be between 0 and 100');
     }
   }
@@ -583,8 +607,13 @@ export const validateConfig = (config: AnalyticsConfig): { valid: boolean; error
     if (config.api.rateLimiting.requestsPerMinute < 1) {
       errors.push('API requests per minute must be at least 1');
     }
-    if (config.api.rateLimiting.burstLimit < config.api.rateLimiting.requestsPerMinute) {
-      errors.push('API burst limit must be greater than or equal to requests per minute');
+    if (
+      config.api.rateLimiting.burstLimit <
+      config.api.rateLimiting.requestsPerMinute
+    ) {
+      errors.push(
+        'API burst limit must be greater than or equal to requests per minute'
+      );
     }
   }
 

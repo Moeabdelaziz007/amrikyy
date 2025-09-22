@@ -51,7 +51,7 @@ class SimpleCache {
   set<T>(key: string, data: T, ttl?: number): void {
     this.cache.set(key, {
       data,
-      expires: Date.now() + (ttl || this.ttl)
+      expires: Date.now() + (ttl || this.ttl),
     });
   }
 
@@ -62,12 +62,20 @@ class SimpleCache {
 
 // Rate limiter
 class RateLimiter {
-  private buckets: Map<string, { count: number; resetTime: number }> = new Map();
+  private buckets: Map<string, { count: number; resetTime: number }> =
+    new Map();
 
-  async checkLimit(key: string, limit: number, window: number = 60000): Promise<boolean> {
+  async checkLimit(
+    key: string,
+    limit: number,
+    window: number = 60000
+  ): Promise<boolean> {
     const now = Date.now();
     const bucketKey = `${key}_${Math.floor(now / window)}`;
-    const bucket = this.buckets.get(bucketKey) || { count: 0, resetTime: now + window };
+    const bucket = this.buckets.get(bucketKey) || {
+      count: 0,
+      resetTime: now + window,
+    };
 
     if (now > bucket.resetTime) {
       bucket.count = 0;
@@ -117,24 +125,24 @@ export class ImprovedMCPProtocol extends EventEmitter {
       apis: {
         huggingface: {
           key: process.env.HUGGINGFACE_API_KEY || 'hf_your_free_token',
-          baseUrl: 'https://api-inference.huggingface.co/models'
+          baseUrl: 'https://api-inference.huggingface.co/models',
         },
         libreTranslate: {
-          baseUrl: 'https://libretranslate.de'
+          baseUrl: 'https://libretranslate.de',
         },
         myMemory: {
-          baseUrl: 'https://api.mymemory.translated.net'
-        }
+          baseUrl: 'https://api.mymemory.translated.net',
+        },
       },
       limits: {
         defaultRateLimit: 100,
         maxRetries: 3,
-        timeout: 30000
+        timeout: 30000,
       },
       cache: {
         ttl: 300000,
-        maxSize: 1000
-      }
+        maxSize: 1000,
+      },
     };
 
     return { ...defaultConfig, ...override };
@@ -154,14 +162,22 @@ export class ImprovedMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           text: { type: 'string', description: 'Text to analyze' },
-          provider: { type: 'string', enum: ['huggingface', 'fallback'], default: 'huggingface' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          provider: {
+            type: 'string',
+            enum: ['huggingface', 'fallback'],
+            default: 'huggingface',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text']
+        required: ['text'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithEnhancements('sentiment', params);
-      }
+      },
     });
 
     // Enhanced Translation Tool
@@ -177,16 +193,28 @@ export class ImprovedMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           text: { type: 'string', description: 'Text to translate' },
-          from: { type: 'string', description: 'Source language', default: 'auto' },
+          from: {
+            type: 'string',
+            description: 'Source language',
+            default: 'auto',
+          },
           to: { type: 'string', description: 'Target language', default: 'en' },
-          provider: { type: 'string', enum: ['libre', 'mymemory'], default: 'libre' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          provider: {
+            type: 'string',
+            enum: ['libre', 'mymemory'],
+            default: 'libre',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text', 'to']
+        required: ['text', 'to'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithEnhancements('translation', params);
-      }
+      },
     });
 
     // Enhanced Web Scraping Tool
@@ -202,22 +230,38 @@ export class ImprovedMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           url: { type: 'string', description: 'URL to scrape' },
-          selector: { type: 'string', description: 'CSS selector for specific content' },
-          format: { type: 'string', enum: ['html', 'text', 'json'], default: 'text' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true },
-          timeout: { type: 'number', description: 'Request timeout in ms', default: 20000 }
+          selector: {
+            type: 'string',
+            description: 'CSS selector for specific content',
+          },
+          format: {
+            type: 'string',
+            enum: ['html', 'text', 'json'],
+            default: 'text',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
+          timeout: {
+            type: 'number',
+            description: 'Request timeout in ms',
+            default: 20000,
+          },
         },
-        required: ['url']
+        required: ['url'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithEnhancements('scraping', params);
-      }
+      },
     });
 
     // Enhanced Data Processing Tool
     this.addTool({
       name: 'enhanced_data_processing',
-      description: 'Enhanced data processing with validation and error handling',
+      description:
+        'Enhanced data processing with validation and error handling',
       category: 'data',
       isFree: true,
       rateLimit: 1000,
@@ -227,15 +271,23 @@ export class ImprovedMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           data: { type: 'string', description: 'Data to process' },
-          format: { type: 'string', enum: ['json', 'csv', 'xml'], description: 'Data format' },
-          operation: { type: 'string', enum: ['validate', 'parse', 'transform', 'analyze'], default: 'parse' },
-          options: { type: 'object', description: 'Processing options' }
+          format: {
+            type: 'string',
+            enum: ['json', 'csv', 'xml'],
+            description: 'Data format',
+          },
+          operation: {
+            type: 'string',
+            enum: ['validate', 'parse', 'transform', 'analyze'],
+            default: 'parse',
+          },
+          options: { type: 'object', description: 'Processing options' },
         },
-        required: ['data', 'format']
+        required: ['data', 'format'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithEnhancements('data_processing', params);
-      }
+      },
     });
   }
 
@@ -243,17 +295,29 @@ export class ImprovedMCPProtocol extends EventEmitter {
     this.tools.set(tool.name, tool);
   }
 
-  private async executeWithEnhancements(operation: string, params: any): Promise<any> {
-    const tool = this.tools.get(`enhanced_${operation}`) || this.tools.get(operation);
+  private async executeWithEnhancements(
+    operation: string,
+    params: any
+  ): Promise<any> {
+    const tool =
+      this.tools.get(`enhanced_${operation}`) || this.tools.get(operation);
     if (!tool) {
       throw new MCPError('TOOL_NOT_FOUND', `Tool ${operation} not found`);
     }
 
     // Check rate limits
     if (tool.rateLimit) {
-      const canProceed = await this.rateLimiter.checkLimit(tool.name, tool.rateLimit);
+      const canProceed = await this.rateLimiter.checkLimit(
+        tool.name,
+        tool.rateLimit
+      );
       if (!canProceed) {
-        throw new MCPError('RATE_LIMIT_EXCEEDED', `Rate limit exceeded for ${tool.name}`, null, true);
+        throw new MCPError(
+          'RATE_LIMIT_EXCEEDED',
+          `Rate limit exceeded for ${tool.name}`,
+          null,
+          true
+        );
       }
     }
 
@@ -288,33 +352,43 @@ export class ImprovedMCPProtocol extends EventEmitter {
     delay: number = 1000
   ): Promise<T> {
     let lastError: Error;
-    
+
     for (let i = 0; i < maxRetries; i++) {
       try {
         return await operation();
       } catch (error) {
         lastError = error as Error;
         this.incrementMetric('tool_errors');
-        
+
         if (i === maxRetries - 1) {
           break;
         }
-        
+
         // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        await new Promise(resolve =>
+          setTimeout(resolve, delay * Math.pow(2, i))
+        );
       }
     }
-    
-    throw new MCPError('MAX_RETRIES_EXCEEDED', `Max retries exceeded: ${lastError.message}`, lastError, false);
+
+    throw new MCPError(
+      'MAX_RETRIES_EXCEEDED',
+      `Max retries exceeded: ${lastError.message}`,
+      lastError,
+      false
+    );
   }
 
-  private async executeToolOperation(tool: EnhancedMCPTool, params: any): Promise<any> {
+  private async executeToolOperation(
+    tool: EnhancedMCPTool,
+    params: any
+  ): Promise<any> {
     const startTime = Date.now();
-    
+
     try {
       // Input validation
       this.validateInput(tool, params);
-      
+
       // Execute tool-specific logic
       let result;
       switch (tool.name) {
@@ -333,17 +407,16 @@ export class ImprovedMCPProtocol extends EventEmitter {
         default:
           throw new MCPError('UNKNOWN_TOOL', `Unknown tool: ${tool.name}`);
       }
-      
+
       const duration = Date.now() - startTime;
       this.incrementMetric('tool_duration', duration);
-      
+
       return {
         success: true,
         result,
         duration,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
-      
     } catch (error) {
       const duration = Date.now() - startTime;
       this.incrementMetric('tool_error_duration', duration);
@@ -354,18 +427,21 @@ export class ImprovedMCPProtocol extends EventEmitter {
   private validateInput(tool: EnhancedMCPTool, params: any): void {
     const schema = tool.inputSchema;
     const required = schema.required || [];
-    
+
     for (const field of required) {
       if (params[field] === undefined || params[field] === null) {
-        throw new MCPError('VALIDATION_ERROR', `Required field '${field}' is missing`);
+        throw new MCPError(
+          'VALIDATION_ERROR',
+          `Required field '${field}' is missing`
+        );
       }
     }
-    
+
     // Additional validation based on tool type
     if (tool.name.includes('web_scraping') && params.url) {
       this.validateUrl(params.url);
     }
-    
+
     if (tool.name.includes('translation') && params.text) {
       this.sanitizeText(params.text);
     }
@@ -375,7 +451,10 @@ export class ImprovedMCPProtocol extends EventEmitter {
     try {
       const parsed = new URL(url);
       if (!['http:', 'https:'].includes(parsed.protocol)) {
-        throw new MCPError('INVALID_URL', 'Only HTTP and HTTPS URLs are allowed');
+        throw new MCPError(
+          'INVALID_URL',
+          'Only HTTP and HTTPS URLs are allowed'
+        );
       }
     } catch {
       throw new MCPError('INVALID_URL', 'Invalid URL format');
@@ -393,7 +472,7 @@ export class ImprovedMCPProtocol extends EventEmitter {
   private async analyzeSentimentEnhanced(params: any): Promise<any> {
     const { text, provider } = params;
     const sanitizedText = this.sanitizeText(text);
-    
+
     if (provider === 'huggingface') {
       try {
         const response = await axios.post(
@@ -401,10 +480,10 @@ export class ImprovedMCPProtocol extends EventEmitter {
           { inputs: sanitizedText },
           {
             headers: {
-              'Authorization': `Bearer ${this.config.apis.huggingface.key}`,
+              Authorization: `Bearer ${this.config.apis.huggingface.key}`,
               'Content-Type': 'application/json',
             },
-            timeout: this.config.limits.timeout
+            timeout: this.config.limits.timeout,
           }
         );
         return { sentiment: response.data, provider: 'huggingface' };
@@ -418,65 +497,103 @@ export class ImprovedMCPProtocol extends EventEmitter {
   }
 
   private fallbackSentimentAnalysis(text: string): any {
-    const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic', 'love', 'like', 'happy', 'joy'];
-    const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'dislike', 'horrible', 'worst', 'disappointed', 'sad', 'angry'];
-    
+    const positiveWords = [
+      'good',
+      'great',
+      'excellent',
+      'amazing',
+      'wonderful',
+      'fantastic',
+      'love',
+      'like',
+      'happy',
+      'joy',
+    ];
+    const negativeWords = [
+      'bad',
+      'terrible',
+      'awful',
+      'hate',
+      'dislike',
+      'horrible',
+      'worst',
+      'disappointed',
+      'sad',
+      'angry',
+    ];
+
     const words = text.toLowerCase().split(/\s+/);
     let positiveScore = 0;
     let negativeScore = 0;
-    
+
     words.forEach(word => {
       if (positiveWords.includes(word)) positiveScore++;
       if (negativeWords.includes(word)) negativeScore++;
     });
-    
+
     const totalScore = positiveScore + negativeScore;
-    if (totalScore === 0) return { sentiment: 'neutral', confidence: 0.5, provider: 'fallback' };
-    
+    if (totalScore === 0)
+      return { sentiment: 'neutral', confidence: 0.5, provider: 'fallback' };
+
     const sentiment = positiveScore > negativeScore ? 'positive' : 'negative';
     const confidence = Math.abs(positiveScore - negativeScore) / totalScore;
-    
+
     return { sentiment, confidence, provider: 'fallback' };
   }
 
   private async translateTextEnhanced(params: any): Promise<any> {
     const { text, from, to, provider } = params;
     const sanitizedText = this.sanitizeText(text);
-    
+
     try {
       if (provider === 'libre') {
-        const response = await axios.post(`${this.config.apis.libreTranslate.baseUrl}/translate`, {
-          q: sanitizedText,
-          source: from,
-          target: to,
-          format: 'text'
-        }, { timeout: this.config.limits.timeout });
-        
+        const response = await axios.post(
+          `${this.config.apis.libreTranslate.baseUrl}/translate`,
+          {
+            q: sanitizedText,
+            source: from,
+            target: to,
+            format: 'text',
+          },
+          { timeout: this.config.limits.timeout }
+        );
+
         return { translation: response.data.translatedText, provider: 'libre' };
       } else {
-        const response = await axios.get(`${this.config.apis.myMemory.baseUrl}/get`, {
-          params: { q: sanitizedText, langpair: `${from}|${to}` },
-          timeout: this.config.limits.timeout
-        });
-        
-        return { translation: response.data.responseData.translatedText, provider: 'mymemory' };
+        const response = await axios.get(
+          `${this.config.apis.myMemory.baseUrl}/get`,
+          {
+            params: { q: sanitizedText, langpair: `${from}|${to}` },
+            timeout: this.config.limits.timeout,
+          }
+        );
+
+        return {
+          translation: response.data.responseData.translatedText,
+          provider: 'mymemory',
+        };
       }
     } catch (error) {
-      throw new MCPError('TRANSLATION_ERROR', `Translation failed: ${error.message}`, error, true);
+      throw new MCPError(
+        'TRANSLATION_ERROR',
+        `Translation failed: ${error.message}`,
+        error,
+        true
+      );
     }
   }
 
   private async scrapeWebEnhanced(params: any): Promise<any> {
     const { url, format = 'text' } = params;
-    
+
     try {
       const response = await axios.get(url, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; MCPBot/1.0)'
+          'User-Agent': 'Mozilla/5.0 (compatible; MCPBot/1.0)',
         },
-        timeout: params.timeout || this.config.limits.timeout
+        timeout: params.timeout || this.config.limits.timeout,
       });
-      
+
       if (format === 'html') {
         return { content: response.data, format: 'html' };
       } else {
@@ -484,13 +601,18 @@ export class ImprovedMCPProtocol extends EventEmitter {
         return { content: textContent, format: 'text' };
       }
     } catch (error) {
-      throw new MCPError('SCRAPING_ERROR', `Web scraping failed: ${error.message}`, error, true);
+      throw new MCPError(
+        'SCRAPING_ERROR',
+        `Web scraping failed: ${error.message}`,
+        error,
+        true
+      );
     }
   }
 
   private async processDataEnhanced(params: any): Promise<any> {
     const { data, format, operation } = params;
-    
+
     try {
       switch (format) {
         case 'json':
@@ -498,16 +620,23 @@ export class ImprovedMCPProtocol extends EventEmitter {
         case 'csv':
           return this.processCsvData(data, operation);
         default:
-          throw new MCPError('UNSUPPORTED_FORMAT', `Unsupported format: ${format}`);
+          throw new MCPError(
+            'UNSUPPORTED_FORMAT',
+            `Unsupported format: ${format}`
+          );
       }
     } catch (error) {
-      throw new MCPError('DATA_PROCESSING_ERROR', `Data processing failed: ${error.message}`, error);
+      throw new MCPError(
+        'DATA_PROCESSING_ERROR',
+        `Data processing failed: ${error.message}`,
+        error
+      );
     }
   }
 
   private processJsonData(data: string, operation: string): any {
     const parsed = JSON.parse(data);
-    
+
     switch (operation) {
       case 'validate':
         return { valid: true, message: 'JSON is valid' };
@@ -516,10 +645,10 @@ export class ImprovedMCPProtocol extends EventEmitter {
       case 'transform':
         return { transformed: JSON.stringify(parsed, null, 2) };
       case 'analyze':
-        return { 
+        return {
           keys: Object.keys(parsed),
           size: JSON.stringify(parsed).length,
-          type: Array.isArray(parsed) ? 'array' : 'object'
+          type: Array.isArray(parsed) ? 'array' : 'object',
         };
       default:
         return { data: parsed };
@@ -530,20 +659,24 @@ export class ImprovedMCPProtocol extends EventEmitter {
     const lines = data.split('\n').filter(line => line.trim());
     const headers = lines[0].split(',');
     const rows = lines.slice(1).map(line => line.split(','));
-    
+
     switch (operation) {
       case 'validate':
         return { valid: true, rows: rows.length, columns: headers.length };
       case 'parse':
         return { headers, rows };
       case 'transform':
-        return { json: rows.map(row => Object.fromEntries(headers.map((h, i) => [h, row[i]]))) };
+        return {
+          json: rows.map(row =>
+            Object.fromEntries(headers.map((h, i) => [h, row[i]]))
+          ),
+        };
       case 'analyze':
         return {
           totalRows: rows.length,
           columns: headers.length,
           headers,
-          sample: rows.slice(0, 3)
+          sample: rows.slice(0, 3),
         };
       default:
         return { headers, rows };
@@ -569,7 +702,10 @@ export class ImprovedMCPProtocol extends EventEmitter {
       throw new MCPError('TOOL_NOT_FOUND', `Tool ${name} not found`);
     }
 
-    return await this.executeWithEnhancements(name.replace('enhanced_', ''), params);
+    return await this.executeWithEnhancements(
+      name.replace('enhanced_', ''),
+      params
+    );
   }
 
   public getMetrics(): Record<string, number> {

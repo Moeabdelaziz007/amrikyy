@@ -1,9 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.default = LoadingPage;
-const card_1 = require("@/components/ui/card");
+const card_1 = require('@/components/ui/card');
 function LoadingPage() {
-    return (<div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-4">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-accent/10 flex items-center justify-center p-4">
       <card_1.Card className="w-full max-w-md">
         <card_1.CardContent className="p-8 text-center">
           {/* Logo */}
@@ -12,7 +13,9 @@ function LoadingPage() {
               <i className="fas fa-robot text-white text-2xl"></i>
             </div>
             <h1 className="text-2xl font-bold text-foreground">AuraOS</h1>
-            <p className="text-sm text-muted-foreground">AI-Powered Social Media Platform</p>
+            <p className="text-sm text-muted-foreground">
+              AI-Powered Social Media Platform
+            </p>
           </div>
 
           {/* Loading Animation */}
@@ -20,11 +23,16 @@ function LoadingPage() {
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
-            
+
             <div className="space-y-2">
-              <p className="text-sm font-medium text-foreground">Loading your workspace...</p>
+              <p className="text-sm font-medium text-foreground">
+                Loading your workspace...
+              </p>
               <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-primary h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                <div
+                  className="bg-primary h-2 rounded-full animate-pulse"
+                  style={{ width: '60%' }}
+                ></div>
               </div>
             </div>
 
@@ -51,7 +59,9 @@ function LoadingPage() {
 
           {/* Features Preview */}
           <div className="mt-8 pt-6 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-3">Powered by advanced AI</p>
+            <p className="text-xs text-muted-foreground mb-3">
+              Powered by advanced AI
+            </p>
             <div className="flex justify-center gap-4 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <i className="fas fa-brain text-primary"></i>
@@ -69,5 +79,6 @@ function LoadingPage() {
           </div>
         </card_1.CardContent>
       </card_1.Card>
-    </div>);
+    </div>
+  );
 }

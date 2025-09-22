@@ -1,8 +1,13 @@
 // Travel API Service - Frontend <-> Backend for travel features
-import { FlightSearchParams, HotelSearchParams, TravelBookingRequest } from '@/types/travel';
+import {
+  FlightSearchParams,
+  HotelSearchParams,
+  TravelBookingRequest,
+} from '@/types/travel';
 
 // Base API configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 const API_VERSION = 'v1';
 
 interface ApiResponse<T = any> {
@@ -47,7 +52,7 @@ class TravelApiService {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const defaultHeaders: HeadersInit = {
       'Content-Type': 'application/json',
     };
@@ -80,9 +85,12 @@ class TravelApiService {
   }
 
   // GET request
-  private async get<T>(endpoint: string, params?: Record<string, any>): Promise<ApiResponse<T>> {
+  private async get<T>(
+    endpoint: string,
+    params?: Record<string, any>
+  ): Promise<ApiResponse<T>> {
     const url = new URL(`${this.baseUrl}${endpoint}`);
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {

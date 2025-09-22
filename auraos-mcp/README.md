@@ -5,6 +5,7 @@ FastAPI adapter to expose AuraOS actions to Cursor via MCP (Model Context Protoc
 ## Features
 
 ✨ **Integrated Control Panel** - Manage AuraOS directly from Cursor IDE
+
 - List and monitor workflows
 - Restart services
 - View metrics and logs
@@ -22,12 +23,14 @@ FastAPI adapter to expose AuraOS actions to Cursor via MCP (Model Context Protoc
 ## Installation
 
 1. Install dependencies:
+
 ```bash
 cd auraos-mcp
 pip install -r requirements.txt
 ```
 
 2. Set environment variables:
+
 ```bash
 export AURAOS_API_URL="http://localhost:8001"
 export AURAOS_API_KEY="your-api-key"  # Optional, for authenticated requests
@@ -36,11 +39,13 @@ export AURAOS_API_KEY="your-api-key"  # Optional, for authenticated requests
 ## Running the Server
 
 ### Standalone
+
 ```bash
 python server.py
 ```
 
 ### With Uvicorn (development)
+
 ```bash
 uvicorn server:app --reload --port 5000
 ```
@@ -82,6 +87,7 @@ curl -X POST http://127.0.0.1:5000/mcp/list_workflows
 ## Security
 
 ⚠️ **Important**: Never commit API keys to version control
+
 - Use environment variables for `AURAOS_API_KEY`
 - Add `.env` files to `.gitignore`
 - Use secret managers in production
@@ -89,12 +95,14 @@ curl -X POST http://127.0.0.1:5000/mcp/list_workflows
 ## Benefits
 
 🚀 **Developer Experience**
+
 - Single IDE for code + operations
 - Real-time monitoring while coding
 - Quick service restarts during development
 - Integrated debugging with logs access
 
 👥 **Team Collaboration**
+
 - Zero setup for new team members
 - Consistent tooling across the team
 - Built-in documentation via MCP

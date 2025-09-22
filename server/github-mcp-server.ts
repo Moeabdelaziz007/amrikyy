@@ -21,15 +21,18 @@ export class GitHubMCPServer {
     this.githubToken = githubToken;
     this.owner = owner;
     this.repo = repo;
-    
-    this.server = new Server({
-      name: 'github-mcp-server',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+
+    this.server = new Server(
+      {
+        name: 'github-mcp-server',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupHandlers();
@@ -153,7 +156,13 @@ export class GitHubMCPServer {
           },
           analysis_type: {
             type: 'string',
-            enum: ['quality', 'security', 'performance', 'complexity', 'duplication'],
+            enum: [
+              'quality',
+              'security',
+              'performance',
+              'complexity',
+              'duplication',
+            ],
             description: 'Type of analysis to perform',
           },
           language: {
@@ -340,7 +349,7 @@ export class GitHubMCPServer {
       };
     });
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
       const tool = this.tools.get(name);
 
@@ -399,11 +408,15 @@ export class GitHubMCPServer {
     }
   }
 
-  private async makeGitHubRequest(endpoint: string, method: string = 'GET', data?: any): Promise<any> {
+  private async makeGitHubRequest(
+    endpoint: string,
+    method: string = 'GET',
+    data?: any
+  ): Promise<any> {
     const url = `https://api.github.com/repos/${this.owner}/${this.repo}${endpoint}`;
     const headers = {
-      'Authorization': `token ${this.githubToken}`,
-      'Accept': 'application/vnd.github.v3+json',
+      Authorization: `token ${this.githubToken}`,
+      Accept: 'application/vnd.github.v3+json',
       'User-Agent': 'AuraOS-GitHub-MCP-Server',
     };
 
@@ -416,7 +429,9 @@ export class GitHubMCPServer {
       });
       return response.data;
     } catch (error) {
-      throw new Error(`GitHub API error: ${error.response?.data?.message || error.message}`);
+      throw new Error(
+        `GitHub API error: ${error.response?.data?.message || error.message}`
+      );
     }
   }
 
@@ -425,7 +440,7 @@ export class GitHubMCPServer {
       const repo = await this.makeGitHubRequest('');
       const stats = await this.makeGitHubRequest('/stats/contributors');
       const languages = await this.makeGitHubRequest('/languages');
-      
+
       return {
         success: true,
         repository: {
@@ -483,11 +498,15 @@ export class GitHubMCPServer {
           };
 
         case 'update':
-          const updatedIssue = await this.makeGitHubRequest(`/issues/${issue_number}`, 'PATCH', {
-            title,
-            body,
-            labels: labels || [],
-          });
+          const updatedIssue = await this.makeGitHubRequest(
+            `/issues/${issue_number}`,
+            'PATCH',
+            {
+              title,
+              body,
+              labels: labels || [],
+            }
+          );
           return {
             success: true,
             action: 'update',
@@ -496,9 +515,13 @@ export class GitHubMCPServer {
           };
 
         case 'close':
-          const closedIssue = await this.makeGitHubRequest(`/issues/${issue_number}`, 'PATCH', {
-            state: 'closed',
-          });
+          const closedIssue = await this.makeGitHubRequest(
+            `/issues/${issue_number}`,
+            'PATCH',
+            {
+              state: 'closed',
+            }
+          );
           return {
             success: true,
             action: 'close',
@@ -520,7 +543,17 @@ export class GitHubMCPServer {
   }
 
   private async managePullRequests(args: any): Promise<any> {
-    const { action, title, body, head, base = 'main', pr_number, review_event, review_body, merge_method = 'merge' } = args;
+    const {
+      action,
+      title,
+      body,
+      head,
+      base = 'main',
+      pr_number,
+      review_event,
+      review_body,
+      merge_method = 'merge',
+    } = args;
 
     try {
       switch (action) {
@@ -549,10 +582,14 @@ export class GitHubMCPServer {
           };
 
         case 'review':
-          const review = await this.makeGitHubRequest(`/pulls/${pr_number}/reviews`, 'POST', {
-            event: review_event,
-            body: review_body,
-          });
+          const review = await this.makeGitHubRequest(
+            `/pulls/${pr_number}/reviews`,
+            'POST',
+            {
+              event: review_event,
+              body: review_body,
+            }
+          );
           return {
             success: true,
             action: 'review',
@@ -561,9 +598,13 @@ export class GitHubMCPServer {
           };
 
         case 'merge':
-          const mergeResult = await this.makeGitHubRequest(`/pulls/${pr_number}/merge`, 'PUT', {
-            merge_method,
-          });
+          const mergeResult = await this.makeGitHubRequest(
+            `/pulls/${pr_number}/merge`,
+            'PUT',
+            {
+              merge_method,
+            }
+          );
           return {
             success: true,
             action: 'merge',
@@ -590,7 +631,7 @@ export class GitHubMCPServer {
     try {
       // Get file content
       const fileContent = await this.makeGitHubRequest(`/contents/${path}`);
-      
+
       // Simulate code analysis (in real implementation, you'd use actual analysis tools)
       const analysis = {
         quality: {
@@ -677,8 +718,14 @@ export class GitHubMCPServer {
         },
       };
 
-      const overallScore = Object.values(reviewResults).reduce((sum, result) => sum + result.score, 0) / 4;
-      const hasIssues = Object.values(reviewResults).some(result => result.issues.length > 0);
+      const overallScore =
+        Object.values(reviewResults).reduce(
+          (sum, result) => sum + result.score,
+          0
+        ) / 4;
+      const hasIssues = Object.values(reviewResults).some(
+        result => result.issues.length > 0
+      );
 
       let reviewEvent = 'APPROVE';
       let reviewBody = `🤖 **Automated Code Review**\n\n**Overall Score**: ${overallScore.toFixed(1)}/100\n\n`;
@@ -699,10 +746,14 @@ export class GitHubMCPServer {
       }
 
       // Submit review
-      const review = await this.makeGitHubRequest(`/pulls/${pr_number}/reviews`, 'POST', {
-        event: reviewEvent,
-        body: reviewBody,
-      });
+      const review = await this.makeGitHubRequest(
+        `/pulls/${pr_number}/reviews`,
+        'POST',
+        {
+          event: reviewEvent,
+          body: reviewBody,
+        }
+      );
 
       return {
         success: true,
@@ -725,7 +776,14 @@ export class GitHubMCPServer {
   }
 
   private async manageReleases(args: any): Promise<any> {
-    const { action, tag_name, name, body, draft = false, prerelease = false } = args;
+    const {
+      action,
+      tag_name,
+      name,
+      body,
+      draft = false,
+      prerelease = false,
+    } = args;
 
     try {
       switch (action) {
@@ -768,13 +826,20 @@ export class GitHubMCPServer {
   }
 
   private async manageBranches(args: any): Promise<any> {
-    const { action, branch_name, source_branch = 'main', protection_rules } = args;
+    const {
+      action,
+      branch_name,
+      source_branch = 'main',
+      protection_rules,
+    } = args;
 
     try {
       switch (action) {
         case 'create':
           // Get source branch SHA
-          const sourceBranch = await this.makeGitHubRequest(`/git/refs/heads/${source_branch}`);
+          const sourceBranch = await this.makeGitHubRequest(
+            `/git/refs/heads/${source_branch}`
+          );
           const newBranch = await this.makeGitHubRequest('/git/refs', 'POST', {
             ref: `refs/heads/${branch_name}`,
             sha: sourceBranch.object.sha,
@@ -797,7 +862,10 @@ export class GitHubMCPServer {
           };
 
         case 'delete':
-          await this.makeGitHubRequest(`/git/refs/heads/${branch_name}`, 'DELETE');
+          await this.makeGitHubRequest(
+            `/git/refs/heads/${branch_name}`,
+            'DELETE'
+          );
           return {
             success: true,
             action: 'delete',
@@ -834,9 +902,13 @@ export class GitHubMCPServer {
           };
 
         case 'run':
-          const run = await this.makeGitHubRequest(`/actions/workflows/${workflow_id}/dispatches`, 'POST', {
-            ref,
-          });
+          const run = await this.makeGitHubRequest(
+            `/actions/workflows/${workflow_id}/dispatches`,
+            'POST',
+            {
+              ref,
+            }
+          );
           return {
             success: true,
             action: 'run',
@@ -846,7 +918,9 @@ export class GitHubMCPServer {
           };
 
         case 'status':
-          const runs = await this.makeGitHubRequest(`/actions/workflows/${workflow_id}/runs`);
+          const runs = await this.makeGitHubRequest(
+            `/actions/workflows/${workflow_id}/runs`
+          );
           return {
             success: true,
             action: 'status',

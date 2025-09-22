@@ -8,11 +8,11 @@ export { ControlButton } from './dashboard/ControlButton';
 export { ClientCard } from './dashboard/ClientCard';
 
 // Re-export types if needed
-export type { 
+export type {
   GlassCardProps,
   StatusWidgetProps,
   ControlButtonProps,
-  ClientCardProps 
+  ClientCardProps,
 } from './dashboard/types';
 
 // Default dashboard export for convenience

@@ -66,15 +66,49 @@ export class AdvancedAIToolsManager {
       version: '2.0.0',
       capabilities: ['text_generation', 'style_adaptation', 'multi_language'],
       parameters: [
-        { name: 'prompt', type: 'string', required: true, description: 'Content prompt' },
-        { name: 'style', type: 'string', required: false, description: 'Writing style', default: 'professional' },
-        { name: 'length', type: 'number', required: false, description: 'Content length', default: 500 },
-        { name: 'language', type: 'string', required: false, description: 'Language code', default: 'en' },
-        { name: 'tone', type: 'string', required: false, description: 'Content tone', default: 'neutral' }
+        {
+          name: 'prompt',
+          type: 'string',
+          required: true,
+          description: 'Content prompt',
+        },
+        {
+          name: 'style',
+          type: 'string',
+          required: false,
+          description: 'Writing style',
+          default: 'professional',
+        },
+        {
+          name: 'length',
+          type: 'number',
+          required: false,
+          description: 'Content length',
+          default: 500,
+        },
+        {
+          name: 'language',
+          type: 'string',
+          required: false,
+          description: 'Language code',
+          default: 'en',
+        },
+        {
+          name: 'tone',
+          type: 'string',
+          required: false,
+          description: 'Content tone',
+          default: 'neutral',
+        },
       ],
       execute: this.executeContentGeneration.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Data Analysis Tools
@@ -84,16 +118,48 @@ export class AdvancedAIToolsManager {
       description: 'Analyze data and generate insights using AI',
       category: 'analysis',
       version: '2.0.0',
-      capabilities: ['statistical_analysis', 'pattern_recognition', 'prediction'],
+      capabilities: [
+        'statistical_analysis',
+        'pattern_recognition',
+        'prediction',
+      ],
       parameters: [
-        { name: 'data', type: 'array', required: true, description: 'Data to analyze' },
-        { name: 'analysis_type', type: 'string', required: false, description: 'Type of analysis', default: 'comprehensive' },
-        { name: 'visualization', type: 'boolean', required: false, description: 'Generate visualizations', default: true },
-        { name: 'insights_depth', type: 'string', required: false, description: 'Depth of insights', default: 'detailed' }
+        {
+          name: 'data',
+          type: 'array',
+          required: true,
+          description: 'Data to analyze',
+        },
+        {
+          name: 'analysis_type',
+          type: 'string',
+          required: false,
+          description: 'Type of analysis',
+          default: 'comprehensive',
+        },
+        {
+          name: 'visualization',
+          type: 'boolean',
+          required: false,
+          description: 'Generate visualizations',
+          default: true,
+        },
+        {
+          name: 'insights_depth',
+          type: 'string',
+          required: false,
+          description: 'Depth of insights',
+          default: 'detailed',
+        },
       ],
       execute: this.executeDataAnalysis.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Web Scraping Tools
@@ -105,14 +171,41 @@ export class AdvancedAIToolsManager {
       version: '2.0.0',
       capabilities: ['html_parsing', 'data_extraction', 'content_analysis'],
       parameters: [
-        { name: 'url', type: 'string', required: true, description: 'URL to scrape' },
-        { name: 'selectors', type: 'object', required: false, description: 'CSS selectors for extraction' },
-        { name: 'data_format', type: 'string', required: false, description: 'Output format', default: 'json' },
-        { name: 'respect_robots', type: 'boolean', required: false, description: 'Respect robots.txt', default: true }
+        {
+          name: 'url',
+          type: 'string',
+          required: true,
+          description: 'URL to scrape',
+        },
+        {
+          name: 'selectors',
+          type: 'object',
+          required: false,
+          description: 'CSS selectors for extraction',
+        },
+        {
+          name: 'data_format',
+          type: 'string',
+          required: false,
+          description: 'Output format',
+          default: 'json',
+        },
+        {
+          name: 'respect_robots',
+          type: 'boolean',
+          required: false,
+          description: 'Respect robots.txt',
+          default: true,
+        },
       ],
       execute: this.executeWebScraping.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Free Utility Tools
@@ -124,12 +217,30 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['url_shortening', 'custom_aliases'],
       parameters: [
-        { name: 'url', type: 'string', required: true, description: 'URL to shorten' },
-        { name: 'custom_alias', type: 'string', required: false, description: 'Custom short alias' }
+        {
+          name: 'url',
+          type: 'string',
+          required: true,
+          description: 'URL to shorten',
+        },
+        {
+          name: 'custom_alias',
+          type: 'string',
+          required: false,
+          description: 'Custom short alias',
+        },
       ],
-      execute: async (params: any) => ({ success: true, data: `Shortened: ${params.url}` }),
+      execute: async (params: any) => ({
+        success: true,
+        data: `Shortened: ${params.url}`,
+      }),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -140,12 +251,28 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['qr_generation', 'image_creation'],
       parameters: [
-        { name: 'text', type: 'string', required: true, description: 'Text or URL to encode' },
-        { name: 'size', type: 'number', required: false, description: 'QR code size in pixels', default: 200 }
+        {
+          name: 'text',
+          type: 'string',
+          required: true,
+          description: 'Text or URL to encode',
+        },
+        {
+          name: 'size',
+          type: 'number',
+          required: false,
+          description: 'QR code size in pixels',
+          default: 200,
+        },
       ],
       execute: this.executeQRGenerator.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -156,15 +283,50 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['password_generation', 'security_analysis'],
       parameters: [
-        { name: 'length', type: 'number', required: false, description: 'Password length', default: 12 },
-        { name: 'include_uppercase', type: 'boolean', required: false, description: 'Include uppercase letters', default: true },
-        { name: 'include_lowercase', type: 'boolean', required: false, description: 'Include lowercase letters', default: true },
-        { name: 'include_numbers', type: 'boolean', required: false, description: 'Include numbers', default: true },
-        { name: 'include_symbols', type: 'boolean', required: false, description: 'Include symbols', default: true }
+        {
+          name: 'length',
+          type: 'number',
+          required: false,
+          description: 'Password length',
+          default: 12,
+        },
+        {
+          name: 'include_uppercase',
+          type: 'boolean',
+          required: false,
+          description: 'Include uppercase letters',
+          default: true,
+        },
+        {
+          name: 'include_lowercase',
+          type: 'boolean',
+          required: false,
+          description: 'Include lowercase letters',
+          default: true,
+        },
+        {
+          name: 'include_numbers',
+          type: 'boolean',
+          required: false,
+          description: 'Include numbers',
+          default: true,
+        },
+        {
+          name: 'include_symbols',
+          type: 'boolean',
+          required: false,
+          description: 'Include symbols',
+          default: true,
+        },
       ],
       execute: this.executePasswordGenerator.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -175,12 +337,28 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['base64_encoding', 'base64_decoding'],
       parameters: [
-        { name: 'text', type: 'string', required: true, description: 'Text to encode/decode' },
-        { name: 'operation', type: 'string', required: false, description: 'Operation type', default: 'encode' }
+        {
+          name: 'text',
+          type: 'string',
+          required: true,
+          description: 'Text to encode/decode',
+        },
+        {
+          name: 'operation',
+          type: 'string',
+          required: false,
+          description: 'Operation type',
+          default: 'encode',
+        },
       ],
       execute: this.executeBase64Converter.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -191,12 +369,28 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['json_formatting', 'json_validation'],
       parameters: [
-        { name: 'json_string', type: 'string', required: true, description: 'JSON string to format' },
-        { name: 'indent', type: 'number', required: false, description: 'Indentation spaces', default: 2 }
+        {
+          name: 'json_string',
+          type: 'string',
+          required: true,
+          description: 'JSON string to format',
+        },
+        {
+          name: 'indent',
+          type: 'number',
+          required: false,
+          description: 'Indentation spaces',
+          default: 2,
+        },
       ],
       execute: this.executeJSONFormatter.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -207,12 +401,28 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['hash_generation', 'cryptographic_hashing'],
       parameters: [
-        { name: 'text', type: 'string', required: true, description: 'Text to hash' },
-        { name: 'algorithm', type: 'string', required: false, description: 'Hash algorithm', default: 'sha256' }
+        {
+          name: 'text',
+          type: 'string',
+          required: true,
+          description: 'Text to hash',
+        },
+        {
+          name: 'algorithm',
+          type: 'string',
+          required: false,
+          description: 'Hash algorithm',
+          default: 'sha256',
+        },
       ],
       execute: this.executeHashGenerator.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -223,13 +433,36 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['color_generation', 'palette_creation'],
       parameters: [
-        { name: 'base_color', type: 'string', required: false, description: 'Base color in hex format', default: '#00ff41' },
-        { name: 'palette_type', type: 'string', required: false, description: 'Palette type', default: 'complementary' },
-        { name: 'count', type: 'number', required: false, description: 'Number of colors', default: 5 }
+        {
+          name: 'base_color',
+          type: 'string',
+          required: false,
+          description: 'Base color in hex format',
+          default: '#00ff41',
+        },
+        {
+          name: 'palette_type',
+          type: 'string',
+          required: false,
+          description: 'Palette type',
+          default: 'complementary',
+        },
+        {
+          name: 'count',
+          type: 'number',
+          required: false,
+          description: 'Number of colors',
+          default: 5,
+        },
       ],
       execute: this.executeColorPaletteGenerator.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -238,14 +471,34 @@ export class AdvancedAIToolsManager {
       description: 'Analyze text for sentiment, keywords, and readability',
       category: 'analysis',
       version: '1.0.0',
-      capabilities: ['sentiment_analysis', 'keyword_extraction', 'readability_analysis'],
+      capabilities: [
+        'sentiment_analysis',
+        'keyword_extraction',
+        'readability_analysis',
+      ],
       parameters: [
-        { name: 'text', type: 'string', required: true, description: 'Text to analyze' },
-        { name: 'analysis_type', type: 'string', required: false, description: 'Type of analysis', default: 'all' }
+        {
+          name: 'text',
+          type: 'string',
+          required: true,
+          description: 'Text to analyze',
+        },
+        {
+          name: 'analysis_type',
+          type: 'string',
+          required: false,
+          description: 'Type of analysis',
+          default: 'all',
+        },
       ],
       execute: this.executeTextAnalyzer.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     this.addTool({
@@ -256,12 +509,29 @@ export class AdvancedAIToolsManager {
       version: '1.0.0',
       capabilities: ['uuid_generation', 'unique_identifiers'],
       parameters: [
-        { name: 'version', type: 'string', required: false, description: 'UUID version', default: 'v4' },
-        { name: 'count', type: 'number', required: false, description: 'Number of UUIDs to generate', default: 1 }
+        {
+          name: 'version',
+          type: 'string',
+          required: false,
+          description: 'UUID version',
+          default: 'v4',
+        },
+        {
+          name: 'count',
+          type: 'number',
+          required: false,
+          description: 'Number of UUIDs to generate',
+          default: 1,
+        },
       ],
       execute: this.executeUUIDGenerator.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Image Processing Tools
@@ -271,16 +541,48 @@ export class AdvancedAIToolsManager {
       description: 'Process and analyze images using AI vision',
       category: 'media',
       version: '2.0.0',
-      capabilities: ['image_analysis', 'object_detection', 'text_extraction', 'style_transfer'],
+      capabilities: [
+        'image_analysis',
+        'object_detection',
+        'text_extraction',
+        'style_transfer',
+      ],
       parameters: [
-        { name: 'image_url', type: 'string', required: true, description: 'Image URL or base64' },
-        { name: 'operation', type: 'string', required: false, description: 'Processing operation', default: 'analyze' },
-        { name: 'filters', type: 'array', required: false, description: 'Image filters to apply' },
-        { name: 'output_format', type: 'string', required: false, description: 'Output format', default: 'json' }
+        {
+          name: 'image_url',
+          type: 'string',
+          required: true,
+          description: 'Image URL or base64',
+        },
+        {
+          name: 'operation',
+          type: 'string',
+          required: false,
+          description: 'Processing operation',
+          default: 'analyze',
+        },
+        {
+          name: 'filters',
+          type: 'array',
+          required: false,
+          description: 'Image filters to apply',
+        },
+        {
+          name: 'output_format',
+          type: 'string',
+          required: false,
+          description: 'Output format',
+          default: 'json',
+        },
       ],
       execute: this.executeImageProcessing.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // API Integration Tools
@@ -290,17 +592,54 @@ export class AdvancedAIToolsManager {
       description: 'Integrate with external APIs and services',
       category: 'integration',
       version: '2.0.0',
-      capabilities: ['api_calls', 'data_transformation', 'rate_limiting', 'error_handling'],
+      capabilities: [
+        'api_calls',
+        'data_transformation',
+        'rate_limiting',
+        'error_handling',
+      ],
       parameters: [
-        { name: 'endpoint', type: 'string', required: true, description: 'API endpoint URL' },
-        { name: 'method', type: 'string', required: false, description: 'HTTP method', default: 'GET' },
-        { name: 'headers', type: 'object', required: false, description: 'Request headers' },
-        { name: 'body', type: 'object', required: false, description: 'Request body' },
-        { name: 'timeout', type: 'number', required: false, description: 'Request timeout', default: 30000 }
+        {
+          name: 'endpoint',
+          type: 'string',
+          required: true,
+          description: 'API endpoint URL',
+        },
+        {
+          name: 'method',
+          type: 'string',
+          required: false,
+          description: 'HTTP method',
+          default: 'GET',
+        },
+        {
+          name: 'headers',
+          type: 'object',
+          required: false,
+          description: 'Request headers',
+        },
+        {
+          name: 'body',
+          type: 'object',
+          required: false,
+          description: 'Request body',
+        },
+        {
+          name: 'timeout',
+          type: 'number',
+          required: false,
+          description: 'Request timeout',
+          default: 30000,
+        },
       ],
       execute: this.executeAPIIntegration.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Automation Tools
@@ -310,16 +649,48 @@ export class AdvancedAIToolsManager {
       description: 'Create and execute automated workflows',
       category: 'automation',
       version: '2.0.0',
-      capabilities: ['workflow_creation', 'task_scheduling', 'conditional_logic', 'error_recovery'],
+      capabilities: [
+        'workflow_creation',
+        'task_scheduling',
+        'conditional_logic',
+        'error_recovery',
+      ],
       parameters: [
-        { name: 'workflow_definition', type: 'object', required: true, description: 'Workflow definition' },
-        { name: 'trigger_type', type: 'string', required: false, description: 'Trigger type', default: 'manual' },
-        { name: 'execution_mode', type: 'string', required: false, description: 'Execution mode', default: 'sequential' },
-        { name: 'retry_policy', type: 'object', required: false, description: 'Retry policy' }
+        {
+          name: 'workflow_definition',
+          type: 'object',
+          required: true,
+          description: 'Workflow definition',
+        },
+        {
+          name: 'trigger_type',
+          type: 'string',
+          required: false,
+          description: 'Trigger type',
+          default: 'manual',
+        },
+        {
+          name: 'execution_mode',
+          type: 'string',
+          required: false,
+          description: 'Execution mode',
+          default: 'sequential',
+        },
+        {
+          name: 'retry_policy',
+          type: 'object',
+          required: false,
+          description: 'Retry policy',
+        },
       ],
       execute: this.executeWorkflowAutomation.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Real-time Monitoring Tools
@@ -329,16 +700,47 @@ export class AdvancedAIToolsManager {
       description: 'Monitor and process real-time data streams',
       category: 'monitoring',
       version: '2.0.0',
-      capabilities: ['stream_processing', 'alert_generation', 'data_aggregation', 'trend_analysis'],
+      capabilities: [
+        'stream_processing',
+        'alert_generation',
+        'data_aggregation',
+        'trend_analysis',
+      ],
       parameters: [
-        { name: 'data_source', type: 'string', required: true, description: 'Data source URL or stream' },
-        { name: 'monitoring_rules', type: 'array', required: false, description: 'Monitoring rules' },
-        { name: 'alert_thresholds', type: 'object', required: false, description: 'Alert thresholds' },
-        { name: 'aggregation_window', type: 'number', required: false, description: 'Aggregation window in seconds', default: 60 }
+        {
+          name: 'data_source',
+          type: 'string',
+          required: true,
+          description: 'Data source URL or stream',
+        },
+        {
+          name: 'monitoring_rules',
+          type: 'array',
+          required: false,
+          description: 'Monitoring rules',
+        },
+        {
+          name: 'alert_thresholds',
+          type: 'object',
+          required: false,
+          description: 'Alert thresholds',
+        },
+        {
+          name: 'aggregation_window',
+          type: 'number',
+          required: false,
+          description: 'Aggregation window in seconds',
+          default: 60,
+        },
       ],
       execute: this.executeRealtimeMonitoring.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
 
     // Natural Language Processing Tools
@@ -348,23 +750,56 @@ export class AdvancedAIToolsManager {
       description: 'Process natural language with advanced AI models',
       category: 'nlp',
       version: '2.0.0',
-      capabilities: ['sentiment_analysis', 'entity_extraction', 'text_classification', 'language_translation'],
+      capabilities: [
+        'sentiment_analysis',
+        'entity_extraction',
+        'text_classification',
+        'language_translation',
+      ],
       parameters: [
-        { name: 'text', type: 'string', required: true, description: 'Text to process' },
-        { name: 'operations', type: 'array', required: false, description: 'NLP operations to perform', default: ['sentiment', 'entities'] },
-        { name: 'language', type: 'string', required: false, description: 'Text language', default: 'auto' },
-        { name: 'confidence_threshold', type: 'number', required: false, description: 'Confidence threshold', default: 0.7 }
+        {
+          name: 'text',
+          type: 'string',
+          required: true,
+          description: 'Text to process',
+        },
+        {
+          name: 'operations',
+          type: 'array',
+          required: false,
+          description: 'NLP operations to perform',
+          default: ['sentiment', 'entities'],
+        },
+        {
+          name: 'language',
+          type: 'string',
+          required: false,
+          description: 'Text language',
+          default: 'auto',
+        },
+        {
+          name: 'confidence_threshold',
+          type: 'number',
+          required: false,
+          description: 'Confidence threshold',
+          default: 0.7,
+        },
       ],
       execute: this.executeNLPProcessing.bind(this),
       isActive: true,
-      usage: { totalCalls: 0, successRate: 0, averageExecutionTime: 0, lastUsed: new Date() }
+      usage: {
+        totalCalls: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        lastUsed: new Date(),
+      },
     });
   }
 
   // Tool Management Methods
   addTool(tool: AITool): void {
     this.tools.set(tool.id, tool);
-    
+
     if (!this.toolCategories.has(tool.category)) {
       this.toolCategories.set(tool.category, []);
     }
@@ -403,7 +838,11 @@ export class AdvancedAIToolsManager {
   }
 
   // Tool Execution Methods
-  async executeTool(toolId: string, params: any, context: AIToolContext): Promise<AIToolResult> {
+  async executeTool(
+    toolId: string,
+    params: any,
+    context: AIToolContext
+  ): Promise<AIToolResult> {
     const tool = this.tools.get(toolId);
     if (!tool) {
       return {
@@ -411,7 +850,7 @@ export class AdvancedAIToolsManager {
         error: `Tool not found: ${toolId}`,
         executionTime: 0,
         toolUsed: toolId,
-        confidence: 0
+        confidence: 0,
       };
     }
 
@@ -421,12 +860,12 @@ export class AdvancedAIToolsManager {
         error: `Tool is inactive: ${toolId}`,
         executionTime: 0,
         toolUsed: toolId,
-        confidence: 0
+        confidence: 0,
       };
     }
 
     const startTime = Date.now();
-    
+
     try {
       // Validate parameters
       const validationResult = this.validateParameters(tool, params);
@@ -436,7 +875,7 @@ export class AdvancedAIToolsManager {
           error: `Parameter validation failed: ${validationResult.error}`,
           executionTime: Date.now() - startTime,
           toolUsed: toolId,
-          confidence: 0
+          confidence: 0,
         };
       }
 
@@ -454,7 +893,7 @@ export class AdvancedAIToolsManager {
         executionTime,
         toolUsed: toolId,
         confidence: this.calculateConfidence(result, tool),
-        suggestions: this.generateSuggestions(result, tool)
+        suggestions: this.generateSuggestions(result, tool),
       };
 
       this.storeExecutionHistory(context.userId, toolResult);
@@ -462,7 +901,7 @@ export class AdvancedAIToolsManager {
       return toolResult;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      
+
       // Update usage statistics
       this.updateToolUsage(tool, false, executionTime);
 
@@ -471,7 +910,7 @@ export class AdvancedAIToolsManager {
         error: error.message,
         executionTime,
         toolUsed: toolId,
-        confidence: 0
+        confidence: 0,
       };
 
       this.storeExecutionHistory(context.userId, toolResult);
@@ -480,56 +919,76 @@ export class AdvancedAIToolsManager {
     }
   }
 
-  private validateParameters(tool: AITool, params: any): { valid: boolean; error?: string } {
+  private validateParameters(
+    tool: AITool,
+    params: any
+  ): { valid: boolean; error?: string } {
     for (const param of tool.parameters) {
-      if (param.required && (params[param.name] === undefined || params[param.name] === null)) {
-        return { valid: false, error: `Required parameter missing: ${param.name}` };
+      if (
+        param.required &&
+        (params[param.name] === undefined || params[param.name] === null)
+      ) {
+        return {
+          valid: false,
+          error: `Required parameter missing: ${param.name}`,
+        };
       }
 
       if (params[param.name] !== undefined && param.validation) {
         if (!param.validation(params[param.name])) {
-          return { valid: false, error: `Invalid parameter value: ${param.name}` };
+          return {
+            valid: false,
+            error: `Invalid parameter value: ${param.name}`,
+          };
         }
       }
     }
     return { valid: true };
   }
 
-  private updateToolUsage(tool: AITool, success: boolean, executionTime: number): void {
+  private updateToolUsage(
+    tool: AITool,
+    success: boolean,
+    executionTime: number
+  ): void {
     tool.usage.totalCalls++;
     tool.usage.lastUsed = new Date();
-    
+
     // Update success rate using exponential moving average
     const alpha = 0.1;
-    tool.usage.successRate = alpha * (success ? 1 : 0) + (1 - alpha) * tool.usage.successRate;
-    
+    tool.usage.successRate =
+      alpha * (success ? 1 : 0) + (1 - alpha) * tool.usage.successRate;
+
     // Update average execution time using exponential moving average
-    tool.usage.averageExecutionTime = alpha * executionTime + (1 - alpha) * tool.usage.averageExecutionTime;
+    tool.usage.averageExecutionTime =
+      alpha * executionTime + (1 - alpha) * tool.usage.averageExecutionTime;
   }
 
   private calculateConfidence(result: any, tool: AITool): number {
     // Calculate confidence based on tool performance and result quality
     let confidence = tool.usage.successRate;
-    
+
     // Adjust confidence based on result characteristics
     if (typeof result === 'string' && result.length > 0) {
       confidence += 0.1;
     }
-    
+
     if (typeof result === 'object' && result !== null) {
       confidence += 0.05;
     }
-    
+
     return Math.min(Math.max(confidence, 0), 1);
   }
 
   private generateSuggestions(result: any, tool: AITool): string[] {
     const suggestions: string[] = [];
-    
+
     // Generate suggestions based on tool type and result
     switch (tool.category) {
       case 'content':
-        suggestions.push('Consider adding more specific keywords for better SEO');
+        suggestions.push(
+          'Consider adding more specific keywords for better SEO'
+        );
         suggestions.push('Try different writing styles for variety');
         break;
       case 'analysis':
@@ -541,7 +1000,7 @@ export class AdvancedAIToolsManager {
         suggestions.push('Add error handling for API failures');
         break;
     }
-    
+
     return suggestions;
   }
 
@@ -549,10 +1008,10 @@ export class AdvancedAIToolsManager {
     if (!this.executionHistory.has(userId)) {
       this.executionHistory.set(userId, []);
     }
-    
+
     const history = this.executionHistory.get(userId)!;
     history.push(result);
-    
+
     // Keep only last 100 executions per user
     if (history.length > 100) {
       history.splice(0, history.length - 100);
@@ -560,9 +1019,12 @@ export class AdvancedAIToolsManager {
   }
 
   // Tool Execution Implementations
-  private async executeContentGeneration(params: any, context: AIToolContext): Promise<any> {
+  private async executeContentGeneration(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { prompt, style, length, language, tone } = params;
-    
+
     // Use MCP protocol for AI generation
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `content_gen_${Date.now()}`,
@@ -570,25 +1032,29 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'ai_generation_tool',
-        arguments: { prompt, model: 'gpt-4', max_tokens: length }
+        arguments: { prompt, model: 'gpt-4', max_tokens: length },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
-      content: mcpResult.result?.generatedText || `Generated content for: ${prompt}`,
+      content:
+        mcpResult.result?.generatedText || `Generated content for: ${prompt}`,
       style,
       language,
       tone,
       wordCount: length,
       generatedAt: new Date(),
-      model: 'gpt-4'
+      model: 'gpt-4',
     };
   }
 
-  private async executeDataAnalysis(params: any, context: AIToolContext): Promise<any> {
+  private async executeDataAnalysis(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { data, analysis_type, visualization, insights_depth } = params;
-    
+
     // Use MCP protocol for data analysis
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `data_analysis_${Date.now()}`,
@@ -596,9 +1062,13 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'data_analysis_tool',
-        arguments: { data, analysis_type, parameters: { visualization, insights_depth } }
+        arguments: {
+          data,
+          analysis_type,
+          parameters: { visualization, insights_depth },
+        },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
@@ -606,13 +1076,16 @@ export class AdvancedAIToolsManager {
       dataSize: data.length,
       analysisType: analysis_type,
       visualizations: visualization ? ['chart1.png', 'chart2.png'] : [],
-      confidence: 0.95
+      confidence: 0.95,
     };
   }
 
-  private async executeWebScraping(params: any, context: AIToolContext): Promise<any> {
+  private async executeWebScraping(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { url, selectors, data_format, respect_robots } = params;
-    
+
     // Use MCP protocol for web operations
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `web_scrape_${Date.now()}`,
@@ -620,9 +1093,9 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'web_search_tool',
-        arguments: { query: url, limit: 1 }
+        arguments: { query: url, limit: 1 },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
@@ -631,13 +1104,16 @@ export class AdvancedAIToolsManager {
       format: data_format,
       selectors,
       scrapedAt: new Date(),
-      robotsRespected: respect_robots
+      robotsRespected: respect_robots,
     };
   }
 
-  private async executeImageProcessing(params: any, context: AIToolContext): Promise<any> {
+  private async executeImageProcessing(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { image_url, operation, filters, output_format } = params;
-    
+
     // Use MCP protocol for AI image analysis
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `image_process_${Date.now()}`,
@@ -645,9 +1121,12 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'ai_generation_tool',
-        arguments: { prompt: `Analyze this image: ${image_url}`, model: 'gpt-4-vision' }
+        arguments: {
+          prompt: `Analyze this image: ${image_url}`,
+          model: 'gpt-4-vision',
+        },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
@@ -656,13 +1135,16 @@ export class AdvancedAIToolsManager {
       analysis: mcpResult.result?.generatedText || 'Image analysis completed',
       filters: filters || [],
       outputFormat: output_format,
-      processedAt: new Date()
+      processedAt: new Date(),
     };
   }
 
-  private async executeAPIIntegration(params: any, context: AIToolContext): Promise<any> {
+  private async executeAPIIntegration(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { endpoint, method, headers, body, timeout } = params;
-    
+
     // Simulate API call (in production, use actual HTTP client)
     return {
       endpoint,
@@ -670,16 +1152,20 @@ export class AdvancedAIToolsManager {
       response: {
         status: 200,
         data: { message: 'API call successful', timestamp: new Date() },
-        headers: headers || {}
+        headers: headers || {},
       },
       executionTime: Math.random() * 1000,
-      calledAt: new Date()
+      calledAt: new Date(),
     };
   }
 
-  private async executeWorkflowAutomation(params: any, context: AIToolContext): Promise<any> {
-    const { workflow_definition, trigger_type, execution_mode, retry_policy } = params;
-    
+  private async executeWorkflowAutomation(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
+    const { workflow_definition, trigger_type, execution_mode, retry_policy } =
+      params;
+
     // Use MCP protocol for automation
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `workflow_auto_${Date.now()}`,
@@ -687,9 +1173,9 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'automation_tool',
-        arguments: { action: 'create', workflow: workflow_definition }
+        arguments: { action: 'create', workflow: workflow_definition },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
@@ -699,13 +1185,21 @@ export class AdvancedAIToolsManager {
       executionMode: execution_mode,
       retryPolicy: retry_policy,
       status: 'active',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
   }
 
-  private async executeRealtimeMonitoring(params: any, context: AIToolContext): Promise<any> {
-    const { data_source, monitoring_rules, alert_thresholds, aggregation_window } = params;
-    
+  private async executeRealtimeMonitoring(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
+    const {
+      data_source,
+      monitoring_rules,
+      alert_thresholds,
+      aggregation_window,
+    } = params;
+
     return {
       dataSource: data_source,
       monitoringRules: monitoring_rules || [],
@@ -713,13 +1207,16 @@ export class AdvancedAIToolsManager {
       aggregationWindow: aggregation_window,
       status: 'monitoring',
       alerts: [],
-      startedAt: new Date()
+      startedAt: new Date(),
     };
   }
 
-  private async executeNLPProcessing(params: any, context: AIToolContext): Promise<any> {
+  private async executeNLPProcessing(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     const { text, operations, language, confidence_threshold } = params;
-    
+
     // Use MCP protocol for NLP processing
     const mcpResult = await this.mcpProtocol.sendMessage({
       id: `nlp_process_${Date.now()}`,
@@ -727,9 +1224,9 @@ export class AdvancedAIToolsManager {
       method: 'tools/call',
       params: {
         name: 'ai_generation_tool',
-        arguments: { prompt: `Process this text: ${text}`, model: 'gpt-4' }
+        arguments: { prompt: `Process this text: ${text}`, model: 'gpt-4' },
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     return {
@@ -740,9 +1237,9 @@ export class AdvancedAIToolsManager {
         sentiment: { score: 0.5, label: 'neutral' },
         entities: [],
         classification: 'general',
-        confidence: confidence_threshold
+        confidence: confidence_threshold,
       },
-      processedAt: new Date()
+      processedAt: new Date(),
     };
   }
 
@@ -751,15 +1248,15 @@ export class AdvancedAIToolsManager {
     if (toolId) {
       const tool = this.tools.get(toolId);
       if (!tool) return null;
-      
+
       return {
         tool: {
           id: tool.id,
           name: tool.name,
-          category: tool.category
+          category: tool.category,
         },
         usage: tool.usage,
-        recentExecutions: this.executionHistory.get('system')?.slice(-10) || []
+        recentExecutions: this.executionHistory.get('system')?.slice(-10) || [],
       };
     }
 
@@ -771,10 +1268,12 @@ export class AdvancedAIToolsManager {
         id: tool.id,
         name: tool.name,
         category: tool.category,
-        usage: tool.usage
+        usage: tool.usage,
       })),
-      totalExecutions: Array.from(this.executionHistory.values())
-        .reduce((sum, history) => sum + history.length, 0)
+      totalExecutions: Array.from(this.executionHistory.values()).reduce(
+        (sum, history) => sum + history.length,
+        0
+      ),
     };
   }
 
@@ -784,36 +1283,44 @@ export class AdvancedAIToolsManager {
 
   // Tool Discovery and Recommendations
   discoverTools(query: string, category?: string): AITool[] {
-    const allTools = category ? this.getToolsByCategory(category) : this.getAllTools();
-    
-    return allTools.filter(tool => 
-      tool.name.toLowerCase().includes(query.toLowerCase()) ||
-      tool.description.toLowerCase().includes(query.toLowerCase()) ||
-      tool.capabilities.some(cap => cap.toLowerCase().includes(query.toLowerCase()))
+    const allTools = category
+      ? this.getToolsByCategory(category)
+      : this.getAllTools();
+
+    return allTools.filter(
+      tool =>
+        tool.name.toLowerCase().includes(query.toLowerCase()) ||
+        tool.description.toLowerCase().includes(query.toLowerCase()) ||
+        tool.capabilities.some(cap =>
+          cap.toLowerCase().includes(query.toLowerCase())
+        )
     );
   }
 
   recommendTools(context: AIToolContext, limit: number = 5): AITool[] {
     // Simple recommendation based on usage patterns
     const allTools = this.getAllTools();
-    
+
     return allTools
       .filter(tool => tool.isActive)
       .sort((a, b) => b.usage.successRate - a.usage.successRate)
       .slice(0, limit);
   }
 
-  private async executeQRGenerator(params: any, context: AIToolContext): Promise<any> {
+  private async executeQRGenerator(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { text, size = 200 } = params;
-      
+
       // Mock QR code generation - in real implementation, you would use a QR code library
       const result = {
         success: true,
         text,
         size,
         qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}`,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
 
       return result;
@@ -822,20 +1329,29 @@ export class AdvancedAIToolsManager {
     }
   }
 
-  private async executePasswordGenerator(params: any, context: AIToolContext): Promise<any> {
+  private async executePasswordGenerator(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
-      const { length = 12, includeSymbols = true, includeNumbers = true } = params;
-      
+      const {
+        length = 12,
+        includeSymbols = true,
+        includeNumbers = true,
+      } = params;
+
       // Mock password generation
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
       const numbers = includeNumbers ? '0123456789' : '';
       const symbols = includeSymbols ? '!@#$%^&*()_+-=[]{}|;:,.<>?' : '';
-      
+
       let password = '';
       const allChars = chars + numbers + symbols;
-      
+
       for (let i = 0; i < length; i++) {
-        password += allChars.charAt(Math.floor(Math.random() * allChars.length));
+        password += allChars.charAt(
+          Math.floor(Math.random() * allChars.length)
+        );
       }
 
       return {
@@ -844,17 +1360,20 @@ export class AdvancedAIToolsManager {
         length,
         includeSymbols,
         includeNumbers,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Password generation failed: ${error.message}`);
     }
   }
 
-  private async executeBase64Converter(params: any, context: AIToolContext): Promise<any> {
+  private async executeBase64Converter(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { text, operation = 'encode' } = params;
-      
+
       let result;
       if (operation === 'encode') {
         result = Buffer.from(text).toString('base64');
@@ -867,17 +1386,20 @@ export class AdvancedAIToolsManager {
         operation,
         input: text,
         output: result,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Base64 conversion failed: ${error.message}`);
     }
   }
 
-  private async executeJSONFormatter(params: any, context: AIToolContext): Promise<any> {
+  private async executeJSONFormatter(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { jsonString, operation = 'format' } = params;
-      
+
       let result;
       if (operation === 'format') {
         result = JSON.stringify(JSON.parse(jsonString), null, 2);
@@ -893,7 +1415,7 @@ export class AdvancedAIToolsManager {
         operation,
         input: jsonString,
         output: result,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       return {
@@ -901,16 +1423,19 @@ export class AdvancedAIToolsManager {
         operation: 'validate',
         input: params.jsonString,
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
 
-  private async executeHashGenerator(params: any, context: AIToolContext): Promise<any> {
+  private async executeHashGenerator(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { text, algorithm = 'sha256' } = params;
       const crypto = require('crypto');
-      
+
       const hash = crypto.createHash(algorithm).update(text).digest('hex');
 
       return {
@@ -918,20 +1443,27 @@ export class AdvancedAIToolsManager {
         algorithm,
         input: text,
         hash,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Hash generation failed: ${error.message}`);
     }
   }
 
-  private async executeColorPaletteGenerator(params: any, context: AIToolContext): Promise<any> {
+  private async executeColorPaletteGenerator(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { baseColor = '#3B82F6', count = 5 } = params;
-      
+
       // Mock color palette generation
       const colors = [
-        '#3B82F6', '#1D4ED8', '#60A5FA', '#93C5FD', '#DBEAFE'
+        '#3B82F6',
+        '#1D4ED8',
+        '#60A5FA',
+        '#93C5FD',
+        '#DBEAFE',
       ].slice(0, count);
 
       return {
@@ -939,47 +1471,58 @@ export class AdvancedAIToolsManager {
         baseColor,
         count,
         colors,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Color palette generation failed: ${error.message}`);
     }
   }
 
-  private async executeTextAnalyzer(params: any, context: AIToolContext): Promise<any> {
+  private async executeTextAnalyzer(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { text } = params;
-      
+
       const analysis = {
         characterCount: text.length,
         wordCount: text.split(/\s+/).length,
-        sentenceCount: text.split(/[.!?]+/).filter(s => s.trim().length > 0).length,
-        paragraphCount: text.split(/\n\s*\n/).filter(p => p.trim().length > 0).length,
-        readingTime: Math.ceil(text.split(/\s+/).length / 200) // Assuming 200 WPM
+        sentenceCount: text.split(/[.!?]+/).filter(s => s.trim().length > 0)
+          .length,
+        paragraphCount: text.split(/\n\s*\n/).filter(p => p.trim().length > 0)
+          .length,
+        readingTime: Math.ceil(text.split(/\s+/).length / 200), // Assuming 200 WPM
       };
 
       return {
         success: true,
         text: text.substring(0, 100) + (text.length > 100 ? '...' : ''),
         analysis,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Text analysis failed: ${error.message}`);
     }
   }
 
-  private async executeUUIDGenerator(params: any, context: AIToolContext): Promise<any> {
+  private async executeUUIDGenerator(
+    params: any,
+    context: AIToolContext
+  ): Promise<any> {
     try {
       const { count = 1, version = 4 } = params;
-      
+
       const uuids = [];
       for (let i = 0; i < count; i++) {
-        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          const r = Math.random() * 16 | 0;
-          const v = c === 'x' ? r : (r & 0x3 | 0x8);
-          return v.toString(16);
-        });
+        const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+          /[xy]/g,
+          function (c) {
+            const r = (Math.random() * 16) | 0;
+            const v = c === 'x' ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          }
+        );
         uuids.push(uuid);
       }
 
@@ -988,7 +1531,7 @@ export class AdvancedAIToolsManager {
         version,
         count,
         uuids,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`UUID generation failed: ${error.message}`);

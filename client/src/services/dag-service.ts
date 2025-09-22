@@ -3,14 +3,14 @@
  * DAG Management Service
  */
 
-import { 
-  Workflow, 
-  NodeData, 
-  Connection, 
-  DAGNode, 
-  DAGValidation, 
+import {
+  Workflow,
+  NodeData,
+  Connection,
+  DAGNode,
+  DAGValidation,
   TopologicalOrder,
-  NodeType 
+  NodeType,
 } from '../types/workflow';
 
 export class DAGService {
@@ -19,7 +19,7 @@ export class DAGService {
    */
   static buildDAG(workflow: Workflow): Map<string, DAGNode> {
     const dagNodes = new Map<string, DAGNode>();
-    
+
     // تهيئة العقد
     workflow.nodes.forEach(node => {
       dagNodes.set(node.id, {
@@ -28,7 +28,7 @@ export class DAGService {
         dependents: [],
         level: 0,
         isEntry: false,
-        isExit: false
+        isExit: false,
       });
     });
 
@@ -36,13 +36,13 @@ export class DAGService {
     workflow.connections.forEach(connection => {
       const sourceNode = dagNodes.get(connection.source);
       const targetNode = dagNodes.get(connection.target);
-      
+
       if (sourceNode && targetNode) {
         // إضافة التبعية
         if (!targetNode.dependencies.includes(connection.source)) {
           targetNode.dependencies.push(connection.source);
         }
-        
+
         // إضافة التابعات
         if (!sourceNode.dependents.includes(connection.target)) {
           sourceNode.dependents.push(connection.target);
@@ -73,7 +73,7 @@ export class DAGService {
       if (visiting.has(nodeId)) {
         return; // تبعية دائرية
       }
-      
+
       if (visited.has(nodeId)) {
         return;
       }
@@ -82,13 +82,13 @@ export class DAGService {
       const node = dagNodes.get(nodeId);
       if (node) {
         node.level = Math.max(node.level, level);
-        
+
         // تحديث المستوى للتابعات
         node.dependents.forEach(dependentId => {
           dfs(dependentId, level + 1);
         });
       }
-      
+
       visiting.delete(nodeId);
       visited.add(nodeId);
     };
@@ -110,7 +110,7 @@ export class DAGService {
     const cycles: string[][] = [];
 
     const dagNodes = this.buildDAG(workflow);
-    
+
     // التحقق من التبعيات الدائرية
     const cyclesFound = this.detectCycles(dagNodes);
     cycles.push(...cyclesFound);
@@ -120,7 +120,9 @@ export class DAGService {
     }
 
     // التحقق من عقد البداية
-    const entryNodes = Array.from(dagNodes.values()).filter(node => node.isEntry);
+    const entryNodes = Array.from(dagNodes.values()).filter(
+      node => node.isEntry
+    );
     if (entryNodes.length === 0) {
       errors.push('لا توجد عقدة بداية في سير العمل');
     } else if (entryNodes.length > 1) {
@@ -142,13 +144,15 @@ export class DAGService {
     }
 
     // التحقق من أنواع العقد
-    const startNodes = workflow.nodes.filter(node => node.type === NodeType.START);
+    const startNodes = workflow.nodes.filter(
+      node => node.type === NodeType.START
+    );
     const endNodes = workflow.nodes.filter(node => node.type === NodeType.END);
-    
+
     if (startNodes.length !== 1) {
       errors.push('يجب أن يكون هناك عقدة بداية واحدة فقط');
     }
-    
+
     if (endNodes.length !== 1) {
       errors.push('يجب أن يكون هناك عقدة نهاية واحدة على الأقل');
     }
@@ -157,7 +161,7 @@ export class DAGService {
       isValid: errors.length === 0,
       errors,
       warnings,
-      cycles
+      cycles,
     };
   }
 
@@ -220,13 +224,13 @@ export class DAGService {
 
       visited.add(nodeId);
       const node = dagNodes.get(nodeId);
-      
+
       if (node) {
         // زيارة التبعيات أولاً
         node.dependencies.forEach(dependencyId => {
           dfs(dependencyId);
         });
-        
+
         result.push(nodeId);
       }
     };
@@ -239,7 +243,9 @@ export class DAGService {
     });
 
     // ترتيب العقد حسب المستوى
-    const maxLevel = Math.max(...Array.from(dagNodes.values()).map(n => n.level));
+    const maxLevel = Math.max(
+      ...Array.from(dagNodes.values()).map(n => n.level)
+    );
     for (let level = 0; level <= maxLevel; level++) {
       levels[level] = Array.from(dagNodes.values())
         .filter(n => n.level === level)
@@ -249,20 +255,23 @@ export class DAGService {
     return {
       nodes: result,
       levels,
-      totalLevels: maxLevel + 1
+      totalLevels: maxLevel + 1,
     };
   }
 
   /**
    * الحصول على العقد الجاهزة للتنفيذ
    */
-  static getReadyNodes(workflow: Workflow, completedNodes: Set<string>): string[] {
+  static getReadyNodes(
+    workflow: Workflow,
+    completedNodes: Set<string>
+  ): string[] {
     const dagNodes = this.buildDAG(workflow);
     const readyNodes: string[] = [];
 
     dagNodes.forEach(node => {
       // التحقق من أن جميع التبعيات مكتملة
-      const allDependenciesCompleted = node.dependencies.every(dep => 
+      const allDependenciesCompleted = node.dependencies.every(dep =>
         completedNodes.has(dep)
       );
 
@@ -277,7 +286,10 @@ export class DAGService {
   /**
    * تحليل تأثير العقدة
    */
-  static analyzeNodeImpact(workflow: Workflow, nodeId: string): {
+  static analyzeNodeImpact(
+    workflow: Workflow,
+    nodeId: string
+  ): {
     affectedNodes: string[];
     criticalPath: boolean;
     impactLevel: 'low' | 'medium' | 'high';
@@ -304,7 +316,7 @@ export class DAGService {
 
     const criticalPath = affectedNodes.length > workflow.nodes.length * 0.5;
     let impactLevel: 'low' | 'medium' | 'high' = 'low';
-    
+
     if (affectedNodes.length > workflow.nodes.length * 0.7) {
       impactLevel = 'high';
     } else if (affectedNodes.length > workflow.nodes.length * 0.3) {
@@ -314,7 +326,7 @@ export class DAGService {
     return {
       affectedNodes,
       criticalPath,
-      impactLevel
+      impactLevel,
     };
   }
 }

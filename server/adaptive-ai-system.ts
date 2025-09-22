@@ -69,7 +69,10 @@ export class AdaptiveAISystem {
   private adaptationHistory: Map<string, any[]> = new Map();
 
   // إنشاء ملف تعريف تكيفي
-  async createProfile(userId: string, initialData?: Partial<AdaptiveAIProfile>): Promise<AdaptiveAIProfile> {
+  async createProfile(
+    userId: string,
+    initialData?: Partial<AdaptiveAIProfile>
+  ): Promise<AdaptiveAIProfile> {
     const profile: AdaptiveAIProfile = {
       id: this.generateId(),
       userId,
@@ -118,7 +121,10 @@ export class AdaptiveAISystem {
   }
 
   // تحديث ملف التعريف
-  async updateProfile(profileId: string, updates: Partial<AdaptiveAIProfile>): Promise<AdaptiveAIProfile | null> {
+  async updateProfile(
+    profileId: string,
+    updates: Partial<AdaptiveAIProfile>
+  ): Promise<AdaptiveAIProfile | null> {
     const profile = this.profiles.get(profileId);
     if (!profile) return null;
 
@@ -146,12 +152,16 @@ export class AdaptiveAISystem {
 
     // تحليل أنماط السلوك
     const patterns = this.extractBehaviorPatterns(responses);
-    
+
     // استخراج الرؤى
     const insights = this.generateInsights(profile, responses, rules);
-    
+
     // إنشاء التوصيات
-    const recommendations = this.generateRecommendations(profile, patterns, insights);
+    const recommendations = this.generateRecommendations(
+      profile,
+      patterns,
+      insights
+    );
 
     return {
       patterns,
@@ -200,17 +210,19 @@ export class AdaptiveAISystem {
   // تحليل أنماط الوقت
   private analyzeTimePatterns(responses: AdaptiveResponse[]): any[] {
     const hourCounts = new Array(24).fill(0);
-    
+
     responses.forEach(response => {
       const hour = response.timestamp.getHours();
       hourCounts[hour]++;
     });
 
-    return hourCounts.map((count, hour) => ({
-      hour,
-      count,
-      percentage: (count / responses.length) * 100,
-    })).filter(item => item.count > 0);
+    return hourCounts
+      .map((count, hour) => ({
+        hour,
+        count,
+        percentage: (count / responses.length) * 100,
+      }))
+      .filter(item => item.count > 0);
   }
 
   // تحليل أنماط المحتوى
@@ -226,7 +238,8 @@ export class AdaptiveAISystem {
 
       // تحليل طول الاستجابة
       const length = response.response.length;
-      const lengthCategory = length < 50 ? 'short' : length < 200 ? 'medium' : 'long';
+      const lengthCategory =
+        length < 50 ? 'short' : length < 200 ? 'medium' : 'long';
       lengths.set(lengthCategory, (lengths.get(lengthCategory) || 0) + 1);
     });
 
@@ -258,13 +271,23 @@ export class AdaptiveAISystem {
     responses.forEach(response => {
       // تحليل التغذية الراجعة
       if (response.feedback) {
-        feedbackCounts.set(response.feedback, (feedbackCounts.get(response.feedback) || 0) + 1);
+        feedbackCounts.set(
+          response.feedback,
+          (feedbackCounts.get(response.feedback) || 0) + 1
+        );
       }
 
       // تحليل مستويات الثقة
-      const confidenceCategory = response.confidence < 0.5 ? 'low' : 
-                                 response.confidence < 0.8 ? 'medium' : 'high';
-      confidenceLevels.set(confidenceCategory, (confidenceLevels.get(confidenceCategory) || 0) + 1);
+      const confidenceCategory =
+        response.confidence < 0.5
+          ? 'low'
+          : response.confidence < 0.8
+            ? 'medium'
+            : 'high';
+      confidenceLevels.set(
+        confidenceCategory,
+        (confidenceLevels.get(confidenceCategory) || 0) + 1
+      );
     });
 
     return [
@@ -278,11 +301,13 @@ export class AdaptiveAISystem {
       },
       {
         type: 'confidence',
-        data: Array.from(confidenceLevels.entries()).map(([confidence, count]) => ({
-          confidence,
-          count,
-          percentage: (count / responses.length) * 100,
-        })),
+        data: Array.from(confidenceLevels.entries()).map(
+          ([confidence, count]) => ({
+            confidence,
+            count,
+            percentage: (count / responses.length) * 100,
+          })
+        ),
       },
     ];
   }
@@ -296,9 +321,11 @@ export class AdaptiveAISystem {
     const insights: string[] = [];
 
     // تحليل معدل التعلم
-    const successRate = profile.learningHistory.successfulInteractions / 
-                       (profile.learningHistory.successfulInteractions + profile.learningHistory.failedInteractions);
-    
+    const successRate =
+      profile.learningHistory.successfulInteractions /
+      (profile.learningHistory.successfulInteractions +
+        profile.learningHistory.failedInteractions);
+
     if (successRate > 0.8) {
       insights.push('User shows high satisfaction with AI interactions');
     } else if (successRate < 0.5) {
@@ -308,22 +335,28 @@ export class AdaptiveAISystem {
     // تحليل أنماط الوقت
     const activeHours = profile.behaviorPatterns.activeHours;
     if (activeHours.length > 0) {
-      const peakHour = activeHours.reduce((a, b) => 
+      const peakHour = activeHours.reduce((a, b) =>
         responses.filter(r => r.timestamp.getHours() === a).length >
-        responses.filter(r => r.timestamp.getHours() === b).length ? a : b
+        responses.filter(r => r.timestamp.getHours() === b).length
+          ? a
+          : b
       );
       insights.push(`User is most active around ${peakHour}:00`);
     }
 
     // تحليل التفضيلات
     if (profile.preferences.topics.length > 0) {
-      insights.push(`User shows interest in: ${profile.preferences.topics.join(', ')}`);
+      insights.push(
+        `User shows interest in: ${profile.preferences.topics.join(', ')}`
+      );
     }
 
     // تحليل قواعد التكيف
     const effectiveRules = rules.filter(rule => rule.effectiveness > 0.7);
     if (effectiveRules.length > 0) {
-      insights.push(`${effectiveRules.length} adaptation rules are highly effective`);
+      insights.push(
+        `${effectiveRules.length} adaptation rules are highly effective`
+      );
     }
 
     return insights;
@@ -343,9 +376,11 @@ export class AdaptiveAISystem {
       const peakHours = timePattern.data
         .filter((item: any) => item.percentage > 20)
         .map((item: any) => item.hour);
-      
+
       if (peakHours.length > 0) {
-        recommendations.push(`Schedule important interactions during peak hours: ${peakHours.join(', ')}`);
+        recommendations.push(
+          `Schedule important interactions during peak hours: ${peakHours.join(', ')}`
+        );
       }
     }
 
@@ -384,10 +419,14 @@ export class AdaptiveAISystem {
 
     // تحليل السياق
     const adaptationFactors = this.analyzeContext(profile, input, context);
-    
+
     // توليد الاستجابة
-    const response = await this.generateResponse(profile, input, adaptationFactors);
-    
+    const response = await this.generateResponse(
+      profile,
+      input,
+      adaptationFactors
+    );
+
     // حساب الثقة
     const confidence = this.calculateConfidence(profile, adaptationFactors);
 
@@ -426,7 +465,11 @@ export class AdaptiveAISystem {
     }
 
     // تحليل المحتوى
-    if (profile.preferences.topics.some(topic => input.toLowerCase().includes(topic))) {
+    if (
+      profile.preferences.topics.some(topic =>
+        input.toLowerCase().includes(topic)
+      )
+    ) {
       factors.push('preferred_topic');
     }
 
@@ -477,14 +520,17 @@ export class AdaptiveAISystem {
 
     // تحديد طول الاستجابة
     const baseResponse = response + 'Here is my response to your input.';
-    
+
     switch (profile.preferences.responseLength) {
       case 'short':
         return baseResponse;
       case 'medium':
         return baseResponse + ' I hope this helps you with your request.';
       case 'long':
-        return baseResponse + ' I hope this detailed response provides you with the information you need. Please let me know if you have any questions.';
+        return (
+          baseResponse +
+          ' I hope this detailed response provides you with the information you need. Please let me know if you have any questions.'
+        );
     }
 
     return baseResponse;
@@ -529,7 +575,7 @@ export class AdaptiveAISystem {
       const response = responses.find(r => r.id === responseId);
       if (response) {
         response.feedback = feedback;
-        
+
         // تحديث ملف التعريف بناءً على التغذية الراجعة
         const profile = this.profiles.get(profileId);
         if (profile) {
@@ -538,22 +584,25 @@ export class AdaptiveAISystem {
           } else if (feedback === 'negative') {
             profile.learningHistory.failedInteractions++;
           }
-          
+
           // تحديث معدل التعلم
-          const totalInteractions = profile.learningHistory.successfulInteractions + 
-                                   profile.learningHistory.failedInteractions;
+          const totalInteractions =
+            profile.learningHistory.successfulInteractions +
+            profile.learningHistory.failedInteractions;
           if (totalInteractions > 0) {
-            profile.learningHistory.learningRate = profile.learningHistory.successfulInteractions / totalInteractions;
+            profile.learningHistory.learningRate =
+              profile.learningHistory.successfulInteractions /
+              totalInteractions;
           }
-          
+
           profile.updatedAt = new Date();
           this.profiles.set(profileId, profile);
         }
-        
+
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -603,6 +652,8 @@ export class AdaptiveAISystem {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 }

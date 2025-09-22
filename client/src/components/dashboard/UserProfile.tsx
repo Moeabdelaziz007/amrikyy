@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { User, Settings, Bell, Shield, Palette, Camera, Save, X } from 'lucide-react';
+import {
+  User,
+  Settings,
+  Bell,
+  Shield,
+  Palette,
+  Camera,
+  Save,
+  X,
+} from 'lucide-react';
 
 interface UserProfileProps {
   user?: {
@@ -24,7 +33,7 @@ interface UserProfileProps {
 export const UserProfile: React.FC<UserProfileProps> = ({
   user,
   onUpdate,
-  onClose
+  onClose,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +45,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
       language: 'ar',
       notifications: true,
       emailUpdates: true,
-    }
+    },
   });
 
   const [stats, setStats] = useState({
@@ -81,10 +90,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = e => {
         setFormData(prev => ({
           ...prev,
-          avatar: e.target?.result as string
+          avatar: e.target?.result as string,
         }));
       };
       reader.readAsDataURL(file);
@@ -227,7 +236,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                 <input
                   type="text"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e =>
+                    setFormData(prev => ({ ...prev, name: e.target.value }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
                 />
               ) : (
@@ -235,12 +246,16 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">البريد الإلكتروني</label>
+              <label className="block text-sm font-medium mb-2">
+                البريد الإلكتروني
+              </label>
               {isEditing ? (
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={e =>
+                    setFormData(prev => ({ ...prev, email: e.target.value }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
                 />
               ) : (
@@ -262,10 +277,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               {isEditing ? (
                 <select
                   value={formData.preferences.theme}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    preferences: { ...prev.preferences, theme: e.target.value as any }
-                  }))}
+                  onChange={e =>
+                    setFormData(prev => ({
+                      ...prev,
+                      preferences: {
+                        ...prev.preferences,
+                        theme: e.target.value as any,
+                      },
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
                 >
                   <option value="light">فاتح</option>
@@ -274,8 +294,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                 </select>
               ) : (
                 <p className="text-gray-900 dark:text-white">
-                  {formData.preferences.theme === 'light' ? 'فاتح' :
-                   formData.preferences.theme === 'dark' ? 'داكن' : 'النظام'}
+                  {formData.preferences.theme === 'light'
+                    ? 'فاتح'
+                    : formData.preferences.theme === 'dark'
+                      ? 'داكن'
+                      : 'النظام'}
                 </p>
               )}
             </div>
@@ -284,10 +307,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               {isEditing ? (
                 <select
                   value={formData.preferences.language}
-                  onChange={(e) => setFormData(prev => ({
-                    ...prev,
-                    preferences: { ...prev.preferences, language: e.target.value }
-                  }))}
+                  onChange={e =>
+                    setFormData(prev => ({
+                      ...prev,
+                      preferences: {
+                        ...prev.preferences,
+                        language: e.target.value,
+                      },
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
                 >
                   <option value="ar">العربية</option>
@@ -295,7 +323,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
                 </select>
               ) : (
                 <p className="text-gray-900 dark:text-white">
-                  {formData.preferences.language === 'ar' ? 'العربية' : 'English'}
+                  {formData.preferences.language === 'ar'
+                    ? 'العربية'
+                    : 'English'}
                 </p>
               )}
             </div>
@@ -313,10 +343,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               <input
                 type="checkbox"
                 checked={formData.preferences.notifications}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  preferences: { ...prev.preferences, notifications: e.target.checked }
-                }))}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    preferences: {
+                      ...prev.preferences,
+                      notifications: e.target.checked,
+                    },
+                  }))
+                }
                 className="mr-3 rtl:ml-3"
                 disabled={!isEditing}
               />
@@ -326,10 +361,15 @@ export const UserProfile: React.FC<UserProfileProps> = ({
               <input
                 type="checkbox"
                 checked={formData.preferences.emailUpdates}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  preferences: { ...prev.preferences, emailUpdates: e.target.checked }
-                }))}
+                onChange={e =>
+                  setFormData(prev => ({
+                    ...prev,
+                    preferences: {
+                      ...prev.preferences,
+                      emailUpdates: e.target.checked,
+                    },
+                  }))
+                }
                 className="mr-3 rtl:ml-3"
                 disabled={!isEditing}
               />
@@ -352,7 +392,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             </p>
           </div>
           <div className="text-left rtl:text-right">
-            <p className="text-sm text-gray-500 dark:text-gray-400">معرف المستخدم</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              معرف المستخدم
+            </p>
             <p className="font-mono text-xs text-gray-700 dark:text-gray-300">
               {user.id}
             </p>

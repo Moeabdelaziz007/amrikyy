@@ -15,7 +15,7 @@ export default defineConfig({
       '.idea',
       '.git',
       '.cache',
-      'test/e2e/**/*'
+      'test/e2e/**/*',
     ],
     coverage: {
       provider: 'v8',
@@ -26,17 +26,17 @@ export default defineConfig({
         'dist/',
         '**/*.d.ts',
         '**/*.config.*',
-        '**/coverage/**'
+        '**/coverage/**',
       ],
       thresholds: {
         global: {
           branches: 80,
           functions: 80,
           lines: 80,
-          statements: 80
-        }
-      }
-    }
+          statements: 80,
+        },
+      },
+    },
   },
   resolve: {
     alias: {

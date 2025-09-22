@@ -17,24 +17,27 @@ Backend API server for the AuraOS Automation Platform - a professional workflow 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - PostgreSQL 14+
 - Redis (optional, for caching)
 
 ### Installation
 
 1. **Install dependencies:**
+
 ```bash
 npm install
 ```
 
 2. **Set up environment variables:**
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
 3. **Set up the database:**
+
 ```bash
 # Create PostgreSQL database
 createdb auraos_automation
@@ -44,6 +47,7 @@ npm run migrate
 ```
 
 4. **Start the development server:**
+
 ```bash
 npm run dev
 ```
@@ -53,9 +57,11 @@ The server will start on `http://localhost:3001`
 ## API Endpoints
 
 ### Health Check
+
 - `GET /health` - Server health status
 
 ### Workspaces
+
 - `GET /api/v1/workspaces` - List workspaces
 - `POST /api/v1/workspaces` - Create workspace
 - `GET /api/v1/workspaces/:id` - Get workspace
@@ -63,6 +69,7 @@ The server will start on `http://localhost:3001`
 - `DELETE /api/v1/workspaces/:id` - Delete workspace
 
 ### Automation Tasks
+
 - `GET /api/v1/tasks` - List tasks
 - `POST /api/v1/tasks` - Create task
 - `GET /api/v1/tasks/:id` - Get task
@@ -73,6 +80,7 @@ The server will start on `http://localhost:3001`
 - `PATCH /api/v1/tasks/:id/resume` - Resume task
 
 ### MCP Tools
+
 - `GET /api/v1/mcp-tools` - List MCP tools
 - `GET /api/v1/mcp-tools/:id` - Get MCP tool
 - `POST /api/v1/mcp-tools/:id/install` - Install tool
@@ -81,12 +89,14 @@ The server will start on `http://localhost:3001`
 - `POST /api/v1/mcp-tools/:id/execute` - Execute tool
 
 ### System Monitoring
+
 - `GET /api/v1/system/health` - System health status
 - `GET /api/v1/system/metrics` - System metrics
 - `GET /api/v1/system/alerts` - System alerts
 - `PATCH /api/v1/system/alerts/:id/resolve` - Resolve alert
 
 ### Analytics
+
 - `GET /api/v1/analytics` - General analytics
 - `GET /api/v1/analytics/tasks/:id` - Task analytics
 - `GET /api/v1/analytics/workspaces/:id` - Workspace analytics

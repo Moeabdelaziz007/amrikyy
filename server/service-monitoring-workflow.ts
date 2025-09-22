@@ -51,9 +51,9 @@ export class ServiceMonitoringWorkflow {
             name: 'Health Check Trigger',
             config: {
               eventType: 'scheduled_check',
-              schedule: `*/${this.config.checkInterval} * * * *` // Every X minutes
+              schedule: `*/${this.config.checkInterval} * * * *`, // Every X minutes
             },
-            position: { x: 100, y: 100 }
+            position: { x: 100, y: 100 },
           },
           {
             id: 'health_check',
@@ -65,10 +65,10 @@ export class ServiceMonitoringWorkflow {
               method: 'GET',
               timeout: 10000,
               headers: {
-                'User-Agent': 'AuraOS-HealthCheck/1.0'
-              }
+                'User-Agent': 'AuraOS-HealthCheck/1.0',
+              },
             },
-            position: { x: 300, y: 100 }
+            position: { x: 300, y: 100 },
           },
           {
             id: 'analyze_results',
@@ -89,9 +89,9 @@ export class ServiceMonitoringWorkflow {
                 } else {
                   return 'healthy';
                 }
-              `
+              `,
             },
-            position: { x: 500, y: 100 }
+            position: { x: 500, y: 100 },
           },
           {
             id: 'send_alert',
@@ -102,7 +102,7 @@ export class ServiceMonitoringWorkflow {
               url: `https://api.telegram.org/bot${this.config.telegramBotToken}/sendMessage`,
               method: 'POST',
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
               },
               body: {
                 chat_id: this.config.telegramChatId,
@@ -116,10 +116,10 @@ Uptime: {{context.variables.uptime}}%
 
 Time: {{context.variables.timestamp}}
                 `,
-                parse_mode: 'Markdown'
-              }
+                parse_mode: 'Markdown',
+              },
             },
-            position: { x: 700, y: 200 }
+            position: { x: 700, y: 200 },
           },
           {
             id: 'log_results',
@@ -140,45 +140,45 @@ Time: {{context.variables.timestamp}}
                   '{{context.variables.timestamp}}',
                   '{{context.variables.errors}}'
                 )
-              `
+              `,
             },
-            position: { x: 700, y: 100 }
-          }
+            position: { x: 700, y: 100 },
+          },
         ],
         connections: [
           {
             id: 'conn1',
             sourceNodeId: 'trigger',
-            targetNodeId: 'health_check'
+            targetNodeId: 'health_check',
           },
           {
             id: 'conn2',
             sourceNodeId: 'health_check',
-            targetNodeId: 'analyze_results'
+            targetNodeId: 'analyze_results',
           },
           {
             id: 'conn3',
             sourceNodeId: 'analyze_results',
             targetNodeId: 'send_alert',
-            condition: 'context.variables.healthStatus !== "healthy"'
+            condition: 'context.variables.healthStatus !== "healthy"',
           },
           {
             id: 'conn4',
             sourceNodeId: 'analyze_results',
-            targetNodeId: 'log_results'
-          }
+            targetNodeId: 'log_results',
+          },
         ],
         variables: [
           {
             name: 'serviceUrl',
             type: 'string',
-            value: this.config.serviceUrl
+            value: this.config.serviceUrl,
           },
           {
             name: 'alertThresholds',
             type: 'object',
-            value: this.config.alertThresholds
-          }
+            value: this.config.alertThresholds,
+          },
         ],
         settings: {
           timeout: 300000, // 5 minutes
@@ -186,19 +186,19 @@ Time: {{context.variables.timestamp}}
             maxRetries: 3,
             retryDelay: 5000,
             backoffMultiplier: 2,
-            retryOn: ['network_error', 'timeout_error']
+            retryOn: ['network_error', 'timeout_error'],
           },
           concurrency: 1,
           errorHandling: {
             onError: 'continue',
-            notificationChannels: ['telegram']
+            notificationChannels: ['telegram'],
           },
           logging: {
             level: 'info',
             includeInput: true,
             includeOutput: true,
-            includeMetrics: true
-          }
+            includeMetrics: true,
+          },
         },
         metadata: {
           tags: ['monitoring', 'telegram', 'health-check'],
@@ -207,16 +207,16 @@ Time: {{context.variables.timestamp}}
           lastModifiedBy: 'system',
           permissions: [
             { userId: 'admin', role: 'admin' },
-            { userId: 'monitor', role: 'viewer' }
-          ]
-        }
+            { userId: 'monitor', role: 'viewer' },
+          ],
+        },
       };
 
       // Create workflow in database
       const workflow = await databaseService.createWorkflow({
         ...workflowDefinition,
         status: 'active',
-        createdBy: 'system'
+        createdBy: 'system',
       });
 
       console.log(`✅ Service monitoring workflow created: ${workflow.id}`);
@@ -232,21 +232,21 @@ Time: {{context.variables.timestamp}}
           schedule: `*/${this.config.checkInterval} * * * *`,
           input: {
             serviceUrl: this.config.serviceUrl,
-            timestamp: new Date().toISOString()
-          }
+            timestamp: new Date().toISOString(),
+          },
         },
         dependencies: [],
         resources: [
           { type: 'cpu', amount: 0.1, unit: 'cores' },
           { type: 'memory', amount: 50, unit: 'MB' },
-          { type: 'network', amount: 1, unit: 'MB' }
+          { type: 'network', amount: 1, unit: 'MB' },
         ],
         retryPolicy: {
           maxRetries: 3,
           retryDelay: 5000,
           backoffMultiplier: 2,
           retryOn: ['network_error', 'timeout_error'],
-          maxRetryDelay: 60000
+          maxRetryDelay: 60000,
         },
         timeout: 300000, // 5 minutes
         priority: 5,
@@ -257,16 +257,16 @@ Time: {{context.variables.timestamp}}
           version: '1.0.0',
           permissions: [
             { userId: 'admin', role: 'admin' },
-            { userId: 'monitor', role: 'viewer' }
+            { userId: 'monitor', role: 'viewer' },
           ],
-          environment: 'production'
-        }
+          environment: 'production',
+        },
       };
 
       const task = await databaseService.createTask({
         ...taskDefinition,
         status: 'pending',
-        createdBy: 'system'
+        createdBy: 'system',
       });
 
       // Schedule the task
@@ -276,16 +276,18 @@ Time: {{context.variables.timestamp}}
         timezone: 'UTC',
         nextRunAt: this.calculateNextRun(this.config.checkInterval),
         isActive: true,
-        runCount: 0
+        runCount: 0,
       });
 
       console.log(`✅ Health check task scheduled: ${task.id}`);
 
       // Start the monitoring
       this.startMonitoring();
-
     } catch (error) {
-      console.error('❌ Failed to initialize service monitoring workflow:', error);
+      console.error(
+        '❌ Failed to initialize service monitoring workflow:',
+        error
+      );
       throw error;
     }
   }
@@ -300,7 +302,9 @@ Time: {{context.variables.timestamp}}
     }
 
     this.isRunning = true;
-    console.log(`🚀 Starting service monitoring for: ${this.config.serviceUrl}`);
+    console.log(
+      `🚀 Starting service monitoring for: ${this.config.serviceUrl}`
+    );
 
     // Set up real-time monitoring
     this.setupRealTimeMonitoring();
@@ -316,7 +320,7 @@ Time: {{context.variables.timestamp}}
     }
 
     this.isRunning = false;
-    
+
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
@@ -340,9 +344,9 @@ Time: {{context.variables.timestamp}}
       const response = await fetch(this.config.serviceUrl, {
         method: 'GET',
         headers: {
-          'User-Agent': 'AuraOS-HealthCheck/1.0'
+          'User-Agent': 'AuraOS-HealthCheck/1.0',
         },
-        signal: AbortSignal.timeout(10000)
+        signal: AbortSignal.timeout(10000),
       });
 
       responseTime = Date.now() - startTime;
@@ -352,9 +356,10 @@ Time: {{context.variables.timestamp}}
         errors.push(`HTTP ${response.status}: ${response.statusText}`);
       } else if (responseTime > this.config.alertThresholds.responseTime) {
         status = 'degraded';
-        errors.push(`Response time ${responseTime}ms exceeds threshold ${this.config.alertThresholds.responseTime}ms`);
+        errors.push(
+          `Response time ${responseTime}ms exceeds threshold ${this.config.alertThresholds.responseTime}ms`
+        );
       }
-
     } catch (error) {
       status = 'down';
       responseTime = Date.now() - startTime;
@@ -368,7 +373,7 @@ Time: {{context.variables.timestamp}}
       errorRate,
       uptime,
       lastCheck: new Date(),
-      errors
+      errors,
     };
 
     // Log the health check result
@@ -385,7 +390,9 @@ Time: {{context.variables.timestamp}}
   /**
    * Send Telegram alert
    */
-  private async sendTelegramAlert(healthCheck: ServiceHealthCheck): Promise<void> {
+  private async sendTelegramAlert(
+    healthCheck: ServiceHealthCheck
+  ): Promise<void> {
     try {
       const message = `
 🚨 *Service Alert*
@@ -400,24 +407,26 @@ ${healthCheck.errors.length > 0 ? `*Errors:*\n${healthCheck.errors.map(e => `•
 _Time: ${new Date().toLocaleString()}_
       `;
 
-      const response = await fetch(`https://api.telegram.org/bot${this.config.telegramBotToken}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          chat_id: this.config.telegramChatId,
-          text: message,
-          parse_mode: 'Markdown'
-        })
-      });
+      const response = await fetch(
+        `https://api.telegram.org/bot${this.config.telegramBotToken}/sendMessage`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: this.config.telegramChatId,
+            text: message,
+            parse_mode: 'Markdown',
+          }),
+        }
+      );
 
       if (!response.ok) {
         console.error('Failed to send Telegram alert:', await response.text());
       } else {
         console.log('✅ Telegram alert sent successfully');
       }
-
     } catch (error) {
       console.error('❌ Error sending Telegram alert:', error);
     }
@@ -433,12 +442,11 @@ _Time: ${new Date().toLocaleString()}_
         url: healthCheck.url,
         status: healthCheck.status,
         responseTime: healthCheck.responseTime,
-        timestamp: healthCheck.lastCheck
+        timestamp: healthCheck.lastCheck,
       });
 
       // You could also store this in Firestore
       // await databaseService.createHealthLog(healthCheck);
-
     } catch (error) {
       console.error('❌ Error logging health check:', error);
     }
@@ -449,21 +457,27 @@ _Time: ${new Date().toLocaleString()}_
    */
   private setupRealTimeMonitoring(): void {
     // Listen to workflow execution events
-    workflowEngine.on('workflow:execution:completed', (execution) => {
+    workflowEngine.on('workflow:execution:completed', execution => {
       console.log(`✅ Workflow execution completed: ${execution.id}`);
     });
 
-    workflowEngine.on('workflow:execution:failed', (execution) => {
-      console.error(`❌ Workflow execution failed: ${execution.id}`, execution.error);
+    workflowEngine.on('workflow:execution:failed', execution => {
+      console.error(
+        `❌ Workflow execution failed: ${execution.id}`,
+        execution.error
+      );
     });
 
     // Listen to task execution events
-    taskAutomationEngine.on('task:execution:completed', (execution) => {
+    taskAutomationEngine.on('task:execution:completed', execution => {
       console.log(`✅ Task execution completed: ${execution.id}`);
     });
 
-    taskAutomationEngine.on('task:execution:failed', (execution) => {
-      console.error(`❌ Task execution failed: ${execution.id}`, execution.error);
+    taskAutomationEngine.on('task:execution:failed', execution => {
+      console.error(
+        `❌ Task execution failed: ${execution.id}`,
+        execution.error
+      );
     });
   }
 
@@ -472,7 +486,7 @@ _Time: ${new Date().toLocaleString()}_
    */
   private calculateNextRun(intervalMinutes: number): Date {
     const now = new Date();
-    const nextRun = new Date(now.getTime() + (intervalMinutes * 60 * 1000));
+    const nextRun = new Date(now.getTime() + intervalMinutes * 60 * 1000);
     return nextRun;
   }
 
@@ -486,7 +500,7 @@ _Time: ${new Date().toLocaleString()}_
   } {
     return {
       isRunning: this.isRunning,
-      config: this.config
+      config: this.config,
     };
   }
 }
@@ -501,13 +515,13 @@ export async function createSampleServiceMonitoring(): Promise<ServiceMonitoring
     alertThresholds: {
       responseTime: 5000, // 5 seconds
       errorRate: 5, // 5%
-      uptime: 95 // 95%
-    }
+      uptime: 95, // 95%
+    },
   };
 
   const monitor = new ServiceMonitoringWorkflow(config);
   await monitor.initialize();
-  
+
   return monitor;
 }
 

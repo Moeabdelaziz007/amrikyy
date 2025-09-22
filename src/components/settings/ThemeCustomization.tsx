@@ -34,7 +34,9 @@ interface ThemeCustomizationProps {
   className?: string;
 }
 
-export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ className = '' }) => {
+export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({
+  className = '',
+}) => {
   const [theme, setTheme] = useState<ThemeConfig>({
     name: 'Cyberpunk Neon',
     primaryColor: '#00f5ff',
@@ -44,7 +46,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
     neonIntensity: 'high',
     animations: true,
     soundEffects: false,
-    customCSS: ''
+    customCSS: '',
   });
 
   const [accessibility, setAccessibility] = useState<AccessibilityConfig>({
@@ -52,7 +54,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
     reducedMotion: false,
     fontSize: 'medium',
     keyboardNavigation: true,
-    screenReader: false
+    screenReader: false,
   });
 
   const [shortcuts, setShortcuts] = useState<ShortcutConfig>({
@@ -61,10 +63,12 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
     startAll: 'Cmd+Shift+L',
     stopAll: 'Cmd+Shift+S',
     toggleMute: 'Cmd+M',
-    quickSearch: 'Cmd+/'
+    quickSearch: 'Cmd+/',
   });
 
-  const [activeTab, setActiveTab] = useState<'theme' | 'accessibility' | 'shortcuts' | 'presets'>('theme');
+  const [activeTab, setActiveTab] = useState<
+    'theme' | 'accessibility' | 'shortcuts' | 'presets'
+  >('theme');
 
   const presetThemes: ThemeConfig[] = [
     {
@@ -75,7 +79,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       backgroundStyle: 'dark',
       neonIntensity: 'high',
       animations: true,
-      soundEffects: false
+      soundEffects: false,
     },
     {
       name: 'Matrix Green',
@@ -85,7 +89,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       backgroundStyle: 'dark',
       neonIntensity: 'medium',
       animations: true,
-      soundEffects: false
+      soundEffects: false,
     },
     {
       name: 'Ocean Blue',
@@ -95,7 +99,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       backgroundStyle: 'dark',
       neonIntensity: 'medium',
       animations: true,
-      soundEffects: false
+      soundEffects: false,
     },
     {
       name: 'Minimal Dark',
@@ -105,7 +109,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       backgroundStyle: 'dark',
       neonIntensity: 'low',
       animations: false,
-      soundEffects: false
+      soundEffects: false,
     },
     {
       name: 'Light Mode',
@@ -115,8 +119,8 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       backgroundStyle: 'light',
       neonIntensity: 'low',
       animations: false,
-      soundEffects: false
-    }
+      soundEffects: false,
+    },
   ];
 
   useEffect(() => {
@@ -125,7 +129,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
     root.style.setProperty('--primary-color', theme.primaryColor);
     root.style.setProperty('--secondary-color', theme.secondaryColor);
     root.style.setProperty('--accent-color', theme.accentColor);
-    
+
     if (theme.backgroundStyle === 'dark') {
       root.classList.add('dark');
     } else if (theme.backgroundStyle === 'light') {
@@ -147,7 +151,10 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
 
     // Apply font size
     const fontSizeMap = { small: '14px', medium: '16px', large: '18px' };
-    root.style.setProperty('--base-font-size', fontSizeMap[accessibility.fontSize]);
+    root.style.setProperty(
+      '--base-font-size',
+      fontSizeMap[accessibility.fontSize]
+    );
 
     // Apply custom CSS
     let customStyleElement = document.getElementById('custom-theme-styles');
@@ -157,7 +164,6 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       document.head.appendChild(customStyleElement);
     }
     customStyleElement.textContent = theme.customCSS || '';
-
   }, [theme, accessibility]);
 
   const handlePresetSelect = (preset: ThemeConfig) => {
@@ -181,7 +187,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       try {
         const config = JSON.parse(e.target?.result as string);
         if (config.theme) setTheme(config.theme);
@@ -207,7 +213,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
           { id: 'theme', label: '🎨 Theme', icon: '🎨' },
           { id: 'accessibility', label: '♿ Accessibility', icon: '♿' },
           { id: 'shortcuts', label: '⌨️ Shortcuts', icon: '⌨️' },
-          { id: 'presets', label: '📦 Presets', icon: '📦' }
+          { id: 'presets', label: '📦 Presets', icon: '📦' },
         ].map(tab => (
           <button
             key={tab.id}
@@ -229,54 +235,84 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
           {/* Color Customization */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Primary Color</label>
+              <label className="block text-sm font-medium mb-2">
+                Primary Color
+              </label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={theme.primaryColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, primaryColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({
+                      ...prev,
+                      primaryColor: e.target.value,
+                    }))
+                  }
                   className="w-12 h-10 rounded border border-glass-border"
                 />
                 <input
                   type="text"
                   value={theme.primaryColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, primaryColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({
+                      ...prev,
+                      primaryColor: e.target.value,
+                    }))
+                  }
                   className="flex-1 px-3 py-2 bg-glass-primary border border-glass-border rounded text-text-primary"
                 />
               </div>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium mb-2">Secondary Color</label>
+              <label className="block text-sm font-medium mb-2">
+                Secondary Color
+              </label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={theme.secondaryColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, secondaryColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({
+                      ...prev,
+                      secondaryColor: e.target.value,
+                    }))
+                  }
                   className="w-12 h-10 rounded border border-glass-border"
                 />
                 <input
                   type="text"
                   value={theme.secondaryColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, secondaryColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({
+                      ...prev,
+                      secondaryColor: e.target.value,
+                    }))
+                  }
                   className="flex-1 px-3 py-2 bg-glass-primary border border-glass-border rounded text-text-primary"
                 />
               </div>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium mb-2">Accent Color</label>
+              <label className="block text-sm font-medium mb-2">
+                Accent Color
+              </label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={theme.accentColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, accentColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({ ...prev, accentColor: e.target.value }))
+                  }
                   className="w-12 h-10 rounded border border-glass-border"
                 />
                 <input
                   type="text"
                   value={theme.accentColor}
-                  onChange={(e) => setTheme(prev => ({ ...prev, accentColor: e.target.value }))}
+                  onChange={e =>
+                    setTheme(prev => ({ ...prev, accentColor: e.target.value }))
+                  }
                   className="flex-1 px-3 py-2 bg-glass-primary border border-glass-border rounded text-text-primary"
                 />
               </div>
@@ -285,16 +321,23 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
 
           {/* Background Style */}
           <div>
-            <label className="block text-sm font-medium mb-2">Background Style</label>
+            <label className="block text-sm font-medium mb-2">
+              Background Style
+            </label>
             <div className="flex gap-2">
               {[
                 { value: 'dark', label: 'Dark', icon: '🌙' },
                 { value: 'light', label: 'Light', icon: '☀️' },
-                { value: 'auto', label: 'Auto', icon: '🔄' }
+                { value: 'auto', label: 'Auto', icon: '🔄' },
               ].map(style => (
                 <button
                   key={style.value}
-                  onClick={() => setTheme(prev => ({ ...prev, backgroundStyle: style.value as any }))}
+                  onClick={() =>
+                    setTheme(prev => ({
+                      ...prev,
+                      backgroundStyle: style.value as any,
+                    }))
+                  }
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     theme.backgroundStyle === style.value
                       ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-glow-blue-md'
@@ -309,16 +352,23 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
 
           {/* Neon Intensity */}
           <div>
-            <label className="block text-sm font-medium mb-2">Neon Intensity</label>
+            <label className="block text-sm font-medium mb-2">
+              Neon Intensity
+            </label>
             <div className="flex gap-2">
               {[
                 { value: 'low', label: 'Low', icon: '💡' },
                 { value: 'medium', label: 'Medium', icon: '🔆' },
-                { value: 'high', label: 'High', icon: '💥' }
+                { value: 'high', label: 'High', icon: '💥' },
               ].map(intensity => (
                 <button
                   key={intensity.value}
-                  onClick={() => setTheme(prev => ({ ...prev, neonIntensity: intensity.value as any }))}
+                  onClick={() =>
+                    setTheme(prev => ({
+                      ...prev,
+                      neonIntensity: intensity.value as any,
+                    }))
+                  }
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     theme.neonIntensity === intensity.value
                       ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-white shadow-glow-yellow-md'
@@ -337,7 +387,9 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
               <input
                 type="checkbox"
                 checked={theme.animations}
-                onChange={(e) => setTheme(prev => ({ ...prev, animations: e.target.checked }))}
+                onChange={e =>
+                  setTheme(prev => ({ ...prev, animations: e.target.checked }))
+                }
                 className="rounded"
               />
               <span className="text-sm">Enable Animations</span>
@@ -346,7 +398,12 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
               <input
                 type="checkbox"
                 checked={theme.soundEffects}
-                onChange={(e) => setTheme(prev => ({ ...prev, soundEffects: e.target.checked }))}
+                onChange={e =>
+                  setTheme(prev => ({
+                    ...prev,
+                    soundEffects: e.target.checked,
+                  }))
+                }
                 className="rounded"
               />
               <span className="text-sm">Sound Effects</span>
@@ -358,7 +415,9 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
             <label className="block text-sm font-medium mb-2">Custom CSS</label>
             <textarea
               value={theme.customCSS}
-              onChange={(e) => setTheme(prev => ({ ...prev, customCSS: e.target.value }))}
+              onChange={e =>
+                setTheme(prev => ({ ...prev, customCSS: e.target.value }))
+              }
               placeholder="Add your custom CSS here..."
               className="w-full h-32 px-3 py-2 bg-glass-primary border border-glass-border rounded text-text-primary font-mono text-sm resize-none"
             />
@@ -375,54 +434,81 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
                 <input
                   type="checkbox"
                   checked={accessibility.highContrast}
-                  onChange={(e) => setAccessibility(prev => ({ ...prev, highContrast: e.target.checked }))}
+                  onChange={e =>
+                    setAccessibility(prev => ({
+                      ...prev,
+                      highContrast: e.target.checked,
+                    }))
+                  }
                   className="rounded"
                 />
                 <span className="text-sm">High Contrast Mode</span>
               </label>
-              
+
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={accessibility.reducedMotion}
-                  onChange={(e) => setAccessibility(prev => ({ ...prev, reducedMotion: e.target.checked }))}
+                  onChange={e =>
+                    setAccessibility(prev => ({
+                      ...prev,
+                      reducedMotion: e.target.checked,
+                    }))
+                  }
                   className="rounded"
                 />
                 <span className="text-sm">Reduce Motion</span>
               </label>
-              
+
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={accessibility.keyboardNavigation}
-                  onChange={(e) => setAccessibility(prev => ({ ...prev, keyboardNavigation: e.target.checked }))}
+                  onChange={e =>
+                    setAccessibility(prev => ({
+                      ...prev,
+                      keyboardNavigation: e.target.checked,
+                    }))
+                  }
                   className="rounded"
                 />
                 <span className="text-sm">Enhanced Keyboard Navigation</span>
               </label>
-              
+
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={accessibility.screenReader}
-                  onChange={(e) => setAccessibility(prev => ({ ...prev, screenReader: e.target.checked }))}
+                  onChange={e =>
+                    setAccessibility(prev => ({
+                      ...prev,
+                      screenReader: e.target.checked,
+                    }))
+                  }
                   className="rounded"
                 />
                 <span className="text-sm">Screen Reader Support</span>
               </label>
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium mb-2">Font Size</label>
+              <label className="block text-sm font-medium mb-2">
+                Font Size
+              </label>
               <div className="flex gap-2">
                 {[
                   { value: 'small', label: 'Small' },
                   { value: 'medium', label: 'Medium' },
-                  { value: 'large', label: 'Large' }
+                  { value: 'large', label: 'Large' },
                 ].map(size => (
                   <button
                     key={size.value}
-                    onClick={() => setAccessibility(prev => ({ ...prev, fontSize: size.value as any }))}
+                    onClick={() =>
+                      setAccessibility(prev => ({
+                        ...prev,
+                        fontSize: size.value as any,
+                      }))
+                    }
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       accessibility.fontSize === size.value
                         ? 'bg-gradient-to-r from-green-400 to-emerald-500 text-white shadow-glow-green-md'
@@ -442,7 +528,10 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
       {activeTab === 'shortcuts' && (
         <div className="space-y-4">
           {Object.entries(shortcuts).map(([key, value]) => (
-            <div key={key} className="flex items-center justify-between p-3 bg-glass-secondary rounded-lg">
+            <div
+              key={key}
+              className="flex items-center justify-between p-3 bg-glass-secondary rounded-lg"
+            >
               <div>
                 <div className="font-medium text-sm capitalize">
                   {key.replace(/([A-Z])/g, ' $1').trim()}
@@ -476,15 +565,15 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
               >
                 <div className="flex items-center gap-3 mb-2">
                   <div className="flex gap-1">
-                    <div 
+                    <div
                       className="w-4 h-4 rounded-full border border-white/20"
                       style={{ backgroundColor: preset.primaryColor }}
                     />
-                    <div 
+                    <div
                       className="w-4 h-4 rounded-full border border-white/20"
                       style={{ backgroundColor: preset.secondaryColor }}
                     />
-                    <div 
+                    <div
                       className="w-4 h-4 rounded-full border border-white/20"
                       style={{ backgroundColor: preset.accentColor }}
                     />
@@ -492,7 +581,8 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
                   <div className="font-medium text-sm">{preset.name}</div>
                 </div>
                 <div className="text-xs text-text-secondary">
-                  {preset.backgroundStyle} • {preset.neonIntensity} neon • {preset.animations ? 'animated' : 'static'}
+                  {preset.backgroundStyle} • {preset.neonIntensity} neon •{' '}
+                  {preset.animations ? 'animated' : 'static'}
                 </div>
               </div>
             ))}
@@ -525,7 +615,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({ classNam
               reducedMotion: false,
               fontSize: 'medium',
               keyboardNavigation: true,
-              screenReader: false
+              screenReader: false,
             });
           }}
           className="px-4 py-2 bg-glass-secondary text-text-primary rounded-lg text-sm font-medium hover:bg-glass-primary transition-all duration-200"

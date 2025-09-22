@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -12,7 +12,10 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error: Error; resetError: () => void }>;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -34,15 +37,22 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;
-        return <FallbackComponent error={this.state.error!} resetError={this.resetError} />;
+        return (
+          <FallbackComponent
+            error={this.state.error!}
+            resetError={this.resetError}
+          />
+        );
       }
 
       return (
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center p-8">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Something went wrong</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">
+              Something went wrong
+            </h2>
             <p className="text-muted-foreground mb-6">
-              {this.state.error?.message || "An unexpected error occurred"}
+              {this.state.error?.message || 'An unexpected error occurred'}
             </p>
             <button
               onClick={this.resetError}

@@ -50,47 +50,56 @@ export class EnhancedTelegramService {
   private config: TelegramConfig;
   private userSessions: Map<number, any> = new Map();
   private chatAnalytics: Map<number, any> = new Map();
-  private messageQueue: Array<{ message: TelegramMessage; priority: number; timestamp: number }> = [];
+  private messageQueue: Array<{
+    message: TelegramMessage;
+    priority: number;
+    timestamp: number;
+  }> = [];
   private isProcessingQueue: boolean = false;
 
   constructor(config: TelegramConfig) {
     this.config = config;
-    this.bot = new TelegramBot(config.token, { 
+    this.bot = new TelegramBot(config.token, {
       polling: config.polling !== false,
-      webHook: !!config.webhookUrl
+      webHook: !!config.webhookUrl,
     });
-    
+
     if (config.webhookUrl) {
       this.bot.setWebHook(config.webhookUrl);
     }
-    
+
     this.setupEventHandlers();
     this.startMessageQueueProcessor();
   }
 
   private setupEventHandlers() {
     // Enhanced message handling
-    this.bot.on('message', async (msg) => {
+    this.bot.on('message', async msg => {
       try {
         await this.handleEnhancedMessage(msg);
       } catch (error) {
         console.error('Error handling message:', error);
-        await this.sendErrorMessage(msg.chat.id, 'Sorry, an error occurred while processing your message.');
+        await this.sendErrorMessage(
+          msg.chat.id,
+          'Sorry, an error occurred while processing your message.'
+        );
       }
     });
 
     // Enhanced callback query handling
-    this.bot.on('callback_query', async (callbackQuery) => {
+    this.bot.on('callback_query', async callbackQuery => {
       try {
         await this.handleEnhancedCallbackQuery(callbackQuery);
       } catch (error) {
         console.error('Error handling callback query:', error);
-        await this.bot.answerCallbackQuery(callbackQuery.id, { text: 'Error processing request' });
+        await this.bot.answerCallbackQuery(callbackQuery.id, {
+          text: 'Error processing request',
+        });
       }
     });
 
     // Handle inline queries
-    this.bot.on('inline_query', async (inlineQuery) => {
+    this.bot.on('inline_query', async inlineQuery => {
       try {
         await this.handleInlineQuery(inlineQuery);
       } catch (error) {
@@ -99,7 +108,7 @@ export class EnhancedTelegramService {
     });
 
     // Handle channel posts
-    this.bot.on('channel_post', async (post) => {
+    this.bot.on('channel_post', async post => {
       try {
         await this.handleChannelPost(post);
       } catch (error) {
@@ -108,7 +117,7 @@ export class EnhancedTelegramService {
     });
 
     // Handle edited messages
-    this.bot.on('edited_message', async (msg) => {
+    this.bot.on('edited_message', async msg => {
       try {
         await this.handleEditedMessage(msg);
       } catch (error) {
@@ -117,17 +126,19 @@ export class EnhancedTelegramService {
     });
 
     // Error handling
-    this.bot.on('polling_error', (error) => {
+    this.bot.on('polling_error', error => {
       console.error('Telegram polling error:', error);
       this.isConnected = false;
     });
 
-    this.bot.on('webhook_error', (error) => {
+    this.bot.on('webhook_error', error => {
       console.error('Telegram webhook error:', error);
     });
 
     this.isConnected = true;
-    console.log('🤖 Enhanced Telegram bot connected and listening for messages');
+    console.log(
+      '🤖 Enhanced Telegram bot connected and listening for messages'
+    );
   }
 
   private async handleEnhancedMessage(msg: TelegramBot.Message) {
@@ -136,7 +147,9 @@ export class EnhancedTelegramService {
     const user = this.extractUserInfo(msg.from);
     const chat = this.extractChatInfo(msg.chat);
 
-    console.log(`📨 Enhanced message from ${user.username || user.firstName}: ${text}`);
+    console.log(
+      `📨 Enhanced message from ${user.username || user.firstName}: ${text}`
+    );
 
     // Update user session
     this.updateUserSession(chatId, user, chat);
@@ -154,8 +167,8 @@ export class EnhancedTelegramService {
         messageId: msg.message_id,
         timestamp: new Date(msg.date * 1000),
         user: user,
-        chat: chat
-      }
+        chat: chat,
+      },
     });
 
     // Handle different message types
@@ -174,7 +187,12 @@ export class EnhancedTelegramService {
     }
   }
 
-  private async handleTextMessage(msg: TelegramBot.Message, text: string, user: TelegramUser, chat: TelegramChat) {
+  private async handleTextMessage(
+    msg: TelegramBot.Message,
+    text: string,
+    user: TelegramUser,
+    chat: TelegramChat
+  ) {
     const chatId = msg.chat.id;
 
     // Track command usage for smart suggestions
@@ -213,10 +231,17 @@ export class EnhancedTelegramService {
   }
 
   // AI-Powered Commands
-  private async handleAICommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleAICommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     const query = text.replace('/ai', '').trim();
     if (!query) {
-      await this.sendMessage(chatId, 'Please provide a question after /ai command.\nExample: /ai What is artificial intelligence?');
+      await this.sendMessage(
+        chatId,
+        'Please provide a question after /ai command.\nExample: /ai What is artificial intelligence?'
+      );
       return;
     }
 
@@ -226,24 +251,44 @@ export class EnhancedTelegramService {
         context: `User: ${user.username || user.firstName}`,
         detail: 'detailed',
         includeSources: false,
-        useCache: true
+        useCache: true,
       });
 
       if (result.success) {
-        const answer = typeof result.result === 'string' ? result.result : result.result.text;
-        await this.sendMessage(chatId, `🤖 AI Response:\n\n${answer}`, 'Markdown');
+        const answer =
+          typeof result.result === 'string'
+            ? result.result
+            : result.result.text;
+        await this.sendMessage(
+          chatId,
+          `🤖 AI Response:\n\n${answer}`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, 'Sorry, I couldn\'t process your question. Please try again.');
+        await this.sendMessage(
+          chatId,
+          "Sorry, I couldn't process your question. Please try again."
+        );
       }
     } catch (error) {
-      await this.sendMessage(chatId, 'Sorry, there was an error processing your AI request.');
+      await this.sendMessage(
+        chatId,
+        'Sorry, there was an error processing your AI request.'
+      );
     }
   }
 
-  private async handleTranslateCommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleTranslateCommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     const parts = text.split(' ');
     if (parts.length < 3) {
-      await this.sendMessage(chatId, 'Usage: /translate <language> <text>\nExample: /translate es Hello world');
+      await this.sendMessage(
+        chatId,
+        'Usage: /translate <language> <text>\nExample: /translate es Hello world'
+      );
       return;
     }
 
@@ -256,24 +301,43 @@ export class EnhancedTelegramService {
         from: 'auto',
         to: targetLanguage,
         context: `User: ${user.username || user.firstName}`,
-        useCache: true
+        useCache: true,
       });
 
       if (result.success) {
-        const translation = typeof result.result === 'string' ? result.result : result.result.text;
-        await this.sendMessage(chatId, `🌍 Translation to ${targetLanguage}:\n\n${translation}`);
+        const translation =
+          typeof result.result === 'string'
+            ? result.result
+            : result.result.text;
+        await this.sendMessage(
+          chatId,
+          `🌍 Translation to ${targetLanguage}:\n\n${translation}`
+        );
       } else {
-        await this.sendMessage(chatId, 'Sorry, I couldn\'t translate your text. Please try again.');
+        await this.sendMessage(
+          chatId,
+          "Sorry, I couldn't translate your text. Please try again."
+        );
       }
     } catch (error) {
-      await this.sendMessage(chatId, 'Sorry, there was an error with the translation.');
+      await this.sendMessage(
+        chatId,
+        'Sorry, there was an error with the translation.'
+      );
     }
   }
 
-  private async handleAnalyzeCommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleAnalyzeCommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     const textToAnalyze = text.replace('/analyze', '').trim();
     if (!textToAnalyze) {
-      await this.sendMessage(chatId, 'Please provide text to analyze after /analyze command.');
+      await this.sendMessage(
+        chatId,
+        'Please provide text to analyze after /analyze command.'
+      );
       return;
     }
 
@@ -281,24 +345,44 @@ export class EnhancedTelegramService {
       const result = await geminiMCP.executeTool('gemini_sentiment_analysis', {
         text: textToAnalyze,
         detail: 'detailed',
-        useCache: true
+        useCache: true,
       });
 
       if (result.success) {
-        const analysis = typeof result.result === 'string' ? result.result : JSON.stringify(result.result);
-        await this.sendMessage(chatId, `📊 Sentiment Analysis:\n\n${analysis}`, 'Markdown');
+        const analysis =
+          typeof result.result === 'string'
+            ? result.result
+            : JSON.stringify(result.result);
+        await this.sendMessage(
+          chatId,
+          `📊 Sentiment Analysis:\n\n${analysis}`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, 'Sorry, I couldn\'t analyze your text. Please try again.');
+        await this.sendMessage(
+          chatId,
+          "Sorry, I couldn't analyze your text. Please try again."
+        );
       }
     } catch (error) {
-      await this.sendMessage(chatId, 'Sorry, there was an error with the analysis.');
+      await this.sendMessage(
+        chatId,
+        'Sorry, there was an error with the analysis.'
+      );
     }
   }
 
-  private async handleGenerateCommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleGenerateCommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     const prompt = text.replace('/generate', '').trim();
     if (!prompt) {
-      await this.sendMessage(chatId, 'Please provide a prompt after /generate command.\nExample: /generate Write a poem about AI');
+      await this.sendMessage(
+        chatId,
+        'Please provide a prompt after /generate command.\nExample: /generate Write a poem about AI'
+      );
       return;
     }
 
@@ -308,24 +392,44 @@ export class EnhancedTelegramService {
         type: 'article',
         length: 'medium',
         tone: 'creative',
-        useCache: true
+        useCache: true,
       });
 
       if (result.success) {
-        const content = typeof result.result === 'string' ? result.result : result.result.text;
-        await this.sendMessage(chatId, `✍️ Generated Content:\n\n${content}`, 'Markdown');
+        const content =
+          typeof result.result === 'string'
+            ? result.result
+            : result.result.text;
+        await this.sendMessage(
+          chatId,
+          `✍️ Generated Content:\n\n${content}`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, 'Sorry, I couldn\'t generate content. Please try again.');
+        await this.sendMessage(
+          chatId,
+          "Sorry, I couldn't generate content. Please try again."
+        );
       }
     } catch (error) {
-      await this.sendMessage(chatId, 'Sorry, there was an error generating content.');
+      await this.sendMessage(
+        chatId,
+        'Sorry, there was an error generating content.'
+      );
     }
   }
 
-  private async handleScheduleCommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleScheduleCommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     const parts = text.split(' ');
     if (parts.length < 3) {
-      await this.sendMessage(chatId, 'Usage: /schedule <time> <message>\nExample: /schedule 14:30 Meeting reminder');
+      await this.sendMessage(
+        chatId,
+        'Usage: /schedule <time> <message>\nExample: /schedule 14:30 Meeting reminder'
+      );
       return;
     }
 
@@ -335,7 +439,10 @@ export class EnhancedTelegramService {
     // Simple time validation
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(time)) {
-      await this.sendMessage(chatId, 'Invalid time format. Please use HH:MM format.');
+      await this.sendMessage(
+        chatId,
+        'Invalid time format. Please use HH:MM format.'
+      );
       return;
     }
 
@@ -348,41 +455,62 @@ export class EnhancedTelegramService {
       scheduledTime.setDate(scheduledTime.getDate() + 1);
     }
 
-    await this.sendMessage(chatId, `✅ Message scheduled for ${scheduledTime.toLocaleString()}:\n"${message}"`);
+    await this.sendMessage(
+      chatId,
+      `✅ Message scheduled for ${scheduledTime.toLocaleString()}:\n"${message}"`
+    );
   }
 
-  private async handleBroadcastCommand(chatId: number, text: string, user: TelegramUser) {
+  private async handleBroadcastCommand(
+    chatId: number,
+    text: string,
+    user: TelegramUser
+  ) {
     // Only allow broadcast for admin users (simplified check)
     if (!this.isAdminUser(user.id)) {
-      await this.sendMessage(chatId, '❌ You don\'t have permission to use broadcast commands.');
+      await this.sendMessage(
+        chatId,
+        "❌ You don't have permission to use broadcast commands."
+      );
       return;
     }
 
     const message = text.replace('/broadcast', '').trim();
     if (!message) {
-      await this.sendMessage(chatId, 'Usage: /broadcast <message>\nExample: /broadcast Important announcement');
+      await this.sendMessage(
+        chatId,
+        'Usage: /broadcast <message>\nExample: /broadcast Important announcement'
+      );
       return;
     }
 
-    await this.sendMessage(chatId, `📢 Broadcast message prepared:\n"${message}"\n\nSend /confirm to broadcast to all users.`);
+    await this.sendMessage(
+      chatId,
+      `📢 Broadcast message prepared:\n"${message}"\n\nSend /confirm to broadcast to all users.`
+    );
   }
 
   // Enhanced message sending with queue
-  private async sendMessage(chatId: number, text: string, parseMode?: string, options?: any) {
+  private async sendMessage(
+    chatId: number,
+    text: string,
+    parseMode?: string,
+    options?: any
+  ) {
     const message: TelegramMessage = {
       chatId,
       text,
       parseMode: parseMode as any,
       disableWebPagePreview: this.config.disableWebPagePreview,
       disableNotification: this.config.disableNotification,
-      ...options
+      ...options,
     };
 
     // Add to queue with priority
     this.messageQueue.push({
       message,
       priority: options?.priority || 1,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
 
     // Process queue if not already processing
@@ -407,17 +535,13 @@ export class EnhancedTelegramService {
       const { message } = this.messageQueue.shift()!;
 
       try {
-        await this.bot.sendMessage(
-          message.chatId,
-          message.text,
-          {
-            parse_mode: message.parseMode,
-            reply_to_message_id: message.replyToMessageId,
-            reply_markup: message.replyMarkup,
-            disable_web_page_preview: message.disableWebPagePreview,
-            disable_notification: message.disableNotification
-          }
-        );
+        await this.bot.sendMessage(message.chatId, message.text, {
+          parse_mode: message.parseMode,
+          reply_to_message_id: message.replyToMessageId,
+          reply_markup: message.replyMarkup,
+          disable_web_page_preview: message.disableWebPagePreview,
+          disable_notification: message.disableNotification,
+        });
 
         // Rate limiting - wait between messages
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -469,16 +593,18 @@ Type /help for more information or /menu for interactive options!`;
       inline_keyboard: [
         [
           { text: '🤖 Ask AI', callback_data: 'ai_menu' },
-          { text: '📊 Analytics', callback_data: 'analytics_menu' }
+          { text: '📊 Analytics', callback_data: 'analytics_menu' },
         ],
         [
           { text: '⚙️ Settings', callback_data: 'settings_menu' },
-          { text: '❓ Help', callback_data: 'help_menu' }
-        ]
-      ]
+          { text: '❓ Help', callback_data: 'help_menu' },
+        ],
+      ],
     };
 
-    await this.sendMessage(chatId, welcomeText, 'Markdown', { replyMarkup: keyboard });
+    await this.sendMessage(chatId, welcomeText, 'Markdown', {
+      replyMarkup: keyboard,
+    });
   }
 
   private async sendEnhancedHelpMessage(chatId: number) {
@@ -521,7 +647,7 @@ Need more help? Contact support or use /menu for interactive options!`;
       lastName: from.last_name,
       languageCode: from.language_code,
       isBot: from.is_bot,
-      isPremium: (from as any).is_premium
+      isPremium: (from as any).is_premium,
     };
   }
 
@@ -532,16 +658,20 @@ Need more help? Contact support or use /menu for interactive options!`;
       title: chat.title,
       username: chat.username,
       description: chat.description,
-      memberCount: (chat as any).member_count
+      memberCount: (chat as any).member_count,
     };
   }
 
-  private updateUserSession(chatId: number, user: TelegramUser, chat: TelegramChat) {
+  private updateUserSession(
+    chatId: number,
+    user: TelegramUser,
+    chat: TelegramChat
+  ) {
     this.userSessions.set(chatId, {
       user,
       chat,
       lastActivity: new Date(),
-      messageCount: (this.userSessions.get(chatId)?.messageCount || 0) + 1
+      messageCount: (this.userSessions.get(chatId)?.messageCount || 0) + 1,
     });
   }
 
@@ -550,12 +680,12 @@ Need more help? Contact support or use /menu for interactive options!`;
       totalMessages: 0,
       commandsUsed: 0,
       lastActivity: new Date(),
-      userTypes: new Set()
+      userTypes: new Set(),
     };
 
     analytics.totalMessages++;
     analytics.lastActivity = new Date();
-    
+
     if (msg.text?.startsWith('/')) {
       analytics.commandsUsed++;
     }
@@ -579,23 +709,38 @@ Need more help? Contact support or use /menu for interactive options!`;
 
   // Placeholder methods for other message types
   private async handlePhotoMessage(msg: TelegramBot.Message) {
-    await this.sendMessage(msg.chat.id, '📸 Photo received! I can analyze images with AI. Send /ai <description> for image analysis.');
+    await this.sendMessage(
+      msg.chat.id,
+      '📸 Photo received! I can analyze images with AI. Send /ai <description> for image analysis.'
+    );
   }
 
   private async handleDocumentMessage(msg: TelegramBot.Message) {
-    await this.sendMessage(msg.chat.id, '📄 Document received! I can process documents. Send /analyze <text> for document analysis.');
+    await this.sendMessage(
+      msg.chat.id,
+      '📄 Document received! I can process documents. Send /analyze <text> for document analysis.'
+    );
   }
 
   private async handleVoiceMessage(msg: TelegramBot.Message) {
-    await this.sendMessage(msg.chat.id, '🎤 Voice message received! Voice processing coming soon.');
+    await this.sendMessage(
+      msg.chat.id,
+      '🎤 Voice message received! Voice processing coming soon.'
+    );
   }
 
   private async handleStickerMessage(msg: TelegramBot.Message) {
-    await this.sendMessage(msg.chat.id, '😄 Sticker received! Thanks for the emoji!');
+    await this.sendMessage(
+      msg.chat.id,
+      '😄 Sticker received! Thanks for the emoji!'
+    );
   }
 
   private async handleLocationMessage(msg: TelegramBot.Message) {
-    await this.sendMessage(msg.chat.id, '📍 Location received! Location-based features coming soon.');
+    await this.sendMessage(
+      msg.chat.id,
+      '📍 Location received! Location-based features coming soon.'
+    );
   }
 
   private async handleInlineQuery(inlineQuery: TelegramBot.InlineQuery) {
@@ -607,9 +752,9 @@ Need more help? Contact support or use /menu for interactive options!`;
         title: 'Ask AI',
         description: 'Ask AI anything',
         input_message_content: {
-          message_text: '🤖 AI Query: ' + inlineQuery.query
-        }
-      }
+          message_text: '🤖 AI Query: ' + inlineQuery.query,
+        },
+      },
     ];
 
     await this.bot.answerInlineQuery(inlineQuery.id, results);
@@ -623,7 +768,9 @@ Need more help? Contact support or use /menu for interactive options!`;
     console.log('✏️ Message edited:', msg.text);
   }
 
-  private async handleEnhancedCallbackQuery(callbackQuery: TelegramBot.CallbackQuery) {
+  private async handleEnhancedCallbackQuery(
+    callbackQuery: TelegramBot.CallbackQuery
+  ) {
     const chatId = callbackQuery.message?.chat.id;
     const data = callbackQuery.data;
 
@@ -633,11 +780,14 @@ Need more help? Contact support or use /menu for interactive options!`;
 
     // Handle enhanced callback queries
     if (data === 'ai_menu') {
-      await this.sendMessage(chatId, '🤖 AI Menu:\n\n• Ask me anything\n• Translate text\n• Analyze sentiment\n• Generate content\n\nUse commands like /ai <question>');
+      await this.sendMessage(
+        chatId,
+        '🤖 AI Menu:\n\n• Ask me anything\n• Translate text\n• Analyze sentiment\n• Generate content\n\nUse commands like /ai <question>'
+      );
     } else if (data === 'analytics_menu') {
       const analytics = this.chatAnalytics.get(chatId);
       const session = this.userSessions.get(chatId);
-      
+
       const analyticsText = `📊 Your Analytics:
 • Messages: ${analytics?.totalMessages || 0}
 • Commands: ${analytics?.commandsUsed || 0}
@@ -646,7 +796,10 @@ Need more help? Contact support or use /menu for interactive options!`;
 
       await this.sendMessage(chatId, analyticsText);
     } else if (data === 'settings_menu') {
-      await this.sendMessage(chatId, '⚙️ Settings:\n\n• Language: Auto-detect\n• Notifications: Enabled\n• AI Responses: Cached\n• Analytics: Enabled');
+      await this.sendMessage(
+        chatId,
+        '⚙️ Settings:\n\n• Language: Auto-detect\n• Notifications: Enabled\n• AI Responses: Cached\n• Analytics: Enabled'
+      );
     } else if (data === 'help_menu') {
       await this.sendEnhancedHelpMessage(chatId);
     }
@@ -658,10 +811,14 @@ Need more help? Contact support or use /menu for interactive options!`;
   }
 
   public async broadcastMessage(text: string, excludeChatIds: number[] = []) {
-    const chatIds = Array.from(this.userSessions.keys()).filter(id => !excludeChatIds.includes(id));
-    
+    const chatIds = Array.from(this.userSessions.keys()).filter(
+      id => !excludeChatIds.includes(id)
+    );
+
     for (const chatId of chatIds) {
-      await this.sendMessage(chatId, `📢 Broadcast:\n\n${text}`, undefined, { priority: 3 });
+      await this.sendMessage(chatId, `📢 Broadcast:\n\n${text}`, undefined, {
+        priority: 3,
+      });
     }
   }
 
@@ -670,7 +827,7 @@ Need more help? Contact support or use /menu for interactive options!`;
       totalUsers: this.userSessions.size,
       totalChats: this.chatAnalytics.size,
       isConnected: this.isConnected,
-      queueLength: this.messageQueue.length
+      queueLength: this.messageQueue.length,
     };
   }
 
@@ -692,7 +849,7 @@ export const enhancedTelegramService = new EnhancedTelegramService({
   token: '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0',
   polling: true,
   parseMode: 'Markdown',
-  disableWebPagePreview: true
+  disableWebPagePreview: true,
 });
 
 export default enhancedTelegramService;

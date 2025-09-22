@@ -7,7 +7,7 @@ import { taskAutomationEngine } from './taskAutomationEngine';
 import { TaskType } from './types/task';
 // Import appropriate adapter based on environment
 const isDevelopment = process.env.NODE_ENV === 'development';
-const { initializeFirestore } = isDevelopment 
+const { initializeFirestore } = isDevelopment
   ? require('./adapters/mockFirestoreAdapter')
   : require('./adapters/firestoreAdapter');
 
@@ -21,8 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
   } else {
@@ -32,10 +35,10 @@ app.use((req, res, next) => {
 
 // Health check endpoint
 app.get('/health', (_req, res) => {
-  res.json({ 
-    status: 'healthy', 
+  res.json({
+    status: 'healthy',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.0.0',
   });
 });
 
@@ -45,9 +48,9 @@ app.get('/task-types', (_req, res) => {
     const taskTypes = taskAutomationEngine.getAvailableTaskTypes();
     res.json({ taskTypes });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       error: 'Failed to get task types',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
@@ -58,15 +61,15 @@ if (isDevelopment) {
     try {
       const { getStorageStats } = require('./adapters/mockFirestoreAdapter');
       const stats = getStorageStats();
-      res.json({ 
+      res.json({
         mode: 'development',
         storage: stats,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       res.status(500).json({
         error: 'Failed to get storage stats',
-        message: error instanceof Error ? error.message : String(error)
+        message: error instanceof Error ? error.message : String(error),
       });
     }
   });
@@ -75,14 +78,14 @@ if (isDevelopment) {
     try {
       const { clearAllData } = require('./adapters/mockFirestoreAdapter');
       clearAllData();
-      res.json({ 
+      res.json({
         message: 'All data cleared',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       res.status(500).json({
         error: 'Failed to clear data',
-        message: error instanceof Error ? error.message : String(error)
+        message: error instanceof Error ? error.message : String(error),
       });
     }
   });
@@ -97,7 +100,7 @@ app.post('/tasks', async (req, res) => {
     if (!name || !type) {
       res.status(400).json({
         error: 'Missing required fields',
-        required: ['name', 'type']
+        required: ['name', 'type'],
       });
       return;
     }
@@ -106,7 +109,7 @@ app.post('/tasks', async (req, res) => {
     if (!Object.values(TaskType).includes(type)) {
       res.status(400).json({
         error: 'Invalid task type',
-        validTypes: Object.values(TaskType)
+        validTypes: Object.values(TaskType),
       });
       return;
     }
@@ -122,7 +125,7 @@ app.post('/tasks', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to create task',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
@@ -136,7 +139,7 @@ app.get('/tasks/:id', async (req, res) => {
     if (!task) {
       res.status(404).json({
         error: 'Task not found',
-        taskId: id
+        taskId: id,
       });
       return;
     }
@@ -145,7 +148,7 @@ app.get('/tasks/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to get task',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
@@ -161,7 +164,7 @@ app.post('/tasks/:id/execute', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to execute task',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
@@ -175,7 +178,7 @@ app.get('/executions/:id', async (req, res) => {
     if (!execution) {
       res.status(404).json({
         error: 'Execution not found',
-        executionId: id
+        executionId: id,
       });
       return;
     }
@@ -184,7 +187,7 @@ app.get('/executions/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to get execution',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
@@ -198,26 +201,33 @@ app.get('/tasks/:id/executions', async (req, res) => {
   } catch (error) {
     res.status(500).json({
       error: 'Failed to get task executions',
-      message: error instanceof Error ? error.message : String(error)
+      message: error instanceof Error ? error.message : String(error),
     });
   }
 });
 
 // Error handling middleware
-app.use((error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Unhandled error:', error);
-  res.status(500).json({
-    error: 'Internal server error',
-    message: error.message
-  });
-});
+app.use(
+  (
+    error: Error,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    console.error('Unhandled error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message,
+    });
+  }
+);
 
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
     error: 'Endpoint not found',
     path: req.path,
-    method: req.method
+    method: req.method,
   });
 });
 

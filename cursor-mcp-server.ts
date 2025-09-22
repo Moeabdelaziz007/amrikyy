@@ -93,23 +93,23 @@ class AuraOSMCPServer {
     });
 
     // Handle tool calls
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
         switch (name) {
           case 'auraos_workflow_list':
             return await this.listWorkflows();
-          
+
           case 'auraos_service_restart':
             return await this.restartService(args.service);
-          
+
           case 'auraos_get_metrics':
             return await this.getMetrics(args.metric_type || 'system');
-          
+
           case 'auraos_get_logs':
             return await this.getLogs(args.level || 'info', args.lines || 100);
-          
+
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
@@ -193,7 +193,7 @@ class AuraOSMCPServer {
   }
 
   private setupErrorHandling() {
-    this.server.onerror = (error) => {
+    this.server.onerror = error => {
       console.error('[MCP Error]', error);
     };
 

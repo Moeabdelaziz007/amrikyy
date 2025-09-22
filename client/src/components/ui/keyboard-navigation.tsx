@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 interface KeyboardNavigationProps {
   children: React.ReactNode;
@@ -15,7 +15,9 @@ export function KeyboardNavigation({ children }: KeyboardNavigationProps) {
           case 'k':
             event.preventDefault();
             // Focus search or command palette
-            const searchInput = document.querySelector('input[type="search"], input[placeholder*="search" i]') as HTMLInputElement;
+            const searchInput = document.querySelector(
+              'input[type="search"], input[placeholder*="search" i]'
+            ) as HTMLInputElement;
             if (searchInput) {
               searchInput.focus();
             }

@@ -35,10 +35,11 @@ export const VALIDATION_PATTERNS = {
   url: /^https?:\/\/.+/,
   phone: /^\+?[\d\s\-\(\)]+$/,
   username: /^[a-zA-Z0-9_]{3,20}$/,
-  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+  password:
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
   alphanumeric: /^[a-zA-Z0-9]+$/,
   hexColor: /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
-  slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+  slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
 };
 
 // Common validation messages
@@ -50,8 +51,10 @@ export const VALIDATION_MESSAGES = {
   email: 'Please enter a valid email address',
   url: 'Please enter a valid URL',
   phone: 'Please enter a valid phone number',
-  username: 'Username must be 3-20 characters long and contain only letters, numbers, and underscores',
-  password: 'Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character',
+  username:
+    'Username must be 3-20 characters long and contain only letters, numbers, and underscores',
+  password:
+    'Password must be at least 8 characters long and contain uppercase, lowercase, number, and special character',
   alphanumeric: 'Only letters and numbers are allowed',
   hexColor: 'Please enter a valid hex color code',
   slug: 'Slug must contain only lowercase letters, numbers, and hyphens',
@@ -61,24 +64,33 @@ export const VALIDATION_MESSAGES = {
   date: 'Please enter a valid date',
   futureDate: 'Please enter a future date',
   pastDate: 'Please enter a past date',
-  custom: 'Invalid value'
+  custom: 'Invalid value',
 };
 
 /**
  * Validates a single field value against validation rules
  */
-export function validateField(value: any, rules: ValidationRule): ValidationResult {
+export function validateField(
+  value: any,
+  rules: ValidationRule
+): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
   // Required validation
-  if (rules.required && (value === null || value === undefined || value === '')) {
+  if (
+    rules.required &&
+    (value === null || value === undefined || value === '')
+  ) {
     errors.push(VALIDATION_MESSAGES.required);
     return { isValid: false, errors, warnings };
   }
 
   // Skip other validations if value is empty and not required
-  if (!rules.required && (value === null || value === undefined || value === '')) {
+  if (
+    !rules.required &&
+    (value === null || value === undefined || value === '')
+  ) {
     return { isValid: true, errors: [], warnings };
   }
 
@@ -150,14 +162,16 @@ export function validateField(value: any, rules: ValidationRule): ValidationResu
   return {
     isValid: errors.length === 0,
     errors,
-    warnings
+    warnings,
   };
 }
 
 /**
  * Validates multiple fields at once
  */
-export function validateFields(fields: Record<string, FieldValidation>): Record<string, ValidationResult> {
+export function validateFields(
+  fields: Record<string, FieldValidation>
+): Record<string, ValidationResult> {
   const results: Record<string, ValidationResult> = {};
 
   for (const [fieldName, field] of Object.entries(fields)) {
@@ -180,7 +194,9 @@ export function isFormValid(fields: Record<string, FieldValidation>): boolean {
 /**
  * Gets all validation errors from fields
  */
-export function getAllErrors(fields: Record<string, FieldValidation>): Record<string, string[]> {
+export function getAllErrors(
+  fields: Record<string, FieldValidation>
+): Record<string, string[]> {
   const errors: Record<string, string[]> = {};
 
   for (const [fieldName, field] of Object.entries(fields)) {
@@ -200,51 +216,51 @@ export const COMMON_RULES: Record<string, ValidationRule> = {
   email: {
     required: true,
     email: true,
-    maxLength: 254
+    maxLength: 254,
   },
   password: {
     required: true,
     minLength: 8,
-    pattern: VALIDATION_PATTERNS.password
+    pattern: VALIDATION_PATTERNS.password,
   },
   username: {
     required: true,
     minLength: 3,
     maxLength: 20,
-    pattern: VALIDATION_PATTERNS.username
+    pattern: VALIDATION_PATTERNS.username,
   },
   name: {
     required: true,
     minLength: 2,
-    maxLength: 50
+    maxLength: 50,
   },
   title: {
     required: true,
     minLength: 1,
-    maxLength: 100
+    maxLength: 100,
   },
   description: {
-    maxLength: 500
+    maxLength: 500,
   },
   url: {
-    url: true
+    url: true,
   },
   phone: {
-    pattern: VALIDATION_PATTERNS.phone
+    pattern: VALIDATION_PATTERNS.phone,
   },
   positiveNumber: {
     number: true,
-    positive: true
+    positive: true,
   },
   integer: {
-    integer: true
+    integer: true,
   },
   slug: {
     required: true,
     pattern: VALIDATION_PATTERNS.slug,
     minLength: 3,
-    maxLength: 50
-  }
+    maxLength: 50,
+  },
 };
 
 /**
@@ -296,7 +312,8 @@ export function validateAndSanitizeForm(
     if (!rule) continue;
 
     // Sanitize string values
-    const sanitizedValue = typeof value === 'string' ? sanitizeInput(value) : value;
+    const sanitizedValue =
+      typeof value === 'string' ? sanitizeInput(value) : value;
     sanitizedData[fieldName] = sanitizedValue;
 
     // Validate
@@ -310,19 +327,21 @@ export function validateAndSanitizeForm(
   return {
     isValid,
     data: sanitizedData,
-    errors
+    errors,
   };
 }
 
 /**
  * Format validation errors for display
  */
-export function formatValidationErrors(errors: Record<string, string[]>): string[] {
+export function formatValidationErrors(
+  errors: Record<string, string[]>
+): string[] {
   const allErrors: string[] = [];
-  
+
   for (const [fieldName, fieldErrors] of Object.entries(errors)) {
     allErrors.push(...fieldErrors);
   }
-  
+
   return allErrors;
 }

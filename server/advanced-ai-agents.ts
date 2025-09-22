@@ -97,29 +97,39 @@ export class AdvancedAIAgentSystem {
     // Content Creation Agent
     this.createAgent({
       name: 'Content Creator Pro',
-      description: 'Specialized in creating high-quality content for various platforms',
+      description:
+        'Specialized in creating high-quality content for various platforms',
       type: 'specialist',
-      capabilities: ['content_generation', 'seo_optimization', 'brand_voice', 'multi_platform'],
+      capabilities: [
+        'content_generation',
+        'seo_optimization',
+        'brand_voice',
+        'multi_platform',
+      ],
       tools: ['content_generator', 'nlp_processor', 'web_scraper'],
       personality: {
         tone: 'creative',
         communicationStyle: 'detailed',
         expertise: ['content marketing', 'SEO', 'social media', 'blogging'],
         limitations: ['technical documentation', 'legal content'],
-        preferences: { style: 'engaging', length: 'medium' }
+        preferences: { style: 'engaging', length: 'medium' },
       },
       knowledge: {
         domains: ['marketing', 'content', 'social media'],
         skills: ['writing', 'editing', 'research', 'strategy'],
         experience: 85,
         certifications: ['Content Marketing Certified', 'SEO Specialist'],
-        specializations: ['blog posts', 'social media content', 'email campaigns']
+        specializations: [
+          'blog posts',
+          'social media content',
+          'email campaigns',
+        ],
       },
       memory: {
         shortTerm: new Map(),
         longTerm: new Map(),
         episodic: [],
-        semantic: new Map()
+        semantic: new Map(),
       },
       performance: {
         tasksCompleted: 0,
@@ -127,36 +137,54 @@ export class AdvancedAIAgentSystem {
         averageResponseTime: 0,
         userSatisfaction: 0,
         learningProgress: 0,
-        efficiency: 0
-      }
+        efficiency: 0,
+      },
     });
 
     // Data Analysis Agent
     this.createAgent({
       name: 'Data Insights Expert',
-      description: 'Expert in data analysis, visualization, and business intelligence',
+      description:
+        'Expert in data analysis, visualization, and business intelligence',
       type: 'specialist',
-      capabilities: ['data_analysis', 'statistical_modeling', 'visualization', 'predictive_analytics'],
+      capabilities: [
+        'data_analysis',
+        'statistical_modeling',
+        'visualization',
+        'predictive_analytics',
+      ],
       tools: ['data_analyzer', 'realtime_monitor', 'api_integrator'],
       personality: {
         tone: 'professional',
         communicationStyle: 'technical',
-        expertise: ['statistics', 'machine learning', 'data visualization', 'business intelligence'],
+        expertise: [
+          'statistics',
+          'machine learning',
+          'data visualization',
+          'business intelligence',
+        ],
         limitations: ['creative content', 'subjective analysis'],
-        preferences: { accuracy: 'high', detail: 'comprehensive' }
+        preferences: { accuracy: 'high', detail: 'comprehensive' },
       },
       knowledge: {
         domains: ['data science', 'statistics', 'business intelligence'],
         skills: ['python', 'r', 'sql', 'machine learning', 'visualization'],
         experience: 90,
-        certifications: ['Data Science Professional', 'Statistical Analysis Expert'],
-        specializations: ['predictive modeling', 'dashboard creation', 'trend analysis']
+        certifications: [
+          'Data Science Professional',
+          'Statistical Analysis Expert',
+        ],
+        specializations: [
+          'predictive modeling',
+          'dashboard creation',
+          'trend analysis',
+        ],
       },
       memory: {
         shortTerm: new Map(),
         longTerm: new Map(),
         episodic: [],
-        semantic: new Map()
+        semantic: new Map(),
       },
       performance: {
         tasksCompleted: 0,
@@ -164,8 +192,8 @@ export class AdvancedAIAgentSystem {
         averageResponseTime: 0,
         userSatisfaction: 0,
         learningProgress: 0,
-        efficiency: 0
-      }
+        efficiency: 0,
+      },
     });
 
     // Automation Specialist Agent
@@ -173,27 +201,48 @@ export class AdvancedAIAgentSystem {
       name: 'Workflow Automation Master',
       description: 'Specializes in creating and managing automated workflows',
       type: 'specialist',
-      capabilities: ['workflow_design', 'process_optimization', 'integration', 'monitoring'],
+      capabilities: [
+        'workflow_design',
+        'process_optimization',
+        'integration',
+        'monitoring',
+      ],
       tools: ['workflow_automator', 'api_integrator', 'realtime_monitor'],
       personality: {
         tone: 'authoritative',
         communicationStyle: 'technical',
-        expertise: ['process automation', 'system integration', 'workflow optimization'],
+        expertise: [
+          'process automation',
+          'system integration',
+          'workflow optimization',
+        ],
         limitations: ['creative tasks', 'subjective decisions'],
-        preferences: { efficiency: 'maximum', reliability: 'high' }
+        preferences: { efficiency: 'maximum', reliability: 'high' },
       },
       knowledge: {
         domains: ['automation', 'integration', 'process management'],
-        skills: ['workflow design', 'api integration', 'monitoring', 'optimization'],
+        skills: [
+          'workflow design',
+          'api integration',
+          'monitoring',
+          'optimization',
+        ],
         experience: 88,
-        certifications: ['Automation Specialist', 'Process Optimization Expert'],
-        specializations: ['business process automation', 'system integration', 'monitoring']
+        certifications: [
+          'Automation Specialist',
+          'Process Optimization Expert',
+        ],
+        specializations: [
+          'business process automation',
+          'system integration',
+          'monitoring',
+        ],
       },
       memory: {
         shortTerm: new Map(),
         longTerm: new Map(),
         episodic: [],
-        semantic: new Map()
+        semantic: new Map(),
       },
       performance: {
         tasksCompleted: 0,
@@ -201,8 +250,8 @@ export class AdvancedAIAgentSystem {
         averageResponseTime: 0,
         userSatisfaction: 0,
         learningProgress: 0,
-        efficiency: 0
-      }
+        efficiency: 0,
+      },
     });
 
     // General Assistant Agent
@@ -210,27 +259,48 @@ export class AdvancedAIAgentSystem {
       name: 'Universal Assistant',
       description: 'General-purpose AI assistant for various tasks',
       type: 'assistant',
-      capabilities: ['general_assistance', 'information_retrieval', 'task_coordination', 'learning'],
-      tools: ['content_generator', 'data_analyzer', 'nlp_processor', 'web_scraper'],
+      capabilities: [
+        'general_assistance',
+        'information_retrieval',
+        'task_coordination',
+        'learning',
+      ],
+      tools: [
+        'content_generator',
+        'data_analyzer',
+        'nlp_processor',
+        'web_scraper',
+      ],
       personality: {
         tone: 'friendly',
         communicationStyle: 'conversational',
-        expertise: ['general knowledge', 'task coordination', 'information synthesis'],
+        expertise: [
+          'general knowledge',
+          'task coordination',
+          'information synthesis',
+        ],
         limitations: ['highly specialized tasks', 'domain-specific expertise'],
-        preferences: { helpfulness: 'maximum', clarity: 'high' }
+        preferences: { helpfulness: 'maximum', clarity: 'high' },
       },
       knowledge: {
         domains: ['general', 'coordination', 'information'],
         skills: ['communication', 'research', 'coordination', 'learning'],
         experience: 75,
-        certifications: ['General AI Assistant', 'Task Coordination Specialist'],
-        specializations: ['general assistance', 'information retrieval', 'task coordination']
+        certifications: [
+          'General AI Assistant',
+          'Task Coordination Specialist',
+        ],
+        specializations: [
+          'general assistance',
+          'information retrieval',
+          'task coordination',
+        ],
       },
       memory: {
         shortTerm: new Map(),
         longTerm: new Map(),
         episodic: [],
-        semantic: new Map()
+        semantic: new Map(),
       },
       performance: {
         tasksCompleted: 0,
@@ -238,8 +308,8 @@ export class AdvancedAIAgentSystem {
         averageResponseTime: 0,
         userSatisfaction: 0,
         learningProgress: 0,
-        efficiency: 0
-      }
+        efficiency: 0,
+      },
     });
 
     // Coordinator Agent
@@ -247,27 +317,43 @@ export class AdvancedAIAgentSystem {
       name: 'Project Coordinator',
       description: 'Coordinates multiple agents and manages complex projects',
       type: 'coordinator',
-      capabilities: ['project_management', 'agent_coordination', 'resource_allocation', 'progress_tracking'],
+      capabilities: [
+        'project_management',
+        'agent_coordination',
+        'resource_allocation',
+        'progress_tracking',
+      ],
       tools: ['workflow_automator', 'realtime_monitor', 'api_integrator'],
       personality: {
         tone: 'authoritative',
         communicationStyle: 'concise',
-        expertise: ['project management', 'team coordination', 'resource optimization'],
+        expertise: [
+          'project management',
+          'team coordination',
+          'resource optimization',
+        ],
         limitations: ['detailed execution', 'creative tasks'],
-        preferences: { efficiency: 'maximum', organization: 'high' }
+        preferences: { efficiency: 'maximum', organization: 'high' },
       },
       knowledge: {
         domains: ['project management', 'coordination', 'resource management'],
         skills: ['planning', 'coordination', 'monitoring', 'optimization'],
         experience: 92,
-        certifications: ['Project Management Professional', 'Team Coordination Expert'],
-        specializations: ['multi-agent coordination', 'project tracking', 'resource allocation']
+        certifications: [
+          'Project Management Professional',
+          'Team Coordination Expert',
+        ],
+        specializations: [
+          'multi-agent coordination',
+          'project tracking',
+          'resource allocation',
+        ],
       },
       memory: {
         shortTerm: new Map(),
         longTerm: new Map(),
         episodic: [],
-        semantic: new Map()
+        semantic: new Map(),
       },
       performance: {
         tasksCompleted: 0,
@@ -275,19 +361,21 @@ export class AdvancedAIAgentSystem {
         averageResponseTime: 0,
         userSatisfaction: 0,
         learningProgress: 0,
-        efficiency: 0
-      }
+        efficiency: 0,
+      },
     });
   }
 
   // Agent Management Methods
-  createAgent(agentData: Omit<AIAgent, 'id' | 'status' | 'createdAt' | 'lastActive'>): AIAgent {
+  createAgent(
+    agentData: Omit<AIAgent, 'id' | 'status' | 'createdAt' | 'lastActive'>
+  ): AIAgent {
     const agent: AIAgent = {
       ...agentData,
       id: `agent_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       status: 'active',
       createdAt: new Date(),
-      lastActive: new Date()
+      lastActive: new Date(),
     };
 
     this.agents.set(agent.id, agent);
@@ -303,7 +391,9 @@ export class AdvancedAIAgentSystem {
   }
 
   getAgentsByType(type: string): AIAgent[] {
-    return Array.from(this.agents.values()).filter(agent => agent.type === type);
+    return Array.from(this.agents.values()).filter(
+      agent => agent.type === type
+    );
   }
 
   updateAgent(agentId: string, updates: Partial<AIAgent>): boolean {
@@ -324,7 +414,10 @@ export class AdvancedAIAgentSystem {
   }
 
   // Task Management Methods
-  async assignTask(agentId: string, task: Omit<AgentTask, 'id' | 'agentId' | 'status' | 'createdAt'>): Promise<AgentTask> {
+  async assignTask(
+    agentId: string,
+    task: Omit<AgentTask, 'id' | 'agentId' | 'status' | 'createdAt'>
+  ): Promise<AgentTask> {
     const agent = this.agents.get(agentId);
     if (!agent) {
       throw new Error(`Agent not found: ${agentId}`);
@@ -335,14 +428,14 @@ export class AdvancedAIAgentSystem {
       id: `task_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       agentId,
       status: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.tasks.set(agentTask.id, agentTask);
-    
+
     // Start task execution
     this.executeTask(agentTask.id);
-    
+
     return agentTask;
   }
 
@@ -364,42 +457,56 @@ export class AdvancedAIAgentSystem {
     try {
       // Execute task using agent's tools
       const result = await this.executeAgentTask(agent, task);
-      
+
       task.status = 'completed';
       task.completedAt = new Date();
       task.result = result;
 
       // Update agent performance
-      this.updateAgentPerformance(agent, true, task.completedAt.getTime() - task.startedAt!.getTime());
+      this.updateAgentPerformance(
+        agent,
+        true,
+        task.completedAt.getTime() - task.startedAt!.getTime()
+      );
 
       // Store in agent memory
       this.storeInAgentMemory(agent, task, result);
-
     } catch (error) {
       task.status = 'failed';
       task.error = error.message;
       task.completedAt = new Date();
 
       // Update agent performance
-      this.updateAgentPerformance(agent, false, task.completedAt.getTime() - task.startedAt!.getTime());
+      this.updateAgentPerformance(
+        agent,
+        false,
+        task.completedAt.getTime() - task.startedAt!.getTime()
+      );
     }
   }
 
-  private async executeAgentTask(agent: AIAgent, task: AgentTask): Promise<any> {
+  private async executeAgentTask(
+    agent: AIAgent,
+    task: AgentTask
+  ): Promise<any> {
     // Determine which tools to use based on task type
     const toolsToUse = this.selectToolsForTask(agent, task);
-    
+
     const results: any[] = [];
-    
+
     for (const toolId of toolsToUse) {
       try {
-        const toolResult = await this.aiToolsManager.executeTool(toolId, task.parameters, {
-          userId: 'system',
-          sessionId: `session_${Date.now()}`,
-          requestId: task.id,
-          timestamp: new Date(),
-          metadata: { agentId: agent.id, taskType: task.type }
-        });
+        const toolResult = await this.aiToolsManager.executeTool(
+          toolId,
+          task.parameters,
+          {
+            userId: 'system',
+            sessionId: `session_${Date.now()}`,
+            requestId: task.id,
+            timestamp: new Date(),
+            metadata: { agentId: agent.id, taskType: task.type },
+          }
+        );
 
         results.push(toolResult);
       } catch (error) {
@@ -417,25 +524,35 @@ export class AdvancedAIAgentSystem {
     const taskType = task.type.toLowerCase();
 
     if (taskType.includes('content') || taskType.includes('writing')) {
-      return availableTools.filter(tool => tool.includes('content') || tool.includes('nlp'));
+      return availableTools.filter(
+        tool => tool.includes('content') || tool.includes('nlp')
+      );
     }
-    
+
     if (taskType.includes('data') || taskType.includes('analysis')) {
-      return availableTools.filter(tool => tool.includes('data') || tool.includes('analyzer'));
+      return availableTools.filter(
+        tool => tool.includes('data') || tool.includes('analyzer')
+      );
     }
-    
+
     if (taskType.includes('automation') || taskType.includes('workflow')) {
-      return availableTools.filter(tool => tool.includes('workflow') || tool.includes('automator'));
+      return availableTools.filter(
+        tool => tool.includes('workflow') || tool.includes('automator')
+      );
     }
 
     // Default to all available tools
     return availableTools;
   }
 
-  private synthesizeResults(agent: AIAgent, task: AgentTask, results: any[]): any {
+  private synthesizeResults(
+    agent: AIAgent,
+    task: AgentTask,
+    results: any[]
+  ): any {
     // Synthesize results based on agent personality and capabilities
     const successfulResults = results.filter(r => r.success);
-    
+
     if (successfulResults.length === 0) {
       throw new Error('No successful tool executions');
     }
@@ -447,13 +564,21 @@ export class AdvancedAIAgentSystem {
       case 'assistant':
         return this.synthesizeAssistantResults(agent, task, successfulResults);
       case 'coordinator':
-        return this.synthesizeCoordinatorResults(agent, task, successfulResults);
+        return this.synthesizeCoordinatorResults(
+          agent,
+          task,
+          successfulResults
+        );
       default:
         return this.synthesizeGeneralResults(agent, task, successfulResults);
     }
   }
 
-  private synthesizeSpecialistResults(agent: AIAgent, task: AgentTask, results: any[]): any {
+  private synthesizeSpecialistResults(
+    agent: AIAgent,
+    task: AgentTask,
+    results: any[]
+  ): any {
     // Specialist agents provide detailed, expert-level results
     return {
       type: 'specialist_result',
@@ -462,11 +587,15 @@ export class AdvancedAIAgentSystem {
       analysis: results.map(r => r.data),
       recommendations: this.generateExpertRecommendations(agent, results),
       confidence: this.calculateExpertConfidence(agent, results),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private synthesizeAssistantResults(agent: AIAgent, task: AgentTask, results: any[]): any {
+  private synthesizeAssistantResults(
+    agent: AIAgent,
+    task: AgentTask,
+    results: any[]
+  ): any {
     // Assistant agents provide helpful, user-friendly results
     return {
       type: 'assistant_result',
@@ -475,11 +604,15 @@ export class AdvancedAIAgentSystem {
       details: results.map(r => r.data),
       nextSteps: this.generateNextSteps(results),
       confidence: this.calculateAssistantConfidence(results),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private synthesizeCoordinatorResults(agent: AIAgent, task: AgentTask, results: any[]): any {
+  private synthesizeCoordinatorResults(
+    agent: AIAgent,
+    task: AgentTask,
+    results: any[]
+  ): any {
     // Coordinator agents provide structured, project-focused results
     return {
       type: 'coordinator_result',
@@ -489,11 +622,15 @@ export class AdvancedAIAgentSystem {
       timeline: this.generateTimeline(results),
       resources: this.assessResources(results),
       confidence: this.calculateCoordinatorConfidence(results),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private synthesizeGeneralResults(agent: AIAgent, task: AgentTask, results: any[]): any {
+  private synthesizeGeneralResults(
+    agent: AIAgent,
+    task: AgentTask,
+    results: any[]
+  ): any {
     // General synthesis for custom agents
     return {
       type: 'general_result',
@@ -501,13 +638,16 @@ export class AdvancedAIAgentSystem {
       results: results.map(r => r.data),
       summary: 'Task completed successfully',
       confidence: 0.8,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private generateExpertRecommendations(agent: AIAgent, results: any[]): string[] {
+  private generateExpertRecommendations(
+    agent: AIAgent,
+    results: any[]
+  ): string[] {
     const recommendations: string[] = [];
-    
+
     // Generate recommendations based on agent expertise
     agent.knowledge.specializations.forEach(specialization => {
       recommendations.push(`Consider ${specialization} best practices`);
@@ -520,7 +660,7 @@ export class AdvancedAIAgentSystem {
     const baseConfidence = agent.performance.successRate;
     const experienceBonus = agent.knowledge.experience / 100;
     const resultsQuality = results.length > 0 ? 0.9 : 0.5;
-    
+
     return Math.min(baseConfidence + experienceBonus + resultsQuality, 1);
   }
 
@@ -532,7 +672,7 @@ export class AdvancedAIAgentSystem {
     return [
       'Review the results',
       'Provide feedback if needed',
-      'Consider additional tasks'
+      'Consider additional tasks',
     ];
   }
 
@@ -544,7 +684,7 @@ export class AdvancedAIAgentSystem {
     return {
       estimated: '2-4 hours',
       actual: '1.5 hours',
-      status: 'ahead_of_schedule'
+      status: 'ahead_of_schedule',
     };
   }
 
@@ -552,7 +692,7 @@ export class AdvancedAIAgentSystem {
     return {
       tools_used: results.length,
       efficiency: 'high',
-      resource_utilization: 'optimal'
+      resource_utilization: 'optimal',
     };
   }
 
@@ -560,28 +700,40 @@ export class AdvancedAIAgentSystem {
     return results.length > 0 ? 0.9 : 0.6;
   }
 
-  private updateAgentPerformance(agent: AIAgent, success: boolean, executionTime: number): void {
+  private updateAgentPerformance(
+    agent: AIAgent,
+    success: boolean,
+    executionTime: number
+  ): void {
     agent.performance.tasksCompleted++;
-    
+
     // Update success rate using exponential moving average
     const alpha = 0.1;
-    agent.performance.successRate = alpha * (success ? 1 : 0) + (1 - alpha) * agent.performance.successRate;
-    
+    agent.performance.successRate =
+      alpha * (success ? 1 : 0) + (1 - alpha) * agent.performance.successRate;
+
     // Update average response time
-    agent.performance.averageResponseTime = alpha * executionTime + (1 - alpha) * agent.performance.averageResponseTime;
-    
+    agent.performance.averageResponseTime =
+      alpha * executionTime +
+      (1 - alpha) * agent.performance.averageResponseTime;
+
     // Update efficiency (tasks per hour)
     const hours = executionTime / (1000 * 60 * 60);
-    agent.performance.efficiency = agent.performance.tasksCompleted / Math.max(hours, 0.1);
+    agent.performance.efficiency =
+      agent.performance.tasksCompleted / Math.max(hours, 0.1);
   }
 
-  private storeInAgentMemory(agent: AIAgent, task: AgentTask, result: any): void {
+  private storeInAgentMemory(
+    agent: AIAgent,
+    task: AgentTask,
+    result: any
+  ): void {
     // Store in episodic memory
     agent.memory.episodic.push({
       timestamp: new Date(),
       event: `Task: ${task.type}`,
       context: task.parameters,
-      outcome: result
+      outcome: result,
     });
 
     // Keep only last 100 episodes
@@ -594,12 +746,12 @@ export class AdvancedAIAgentSystem {
     if (!agent.memory.semantic.has(taskType)) {
       agent.memory.semantic.set(taskType, []);
     }
-    
+
     const semanticMemory = agent.memory.semantic.get(taskType)!;
     semanticMemory.push({
       timestamp: new Date(),
       success: task.status === 'completed',
-      executionTime: task.completedAt!.getTime() - task.startedAt!.getTime()
+      executionTime: task.completedAt!.getTime() - task.startedAt!.getTime(),
     });
 
     // Keep only last 50 semantic entries per task type
@@ -609,7 +761,11 @@ export class AdvancedAIAgentSystem {
   }
 
   // Collaboration Methods
-  async createCollaboration(agents: string[], task: string, coordination: 'sequential' | 'parallel' | 'hierarchical' | 'peer'): Promise<AgentCollaboration> {
+  async createCollaboration(
+    agents: string[],
+    task: string,
+    coordination: 'sequential' | 'parallel' | 'hierarchical' | 'peer'
+  ): Promise<AgentCollaboration> {
     const collaboration: AgentCollaboration = {
       id: `collab_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       agents,
@@ -617,14 +773,14 @@ export class AdvancedAIAgentSystem {
       coordination,
       status: 'planning',
       results: new Map(),
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     this.collaborations.set(collaboration.id, collaboration);
-    
+
     // Start collaboration
     this.executeCollaboration(collaboration.id);
-    
+
     return collaboration;
   }
 
@@ -657,7 +813,9 @@ export class AdvancedAIAgentSystem {
     }
   }
 
-  private async executeSequentialCollaboration(collaboration: AgentCollaboration): Promise<void> {
+  private async executeSequentialCollaboration(
+    collaboration: AgentCollaboration
+  ): Promise<void> {
     for (const agentId of collaboration.agents) {
       const agent = this.agents.get(agentId);
       if (!agent) continue;
@@ -666,7 +824,7 @@ export class AdvancedAIAgentSystem {
         type: 'collaboration_task',
         description: collaboration.task,
         parameters: { collaborationId: collaboration.id },
-        priority: 'medium'
+        priority: 'medium',
       });
 
       // Wait for task completion
@@ -678,42 +836,49 @@ export class AdvancedAIAgentSystem {
     }
   }
 
-  private async executeParallelCollaboration(collaboration: AgentCollaboration): Promise<void> {
-    const tasks = collaboration.agents.map(agentId => 
+  private async executeParallelCollaboration(
+    collaboration: AgentCollaboration
+  ): Promise<void> {
+    const tasks = collaboration.agents.map(agentId =>
       this.assignTask(agentId, {
         type: 'collaboration_task',
         description: collaboration.task,
         parameters: { collaborationId: collaboration.id },
-        priority: 'medium'
+        priority: 'medium',
       })
     );
 
     // Wait for all tasks to complete
     const completedTasks = await Promise.all(tasks);
-    
+
     completedTasks.forEach(task => {
       collaboration.results.set(task.agentId, task.result);
     });
   }
 
-  private async executeHierarchicalCollaboration(collaboration: AgentCollaboration): Promise<void> {
+  private async executeHierarchicalCollaboration(
+    collaboration: AgentCollaboration
+  ): Promise<void> {
     // First agent (coordinator) plans the collaboration
     const coordinatorId = collaboration.agents[0];
     const coordinator = this.agents.get(coordinatorId);
-    
+
     if (coordinator) {
       const planningTask = await this.assignTask(coordinatorId, {
         type: 'collaboration_planning',
         description: `Plan collaboration: ${collaboration.task}`,
-        parameters: { 
+        parameters: {
           collaborationId: collaboration.id,
-          participants: collaboration.agents.slice(1)
+          participants: collaboration.agents.slice(1),
         },
-        priority: 'high'
+        priority: 'high',
       });
 
       // Wait for planning to complete
-      while (planningTask.status === 'pending' || planningTask.status === 'in_progress') {
+      while (
+        planningTask.status === 'pending' ||
+        planningTask.status === 'in_progress'
+      ) {
         await new Promise(resolve => setTimeout(resolve, 100));
       }
 
@@ -726,7 +891,7 @@ export class AdvancedAIAgentSystem {
             type: 'collaboration_subtask',
             description: subtask.description,
             parameters: subtask.parameters,
-            priority: subtask.priority || 'medium'
+            priority: subtask.priority || 'medium',
           });
 
           while (task.status === 'pending' || task.status === 'in_progress') {
@@ -739,42 +904,51 @@ export class AdvancedAIAgentSystem {
     }
   }
 
-  private async executePeerCollaboration(collaboration: AgentCollaboration): Promise<void> {
+  private async executePeerCollaboration(
+    collaboration: AgentCollaboration
+  ): Promise<void> {
     // All agents work together as peers
-    const tasks = collaboration.agents.map(agentId => 
+    const tasks = collaboration.agents.map(agentId =>
       this.assignTask(agentId, {
         type: 'peer_collaboration',
         description: collaboration.task,
-        parameters: { 
+        parameters: {
           collaborationId: collaboration.id,
-          peers: collaboration.agents.filter(id => id !== agentId)
+          peers: collaboration.agents.filter(id => id !== agentId),
         },
-        priority: 'medium'
+        priority: 'medium',
       })
     );
 
     const completedTasks = await Promise.all(tasks);
-    
+
     completedTasks.forEach(task => {
       collaboration.results.set(task.agentId, task.result);
     });
   }
 
   // Communication Methods
-  async enableAgentCommunication(agentId1: string, agentId2: string): Promise<void> {
+  async enableAgentCommunication(
+    agentId1: string,
+    agentId2: string
+  ): Promise<void> {
     const communicationId = `${agentId1}_${agentId2}`;
     this.agentCommunications.set(communicationId, []);
   }
 
-  async sendMessage(fromAgentId: string, toAgentId: string, message: any): Promise<void> {
+  async sendMessage(
+    fromAgentId: string,
+    toAgentId: string,
+    message: any
+  ): Promise<void> {
     const communicationId = `${fromAgentId}_${toAgentId}`;
     const communications = this.agentCommunications.get(communicationId) || [];
-    
+
     communications.push({
       from: fromAgentId,
       to: toAgentId,
       message,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     this.agentCommunications.set(communicationId, communications);
@@ -791,49 +965,66 @@ export class AdvancedAIAgentSystem {
       const agent = this.agents.get(agentId);
       if (!agent) return null;
 
-      const agentTasks = Array.from(this.tasks.values()).filter(task => task.agentId === agentId);
-      
+      const agentTasks = Array.from(this.tasks.values()).filter(
+        task => task.agentId === agentId
+      );
+
       return {
         agent: {
           id: agent.id,
           name: agent.name,
           type: agent.type,
-          status: agent.status
+          status: agent.status,
         },
         performance: agent.performance,
         tasks: {
           total: agentTasks.length,
           completed: agentTasks.filter(t => t.status === 'completed').length,
           failed: agentTasks.filter(t => t.status === 'failed').length,
-          averageExecutionTime: agentTasks.reduce((sum, t) => {
-            if (t.startedAt && t.completedAt) {
-              return sum + (t.completedAt.getTime() - t.startedAt.getTime());
-            }
-            return sum;
-          }, 0) / agentTasks.length
+          averageExecutionTime:
+            agentTasks.reduce((sum, t) => {
+              if (t.startedAt && t.completedAt) {
+                return sum + (t.completedAt.getTime() - t.startedAt.getTime());
+              }
+              return sum;
+            }, 0) / agentTasks.length,
         },
         memory: {
           episodic: agent.memory.episodic.length,
-          semantic: agent.memory.semantic.size
-        }
+          semantic: agent.memory.semantic.size,
+        },
       };
     }
 
     // Return analytics for all agents
     return {
       totalAgents: this.agents.size,
-      activeAgents: Array.from(this.agents.values()).filter(a => a.status === 'active').length,
+      activeAgents: Array.from(this.agents.values()).filter(
+        a => a.status === 'active'
+      ).length,
       totalTasks: this.tasks.size,
-      completedTasks: Array.from(this.tasks.values()).filter(t => t.status === 'completed').length,
-      activeCollaborations: Array.from(this.collaborations.values()).filter(c => c.status === 'executing').length,
-      agentTypes: Array.from(new Set(Array.from(this.agents.values()).map(a => a.type))),
-      averagePerformance: Array.from(this.agents.values()).reduce((sum, a) => sum + a.performance.successRate, 0) / this.agents.size
+      completedTasks: Array.from(this.tasks.values()).filter(
+        t => t.status === 'completed'
+      ).length,
+      activeCollaborations: Array.from(this.collaborations.values()).filter(
+        c => c.status === 'executing'
+      ).length,
+      agentTypes: Array.from(
+        new Set(Array.from(this.agents.values()).map(a => a.type))
+      ),
+      averagePerformance:
+        Array.from(this.agents.values()).reduce(
+          (sum, a) => sum + a.performance.successRate,
+          0
+        ) / this.agents.size,
     };
   }
 
   getTaskHistory(agentId?: string): AgentTask[] {
     const allTasks = Array.from(this.tasks.values());
-    return agentId ? allTasks.filter(task => task.agentId === agentId) : allTasks;
+    return agentId
+      ? allTasks.filter(task => task.agentId === agentId)
+      : allTasks;
   }
 
   getCollaborationHistory(): AgentCollaboration[] {
