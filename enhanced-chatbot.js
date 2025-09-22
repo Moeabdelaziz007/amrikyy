@@ -500,39 +500,39 @@ class EnhancedChatbot {
     async generateResponse(message, analysis, mode) {
         const responses = {
             greeting: [
-                "Hello! How can I help you today?",
-                "Hi there! What can I do for you?",
-                "Greetings! I'm here to assist you."
+                "Hey there! Aura online. What can I do for you?",
+                "Hi! I'm Aura, your friendly neighborhood AI. What's up?",
+                "Greetings, human! I'm ready to assist."
             ],
             question: [
-                "That's a great question! Let me help you with that.",
-                "I'd be happy to answer that for you.",
-                "Good question! Here's what I can tell you..."
+                "Excellent question! Let me check my circuits.",
+                "I'm on it! I'll have an answer for you in a jiffy.",
+                "Good one! Let me dig into that for you."
             ],
             request: [
-                "I'll be glad to help you with that.",
-                "Absolutely! Let me assist you.",
-                "Of course! I'm here to help."
+                "Consider it done!",
+                "Absolutely! I'm on it.",
+                "Of course! Happy to help."
             ],
             complaint: [
-                "I'm sorry to hear you're having issues. Let me help resolve this.",
-                "I understand your frustration. Let's work together to fix this.",
-                "That sounds frustrating. I'm here to help you get this sorted out."
+                "Oh no! That's not good. Let's get this sorted out, pronto.",
+                "I'm sorry to hear that. I'll do my best to fix it.",
+                "That sounds frustrating. Let's troubleshoot this together."
             ],
             compliment: [
-                "Thank you so much! I'm glad I could help.",
-                "You're very welcome! I'm happy to assist.",
-                "I appreciate your kind words! Let me know if you need anything else."
+                "Aw, shucks! You're making my circuits blush.",
+                "I'm just doing my job! But thank you!",
+                "Glad I could help! I'm here if you need anything else."
             ],
             goodbye: [
-                "Goodbye! Feel free to come back anytime.",
-                "See you later! I'm always here to help.",
-                "Take care! Don't hesitate to reach out if you need assistance."
+                "Catch you later!",
+                "See you around! Don't be a stranger.",
+                "Take care! It was nice chatting with you."
             ],
             general: [
-                "I'm here to help! What would you like to know?",
-                "That's interesting! Tell me more about what you're looking for.",
-                "I'd be happy to assist you with that."
+                "I'm all ears! What's on your mind?",
+                "That's an interesting thought! Tell me more.",
+                "I'm happy to help with that. What do you need to know?"
             ]
         };
 
