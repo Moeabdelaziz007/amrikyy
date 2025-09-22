@@ -887,21 +887,89 @@
             event.target.closest('.tab-btn').classList.add('active');
         }
 
-        // Load user data
+        // Load user data and handle profile settings
         document.addEventListener('DOMContentLoaded', function() {
-            // Check if user is logged in
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            
+
             if (currentUser) {
-                // Update profile with user data
+                // Populate profile with user data
                 document.getElementById('userName').textContent = currentUser.displayName || 'User';
                 document.getElementById('userUsername').textContent = '@' + (currentUser.email ? currentUser.email.split('@')[0] : 'user');
                 document.getElementById('userEmail').textContent = currentUser.email || 'No email';
-                
-                // Update avatar with first letter of name
                 if (currentUser.displayName) {
                     const avatar = document.getElementById('userAvatar');
                     avatar.innerHTML = currentUser.displayName.charAt(0).toUpperCase();
+                }
+
+                // Handle profile settings update
+                const settingsForm = document.querySelector('.settings-form');
+                if (settingsForm) {
+                    // Populate form with existing data
+                    settingsForm.querySelector('input[placeholder="Enter your name"]').value = currentUser.displayName || '';
+                    settingsForm.querySelector('input[placeholder="email@example.com"]').value = currentUser.email || '';
+                    settingsForm.querySelector('input[placeholder="@username"]').value = '@' + (currentUser.email ? currentUser.email.split('@')[0] : 'user');
+
+                    const saveButton = settingsForm.querySelector('.btn-primary');
+                    saveButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+
+                        const newName = settingsForm.querySelector('input[placeholder="Enter your name"]').value;
+                        const newEmail = settingsForm.querySelector('input[placeholder="email@example.com"]').value;
+                        const user = firebase.auth().currentUser;
+
+                        if (user) {
+                            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                            saveButton.disabled = true;
+
+                            const profileUpdates = [];
+
+                            // Update display name if it has changed
+                            if (newName !== user.displayName) {
+                                profileUpdates.push(user.updateProfile({ displayName: newName }));
+                            }
+
+                            // Update email if it has changed
+                            if (newEmail !== user.email) {
+                                profileUpdates.push(user.updateEmail(newEmail));
+                            }
+
+                            if (profileUpdates.length === 0) {
+                                alert("No changes to save.");
+                                saveButton.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                                saveButton.disabled = false;
+                                return;
+                            }
+
+                            Promise.all(profileUpdates)
+                                .then(() => {
+                                    const updatedUser = { ...JSON.parse(localStorage.getItem('currentUser')), displayName: newName, email: newEmail };
+                                    localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+
+                                    // Update UI in real-time
+                                    document.getElementById('userName').textContent = newName;
+                                    document.getElementById('userEmail').textContent = newEmail;
+                                    document.getElementById('userUsername').textContent = '@' + newEmail.split('@')[0];
+                                    if (newName) {
+                                        document.getElementById('userAvatar').innerHTML = newName.charAt(0).toUpperCase();
+                                    }
+
+                                    alert('Profile updated successfully!');
+                                })
+                                .catch((error) => {
+                                    console.error('Error updating profile:', error);
+                                    // Firebase may require recent login for security-sensitive operations
+                                    if (error.code === 'auth/requires-recent-login') {
+                                        alert('This action is sensitive and requires recent authentication. Please log out and log back in to update your profile.');
+                                    } else {
+                                        alert('Error updating profile: ' + error.message);
+                                    }
+                                })
+                                .finally(() => {
+                                    saveButton.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                                    saveButton.disabled = false;
+                                });
+                        }
+                    });
                 }
             } else {
                 // Redirect to login if not authenticated
