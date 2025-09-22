@@ -816,16 +816,16 @@ class AuthSystem {
         }
 
         try {
-            // Firebase Authentication
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
             // Set persistence based on remember me
             const persistence = rememberMe ? 
                 firebase.auth.Auth.Persistence.LOCAL : 
                 firebase.auth.Auth.Persistence.SESSION;
             
             await auth.setPersistence(persistence);
+
+            // Firebase Authentication
+            const userCredential = await auth.signInWithEmailAndPassword(email, password);
+            const user = userCredential.user;
             
             // Store user data
             this.currentUser = {
