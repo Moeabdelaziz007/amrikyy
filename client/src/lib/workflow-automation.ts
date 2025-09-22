@@ -94,9 +94,16 @@ export interface WorkflowExample {
   tags: string[];
 }
 
-export type WorkflowCategory = 
-  | 'social_media' | 'email_marketing' | 'content_creation' | 'data_processing'
-  | 'ai_automation' | 'notification' | 'integration' | 'analytics' | 'productivity';
+export type WorkflowCategory =
+  | 'social_media'
+  | 'email_marketing'
+  | 'content_creation'
+  | 'data_processing'
+  | 'ai_automation'
+  | 'notification'
+  | 'integration'
+  | 'analytics'
+  | 'productivity';
 
 export interface WorkflowExecution {
   id: string;
@@ -170,7 +177,8 @@ export class WorkflowAutomationEngine {
     {
       id: 'social_auto_post',
       name: 'Smart Social Media Auto-Poster',
-      description: 'Automatically posts content to multiple social platforms with AI optimization',
+      description:
+        'Automatically posts content to multiple social platforms with AI optimization',
       category: 'social_media',
       tags: ['social', 'automation', 'ai', 'content'],
       difficulty: 'intermediate',
@@ -181,7 +189,7 @@ export class WorkflowAutomationEngine {
       author: {
         id: 'template_author_1',
         name: 'AI Automation Pro',
-        avatar: '/avatars/ai-pro.png'
+        avatar: '/avatars/ai-pro.png',
       },
       steps: [
         {
@@ -193,7 +201,7 @@ export class WorkflowAutomationEngine {
           position: { x: 100, y: 100 },
           connections: ['condition_content_check'],
           icon: '⏰',
-          color: '#3B82F6'
+          color: '#3B82F6',
         },
         {
           id: 'condition_content_check',
@@ -204,18 +212,21 @@ export class WorkflowAutomationEngine {
           position: { x: 300, y: 100 },
           connections: ['action_ai_optimize', 'action_skip'],
           icon: '🔍',
-          color: '#F59E0B'
+          color: '#F59E0B',
         },
         {
           id: 'action_ai_optimize',
           name: 'AI Content Optimization',
           type: 'ai',
           description: 'Optimizes content for each platform',
-          config: { model: 'gpt-4', platforms: ['twitter', 'linkedin', 'facebook'] },
+          config: {
+            model: 'gpt-4',
+            platforms: ['twitter', 'linkedin', 'facebook'],
+          },
           position: { x: 500, y: 50 },
           connections: ['action_post_social'],
           icon: '🤖',
-          color: '#8B5CF6'
+          color: '#8B5CF6',
         },
         {
           id: 'action_post_social',
@@ -226,7 +237,7 @@ export class WorkflowAutomationEngine {
           position: { x: 700, y: 100 },
           connections: [],
           icon: '📱',
-          color: '#10B981'
+          color: '#10B981',
         },
         {
           id: 'action_skip',
@@ -237,8 +248,8 @@ export class WorkflowAutomationEngine {
           position: { x: 500, y: 150 },
           connections: [],
           icon: '⏭️',
-          color: '#6B7280'
-        }
+          color: '#6B7280',
+        },
       ],
       triggers: [
         {
@@ -247,8 +258,8 @@ export class WorkflowAutomationEngine {
           type: 'schedule',
           config: { cron: '0 9 * * *', timezone: 'UTC' },
           description: 'Triggers daily at 9 AM',
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       actions: [
         {
@@ -258,8 +269,8 @@ export class WorkflowAutomationEngine {
           config: { platforms: ['twitter', 'linkedin', 'facebook'] },
           description: 'Posts content to social media platforms',
           retryCount: 3,
-          timeout: 30000
-        }
+          timeout: 30000,
+        },
       ],
       conditions: [
         {
@@ -269,8 +280,8 @@ export class WorkflowAutomationEngine {
           config: { field: 'quality_score', operator: '>', value: 0.8 },
           description: 'Checks if content quality meets threshold',
           truePath: ['action_ai_optimize'],
-          falsePath: ['action_skip']
-        }
+          falsePath: ['action_skip'],
+        },
       ],
       variables: [
         {
@@ -279,8 +290,8 @@ export class WorkflowAutomationEngine {
           type: 'number',
           value: 0.8,
           description: 'Minimum quality score for posting',
-          isGlobal: true
-        }
+          isGlobal: true,
+        },
       ],
       icon: '📱',
       preview: '/previews/social-auto-post.png',
@@ -292,19 +303,20 @@ export class WorkflowAutomationEngine {
           description: 'Example for tech blog content',
           input: { content: 'New AI breakthrough...', category: 'tech' },
           expectedOutput: { posted: true, platforms: ['twitter', 'linkedin'] },
-          tags: ['tech', 'blog']
-        }
+          tags: ['tech', 'blog'],
+        },
       ],
       isPublic: true,
       isFeatured: true,
       createdAt: new Date('2024-01-15'),
       updatedAt: new Date('2024-01-20'),
-      version: '1.2.0'
+      version: '1.2.0',
     },
     {
       id: 'email_drip_campaign',
       name: 'AI-Powered Email Drip Campaign',
-      description: 'Automated email sequences with personalization and AI optimization',
+      description:
+        'Automated email sequences with personalization and AI optimization',
       category: 'email_marketing',
       tags: ['email', 'marketing', 'ai', 'personalization'],
       difficulty: 'advanced',
@@ -315,7 +327,7 @@ export class WorkflowAutomationEngine {
       author: {
         id: 'template_author_2',
         name: 'Marketing Automation Expert',
-        avatar: '/avatars/marketing-expert.png'
+        avatar: '/avatars/marketing-expert.png',
       },
       steps: [
         {
@@ -327,7 +339,7 @@ export class WorkflowAutomationEngine {
           position: { x: 100, y: 100 },
           connections: ['action_welcome_email'],
           icon: '👤',
-          color: '#3B82F6'
+          color: '#3B82F6',
         },
         {
           id: 'action_welcome_email',
@@ -338,7 +350,7 @@ export class WorkflowAutomationEngine {
           position: { x: 300, y: 100 },
           connections: ['delay_24h'],
           icon: '📧',
-          color: '#10B981'
+          color: '#10B981',
         },
         {
           id: 'delay_24h',
@@ -349,7 +361,7 @@ export class WorkflowAutomationEngine {
           position: { x: 500, y: 100 },
           connections: ['condition_engagement_check'],
           icon: '⏳',
-          color: '#F59E0B'
+          color: '#F59E0B',
         },
         {
           id: 'condition_engagement_check',
@@ -360,7 +372,7 @@ export class WorkflowAutomationEngine {
           position: { x: 700, y: 100 },
           connections: ['action_follow_up', 'action_re_engagement'],
           icon: '📊',
-          color: '#8B5CF6'
+          color: '#8B5CF6',
         },
         {
           id: 'action_follow_up',
@@ -371,7 +383,7 @@ export class WorkflowAutomationEngine {
           position: { x: 900, y: 50 },
           connections: [],
           icon: '📧',
-          color: '#10B981'
+          color: '#10B981',
         },
         {
           id: 'action_re_engagement',
@@ -382,8 +394,8 @@ export class WorkflowAutomationEngine {
           position: { x: 900, y: 150 },
           connections: [],
           icon: '🔄',
-          color: '#EF4444'
-        }
+          color: '#EF4444',
+        },
       ],
       triggers: [
         {
@@ -392,8 +404,8 @@ export class WorkflowAutomationEngine {
           type: 'webhook',
           config: { endpoint: '/webhooks/subscriber', method: 'POST' },
           description: 'Triggers when new subscriber is added',
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       actions: [
         {
@@ -403,8 +415,8 @@ export class WorkflowAutomationEngine {
           config: { provider: 'sendgrid', personalization: true },
           description: 'Sends personalized email',
           retryCount: 3,
-          timeout: 30000
-        }
+          timeout: 30000,
+        },
       ],
       conditions: [
         {
@@ -414,8 +426,8 @@ export class WorkflowAutomationEngine {
           config: { field: 'engagement_rate', operator: '>', value: 0.3 },
           description: 'Checks user engagement level',
           truePath: ['action_follow_up'],
-          falsePath: ['action_re_engagement']
-        }
+          falsePath: ['action_re_engagement'],
+        },
       ],
       variables: [
         {
@@ -424,8 +436,8 @@ export class WorkflowAutomationEngine {
           type: 'number',
           value: 0.3,
           description: 'Minimum engagement rate for follow-up',
-          isGlobal: true
-        }
+          isGlobal: true,
+        },
       ],
       icon: '📧',
       preview: '/previews/email-drip.png',
@@ -437,14 +449,14 @@ export class WorkflowAutomationEngine {
           description: 'Example for SaaS product onboarding',
           input: { userType: 'premium', industry: 'tech' },
           expectedOutput: { emailsSent: 5, openRate: 0.45 },
-          tags: ['saas', 'onboarding']
-        }
+          tags: ['saas', 'onboarding'],
+        },
       ],
       isPublic: true,
       isFeatured: true,
       createdAt: new Date('2024-01-10'),
       updatedAt: new Date('2024-01-18'),
-      version: '2.1.0'
+      version: '2.1.0',
     },
     {
       id: 'ai_content_generator',
@@ -460,7 +472,7 @@ export class WorkflowAutomationEngine {
       author: {
         id: 'template_author_3',
         name: 'Content AI Specialist',
-        avatar: '/avatars/content-ai.png'
+        avatar: '/avatars/content-ai.png',
       },
       steps: [
         {
@@ -472,7 +484,7 @@ export class WorkflowAutomationEngine {
           position: { x: 100, y: 100 },
           connections: ['action_ai_research'],
           icon: '💡',
-          color: '#3B82F6'
+          color: '#3B82F6',
         },
         {
           id: 'action_ai_research',
@@ -483,7 +495,7 @@ export class WorkflowAutomationEngine {
           position: { x: 300, y: 100 },
           connections: ['action_ai_write'],
           icon: '🔍',
-          color: '#8B5CF6'
+          color: '#8B5CF6',
         },
         {
           id: 'action_ai_write',
@@ -494,7 +506,7 @@ export class WorkflowAutomationEngine {
           position: { x: 500, y: 100 },
           connections: ['condition_quality_check'],
           icon: '✍️',
-          color: '#8B5CF6'
+          color: '#8B5CF6',
         },
         {
           id: 'condition_quality_check',
@@ -505,7 +517,7 @@ export class WorkflowAutomationEngine {
           position: { x: 700, y: 100 },
           connections: ['action_publish', 'action_revise'],
           icon: '✅',
-          color: '#F59E0B'
+          color: '#F59E0B',
         },
         {
           id: 'action_publish',
@@ -516,7 +528,7 @@ export class WorkflowAutomationEngine {
           position: { x: 900, y: 50 },
           connections: [],
           icon: '🚀',
-          color: '#10B981'
+          color: '#10B981',
         },
         {
           id: 'action_revise',
@@ -527,8 +539,8 @@ export class WorkflowAutomationEngine {
           position: { x: 900, y: 150 },
           connections: ['condition_quality_check'],
           icon: '🔄',
-          color: '#EF4444'
-        }
+          color: '#EF4444',
+        },
       ],
       triggers: [
         {
@@ -537,8 +549,8 @@ export class WorkflowAutomationEngine {
           type: 'manual',
           config: { inputFields: ['topic', 'style', 'length'] },
           description: 'Manual trigger with topic input',
-          isActive: true
-        }
+          isActive: true,
+        },
       ],
       actions: [
         {
@@ -548,8 +560,8 @@ export class WorkflowAutomationEngine {
           config: { platforms: ['blog', 'social'], autoSchedule: true },
           description: 'Publishes content to multiple platforms',
           retryCount: 2,
-          timeout: 60000
-        }
+          timeout: 60000,
+        },
       ],
       conditions: [
         {
@@ -559,8 +571,8 @@ export class WorkflowAutomationEngine {
           config: { field: 'quality_score', operator: '>=', value: 0.85 },
           description: 'Checks content quality threshold',
           truePath: ['action_publish'],
-          falsePath: ['action_revise']
-        }
+          falsePath: ['action_revise'],
+        },
       ],
       variables: [
         {
@@ -569,8 +581,8 @@ export class WorkflowAutomationEngine {
           type: 'string',
           value: 'professional',
           description: 'Writing style for content',
-          isGlobal: true
-        }
+          isGlobal: true,
+        },
       ],
       icon: '🤖',
       preview: '/previews/ai-content.png',
@@ -582,15 +594,15 @@ export class WorkflowAutomationEngine {
           description: 'Example for blog post generation',
           input: { topic: 'AI trends', length: '1000 words' },
           expectedOutput: { content: 'Generated blog post', quality: 0.9 },
-          tags: ['blog', 'ai', 'trends']
-        }
+          tags: ['blog', 'ai', 'trends'],
+        },
       ],
       isPublic: true,
       isFeatured: false,
       createdAt: new Date('2024-01-05'),
       updatedAt: new Date('2024-01-15'),
-      version: '1.5.0'
-    }
+      version: '1.5.0',
+    },
   ];
 
   private static readonly CATEGORIES: WorkflowCategoryInfo[] = [
@@ -600,7 +612,7 @@ export class WorkflowAutomationEngine {
       description: 'Automate social media posting and engagement',
       icon: '📱',
       templateCount: 25,
-      color: '#3B82F6'
+      color: '#3B82F6',
     },
     {
       id: 'email_marketing',
@@ -608,7 +620,7 @@ export class WorkflowAutomationEngine {
       description: 'Email campaigns and automation',
       icon: '📧',
       templateCount: 18,
-      color: '#10B981'
+      color: '#10B981',
     },
     {
       id: 'content_creation',
@@ -616,7 +628,7 @@ export class WorkflowAutomationEngine {
       description: 'AI-powered content generation and publishing',
       icon: '✍️',
       templateCount: 32,
-      color: '#8B5CF6'
+      color: '#8B5CF6',
     },
     {
       id: 'ai_automation',
@@ -624,7 +636,7 @@ export class WorkflowAutomationEngine {
       description: 'Advanced AI-powered workflows',
       icon: '🤖',
       templateCount: 45,
-      color: '#F59E0B'
+      color: '#F59E0B',
     },
     {
       id: 'data_processing',
@@ -632,7 +644,7 @@ export class WorkflowAutomationEngine {
       description: 'Automate data collection and analysis',
       icon: '📊',
       templateCount: 15,
-      color: '#EF4444'
+      color: '#EF4444',
     },
     {
       id: 'notification',
@@ -640,7 +652,7 @@ export class WorkflowAutomationEngine {
       description: 'Smart notification and alert systems',
       icon: '🔔',
       templateCount: 12,
-      color: '#06B6D4'
+      color: '#06B6D4',
     },
     {
       id: 'integration',
@@ -648,7 +660,7 @@ export class WorkflowAutomationEngine {
       description: 'Connect and sync with external services',
       icon: '🔗',
       templateCount: 28,
-      color: '#84CC16'
+      color: '#84CC16',
     },
     {
       id: 'analytics',
@@ -656,7 +668,7 @@ export class WorkflowAutomationEngine {
       description: 'Automated reporting and insights',
       icon: '📈',
       templateCount: 20,
-      color: '#F97316'
+      color: '#F97316',
     },
     {
       id: 'productivity',
@@ -664,14 +676,16 @@ export class WorkflowAutomationEngine {
       description: 'Workflow optimization and task automation',
       icon: '⚡',
       templateCount: 35,
-      color: '#EC4899'
-    }
+      color: '#EC4899',
+    },
   ];
 
   /**
    * Get workflow marketplace
    */
-  static async getMarketplace(filters?: WorkflowFilters): Promise<WorkflowMarketplace> {
+  static async getMarketplace(
+    filters?: WorkflowFilters
+  ): Promise<WorkflowMarketplace> {
     try {
       let templates = [...this.MARKETPLACE_TEMPLATES];
 
@@ -681,10 +695,12 @@ export class WorkflowAutomationEngine {
           templates = templates.filter(t => t.category === filters.category);
         }
         if (filters.difficulty) {
-          templates = templates.filter(t => t.difficulty === filters.difficulty);
+          templates = templates.filter(
+            t => t.difficulty === filters.difficulty
+          );
         }
         if (filters.tags && filters.tags.length > 0) {
-          templates = templates.filter(t => 
+          templates = templates.filter(t =>
             filters.tags!.some(tag => t.tags.includes(tag))
           );
         }
@@ -712,7 +728,7 @@ export class WorkflowAutomationEngine {
         trending,
         recent,
         searchResults: templates,
-        filters: filters || {}
+        filters: filters || {},
       };
     } catch (error) {
       console.error('Error getting marketplace:', error);
@@ -724,18 +740,19 @@ export class WorkflowAutomationEngine {
    * Search workflow templates
    */
   static async searchTemplates(
-    query: string, 
+    query: string,
     filters?: WorkflowFilters
   ): Promise<WorkflowTemplate[]> {
     try {
       const marketplace = await this.getMarketplace(filters);
       const searchTerm = query.toLowerCase();
 
-      return marketplace.templates.filter(template =>
-        template.name.toLowerCase().includes(searchTerm) ||
-        template.description.toLowerCase().includes(searchTerm) ||
-        template.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-        template.author.name.toLowerCase().includes(searchTerm)
+      return marketplace.templates.filter(
+        template =>
+          template.name.toLowerCase().includes(searchTerm) ||
+          template.description.toLowerCase().includes(searchTerm) ||
+          template.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+          template.author.name.toLowerCase().includes(searchTerm)
       );
     } catch (error) {
       console.error('Error searching templates:', error);
@@ -746,7 +763,9 @@ export class WorkflowAutomationEngine {
   /**
    * Get template by ID
    */
-  static async getTemplate(templateId: string): Promise<WorkflowTemplate | null> {
+  static async getTemplate(
+    templateId: string
+  ): Promise<WorkflowTemplate | null> {
     try {
       return this.MARKETPLACE_TEMPLATES.find(t => t.id === templateId) || null;
     } catch (error) {
@@ -759,8 +778,8 @@ export class WorkflowAutomationEngine {
    * Create workflow from template
    */
   static async createWorkflowFromTemplate(
-    templateId: string, 
-    userId: string, 
+    templateId: string,
+    userId: string,
     customizations?: Record<string, any>
   ): Promise<string> {
     try {
@@ -771,10 +790,10 @@ export class WorkflowAutomationEngine {
 
       // Create workflow from template with customizations
       const workflowId = `workflow_${userId}_${Date.now()}`;
-      
+
       // In a real implementation, this would save to Firestore
       console.log(`Created workflow ${workflowId} from template ${templateId}`);
-      
+
       return workflowId;
     } catch (error) {
       console.error('Error creating workflow from template:', error);
@@ -786,13 +805,13 @@ export class WorkflowAutomationEngine {
    * Execute workflow
    */
   static async executeWorkflow(
-    workflowId: string, 
-    userId: string, 
+    workflowId: string,
+    userId: string,
     variables?: Record<string, any>
   ): Promise<WorkflowExecution> {
     try {
       const executionId = `exec_${workflowId}_${Date.now()}`;
-      
+
       const execution: WorkflowExecution = {
         id: executionId,
         workflowId,
@@ -801,12 +820,12 @@ export class WorkflowAutomationEngine {
         startedAt: new Date(),
         steps: [],
         variables: variables || {},
-        logs: []
+        logs: [],
       };
 
       // In a real implementation, this would execute the workflow
       console.log(`Executing workflow ${workflowId} for user ${userId}`);
-      
+
       return execution;
     } catch (error) {
       console.error('Error executing workflow:', error);
@@ -817,7 +836,9 @@ export class WorkflowAutomationEngine {
   /**
    * Get workflow execution status
    */
-  static async getExecutionStatus(executionId: string): Promise<WorkflowExecution | null> {
+  static async getExecutionStatus(
+    executionId: string
+  ): Promise<WorkflowExecution | null> {
     try {
       // Mock implementation - would fetch from database
       return null;
@@ -844,24 +865,27 @@ export class WorkflowAutomationEngine {
    * Publish workflow template
    */
   static async publishTemplate(
-    template: Omit<WorkflowTemplate, 'id' | 'createdAt' | 'updatedAt' | 'version' | 'downloads'>,
+    template: Omit<
+      WorkflowTemplate,
+      'id' | 'createdAt' | 'updatedAt' | 'version' | 'downloads'
+    >,
     userId: string
   ): Promise<string> {
     try {
       const templateId = `template_${userId}_${Date.now()}`;
-      
+
       const newTemplate: WorkflowTemplate = {
         ...template,
         id: templateId,
         createdAt: new Date(),
         updatedAt: new Date(),
         version: '1.0.0',
-        downloads: 0
+        downloads: 0,
       };
 
       // In a real implementation, this would save to Firestore
       console.log(`Published template ${templateId}`);
-      
+
       return templateId;
     } catch (error) {
       console.error('Error publishing template:', error);
@@ -879,44 +903,58 @@ export class WorkflowAutomationEngine {
     try {
       // Get user behavior patterns - Mock implementation for now
       const history: any[] = []; // await UserHistoryService.getUserHistory(userId, { limit: 100 });
-      
+
       // Analyze patterns to recommend relevant workflows
       const recommendations: WorkflowTemplate[] = [];
-      
+
       // Check for social media usage
-      const socialActions = history.filter((h: any) => h.action?.category === 'social').length;
+      const socialActions = history.filter(
+        (h: any) => h.action?.category === 'social'
+      ).length;
       if (socialActions > 5) {
-        const socialTemplate = this.MARKETPLACE_TEMPLATES.find(t => t.id === 'social_auto_post');
+        const socialTemplate = this.MARKETPLACE_TEMPLATES.find(
+          t => t.id === 'social_auto_post'
+        );
         if (socialTemplate) recommendations.push(socialTemplate);
       }
-      
+
       // Check for AI usage
-      const aiActions = history.filter((h: any) => h.action?.category === 'ai').length;
+      const aiActions = history.filter(
+        (h: any) => h.action?.category === 'ai'
+      ).length;
       if (aiActions > 3) {
-        const aiTemplate = this.MARKETPLACE_TEMPLATES.find(t => t.id === 'ai_content_generator');
+        const aiTemplate = this.MARKETPLACE_TEMPLATES.find(
+          t => t.id === 'ai_content_generator'
+        );
         if (aiTemplate) recommendations.push(aiTemplate);
       }
-      
+
       // Check for content creation
-      const contentActions = history.filter((h: any) => 
-        h.action?.type === 'create' && h.action?.targetType === 'post'
+      const contentActions = history.filter(
+        (h: any) =>
+          h.action?.type === 'create' && h.action?.targetType === 'post'
       ).length;
       if (contentActions > 2) {
-        const contentTemplate = this.MARKETPLACE_TEMPLATES.find(t => t.id === 'ai_content_generator');
-        if (contentTemplate && !recommendations.find(r => r.id === contentTemplate.id)) {
+        const contentTemplate = this.MARKETPLACE_TEMPLATES.find(
+          t => t.id === 'ai_content_generator'
+        );
+        if (
+          contentTemplate &&
+          !recommendations.find(r => r.id === contentTemplate.id)
+        ) {
           recommendations.push(contentTemplate);
         }
       }
-      
+
       // Add trending templates if we need more recommendations
-      const trending = this.MARKETPLACE_TEMPLATES
-        .filter(t => t.isFeatured)
-        .slice(0, limit - recommendations.length);
-      
-      recommendations.push(...trending.filter(t => 
-        !recommendations.find(r => r.id === t.id)
-      ));
-      
+      const trending = this.MARKETPLACE_TEMPLATES.filter(
+        t => t.isFeatured
+      ).slice(0, limit - recommendations.length);
+
+      recommendations.push(
+        ...trending.filter(t => !recommendations.find(r => r.id === t.id))
+      );
+
       return recommendations.slice(0, limit);
     } catch (error) {
       console.error('Error getting intelligent recommendations:', error);
@@ -936,7 +974,7 @@ export class WorkflowAutomationEngine {
         averageDuration: 120, // seconds
         popularSteps: ['trigger_schedule', 'action_ai_optimize'],
         errorRate: 0.08,
-        userSatisfaction: 4.6
+        userSatisfaction: 4.6,
       };
     } catch (error) {
       console.error('Error getting workflow analytics:', error);

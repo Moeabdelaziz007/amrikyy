@@ -1,7 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Loader2, Rocket, Zap, Brain } from "lucide-react";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Loader2, Rocket, Zap, Brain } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function AuraOSLanding() {
   const [isLoading, setIsLoading] = useState(true);
@@ -20,12 +20,12 @@ export default function AuraOSLanding() {
 
   const handleLaunch = async () => {
     setIsLaunching(true);
-    
+
     // Simulate OS launch process
     await new Promise(resolve => setTimeout(resolve, 2000));
-    
+
     // Here you would typically navigate to the main OS interface
-    console.log("AuraOS launching...");
+    console.log('AuraOS launching...');
     setIsLaunching(false);
   };
 
@@ -44,7 +44,7 @@ export default function AuraOSLanding() {
             <motion.div
               className="w-20 h-20 border-4 border-purple-500 border-t-transparent rounded-full mb-4"
               animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+              transition={{ repeat: Infinity, duration: 1.2, ease: 'linear' }}
             />
             <motion.p
               className="text-purple-400 text-lg font-medium"
@@ -84,7 +84,9 @@ export default function AuraOSLanding() {
               transition={{ duration: 0.8, delay: 0.7 }}
             >
               <Zap className="w-6 h-6 text-purple-400" />
-              <span className="text-purple-400 font-semibold">نظام تشغيلي كوانتمي</span>
+              <span className="text-purple-400 font-semibold">
+                نظام تشغيلي كوانتمي
+              </span>
               <Zap className="w-6 h-6 text-cyan-400" />
             </motion.div>
 
@@ -94,13 +96,15 @@ export default function AuraOSLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.8 }}
             >
-              النظام التشغيلي الكوانتمي الأول من نوعه — يجمع بين{" "}
+              النظام التشغيلي الكوانتمي الأول من نوعه — يجمع بين{' '}
               <span className="text-purple-400 font-semibold flex items-center justify-center gap-1">
                 <Brain className="w-5 h-5" />
                 الذكاء الاصطناعي
-              </span> 
-              و{" "}
-              <span className="text-cyan-400 font-semibold">الإبداع البشري</span> 
+              </span>
+              و{' '}
+              <span className="text-cyan-400 font-semibold">
+                الإبداع البشري
+              </span>
               لبناء تجربة تشغيل مستقبلية تتجاوز حدود التقنية الحالية.
             </motion.p>
 
@@ -113,13 +117,19 @@ export default function AuraOSLanding() {
             >
               <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20">
                 <div className="text-purple-400 text-2xl mb-2">🧠</div>
-                <h3 className="text-lg font-semibold mb-2">ذكاء اصطناعي متقدم</h3>
-                <p className="text-gray-400 text-sm">تعلم وتكيف مستمر مع احتياجاتك</p>
+                <h3 className="text-lg font-semibold mb-2">
+                  ذكاء اصطناعي متقدم
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  تعلم وتكيف مستمر مع احتياجاتك
+                </p>
               </div>
               <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-cyan-500/20">
                 <div className="text-cyan-400 text-2xl mb-2">⚡</div>
                 <h3 className="text-lg font-semibold mb-2">أداء كوانتمي</h3>
-                <p className="text-gray-400 text-sm">سرعة فائقة في جميع العمليات</p>
+                <p className="text-gray-400 text-sm">
+                  سرعة فائقة في جميع العمليات
+                </p>
               </div>
               <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20">
                 <div className="text-purple-400 text-2xl mb-2">🎨</div>
@@ -134,7 +144,7 @@ export default function AuraOSLanding() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1, delay: 1.2 }}
             >
-              <Button 
+              <Button
                 onClick={handleLaunch}
                 disabled={isLaunching}
                 className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-700 hover:to-cyan-700 text-lg px-12 py-6 rounded-2xl shadow-lg shadow-purple-500/30 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -170,22 +180,22 @@ export default function AuraOSLanding() {
       {/* 🔹 Background Effects */}
       <motion.div
         className="absolute bottom-[-300px] right-[-300px] w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-3xl"
-        animate={{ 
-          scale: [1, 1.3, 1], 
+        animate={{
+          scale: [1, 1.3, 1],
           opacity: [0.2, 0.4, 0.2],
-          rotate: [0, 180, 360]
+          rotate: [0, 180, 360],
         }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
-      
+
       <motion.div
         className="absolute top-[-200px] left-[-200px] w-[400px] h-[400px] rounded-full bg-cyan-600/20 blur-3xl"
-        animate={{ 
-          scale: [1.2, 1, 1.2], 
+        animate={{
+          scale: [1.2, 1, 1.2],
           opacity: [0.3, 0.1, 0.3],
-          rotate: [360, 180, 0]
+          rotate: [360, 180, 0],
         }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       {/* 🔹 Particle Effects */}

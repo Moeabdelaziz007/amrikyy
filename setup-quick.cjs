@@ -8,27 +8,27 @@ console.log('='.repeat(60));
 
 // Check if .env exists
 if (!fs.existsSync('.env')) {
-    console.log('📝 Creating .env file from template...');
-    if (fs.existsSync('env-config.txt')) {
-        fs.copyFileSync('env-config.txt', '.env');
-        console.log('✅ .env file created!');
-        console.log('📝 Please edit .env with your actual credentials');
-    } else {
-        console.log('❌ env-config.txt not found');
-        process.exit(1);
-    }
+  console.log('📝 Creating .env file from template...');
+  if (fs.existsSync('env-config.txt')) {
+    fs.copyFileSync('env-config.txt', '.env');
+    console.log('✅ .env file created!');
+    console.log('📝 Please edit .env with your actual credentials');
+  } else {
+    console.log('❌ env-config.txt not found');
+    process.exit(1);
+  }
 } else {
-    console.log('✅ .env file exists');
+  console.log('✅ .env file exists');
 }
 
 // Check if service-account-key.json exists
 if (!fs.existsSync('service-account-key.json')) {
-    console.log('⚠️  service-account-key.json not found');
-    console.log('📝 Please download from Firebase Console:');
-    console.log('   1. Go to Firebase Console');
-    console.log('   2. Project Settings → Service Accounts');
-    console.log('   3. Generate new private key');
-    console.log('   4. Save as service-account-key.json');
+  console.log('⚠️  service-account-key.json not found');
+  console.log('📝 Please download from Firebase Console:');
+  console.log('   1. Go to Firebase Console');
+  console.log('   2. Project Settings → Service Accounts');
+  console.log('   3. Generate new private key');
+  console.log('   4. Save as service-account-key.json');
 }
 
 console.log('='.repeat(60));

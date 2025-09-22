@@ -7,7 +7,10 @@ import { config } from 'dotenv';
 import { createServer } from 'http';
 import { dbManager } from './api/automation/database';
 import automationRoutes from './api/automation/routes';
-import { initializeWebSocketServer, getWebSocketServer } from './api/automation/websocket';
+import {
+  initializeWebSocketServer,
+  getWebSocketServer,
+} from './api/automation/websocket';
 
 // Load environment variables
 config();
@@ -18,10 +21,12 @@ const PORT = 3001;
 
 // Middleware
 app.use(helmet());
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    credentials: true,
+  })
+);
 app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -34,13 +39,13 @@ app.get('/health', async (req, res) => {
       status: 'ok',
       timestamp: new Date().toISOString(),
       database: dbHealthy ? 'connected' : 'disconnected',
-      uptime: process.uptime()
+      uptime: process.uptime(),
     });
   } catch (error) {
     res.status(500).json({
       status: 'error',
       message: 'Health check failed',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
     });
   }
 });
@@ -49,18 +54,25 @@ app.get('/health', async (req, res) => {
 app.use('/api/v1', automationRoutes);
 
 // Error handling middleware
-app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error('Unhandled error:', error);
-  
-  res.status(error.status || 500).json({
-    success: false,
-    error: {
-      code: error.code || 'INTERNAL_ERROR',
-      message: error.message || 'Internal server error',
-      ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
-    }
-  });
-});
+app.use(
+  (
+    error: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.error('Unhandled error:', error);
+
+    res.status(error.status || 500).json({
+      success: false,
+      error: {
+        code: error.code || 'INTERNAL_ERROR',
+        message: error.message || 'Internal server error',
+        ...(process.env.NODE_ENV === 'development' && { stack: error.stack }),
+      },
+    });
+  }
+);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -68,8 +80,8 @@ app.use('*', (req, res) => {
     success: false,
     error: {
       code: 'NOT_FOUND',
-      message: 'Endpoint not found'
-    }
+      message: 'Endpoint not found',
+    },
   });
 });
 
@@ -111,10 +123,10 @@ async function startServer() {
   try {
     // Connect to database
     await dbManager.connect();
-    
+
     // Initialize WebSocket server
     const wsServer = initializeWebSocketServer(server);
-    
+
     // Start HTTP server
     server.listen(PORT, () => {
       console.log(`🚀 AuraOS Automation API Server running on port ${PORT}`);

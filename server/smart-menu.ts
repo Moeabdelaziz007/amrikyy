@@ -48,17 +48,17 @@ export class SmartMenuService {
         preferences: {
           language: 'en',
           timezone: 'UTC',
-          notifications: true
+          notifications: true,
         },
         session: {
           currentMenu: 'main',
           lastCommand: '',
-          contextData: {}
+          contextData: {},
         },
         stats: {
           totalInteractions: 0,
-          favoriteCommands: []
-        }
+          favoriteCommands: [],
+        },
       });
     }
     return this.userContexts.get(chatId)!;
@@ -73,12 +73,18 @@ export class SmartMenuService {
   }
 
   // Generate smart menu based on context
-  async generateSmartMenu(chatId: number, username: string, menuType: string = 'main'): Promise<{
+  async generateSmartMenu(
+    chatId: number,
+    username: string,
+    menuType: string = 'main'
+  ): Promise<{
     text: string;
     keyboard: any;
   }> {
     const context = this.getUserContext(chatId, username);
-    this.updateUserContext(chatId, { session: { ...context.session, currentMenu: menuType } });
+    this.updateUserContext(chatId, {
+      session: { ...context.session, currentMenu: menuType },
+    });
 
     switch (menuType) {
       case 'main':
@@ -105,16 +111,18 @@ export class SmartMenuService {
   }
 
   // Main smart menu with context-aware options
-  private async generateMainMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateMainMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const timeOfDay = this.getTimeOfDay();
     const greeting = this.getGreeting(timeOfDay);
-    
+
     // Get user stats for personalized experience
     const userStats = await storage.getUserStats('user-1').catch(() => ({
       totalPosts: 0,
       activeAgents: 0,
       engagementRate: 0,
-      automationsRun: 0
+      automationsRun: 0,
     }));
 
     const text = `${greeting} ${context.username}! 👋
@@ -133,49 +141,87 @@ export class SmartMenuService {
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Posts management menu
-  private async generatePostsMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generatePostsMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const recentPosts = await storage.getPostsWithAuthor(3).catch(() => []);
-    
+
     const text = `📝 Content Management Center
 
 📊 Recent Activity:
-${recentPosts.length > 0 ? 
-  recentPosts.map((post, i) => 
-    `${i + 1}. ${post.content.substring(0, 30)}... (${post.likes} 👍)`
-  ).join('\n') : 
-  'No posts yet. Create your first one!'
+${
+  recentPosts.length > 0
+    ? recentPosts
+        .map(
+          (post, i) =>
+            `${i + 1}. ${post.content.substring(0, 30)}... (${post.likes} 👍)`
+        )
+        .join('\n')
+    : 'No posts yet. Create your first one!'
 }
 
 🎯 Choose an action:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '✍️ Create New Post', callback_data: 'create_post', icon: '✍️', priority: 1 },
-      { text: '📅 Schedule Post', callback_data: 'schedule_post', icon: '📅', priority: 2 },
-      { text: '📊 View All Posts', callback_data: 'view_all_posts', icon: '📊', priority: 3 },
-      { text: '🤖 AI Content Generator', callback_data: 'ai_generator', icon: '🤖', priority: 4 },
-      { text: '📈 Post Analytics', callback_data: 'post_analytics', icon: '📈', priority: 5 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 6 }
+      {
+        text: '✍️ Create New Post',
+        callback_data: 'create_post',
+        icon: '✍️',
+        priority: 1,
+      },
+      {
+        text: '📅 Schedule Post',
+        callback_data: 'schedule_post',
+        icon: '📅',
+        priority: 2,
+      },
+      {
+        text: '📊 View All Posts',
+        callback_data: 'view_all_posts',
+        icon: '📊',
+        priority: 3,
+      },
+      {
+        text: '🤖 AI Content Generator',
+        callback_data: 'ai_generator',
+        icon: '🤖',
+        priority: 4,
+      },
+      {
+        text: '📈 Post Analytics',
+        callback_data: 'post_analytics',
+        icon: '📈',
+        priority: 5,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 6,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // AI Agents menu
-  private async generateAgentsMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateAgentsMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const templates = await storage.getAgentTemplates().catch(() => []);
     const userAgents = await storage.getUserAgents('user-1').catch(() => []);
 
@@ -187,30 +233,62 @@ ${recentPosts.length > 0 ?
 🎯 Manage your AI workforce:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '🆕 Create Agent', callback_data: 'create_agent', icon: '🆕', priority: 1 },
-      { text: '📋 Browse Templates', callback_data: 'browse_templates', icon: '📋', priority: 2 },
-      { text: '⚡ Active Agents', callback_data: 'active_agents', icon: '⚡', priority: 3 },
-      { text: '📊 Agent Performance', callback_data: 'agent_performance', icon: '📊', priority: 4 },
-      { text: '🔧 Agent Settings', callback_data: 'agent_settings', icon: '🔧', priority: 5 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 6 }
+      {
+        text: '🆕 Create Agent',
+        callback_data: 'create_agent',
+        icon: '🆕',
+        priority: 1,
+      },
+      {
+        text: '📋 Browse Templates',
+        callback_data: 'browse_templates',
+        icon: '📋',
+        priority: 2,
+      },
+      {
+        text: '⚡ Active Agents',
+        callback_data: 'active_agents',
+        icon: '⚡',
+        priority: 3,
+      },
+      {
+        text: '📊 Agent Performance',
+        callback_data: 'agent_performance',
+        icon: '📊',
+        priority: 4,
+      },
+      {
+        text: '🔧 Agent Settings',
+        callback_data: 'agent_settings',
+        icon: '🔧',
+        priority: 5,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 6,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Analytics menu
-  private async generateAnalyticsMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateAnalyticsMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const userStats = await storage.getUserStats('user-1').catch(() => ({
       totalPosts: 0,
       activeAgents: 0,
       engagementRate: 0,
-      automationsRun: 0
+      automationsRun: 0,
     }));
 
     const text = `📊 Analytics Dashboard
@@ -224,25 +302,57 @@ ${recentPosts.length > 0 ?
 🎯 Dive deeper into your data:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '📈 Performance Overview', callback_data: 'performance_overview', icon: '📈', priority: 1 },
-      { text: '📊 Post Analytics', callback_data: 'post_analytics', icon: '📊', priority: 2 },
-      { text: '🤖 Agent Performance', callback_data: 'agent_performance', icon: '🤖', priority: 3 },
-      { text: '📅 Time-based Reports', callback_data: 'time_reports', icon: '📅', priority: 4 },
-      { text: '🎯 Engagement Insights', callback_data: 'engagement_insights', icon: '🎯', priority: 5 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 6 }
+      {
+        text: '📈 Performance Overview',
+        callback_data: 'performance_overview',
+        icon: '📈',
+        priority: 1,
+      },
+      {
+        text: '📊 Post Analytics',
+        callback_data: 'post_analytics',
+        icon: '📊',
+        priority: 2,
+      },
+      {
+        text: '🤖 Agent Performance',
+        callback_data: 'agent_performance',
+        icon: '🤖',
+        priority: 3,
+      },
+      {
+        text: '📅 Time-based Reports',
+        callback_data: 'time_reports',
+        icon: '📅',
+        priority: 4,
+      },
+      {
+        text: '🎯 Engagement Insights',
+        callback_data: 'engagement_insights',
+        icon: '🎯',
+        priority: 5,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 6,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Settings menu
-  private async generateSettingsMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateSettingsMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const text = `⚙️ Settings & Preferences
 
 🔧 Customize your AuraOS experience:
@@ -255,83 +365,186 @@ Current Settings:
 🎯 Adjust your preferences:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '🌍 Language', callback_data: 'set_language', icon: '🌍', priority: 1 },
-      { text: '🕐 Timezone', callback_data: 'set_timezone', icon: '🕐', priority: 2 },
-      { text: '🔔 Notifications', callback_data: 'toggle_notifications', icon: '🔔', priority: 3 },
+      {
+        text: '🌍 Language',
+        callback_data: 'set_language',
+        icon: '🌍',
+        priority: 1,
+      },
+      {
+        text: '🕐 Timezone',
+        callback_data: 'set_timezone',
+        icon: '🕐',
+        priority: 2,
+      },
+      {
+        text: '🔔 Notifications',
+        callback_data: 'toggle_notifications',
+        icon: '🔔',
+        priority: 3,
+      },
       { text: '🎨 Theme', callback_data: 'set_theme', icon: '🎨', priority: 4 },
-      { text: '🔐 Privacy', callback_data: 'privacy_settings', icon: '🔐', priority: 5 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 6 }
+      {
+        text: '🔐 Privacy',
+        callback_data: 'privacy_settings',
+        icon: '🔐',
+        priority: 5,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 6,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Quick actions menu for power users
-  private async generateQuickActionsMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateQuickActionsMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const text = `⚡ Quick Actions
 
 🚀 Fast access to your most-used features:
 
-${context.stats.favoriteCommands.length > 0 ? 
-  `⭐ Your favorites: ${context.stats.favoriteCommands.join(', ')}` : 
-  '⭐ Start using commands to build your favorites!'
+${
+  context.stats.favoriteCommands.length > 0
+    ? `⭐ Your favorites: ${context.stats.favoriteCommands.join(', ')}`
+    : '⭐ Start using commands to build your favorites!'
 }
 
 🎯 Quick shortcuts:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '📝 Quick Post', callback_data: 'quick_post', icon: '📝', priority: 1 },
-      { text: '🤖 Quick Agent', callback_data: 'quick_agent', icon: '🤖', priority: 2 },
-      { text: '📊 Quick Stats', callback_data: 'quick_stats', icon: '📊', priority: 3 },
-      { text: '🔄 Run Automation', callback_data: 'run_automation', icon: '🔄', priority: 4 },
+      {
+        text: '📝 Quick Post',
+        callback_data: 'quick_post',
+        icon: '📝',
+        priority: 1,
+      },
+      {
+        text: '🤖 Quick Agent',
+        callback_data: 'quick_agent',
+        icon: '🤖',
+        priority: 2,
+      },
+      {
+        text: '📊 Quick Stats',
+        callback_data: 'quick_stats',
+        icon: '📊',
+        priority: 3,
+      },
+      {
+        text: '🔄 Run Automation',
+        callback_data: 'run_automation',
+        icon: '🔄',
+        priority: 4,
+      },
       { text: '💬 AI Chat', callback_data: 'ai_chat', icon: '💬', priority: 5 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 6 }
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 6,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Get contextual menu options based on user behavior
-  private async getContextualMenuOptions(context: UserContext): Promise<SmartMenuOption[]> {
+  private async getContextualMenuOptions(
+    context: UserContext
+  ): Promise<SmartMenuOption[]> {
     const options: SmartMenuOption[] = [];
 
     // Always include core options
     options.push(
-      { text: '📝 Posts', callback_data: 'posts_menu', icon: '📝', priority: 1 },
-      { text: '🤖 Agents', callback_data: 'agents_menu', icon: '🤖', priority: 2 },
-      { text: '📊 Analytics', callback_data: 'analytics_menu', icon: '📊', priority: 3 },
-      { text: '✈️ Travel', callback_data: 'travel_menu', icon: '✈️', priority: 4 },
+      {
+        text: '📝 Posts',
+        callback_data: 'posts_menu',
+        icon: '📝',
+        priority: 1,
+      },
+      {
+        text: '🤖 Agents',
+        callback_data: 'agents_menu',
+        icon: '🤖',
+        priority: 2,
+      },
+      {
+        text: '📊 Analytics',
+        callback_data: 'analytics_menu',
+        icon: '📊',
+        priority: 3,
+      },
+      {
+        text: '✈️ Travel',
+        callback_data: 'travel_menu',
+        icon: '✈️',
+        priority: 4,
+      },
       { text: '🍽️ Food', callback_data: 'food_menu', icon: '🍽️', priority: 5 },
-      { text: '🛒 Shopping', callback_data: 'shopping_menu', icon: '🛒', priority: 6 }
+      {
+        text: '🛒 Shopping',
+        callback_data: 'shopping_menu',
+        icon: '🛒',
+        priority: 6,
+      }
     );
 
     // Add contextual options based on user behavior
     if (context.stats.totalInteractions > 10) {
-      options.push({ text: '⚡ Quick Actions', callback_data: 'quick_actions_menu', icon: '⚡', priority: 4 });
+      options.push({
+        text: '⚡ Quick Actions',
+        callback_data: 'quick_actions_menu',
+        icon: '⚡',
+        priority: 4,
+      });
     }
 
-    if (context.stats.lastPostTime && this.isRecent(context.stats.lastPostTime)) {
-      options.push({ text: '📈 View Performance', callback_data: 'view_performance', icon: '📈', priority: 5 });
+    if (
+      context.stats.lastPostTime &&
+      this.isRecent(context.stats.lastPostTime)
+    ) {
+      options.push({
+        text: '📈 View Performance',
+        callback_data: 'view_performance',
+        icon: '📈',
+        priority: 5,
+      });
     }
 
     // Add settings option
-    options.push({ text: '⚙️ Settings', callback_data: 'settings_menu', icon: '⚙️', priority: 6 });
+    options.push({
+      text: '⚙️ Settings',
+      callback_data: 'settings_menu',
+      icon: '⚙️',
+      priority: 6,
+    });
 
     // Add help option for new users
     if (context.stats.totalInteractions < 5) {
-      options.push({ text: '❓ Help', callback_data: 'help_menu', icon: '❓', priority: 7 });
+      options.push({
+        text: '❓ Help',
+        callback_data: 'help_menu',
+        icon: '❓',
+        priority: 7,
+      });
     }
 
     return options;
@@ -341,11 +554,11 @@ ${context.stats.favoriteCommands.length > 0 ?
   private organizeMenuOptions(options: SmartMenuOption[]): any[][] {
     const sortedOptions = options.sort((a, b) => a.priority - b.priority);
     const rows: any[][] = [];
-    
+
     for (let i = 0; i < sortedOptions.length; i += 2) {
       const row = sortedOptions.slice(i, i + 2).map(option => ({
         text: `${option.icon} ${option.text}`,
-        callback_data: option.callback_data
+        callback_data: option.callback_data,
       }));
       rows.push(row);
     }
@@ -354,7 +567,9 @@ ${context.stats.favoriteCommands.length > 0 ?
   }
 
   // Travel Menu
-  private async generateTravelMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateTravelMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const text = `✈️ Travel Services Hub
 
 🎯 **AI-Powered Travel Solutions:**
@@ -374,26 +589,63 @@ ${context.stats.favoriteCommands.length > 0 ?
 🎯 Choose your travel service:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '✈️ Flight Booking', callback_data: 'flight_booking', icon: '✈️', priority: 1 },
-      { text: '🏨 Hotel Booking', callback_data: 'hotel_booking', icon: '🏨', priority: 2 },
-      { text: '🚗 Car Rental', callback_data: 'car_rental', icon: '🚗', priority: 3 },
-      { text: '📦 Travel Packages', callback_data: 'travel_packages', icon: '📦', priority: 4 },
-      { text: '🎯 Activities', callback_data: 'travel_activities', icon: '🎯', priority: 5 },
-      { text: '🤖 Travel Agents', callback_data: 'travel_agents', icon: '🤖', priority: 6 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 7 }
+      {
+        text: '✈️ Flight Booking',
+        callback_data: 'flight_booking',
+        icon: '✈️',
+        priority: 1,
+      },
+      {
+        text: '🏨 Hotel Booking',
+        callback_data: 'hotel_booking',
+        icon: '🏨',
+        priority: 2,
+      },
+      {
+        text: '🚗 Car Rental',
+        callback_data: 'car_rental',
+        icon: '🚗',
+        priority: 3,
+      },
+      {
+        text: '📦 Travel Packages',
+        callback_data: 'travel_packages',
+        icon: '📦',
+        priority: 4,
+      },
+      {
+        text: '🎯 Activities',
+        callback_data: 'travel_activities',
+        icon: '🎯',
+        priority: 5,
+      },
+      {
+        text: '🤖 Travel Agents',
+        callback_data: 'travel_agents',
+        icon: '🤖',
+        priority: 6,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 7,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Food Menu
-  private async generateFoodMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateFoodMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const text = `🍽️ Food Services Hub
 
 🎯 **AI-Powered Food Solutions:**
@@ -413,26 +665,63 @@ ${context.stats.favoriteCommands.length > 0 ?
 🎯 Choose your food service:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '🍴 Restaurant Discovery', callback_data: 'restaurant_discovery', icon: '🍴', priority: 1 },
-      { text: '🚚 Food Delivery', callback_data: 'food_delivery', icon: '🚚', priority: 2 },
-      { text: '🛒 Grocery Shopping', callback_data: 'grocery_shopping', icon: '🛒', priority: 3 },
-      { text: '📋 Meal Planning', callback_data: 'meal_planning', icon: '📋', priority: 4 },
-      { text: '🎉 Catering Services', callback_data: 'catering_services', icon: '🎉', priority: 5 },
-      { text: '🤖 Food Agents', callback_data: 'food_agents', icon: '🤖', priority: 6 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 7 }
+      {
+        text: '🍴 Restaurant Discovery',
+        callback_data: 'restaurant_discovery',
+        icon: '🍴',
+        priority: 1,
+      },
+      {
+        text: '🚚 Food Delivery',
+        callback_data: 'food_delivery',
+        icon: '🚚',
+        priority: 2,
+      },
+      {
+        text: '🛒 Grocery Shopping',
+        callback_data: 'grocery_shopping',
+        icon: '🛒',
+        priority: 3,
+      },
+      {
+        text: '📋 Meal Planning',
+        callback_data: 'meal_planning',
+        icon: '📋',
+        priority: 4,
+      },
+      {
+        text: '🎉 Catering Services',
+        callback_data: 'catering_services',
+        icon: '🎉',
+        priority: 5,
+      },
+      {
+        text: '🤖 Food Agents',
+        callback_data: 'food_agents',
+        icon: '🤖',
+        priority: 6,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 7,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
   }
 
   // Shopping Menu
-  private async generateShoppingMenu(context: UserContext): Promise<{ text: string; keyboard: any }> {
+  private async generateShoppingMenu(
+    context: UserContext
+  ): Promise<{ text: string; keyboard: any }> {
     const text = `🛒 Smart Shopping Hub
 
 🎯 **AI-Powered Shopping Solutions:**
@@ -452,19 +741,54 @@ ${context.stats.favoriteCommands.length > 0 ?
 🎯 Choose your shopping service:`;
 
     const menuOptions: SmartMenuOption[] = [
-      { text: '🔍 Price Comparison', callback_data: 'price_comparison', icon: '🔍', priority: 1 },
-      { text: '💰 Deal Detection', callback_data: 'deal_detection', icon: '💰', priority: 2 },
-      { text: '🤖 Auto-Purchase', callback_data: 'auto_purchase', icon: '🤖', priority: 3 },
-      { text: '📋 Wishlist Manager', callback_data: 'wishlist_manager', icon: '📋', priority: 4 },
-      { text: '📊 Budget Tracker', callback_data: 'budget_tracker', icon: '📊', priority: 5 },
-      { text: '🤖 Shopping Agents', callback_data: 'shopping_agents', icon: '🤖', priority: 6 },
-      { text: '🔙 Back to Main', callback_data: 'main_menu', icon: '🔙', priority: 7 }
+      {
+        text: '🔍 Price Comparison',
+        callback_data: 'price_comparison',
+        icon: '🔍',
+        priority: 1,
+      },
+      {
+        text: '💰 Deal Detection',
+        callback_data: 'deal_detection',
+        icon: '💰',
+        priority: 2,
+      },
+      {
+        text: '🤖 Auto-Purchase',
+        callback_data: 'auto_purchase',
+        icon: '🤖',
+        priority: 3,
+      },
+      {
+        text: '📋 Wishlist Manager',
+        callback_data: 'wishlist_manager',
+        icon: '📋',
+        priority: 4,
+      },
+      {
+        text: '📊 Budget Tracker',
+        callback_data: 'budget_tracker',
+        icon: '📊',
+        priority: 5,
+      },
+      {
+        text: '🤖 Shopping Agents',
+        callback_data: 'shopping_agents',
+        icon: '🤖',
+        priority: 6,
+      },
+      {
+        text: '🔙 Back to Main',
+        callback_data: 'main_menu',
+        icon: '🔙',
+        priority: 7,
+      },
     ];
 
     const keyboard = {
       reply_markup: {
-        inline_keyboard: this.organizeMenuOptions(menuOptions)
-      }
+        inline_keyboard: this.organizeMenuOptions(menuOptions),
+      },
     };
 
     return { text, keyboard };
@@ -484,7 +808,7 @@ ${context.stats.favoriteCommands.length > 0 ?
       morning: 'Good morning',
       afternoon: 'Good afternoon',
       evening: 'Good evening',
-      night: 'Good evening'
+      night: 'Good evening',
     };
     return greetings[timeOfDay] || 'Hello';
   }
@@ -496,7 +820,10 @@ ${context.stats.favoriteCommands.length > 0 ?
   }
 
   // Update user preferences
-  async updateUserPreferences(chatId: number, preferences: Partial<UserContext['preferences']>) {
+  async updateUserPreferences(
+    chatId: number,
+    preferences: Partial<UserContext['preferences']>
+  ) {
     const context = this.getUserContext(chatId, '');
     context.preferences = { ...context.preferences, ...preferences };
   }
@@ -513,7 +840,8 @@ ${context.stats.favoriteCommands.length > 0 ?
       context.stats.favoriteCommands.push(command);
       // Keep only top 5 favorites
       if (context.stats.favoriteCommands.length > 5) {
-        context.stats.favoriteCommands = context.stats.favoriteCommands.slice(-5);
+        context.stats.favoriteCommands =
+          context.stats.favoriteCommands.slice(-5);
       }
     }
   }

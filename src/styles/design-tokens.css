@@ -3,111 +3,131 @@
 :root {
   /* === NEON COLOR PALETTE === */
   /* Primary Neon Colors */
-  --neon-green: #39FF14;
-  --cyber-blue: #00E5FF; 
-  --vivid-purple: #9D00FF;
-  
+  --neon-green: #39ff14;
+  --cyber-blue: #00e5ff;
+  --vivid-purple: #9d00ff;
+
   /* Secondary Neon Colors */
-  --neon-pink: #FF1493;
-  --electric-yellow: #FFFF00;
-  --cyber-orange: #FF4500;
-  
+  --neon-pink: #ff1493;
+  --electric-yellow: #ffff00;
+  --cyber-orange: #ff4500;
+
   /* Neon Color Variants */
-  --neon-green-light: #7FFF7F;
-  --neon-green-dark: #00CC00;
-  --cyber-blue-light: #40E0D0;
-  --cyber-blue-dark: #0080FF;
-  --vivid-purple-light: #DA70D6;
-  --vivid-purple-dark: #6A0DAD;
-  
+  --neon-green-light: #7fff7f;
+  --neon-green-dark: #00cc00;
+  --cyber-blue-light: #40e0d0;
+  --cyber-blue-dark: #0080ff;
+  --vivid-purple-light: #da70d6;
+  --vivid-purple-dark: #6a0dad;
+
   /* === GRADIENTS === */
   /* Primary Gradients */
-  --gradient-primary: linear-gradient(90deg, var(--cyber-blue), var(--vivid-purple));
-  --gradient-accent: linear-gradient(135deg, var(--neon-green), var(--cyber-blue));
-  --gradient-secondary: linear-gradient(45deg, var(--vivid-purple), var(--neon-pink));
-  
+  --gradient-primary: linear-gradient(
+    90deg,
+    var(--cyber-blue),
+    var(--vivid-purple)
+  );
+  --gradient-accent: linear-gradient(
+    135deg,
+    var(--neon-green),
+    var(--cyber-blue)
+  );
+  --gradient-secondary: linear-gradient(
+    45deg,
+    var(--vivid-purple),
+    var(--neon-pink)
+  );
+
   /* Background Gradients */
-  --gradient-bg-primary: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(0, 229, 255, 0.1));
-  --gradient-bg-secondary: linear-gradient(45deg, rgba(157, 0, 255, 0.1), rgba(255, 20, 147, 0.1));
-  
+  --gradient-bg-primary: linear-gradient(
+    135deg,
+    rgba(57, 255, 20, 0.1),
+    rgba(0, 229, 255, 0.1)
+  );
+  --gradient-bg-secondary: linear-gradient(
+    45deg,
+    rgba(157, 0, 255, 0.1),
+    rgba(255, 20, 147, 0.1)
+  );
+
   /* === GLOW EFFECTS === */
   /* Glow Levels */
   --glow-sm: 0 0 8px currentColor;
   --glow-md: 0 0 16px currentColor;
   --glow-lg: 0 0 24px currentColor;
   --glow-xl: 0 0 32px currentColor;
-  
+
   /* Specific Color Glows */
   --glow-green-sm: 0 0 8px var(--neon-green);
   --glow-green-md: 0 0 16px var(--neon-green);
   --glow-green-lg: 0 0 24px var(--neon-green);
-  
+
   --glow-blue-sm: 0 0 8px var(--cyber-blue);
   --glow-blue-md: 0 0 16px var(--cyber-blue);
   --glow-blue-lg: 0 0 24px var(--cyber-blue);
-  
+
   --glow-purple-sm: 0 0 8px var(--vivid-purple);
   --glow-purple-md: 0 0 16px var(--vivid-purple);
   --glow-purple-lg: 0 0 24px var(--vivid-purple);
-  
+
   /* === GLASSMORPHISM === */
   /* Glass Background Colors */
   --glass-bg-primary: rgba(255, 255, 255, 0.08);
   --glass-bg-secondary: rgba(255, 255, 255, 0.12);
   --glass-bg-tertiary: rgba(255, 255, 255, 0.16);
-  
+
   /* Glass Border Colors */
   --glass-border-primary: rgba(255, 255, 255, 0.2);
   --glass-border-secondary: rgba(255, 255, 255, 0.3);
-  
+
   /* Blur Levels */
   --blur-sm: blur(8px);
   --blur-md: blur(12px);
   --blur-lg: blur(16px);
-  
+
   /* === DARK MODE COLORS === */
   /* Background Colors */
   --bg-primary: #0a0a0a;
   --bg-secondary: #1a1a1a;
   --bg-tertiary: #2a2a2a;
-  
+
   /* Text Colors */
   --text-primary: #ffffff;
   --text-secondary: #e0e0e0;
   --text-tertiary: #a0a0a0;
-  
+
   /* === STATUS COLORS === */
   /* Success/Running */
   --status-success: var(--neon-green);
   --status-success-bg: rgba(57, 255, 20, 0.1);
-  
+
   /* Warning */
   --status-warning: var(--electric-yellow);
   --status-warning-bg: rgba(255, 255, 0, 0.1);
-  
+
   /* Error */
-  --status-error: #FF0040;
+  --status-error: #ff0040;
   --status-error-bg: rgba(255, 0, 64, 0.1);
-  
+
   /* Info */
   --status-info: var(--cyber-blue);
   --status-info-bg: rgba(0, 229, 255, 0.1);
-  
+
   /* === CYBERPUNK GRID === */
   --grid-color: rgba(0, 229, 255, 0.3);
   --grid-size: 40px;
-  
+
   /* === ANIMATIONS === */
   --animation-duration-fast: 0.15s;
   --animation-duration-normal: 0.3s;
   --animation-duration-slow: 0.6s;
-  
+
   /* === BORDERS === */
   --border-radius-sm: 4px;
   --border-radius-md: 8px;
   --border-radius-lg: 12px;
   --border-radius-xl: 16px;
-  
+
   /* === SHADOWS === */
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -120,14 +140,14 @@
   --glass-bg-primary: rgba(0, 0, 0, 0.08);
   --glass-bg-secondary: rgba(0, 0, 0, 0.12);
   --glass-bg-tertiary: rgba(0, 0, 0, 0.16);
-  
+
   --glass-border-primary: rgba(0, 0, 0, 0.2);
   --glass-border-secondary: rgba(0, 0, 0, 0.3);
-  
+
   --bg-primary: #ffffff;
   --bg-secondary: #f8f8f8;
   --bg-tertiary: #f0f0f0;
-  
+
   --text-primary: #000000;
   --text-secondary: #333333;
   --text-tertiary: #666666;
@@ -192,7 +212,8 @@
 
 /* === ANIMATIONS === */
 @keyframes neon-pulse {
-  0%, 100% {
+  0%,
+  100% {
     text-shadow: var(--glow-green-sm);
     box-shadow: var(--glow-green-sm);
   }
@@ -228,7 +249,7 @@
 
 /* === CYBERPUNK GRID BACKGROUND === */
 .cyber-grid {
-  background-image: 
+  background-image:
     linear-gradient(var(--grid-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: var(--grid-size) var(--grid-size);
@@ -252,7 +273,7 @@
   .cyber-scan {
     animation: none;
   }
-  
+
   .glass-card-hover {
     transition: none;
   }

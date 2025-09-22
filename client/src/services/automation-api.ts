@@ -2,7 +2,8 @@
 import { ApiResponse, PaginationParams } from '@/types/automation';
 
 // Base API configuration
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 const API_VERSION = 'v1';
 
 class AutomationApiService {
@@ -32,7 +33,7 @@ class AutomationApiService {
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const defaultHeaders: HeadersInit = {
       'Content-Type': 'application/json',
     };
@@ -65,9 +66,12 @@ class AutomationApiService {
   }
 
   // GET request
-  private async get<T>(endpoint: string, params?: Record<string, any>): Promise<ApiResponse<T>> {
+  private async get<T>(
+    endpoint: string,
+    params?: Record<string, any>
+  ): Promise<ApiResponse<T>> {
     const url = new URL(`${this.baseUrl}${endpoint}`);
-    
+
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -105,7 +109,10 @@ class AutomationApiService {
   }
 
   // PATCH request
-  private async patch<T>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  private async patch<T>(
+    endpoint: string,
+    data?: any
+  ): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
@@ -132,15 +139,18 @@ class AutomationApiService {
     return this.post('/workspaces', data);
   }
 
-  async updateWorkspace(id: string, data: Partial<{
-    name: string;
-    description: string;
-    color: string;
-    icon: string;
-    isPublic: boolean;
-    tags: string[];
-    settings: any;
-  }>) {
+  async updateWorkspace(
+    id: string,
+    data: Partial<{
+      name: string;
+      description: string;
+      color: string;
+      icon: string;
+      isPublic: boolean;
+      tags: string[];
+      settings: any;
+    }>
+  ) {
     return this.put(`/workspaces/${id}`, data);
   }
 
@@ -148,11 +158,14 @@ class AutomationApiService {
     return this.delete(`/workspaces/${id}`);
   }
 
-  async addWorkspaceMember(workspaceId: string, data: {
-    userId: string;
-    role: 'admin' | 'editor' | 'viewer';
-    permissions?: string[];
-  }) {
+  async addWorkspaceMember(
+    workspaceId: string,
+    data: {
+      userId: string;
+      role: 'admin' | 'editor' | 'viewer';
+      permissions?: string[];
+    }
+  ) {
     return this.post(`/workspaces/${workspaceId}/members`, data);
   }
 
@@ -161,13 +174,15 @@ class AutomationApiService {
   }
 
   // Automation Tasks API methods
-  async getTasks(params?: PaginationParams & {
-    workspaceId?: string;
-    status?: string;
-    category?: string;
-    priority?: string;
-    userId?: string;
-  }) {
+  async getTasks(
+    params?: PaginationParams & {
+      workspaceId?: string;
+      status?: string;
+      category?: string;
+      priority?: string;
+      userId?: string;
+    }
+  ) {
     return this.get('/tasks', params);
   }
 
@@ -180,7 +195,13 @@ class AutomationApiService {
     description?: string;
     workspaceId: string;
     type: 'workflow' | 'trigger' | 'action' | 'condition' | 'ai' | 'mcp';
-    category: 'social_media' | 'email' | 'data' | 'ai' | 'integration' | 'notification';
+    category:
+      | 'social_media'
+      | 'email'
+      | 'data'
+      | 'ai'
+      | 'integration'
+      | 'notification';
     priority?: 'low' | 'medium' | 'high' | 'critical';
     tags?: string[];
     config?: Record<string, any>;
@@ -194,16 +215,19 @@ class AutomationApiService {
     return this.post('/tasks', data);
   }
 
-  async updateTask(id: string, data: Partial<{
-    name: string;
-    description: string;
-    status: 'active' | 'inactive' | 'draft' | 'error' | 'running' | 'paused';
-    priority: 'low' | 'medium' | 'high' | 'critical';
-    tags: string[];
-    config: Record<string, any>;
-    schedule: any;
-    variables: Record<string, any>;
-  }>) {
+  async updateTask(
+    id: string,
+    data: Partial<{
+      name: string;
+      description: string;
+      status: 'active' | 'inactive' | 'draft' | 'error' | 'running' | 'paused';
+      priority: 'low' | 'medium' | 'high' | 'critical';
+      tags: string[];
+      config: Record<string, any>;
+      schedule: any;
+      variables: Record<string, any>;
+    }>
+  ) {
     return this.put(`/tasks/${id}`, data);
   }
 
@@ -211,10 +235,13 @@ class AutomationApiService {
     return this.delete(`/tasks/${id}`);
   }
 
-  async executeTask(id: string, data?: {
-    input?: Record<string, any>;
-    variables?: Record<string, any>;
-  }) {
+  async executeTask(
+    id: string,
+    data?: {
+      input?: Record<string, any>;
+      variables?: Record<string, any>;
+    }
+  ) {
     return this.post(`/tasks/${id}/execute`, data);
   }
 
@@ -231,11 +258,13 @@ class AutomationApiService {
   }
 
   // Task Execution API methods
-  async getTaskExecutions(params?: PaginationParams & {
-    taskId?: string;
-    status?: string;
-    userId?: string;
-  }) {
+  async getTaskExecutions(
+    params?: PaginationParams & {
+      taskId?: string;
+      status?: string;
+      userId?: string;
+    }
+  ) {
     return this.get('/executions', params);
   }
 
@@ -243,18 +272,23 @@ class AutomationApiService {
     return this.get(`/executions/${id}`);
   }
 
-  async getTaskExecutionLogs(executionId: string, params?: PaginationParams & {
-    level?: string;
-  }) {
+  async getTaskExecutionLogs(
+    executionId: string,
+    params?: PaginationParams & {
+      level?: string;
+    }
+  ) {
     return this.get(`/executions/${executionId}/logs`, params);
   }
 
   // MCP Tools API methods
-  async getMcpTools(params?: PaginationParams & {
-    category?: string;
-    status?: string;
-    search?: string;
-  }) {
+  async getMcpTools(
+    params?: PaginationParams & {
+      category?: string;
+      status?: string;
+      search?: string;
+    }
+  ) {
     return this.get('/mcp-tools', params);
   }
 
@@ -270,17 +304,23 @@ class AutomationApiService {
     return this.delete(`/mcp-tools/${id}/uninstall`);
   }
 
-  async configureMcpTool(id: string, data: {
-    settings?: any;
-    integrations?: any[];
-  }) {
+  async configureMcpTool(
+    id: string,
+    data: {
+      settings?: any;
+      integrations?: any[];
+    }
+  ) {
     return this.put(`/mcp-tools/${id}/configure`, data);
   }
 
-  async executeMcpTool(id: string, data: {
-    parameters?: Record<string, any>;
-    input?: any;
-  }) {
+  async executeMcpTool(
+    id: string,
+    data: {
+      parameters?: Record<string, any>;
+      input?: any;
+    }
+  ) {
     return this.post(`/mcp-tools/${id}/execute`, data);
   }
 
@@ -289,12 +329,14 @@ class AutomationApiService {
   }
 
   // Workflow Suggestions API methods
-  async getWorkflowSuggestions(params?: PaginationParams & {
-    category?: string;
-    priority?: string;
-    applied?: boolean;
-    userId?: string;
-  }) {
+  async getWorkflowSuggestions(
+    params?: PaginationParams & {
+      category?: string;
+      priority?: string;
+      applied?: boolean;
+      userId?: string;
+    }
+  ) {
     return this.get('/suggestions', params);
   }
 
@@ -305,7 +347,13 @@ class AutomationApiService {
   async createWorkflowSuggestion(data: {
     title: string;
     description: string;
-    category: 'optimization' | 'automation' | 'integration' | 'performance' | 'security' | 'scalability';
+    category:
+      | 'optimization'
+      | 'automation'
+      | 'integration'
+      | 'performance'
+      | 'security'
+      | 'scalability';
     priority: 'low' | 'medium' | 'high' | 'critical';
     impact: 'low' | 'medium' | 'high' | 'transformational';
     effort: 'low' | 'medium' | 'high' | 'extensive';
@@ -341,10 +389,12 @@ class AutomationApiService {
   }
 
   // Optimization Results API methods
-  async getOptimizationResults(params?: PaginationParams & {
-    taskId?: string;
-    userId?: string;
-  }) {
+  async getOptimizationResults(
+    params?: PaginationParams & {
+      taskId?: string;
+      userId?: string;
+    }
+  ) {
     return this.get('/optimizations', params);
   }
 
@@ -357,12 +407,14 @@ class AutomationApiService {
   }
 
   // Workflow Templates API methods
-  async getWorkflowTemplates(params?: PaginationParams & {
-    category?: string;
-    isPublic?: boolean;
-    isOfficial?: boolean;
-    search?: string;
-  }) {
+  async getWorkflowTemplates(
+    params?: PaginationParams & {
+      category?: string;
+      isPublic?: boolean;
+      isOfficial?: boolean;
+      search?: string;
+    }
+  ) {
     return this.get('/workflow-templates', params);
   }
 
@@ -383,16 +435,19 @@ class AutomationApiService {
     return this.post('/workflow-templates', data);
   }
 
-  async updateWorkflowTemplate(id: string, data: Partial<{
-    name: string;
-    description: string;
-    category: string;
-    isPublic: boolean;
-    nodes: any[];
-    connections: any[];
-    variables: any[];
-    settings: any;
-  }>) {
+  async updateWorkflowTemplate(
+    id: string,
+    data: Partial<{
+      name: string;
+      description: string;
+      category: string;
+      isPublic: boolean;
+      nodes: any[];
+      connections: any[];
+      variables: any[];
+      settings: any;
+    }>
+  ) {
     return this.put(`/workflow-templates/${id}`, data);
   }
 
@@ -416,18 +471,23 @@ class AutomationApiService {
     return this.get('/system/metrics', params);
   }
 
-  async getSystemAlerts(params?: PaginationParams & {
-    type?: string;
-    resolved?: boolean;
-    severity?: string;
-  }) {
+  async getSystemAlerts(
+    params?: PaginationParams & {
+      type?: string;
+      resolved?: boolean;
+      severity?: string;
+    }
+  ) {
     return this.get('/system/alerts', params);
   }
 
-  async resolveAlert(id: string, data?: {
-    action?: string;
-    note?: string;
-  }) {
+  async resolveAlert(
+    id: string,
+    data?: {
+      action?: string;
+      note?: string;
+    }
+  ) {
     return this.patch(`/system/alerts/${id}/resolve`, data);
   }
 
@@ -440,15 +500,21 @@ class AutomationApiService {
     return this.get('/analytics', params);
   }
 
-  async getTaskAnalytics(taskId: string, params?: {
-    timeRange?: '1h' | '6h' | '24h' | '7d' | '30d';
-  }) {
+  async getTaskAnalytics(
+    taskId: string,
+    params?: {
+      timeRange?: '1h' | '6h' | '24h' | '7d' | '30d';
+    }
+  ) {
     return this.get(`/analytics/tasks/${taskId}`, params);
   }
 
-  async getWorkspaceAnalytics(workspaceId: string, params?: {
-    timeRange?: '1h' | '6h' | '24h' | '7d' | '30d';
-  }) {
+  async getWorkspaceAnalytics(
+    workspaceId: string,
+    params?: {
+      timeRange?: '1h' | '6h' | '24h' | '7d' | '30d';
+    }
+  ) {
     return this.get(`/analytics/workspaces/${workspaceId}`, params);
   }
 
@@ -482,26 +548,39 @@ class AutomationApiService {
     return this.get('/users/me/preferences');
   }
 
-  async updateMyPreferences(data: Partial<{ theme: 'light' | 'dark' | 'auto'; notifications: boolean; language: string; reducedMotion: boolean }>) {
+  async updateMyPreferences(
+    data: Partial<{
+      theme: 'light' | 'dark' | 'auto';
+      notifications: boolean;
+      language: string;
+      reducedMotion: boolean;
+    }>
+  ) {
     return this.put('/users/me/preferences', data);
   }
 
-  async optimizeWorkflowAi(workflowId: string, data?: {
-    focus?: 'performance' | 'cost' | 'reliability';
-    constraints?: Record<string, any>;
-  }) {
+  async optimizeWorkflowAi(
+    workflowId: string,
+    data?: {
+      focus?: 'performance' | 'cost' | 'reliability';
+      constraints?: Record<string, any>;
+    }
+  ) {
     return this.post(`/ai/optimize/${workflowId}`, data);
   }
 
   // File Upload API methods
-  async uploadFile(file: File, data?: {
-    workspaceId?: string;
-    taskId?: string;
-    type?: string;
-  }) {
+  async uploadFile(
+    file: File,
+    data?: {
+      workspaceId?: string;
+      taskId?: string;
+      type?: string;
+    }
+  ) {
     const formData = new FormData();
     formData.append('file', file);
-    
+
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
         if (value) formData.append(key, String(value));
@@ -512,7 +591,7 @@ class AutomationApiService {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
         // Don't set Content-Type for FormData, let browser set it
       },
     });
@@ -522,11 +601,13 @@ class AutomationApiService {
     return this.delete(`/files/${fileId}`);
   }
 
-  async getFiles(params?: PaginationParams & {
-    workspaceId?: string;
-    taskId?: string;
-    type?: string;
-  }) {
+  async getFiles(
+    params?: PaginationParams & {
+      workspaceId?: string;
+      taskId?: string;
+      type?: string;
+    }
+  ) {
     return this.get('/files', params);
   }
 
@@ -547,7 +628,7 @@ class AutomationApiService {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
   }
@@ -561,7 +642,7 @@ class AutomationApiService {
       method: 'POST',
       body: formData,
       headers: {
-        'Authorization': `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     });
   }
@@ -574,7 +655,4 @@ export const automationApi = new AutomationApiService();
 export { AutomationApiService };
 
 // Export types for use in components
-export type {
-  ApiResponse,
-  PaginationParams,
-} from '@/types/automation';
+export type { ApiResponse, PaginationParams } from '@/types/automation';

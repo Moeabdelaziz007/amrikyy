@@ -30,10 +30,10 @@ export class AdvancedCache<T = any> {
   // إضافة عنصر للتخزين المؤقت
   set(key: string, data: T): void {
     const now = Date.now();
-    
+
     // إزالة العناصر المنتهية الصلاحية
     this.cleanup();
-    
+
     // إزالة العناصر إذا تجاوزنا الحد الأقصى
     if (this.cache.size >= this.maxSize) {
       this.evict();
@@ -53,7 +53,7 @@ export class AdvancedCache<T = any> {
   // الحصول على عنصر من التخزين المؤقت
   get(key: string): T | null {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return null;
     }
@@ -113,7 +113,10 @@ export class AdvancedCache<T = any> {
       strategy: this.strategy,
       totalAccessCount,
       expiredEntries,
-      hitRate: totalAccessCount > 0 ? (totalAccessCount - expiredEntries) / totalAccessCount : 0,
+      hitRate:
+        totalAccessCount > 0
+          ? (totalAccessCount - expiredEntries) / totalAccessCount
+          : 0,
     };
   }
 

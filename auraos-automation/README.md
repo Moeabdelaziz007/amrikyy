@@ -61,11 +61,13 @@ npm start
 ## API Endpoints
 
 ### Health Check
+
 ```
 GET /health
 ```
 
 ### Task Management
+
 ```
 GET    /task-types              # Get available task types
 POST   /tasks                   # Create new task
@@ -75,6 +77,7 @@ GET    /tasks/:id/executions    # Get task executions
 ```
 
 ### Execution Management
+
 ```
 GET    /executions/:id          # Get execution by ID
 ```

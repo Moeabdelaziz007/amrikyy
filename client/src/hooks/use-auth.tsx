@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { AuthService } from "@/lib/firebase";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { AuthService } from '@/lib/firebase';
 
 type User = {
   uid: string;
@@ -18,7 +18,11 @@ type AuthContextType = {
   signInWithGoogle: () => Promise<void>;
   signInAsGuest: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string, displayName?: string) => Promise<void>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    displayName?: string
+  ) => Promise<void>;
   signOut: () => Promise<void>;
   isAuthenticated: boolean;
 };
@@ -30,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = AuthService.onAuthStateChanged((user) => {
+    const unsubscribe = AuthService.onAuthStateChanged(user => {
       // Check for existing guest user
       const isGuestUser = localStorage.getItem('isGuestUser') === 'true';
       const guestUserData = localStorage.getItem('guestUser');
@@ -76,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         displayName: 'Guest User',
         photoURL: null,
         emailVerified: false,
-        isAnonymous: true
+        isAnonymous: true,
       };
 
       // Store guest info in localStorage
@@ -104,7 +108,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signUpWithEmail = async (email: string, password: string, displayName?: string) => {
+  const signUpWithEmail = async (
+    email: string,
+    password: string,
+    displayName?: string
+  ) => {
     try {
       setLoading(true);
       await AuthService.signUpWithEmail(email, password, displayName);
@@ -151,11 +159,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     isAuthenticated: !!user,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export const useAuth = () => {

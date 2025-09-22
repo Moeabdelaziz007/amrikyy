@@ -1,23 +1,28 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const react_2 = require("react");
-const react_svg_1 = require("./assets/react.svg");
-const vite_svg_1 = require("/vite.svg");
-require("./App.css");
+'use strict';
+Object.defineProperty(exports, '__esModule', { value: true });
+const react_2 = require('react');
+const react_svg_1 = require('./assets/react.svg');
+const vite_svg_1 = require('/vite.svg');
+require('./App.css');
 function App() {
-    const [count, setCount] = (0, react_2.useState)(0);
-    return (<>
+  const [count, setCount] = (0, react_2.useState)(0);
+  return (
+    <>
       <div>
         <a href="https://vite.dev" target="_blank">
-          <img src={vite_svg_1.default} className="logo" alt="Vite logo"/>
+          <img src={vite_svg_1.default} className="logo" alt="Vite logo" />
         </a>
         <a href="https://react.dev" target="_blank">
-          <img src={react_svg_1.default} className="logo react" alt="React logo"/>
+          <img
+            src={react_svg_1.default}
+            className="logo react"
+            alt="React logo"
+          />
         </a>
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => setCount(count => count + 1)}>
           count is {count}
         </button>
         <p>
@@ -27,6 +32,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-    </>);
+    </>
+  );
 }
 exports.default = App;

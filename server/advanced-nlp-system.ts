@@ -43,7 +43,12 @@ export interface NLPTrainingData {
 export interface NLPModel {
   id: string;
   name: string;
-  type: 'sentiment' | 'classification' | 'ner' | 'topic_modeling' | 'translation';
+  type:
+    | 'sentiment'
+    | 'classification'
+    | 'ner'
+    | 'topic_modeling'
+    | 'translation';
   accuracy: number;
   trainingData: NLPTrainingData[];
   parameters: Record<string, any>;
@@ -132,7 +137,7 @@ export class AdvancedNLPSystem {
     try {
       // محاكاة عملية التدريب
       const accuracy = await this.simulateTraining(model, trainingData);
-      
+
       model.accuracy = accuracy;
       model.status = 'ready';
       model.updatedAt = new Date();
@@ -147,7 +152,10 @@ export class AdvancedNLPSystem {
   }
 
   // محاكاة التدريب
-  private async simulateTraining(model: NLPModel, trainingData: NLPTrainingData[]): Promise<number> {
+  private async simulateTraining(
+    model: NLPModel,
+    trainingData: NLPTrainingData[]
+  ): Promise<number> {
     // محاكاة التدريب مع تحسين تدريجي
     const iterations = Math.min(100, trainingData.length);
     let accuracy = 0.5;
@@ -162,7 +170,7 @@ export class AdvancedNLPSystem {
   // تحليل النص
   async analyzeText(text: string, pipelineId?: string): Promise<NLPAnalysis> {
     let pipeline: NLPPipeline | null = null;
-    
+
     if (pipelineId) {
       pipeline = this.pipelines.get(pipelineId) || null;
     }
@@ -231,7 +239,10 @@ export class AdvancedNLPSystem {
   }
 
   // تنفيذ خط الأنابيب
-  private async executePipeline(pipeline: NLPPipeline, text: string): Promise<NLPAnalysis> {
+  private async executePipeline(
+    pipeline: NLPPipeline,
+    text: string
+  ): Promise<NLPAnalysis> {
     let processedText = text;
     const entities: any[] = [];
     const keywords: any[] = [];
@@ -239,11 +250,14 @@ export class AdvancedNLPSystem {
 
     // تنفيذ الخطوات بالترتيب
     const sortedSteps = pipeline.steps.sort((a, b) => a.order - b.order);
-    
+
     for (const step of sortedSteps) {
       switch (step.name) {
         case 'text_preprocessing':
-          processedText = await this.preprocessText(processedText, step.parameters);
+          processedText = await this.preprocessText(
+            processedText,
+            step.parameters
+          );
           break;
         case 'sentiment_analysis':
           // سيتم تنفيذها في النهاية
@@ -285,7 +299,10 @@ export class AdvancedNLPSystem {
   }
 
   // معالجة النص مسبقاً
-  private async preprocessText(text: string, parameters: Record<string, any>): Promise<string> {
+  private async preprocessText(
+    text: string,
+    parameters: Record<string, any>
+  ): Promise<string> {
     let processedText = text;
 
     if (parameters.lowercase) {
@@ -303,11 +320,27 @@ export class AdvancedNLPSystem {
   }
 
   // تحليل المشاعر
-  private async analyzeSentiment(text: string): Promise<NLPAnalysis['sentiment']> {
+  private async analyzeSentiment(
+    text: string
+  ): Promise<NLPAnalysis['sentiment']> {
     // محاكاة تحليل المشاعر
-    const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'fantastic'];
-    const negativeWords = ['bad', 'terrible', 'awful', 'horrible', 'disgusting', 'hate'];
-    
+    const positiveWords = [
+      'good',
+      'great',
+      'excellent',
+      'amazing',
+      'wonderful',
+      'fantastic',
+    ];
+    const negativeWords = [
+      'bad',
+      'terrible',
+      'awful',
+      'horrible',
+      'disgusting',
+      'hate',
+    ];
+
     const words = text.toLowerCase().split(' ');
     let positiveCount = 0;
     let negativeCount = 0;
@@ -335,14 +368,22 @@ export class AdvancedNLPSystem {
   }
 
   // استخراج الكيانات
-  private async extractEntities(text: string): Promise<NLPAnalysis['entities']> {
+  private async extractEntities(
+    text: string
+  ): Promise<NLPAnalysis['entities']> {
     const entities: NLPAnalysis['entities'] = [];
-    
+
     // محاكاة استخراج الكيانات
     const patterns = [
       { pattern: /\b[A-Z][a-z]+ [A-Z][a-z]+\b/g, type: 'person' as const },
-      { pattern: /\b[A-Z][a-z]+(?: [A-Z][a-z]+)*\b/g, type: 'location' as const },
-      { pattern: /\b(?:Inc|Corp|LLC|Ltd|Company)\b/g, type: 'organization' as const },
+      {
+        pattern: /\b[A-Z][a-z]+(?: [A-Z][a-z]+)*\b/g,
+        type: 'location' as const,
+      },
+      {
+        pattern: /\b(?:Inc|Corp|LLC|Ltd|Company)\b/g,
+        type: 'organization' as const,
+      },
       { pattern: /\b\d{1,2}\/\d{1,2}\/\d{4}\b/g, type: 'date' as const },
       { pattern: /\b\d+\b/g, type: 'number' as const },
     ];
@@ -364,12 +405,29 @@ export class AdvancedNLPSystem {
   }
 
   // استخراج الكلمات المفتاحية
-  private async extractKeywords(text: string): Promise<NLPAnalysis['keywords']> {
+  private async extractKeywords(
+    text: string
+  ): Promise<NLPAnalysis['keywords']> {
     const words = text.toLowerCase().split(' ');
-    const stopWords = new Set(['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by']);
-    
+    const stopWords = new Set([
+      'the',
+      'a',
+      'an',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'to',
+      'for',
+      'of',
+      'with',
+      'by',
+    ]);
+
     const wordCount = new Map<string, number>();
-    
+
     words.forEach(word => {
       if (!stopWords.has(word) && word.length > 2) {
         wordCount.set(word, (wordCount.get(word) || 0) + 1);
@@ -381,7 +439,8 @@ export class AdvancedNLPSystem {
 
     wordCount.forEach((frequency, word) => {
       const importance = frequency / totalWords;
-      if (importance > 0.01) { // عتبة 1%
+      if (importance > 0.01) {
+        // عتبة 1%
         keywords.push({
           word,
           importance,
@@ -397,17 +456,17 @@ export class AdvancedNLPSystem {
   private async extractTopics(text: string): Promise<NLPAnalysis['topics']> {
     // محاكاة استخراج المواضيع
     const topics: NLPAnalysis['topics'] = [];
-    
+
     const topicKeywords = {
-      'technology': ['computer', 'software', 'programming', 'code', 'tech'],
-      'business': ['company', 'business', 'market', 'sales', 'profit'],
-      'health': ['health', 'medical', 'doctor', 'hospital', 'medicine'],
-      'education': ['school', 'university', 'student', 'teacher', 'learning'],
-      'sports': ['game', 'team', 'player', 'sport', 'match'],
+      technology: ['computer', 'software', 'programming', 'code', 'tech'],
+      business: ['company', 'business', 'market', 'sales', 'profit'],
+      health: ['health', 'medical', 'doctor', 'hospital', 'medicine'],
+      education: ['school', 'university', 'student', 'teacher', 'learning'],
+      sports: ['game', 'team', 'player', 'sport', 'match'],
     };
 
     const words = text.toLowerCase().split(' ');
-    
+
     Object.entries(topicKeywords).forEach(([topic, keywords]) => {
       const matches = keywords.filter(keyword => words.includes(keyword));
       if (matches.length > 0) {
@@ -427,11 +486,11 @@ export class AdvancedNLPSystem {
   private async detectLanguage(text: string): Promise<string> {
     // محاكاة اكتشاف اللغة
     const patterns = {
-      'en': /[a-zA-Z]/g,
-      'ar': /[\u0600-\u06FF]/g,
-      'fr': /[àâäéèêëïîôöùûüÿç]/g,
-      'es': /[ñáéíóúü]/g,
-      'de': /[äöüß]/g,
+      en: /[a-zA-Z]/g,
+      ar: /[\u0600-\u06FF]/g,
+      fr: /[àâäéèêëïîôöùûüÿç]/g,
+      es: /[ñáéíóúü]/g,
+      de: /[äöüß]/g,
     };
 
     let maxScore = 0;
@@ -440,7 +499,7 @@ export class AdvancedNLPSystem {
     Object.entries(patterns).forEach(([lang, pattern]) => {
       const matches = text.match(pattern);
       const score = matches ? matches.length : 0;
-      
+
       if (score > maxScore) {
         maxScore = score;
         detectedLanguage = lang;
@@ -492,7 +551,10 @@ export class AdvancedNLPSystem {
   }
 
   // تحديث خط الأنابيب
-  async updatePipeline(pipelineId: string, updates: Partial<NLPPipeline>): Promise<NLPPipeline | null> {
+  async updatePipeline(
+    pipelineId: string,
+    updates: Partial<NLPPipeline>
+  ): Promise<NLPPipeline | null> {
     const pipeline = this.pipelines.get(pipelineId);
     if (!pipeline) return null;
 
@@ -557,6 +619,8 @@ export class AdvancedNLPSystem {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 }

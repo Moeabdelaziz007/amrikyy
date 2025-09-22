@@ -46,22 +46,32 @@ export class EnhancedChatPersona {
       name: 'AuraOS Assistant',
       personality: {
         tone: 'professional',
-        expertise: ['social media automation', 'AI agents', 'content creation', 'analytics', 'workflow optimization'],
+        expertise: [
+          'social media automation',
+          'AI agents',
+          'content creation',
+          'analytics',
+          'workflow optimization',
+        ],
         communicationStyle: 'helpful, knowledgeable, and encouraging',
-        humorLevel: 'subtle'
+        humorLevel: 'subtle',
       },
       context: {
         userLevel: 'intermediate',
-        preferredTopics: ['automation', 'content strategy', 'performance optimization'],
+        preferredTopics: [
+          'automation',
+          'content strategy',
+          'performance optimization',
+        ],
         lastInteraction: new Date(),
-        conversationHistory: []
+        conversationHistory: [],
       },
       capabilities: {
         canGenerateContent: true,
         canAnalyzeData: true,
         canProvideAdvice: true,
-        canCreateAutomations: true
-      }
+        canCreateAutomations: true,
+      },
     });
 
     // Content Creator Persona
@@ -69,22 +79,31 @@ export class EnhancedChatPersona {
       name: 'Content Creator Assistant',
       personality: {
         tone: 'enthusiastic',
-        expertise: ['content strategy', 'social media trends', 'engagement optimization', 'brand voice'],
+        expertise: [
+          'content strategy',
+          'social media trends',
+          'engagement optimization',
+          'brand voice',
+        ],
         communicationStyle: 'creative, inspiring, and trend-aware',
-        humorLevel: 'moderate'
+        humorLevel: 'moderate',
       },
       context: {
         userLevel: 'intermediate',
-        preferredTopics: ['content ideas', 'trending topics', 'engagement strategies'],
+        preferredTopics: [
+          'content ideas',
+          'trending topics',
+          'engagement strategies',
+        ],
         lastInteraction: new Date(),
-        conversationHistory: []
+        conversationHistory: [],
       },
       capabilities: {
         canGenerateContent: true,
         canAnalyzeData: true,
         canProvideAdvice: true,
-        canCreateAutomations: false
-      }
+        canCreateAutomations: false,
+      },
     });
 
     // Analytics Expert Persona
@@ -92,27 +111,39 @@ export class EnhancedChatPersona {
       name: 'Analytics Expert',
       personality: {
         tone: 'professional',
-        expertise: ['data analysis', 'performance metrics', 'ROI optimization', 'trend analysis'],
+        expertise: [
+          'data analysis',
+          'performance metrics',
+          'ROI optimization',
+          'trend analysis',
+        ],
         communicationStyle: 'data-driven, precise, and insightful',
-        humorLevel: 'none'
+        humorLevel: 'none',
       },
       context: {
         userLevel: 'expert',
-        preferredTopics: ['performance metrics', 'data insights', 'optimization strategies'],
+        preferredTopics: [
+          'performance metrics',
+          'data insights',
+          'optimization strategies',
+        ],
         lastInteraction: new Date(),
-        conversationHistory: []
+        conversationHistory: [],
       },
       capabilities: {
         canGenerateContent: false,
         canAnalyzeData: true,
         canProvideAdvice: true,
-        canCreateAutomations: false
-      }
+        canCreateAutomations: false,
+      },
     });
   }
 
   // Get or create conversation context
-  private getConversationContext(chatId: number, username: string): ConversationContext {
+  private getConversationContext(
+    chatId: number,
+    username: string
+  ): ConversationContext {
     if (!this.conversationContexts.has(chatId)) {
       this.conversationContexts.set(chatId, {
         chatId,
@@ -120,38 +151,51 @@ export class EnhancedChatPersona {
         currentTopic: 'general',
         mood: 'neutral',
         userGoals: [],
-        sessionData: {}
+        sessionData: {},
       });
     }
     return this.conversationContexts.get(chatId)!;
   }
 
   // Analyze user message and determine appropriate persona
-  private analyzeMessage(message: string, context: ConversationContext): string {
+  private analyzeMessage(
+    message: string,
+    context: ConversationContext
+  ): string {
     const lowerMessage = message.toLowerCase();
-    
+
     // Content creation keywords
-    if (lowerMessage.includes('post') || lowerMessage.includes('content') || 
-        lowerMessage.includes('create') || lowerMessage.includes('write') ||
-        lowerMessage.includes('idea') || lowerMessage.includes('trend')) {
+    if (
+      lowerMessage.includes('post') ||
+      lowerMessage.includes('content') ||
+      lowerMessage.includes('create') ||
+      lowerMessage.includes('write') ||
+      lowerMessage.includes('idea') ||
+      lowerMessage.includes('trend')
+    ) {
       return 'content_creator';
     }
-    
+
     // Analytics keywords
-    if (lowerMessage.includes('analytics') || lowerMessage.includes('stats') ||
-        lowerMessage.includes('performance') || lowerMessage.includes('metrics') ||
-        lowerMessage.includes('data') || lowerMessage.includes('report')) {
+    if (
+      lowerMessage.includes('analytics') ||
+      lowerMessage.includes('stats') ||
+      lowerMessage.includes('performance') ||
+      lowerMessage.includes('metrics') ||
+      lowerMessage.includes('data') ||
+      lowerMessage.includes('report')
+    ) {
       return 'analytics_expert';
     }
-    
+
     // Default to main assistant
     return 'auraos_assistant';
   }
 
   // Generate intelligent response based on persona and context
   async generateIntelligentResponse(
-    message: string, 
-    chatId: number, 
+    message: string,
+    chatId: number,
     username: string
   ): Promise<{
     response: string;
@@ -174,15 +218,27 @@ export class EnhancedChatPersona {
 
     switch (personaKey) {
       case 'content_creator':
-        response = await this.generateContentCreatorResponse(message, context, persona);
+        response = await this.generateContentCreatorResponse(
+          message,
+          context,
+          persona
+        );
         suggestions = this.getContentCreatorSuggestions(context);
         break;
       case 'analytics_expert':
-        response = await this.generateAnalyticsResponse(message, context, persona);
+        response = await this.generateAnalyticsResponse(
+          message,
+          context,
+          persona
+        );
         suggestions = this.getAnalyticsSuggestions(context);
         break;
       default:
-        response = await this.generateMainAssistantResponse(message, context, persona);
+        response = await this.generateMainAssistantResponse(
+          message,
+          context,
+          persona
+        );
         suggestions = this.getMainAssistantSuggestions(context);
     }
 
@@ -190,18 +246,18 @@ export class EnhancedChatPersona {
       response,
       suggestions,
       mood: context.mood,
-      persona: persona.name
+      persona: persona.name,
     };
   }
 
   // Content Creator Response Generation
   private async generateContentCreatorResponse(
-    message: string, 
-    context: ConversationContext, 
+    message: string,
+    context: ConversationContext,
     persona: ChatPersona
   ): Promise<string> {
     const lowerMessage = message.toLowerCase();
-    
+
     if (lowerMessage.includes('idea') || lowerMessage.includes('suggest')) {
       return `🎨 Great question! Let me help you brainstorm some engaging content ideas!
 
@@ -255,13 +311,16 @@ What's your main content goal today? Are you looking to increase engagement, rea
 
   // Analytics Expert Response Generation
   private async generateAnalyticsResponse(
-    message: string, 
-    context: ConversationContext, 
+    message: string,
+    context: ConversationContext,
     persona: ChatPersona
   ): Promise<string> {
     const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('performance') || lowerMessage.includes('stats')) {
+
+    if (
+      lowerMessage.includes('performance') ||
+      lowerMessage.includes('stats')
+    ) {
       try {
         const stats = await storage.getUserStats('user-1');
         return `📊 **Performance Analysis Report**
@@ -273,9 +332,11 @@ What's your main content goal today? Are you looking to increase engagement, rea
 • Automations Run: ${stats.automationsRun}
 
 🔍 **Insights:**
-${stats.engagementRate > 5 ? 
-  '✅ Your engagement rate is above average! Keep up the great work!' : 
-  '⚠️ Your engagement rate could be improved. Consider more interactive content.'}
+${
+  stats.engagementRate > 5
+    ? '✅ Your engagement rate is above average! Keep up the great work!'
+    : '⚠️ Your engagement rate could be improved. Consider more interactive content.'
+}
 
 📊 **Recommendations:**
 • Post consistently for better reach
@@ -318,12 +379,12 @@ What metrics are you most curious about? Let's turn your data into actionable in
 
   // Main Assistant Response Generation
   private async generateMainAssistantResponse(
-    message: string, 
-    context: ConversationContext, 
+    message: string,
+    context: ConversationContext,
     persona: ChatPersona
   ): Promise<string> {
     const lowerMessage = message.toLowerCase();
-    
+
     if (lowerMessage.includes('help') || lowerMessage.includes('how')) {
       return `🤖 Hello ${context.username}! I'm your AuraOS Assistant, and I'm here to help you succeed!
 
@@ -345,7 +406,10 @@ What metrics are you most curious about? Let's turn your data into actionable in
 What would you like to accomplish today? I'm here to help! ✨`;
     }
 
-    if (lowerMessage.includes('automation') || lowerMessage.includes('workflow')) {
+    if (
+      lowerMessage.includes('automation') ||
+      lowerMessage.includes('workflow')
+    ) {
       return `🔄 Automation is my specialty! Let me help you streamline your social media workflow.
 
 ⚡ **Automation Options:**
@@ -395,22 +459,54 @@ What's your main goal today? I'm here to make your social media management effor
   // Helper methods
   private extractTopic(message: string): string {
     const lowerMessage = message.toLowerCase();
-    if (lowerMessage.includes('post') || lowerMessage.includes('content')) return 'content';
-    if (lowerMessage.includes('analytics') || lowerMessage.includes('stats')) return 'analytics';
-    if (lowerMessage.includes('automation') || lowerMessage.includes('workflow')) return 'automation';
-    if (lowerMessage.includes('agent') || lowerMessage.includes('ai')) return 'agents';
+    if (lowerMessage.includes('post') || lowerMessage.includes('content'))
+      return 'content';
+    if (lowerMessage.includes('analytics') || lowerMessage.includes('stats'))
+      return 'analytics';
+    if (
+      lowerMessage.includes('automation') ||
+      lowerMessage.includes('workflow')
+    )
+      return 'automation';
+    if (lowerMessage.includes('agent') || lowerMessage.includes('ai'))
+      return 'agents';
     return 'general';
   }
 
-  private analyzeMood(message: string): 'positive' | 'neutral' | 'frustrated' | 'excited' {
+  private analyzeMood(
+    message: string
+  ): 'positive' | 'neutral' | 'frustrated' | 'excited' {
     const lowerMessage = message.toLowerCase();
-    const positiveWords = ['great', 'awesome', 'amazing', 'love', 'excited', 'happy'];
-    const frustratedWords = ['problem', 'issue', 'help', 'stuck', 'confused', 'difficult'];
-    const excitedWords = ['wow', 'incredible', 'fantastic', 'brilliant', 'perfect'];
+    const positiveWords = [
+      'great',
+      'awesome',
+      'amazing',
+      'love',
+      'excited',
+      'happy',
+    ];
+    const frustratedWords = [
+      'problem',
+      'issue',
+      'help',
+      'stuck',
+      'confused',
+      'difficult',
+    ];
+    const excitedWords = [
+      'wow',
+      'incredible',
+      'fantastic',
+      'brilliant',
+      'perfect',
+    ];
 
-    if (excitedWords.some(word => lowerMessage.includes(word))) return 'excited';
-    if (positiveWords.some(word => lowerMessage.includes(word))) return 'positive';
-    if (frustratedWords.some(word => lowerMessage.includes(word))) return 'frustrated';
+    if (excitedWords.some(word => lowerMessage.includes(word)))
+      return 'excited';
+    if (positiveWords.some(word => lowerMessage.includes(word)))
+      return 'positive';
+    if (frustratedWords.some(word => lowerMessage.includes(word)))
+      return 'frustrated';
     return 'neutral';
   }
 
@@ -420,7 +516,7 @@ What's your main goal today? I'm here to make your social media management effor
       '💡 Generate content ideas',
       '📈 Check trending topics',
       '🎨 Optimize content strategy',
-      '📊 Analyze content performance'
+      '📊 Analyze content performance',
     ];
   }
 
@@ -429,7 +525,7 @@ What's your main goal today? I'm here to make your social media management effor
       '📊 View performance metrics',
       '📈 Generate insights report',
       '🎯 Identify optimization opportunities',
-      '📅 Schedule analytics review'
+      '📅 Schedule analytics review',
     ];
   }
 
@@ -438,7 +534,7 @@ What's your main goal today? I'm here to make your social media management effor
       '🤖 Set up automation',
       '📝 Create content',
       '📊 Check performance',
-      '⚙️ Configure settings'
+      '⚙️ Configure settings',
     ];
   }
 

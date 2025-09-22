@@ -488,7 +488,7 @@
   .mobile-only {
     display: none;
   }
-  
+
   .tablet-only {
     display: block;
   }
@@ -498,7 +498,7 @@
   .tablet-only {
     display: none;
   }
-  
+
   .desktop-only {
     display: block;
   }

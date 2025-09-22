@@ -3,30 +3,33 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { 
-  Task, 
-  TaskType, 
-  TaskExecution, 
-  ExecutionStatus, 
+import {
+  Task,
+  TaskType,
+  TaskExecution,
+  ExecutionStatus,
   TaskConfig,
-  TaskMetadata
+  TaskMetadata,
 } from './types/task';
 // Import appropriate adapter based on environment
 const isDevelopment = process.env.NODE_ENV === 'development';
-const adapter = isDevelopment 
+const adapter = isDevelopment
   ? require('./adapters/mockFirestoreAdapter')
   : require('./adapters/firestoreAdapter');
 
-const { 
-  saveTask, 
-  getTask, 
-  saveTaskExecution, 
+const {
+  saveTask,
+  getTask,
+  saveTaskExecution,
   getTaskExecution,
-  getTaskExecutions 
+  getTaskExecutions,
 } = adapter;
 
 export class TaskAutomationEngine {
-  private taskExecutors: Map<TaskType, (config: TaskConfig, input?: any) => Promise<any>>;
+  private taskExecutors: Map<
+    TaskType,
+    (config: TaskConfig, input?: any) => Promise<any>
+  >;
 
   constructor() {
     this.taskExecutors = new Map();
@@ -38,99 +41,117 @@ export class TaskAutomationEngine {
    */
   private initializeDefaultExecutors(): void {
     // HTTP Request executor
-    this.taskExecutors.set(TaskType.HTTP_REQUEST, async (config: TaskConfig) => {
-      const { url, method = 'GET', headers = {}, body } = config;
-      
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          ...headers
-        },
-        body: body ? JSON.stringify(body) : undefined
-      });
+    this.taskExecutors.set(
+      TaskType.HTTP_REQUEST,
+      async (config: TaskConfig) => {
+        const { url, method = 'GET', headers = {}, body } = config;
 
-      return {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries()),
-        data: await response.text()
-      };
-    });
+        const response = await fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+            ...headers,
+          },
+          body: body ? JSON.stringify(body) : undefined,
+        });
+
+        return {
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          data: await response.text(),
+        };
+      }
+    );
 
     // Database Query executor (mock)
-    this.taskExecutors.set(TaskType.DATABASE_QUERY, async (config: TaskConfig) => {
-      const { query, database } = config;
-      
-      // Mock database query execution
-      return {
-        query,
-        database,
-        result: `Mock result for query: ${query}`,
-        rowCount: Math.floor(Math.random() * 100)
-      };
-    });
+    this.taskExecutors.set(
+      TaskType.DATABASE_QUERY,
+      async (config: TaskConfig) => {
+        const { query, database } = config;
+
+        // Mock database query execution
+        return {
+          query,
+          database,
+          result: `Mock result for query: ${query}`,
+          rowCount: Math.floor(Math.random() * 100),
+        };
+      }
+    );
 
     // File Operation executor (mock)
-    this.taskExecutors.set(TaskType.FILE_OPERATION, async (config: TaskConfig) => {
-      const { operation, path } = config;
-      
-      // Mock file operation
-      return {
-        operation,
-        path,
-        success: true,
-        message: `Mock ${operation} operation on ${path}`
-      };
-    });
+    this.taskExecutors.set(
+      TaskType.FILE_OPERATION,
+      async (config: TaskConfig) => {
+        const { operation, path } = config;
+
+        // Mock file operation
+        return {
+          operation,
+          path,
+          success: true,
+          message: `Mock ${operation} operation on ${path}`,
+        };
+      }
+    );
 
     // Email Send executor (mock)
     this.taskExecutors.set(TaskType.EMAIL_SEND, async (config: TaskConfig) => {
       const { to, subject } = config;
-      
+
       return {
         to,
         subject,
         messageId: uuidv4(),
-        status: 'sent'
+        status: 'sent',
       };
     });
 
     // Telegram Notify executor (mock)
-    this.taskExecutors.set(TaskType.TELEGRAM_NOTIFY, async (config: TaskConfig) => {
-      const { chatId, message } = config;
-      
-      return {
-        chatId,
-        message,
-        messageId: uuidv4(),
-        status: 'sent'
-      };
-    });
+    this.taskExecutors.set(
+      TaskType.TELEGRAM_NOTIFY,
+      async (config: TaskConfig) => {
+        const { chatId, message } = config;
+
+        return {
+          chatId,
+          message,
+          messageId: uuidv4(),
+          status: 'sent',
+        };
+      }
+    );
 
     // Slack Notify executor (mock)
-    this.taskExecutors.set(TaskType.SLACK_NOTIFY, async (config: TaskConfig) => {
-      const { channel, text } = config;
-      
-      return {
-        channel,
-        text,
-        timestamp: Date.now(),
-        status: 'sent'
-      };
-    });
+    this.taskExecutors.set(
+      TaskType.SLACK_NOTIFY,
+      async (config: TaskConfig) => {
+        const { channel, text } = config;
+
+        return {
+          channel,
+          text,
+          timestamp: Date.now(),
+          status: 'sent',
+        };
+      }
+    );
 
     // Custom Script executor (mock)
-    this.taskExecutors.set(TaskType.CUSTOM_SCRIPT, async (config: TaskConfig) => {
-      const { script, language = 'javascript' } = config;
-      
-      return {
-        script,
-        language,
-        output: `Mock execution of ${language} script`,
-        success: true
-      };
-    });
+    this.taskExecutors.set(
+      TaskType.CUSTOM_SCRIPT,
+      async (config: TaskConfig) => {
+        const { script, language = 'javascript' } = config;
+
+        return {
+          script,
+          language,
+          output: `Mock execution of ${language} script`,
+          success: true,
+        };
+      }
+    );
   }
 
   /**
@@ -152,10 +173,10 @@ export class TaskAutomationEngine {
         timeout: 30000,
         retryCount: 3,
         retryDelay: 1000,
-        ...metadata
+        ...metadata,
       },
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     await saveTask(task);
@@ -188,7 +209,7 @@ export class TaskAutomationEngine {
       status: ExecutionStatus.RUNNING,
       input,
       startedAt: startTime,
-      metrics: {}
+      metrics: {},
     };
 
     await saveTaskExecution(execution);
@@ -215,12 +236,11 @@ export class TaskAutomationEngine {
       execution.completedAt = endTime;
       execution.metrics = {
         duration,
-        retryCount: 0
+        retryCount: 0,
       };
 
       await saveTaskExecution(execution);
       return execution;
-
     } catch (error) {
       const endTime = new Date();
       const duration = endTime.getTime() - startTime.getTime();
@@ -231,7 +251,7 @@ export class TaskAutomationEngine {
       execution.completedAt = endTime;
       execution.metrics = {
         duration,
-        retryCount: 0
+        retryCount: 0,
       };
 
       await saveTaskExecution(execution);

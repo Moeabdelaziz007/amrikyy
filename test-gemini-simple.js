@@ -3,27 +3,29 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 async function testGeminiAPI() {
   console.log('🚀 Testing Gemini API Integration\n');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
   console.log('🔑 API Key: AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-  console.log('=' .repeat(50));
+  console.log('='.repeat(50));
 
   try {
     // Initialize Gemini
-    const genAI = new GoogleGenerativeAI('AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-    const model = genAI.getGenerativeModel({ 
+    const genAI = new GoogleGenerativeAI(
+      'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
+    );
+    const model = genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HARASSMENT',
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE'
-        }
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+        },
       ],
       generationConfig: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: 1024
-      }
+        maxOutputTokens: 1024,
+      },
     });
 
     console.log('✅ Gemini API initialized successfully');
@@ -35,7 +37,7 @@ async function testGeminiAPI() {
     const result1 = await model.generateContent(prompt1);
     const response1 = await result1.response;
     const text1 = response1.text();
-    
+
     console.log('✅ Text generation successful');
     console.log(`📝 Response: ${text1.substring(0, 100)}...`);
 
@@ -53,7 +55,7 @@ Format as JSON.`;
     const result2 = await model.generateContent(prompt2);
     const response2 = await result2.response;
     const text2 = response2.text();
-    
+
     console.log('✅ Sentiment analysis successful');
     console.log(`📊 Analysis: ${text2.substring(0, 150)}...`);
 
@@ -76,7 +78,7 @@ Please explain:
     const result3 = await model.generateContent(prompt3);
     const response3 = await result3.response;
     const text3 = response3.text();
-    
+
     console.log('✅ Code explanation successful');
     console.log(`💻 Explanation: ${text3.substring(0, 150)}...`);
 
@@ -91,7 +93,7 @@ Please provide:
     const result4 = await model.generateContent(prompt4);
     const response4 = await result4.response;
     const text4 = response4.text();
-    
+
     console.log('✅ Translation successful');
     console.log(`🌍 Translation: ${text4.substring(0, 150)}...`);
 
@@ -112,7 +114,7 @@ Please provide:
     const result5 = await model.generateContent(prompt5);
     const response5 = await result5.response;
     const text5 = response5.text();
-    
+
     console.log('✅ Data analysis successful');
     console.log(`📊 Analysis: ${text5.substring(0, 150)}...`);
 
@@ -129,7 +131,7 @@ Requirements:
     const result6 = await model.generateContent(prompt6);
     const response6 = await result6.response;
     const text6 = response6.text();
-    
+
     console.log('✅ Content generation successful');
     console.log(`✍️ Email: ${text6.substring(0, 150)}...`);
 
@@ -145,7 +147,7 @@ Please provide:
     const result7 = await model.generateContent(prompt7);
     const response7 = await result7.response;
     const text7 = response7.text();
-    
+
     console.log('✅ Question answering successful');
     console.log(`❓ Answer: ${text7.substring(0, 150)}...`);
 
@@ -163,37 +165,38 @@ Please:
     const result8 = await model.generateContent(prompt8);
     const response8 = await result8.response;
     const text8 = response8.text();
-    
+
     console.log('✅ Text enhancement successful');
     console.log(`✨ Enhanced: ${text8.substring(0, 150)}...`);
 
     // Performance Test
     console.log('\n🧪 Performance Test: Multiple Requests');
     const startTime = Date.now();
-    
+
     const promises = [
       model.generateContent('What is AI?'),
       model.generateContent('What is machine learning?'),
-      model.generateContent('What is deep learning?')
+      model.generateContent('What is deep learning?'),
     ];
 
     const results = await Promise.all(promises);
     const totalTime = Date.now() - startTime;
 
     console.log('✅ Performance test successful');
-    console.log(`⚡ 3 requests completed in ${totalTime}ms (avg: ${Math.round(totalTime/3)}ms per request)`);
+    console.log(
+      `⚡ 3 requests completed in ${totalTime}ms (avg: ${Math.round(totalTime / 3)}ms per request)`
+    );
 
     // Summary
-    console.log('\n' + '=' .repeat(50));
+    console.log('\n' + '='.repeat(50));
     console.log('📊 GEMINI API TEST SUMMARY');
-    console.log('=' .repeat(50));
+    console.log('='.repeat(50));
     console.log('✅ All tests passed successfully!');
     console.log('🎯 API Key: Working correctly');
     console.log('🤖 Model: gemini-1.5-flash');
     console.log('📈 Performance: Excellent');
     console.log('🔒 Safety: Configured');
     console.log('🎉 Gemini API integration is ready for MCP!');
-
   } catch (error) {
     console.error('❌ Gemini API test failed:', error.message);
     console.error('🔍 Error details:', error);

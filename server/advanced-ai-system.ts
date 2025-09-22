@@ -67,7 +67,7 @@ export class AdvancedAISystem {
     this.openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY || 'test-key',
     });
-    
+
     // this.gemini = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY || '');
   }
 
@@ -100,7 +100,10 @@ export class AdvancedAISystem {
   }
 
   // تحديث وكيل AI
-  async updateAgent(agentId: string, updates: Partial<AIAgent>): Promise<AIAgent | null> {
+  async updateAgent(
+    agentId: string,
+    updates: Partial<AIAgent>
+  ): Promise<AIAgent | null> {
     const agent = this.agents.get(agentId);
     if (!agent) return null;
 
@@ -131,7 +134,10 @@ export class AdvancedAISystem {
   }
 
   // إضافة ذاكرة لوكيل AI
-  async addMemory(agentId: string, memory: Omit<AIMemory, 'id' | 'agentId' | 'timestamp'>): Promise<AIMemory> {
+  async addMemory(
+    agentId: string,
+    memory: Omit<AIMemory, 'id' | 'agentId' | 'timestamp'>
+  ): Promise<AIMemory> {
     const agent = this.agents.get(agentId);
     if (!agent) throw new Error('Agent not found');
 
@@ -164,7 +170,10 @@ export class AdvancedAISystem {
   }
 
   // إضافة بيانات تعلم
-  async addLearningData(agentId: string, data: Omit<AILearningData, 'id' | 'agentId' | 'timestamp'>): Promise<AILearningData> {
+  async addLearningData(
+    agentId: string,
+    data: Omit<AILearningData, 'id' | 'agentId' | 'timestamp'>
+  ): Promise<AILearningData> {
     const agent = this.agents.get(agentId);
     if (!agent) throw new Error('Agent not found');
 
@@ -199,7 +208,7 @@ export class AdvancedAISystem {
     totalInteractions: number;
   } {
     const learningData = this.learningData.get(agentId) || [];
-    
+
     if (learningData.length === 0) {
       return {
         accuracy: 0,
@@ -210,11 +219,17 @@ export class AdvancedAISystem {
       };
     }
 
-    const positiveFeedback = learningData.filter(d => d.feedback === 'positive').length;
-    const totalFeedback = learningData.filter(d => d.feedback !== 'neutral').length;
+    const positiveFeedback = learningData.filter(
+      d => d.feedback === 'positive'
+    ).length;
+    const totalFeedback = learningData.filter(
+      d => d.feedback !== 'neutral'
+    ).length;
     const accuracy = totalFeedback > 0 ? positiveFeedback / totalFeedback : 0;
 
-    const avgAccuracy = learningData.reduce((sum, d) => sum + d.accuracy, 0) / learningData.length;
+    const avgAccuracy =
+      learningData.reduce((sum, d) => sum + d.accuracy, 0) /
+      learningData.length;
     const userSatisfaction = (accuracy + avgAccuracy) / 2;
 
     return {
@@ -284,11 +299,12 @@ export class AdvancedAISystem {
   }
 
   // الحصول على التوصيات للمستخدم
-  getUserRecommendations(userId: string, limit: number = 20): AIRecommendation[] {
+  getUserRecommendations(
+    userId: string,
+    limit: number = 20
+  ): AIRecommendation[] {
     const recommendations = this.recommendations.get(userId) || [];
-    return recommendations
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
+    return recommendations.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
   // تحليل أنماط المستخدم
@@ -330,10 +346,17 @@ export class AdvancedAISystem {
       .map(([topic]) => topic);
 
     // حساب درجة الرضا
-    const userLearningData = learningData.filter(d => d.context.userId === userId);
-    const positiveFeedback = userLearningData.filter(d => d.feedback === 'positive').length;
-    const totalFeedback = userLearningData.filter(d => d.feedback !== 'neutral').length;
-    const satisfactionScore = totalFeedback > 0 ? positiveFeedback / totalFeedback : 0;
+    const userLearningData = learningData.filter(
+      d => d.context.userId === userId
+    );
+    const positiveFeedback = userLearningData.filter(
+      d => d.feedback === 'positive'
+    ).length;
+    const totalFeedback = userLearningData.filter(
+      d => d.feedback !== 'neutral'
+    ).length;
+    const satisfactionScore =
+      totalFeedback > 0 ? positiveFeedback / totalFeedback : 0;
 
     return {
       preferredAgents,
@@ -345,7 +368,9 @@ export class AdvancedAISystem {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 
   // تصدير بيانات النظام
@@ -384,14 +409,16 @@ export class AdvancedAISystem {
 
     // استيراد بيانات التعلم
     data.learningData.forEach(learningData => {
-      const agentLearningData = this.learningData.get(learningData.agentId) || [];
+      const agentLearningData =
+        this.learningData.get(learningData.agentId) || [];
       agentLearningData.push(learningData);
       this.learningData.set(learningData.agentId, agentLearningData);
     });
 
     // استيراد التوصيات
     data.recommendations.forEach(recommendation => {
-      const userRecommendations = this.recommendations.get(recommendation.userId) || [];
+      const userRecommendations =
+        this.recommendations.get(recommendation.userId) || [];
       userRecommendations.push(recommendation);
       this.recommendations.set(recommendation.userId, userRecommendations);
     });

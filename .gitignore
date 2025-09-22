@@ -109,6 +109,11 @@ firebase-debug.*.log
 
 # Python
 __pycache__/
+
+# MCP Server
+auraos-mcp/.venv/
+auraos-mcp/*.log
+auraos-mcp/.env
 *.py[cod]
 *$py.class
 *.so
@@ -137,3 +142,9 @@ COMPREHENSIVE_BUGS_AND_ERRORS_REPORT.md
 
 # Scripts
 scripts/
+# OpenShift auth (do not commit)
+.openshift.env
+.openshift.token
+.openshift.config
+# Local overrides
+.env.local

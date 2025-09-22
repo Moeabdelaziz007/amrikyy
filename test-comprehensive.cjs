@@ -20,7 +20,7 @@ class ComprehensiveBotTester {
   async runAllTests() {
     console.log('🚀 AuraOS Comprehensive Bot Test Suite');
     console.log('=====================================\n');
-    
+
     try {
       await this.testBasicConnectivity();
       await this.testSmartMenuSystem();
@@ -28,7 +28,7 @@ class ComprehensiveBotTester {
       await this.testCommandHandling();
       await this.testCallbackQueries();
       await this.testErrorHandling();
-      
+
       this.printTestResults();
     } catch (error) {
       console.error('❌ Test suite failed:', error);
@@ -37,33 +37,50 @@ class ComprehensiveBotTester {
 
   async testBasicConnectivity() {
     console.log('📡 Testing Basic Connectivity...');
-    
+
     try {
       const botInfo = await this.bot.getMe();
-      this.addTestResult('Basic Connectivity', 'PASS', `Connected to @${botInfo.username}`);
-      console.log(`✅ Connected to @${botInfo.username} (${botInfo.first_name})`);
+      this.addTestResult(
+        'Basic Connectivity',
+        'PASS',
+        `Connected to @${botInfo.username}`
+      );
+      console.log(
+        `✅ Connected to @${botInfo.username} (${botInfo.first_name})`
+      );
     } catch (error) {
-      this.addTestResult('Basic Connectivity', 'FAIL', `Connection failed: ${error.message}`);
+      this.addTestResult(
+        'Basic Connectivity',
+        'FAIL',
+        `Connection failed: ${error.message}`
+      );
       console.log(`❌ Connection failed: ${error.message}`);
     }
   }
 
   async testSmartMenuSystem() {
     console.log('🎯 Testing Smart Menu System...');
-    
+
     const menuTests = [
       { name: 'Main Menu Generation', test: () => this.testMainMenu() },
       { name: 'Posts Menu Generation', test: () => this.testPostsMenu() },
       { name: 'Agents Menu Generation', test: () => this.testAgentsMenu() },
-      { name: 'Analytics Menu Generation', test: () => this.testAnalyticsMenu() },
+      {
+        name: 'Analytics Menu Generation',
+        test: () => this.testAnalyticsMenu(),
+      },
       { name: 'Settings Menu Generation', test: () => this.testSettingsMenu() },
-      { name: 'Quick Actions Menu', test: () => this.testQuickActionsMenu() }
+      { name: 'Quick Actions Menu', test: () => this.testQuickActionsMenu() },
     ];
 
     for (const test of menuTests) {
       try {
         await test.test();
-        this.addTestResult(`Smart Menu - ${test.name}`, 'PASS', 'Menu generated successfully');
+        this.addTestResult(
+          `Smart Menu - ${test.name}`,
+          'PASS',
+          'Menu generated successfully'
+        );
         console.log(`✅ ${test.name}: PASSED`);
       } catch (error) {
         this.addTestResult(`Smart Menu - ${test.name}`, 'FAIL', error.message);
@@ -74,26 +91,43 @@ class ComprehensiveBotTester {
 
   async testMainMenu() {
     // Test main menu structure
-    const expectedButtons = ['📝 Posts', '🤖 Agents', '📊 Analytics', '⚙️ Settings'];
+    const expectedButtons = [
+      '📝 Posts',
+      '🤖 Agents',
+      '📊 Analytics',
+      '⚙️ Settings',
+    ];
     console.log('   Testing main menu structure...');
     // In a real test, you'd verify the menu structure
   }
 
   async testPostsMenu() {
     // Test posts menu structure
-    const expectedButtons = ['✍️ Create New Post', '📅 Schedule Post', '📊 View All Posts'];
+    const expectedButtons = [
+      '✍️ Create New Post',
+      '📅 Schedule Post',
+      '📊 View All Posts',
+    ];
     console.log('   Testing posts menu structure...');
   }
 
   async testAgentsMenu() {
     // Test agents menu structure
-    const expectedButtons = ['🆕 Create Agent', '📋 Browse Templates', '⚡ Active Agents'];
+    const expectedButtons = [
+      '🆕 Create Agent',
+      '📋 Browse Templates',
+      '⚡ Active Agents',
+    ];
     console.log('   Testing agents menu structure...');
   }
 
   async testAnalyticsMenu() {
     // Test analytics menu structure
-    const expectedButtons = ['📈 Performance Overview', '📊 Post Analytics', '🎯 Engagement Insights'];
+    const expectedButtons = [
+      '📈 Performance Overview',
+      '📊 Post Analytics',
+      '🎯 Engagement Insights',
+    ];
     console.log('   Testing analytics menu structure...');
   }
 
@@ -105,39 +139,43 @@ class ComprehensiveBotTester {
 
   async testQuickActionsMenu() {
     // Test quick actions menu structure
-    const expectedButtons = ['📝 Quick Post', '🤖 Quick Agent', '📊 Quick Stats'];
+    const expectedButtons = [
+      '📝 Quick Post',
+      '🤖 Quick Agent',
+      '📊 Quick Stats',
+    ];
     console.log('   Testing quick actions menu structure...');
   }
 
   async testEnhancedPersona() {
     console.log('🤖 Testing Enhanced Persona System...');
-    
+
     const personaTests = [
-      { 
-        name: 'Content Creator Persona', 
+      {
+        name: 'Content Creator Persona',
         message: 'I need help creating engaging content ideas',
-        expectedPersona: 'content_creator'
+        expectedPersona: 'content_creator',
       },
-      { 
-        name: 'Analytics Expert Persona', 
+      {
+        name: 'Analytics Expert Persona',
         message: 'Can you analyze my performance metrics?',
-        expectedPersona: 'analytics_expert'
+        expectedPersona: 'analytics_expert',
       },
-      { 
-        name: 'Main Assistant Persona', 
+      {
+        name: 'Main Assistant Persona',
         message: 'How can I set up automation?',
-        expectedPersona: 'auraos_assistant'
+        expectedPersona: 'auraos_assistant',
       },
-      { 
-        name: 'Mood Detection', 
+      {
+        name: 'Mood Detection',
         message: 'This is amazing! I love it!',
-        expectedMood: 'excited'
+        expectedMood: 'excited',
       },
-      { 
-        name: 'Topic Extraction', 
+      {
+        name: 'Topic Extraction',
         message: 'I want to create a new post about AI',
-        expectedTopic: 'content'
-      }
+        expectedTopic: 'content',
+      },
     ];
 
     for (const test of personaTests) {
@@ -149,30 +187,58 @@ class ComprehensiveBotTester {
         let detectedTopic = 'general';
 
         // Simple persona detection logic
-        if (lowerMessage.includes('content') || lowerMessage.includes('post') || lowerMessage.includes('idea')) {
+        if (
+          lowerMessage.includes('content') ||
+          lowerMessage.includes('post') ||
+          lowerMessage.includes('idea')
+        ) {
           detectedPersona = 'content_creator';
           detectedTopic = 'content';
         }
-        if (lowerMessage.includes('analytics') || lowerMessage.includes('metrics') || lowerMessage.includes('performance')) {
+        if (
+          lowerMessage.includes('analytics') ||
+          lowerMessage.includes('metrics') ||
+          lowerMessage.includes('performance')
+        ) {
           detectedPersona = 'analytics_expert';
           detectedTopic = 'analytics';
         }
-        if (lowerMessage.includes('amazing') || lowerMessage.includes('love') || lowerMessage.includes('excited')) {
+        if (
+          lowerMessage.includes('amazing') ||
+          lowerMessage.includes('love') ||
+          lowerMessage.includes('excited')
+        ) {
           detectedMood = 'excited';
         }
 
         // Verify persona detection
         if (test.expectedPersona && detectedPersona === test.expectedPersona) {
-          this.addTestResult(`Persona - ${test.name}`, 'PASS', `Correctly detected ${detectedPersona} persona`);
+          this.addTestResult(
+            `Persona - ${test.name}`,
+            'PASS',
+            `Correctly detected ${detectedPersona} persona`
+          );
           console.log(`✅ ${test.name}: PASSED (${detectedPersona})`);
         } else if (test.expectedMood && detectedMood === test.expectedMood) {
-          this.addTestResult(`Persona - ${test.name}`, 'PASS', `Correctly detected ${detectedMood} mood`);
+          this.addTestResult(
+            `Persona - ${test.name}`,
+            'PASS',
+            `Correctly detected ${detectedMood} mood`
+          );
           console.log(`✅ ${test.name}: PASSED (${detectedMood})`);
         } else if (test.expectedTopic && detectedTopic === test.expectedTopic) {
-          this.addTestResult(`Persona - ${test.name}`, 'PASS', `Correctly detected ${detectedTopic} topic`);
+          this.addTestResult(
+            `Persona - ${test.name}`,
+            'PASS',
+            `Correctly detected ${detectedTopic} topic`
+          );
           console.log(`✅ ${test.name}: PASSED (${detectedTopic})`);
         } else {
-          this.addTestResult(`Persona - ${test.name}`, 'FAIL', `Expected ${test.expectedPersona || test.expectedMood || test.expectedTopic}, got ${detectedPersona || detectedMood || detectedTopic}`);
+          this.addTestResult(
+            `Persona - ${test.name}`,
+            'FAIL',
+            `Expected ${test.expectedPersona || test.expectedMood || test.expectedTopic}, got ${detectedPersona || detectedMood || detectedTopic}`
+          );
           console.log(`❌ ${test.name}: FAILED`);
         }
       } catch (error) {
@@ -184,7 +250,7 @@ class ComprehensiveBotTester {
 
   async testCommandHandling() {
     console.log('⌨️ Testing Command Handling...');
-    
+
     const commands = [
       { command: '/start', description: 'Welcome message with smart menu' },
       { command: '/help', description: 'Smart help message' },
@@ -193,7 +259,10 @@ class ComprehensiveBotTester {
       { command: '/posts', description: 'Recent posts' },
       { command: '/agents', description: 'Agent templates' },
       { command: '/create Test post', description: 'Create post command' },
-      { command: '/schedule 2024-01-01 10:00 Test scheduled post', description: 'Schedule post command' }
+      {
+        command: '/schedule 2024-01-01 10:00 Test scheduled post',
+        description: 'Schedule post command',
+      },
     ];
 
     for (const cmd of commands) {
@@ -202,8 +271,12 @@ class ComprehensiveBotTester {
         const parts = cmd.command.split(' ');
         const commandName = parts[0];
         const hasArgs = parts.length > 1;
-        
-        this.addTestResult(`Command - ${commandName}`, 'PASS', `${cmd.description}${hasArgs ? ' (with args)' : ''}`);
+
+        this.addTestResult(
+          `Command - ${commandName}`,
+          'PASS',
+          `${cmd.description}${hasArgs ? ' (with args)' : ''}`
+        );
         console.log(`✅ ${commandName}: PASSED`);
       } catch (error) {
         this.addTestResult(`Command - ${cmd.command}`, 'FAIL', error.message);
@@ -214,7 +287,7 @@ class ComprehensiveBotTester {
 
   async testCallbackQueries() {
     console.log('🔘 Testing Callback Query Handling...');
-    
+
     const callbacks = [
       'main_menu',
       'posts_menu',
@@ -237,7 +310,7 @@ class ComprehensiveBotTester {
       'quick_agent',
       'quick_stats',
       'run_automation',
-      'ai_chat'
+      'ai_chat',
     ];
 
     for (const callback of callbacks) {
@@ -245,10 +318,18 @@ class ComprehensiveBotTester {
         // Test callback data validation
         const isValidCallback = callback.length > 0 && !callback.includes(' ');
         if (isValidCallback) {
-          this.addTestResult(`Callback - ${callback}`, 'PASS', 'Valid callback data');
+          this.addTestResult(
+            `Callback - ${callback}`,
+            'PASS',
+            'Valid callback data'
+          );
           console.log(`✅ ${callback}: PASSED`);
         } else {
-          this.addTestResult(`Callback - ${callback}`, 'FAIL', 'Invalid callback data');
+          this.addTestResult(
+            `Callback - ${callback}`,
+            'FAIL',
+            'Invalid callback data'
+          );
           console.log(`❌ ${callback}: FAILED`);
         }
       } catch (error) {
@@ -260,21 +341,29 @@ class ComprehensiveBotTester {
 
   async testErrorHandling() {
     console.log('⚠️ Testing Error Handling...');
-    
+
     const errorTests = [
       { name: 'Invalid Chat ID', test: () => this.testInvalidChatId() },
       { name: 'Empty Message', test: () => this.testEmptyMessage() },
       { name: 'Malformed Command', test: () => this.testMalformedCommand() },
-      { name: 'Unknown Callback', test: () => this.testUnknownCallback() }
+      { name: 'Unknown Callback', test: () => this.testUnknownCallback() },
     ];
 
     for (const test of errorTests) {
       try {
         await test.test();
-        this.addTestResult(`Error Handling - ${test.name}`, 'PASS', 'Error handled gracefully');
+        this.addTestResult(
+          `Error Handling - ${test.name}`,
+          'PASS',
+          'Error handled gracefully'
+        );
         console.log(`✅ ${test.name}: PASSED`);
       } catch (error) {
-        this.addTestResult(`Error Handling - ${test.name}`, 'FAIL', error.message);
+        this.addTestResult(
+          `Error Handling - ${test.name}`,
+          'FAIL',
+          error.message
+        );
         console.log(`❌ ${test.name}: FAILED - ${error.message}`);
       }
     }
@@ -285,7 +374,10 @@ class ComprehensiveBotTester {
     try {
       await this.bot.sendMessage('invalid_chat_id', 'Test message');
     } catch (error) {
-      if (error.message.includes('chat not found') || error.message.includes('Bad Request')) {
+      if (
+        error.message.includes('chat not found') ||
+        error.message.includes('Bad Request')
+      ) {
         console.log('   Invalid chat ID handled correctly');
       } else {
         throw error;
@@ -314,11 +406,11 @@ class ComprehensiveBotTester {
 
   printTestResults() {
     console.log('\n📊 Comprehensive Test Results:');
-    console.log('=' .repeat(60));
-    
+    console.log('='.repeat(60));
+
     const passed = this.testResults.filter(r => r.status === 'PASS').length;
     const failed = this.testResults.filter(r => r.status === 'FAIL').length;
-    
+
     // Group results by category
     const categories = {};
     this.testResults.forEach(result => {
@@ -340,12 +432,16 @@ class ComprehensiveBotTester {
       });
       console.log(`  📊 ${cat.passed} passed, ${cat.failed} failed`);
     });
-    
-    console.log('\n' + '=' .repeat(60));
-    console.log(`🎯 Total: ${this.testResults.length} | ✅ Passed: ${passed} | ❌ Failed: ${failed}`);
-    
+
+    console.log('\n' + '='.repeat(60));
+    console.log(
+      `🎯 Total: ${this.testResults.length} | ✅ Passed: ${passed} | ❌ Failed: ${failed}`
+    );
+
     if (failed === 0) {
-      console.log('\n🎉 All tests passed! Your enhanced Telegram bot is ready!');
+      console.log(
+        '\n🎉 All tests passed! Your enhanced Telegram bot is ready!'
+      );
       console.log('\n🚀 **Features Verified:**');
       console.log('• ✅ Smart Menu System');
       console.log('• ✅ Enhanced AI Persona');
@@ -362,13 +458,13 @@ class ComprehensiveBotTester {
   // Test with real chat (if chat ID provided)
   async testWithRealChat(chatId) {
     console.log(`\n📱 Testing with Real Chat ID: ${chatId}`);
-    
+
     const testMessages = [
       'Hello! I need help with content creation',
       'Can you analyze my performance?',
       'How do I set up automation?',
       'What trending topics should I post about?',
-      'Show me my analytics dashboard'
+      'Show me my analytics dashboard',
     ];
 
     for (const message of testMessages) {
@@ -376,7 +472,7 @@ class ComprehensiveBotTester {
         console.log(`\n📤 Sending: "${message}"`);
         const result = await this.bot.sendMessage(chatId, message);
         console.log(`✅ Message sent! ID: ${result.message_id}`);
-        
+
         // Wait a bit between messages
         await new Promise(resolve => setTimeout(resolve, 2000));
       } catch (error) {
@@ -389,9 +485,9 @@ class ComprehensiveBotTester {
 // Main execution
 async function main() {
   const tester = new ComprehensiveBotTester(BOT_TOKEN);
-  
+
   await tester.runAllTests();
-  
+
   // Check if a chat ID was provided for real testing
   const chatId = process.argv[2];
   if (chatId) {
@@ -407,7 +503,7 @@ async function main() {
 }
 
 // Handle errors gracefully
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
   console.error('❌ Unhandled error:', error);
   process.exit(1);
 });

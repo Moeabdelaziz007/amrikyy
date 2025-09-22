@@ -1,20 +1,76 @@
 // Advanced Visual Workflow Builder with Node Editor
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { 
-  Play, Pause, Square, RefreshCw, Save, Download, Upload, 
-  Plus, Minus, ZoomIn, ZoomOut, RotateCcw, Settings, Eye,
-  Trash2, Copy, Cut, Paste, Undo, Redo, Search, Filter,
-  Code, Database, Globe, Bot, Zap, Clock, CheckCircle,
-  XCircle, AlertCircle, Activity, BarChart3, Users, 
-  MessageSquare, Calendar, Timer, Target, Lightbulb,
-  ChevronDown, ChevronRight, Maximize2, Minimize2,
-  Move, Link2, Unlink, Lock, Unlock, EyeOff, EyeIcon,
-  Node, GitBranch, GitCommit, GitMerge, Layers, Network
+import {
+  Play,
+  Pause,
+  Square,
+  RefreshCw,
+  Save,
+  Download,
+  Upload,
+  Plus,
+  Minus,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Settings,
+  Eye,
+  Trash2,
+  Copy,
+  Cut,
+  Paste,
+  Undo,
+  Redo,
+  Search,
+  Filter,
+  Code,
+  Database,
+  Globe,
+  Bot,
+  Zap,
+  Clock,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  Activity,
+  BarChart3,
+  Users,
+  MessageSquare,
+  Calendar,
+  Timer,
+  Target,
+  Lightbulb,
+  ChevronDown,
+  ChevronRight,
+  Maximize2,
+  Minimize2,
+  Move,
+  Link2,
+  Unlink,
+  Lock,
+  Unlock,
+  EyeOff,
+  EyeIcon,
+  Node,
+  GitBranch,
+  GitCommit,
+  GitMerge,
+  Layers,
+  Network,
 } from 'lucide-react';
 
 interface WorkflowNode {
   id: string;
-  type: 'trigger' | 'action' | 'condition' | 'delay' | 'webhook' | 'ai' | 'data' | 'loop' | 'merge';
+  type:
+    | 'trigger'
+    | 'action'
+    | 'condition'
+    | 'delay'
+    | 'webhook'
+    | 'ai'
+    | 'data'
+    | 'loop'
+    | 'merge';
   name: string;
   description: string;
   position: { x: number; y: number };
@@ -120,7 +176,7 @@ export default function WorkflowBuilder({
   onExport,
   onImport,
   templates,
-  onLoadTemplate
+  onLoadTemplate,
 }: WorkflowBuilderProps) {
   const [nodes, setNodes] = useState<WorkflowNode[]>([]);
   const [connections, setConnections] = useState<WorkflowConnection[]>([]);
@@ -134,12 +190,15 @@ export default function WorkflowBuilder({
     parallelExecution: false,
     errorHandling: 'stop',
     logging: true,
-    notifications: false
+    notifications: false,
   });
-  
+
   const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
-  const [draggedConnection, setDraggedConnection] = useState<{ sourceNodeId: string; sourcePortId: string } | null>(null);
+  const [draggedConnection, setDraggedConnection] = useState<{
+    sourceNodeId: string;
+    sourcePortId: string;
+  } | null>(null);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -149,8 +208,10 @@ export default function WorkflowBuilder({
   const [showVariables, setShowVariables] = useState(false);
   const [selectedNode, setSelectedNode] = useState<WorkflowNode | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
-  const [executionResults, setExecutionResults] = useState<Record<string, any>>({});
-  
+  const [executionResults, setExecutionResults] = useState<Record<string, any>>(
+    {}
+  );
+
   const canvasRef = useRef<HTMLDivElement>(null);
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
@@ -163,7 +224,7 @@ export default function WorkflowBuilder({
       icon: Globe,
       color: '#3B82F6',
       inputs: [],
-      outputs: [{ id: 'output', name: 'Data', type: 'object', required: true }]
+      outputs: [{ id: 'output', name: 'Data', type: 'object', required: true }],
     },
     {
       type: 'trigger',
@@ -172,7 +233,9 @@ export default function WorkflowBuilder({
       icon: Clock,
       color: '#3B82F6',
       inputs: [],
-      outputs: [{ id: 'output', name: 'Trigger', type: 'object', required: true }]
+      outputs: [
+        { id: 'output', name: 'Trigger', type: 'object', required: true },
+      ],
     },
     {
       type: 'action',
@@ -181,7 +244,9 @@ export default function WorkflowBuilder({
       icon: Globe,
       color: '#10B981',
       inputs: [{ id: 'input', name: 'Data', type: 'object', required: true }],
-      outputs: [{ id: 'output', name: 'Response', type: 'object', required: true }]
+      outputs: [
+        { id: 'output', name: 'Response', type: 'object', required: true },
+      ],
     },
     {
       type: 'action',
@@ -190,7 +255,9 @@ export default function WorkflowBuilder({
       icon: Database,
       color: '#10B981',
       inputs: [{ id: 'input', name: 'Query', type: 'string', required: true }],
-      outputs: [{ id: 'output', name: 'Results', type: 'array', required: true }]
+      outputs: [
+        { id: 'output', name: 'Results', type: 'array', required: true },
+      ],
     },
     {
       type: 'ai',
@@ -199,7 +266,9 @@ export default function WorkflowBuilder({
       icon: Bot,
       color: '#8B5CF6',
       inputs: [{ id: 'input', name: 'Data', type: 'object', required: true }],
-      outputs: [{ id: 'output', name: 'Result', type: 'object', required: true }]
+      outputs: [
+        { id: 'output', name: 'Result', type: 'object', required: true },
+      ],
     },
     {
       type: 'condition',
@@ -210,8 +279,8 @@ export default function WorkflowBuilder({
       inputs: [{ id: 'input', name: 'Data', type: 'object', required: true }],
       outputs: [
         { id: 'true', name: 'True', type: 'object', required: true },
-        { id: 'false', name: 'False', type: 'object', required: true }
-      ]
+        { id: 'false', name: 'False', type: 'object', required: true },
+      ],
     },
     {
       type: 'delay',
@@ -220,7 +289,7 @@ export default function WorkflowBuilder({
       icon: Timer,
       color: '#6B7280',
       inputs: [{ id: 'input', name: 'Data', type: 'object', required: true }],
-      outputs: [{ id: 'output', name: 'Data', type: 'object', required: true }]
+      outputs: [{ id: 'output', name: 'Data', type: 'object', required: true }],
     },
     {
       type: 'data',
@@ -229,8 +298,10 @@ export default function WorkflowBuilder({
       icon: Code,
       color: '#06B6D4',
       inputs: [{ id: 'input', name: 'Data', type: 'object', required: true }],
-      outputs: [{ id: 'output', name: 'Transformed', type: 'object', required: true }]
-    }
+      outputs: [
+        { id: 'output', name: 'Transformed', type: 'object', required: true },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -247,7 +318,7 @@ export default function WorkflowBuilder({
       if (canvasRef.current) {
         setCanvasSize({
           width: canvasRef.current.offsetWidth,
-          height: canvasRef.current.offsetHeight
+          height: canvasRef.current.offsetHeight,
         });
       }
     };
@@ -257,70 +328,92 @@ export default function WorkflowBuilder({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const createNode = useCallback((template: typeof nodeTemplates[0], position: { x: number; y: number }) => {
-    const id = `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const newNode: WorkflowNode = {
-      id,
-      type: template.type,
-      name: template.name,
-      description: template.description,
-      position: { x: position.x - 100, y: position.y - 50 },
-      size: { width: 200, height: 100 },
-      config: {},
-      inputs: template.inputs,
-      outputs: template.outputs,
-      status: 'idle',
-      data: null,
-      isSelected: false,
-      isLocked: false,
-      isCollapsed: false,
-      metadata: {
-        category: template.type,
-        tags: [],
-        version: '1.0.0',
-        author: 'user',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+  const createNode = useCallback(
+    (
+      template: (typeof nodeTemplates)[0],
+      position: { x: number; y: number }
+    ) => {
+      const id = `node_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const newNode: WorkflowNode = {
+        id,
+        type: template.type,
+        name: template.name,
+        description: template.description,
+        position: { x: position.x - 100, y: position.y - 50 },
+        size: { width: 200, height: 100 },
+        config: {},
+        inputs: template.inputs,
+        outputs: template.outputs,
+        status: 'idle',
+        data: null,
+        isSelected: false,
+        isLocked: false,
+        isCollapsed: false,
+        metadata: {
+          category: template.type,
+          tags: [],
+          version: '1.0.0',
+          author: 'user',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      };
+
+      setNodes(prev => [...prev, newNode]);
+      setSelectedNode(newNode);
+    },
+    []
+  );
+
+  const deleteNode = useCallback(
+    (nodeId: string) => {
+      setNodes(prev => prev.filter(node => node.id !== nodeId));
+      setConnections(prev =>
+        prev.filter(
+          conn => conn.sourceNodeId !== nodeId && conn.targetNodeId !== nodeId
+        )
+      );
+      if (selectedNode?.id === nodeId) {
+        setSelectedNode(null);
       }
-    };
-    
-    setNodes(prev => [...prev, newNode]);
-    setSelectedNode(newNode);
-  }, []);
+    },
+    [selectedNode]
+  );
 
-  const deleteNode = useCallback((nodeId: string) => {
-    setNodes(prev => prev.filter(node => node.id !== nodeId));
-    setConnections(prev => prev.filter(conn => 
-      conn.sourceNodeId !== nodeId && conn.targetNodeId !== nodeId
-    ));
-    if (selectedNode?.id === nodeId) {
-      setSelectedNode(null);
-    }
-  }, [selectedNode]);
+  const updateNode = useCallback(
+    (nodeId: string, updates: Partial<WorkflowNode>) => {
+      setNodes(prev =>
+        prev.map(node => (node.id === nodeId ? { ...node, ...updates } : node))
+      );
+      if (selectedNode?.id === nodeId) {
+        setSelectedNode(prev => (prev ? { ...prev, ...updates } : null));
+      }
+    },
+    [selectedNode]
+  );
 
-  const updateNode = useCallback((nodeId: string, updates: Partial<WorkflowNode>) => {
-    setNodes(prev => prev.map(node => 
-      node.id === nodeId ? { ...node, ...updates } : node
-    ));
-    if (selectedNode?.id === nodeId) {
-      setSelectedNode(prev => prev ? { ...prev, ...updates } : null);
-    }
-  }, [selectedNode]);
+  const createConnection = useCallback(
+    (
+      sourceNodeId: string,
+      sourcePortId: string,
+      targetNodeId: string,
+      targetPortId: string
+    ) => {
+      const id = `conn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const newConnection: WorkflowConnection = {
+        id,
+        sourceNodeId,
+        sourcePortId,
+        targetNodeId,
+        targetPortId,
+        type: 'data',
+        isActive: true,
+      };
 
-  const createConnection = useCallback((sourceNodeId: string, sourcePortId: string, targetNodeId: string, targetPortId: string) => {
-    const id = `conn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const newConnection: WorkflowConnection = {
-      id,
-      sourceNodeId,
-      sourcePortId,
-      targetNodeId,
-      targetPortId,
-      type: 'data',
-      isActive: true
-    };
-    
-    setConnections(prev => [...prev, newConnection]);
-  }, []);
+      setConnections(prev => [...prev, newConnection]);
+    },
+    []
+  );
 
   const deleteConnection = useCallback((connectionId: string) => {
     setConnections(prev => prev.filter(conn => conn.id !== connectionId));
@@ -334,14 +427,17 @@ export default function WorkflowBuilder({
     }
   }, []);
 
-  const handleCanvasDrag = useCallback((e: React.MouseEvent) => {
-    if (isDragging) {
-      const deltaX = e.clientX - dragStart.x;
-      const deltaY = e.clientY - dragStart.y;
-      setPan(prev => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
-      setDragStart({ x: e.clientX, y: e.clientY });
-    }
-  }, [isDragging, dragStart]);
+  const handleCanvasDrag = useCallback(
+    (e: React.MouseEvent) => {
+      if (isDragging) {
+        const deltaX = e.clientX - dragStart.x;
+        const deltaY = e.clientY - dragStart.y;
+        setPan(prev => ({ x: prev.x + deltaX, y: prev.y + deltaY }));
+        setDragStart({ x: e.clientX, y: e.clientY });
+      }
+    },
+    [isDragging, dragStart]
+  );
 
   const handleCanvasMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.target === canvasRef.current) {
@@ -354,38 +450,52 @@ export default function WorkflowBuilder({
     setIsDragging(false);
   }, []);
 
-  const handleNodeDrag = useCallback((nodeId: string, e: React.MouseEvent) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (rect) {
-      const x = (e.clientX - rect.left - pan.x) / zoom;
-      const y = (e.clientY - rect.top - pan.y) / zoom;
-      updateNode(nodeId, { position: { x, y } });
-    }
-  }, [pan, zoom, updateNode]);
+  const handleNodeDrag = useCallback(
+    (nodeId: string, e: React.MouseEvent) => {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = (e.clientX - rect.left - pan.x) / zoom;
+        const y = (e.clientY - rect.top - pan.y) / zoom;
+        updateNode(nodeId, { position: { x, y } });
+      }
+    },
+    [pan, zoom, updateNode]
+  );
 
-  const handleNodeSelect = useCallback((nodeId: string, multiSelect: boolean = false) => {
-    if (multiSelect) {
-      setSelectedNodes(prev => 
-        prev.includes(nodeId) 
-          ? prev.filter(id => id !== nodeId)
-          : [...prev, nodeId]
-      );
-    } else {
-      setSelectedNodes([nodeId]);
-    }
-    
-    const node = nodes.find(n => n.id === nodeId);
-    setSelectedNode(node || null);
-  }, [nodes]);
+  const handleNodeSelect = useCallback(
+    (nodeId: string, multiSelect: boolean = false) => {
+      if (multiSelect) {
+        setSelectedNodes(prev =>
+          prev.includes(nodeId)
+            ? prev.filter(id => id !== nodeId)
+            : [...prev, nodeId]
+        );
+      } else {
+        setSelectedNodes([nodeId]);
+      }
 
-  const handlePortClick = useCallback((nodeId: string, portId: string, isOutput: boolean) => {
-    if (isOutput) {
-      setDraggedConnection({ sourceNodeId: nodeId, sourcePortId: portId });
-    } else if (draggedConnection) {
-      createConnection(draggedConnection.sourceNodeId, draggedConnection.sourcePortId, nodeId, portId);
-      setDraggedConnection(null);
-    }
-  }, [draggedConnection, createConnection]);
+      const node = nodes.find(n => n.id === nodeId);
+      setSelectedNode(node || null);
+    },
+    [nodes]
+  );
+
+  const handlePortClick = useCallback(
+    (nodeId: string, portId: string, isOutput: boolean) => {
+      if (isOutput) {
+        setDraggedConnection({ sourceNodeId: nodeId, sourcePortId: portId });
+      } else if (draggedConnection) {
+        createConnection(
+          draggedConnection.sourceNodeId,
+          draggedConnection.sourcePortId,
+          nodeId,
+          portId
+        );
+        setDraggedConnection(null);
+      }
+    },
+    [draggedConnection, createConnection]
+  );
 
   const handleZoom = useCallback((delta: number) => {
     setZoom(prev => Math.max(0.1, Math.min(3, prev + delta)));
@@ -394,7 +504,7 @@ export default function WorkflowBuilder({
   const handleExecute = useCallback(async () => {
     setIsExecuting(true);
     setExecutionResults({});
-    
+
     const workflowTemplate: WorkflowTemplate = {
       id: `workflow_${Date.now()}`,
       name: settings.name,
@@ -409,10 +519,10 @@ export default function WorkflowBuilder({
         author: 'user',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        tags: []
-      }
+        tags: [],
+      },
     };
-    
+
     try {
       await onExecute(workflowTemplate);
       // Simulate execution results
@@ -421,16 +531,18 @@ export default function WorkflowBuilder({
         results[node.id] = {
           status: Math.random() > 0.2 ? 'success' : 'error',
           data: { result: `Output from ${node.name}` },
-          executionTime: Math.random() * 1000
+          executionTime: Math.random() * 1000,
         };
       });
       setExecutionResults(results);
-      
+
       // Update node statuses
-      setNodes(prev => prev.map(node => ({
-        ...node,
-        status: results[node.id]?.status === 'success' ? 'success' : 'error'
-      })));
+      setNodes(prev =>
+        prev.map(node => ({
+          ...node,
+          status: results[node.id]?.status === 'success' ? 'success' : 'error',
+        }))
+      );
     } catch (error) {
       console.error('Execution failed:', error);
     } finally {
@@ -453,10 +565,10 @@ export default function WorkflowBuilder({
         author: 'user',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        tags: []
-      }
+        tags: [],
+      },
     };
-    
+
     onSave(workflowTemplate);
   }, [nodes, connections, variables, settings, onSave]);
 
@@ -468,7 +580,7 @@ export default function WorkflowBuilder({
   const getNodeColor = (type: string, status: string) => {
     const template = nodeTemplates.find(t => t.type === type);
     const baseColor = template?.color || '#6B7280';
-    
+
     switch (status) {
       case 'success':
         return '#10B981';
@@ -510,7 +622,7 @@ export default function WorkflowBuilder({
                 Save
               </button>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <button
                 onClick={() => handleZoom(-0.1)}
@@ -561,13 +673,15 @@ export default function WorkflowBuilder({
         {showNodeLibrary && (
           <div className="w-80 bg-white border-r border-gray-200 overflow-y-auto">
             <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Node Library</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Node Library
+              </h3>
               <div className="space-y-2">
                 {nodeTemplates.map((template, index) => (
                   <div
                     key={index}
                     className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
-                    onClick={(e) => {
+                    onClick={e => {
                       const rect = canvasRef.current?.getBoundingClientRect();
                       if (rect) {
                         const x = (e.clientX - rect.left - pan.x) / zoom;
@@ -576,15 +690,19 @@ export default function WorkflowBuilder({
                       }
                     }}
                   >
-                    <div 
+                    <div
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-white"
                       style={{ backgroundColor: template.color }}
                     >
                       <template.icon className="w-4 h-4" />
                     </div>
                     <div>
-                      <h4 className="font-medium text-gray-900">{template.name}</h4>
-                      <p className="text-sm text-gray-600">{template.description}</p>
+                      <h4 className="font-medium text-gray-900">
+                        {template.name}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {template.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -605,14 +723,14 @@ export default function WorkflowBuilder({
             onClick={handleCanvasClick}
           >
             {/* Grid */}
-            <div 
+            <div
               className="absolute inset-0 opacity-20"
               style={{
                 backgroundImage: `
                   radial-gradient(circle, #000 1px, transparent 1px)
                 `,
                 backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
-                transform: `translate(${pan.x}px, ${pan.y}px)`
+                transform: `translate(${pan.x}px, ${pan.y}px)`,
               }}
             />
 
@@ -621,10 +739,14 @@ export default function WorkflowBuilder({
               className="absolute inset-0 pointer-events-none"
               style={{ zIndex: 1 }}
             >
-              {connections.map((connection) => {
-                const sourceNode = nodes.find(n => n.id === connection.sourceNodeId);
-                const targetNode = nodes.find(n => n.id === connection.targetNodeId);
-                
+              {connections.map(connection => {
+                const sourceNode = nodes.find(
+                  n => n.id === connection.sourceNodeId
+                );
+                const targetNode = nodes.find(
+                  n => n.id === connection.targetNodeId
+                );
+
                 if (!sourceNode || !targetNode) return null;
 
                 const sourceX = (sourceNode.position.x + 200) * zoom + pan.x;
@@ -645,7 +767,7 @@ export default function WorkflowBuilder({
                   />
                 );
               })}
-              
+
               {/* Arrow marker */}
               <defs>
                 <marker
@@ -656,20 +778,17 @@ export default function WorkflowBuilder({
                   refY="3.5"
                   orient="auto"
                 >
-                  <polygon
-                    points="0 0, 10 3.5, 0 7"
-                    fill="#3B82F6"
-                  />
+                  <polygon points="0 0, 10 3.5, 0 7" fill="#3B82F6" />
                 </marker>
               </defs>
             </svg>
 
             {/* Nodes */}
-            {nodes.map((node) => {
+            {nodes.map(node => {
               const Icon = getNodeIcon(node.type);
               const color = getNodeColor(node.type, node.status);
               const isSelected = selectedNodes.includes(node.id);
-              
+
               return (
                 <div
                   key={node.id}
@@ -682,13 +801,13 @@ export default function WorkflowBuilder({
                     width: node.size.width * zoom,
                     height: node.size.height * zoom,
                     backgroundColor: color,
-                    zIndex: isSelected ? 10 : 5
+                    zIndex: isSelected ? 10 : 5,
                   }}
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     handleNodeSelect(node.id, e.ctrlKey || e.metaKey);
                   }}
-                  onMouseDown={(e) => {
+                  onMouseDown={e => {
                     e.stopPropagation();
                     handleNodeDrag(node.id, e);
                   }}
@@ -710,7 +829,7 @@ export default function WorkflowBuilder({
                           <XCircle className="w-3 h-3" />
                         )}
                         <button
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             deleteNode(node.id);
                           }}
@@ -720,7 +839,7 @@ export default function WorkflowBuilder({
                         </button>
                       </div>
                     </div>
-                    
+
                     {/* Input Ports */}
                     <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1">
                       {node.inputs.map((input, index) => (
@@ -728,14 +847,14 @@ export default function WorkflowBuilder({
                           key={input.id}
                           className="w-2 h-2 bg-white rounded-full border border-gray-300 cursor-pointer hover:bg-blue-200"
                           style={{ marginTop: index * 8 }}
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             handlePortClick(node.id, input.id, false);
                           }}
                         />
                       ))}
                     </div>
-                    
+
                     {/* Output Ports */}
                     <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1">
                       {node.outputs.map((output, index) => (
@@ -743,14 +862,14 @@ export default function WorkflowBuilder({
                           key={output.id}
                           className="w-2 h-2 bg-white rounded-full border border-gray-300 cursor-pointer hover:bg-blue-200"
                           style={{ marginTop: index * 8 }}
-                          onClick={(e) => {
+                          onClick={e => {
                             e.stopPropagation();
                             handlePortClick(node.id, output.id, true);
                           }}
                         />
                       ))}
                     </div>
-                    
+
                     {executionResults[node.id] && (
                       <div className="text-xs mt-1 opacity-80">
                         {executionResults[node.id].executionTime.toFixed(0)}ms
@@ -767,35 +886,53 @@ export default function WorkflowBuilder({
         {showProperties && (
           <div className="w-80 bg-white border-l border-gray-200 overflow-y-auto">
             <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Properties</h3>
-              
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                Properties
+              </h3>
+
               {selectedNode ? (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Node Name</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Node Name
+                    </label>
                     <input
                       type="text"
                       value={selectedNode.name}
-                      onChange={(e) => updateNode(selectedNode.id, { name: e.target.value })}
+                      onChange={e =>
+                        updateNode(selectedNode.id, { name: e.target.value })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Description
+                    </label>
                     <textarea
                       value={selectedNode.description}
-                      onChange={(e) => updateNode(selectedNode.id, { description: e.target.value })}
+                      onChange={e =>
+                        updateNode(selectedNode.id, {
+                          description: e.target.value,
+                        })
+                      }
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Status
+                    </label>
                     <select
                       value={selectedNode.status}
-                      onChange={(e) => updateNode(selectedNode.id, { status: e.target.value as any })}
+                      onChange={e =>
+                        updateNode(selectedNode.id, {
+                          status: e.target.value as any,
+                        })
+                      }
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="idle">Idle</option>

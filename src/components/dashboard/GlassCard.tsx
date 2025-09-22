@@ -74,7 +74,7 @@ export const GlassCard: React.FC<GlassCardProps> = ({
     >
       {/* Cyber Grid Background */}
       <div className="absolute inset-0 bg-cyber-grid bg-grid opacity-10 rounded-lg pointer-events-none" />
-      
+
       {/* Status Indicator */}
       {status !== 'idle' && (
         <div className="absolute top-4 right-4">
@@ -92,23 +92,15 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       {/* Header */}
       {(title || subtitle) && (
         <div className="mb-4 relative z-10">
-          {title && (
-            <h3 className="cyberpunk-heading-2 mb-1">
-              {title}
-            </h3>
-          )}
+          {title && <h3 className="cyberpunk-heading-2 mb-1">{title}</h3>}
           {subtitle && (
-            <p className="cyberpunk-label text-text-secondary">
-              {subtitle}
-            </p>
+            <p className="cyberpunk-label text-text-secondary">{subtitle}</p>
           )}
         </div>
       )}
 
       {/* Content */}
-      <div className="relative z-10">
-        {children}
-      </div>
+      <div className="relative z-10">{children}</div>
 
       {/* Hover Effect Overlay */}
       <div className="absolute inset-0 bg-gradient-primary opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-lg pointer-events-none" />

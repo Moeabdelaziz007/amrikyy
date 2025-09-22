@@ -4,7 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 export interface LearningActivity {
   id: string;
   userId: string;
-  type: 'feature_usage' | 'ai_interaction' | 'automation_created' | 'social_post' | 'workflow_completed' | 'custom';
+  type:
+    | 'feature_usage'
+    | 'ai_interaction'
+    | 'automation_created'
+    | 'social_post'
+    | 'workflow_completed'
+    | 'custom';
   category: string;
   points: number;
   metadata: Record<string, any>;
@@ -55,7 +61,11 @@ export interface Badge {
 export interface LearningRecommendation {
   id: string;
   userId: string;
-  type: 'feature_tutorial' | 'ai_prompt' | 'automation_template' | 'workflow_suggestion';
+  type:
+    | 'feature_tutorial'
+    | 'ai_prompt'
+    | 'automation_template'
+    | 'workflow_suggestion';
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
@@ -96,7 +106,7 @@ export class LearningAutomationSystem extends EventEmitter {
   private achievements: Map<string, Achievement> = new Map();
   private recommendations: Map<string, LearningRecommendation[]> = new Map();
   private challenges: Map<string, LearningChallenge> = new Map();
-  
+
   // Learning multipliers based on user level
   private levelMultipliers = {
     1: 1.0,
@@ -106,7 +116,7 @@ export class LearningAutomationSystem extends EventEmitter {
     5: 1.5,
     10: 2.0,
     20: 2.5,
-    50: 3.0
+    50: 3.0,
   };
 
   constructor() {
@@ -119,11 +129,13 @@ export class LearningAutomationSystem extends EventEmitter {
   /**
    * Record a learning activity and update user progress
    */
-  async recordActivity(activity: Omit<LearningActivity, 'id' | 'timestamp'>): Promise<LearningActivity> {
+  async recordActivity(
+    activity: Omit<LearningActivity, 'id' | 'timestamp'>
+  ): Promise<LearningActivity> {
     const learningActivity: LearningActivity = {
       ...activity,
       id: uuidv4(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Store activity
@@ -149,9 +161,12 @@ export class LearningAutomationSystem extends EventEmitter {
   /**
    * Update user progress based on activity
    */
-  private async updateUserProgress(userId: string, activity: LearningActivity): Promise<void> {
+  private async updateUserProgress(
+    userId: string,
+    activity: LearningActivity
+  ): Promise<void> {
     let progress = this.userProgress.get(userId);
-    
+
     if (!progress) {
       progress = this.initializeUserProgress(userId);
     }
@@ -232,7 +247,9 @@ export class LearningAutomationSystem extends EventEmitter {
 
     // Analyze user's skill gaps
     const skillCategories = Object.keys(progress.skillPoints);
-    const avgSkillPoints = Object.values(progress.skillPoints).reduce((a, b) => a + b, 0) / skillCategories.length;
+    const avgSkillPoints =
+      Object.values(progress.skillPoints).reduce((a, b) => a + b, 0) /
+      skillCategories.length;
 
     // Recommend features user hasn't used much
     for (const [category, points] of Object.entries(progress.skillPoints)) {
@@ -243,13 +260,18 @@ export class LearningAutomationSystem extends EventEmitter {
           type: 'feature_tutorial',
           title: `Master ${category}`,
           description: `Improve your ${category} skills with guided tutorials`,
-          difficulty: progress.level < 5 ? 'beginner' : progress.level < 15 ? 'intermediate' : 'advanced',
+          difficulty:
+            progress.level < 5
+              ? 'beginner'
+              : progress.level < 15
+                ? 'intermediate'
+                : 'advanced',
           estimatedTime: 15,
           points: 100,
           prerequisites: [],
           category,
           priority: Math.floor(avgSkillPoints / points),
-          createdAt: new Date()
+          createdAt: new Date(),
         });
       }
     }
@@ -268,7 +290,7 @@ export class LearningAutomationSystem extends EventEmitter {
         prerequisites: [],
         category: 'ai_interaction',
         priority: 8,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
     }
 
@@ -286,7 +308,7 @@ export class LearningAutomationSystem extends EventEmitter {
         prerequisites: [],
         category: 'automation_creation',
         priority: 9,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
     }
 
@@ -306,9 +328,14 @@ export class LearningAutomationSystem extends EventEmitter {
       let unlocked = true;
       for (const requirement of badge.requirements) {
         const activities = this.getUserActivities(userId, 1000);
-        const filteredActivities = this.filterActivitiesByTimeframe(activities, requirement.timeframe);
-        
-        const count = filteredActivities.filter(a => a.type === requirement.type).length;
+        const filteredActivities = this.filterActivitiesByTimeframe(
+          activities,
+          requirement.timeframe
+        );
+
+        const count = filteredActivities.filter(
+          a => a.type === requirement.type
+        ).length;
         if (count < requirement.threshold) {
           unlocked = false;
           break;
@@ -330,36 +357,45 @@ export class LearningAutomationSystem extends EventEmitter {
     if (!progress) return;
 
     // Level achievements
-    if (progress.level >= 10 && !progress.achievements.find(a => a.id === 'level_10')) {
+    if (
+      progress.level >= 10 &&
+      !progress.achievements.find(a => a.id === 'level_10')
+    ) {
       const achievement = this.achievements.get('level_10');
       if (achievement) {
         progress.achievements.push({
           ...achievement,
-          unlockedAt: new Date()
+          unlockedAt: new Date(),
         });
         this.emit('achievementUnlocked', { userId, achievement });
       }
     }
 
     // Streak achievements
-    if (progress.learningStreak >= 7 && !progress.achievements.find(a => a.id === 'week_streak')) {
+    if (
+      progress.learningStreak >= 7 &&
+      !progress.achievements.find(a => a.id === 'week_streak')
+    ) {
       const achievement = this.achievements.get('week_streak');
       if (achievement) {
         progress.achievements.push({
           ...achievement,
-          unlockedAt: new Date()
+          unlockedAt: new Date(),
         });
         this.emit('achievementUnlocked', { userId, achievement });
       }
     }
 
     // Points achievements
-    if (progress.totalPoints >= 1000 && !progress.achievements.find(a => a.id === 'points_1000')) {
+    if (
+      progress.totalPoints >= 1000 &&
+      !progress.achievements.find(a => a.id === 'points_1000')
+    ) {
       const achievement = this.achievements.get('points_1000');
       if (achievement) {
         progress.achievements.push({
           ...achievement,
-          unlockedAt: new Date()
+          unlockedAt: new Date(),
         });
         this.emit('achievementUnlocked', { userId, achievement });
       }
@@ -378,7 +414,7 @@ export class LearningAutomationSystem extends EventEmitter {
         icon: '🤖',
         category: 'ai',
         requirements: [{ type: 'ai_interaction', threshold: 1 }],
-        rarity: 'bronze'
+        rarity: 'bronze',
       },
       {
         id: 'automation_master',
@@ -387,7 +423,7 @@ export class LearningAutomationSystem extends EventEmitter {
         icon: '⚙️',
         category: 'automation',
         requirements: [{ type: 'automation_created', threshold: 10 }],
-        rarity: 'gold'
+        rarity: 'gold',
       },
       {
         id: 'social_butterfly',
@@ -396,7 +432,7 @@ export class LearningAutomationSystem extends EventEmitter {
         icon: '📱',
         category: 'social',
         requirements: [{ type: 'social_post', threshold: 50 }],
-        rarity: 'silver'
+        rarity: 'silver',
       },
       {
         id: 'workflow_wizard',
@@ -405,7 +441,7 @@ export class LearningAutomationSystem extends EventEmitter {
         icon: '🪄',
         category: 'workflow',
         requirements: [{ type: 'workflow_completed', threshold: 25 }],
-        rarity: 'gold'
+        rarity: 'gold',
       },
       {
         id: 'daily_learner',
@@ -413,9 +449,11 @@ export class LearningAutomationSystem extends EventEmitter {
         description: 'Active for 30 consecutive days',
         icon: '📚',
         category: 'consistency',
-        requirements: [{ type: 'feature_usage', threshold: 30, timeframe: '30_days' }],
-        rarity: 'platinum'
-      }
+        requirements: [
+          { type: 'feature_usage', threshold: 30, timeframe: '30_days' },
+        ],
+        rarity: 'platinum',
+      },
     ];
 
     defaultBadges.forEach(badge => {
@@ -437,7 +475,7 @@ export class LearningAutomationSystem extends EventEmitter {
         points: 500,
         rarity: 'rare',
         unlockedAt: new Date(),
-        metadata: {}
+        metadata: {},
       },
       {
         id: 'week_streak',
@@ -448,7 +486,7 @@ export class LearningAutomationSystem extends EventEmitter {
         points: 300,
         rarity: 'rare',
         unlockedAt: new Date(),
-        metadata: {}
+        metadata: {},
       },
       {
         id: 'points_1000',
@@ -459,8 +497,8 @@ export class LearningAutomationSystem extends EventEmitter {
         points: 200,
         rarity: 'epic',
         unlockedAt: new Date(),
-        metadata: {}
-      }
+        metadata: {},
+      },
     ];
 
     defaultAchievements.forEach(achievement => {
@@ -478,16 +516,18 @@ export class LearningAutomationSystem extends EventEmitter {
       description: 'Create 3 new automations this week',
       type: 'weekly',
       category: 'automation',
-      requirements: [{ type: 'automation_created', threshold: 3, timeframe: '7_days' }],
+      requirements: [
+        { type: 'automation_created', threshold: 3, timeframe: '7_days' },
+      ],
       rewards: {
         points: 500,
         badges: [],
-        achievements: []
+        achievements: [],
       },
       startDate: new Date(),
       endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       participants: [],
-      isActive: true
+      isActive: true,
     };
 
     this.challenges.set(weeklyChallenge.id, weeklyChallenge);
@@ -508,12 +548,14 @@ export class LearningAutomationSystem extends EventEmitter {
       lastActivityDate: new Date(),
       skillPoints: {},
       weeklyGoal: 500,
-      monthlyGoal: 2000
+      monthlyGoal: 2000,
     };
   }
 
   private getLevelMultiplier(level: number): number {
-    for (const [threshold, multiplier] of Object.entries(this.levelMultipliers).reverse()) {
+    for (const [threshold, multiplier] of Object.entries(
+      this.levelMultipliers
+    ).reverse()) {
       if (level >= parseInt(threshold)) {
         return multiplier;
       }
@@ -526,7 +568,10 @@ export class LearningAutomationSystem extends EventEmitter {
     return Math.floor(Math.sqrt(experience / 100)) + 1;
   }
 
-  private filterActivitiesByTimeframe(activities: LearningActivity[], timeframe?: string): LearningActivity[] {
+  private filterActivitiesByTimeframe(
+    activities: LearningActivity[],
+    timeframe?: string
+  ): LearningActivity[] {
     if (!timeframe) return activities;
 
     const now = new Date();
@@ -552,7 +597,9 @@ export class LearningAutomationSystem extends EventEmitter {
   /**
    * Get leaderboard data
    */
-  getLeaderboard(limit: number = 10): Array<{ userId: string; points: number; level: number; badges: number }> {
+  getLeaderboard(
+    limit: number = 10
+  ): Array<{ userId: string; points: number; level: number; badges: number }> {
     const allProgress = Array.from(this.userProgress.values());
     return allProgress
       .sort((a, b) => b.totalPoints - a.totalPoints)
@@ -561,7 +608,7 @@ export class LearningAutomationSystem extends EventEmitter {
         userId: progress.userId,
         points: progress.totalPoints,
         level: progress.level,
-        badges: progress.badges.length
+        badges: progress.badges.length,
       }));
   }
 
@@ -569,7 +616,9 @@ export class LearningAutomationSystem extends EventEmitter {
    * Get available challenges
    */
   getActiveChallenges(): LearningChallenge[] {
-    return Array.from(this.challenges.values()).filter(challenge => challenge.isActive);
+    return Array.from(this.challenges.values()).filter(
+      challenge => challenge.isActive
+    );
   }
 }
 
@@ -585,11 +634,13 @@ export function getLearningSystem(): LearningAutomationSystem {
 
 export function initializeLearningSystem(): LearningAutomationSystem {
   const system = getLearningSystem();
-  
+
   // Set up event listeners for WebSocket broadcasting
-  system.on('activityRecorded', (activity) => {
+  system.on('activityRecorded', activity => {
     // Broadcast to connected clients
-    console.log(`📊 Activity recorded: ${activity.type} for user ${activity.userId} (+${activity.points} points)`);
+    console.log(
+      `📊 Activity recorded: ${activity.type} for user ${activity.userId} (+${activity.points} points)`
+    );
   });
 
   system.on('levelUp', ({ userId, oldLevel, newLevel }) => {
@@ -601,7 +652,9 @@ export function initializeLearningSystem(): LearningAutomationSystem {
   });
 
   system.on('achievementUnlocked', ({ userId, achievement }) => {
-    console.log(`🏅 Achievement unlocked! User ${userId} earned: ${achievement.name}`);
+    console.log(
+      `🏅 Achievement unlocked! User ${userId} earned: ${achievement.name}`
+    );
   });
 
   return system;

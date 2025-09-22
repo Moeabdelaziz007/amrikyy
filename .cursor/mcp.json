@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "auraos": {
+      "command": "npx",
+      "args": ["tsx", "cursor-mcp-server.ts"],
+      "cwd": "/Users/cryptojoker710/Downloads/AuraOS",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    }
+  }
+}

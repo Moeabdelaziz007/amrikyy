@@ -42,9 +42,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        {children}
-      </BrowserRouter>
+      <BrowserRouter>{children}</BrowserRouter>
     </QueryClientProvider>
   );
 };
@@ -107,7 +105,7 @@ describe('Dashboard Integration', () => {
 
   it('should handle logout functionality', async () => {
     const mockSignOut = vi.fn();
-    
+
     vi.mocked(require('@/hooks/use-auth').useAuth).mockReturnValue({
       user: mockUser,
       loading: false,

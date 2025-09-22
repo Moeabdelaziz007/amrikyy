@@ -94,7 +94,21 @@ export interface N8nNodeType {
 export interface N8nNodeProperty {
   displayName: string;
   name: string;
-  type: 'string' | 'number' | 'boolean' | 'array' | 'object' | 'options' | 'collection' | 'fixedCollection' | 'multiOptions' | 'dateTime' | 'json' | 'color' | 'notice' | 'hidden';
+  type:
+    | 'string'
+    | 'number'
+    | 'boolean'
+    | 'array'
+    | 'object'
+    | 'options'
+    | 'collection'
+    | 'fixedCollection'
+    | 'multiOptions'
+    | 'dateTime'
+    | 'json'
+    | 'color'
+    | 'notice'
+    | 'hidden';
   default?: any;
   description?: string;
   placeholder?: string;
@@ -173,7 +187,7 @@ export class N8nNodeSystem {
   private initializeLiveMode() {
     this.isLive = true;
     console.log('🚀 N8n Node System is now LIVE');
-    
+
     // Start real-time monitoring
     setInterval(() => {
       this.broadcastSystemStatus();
@@ -191,7 +205,7 @@ export class N8nNodeSystem {
         name: 'Schedule Trigger',
         color: '#3B82F6',
         inputs: [],
-        outputs: ['main']
+        outputs: ['main'],
       },
       inputs: [],
       outputs: ['main'],
@@ -205,9 +219,9 @@ export class N8nNodeSystem {
             { name: 'Daily', value: 'daily' },
             { name: 'Weekly', value: 'weekly' },
             { name: 'Monthly', value: 'monthly' },
-            { name: 'Custom Cron', value: 'cron' }
+            { name: 'Custom Cron', value: 'cron' },
           ],
-          required: true
+          required: true,
         },
         {
           displayName: 'Time',
@@ -218,12 +232,12 @@ export class N8nNodeSystem {
           required: true,
           displayOptions: {
             show: {
-              schedule: ['daily', 'weekly']
-            }
-          }
-        }
+              schedule: ['daily', 'weekly'],
+            },
+          },
+        },
       ],
-      group: ['trigger']
+      group: ['trigger'],
     });
 
     // AI Nodes
@@ -236,7 +250,7 @@ export class N8nNodeSystem {
         name: 'Gemini AI',
         color: '#8B5CF6',
         inputs: ['main'],
-        outputs: ['main']
+        outputs: ['main'],
       },
       inputs: ['main'],
       outputs: ['main'],
@@ -250,20 +264,20 @@ export class N8nNodeSystem {
             { name: 'Generate Content', value: 'generate' },
             { name: 'Analyze Text', value: 'analyze' },
             { name: 'Translate', value: 'translate' },
-            { name: 'Summarize', value: 'summarize' }
+            { name: 'Summarize', value: 'summarize' },
           ],
-          required: true
+          required: true,
         },
         {
           displayName: 'Prompt',
           name: 'prompt',
           type: 'string',
           typeOptions: {
-            rows: 4
+            rows: 4,
           },
           default: '',
           placeholder: 'Enter your prompt here...',
-          required: true
+          required: true,
         },
         {
           displayName: 'Model',
@@ -272,11 +286,11 @@ export class N8nNodeSystem {
           default: 'gemini-pro',
           options: [
             { name: 'Gemini Pro', value: 'gemini-pro' },
-            { name: 'Gemini Pro Vision', value: 'gemini-pro-vision' }
-          ]
-        }
+            { name: 'Gemini Pro Vision', value: 'gemini-pro-vision' },
+          ],
+        },
       ],
-      group: ['ai']
+      group: ['ai'],
     });
 
     // Social Media Nodes
@@ -289,7 +303,7 @@ export class N8nNodeSystem {
         name: 'Telegram',
         color: '#0088cc',
         inputs: ['main'],
-        outputs: ['main']
+        outputs: ['main'],
       },
       inputs: ['main'],
       outputs: ['main'],
@@ -303,9 +317,9 @@ export class N8nNodeSystem {
           options: [
             { name: 'Send Message', value: 'sendMessage' },
             { name: 'Send Photo', value: 'sendPhoto' },
-            { name: 'Get Updates', value: 'getUpdates' }
+            { name: 'Get Updates', value: 'getUpdates' },
           ],
-          required: true
+          required: true,
         },
         {
           displayName: 'Chat ID',
@@ -313,26 +327,26 @@ export class N8nNodeSystem {
           type: 'string',
           default: '',
           placeholder: 'Chat ID or @username',
-          required: true
+          required: true,
         },
         {
           displayName: 'Message',
           name: 'message',
           type: 'string',
           typeOptions: {
-            rows: 4
+            rows: 4,
           },
           default: '',
           placeholder: 'Message text...',
           required: true,
           displayOptions: {
             show: {
-              operation: ['sendMessage']
-            }
-          }
-        }
+              operation: ['sendMessage'],
+            },
+          },
+        },
       ],
-      group: ['social']
+      group: ['social'],
     });
 
     // Data Processing Nodes
@@ -345,7 +359,7 @@ export class N8nNodeSystem {
         name: 'Set Data',
         color: '#10B981',
         inputs: ['main'],
-        outputs: ['main']
+        outputs: ['main'],
       },
       inputs: ['main'],
       outputs: ['main'],
@@ -355,7 +369,7 @@ export class N8nNodeSystem {
           name: 'values',
           type: 'collection',
           typeOptions: {
-            multipleValues: true
+            multipleValues: true,
           },
           default: {},
           options: [
@@ -364,19 +378,19 @@ export class N8nNodeSystem {
               name: 'name',
               type: 'string',
               default: '',
-              placeholder: 'Property name'
+              placeholder: 'Property name',
             },
             {
               displayName: 'Value',
               name: 'value',
               type: 'string',
               default: '',
-              placeholder: 'Property value'
-            }
-          ]
-        }
+              placeholder: 'Property value',
+            },
+          ],
+        },
       ],
-      group: ['data']
+      group: ['data'],
     });
 
     // Conditional Logic Nodes
@@ -389,7 +403,7 @@ export class N8nNodeSystem {
         name: 'If',
         color: '#F59E0B',
         inputs: ['main'],
-        outputs: ['true', 'false']
+        outputs: ['true', 'false'],
       },
       inputs: ['main'],
       outputs: ['true', 'false'],
@@ -399,7 +413,7 @@ export class N8nNodeSystem {
           name: 'conditions',
           type: 'collection',
           typeOptions: {
-            multipleValues: true
+            multipleValues: true,
           },
           default: {},
           options: [
@@ -408,7 +422,7 @@ export class N8nNodeSystem {
               name: 'leftValue',
               type: 'string',
               default: '',
-              placeholder: 'Left operand'
+              placeholder: 'Left operand',
             },
             {
               displayName: 'Operation',
@@ -420,20 +434,20 @@ export class N8nNodeSystem {
                 { name: 'Not Equals', value: 'notEquals' },
                 { name: 'Contains', value: 'contains' },
                 { name: 'Greater Than', value: 'gt' },
-                { name: 'Less Than', value: 'lt' }
-              ]
+                { name: 'Less Than', value: 'lt' },
+              ],
             },
             {
               displayName: 'Right Value',
               name: 'rightValue',
               type: 'string',
               default: '',
-              placeholder: 'Right operand'
-            }
-          ]
-        }
+              placeholder: 'Right operand',
+            },
+          ],
+        },
       ],
-      group: ['logic']
+      group: ['logic'],
     });
 
     // HTTP Request Node
@@ -446,7 +460,7 @@ export class N8nNodeSystem {
         name: 'HTTP Request',
         color: '#FF6B6B',
         inputs: ['main'],
-        outputs: ['main']
+        outputs: ['main'],
       },
       inputs: ['main'],
       outputs: ['main'],
@@ -460,9 +474,9 @@ export class N8nNodeSystem {
             { name: 'GET', value: 'GET' },
             { name: 'POST', value: 'POST' },
             { name: 'PUT', value: 'PUT' },
-            { name: 'DELETE', value: 'DELETE' }
+            { name: 'DELETE', value: 'DELETE' },
           ],
-          required: true
+          required: true,
         },
         {
           displayName: 'URL',
@@ -470,14 +484,14 @@ export class N8nNodeSystem {
           type: 'string',
           default: '',
           placeholder: 'https://api.example.com/endpoint',
-          required: true
+          required: true,
         },
         {
           displayName: 'Headers',
           name: 'headers',
           type: 'collection',
           typeOptions: {
-            multipleValues: true
+            multipleValues: true,
           },
           default: {},
           options: [
@@ -485,18 +499,18 @@ export class N8nNodeSystem {
               displayName: 'Name',
               name: 'name',
               type: 'string',
-              default: ''
+              default: '',
             },
             {
               displayName: 'Value',
               name: 'value',
               type: 'string',
-              default: ''
-            }
-          ]
-        }
+              default: '',
+            },
+          ],
+        },
       ],
-      group: ['http']
+      group: ['http'],
     });
   }
 
@@ -514,8 +528,8 @@ export class N8nNodeSystem {
           position: [0, 0],
           parameters: {
             schedule: 'daily',
-            time: '09:00'
-          }
+            time: '09:00',
+          },
         },
         {
           id: 'set_topic',
@@ -527,10 +541,10 @@ export class N8nNodeSystem {
             values: {
               string: [
                 { name: 'topic', value: 'AI Technology Trends' },
-                { name: 'platform', value: 'social_media' }
-              ]
-            }
-          }
+                { name: 'platform', value: 'social_media' },
+              ],
+            },
+          },
         },
         {
           id: 'ai_generate',
@@ -540,9 +554,10 @@ export class N8nNodeSystem {
           position: [600, 0],
           parameters: {
             operation: 'generate',
-            prompt: 'Generate engaging social media content about {{ $json.topic }}. Make it informative and engaging for {{ $json.platform }} audience.',
-            model: 'gemini-pro'
-          }
+            prompt:
+              'Generate engaging social media content about {{ $json.topic }}. Make it informative and engaging for {{ $json.platform }} audience.',
+            model: 'gemini-pro',
+          },
         },
         {
           id: 'telegram_send',
@@ -553,22 +568,22 @@ export class N8nNodeSystem {
           parameters: {
             operation: 'sendMessage',
             chatId: '@your_channel',
-            message: '{{ $json.content }}'
-          }
-        }
+            message: '{{ $json.content }}',
+          },
+        },
       ],
       connections: {
         schedule_trigger: [{ node: 'set_topic', type: 'main', index: 0 }],
         set_topic: [{ node: 'ai_generate', type: 'main', index: 0 }],
-        ai_generate: [{ node: 'telegram_send', type: 'main', index: 0 }]
+        ai_generate: [{ node: 'telegram_send', type: 'main', index: 0 }],
       },
       active: true,
       settings: {
         executionOrder: 'v1',
         saveManualExecutions: true,
-        callerPolicy: 'workflowsFromSameOwner'
+        callerPolicy: 'workflowsFromSameOwner',
       },
-      tags: ['ai', 'content', 'automation']
+      tags: ['ai', 'content', 'automation'],
     };
 
     this.workflows.set(aiContentWorkflow.id, aiContentWorkflow);
@@ -587,8 +602,10 @@ export class N8nNodeSystem {
   }
 
   private async checkWorkflowTriggers() {
-    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.active);
-    
+    const activeWorkflows = Array.from(this.workflows.values()).filter(
+      w => w.active
+    );
+
     for (const workflow of activeWorkflows) {
       for (const node of workflow.nodes) {
         if (node.type === 'amrikyy.trigger.schedule') {
@@ -604,18 +621,18 @@ export class N8nNodeSystem {
     const now = new Date();
     const schedule = parameters.schedule;
     const time = parameters.time;
-    
+
     if (schedule === 'daily') {
       const [hours, minutes] = time.split(':').map(Number);
       return now.getHours() === hours && now.getMinutes() === minutes;
     }
-    
+
     return false;
   }
 
   private async processExecutionQueue() {
     if (this.executionQueue.length === 0) return;
-    
+
     const workflowId = this.executionQueue.shift();
     if (workflowId) {
       await this.executeWorkflow(workflowId);
@@ -640,9 +657,9 @@ export class N8nNodeSystem {
       data: {
         resultData: [],
         startTime: Date.now(),
-        executionTime: 0
+        executionTime: 0,
       },
-      status: 'running'
+      status: 'running',
     };
 
     this.executions.set(executionId, execution);
@@ -650,13 +667,15 @@ export class N8nNodeSystem {
 
     try {
       await this.executeWorkflowNodes(workflow, execution);
-      
+
       execution.status = 'success';
       execution.finished = true;
       execution.stoppedAt = new Date().toISOString();
       execution.data.executionTime = Date.now() - execution.data.startTime;
-      
-      console.log(`✅ Workflow completed: ${workflow.name} (${execution.data.executionTime}ms)`);
+
+      console.log(
+        `✅ Workflow completed: ${workflow.name} (${execution.data.executionTime}ms)`
+      );
     } catch (error) {
       execution.status = 'error';
       execution.finished = true;
@@ -664,16 +683,19 @@ export class N8nNodeSystem {
       execution.error = {
         name: error.name || 'ExecutionError',
         message: error.message || 'Unknown error',
-        stack: error.stack
+        stack: error.stack,
       };
-      
+
       console.error(`❌ Workflow failed: ${workflow.name}`, error);
     }
 
     this.broadcastExecutionUpdate(execution);
   }
 
-  private async executeWorkflowNodes(workflow: N8nWorkflow, execution: N8nExecution): Promise<void> {
+  private async executeWorkflowNodes(
+    workflow: N8nWorkflow,
+    execution: N8nExecution
+  ): Promise<void> {
     const executedNodes = new Set<string>();
     const nodeData: Record<string, any[]> = {};
 
@@ -687,14 +709,16 @@ export class N8nNodeSystem {
     let hasMoreNodes = true;
     while (hasMoreNodes) {
       hasMoreNodes = false;
-      
+
       for (const node of workflow.nodes) {
         if (executedNodes.has(node.id)) continue;
-        
+
         // Check if all input connections are satisfied
         const inputConnections = workflow.connections[node.id] || [];
-        const hasInputData = inputConnections.length === 0 || inputConnections.some(conn => nodeData[conn.node]);
-        
+        const hasInputData =
+          inputConnections.length === 0 ||
+          inputConnections.some(conn => nodeData[conn.node]);
+
         if (hasInputData) {
           const result = await this.executeNode(node, nodeData, execution);
           nodeData[node.id] = result;
@@ -705,58 +729,62 @@ export class N8nNodeSystem {
     }
   }
 
-  private async executeNode(node: N8nNode, nodeData: Record<string, any[]>, execution: N8nExecution): Promise<any[]> {
+  private async executeNode(
+    node: N8nNode,
+    nodeData: Record<string, any[]>,
+    execution: N8nExecution
+  ): Promise<any[]> {
     console.log(`  📋 Executing node: ${node.name} (${node.type})`);
-    
+
     const startTime = Date.now();
-    
+
     try {
       let result: any[] = [];
-      
+
       switch (node.type) {
         case 'amrikyy.trigger.schedule':
           result = [{}]; // Trigger nodes provide initial data
           break;
-          
+
         case 'amrikyy.data.set':
           result = this.executeSetDataNode(node, nodeData);
           break;
-          
+
         case 'amrikyy.ai.gemini':
           result = await this.executeGeminiNode(node, nodeData);
           break;
-          
+
         case 'amrikyy.social.telegram':
           result = await this.executeTelegramNode(node, nodeData);
           break;
-          
+
         case 'amrikyy.logic.if':
           result = this.executeIfNode(node, nodeData);
           break;
-          
+
         case 'amrikyy.http.request':
           result = await this.executeHttpRequestNode(node, nodeData);
           break;
-          
+
         default:
           throw new Error(`Unknown node type: ${node.type}`);
       }
-      
+
       const executionTime = Date.now() - startTime;
-      
+
       // Record execution result
       execution.data.resultData.push({
         node: {
           name: node.name,
-          type: node.type
+          type: node.type,
         },
         data: {
-          main: result
+          main: result,
         },
         finished: true,
-        executionTime
+        executionTime,
       });
-      
+
       return result;
     } catch (error) {
       console.error(`Node execution error: ${node.name}`, error);
@@ -764,34 +792,43 @@ export class N8nNodeSystem {
     }
   }
 
-  private executeSetDataNode(node: N8nNode, nodeData: Record<string, any[]>): any[] {
+  private executeSetDataNode(
+    node: N8nNode,
+    nodeData: Record<string, any[]>
+  ): any[] {
     const inputData = this.getInputData(node, nodeData);
     const values = node.parameters.values || {};
-    
+
     return inputData.map(item => ({
       ...item,
-      ...values
+      ...values,
     }));
   }
 
-  private async executeGeminiNode(node: N8nNode, nodeData: Record<string, any[]>): Promise<any[]> {
+  private async executeGeminiNode(
+    node: N8nNode,
+    nodeData: Record<string, any[]>
+  ): Promise<any[]> {
     const inputData = this.getInputData(node, nodeData);
     const prompt = node.parameters.prompt || '';
     const operation = node.parameters.operation || 'generate';
-    
+
     try {
       const { generateContent } = await import('./gemini.js');
-      
+
       // Replace template variables in prompt
-      const processedPrompt = this.replaceTemplateVariables(prompt, inputData[0] || {});
-      
+      const processedPrompt = this.replaceTemplateVariables(
+        prompt,
+        inputData[0] || {}
+      );
+
       const response = await generateContent(processedPrompt);
-      
+
       return inputData.map(item => ({
         ...item,
         content: response,
         operation,
-        prompt: processedPrompt
+        prompt: processedPrompt,
       }));
     } catch (error) {
       console.error('Gemini execution error:', error);
@@ -799,24 +836,30 @@ export class N8nNodeSystem {
     }
   }
 
-  private async executeTelegramNode(node: N8nNode, nodeData: Record<string, any[]>): Promise<any[]> {
+  private async executeTelegramNode(
+    node: N8nNode,
+    nodeData: Record<string, any[]>
+  ): Promise<any[]> {
     const inputData = this.getInputData(node, nodeData);
     const operation = node.parameters.operation || 'sendMessage';
     const chatId = node.parameters.chatId || '';
-    const message = this.replaceTemplateVariables(node.parameters.message || '', inputData[0] || {});
-    
+    const message = this.replaceTemplateVariables(
+      node.parameters.message || '',
+      inputData[0] || {}
+    );
+
     try {
       // In a real implementation, this would use the Telegram API
       console.log(`📱 Telegram ${operation}: ${message} to ${chatId}`);
-      
+
       return inputData.map(item => ({
         ...item,
         telegramResult: {
           success: true,
           operation,
           chatId,
-          message
-        }
+          message,
+        },
       }));
     } catch (error) {
       console.error('Telegram execution error:', error);
@@ -827,33 +870,39 @@ export class N8nNodeSystem {
   private executeIfNode(node: N8nNode, nodeData: Record<string, any[]>): any[] {
     const inputData = this.getInputData(node, nodeData);
     const conditions = node.parameters.conditions || {};
-    
+
     // Simple condition evaluation (in real implementation, this would be more sophisticated)
     const conditionMet = Math.random() > 0.5; // Simplified for demo
-    
+
     return inputData.map(item => ({
       ...item,
-      conditionResult: conditionMet
+      conditionResult: conditionMet,
     }));
   }
 
-  private async executeHttpRequestNode(node: N8nNode, nodeData: Record<string, any[]>): Promise<any[]> {
+  private async executeHttpRequestNode(
+    node: N8nNode,
+    nodeData: Record<string, any[]>
+  ): Promise<any[]> {
     const inputData = this.getInputData(node, nodeData);
     const method = node.parameters.method || 'GET';
-    const url = this.replaceTemplateVariables(node.parameters.url || '', inputData[0] || {});
-    
+    const url = this.replaceTemplateVariables(
+      node.parameters.url || '',
+      inputData[0] || {}
+    );
+
     try {
       // In a real implementation, this would make actual HTTP requests
       console.log(`🌐 HTTP ${method}: ${url}`);
-      
+
       return inputData.map(item => ({
         ...item,
         httpResult: {
           success: true,
           method,
           url,
-          response: { status: 200, data: 'Mock response' }
-        }
+          response: { status: 200, data: 'Mock response' },
+        },
       }));
     } catch (error) {
       console.error('HTTP request execution error:', error);
@@ -871,7 +920,10 @@ export class N8nNodeSystem {
     return [{}]; // Default empty data
   }
 
-  private replaceTemplateVariables(template: string, data: Record<string, any>): string {
+  private replaceTemplateVariables(
+    template: string,
+    data: Record<string, any>
+  ): string {
     return template.replace(/\{\{\s*\$json\.([^}]+)\s*\}\}/g, (match, key) => {
       return data[key] || match;
     });
@@ -886,9 +938,9 @@ export class N8nNodeSystem {
   createWorkflow(workflowData: Omit<N8nWorkflow, 'id'>): N8nWorkflow {
     const workflow: N8nWorkflow = {
       ...workflowData,
-      id: `workflow_${Date.now()}`
+      id: `workflow_${Date.now()}`,
     };
-    
+
     this.workflows.set(workflow.id, workflow);
     console.log(`🆕 Created workflow: ${workflow.name} (${workflow.id})`);
     return workflow;
@@ -923,11 +975,12 @@ export class N8nNodeSystem {
     return {
       isLive: this.isLive,
       totalWorkflows: this.workflows.size,
-      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.active).length,
+      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.active)
+        .length,
       totalExecutions: this.executions.size,
       nodeTypes: this.nodeTypes.size,
       executionQueue: this.executionQueue.length,
-      recentExecutions: Array.from(this.executions.values()).slice(-5)
+      recentExecutions: Array.from(this.executions.values()).slice(-5),
     };
   }
 
@@ -947,9 +1000,9 @@ export class N8nNodeSystem {
         id: w.id,
         name: w.name,
         active: w.active,
-        nodeCount: w.nodes.length
+        nodeCount: w.nodes.length,
       })),
-      recentExecutions: this.getAllExecutions().slice(-3)
+      recentExecutions: this.getAllExecutions().slice(-3),
     };
 
     this.monitoringSubscribers.forEach(callback => {
@@ -971,8 +1024,8 @@ export class N8nNodeSystem {
             status: execution.status,
             workflowId: execution.workflowId,
             startedAt: execution.startedAt,
-            finished: execution.finished
-          }
+            finished: execution.finished,
+          },
         });
       } catch (error) {
         console.error('Error broadcasting execution update:', error);

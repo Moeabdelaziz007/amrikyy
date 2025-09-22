@@ -8,7 +8,7 @@ class EnhancedTelegramTestSuite {
     this.results = {
       passed: 0,
       failed: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -18,10 +18,10 @@ class EnhancedTelegramTestSuite {
 
   async runTests() {
     console.log('🚀 Starting Enhanced Telegram Integration Tests\n');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log('🤖 Bot Token: 8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0');
     console.log('📱 Bot Username: @Amrikyyybot');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
 
     for (const test of this.tests) {
       try {
@@ -41,12 +41,14 @@ class EnhancedTelegramTestSuite {
   }
 
   printSummary() {
-    console.log('\n' + '=' .repeat(60));
+    console.log('\n' + '='.repeat(60));
     console.log('📊 ENHANCED TELEGRAM TEST SUMMARY');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log(`✅ Passed: ${this.results.passed}`);
     console.log(`❌ Failed: ${this.results.failed}`);
-    console.log(`📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`);
+    console.log(
+      `📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`
+    );
 
     if (this.results.errors.length > 0) {
       console.log('\n🔍 FAILED TESTS:');
@@ -65,30 +67,32 @@ const testSuite = new EnhancedTelegramTestSuite();
 // Test 1: Enhanced Telegram Service Initialization
 testSuite.addTest('Enhanced Telegram Service Initialization', async () => {
   const isConnected = enhancedTelegramService.isBotConnected();
-  
+
   if (!isConnected) {
     throw new Error('Enhanced Telegram service not connected');
   }
-  
-  console.log(`   🔗 Connection Status: ${isConnected ? 'Connected' : 'Disconnected'}`);
+
+  console.log(
+    `   🔗 Connection Status: ${isConnected ? 'Connected' : 'Disconnected'}`
+  );
 });
 
 // Test 2: Analytics System
 testSuite.addTest('Analytics System', async () => {
   const analytics = enhancedTelegramService.getAnalytics();
-  
+
   if (typeof analytics.totalUsers !== 'number') {
     throw new Error('Invalid analytics data');
   }
-  
+
   if (typeof analytics.totalChats !== 'number') {
     throw new Error('Invalid analytics data');
   }
-  
+
   if (typeof analytics.isConnected !== 'boolean') {
     throw new Error('Invalid connection status');
   }
-  
+
   console.log(`   📊 Total Users: ${analytics.totalUsers}`);
   console.log(`   💬 Total Chats: ${analytics.totalChats}`);
   console.log(`   🔗 Connected: ${analytics.isConnected}`);
@@ -102,7 +106,7 @@ testSuite.addTest('AI Command Integration', async () => {
     context: 'Telegram user query',
     detail: 'simple',
     includeSources: false,
-    useCache: true
+    useCache: true,
   });
 
   if (!result.success) {
@@ -113,7 +117,9 @@ testSuite.addTest('AI Command Integration', async () => {
     throw new Error('No AI response generated');
   }
 
-  console.log(`   🤖 AI Response: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   🤖 AI Response: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
 });
 
 // Test 4: Translation Command Integration
@@ -122,7 +128,7 @@ testSuite.addTest('Translation Command Integration', async () => {
     text: 'Hello, how are you?',
     from: 'en',
     to: 'es',
-    useCache: true
+    useCache: true,
   });
 
   if (!result.success) {
@@ -133,7 +139,9 @@ testSuite.addTest('Translation Command Integration', async () => {
     throw new Error('No translation generated');
   }
 
-  console.log(`   🌍 Translation: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   🌍 Translation: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
 });
 
 // Test 5: Sentiment Analysis Integration
@@ -141,7 +149,7 @@ testSuite.addTest('Sentiment Analysis Integration', async () => {
   const result = await geminiMCP.executeTool('gemini_sentiment_analysis', {
     text: 'I absolutely love this new AI system! It is amazing and wonderful!',
     detail: 'simple',
-    useCache: true
+    useCache: true,
   });
 
   if (!result.success) {
@@ -152,7 +160,9 @@ testSuite.addTest('Sentiment Analysis Integration', async () => {
     throw new Error('No sentiment analysis generated');
   }
 
-  console.log(`   📊 Sentiment: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   📊 Sentiment: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
 });
 
 // Test 6: Content Generation Integration
@@ -162,7 +172,7 @@ testSuite.addTest('Content Generation Integration', async () => {
     type: 'article',
     length: 'short',
     tone: 'professional',
-    useCache: true
+    useCache: true,
   });
 
   if (!result.success) {
@@ -173,17 +183,19 @@ testSuite.addTest('Content Generation Integration', async () => {
     throw new Error('No content generated');
   }
 
-  console.log(`   ✍️ Generated Content: ${JSON.stringify(result.result).substring(0, 100)}...`);
+  console.log(
+    `   ✍️ Generated Content: ${JSON.stringify(result.result).substring(0, 100)}...`
+  );
 });
 
 // Test 7: Message Queue System
 testSuite.addTest('Message Queue System', async () => {
   const analytics = enhancedTelegramService.getAnalytics();
-  
+
   if (typeof analytics.queueLength !== 'number') {
     throw new Error('Invalid queue length data');
   }
-  
+
   console.log(`   📬 Queue Length: ${analytics.queueLength}`);
   console.log(`   ⚡ Queue System: Active`);
 });
@@ -192,25 +204,27 @@ testSuite.addTest('Message Queue System', async () => {
 testSuite.addTest('User Session Management', async () => {
   const testChatId = 123456789;
   const session = enhancedTelegramService.getUserSession(testChatId);
-  
+
   // Session might be null for test chat ID, which is expected
   if (session !== null && typeof session !== 'object') {
     throw new Error('Invalid session data structure');
   }
-  
-  console.log(`   👤 Session Management: ${session ? 'Active' : 'No active session'}`);
+
+  console.log(
+    `   👤 Session Management: ${session ? 'Active' : 'No active session'}`
+  );
 });
 
 // Test 9: Chat Analytics
 testSuite.addTest('Chat Analytics', async () => {
   const testChatId = 123456789;
   const analytics = enhancedTelegramService.getChatAnalytics(testChatId);
-  
+
   // Analytics might be null for test chat ID, which is expected
   if (analytics !== null && typeof analytics !== 'object') {
     throw new Error('Invalid analytics data structure');
   }
-  
+
   console.log(`   📈 Chat Analytics: ${analytics ? 'Available' : 'No data'}`);
 });
 
@@ -219,7 +233,7 @@ testSuite.addTest('Broadcast Functionality', async () => {
   // Test broadcast without actually sending (to avoid spam)
   const testMessage = 'Test broadcast message';
   const excludeChatIds = [123456789]; // Exclude test chat ID
-  
+
   // This should not throw an error
   console.log(`   📢 Broadcast System: Ready`);
   console.log(`   🚫 Excluded Chats: ${excludeChatIds.length}`);
@@ -228,10 +242,20 @@ testSuite.addTest('Broadcast Functionality', async () => {
 // Test 11: Enhanced Commands
 testSuite.addTest('Enhanced Commands', async () => {
   const commands = [
-    '/start', '/help', '/menu', '/status', '/posts', '/agents',
-    '/ai', '/translate', '/analyze', '/generate', '/schedule', '/broadcast'
+    '/start',
+    '/help',
+    '/menu',
+    '/status',
+    '/posts',
+    '/agents',
+    '/ai',
+    '/translate',
+    '/analyze',
+    '/generate',
+    '/schedule',
+    '/broadcast',
   ];
-  
+
   console.log(`   📋 Available Commands: ${commands.length}`);
   console.log(`   🤖 AI Commands: 4`);
   console.log(`   📱 Core Commands: 6`);
@@ -247,11 +271,13 @@ testSuite.addTest('Error Handling', async () => {
       context: 'Test',
       detail: 'simple',
       includeSources: false,
-      useCache: true
+      useCache: true,
     });
-    
+
     // Should either succeed with empty response or fail gracefully
-    console.log(`   🛡️ Error Handling: ${result.success ? 'Graceful' : 'Handled'}`);
+    console.log(
+      `   🛡️ Error Handling: ${result.success ? 'Graceful' : 'Handled'}`
+    );
   } catch (error) {
     console.log(`   🛡️ Error Handling: Caught and handled`);
   }
@@ -260,7 +286,7 @@ testSuite.addTest('Error Handling', async () => {
 // Test 13: Performance Metrics
 testSuite.addTest('Performance Metrics', async () => {
   const startTime = Date.now();
-  
+
   // Test multiple AI operations
   const promises = [
     geminiMCP.executeTool('gemini_question_answering', {
@@ -268,19 +294,19 @@ testSuite.addTest('Performance Metrics', async () => {
       context: 'Test',
       detail: 'simple',
       includeSources: false,
-      useCache: true
+      useCache: true,
     }),
     geminiMCP.executeTool('gemini_sentiment_analysis', {
       text: 'This is great!',
       detail: 'simple',
-      useCache: true
+      useCache: true,
     }),
     geminiMCP.executeTool('gemini_translation', {
       text: 'Hello',
       from: 'en',
       to: 'es',
-      useCache: true
-    })
+      useCache: true,
+    }),
   ];
 
   const results = await Promise.all(promises);
@@ -292,27 +318,31 @@ testSuite.addTest('Performance Metrics', async () => {
     }
   }
 
-  console.log(`   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime/3)}ms per operation)`);
+  console.log(
+    `   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime / 3)}ms per operation)`
+  );
 });
 
 // Test 14: Integration Status
 testSuite.addTest('Integration Status', async () => {
   const analytics = enhancedTelegramService.getAnalytics();
-  
+
   const status = {
     telegram: analytics.isConnected,
     gemini: true, // We know Gemini is working from previous tests
     queue: analytics.queueLength >= 0,
-    analytics: analytics.totalUsers >= 0
+    analytics: analytics.totalUsers >= 0,
   };
-  
+
   const allSystemsOperational = Object.values(status).every(s => s === true);
-  
+
   if (!allSystemsOperational) {
     throw new Error('Not all systems operational');
   }
-  
-  console.log(`   🔗 Telegram: ${status.telegram ? 'Connected' : 'Disconnected'}`);
+
+  console.log(
+    `   🔗 Telegram: ${status.telegram ? 'Connected' : 'Disconnected'}`
+  );
   console.log(`   🤖 Gemini: ${status.gemini ? 'Active' : 'Inactive'}`);
   console.log(`   📬 Queue: ${status.queue ? 'Active' : 'Inactive'}`);
   console.log(`   📊 Analytics: ${status.analytics ? 'Active' : 'Inactive'}`);
@@ -325,11 +355,14 @@ testSuite.addTest('Feature Completeness', async () => {
     coreCommands: ['/start', '/help', '/menu', '/status', '/posts', '/agents'],
     adminCommands: ['/broadcast'],
     advancedFeatures: ['scheduling', 'analytics', 'queue', 'sessions'],
-    integrations: ['gemini', 'storage', 'smart-menu']
+    integrations: ['gemini', 'storage', 'smart-menu'],
   };
-  
-  const totalFeatures = Object.values(features).reduce((sum, arr) => sum + arr.length, 0);
-  
+
+  const totalFeatures = Object.values(features).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  );
+
   console.log(`   🎯 AI Commands: ${features.aiCommands.length}`);
   console.log(`   📱 Core Commands: ${features.coreCommands.length}`);
   console.log(`   👑 Admin Commands: ${features.adminCommands.length}`);

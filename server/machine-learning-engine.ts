@@ -4,7 +4,12 @@ import { createHash } from 'crypto';
 export interface MLModel {
   id: string;
   name: string;
-  type: 'classification' | 'regression' | 'clustering' | 'nlp' | 'recommendation';
+  type:
+    | 'classification'
+    | 'regression'
+    | 'clustering'
+    | 'nlp'
+    | 'recommendation';
   algorithm: string;
   accuracy: number;
   precision: number;
@@ -120,7 +125,7 @@ export class MachineLearningEngine {
     try {
       // محاكاة عملية التدريب
       const metrics = await this.simulateTraining(model, trainingData);
-      
+
       model.accuracy = metrics.accuracy;
       model.precision = metrics.precision;
       model.recall = metrics.recall;
@@ -138,7 +143,10 @@ export class MachineLearningEngine {
   }
 
   // محاكاة عملية التدريب
-  private async simulateTraining(model: MLModel, trainingData: MLTrainingData[]): Promise<{
+  private async simulateTraining(
+    model: MLModel,
+    trainingData: MLTrainingData[]
+  ): Promise<{
     accuracy: number;
     precision: number;
     recall: number;
@@ -157,7 +165,7 @@ export class MachineLearningEngine {
       recall += (0.88 - recall) * 0.1;
     }
 
-    const f1Score = 2 * (precision * recall) / (precision + recall);
+    const f1Score = (2 * (precision * recall)) / (precision + recall);
 
     return {
       accuracy: Math.min(0.95, accuracy),
@@ -175,7 +183,7 @@ export class MachineLearningEngine {
     try {
       // محاكاة التنبؤ
       const prediction = await this.simulatePrediction(model, input);
-      
+
       const mlPrediction: MLPrediction = {
         id: this.generateId(),
         modelId,
@@ -198,7 +206,10 @@ export class MachineLearningEngine {
   }
 
   // محاكاة التنبؤ
-  private async simulatePrediction(model: MLModel, input: any): Promise<{
+  private async simulatePrediction(
+    model: MLModel,
+    input: any
+  ): Promise<{
     result: any;
     confidence: number;
     metadata?: Record<string, any>;
@@ -261,9 +272,17 @@ export class MachineLearningEngine {
     keywords: string[];
   } {
     return {
-      sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)],
-      entities: ['person', 'location', 'organization'].slice(0, Math.floor(Math.random() * 3)),
-      keywords: ['keyword1', 'keyword2', 'keyword3'].slice(0, Math.floor(Math.random() * 3)),
+      sentiment: ['positive', 'negative', 'neutral'][
+        Math.floor(Math.random() * 3)
+      ],
+      entities: ['person', 'location', 'organization'].slice(
+        0,
+        Math.floor(Math.random() * 3)
+      ),
+      keywords: ['keyword1', 'keyword2', 'keyword3'].slice(
+        0,
+        Math.floor(Math.random() * 3)
+      ),
     };
   }
 
@@ -331,8 +350,12 @@ export class MachineLearningEngine {
     importance: number;
     examples: number[];
   }> {
-    const features: Array<{ name: string; importance: number; examples: number[] }> = [];
-    
+    const features: Array<{
+      name: string;
+      importance: number;
+      examples: number[];
+    }> = [];
+
     // تحليل بسيط للميزات الرقمية
     if (trainingData.length > 0) {
       const input = trainingData[0].input;
@@ -342,7 +365,10 @@ export class MachineLearningEngine {
             features.push({
               name: key,
               importance: Math.random(),
-              examples: trainingData.slice(0, 5).map(d => d.input[key]).filter(v => typeof v === 'number'),
+              examples: trainingData
+                .slice(0, 5)
+                .map(d => d.input[key])
+                .filter(v => typeof v === 'number'),
             });
           }
         });
@@ -358,8 +384,12 @@ export class MachineLearningEngine {
     importance: number;
     examples: string[];
   }> {
-    const features: Array<{ name: string; importance: number; examples: string[] }> = [];
-    
+    const features: Array<{
+      name: string;
+      importance: number;
+      examples: string[];
+    }> = [];
+
     if (trainingData.length > 0) {
       const input = trainingData[0].input;
       if (typeof input === 'object') {
@@ -368,7 +398,10 @@ export class MachineLearningEngine {
             features.push({
               name: key,
               importance: Math.random(),
-              examples: trainingData.slice(0, 5).map(d => d.input[key]).filter(v => typeof v === 'string'),
+              examples: trainingData
+                .slice(0, 5)
+                .map(d => d.input[key])
+                .filter(v => typeof v === 'string'),
             });
           }
         });
@@ -384,8 +417,12 @@ export class MachineLearningEngine {
     importance: number;
     examples: any[];
   }> {
-    const features: Array<{ name: string; importance: number; examples: any[] }> = [];
-    
+    const features: Array<{
+      name: string;
+      importance: number;
+      examples: any[];
+    }> = [];
+
     if (trainingData.length > 0) {
       const input = trainingData[0].input;
       if (typeof input === 'object') {
@@ -438,17 +475,23 @@ export class MachineLearningEngine {
     const correct = confusionMatrix.reduce((sum, row, i) => sum + row[i], 0);
     const accuracy = correct / total;
 
-    const precision = confusionMatrix.map((row, i) => {
-      const rowSum = row.reduce((sum, val) => sum + val, 0);
-      return rowSum > 0 ? row[i] / rowSum : 0;
-    }).reduce((sum, val) => sum + val, 0) / confusionMatrix.length;
+    const precision =
+      confusionMatrix
+        .map((row, i) => {
+          const rowSum = row.reduce((sum, val) => sum + val, 0);
+          return rowSum > 0 ? row[i] / rowSum : 0;
+        })
+        .reduce((sum, val) => sum + val, 0) / confusionMatrix.length;
 
-    const recall = confusionMatrix.map((row, i) => {
-      const colSum = confusionMatrix.reduce((sum, r) => sum + r[i], 0);
-      return colSum > 0 ? row[i] / colSum : 0;
-    }).reduce((sum, val) => sum + val, 0) / confusionMatrix.length;
+    const recall =
+      confusionMatrix
+        .map((row, i) => {
+          const colSum = confusionMatrix.reduce((sum, r) => sum + r[i], 0);
+          return colSum > 0 ? row[i] / colSum : 0;
+        })
+        .reduce((sum, val) => sum + val, 0) / confusionMatrix.length;
 
-    const f1Score = 2 * (precision * recall) / (precision + recall);
+    const f1Score = (2 * (precision * recall)) / (precision + recall);
 
     return {
       accuracy,
@@ -465,7 +508,7 @@ export class MachineLearningEngine {
     if (!model) return null;
 
     const evaluation = await this.evaluateModel(modelId);
-    
+
     // تحديث مقاييس النموذج
     model.accuracy = evaluation.accuracy;
     model.precision = evaluation.precision;
@@ -478,7 +521,10 @@ export class MachineLearningEngine {
       // تحسين المعاملات
       model.parameters = {
         ...model.parameters,
-        learningRate: Math.max(0.001, (model.parameters.learningRate || 0.01) * 0.9),
+        learningRate: Math.max(
+          0.001,
+          (model.parameters.learningRate || 0.01) * 0.9
+        ),
         regularization: (model.parameters.regularization || 0.1) + 0.01,
       };
     }
@@ -525,6 +571,8 @@ export class MachineLearningEngine {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 }

@@ -19,7 +19,7 @@ export enum ApiProvider {
   GITHUB_ACTIONS = 'github_actions',
   TELEGRAM = 'telegram',
   EMAIL = 'email',
-  WEBHOOK = 'webhook'
+  WEBHOOK = 'webhook',
 }
 
 export interface ApiAction {
@@ -133,7 +133,14 @@ export interface GitHubWorkflowRun {
   id: number;
   name: string;
   status: 'queued' | 'in_progress' | 'completed';
-  conclusion: 'success' | 'failure' | 'neutral' | 'cancelled' | 'skipped' | 'timed_out' | 'action_required';
+  conclusion:
+    | 'success'
+    | 'failure'
+    | 'neutral'
+    | 'cancelled'
+    | 'skipped'
+    | 'timed_out'
+    | 'action_required';
   created_at: string;
   updated_at: string;
   run_number: number;

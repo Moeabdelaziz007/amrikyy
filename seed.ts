@@ -1,4 +1,3 @@
-
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { users } from './shared/schema';
 import postgres from 'postgres';

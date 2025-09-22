@@ -8,7 +8,15 @@ import { URL } from 'url';
 
 // WebSocket message types
 export interface WebSocketMessage {
-  type: 'task_update' | 'execution_update' | 'workspace_update' | 'system_health' | 'alert' | 'notification' | 'data_response' | 'error';
+  type:
+    | 'task_update'
+    | 'execution_update'
+    | 'workspace_update'
+    | 'system_health'
+    | 'alert'
+    | 'notification'
+    | 'data_response'
+    | 'error';
   data: any;
   timestamp: string;
   userId?: string;
@@ -33,7 +41,7 @@ export class AutomationWebSocketServer {
     this.wss = new WebSocketServer({
       server,
       path: '/ws/automation',
-      perMessageDeflate: false
+      perMessageDeflate: false,
     });
 
     this.setupWebSocketServer();
@@ -46,7 +54,7 @@ export class AutomationWebSocketServer {
       this.handleConnection(ws, request);
     });
 
-    this.wss.on('error', (error) => {
+    this.wss.on('error', error => {
       console.error('WebSocket server error:', error);
     });
 
@@ -57,7 +65,9 @@ export class AutomationWebSocketServer {
     try {
       // Extract user info from query params or headers
       const url = new URL(request.url || '', `http://${request.headers.host}`);
-      const token = url.searchParams.get('token') || request.headers.authorization?.replace('Bearer ', '');
+      const token =
+        url.searchParams.get('token') ||
+        request.headers.authorization?.replace('Bearer ', '');
       const workspaceId = url.searchParams.get('workspaceId');
 
       if (!token) {
@@ -74,7 +84,7 @@ export class AutomationWebSocketServer {
         userId,
         workspaceId: workspaceId || undefined,
         subscriptions: ['system_health'], // Default subscriptions
-        lastPing: Date.now()
+        lastPing: Date.now(),
       };
 
       this.clients.set(connectionId, connection);
@@ -85,14 +95,14 @@ export class AutomationWebSocketServer {
         type: 'notification',
         data: {
           message: 'Connected to AuraOS Automation',
-          status: 'connected'
+          status: 'connected',
         },
         timestamp: new Date().toISOString(),
-        userId
+        userId,
       });
 
       // Setup message handlers
-      ws.on('message', (data) => {
+      ws.on('message', data => {
         this.handleMessage(connectionId, data);
       });
 
@@ -100,7 +110,7 @@ export class AutomationWebSocketServer {
         this.handleDisconnection(connectionId);
       });
 
-      ws.on('error', (error) => {
+      ws.on('error', error => {
         console.error(`WebSocket error for client ${connectionId}:`, error);
         this.handleDisconnection(connectionId);
       });
@@ -111,7 +121,6 @@ export class AutomationWebSocketServer {
           connection.lastPing = Date.now();
         }
       });
-
     } catch (error) {
       console.error('Error handling WebSocket connection:', error);
       ws.close(1011, 'Server error');
@@ -164,8 +173,13 @@ export class AutomationWebSocketServer {
 
     const { subscriptions } = data;
     if (Array.isArray(subscriptions)) {
-      connection.subscriptions = [...new Set([...connection.subscriptions, ...subscriptions])];
-      console.log(`📡 Client ${connectionId} subscribed to:`, connection.subscriptions);
+      connection.subscriptions = [
+        ...new Set([...connection.subscriptions, ...subscriptions]),
+      ];
+      console.log(
+        `📡 Client ${connectionId} subscribed to:`,
+        connection.subscriptions
+      );
     }
   }
 
@@ -175,8 +189,13 @@ export class AutomationWebSocketServer {
 
     const { subscriptions } = data;
     if (Array.isArray(subscriptions)) {
-      connection.subscriptions = connection.subscriptions.filter(sub => !subscriptions.includes(sub));
-      console.log(`📡 Client ${connectionId} unsubscribed from:`, subscriptions);
+      connection.subscriptions = connection.subscriptions.filter(
+        sub => !subscriptions.includes(sub)
+      );
+      console.log(
+        `📡 Client ${connectionId} unsubscribed from:`,
+        subscriptions
+      );
     }
   }
 
@@ -186,7 +205,7 @@ export class AutomationWebSocketServer {
       this.sendMessage(connection.ws, {
         type: 'notification',
         data: { message: 'pong' },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }
@@ -214,9 +233,9 @@ export class AutomationWebSocketServer {
           break;
         case 'system_health':
           // Simplified response for demo
-          responseData = { 
+          responseData = {
             status: 'healthy',
-            message: 'System health data not implemented in demo' 
+            message: 'System health data not implemented in demo',
           };
           break;
         default:
@@ -227,16 +246,18 @@ export class AutomationWebSocketServer {
       const response: WebSocketMessage = {
         type: 'data_response',
         data: { requestType: type, data: responseData },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
       this.sendMessage(connection.ws, response);
-
     } catch (error) {
       console.error('Error handling get_data request:', error);
       const errMsg: WebSocketMessage = {
         type: 'error',
-        data: { message: 'Failed to fetch data', error: error instanceof Error ? error.message : 'Unknown error' },
-        timestamp: new Date().toISOString()
+        data: {
+          message: 'Failed to fetch data',
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
+        timestamp: new Date().toISOString(),
       };
       this.sendMessage(connection.ws, errMsg);
     }
@@ -245,7 +266,9 @@ export class AutomationWebSocketServer {
   private handleDisconnection(connectionId: string) {
     const connection = this.clients.get(connectionId);
     if (connection) {
-      console.log(`📱 Client disconnected: ${connection.userId} (${connectionId})`);
+      console.log(
+        `📱 Client disconnected: ${connection.userId} (${connectionId})`
+      );
       this.clients.delete(connectionId);
     }
   }
@@ -256,7 +279,7 @@ export class AutomationWebSocketServer {
       type: 'task_update',
       data: taskData,
       timestamp: new Date().toISOString(),
-      ...(workspaceId ? { workspaceId } : {})
+      ...(workspaceId ? { workspaceId } : {}),
     };
     this.broadcast(message, workspaceId);
   }
@@ -266,7 +289,7 @@ export class AutomationWebSocketServer {
       type: 'execution_update',
       data: executionData,
       timestamp: new Date().toISOString(),
-      ...(workspaceId ? { workspaceId } : {})
+      ...(workspaceId ? { workspaceId } : {}),
     };
     this.broadcast(message, workspaceId);
   }
@@ -276,7 +299,7 @@ export class AutomationWebSocketServer {
       type: 'workspace_update',
       data: workspaceData,
       timestamp: new Date().toISOString(),
-      ...(workspaceId ? { workspaceId } : {})
+      ...(workspaceId ? { workspaceId } : {}),
     };
     this.broadcast(message, workspaceId);
   }
@@ -285,7 +308,7 @@ export class AutomationWebSocketServer {
     this.broadcast({
       type: 'system_health',
       data: healthData,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -294,22 +317,24 @@ export class AutomationWebSocketServer {
       type: 'alert',
       data: alertData,
       timestamp: new Date().toISOString(),
-      ...(workspaceId ? { workspaceId } : {})
+      ...(workspaceId ? { workspaceId } : {}),
     };
     this.broadcast(message, workspaceId);
   }
 
   public sendNotification(userId: string, message: string, data?: any) {
-    const connection = Array.from(this.clients.values()).find(c => c.userId === userId);
+    const connection = Array.from(this.clients.values()).find(
+      c => c.userId === userId
+    );
     if (connection) {
       this.sendMessage(connection.ws, {
         type: 'notification',
         data: {
           message,
-          ...data
+          ...data,
         },
         timestamp: new Date().toISOString(),
-        userId
+        userId,
       });
     }
   }
@@ -318,10 +343,10 @@ export class AutomationWebSocketServer {
     const connections = Array.from(this.clients.values()).filter(connection => {
       // Check if client is subscribed to this message type
       if (!connection.subscriptions.includes(message.type)) return false;
-      
+
       // Check workspace filter
       if (workspaceId && connection.workspaceId !== workspaceId) return false;
-      
+
       // Check if connection is still alive
       return this.isConnectionAlive(connection);
     });
@@ -330,7 +355,9 @@ export class AutomationWebSocketServer {
       this.sendMessage(connection.ws, message);
     });
 
-    console.log(`📡 Broadcasted ${message.type} to ${connections.length} clients`);
+    console.log(
+      `📡 Broadcasted ${message.type} to ${connections.length} clients`
+    );
   }
 
   private sendMessage(ws: WebSocket, message: WebSocketMessage) {
@@ -375,20 +402,31 @@ export class AutomationWebSocketServer {
         const connectedClients = this.getConnectedClients();
 
         const healthData = {
-          overall: usedMemPct > 90 || loadAvg > os.cpus().length ? 'degraded' : 'healthy',
+          overall:
+            usedMemPct > 90 || loadAvg > os.cpus().length
+              ? 'degraded'
+              : 'healthy',
           components: {
-            cpu: { status: loadAvg > os.cpus().length ? 'degraded' : 'healthy', value: Number(loadAvg.toFixed(2)), unit: 'load' },
-            memory: { status: usedMemPct > 90 ? 'degraded' : 'healthy', value: Number(usedMemPct.toFixed(1)), unit: '%' },
+            cpu: {
+              status: loadAvg > os.cpus().length ? 'degraded' : 'healthy',
+              value: Number(loadAvg.toFixed(2)),
+              unit: 'load',
+            },
+            memory: {
+              status: usedMemPct > 90 ? 'degraded' : 'healthy',
+              value: Number(usedMemPct.toFixed(1)),
+              unit: '%',
+            },
             disk: { status: 'healthy', value: 0, unit: '%' }, // placeholder without disk probe
             network: { status: 'healthy', value: 0, unit: 'Mbps' }, // placeholder
             database: { status: 'healthy', value: 0, unit: 'ms' }, // placeholder
-            queue: { status: 'healthy', value: 0, unit: 'tasks' }
+            queue: { status: 'healthy', value: 0, unit: 'tasks' },
           },
           meta: {
             uptime,
-            connectedClients
+            connectedClients,
           },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         };
 
         this.broadcastSystemHealth(healthData);
@@ -412,11 +450,17 @@ export class AutomationWebSocketServer {
     return this.clients.size;
   }
 
-  public getClientInfo(): Array<{ userId: string; workspaceId?: string; subscriptions: string[] }> {
+  public getClientInfo(): Array<{
+    userId: string;
+    workspaceId?: string;
+    subscriptions: string[];
+  }> {
     return Array.from(this.clients.values()).map(connection => ({
       userId: connection.userId,
-      ...(connection.workspaceId ? { workspaceId: connection.workspaceId } : {}),
-      subscriptions: connection.subscriptions
+      ...(connection.workspaceId
+        ? { workspaceId: connection.workspaceId }
+        : {}),
+      subscriptions: connection.subscriptions,
     }));
   }
 
@@ -428,7 +472,7 @@ export class AutomationWebSocketServer {
       clearInterval(this.metricsBroadcastInterval);
     }
 
-    this.clients.forEach((connection) => {
+    this.clients.forEach(connection => {
       connection.ws.close(1001, 'Server shutting down');
     });
 
@@ -440,7 +484,9 @@ export class AutomationWebSocketServer {
 // Export singleton instance
 let wsServer: AutomationWebSocketServer | null = null;
 
-export function initializeWebSocketServer(server: any): AutomationWebSocketServer {
+export function initializeWebSocketServer(
+  server: any
+): AutomationWebSocketServer {
   if (!wsServer) {
     wsServer = new AutomationWebSocketServer(server);
   }

@@ -232,7 +232,8 @@ export class EnhancedTravelAgency {
   private bookings: Map<string, TravelBooking> = new Map();
   private aiRecommendations: Map<string, any> = new Map();
   private lastRoutePrices: Map<string, number> = new Map();
-  private alertsEnabled: boolean = (process.env.TRAVEL_TELEGRAM_ALERTS || 'true').toLowerCase() !== 'false';
+  private alertsEnabled: boolean =
+    (process.env.TRAVEL_TELEGRAM_ALERTS || 'true').toLowerCase() !== 'false';
 
   constructor() {
     this.initializeDestinations();
@@ -250,7 +251,12 @@ export class EnhancedTravelAgency {
         coordinates: { latitude: 48.8566, longitude: 2.3522 },
         timezone: 'CET',
         bestTimeToVisit: ['April', 'May', 'September', 'October'],
-        attractions: ['Eiffel Tower', 'Louvre Museum', 'Notre-Dame', 'Champs-Élysées'],
+        attractions: [
+          'Eiffel Tower',
+          'Louvre Museum',
+          'Notre-Dame',
+          'Champs-Élysées',
+        ],
         localCurrency: 'EUR',
         visaRequirements: 'Schengen visa required for most non-EU citizens',
         safetyLevel: 'medium',
@@ -258,8 +264,8 @@ export class EnhancedTravelAgency {
           'Best visited in spring for pleasant weather and fewer crowds',
           'Book museum tickets in advance to avoid long queues',
           'Try local cuisine at neighborhood bistros for authentic experience',
-          'Use public transport - efficient and affordable'
-        ]
+          'Use public transport - efficient and affordable',
+        ],
       },
       {
         id: 'tokyo_japan',
@@ -268,8 +274,20 @@ export class EnhancedTravelAgency {
         city: 'Tokyo',
         coordinates: { latitude: 35.6762, longitude: 139.6503 },
         timezone: 'JST',
-        bestTimeToVisit: ['March', 'April', 'May', 'September', 'October', 'November'],
-        attractions: ['Senso-ji Temple', 'Tokyo Skytree', 'Shibuya Crossing', 'Tsukiji Fish Market'],
+        bestTimeToVisit: [
+          'March',
+          'April',
+          'May',
+          'September',
+          'October',
+          'November',
+        ],
+        attractions: [
+          'Senso-ji Temple',
+          'Tokyo Skytree',
+          'Shibuya Crossing',
+          'Tsukiji Fish Market',
+        ],
         localCurrency: 'JPY',
         visaRequirements: 'Visa-free for 90 days for most countries',
         safetyLevel: 'high',
@@ -277,18 +295,23 @@ export class EnhancedTravelAgency {
           'Spring (March-May) offers cherry blossoms and mild weather',
           'Autumn (September-November) has beautiful foliage',
           'Learn basic Japanese phrases for better experience',
-          'Use JR Pass for efficient train travel'
-        ]
+          'Use JR Pass for efficient train travel',
+        ],
       },
       {
         id: 'new_york_usa',
         name: 'New York City',
         country: 'USA',
         city: 'New York',
-        coordinates: { latitude: 40.7128, longitude: -74.0060 },
+        coordinates: { latitude: 40.7128, longitude: -74.006 },
         timezone: 'EST',
         bestTimeToVisit: ['April', 'May', 'September', 'October'],
-        attractions: ['Statue of Liberty', 'Central Park', 'Times Square', 'Brooklyn Bridge'],
+        attractions: [
+          'Statue of Liberty',
+          'Central Park',
+          'Times Square',
+          'Brooklyn Bridge',
+        ],
         localCurrency: 'USD',
         visaRequirements: 'ESTA required for visa waiver program countries',
         safetyLevel: 'medium',
@@ -296,9 +319,9 @@ export class EnhancedTravelAgency {
           'Book Broadway shows well in advance',
           'Use subway system for efficient city travel',
           'Visit during shoulder seasons for better prices',
-          'Try diverse cuisines in different neighborhoods'
-        ]
-      }
+          'Try diverse cuisines in different neighborhoods',
+        ],
+      },
     ];
 
     destinations.forEach(dest => {
@@ -309,7 +332,12 @@ export class EnhancedTravelAgency {
   private getTelegramConfig() {
     const token = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID;
-    if (!token || !chatId || chatId.includes('YOUR_') || chatId.includes('your_')) {
+    if (
+      !token ||
+      !chatId ||
+      chatId.includes('YOUR_') ||
+      chatId.includes('your_')
+    ) {
       return null;
     }
     return { token, chatId };
@@ -321,7 +349,11 @@ export class EnhancedTravelAgency {
     if (!cfg) return;
     try {
       const url = `https://api.telegram.org/bot${cfg.token}/sendMessage`;
-      await axios.post(url, { chat_id: cfg.chatId, text: message, parse_mode: 'Markdown' });
+      await axios.post(url, {
+        chat_id: cfg.chatId,
+        text: message,
+        parse_mode: 'Markdown',
+      });
     } catch (error: any) {
       console.error('Telegram send failed:', error?.message || error);
     }
@@ -329,7 +361,7 @@ export class EnhancedTravelAgency {
 
   private startAITravelEngine() {
     console.log('✈️ Enhanced AI Travel Agency Engine started');
-    
+
     // Start AI-powered travel monitoring
     setInterval(() => {
       this.runAITravelAnalysis();
@@ -343,8 +375,10 @@ export class EnhancedTravelAgency {
 
   // AI-Powered Flight Search
   async searchFlights(searchParams: FlightSearch): Promise<FlightOption[]> {
-    console.log(`🔍 AI-powered flight search: ${searchParams.origin} → ${searchParams.destination}`);
-    
+    console.log(
+      `🔍 AI-powered flight search: ${searchParams.origin} → ${searchParams.destination}`
+    );
+
     try {
       // Generate AI-powered flight search prompt
       const prompt = `Find the best flight options from ${searchParams.origin} to ${searchParams.destination} 
@@ -370,20 +404,19 @@ export class EnhancedTravelAgency {
       Format as JSON array of flight options.`;
 
       const aiResponse = await generateContent(prompt);
-      
+
       // Parse AI response and create flight options
       const flightOptions = this.parseFlightOptions(aiResponse, searchParams);
-      
+
       // Enhance with AI scoring
       const enhancedOptions = flightOptions.map(option => ({
         ...option,
         aiScore: this.calculateFlightScore(option, searchParams),
-        aiInsights: this.generateFlightInsights(option, searchParams)
+        aiInsights: this.generateFlightInsights(option, searchParams),
       }));
 
       console.log(`✅ Found ${enhancedOptions.length} flight options`);
       return enhancedOptions.sort((a, b) => b.aiScore - a.aiScore);
-
     } catch (error) {
       console.error('Error in AI flight search:', error);
       return [];
@@ -393,7 +426,7 @@ export class EnhancedTravelAgency {
   // AI-Powered Hotel Search
   async searchHotels(searchParams: HotelSearch): Promise<HotelOption[]> {
     console.log(`🏨 AI-powered hotel search in ${searchParams.destination}`);
-    
+
     try {
       const prompt = `Find the best hotel options in ${searchParams.destination} 
       for check-in ${searchParams.checkIn} and check-out ${searchParams.checkOut}.
@@ -419,20 +452,19 @@ export class EnhancedTravelAgency {
       Format as JSON array of hotel options.`;
 
       const aiResponse = await generateContent(prompt);
-      
+
       // Parse AI response and create hotel options
       const hotelOptions = this.parseHotelOptions(aiResponse, searchParams);
-      
+
       // Enhance with AI scoring
       const enhancedOptions = hotelOptions.map(option => ({
         ...option,
         aiScore: this.calculateHotelScore(option, searchParams),
-        aiInsights: this.generateHotelInsights(option, searchParams)
+        aiInsights: this.generateHotelInsights(option, searchParams),
       }));
 
       console.log(`✅ Found ${enhancedOptions.length} hotel options`);
       return enhancedOptions.sort((a, b) => b.aiScore - a.aiScore);
-
     } catch (error) {
       console.error('Error in AI hotel search:', error);
       return [];
@@ -440,13 +472,18 @@ export class EnhancedTravelAgency {
   }
 
   // AI-Powered Travel Recommendations
-  async getPersonalizedRecommendations(userId: string, destination: string): Promise<TravelPackage[]> {
-    console.log(`🎯 Generating personalized travel recommendations for ${userId} in ${destination}`);
-    
+  async getPersonalizedRecommendations(
+    userId: string,
+    destination: string
+  ): Promise<TravelPackage[]> {
+    console.log(
+      `🎯 Generating personalized travel recommendations for ${userId} in ${destination}`
+    );
+
     try {
       const userProfile = await this.getUserProfile(userId);
       const destinationInfo = this.destinations.get(destination);
-      
+
       if (!destinationInfo) {
         throw new Error('Destination not found');
       }
@@ -481,10 +518,11 @@ export class EnhancedTravelAgency {
 
       const aiResponse = await generateContent(prompt);
       const packages = this.parseTravelPackages(aiResponse, destinationInfo);
-      
-      console.log(`✅ Generated ${packages.length} personalized travel packages`);
-      return packages;
 
+      console.log(
+        `✅ Generated ${packages.length} personalized travel packages`
+      );
+      return packages;
     } catch (error) {
       console.error('Error generating personalized recommendations:', error);
       return [];
@@ -494,13 +532,15 @@ export class EnhancedTravelAgency {
   // Intelligent Booking System
   async bookTravel(bookingRequest: any): Promise<TravelBooking> {
     console.log(`📋 Processing travel booking: ${bookingRequest.type}`);
-    
+
     try {
       // AI-powered booking validation
       const validationResult = await this.validateBooking(bookingRequest);
-      
+
       if (!validationResult.valid) {
-        throw new Error(`Booking validation failed: ${validationResult.reason}`);
+        throw new Error(
+          `Booking validation failed: ${validationResult.reason}`
+        );
       }
 
       // Generate booking reference
@@ -517,7 +557,7 @@ export class EnhancedTravelAgency {
         details: bookingRequest.details,
         price: bookingRequest.price,
         confirmationCode,
-        cancellationPolicy: this.getCancellationPolicy(bookingRequest.type)
+        cancellationPolicy: this.getCancellationPolicy(bookingRequest.type),
       };
 
       this.bookings.set(booking.id, booking);
@@ -530,7 +570,6 @@ export class EnhancedTravelAgency {
 
       console.log(`✅ Travel booking confirmed: ${booking.confirmationCode}`);
       return booking;
-
     } catch (error) {
       console.error('Error processing travel booking:', error);
       throw error;
@@ -540,7 +579,7 @@ export class EnhancedTravelAgency {
   // AI Travel Analysis and Monitoring
   private async runAITravelAnalysis() {
     console.log('🧠 Running AI travel analysis...');
-    
+
     try {
       // Analyze travel trends and patterns
       const trendsPrompt = `Analyze current travel trends and provide insights for:
@@ -553,16 +592,15 @@ export class EnhancedTravelAgency {
       Provide actionable recommendations for travelers.`;
 
       const trendsResponse = await generateContent(trendsPrompt);
-      
+
       // Store AI insights
       this.aiRecommendations.set('travel_trends', {
         timestamp: new Date(),
         insights: trendsResponse,
-        recommendations: this.extractRecommendations(trendsResponse)
+        recommendations: this.extractRecommendations(trendsResponse),
       });
 
       console.log('✅ AI travel analysis completed');
-
     } catch (error) {
       console.error('Error in AI travel analysis:', error);
     }
@@ -570,22 +608,28 @@ export class EnhancedTravelAgency {
 
   private async monitorTravelPrices() {
     console.log('💰 Monitoring travel prices...');
-    
+
     // Simulate price monitoring for popular routes
     const popularRoutes = [
       { origin: 'NYC', destination: 'LAX' },
       { origin: 'LHR', destination: 'CDG' },
-      { origin: 'NRT', destination: 'ICN' }
+      { origin: 'NRT', destination: 'ICN' },
     ];
 
     for (const route of popularRoutes) {
       try {
-        const priceAlert = await this.checkPriceDrops(route.origin, route.destination);
+        const priceAlert = await this.checkPriceDrops(
+          route.origin,
+          route.destination
+        );
         if (priceAlert) {
           await this.sendPriceAlert(priceAlert);
         }
       } catch (error) {
-        console.error(`Error monitoring prices for ${route.origin}-${route.destination}:`, error);
+        console.error(
+          `Error monitoring prices for ${route.origin}-${route.destination}:`,
+          error
+        );
       }
     }
   }
@@ -602,12 +646,27 @@ export class EnhancedTravelAgency {
 
   private simulateCurrentPrice(origin: string, destination: string): number {
     // Simple simulation: base by route hash + small variance
-    const base = Math.abs(this.generateRouteKey(origin, destination).split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % 400 + 150;
+    const base =
+      (Math.abs(
+        this.generateRouteKey(origin, destination)
+          .split('')
+          .reduce((a, c) => a + c.charCodeAt(0), 0)
+      ) %
+        400) +
+      150;
     const variance = (Math.random() - 0.5) * 40; // ±20
     return Math.max(50, Math.round((base + variance) * 100) / 100);
   }
 
-  private async checkPriceDrops(origin: string, destination: string): Promise<{ route: string; oldPrice: number; newPrice: number; dropPercent: number } | null> {
+  private async checkPriceDrops(
+    origin: string,
+    destination: string
+  ): Promise<{
+    route: string;
+    oldPrice: number;
+    newPrice: number;
+    dropPercent: number;
+  } | null> {
     const key = this.generateRouteKey(origin, destination);
     const current = this.simulateCurrentPrice(origin, destination);
     const prev = this.lastRoutePrices.get(key);
@@ -618,19 +677,32 @@ export class EnhancedTravelAgency {
     const dropPercent = ((prev - current) / prev) * 100;
     const threshold = this.getAlertThresholdPercent();
     if (dropPercent >= threshold) {
-      return { route: `${origin} → ${destination}`, oldPrice: prev, newPrice: current, dropPercent: Math.round(dropPercent * 100) / 100 };
+      return {
+        route: `${origin} → ${destination}`,
+        oldPrice: prev,
+        newPrice: current,
+        dropPercent: Math.round(dropPercent * 100) / 100,
+      };
     }
     return null;
   }
 
-  private async sendPriceAlert(alert: { route: string; oldPrice: number; newPrice: number; dropPercent: number }) {
+  private async sendPriceAlert(alert: {
+    route: string;
+    oldPrice: number;
+    newPrice: number;
+    dropPercent: number;
+  }) {
     const msg = `💸 Price Drop Alert\nRoute: ${alert.route}\nDrop: ${alert.dropPercent}%\nOld: $${alert.oldPrice.toFixed(2)}\nNew: $${alert.newPrice.toFixed(2)}\n\nAction: Consider booking now for best rates.`;
     console.log(msg);
     await this.sendTelegramMessage(msg);
   }
 
   // Utility Methods
-  private parseFlightOptions(aiResponse: string, searchParams: FlightSearch): FlightOption[] {
+  private parseFlightOptions(
+    aiResponse: string,
+    searchParams: FlightSearch
+  ): FlightOption[] {
     // Parse AI response and create structured flight options
     // This would parse the JSON response from AI and create FlightOption objects
     const mockOptions: FlightOption[] = [
@@ -642,42 +714,56 @@ export class EnhancedTravelAgency {
         arrival: { airport: searchParams.destination, time: '12:00' },
         duration: '4h 00m',
         stops: 0,
-        price: { amount: 299, currency: 'USD', breakdown: { base: 250, taxes: 40, fees: 9 } },
+        price: {
+          amount: 299,
+          currency: 'USD',
+          breakdown: { base: 250, taxes: 40, fees: 9 },
+        },
         aircraft: 'Boeing 737',
         amenities: ['WiFi', 'Entertainment', 'Meals'],
         baggageAllowance: { carryOn: '1 bag', checked: '2 bags' },
         aiScore: 0,
-        aiInsights: []
-      }
+        aiInsights: [],
+      },
     ];
-    
+
     return mockOptions;
   }
 
-  private parseHotelOptions(aiResponse: string, searchParams: HotelSearch): HotelOption[] {
+  private parseHotelOptions(
+    aiResponse: string,
+    searchParams: HotelSearch
+  ): HotelOption[] {
     // Parse AI response and create structured hotel options
     const mockOptions: HotelOption[] = [
       {
         id: 'hotel_1',
         name: 'Grand Hotel',
         address: '123 Main St, City Center',
-        coordinates: { latitude: 40.7128, longitude: -74.0060 },
+        coordinates: { latitude: 40.7128, longitude: -74.006 },
         starRating: 4,
         price: { amount: 150, currency: 'USD', perNight: 150, total: 450 },
         amenities: ['WiFi', 'Pool', 'Gym', 'Restaurant'],
         images: [],
-        reviews: { rating: 4.5, count: 1234, highlights: ['Great location', 'Excellent service'] },
+        reviews: {
+          rating: 4.5,
+          count: 1234,
+          highlights: ['Great location', 'Excellent service'],
+        },
         availability: true,
         cancellationPolicy: 'Free cancellation until 24h before check-in',
         aiScore: 0,
-        aiInsights: []
-      }
+        aiInsights: [],
+      },
     ];
-    
+
     return mockOptions;
   }
 
-  private parseTravelPackages(aiResponse: string, destination: TravelDestination): TravelPackage[] {
+  private parseTravelPackages(
+    aiResponse: string,
+    destination: TravelDestination
+  ): TravelPackage[] {
     // Parse AI response and create structured travel packages
     const mockPackages: TravelPackage[] = [
       {
@@ -690,59 +776,68 @@ export class EnhancedTravelAgency {
         highlights: ['City tour', 'Local experiences', 'Cultural sites'],
         itinerary: [],
         aiRecommendations: [],
-        bestFor: ['First-time visitors', 'Cultural enthusiasts']
-      }
+        bestFor: ['First-time visitors', 'Cultural enthusiasts'],
+      },
     ];
-    
+
     return mockPackages;
   }
 
-  private calculateFlightScore(option: FlightOption, searchParams: FlightSearch): number {
+  private calculateFlightScore(
+    option: FlightOption,
+    searchParams: FlightSearch
+  ): number {
     let score = 0;
-    
+
     // Price score (lower price = higher score)
     if (searchParams.budget) {
       const priceRatio = option.price.amount / searchParams.budget.max;
       score += (1 - priceRatio) * 30;
     }
-    
+
     // Duration score (shorter = higher score)
     const durationHours = this.parseDurationToHours(option.duration);
     score += (1 - durationHours / 12) * 25;
-    
+
     // Stops score (fewer stops = higher score)
     score += (1 - option.stops / 3) * 20;
-    
+
     // Amenities score
     score += option.amenities.length * 5;
-    
+
     return Math.min(100, Math.max(0, score));
   }
 
-  private calculateHotelScore(option: HotelOption, searchParams: HotelSearch): number {
+  private calculateHotelScore(
+    option: HotelOption,
+    searchParams: HotelSearch
+  ): number {
     let score = 0;
-    
+
     // Review score
     score += option.reviews.rating * 15;
-    
+
     // Star rating score
     score += option.starRating * 10;
-    
+
     // Price score
     if (searchParams.budget) {
       const priceRatio = option.price.perNight / searchParams.budget.max;
       score += (1 - priceRatio) * 25;
     }
-    
+
     // Amenities score
     score += option.amenities.length * 3;
-    
+
     return Math.min(100, Math.max(0, score));
   }
 
-  private generateFlightInsights(option: FlightOption, searchParams: FlightSearch): string[] {
+  private generateFlightInsights(
+    option: FlightOption,
+    searchParams: FlightSearch
+  ): string[] {
     const insights = [];
-    
+
     if (option.stops === 0) {
       insights.push('Direct flight - no layovers for maximum convenience');
     } else if (option.stops === 1) {
@@ -750,33 +845,36 @@ export class EnhancedTravelAgency {
     } else {
       insights.push('Multiple stops - most economical option');
     }
-    
+
     if (option.price.amount < 300) {
       insights.push('Excellent value for money');
     }
-    
+
     if (option.amenities.includes('WiFi')) {
       insights.push('WiFi available for productivity');
     }
-    
+
     return insights;
   }
 
-  private generateHotelInsights(option: HotelOption, searchParams: HotelSearch): string[] {
+  private generateHotelInsights(
+    option: HotelOption,
+    searchParams: HotelSearch
+  ): string[] {
     const insights = [];
-    
+
     if (option.reviews.rating > 4.5) {
       insights.push('Highly rated by guests');
     }
-    
+
     if (option.starRating >= 4) {
       insights.push('Premium accommodation with excellent amenities');
     }
-    
+
     if (option.amenities.includes('Pool')) {
       insights.push('Swimming pool available for relaxation');
     }
-    
+
     return insights;
   }
 
@@ -801,13 +899,18 @@ export class EnhancedTravelAgency {
       flight: 'Cancellation allowed up to 24 hours before departure',
       hotel: 'Free cancellation until 24 hours before check-in',
       package: 'Cancellation policy varies by component',
-      activity: 'Cancellation allowed up to 48 hours before activity'
+      activity: 'Cancellation allowed up to 48 hours before activity',
     };
-    
-    return policies[type as keyof typeof policies] || 'Standard cancellation policy applies';
+
+    return (
+      policies[type as keyof typeof policies] ||
+      'Standard cancellation policy applies'
+    );
   }
 
-  private async validateBooking(bookingRequest: any): Promise<{ valid: boolean; reason?: string }> {
+  private async validateBooking(
+    bookingRequest: any
+  ): Promise<{ valid: boolean; reason?: string }> {
     // AI-powered booking validation
     const prompt = `Validate this travel booking request:
     Type: ${bookingRequest.type}
@@ -833,7 +936,7 @@ export class EnhancedTravelAgency {
 
   private async getUserProfile(userId: string): Promise<UserTravelProfile> {
     let profile = this.userProfiles.get(userId);
-    
+
     if (!profile) {
       // Create default profile
       profile = {
@@ -843,48 +946,56 @@ export class EnhancedTravelAgency {
           travelStyle: 'comfort',
           interests: ['culture', 'food', 'sightseeing'],
           dietaryRestrictions: [],
-          accessibilityNeeds: []
+          accessibilityNeeds: [],
         },
         history: {
           bookings: [],
           destinations: [],
           airlines: [],
-          hotels: []
+          hotels: [],
         },
         budget: {
           averageTripBudget: 2000,
           currency: 'USD',
-          flexibility: 'medium'
+          flexibility: 'medium',
         },
         aiInsights: {
           preferredTravelTimes: [],
           favoriteDestinations: [],
           spendingPatterns: {},
-          recommendations: []
-        }
+          recommendations: [],
+        },
       };
-      
+
       this.userProfiles.set(userId, profile);
     }
-    
+
     return profile;
   }
 
-  private async updateUserProfile(userId: string, booking: TravelBooking): Promise<void> {
+  private async updateUserProfile(
+    userId: string,
+    booking: TravelBooking
+  ): Promise<void> {
     const profile = await this.getUserProfile(userId);
     profile.history.bookings.push(booking);
     this.userProfiles.set(userId, profile);
   }
 
   private async sendBookingConfirmation(booking: TravelBooking): Promise<void> {
-    console.log(`📧 Sending booking confirmation for ${booking.confirmationCode}`);
+    console.log(
+      `📧 Sending booking confirmation for ${booking.confirmationCode}`
+    );
     const details = `✅ Booking Confirmed\nType: ${booking.type}\nRef: ${booking.reference}\nCode: ${booking.confirmationCode}\nTravel Date: ${booking.travelDate.toISOString().split('T')[0]}\nAmount: ${booking.price.amount} ${booking.price.currency}`;
     await this.sendTelegramMessage(details);
   }
 
   private extractRecommendations(response: string): string[] {
     // Extract actionable recommendations from AI response
-    return ['Book flights 6-8 weeks in advance for best prices', 'Consider shoulder season for fewer crowds'];
+    return [
+      'Book flights 6-8 weeks in advance for best prices',
+      'Consider shoulder season for fewer crowds',
+    ];
   }
 
   // Public API Methods

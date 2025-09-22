@@ -50,17 +50,18 @@ export class GeminiMCPProtocol extends EventEmitter {
   private tools: Map<string, GeminiMCPTool> = new Map();
   private config: GeminiConfig;
   private cache: Map<string, { data: any; expires: number }> = new Map();
-  private rateLimits: Map<string, { count: number; resetTime: number }> = new Map();
+  private rateLimits: Map<string, { count: number; resetTime: number }> =
+    new Map();
   private metrics: Map<string, number> = new Map();
 
   constructor(apiKey: string) {
     super();
     this.config = this.loadConfig(apiKey);
     this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ 
+    this.model = this.genAI.getGenerativeModel({
       model: this.config.model,
       safetySettings: this.config.safetySettings,
-      generationConfig: this.config.generationConfig
+      generationConfig: this.config.generationConfig,
     });
     this.initializeGeminiTools();
   }
@@ -72,27 +73,27 @@ export class GeminiMCPProtocol extends EventEmitter {
       safetySettings: [
         {
           category: 'HARM_CATEGORY_HARASSMENT',
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
         },
         {
           category: 'HARM_CATEGORY_HATE_SPEECH',
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
         },
         {
           category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT',
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE'
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
         },
         {
           category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE'
-        }
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+        },
       ],
       generationConfig: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: 2048
-      }
+        maxOutputTokens: 2048,
+      },
     };
   }
 
@@ -110,15 +111,27 @@ export class GeminiMCPProtocol extends EventEmitter {
       inputSchema: {
         type: 'object',
         properties: {
-          text: { type: 'string', description: 'Text to analyze for sentiment' },
-          detail: { type: 'string', enum: ['simple', 'detailed'], default: 'simple', description: 'Level of analysis detail' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          text: {
+            type: 'string',
+            description: 'Text to analyze for sentiment',
+          },
+          detail: {
+            type: 'string',
+            enum: ['simple', 'detailed'],
+            default: 'simple',
+            description: 'Level of analysis detail',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text']
+        required: ['text'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('sentiment', params);
-      }
+      },
     });
 
     // Gemini-powered Text Summarization
@@ -135,15 +148,28 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           text: { type: 'string', description: 'Text to summarize' },
-          maxLength: { type: 'number', description: 'Maximum summary length in words', default: 100 },
-          style: { type: 'string', enum: ['concise', 'detailed', 'bullet_points'], default: 'concise', description: 'Summary style' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          maxLength: {
+            type: 'number',
+            description: 'Maximum summary length in words',
+            default: 100,
+          },
+          style: {
+            type: 'string',
+            enum: ['concise', 'detailed', 'bullet_points'],
+            default: 'concise',
+            description: 'Summary style',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text']
+        required: ['text'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('summarization', params);
-      }
+      },
     });
 
     // Gemini-powered Translation
@@ -160,16 +186,28 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           text: { type: 'string', description: 'Text to translate' },
-          from: { type: 'string', description: 'Source language', default: 'auto' },
+          from: {
+            type: 'string',
+            description: 'Source language',
+            default: 'auto',
+          },
           to: { type: 'string', description: 'Target language', default: 'en' },
-          context: { type: 'string', description: 'Additional context for better translation', default: '' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          context: {
+            type: 'string',
+            description: 'Additional context for better translation',
+            default: '',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text', 'to']
+        required: ['text', 'to'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('translation', params);
-      }
+      },
     });
 
     // Gemini-powered Code Explanation
@@ -186,16 +224,33 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           code: { type: 'string', description: 'Code to explain' },
-          language: { type: 'string', description: 'Programming language', default: 'javascript' },
-          detail: { type: 'string', enum: ['simple', 'detailed', 'comprehensive'], default: 'detailed', description: 'Explanation detail level' },
-          includeExamples: { type: 'boolean', description: 'Include code examples', default: true },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          language: {
+            type: 'string',
+            description: 'Programming language',
+            default: 'javascript',
+          },
+          detail: {
+            type: 'string',
+            enum: ['simple', 'detailed', 'comprehensive'],
+            default: 'detailed',
+            description: 'Explanation detail level',
+          },
+          includeExamples: {
+            type: 'boolean',
+            description: 'Include code examples',
+            default: true,
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['code']
+        required: ['code'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('code_explanation', params);
-      }
+      },
     });
 
     // Gemini-powered Content Generation
@@ -212,16 +267,35 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           prompt: { type: 'string', description: 'Content generation prompt' },
-          type: { type: 'string', enum: ['article', 'story', 'poem', 'email', 'social_media'], default: 'article', description: 'Type of content' },
-          length: { type: 'string', enum: ['short', 'medium', 'long'], default: 'medium', description: 'Content length' },
-          tone: { type: 'string', enum: ['professional', 'casual', 'creative', 'technical'], default: 'professional', description: 'Content tone' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          type: {
+            type: 'string',
+            enum: ['article', 'story', 'poem', 'email', 'social_media'],
+            default: 'article',
+            description: 'Type of content',
+          },
+          length: {
+            type: 'string',
+            enum: ['short', 'medium', 'long'],
+            default: 'medium',
+            description: 'Content length',
+          },
+          tone: {
+            type: 'string',
+            enum: ['professional', 'casual', 'creative', 'technical'],
+            default: 'professional',
+            description: 'Content tone',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['prompt']
+        required: ['prompt'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('content_generation', params);
-      }
+      },
     });
 
     // Gemini-powered Data Analysis
@@ -237,17 +311,38 @@ export class GeminiMCPProtocol extends EventEmitter {
       inputSchema: {
         type: 'object',
         properties: {
-          data: { type: 'string', description: 'Data to analyze (JSON, CSV, or text)' },
-          analysisType: { type: 'string', enum: ['trends', 'patterns', 'summary', 'insights'], default: 'insights', description: 'Type of analysis' },
-          context: { type: 'string', description: 'Additional context about the data', default: '' },
-          format: { type: 'string', enum: ['json', 'csv', 'text'], default: 'text', description: 'Data format' },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          data: {
+            type: 'string',
+            description: 'Data to analyze (JSON, CSV, or text)',
+          },
+          analysisType: {
+            type: 'string',
+            enum: ['trends', 'patterns', 'summary', 'insights'],
+            default: 'insights',
+            description: 'Type of analysis',
+          },
+          context: {
+            type: 'string',
+            description: 'Additional context about the data',
+            default: '',
+          },
+          format: {
+            type: 'string',
+            enum: ['json', 'csv', 'text'],
+            default: 'text',
+            description: 'Data format',
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['data']
+        required: ['data'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('data_analysis', params);
-      }
+      },
     });
 
     // Gemini-powered Question Answering
@@ -264,16 +359,33 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           question: { type: 'string', description: 'Question to answer' },
-          context: { type: 'string', description: 'Additional context for the question', default: '' },
-          detail: { type: 'string', enum: ['brief', 'detailed', 'comprehensive'], default: 'detailed', description: 'Answer detail level' },
-          includeSources: { type: 'boolean', description: 'Include source information', default: false },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          context: {
+            type: 'string',
+            description: 'Additional context for the question',
+            default: '',
+          },
+          detail: {
+            type: 'string',
+            enum: ['brief', 'detailed', 'comprehensive'],
+            default: 'detailed',
+            description: 'Answer detail level',
+          },
+          includeSources: {
+            type: 'boolean',
+            description: 'Include source information',
+            default: false,
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['question']
+        required: ['question'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('question_answering', params);
-      }
+      },
     });
 
     // Gemini-powered Text Enhancement
@@ -290,16 +402,34 @@ export class GeminiMCPProtocol extends EventEmitter {
         type: 'object',
         properties: {
           text: { type: 'string', description: 'Text to enhance' },
-          enhancement: { type: 'string', enum: ['grammar', 'clarity', 'style', 'tone', 'all'], default: 'all', description: 'Type of enhancement' },
-          targetAudience: { type: 'string', enum: ['general', 'professional', 'academic', 'casual'], default: 'general', description: 'Target audience' },
-          preserveOriginal: { type: 'boolean', description: 'Preserve original meaning', default: true },
-          useCache: { type: 'boolean', description: 'Use cached results', default: true }
+          enhancement: {
+            type: 'string',
+            enum: ['grammar', 'clarity', 'style', 'tone', 'all'],
+            default: 'all',
+            description: 'Type of enhancement',
+          },
+          targetAudience: {
+            type: 'string',
+            enum: ['general', 'professional', 'academic', 'casual'],
+            default: 'general',
+            description: 'Target audience',
+          },
+          preserveOriginal: {
+            type: 'boolean',
+            description: 'Preserve original meaning',
+            default: true,
+          },
+          useCache: {
+            type: 'boolean',
+            description: 'Use cached results',
+            default: true,
+          },
         },
-        required: ['text']
+        required: ['text'],
       },
-      execute: async (params) => {
+      execute: async params => {
         return await this.executeWithGemini('text_enhancement', params);
-      }
+      },
     });
   }
 
@@ -307,17 +437,28 @@ export class GeminiMCPProtocol extends EventEmitter {
     this.tools.set(tool.name, tool);
   }
 
-  private async executeWithGemini(operation: string, params: any): Promise<any> {
+  private async executeWithGemini(
+    operation: string,
+    params: any
+  ): Promise<any> {
     const tool = this.tools.get(`gemini_${operation}`);
     if (!tool) {
-      throw new GeminiMCPError('TOOL_NOT_FOUND', `Tool gemini_${operation} not found`);
+      throw new GeminiMCPError(
+        'TOOL_NOT_FOUND',
+        `Tool gemini_${operation} not found`
+      );
     }
 
     // Check rate limits
     if (tool.rateLimit) {
       const canProceed = await this.checkRateLimit(tool.name, tool.rateLimit);
       if (!canProceed) {
-        throw new GeminiMCPError('RATE_LIMIT_EXCEEDED', `Rate limit exceeded for ${tool.name}`, null, true);
+        throw new GeminiMCPError(
+          'RATE_LIMIT_EXCEEDED',
+          `Rate limit exceeded for ${tool.name}`,
+          null,
+          true
+        );
       }
     }
 
@@ -346,9 +487,12 @@ export class GeminiMCPProtocol extends EventEmitter {
     return result;
   }
 
-  private async executeGeminiOperation(operation: string, params: any): Promise<any> {
+  private async executeGeminiOperation(
+    operation: string,
+    params: any
+  ): Promise<any> {
     const startTime = Date.now();
-    
+
     try {
       let prompt = '';
       let result: any;
@@ -387,7 +531,10 @@ export class GeminiMCPProtocol extends EventEmitter {
           result = await this.callGeminiAPI(prompt);
           break;
         default:
-          throw new GeminiMCPError('UNKNOWN_OPERATION', `Unknown operation: ${operation}`);
+          throw new GeminiMCPError(
+            'UNKNOWN_OPERATION',
+            `Unknown operation: ${operation}`
+          );
       }
 
       const duration = Date.now() - startTime;
@@ -399,9 +546,8 @@ export class GeminiMCPProtocol extends EventEmitter {
         duration,
         timestamp: new Date().toISOString(),
         operation,
-        model: this.config.model
+        model: this.config.model,
       };
-
     } catch (error) {
       const duration = Date.now() - startTime;
       this.incrementMetric('gemini_error_time', duration);
@@ -415,14 +561,20 @@ export class GeminiMCPProtocol extends EventEmitter {
       const response = await result.response;
       return response.text();
     } catch (error) {
-      throw new GeminiMCPError('GEMINI_API_ERROR', `Gemini API error: ${error.message}`, error, true);
+      throw new GeminiMCPError(
+        'GEMINI_API_ERROR',
+        `Gemini API error: ${error.message}`,
+        error,
+        true
+      );
     }
   }
 
   private buildSentimentPrompt(params: any): string {
     const { text, detail } = params;
-    const detailLevel = detail === 'detailed' ? 'detailed analysis' : 'simple analysis';
-    
+    const detailLevel =
+      detail === 'detailed' ? 'detailed analysis' : 'simple analysis';
+
     return `Analyze the sentiment of the following text and provide a ${detailLevel}:
 
 Text: "${text}"
@@ -444,7 +596,7 @@ Format your response as JSON with the following structure:
 
   private buildSummarizationPrompt(params: any): string {
     const { text, maxLength, style } = params;
-    
+
     let styleInstruction = '';
     switch (style) {
       case 'concise':
@@ -473,7 +625,7 @@ Summary:`;
 
   private buildTranslationPrompt(params: any): string {
     const { text, from, to, context } = params;
-    
+
     return `Translate the following text from ${from === 'auto' ? 'the detected language' : from} to ${to}:
 
 Text: "${text}"
@@ -490,7 +642,7 @@ Translation:`;
 
   private buildCodeExplanationPrompt(params: any): string {
     const { code, language, detail, includeExamples } = params;
-    
+
     return `Explain the following ${language} code with ${detail} detail:
 
 Code:
@@ -510,7 +662,7 @@ Format your response in a clear, structured manner.`;
 
   private buildContentGenerationPrompt(params: any): string {
     const { prompt, type, length, tone } = params;
-    
+
     return `Generate ${type} content based on the following prompt:
 
 Prompt: "${prompt}"
@@ -528,7 +680,7 @@ Generated Content:`;
 
   private buildDataAnalysisPrompt(params: any): string {
     const { data, analysisType, context, format } = params;
-    
+
     return `Analyze the following ${format} data and provide ${analysisType} insights:
 
 Data:
@@ -548,7 +700,7 @@ Format your analysis in a clear, structured manner.`;
 
   private buildQuestionAnsweringPrompt(params: any): string {
     const { question, context, detail, includeSources } = params;
-    
+
     return `Answer the following question with ${detail} detail:
 
 Question: ${question}
@@ -566,7 +718,7 @@ Answer:`;
 
   private buildTextEnhancementPrompt(params: any): string {
     const { text, enhancement, targetAudience, preserveOriginal } = params;
-    
+
     return `Enhance the following text for ${enhancement} improvement targeting ${targetAudience} audience:
 
 Original Text: "${text}"
@@ -587,25 +739,32 @@ Enhanced Text:`;
       if (response.trim().startsWith('{') || response.trim().startsWith('[')) {
         return JSON.parse(response);
       }
-      
+
       // For non-JSON responses, return as structured text
       return {
         text: response,
-        formatted: true
+        formatted: true,
       };
     } catch (error) {
       // If JSON parsing fails, return raw response
       return {
         text: response,
-        raw: true
+        raw: true,
       };
     }
   }
 
-  private async checkRateLimit(key: string, limit: number, window: number = 60000): Promise<boolean> {
+  private async checkRateLimit(
+    key: string,
+    limit: number,
+    window: number = 60000
+  ): Promise<boolean> {
     const now = Date.now();
     const bucketKey = `${key}_${Math.floor(now / window)}`;
-    const bucket = this.rateLimits.get(bucketKey) || { count: 0, resetTime: now + window };
+    const bucket = this.rateLimits.get(bucketKey) || {
+      count: 0,
+      resetTime: now + window,
+    };
 
     if (now > bucket.resetTime) {
       bucket.count = 0;
@@ -627,24 +786,31 @@ Enhanced Text:`;
     delay: number = 1000
   ): Promise<T> {
     let lastError: Error;
-    
+
     for (let i = 0; i < maxRetries; i++) {
       try {
         return await operation();
       } catch (error) {
         lastError = error as Error;
         this.incrementMetric('gemini_retries');
-        
+
         if (i === maxRetries - 1) {
           break;
         }
-        
+
         // Exponential backoff
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+        await new Promise(resolve =>
+          setTimeout(resolve, delay * Math.pow(2, i))
+        );
       }
     }
-    
-    throw new GeminiMCPError('MAX_RETRIES_EXCEEDED', `Max retries exceeded: ${lastError.message}`, lastError, false);
+
+    throw new GeminiMCPError(
+      'MAX_RETRIES_EXCEEDED',
+      `Max retries exceeded: ${lastError.message}`,
+      lastError,
+      false
+    );
   }
 
   private getFromCache(key: string): any | null {
@@ -659,7 +825,7 @@ Enhanced Text:`;
   private setCache(key: string, data: any, ttl: number = 300000): void {
     this.cache.set(key, {
       data,
-      expires: Date.now() + ttl
+      expires: Date.now() + ttl,
     });
   }
 
@@ -704,5 +870,7 @@ Enhanced Text:`;
 }
 
 // Export singleton instance
-export const geminiMCP = new GeminiMCPProtocol('AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
+export const geminiMCP = new GeminiMCPProtocol(
+  'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
+);
 export default geminiMCP;

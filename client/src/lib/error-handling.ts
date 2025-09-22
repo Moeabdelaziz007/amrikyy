@@ -6,7 +6,10 @@ export class CustomError extends Error {
 }
 
 export class APIError extends CustomError {
-  constructor(message: string, public status: number) {
+  constructor(
+    message: string,
+    public status: number
+  ) {
     super(message);
     this.status = status;
   }

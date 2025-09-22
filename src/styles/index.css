@@ -16,18 +16,20 @@
   * {
     @apply border-border;
   }
-  
+
   body {
     @apply bg-background text-foreground font-modern;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   /* Dark mode by default */
   html {
     @apply dark;
@@ -40,133 +42,133 @@
   .glass {
     @apply bg-glass-primary backdrop-blur-glass-md border border-glass-border;
   }
-  
+
   .glass-hover {
     @apply transition-all duration-300 hover:bg-glass-secondary hover:border-glass-border-secondary;
   }
-  
+
   /* Neon utilities */
   .neon-glow {
     @apply shadow-glow-md;
   }
-  
+
   .neon-glow-green {
     @apply shadow-glow-green-md;
   }
-  
+
   .neon-glow-blue {
     @apply shadow-glow-blue-md;
   }
-  
+
   .neon-glow-purple {
     @apply shadow-glow-purple-md;
   }
-  
+
   /* Cyberpunk grid background */
   .cyber-grid-bg {
     @apply bg-cyber-grid bg-grid relative;
   }
-  
+
   .cyber-grid-bg::before {
     content: '';
     @apply absolute inset-0 bg-gradient-bg-primary pointer-events-none;
   }
-  
+
   /* Status indicators */
   .status-dot {
     @apply w-2 h-2 rounded-full;
   }
-  
+
   .status-dot.running {
     @apply bg-status-success shadow-glow-green-sm animate-pulse;
   }
-  
+
   .status-dot.error {
     @apply bg-status-error animate-pulse;
     box-shadow: 0 0 8px rgba(255, 0, 64, 0.7);
   }
-  
+
   .status-dot.warning {
     @apply bg-status-warning animate-pulse;
     box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
   }
-  
+
   .status-dot.idle {
     @apply bg-glass-border;
   }
-  
+
   /* Progress bars */
   .progress-bar {
     @apply w-full bg-glass-secondary rounded-full h-2 overflow-hidden;
   }
-  
+
   .progress-fill {
     @apply h-full bg-gradient-accent transition-all duration-300;
   }
-  
+
   .progress-fill.animated {
     @apply animate-cyber-scan;
   }
-  
+
   /* Buttons */
   .btn-cyberpunk {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2 border rounded-md backdrop-blur-glass-sm font-futuristic font-medium uppercase tracking-wider transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
-  
+
   .btn-primary {
     @apply btn-cyberpunk bg-glass-primary border-neon-green text-neon-green hover:bg-neon-green hover:text-bg-primary hover:shadow-glow-green-md;
   }
-  
+
   .btn-secondary {
     @apply btn-cyberpunk bg-glass-primary border-cyber-blue text-cyber-blue hover:bg-cyber-blue hover:text-bg-primary hover:shadow-glow-blue-md;
   }
-  
+
   .btn-success {
     @apply btn-cyberpunk bg-glass-primary border-status-success text-status-success hover:bg-status-success hover:text-bg-primary hover:shadow-glow-green-md;
   }
-  
+
   .btn-danger {
     @apply btn-cyberpunk bg-glass-primary border-status-error text-status-error hover:bg-status-error hover:text-bg-primary;
   }
-  
+
   .btn-danger:hover {
     box-shadow: 0 0 16px rgba(255, 0, 64, 0.7);
   }
-  
+
   /* Cards */
   .card-glass {
     @apply glass glass-hover rounded-lg p-6 relative;
   }
-  
+
   .card-glass::before {
     content: '';
     @apply absolute inset-0 bg-cyber-grid bg-grid opacity-10 rounded-lg pointer-events-none;
   }
-  
+
   /* Form elements */
   .input-cyberpunk {
     @apply glass rounded-md px-3 py-2 text-sm placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-neon-green focus:border-neon-green transition-colors;
   }
-  
+
   /* Scrollbars */
   .scrollbar-cyberpunk {
     scrollbar-width: thin;
     scrollbar-color: var(--cyber-blue) var(--glass-bg-primary);
   }
-  
+
   .scrollbar-cyberpunk::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   .scrollbar-cyberpunk::-webkit-scrollbar-track {
     @apply bg-glass-primary rounded-full;
   }
-  
+
   .scrollbar-cyberpunk::-webkit-scrollbar-thumb {
     @apply bg-cyber-blue rounded-full;
   }
-  
+
   .scrollbar-cyberpunk::-webkit-scrollbar-thumb:hover {
     @apply bg-neon-green;
     box-shadow: var(--glow-green-sm);
@@ -179,53 +181,53 @@
   .text-gradient {
     @apply bg-gradient-primary bg-clip-text text-transparent;
   }
-  
+
   .text-gradient-accent {
     @apply bg-gradient-accent bg-clip-text text-transparent;
   }
-  
+
   /* Animations */
   .animate-glow {
     animation: neon-glow 2s ease-in-out infinite;
   }
-  
+
   .animate-scan {
     animation: cyber-scan 3s linear infinite;
   }
-  
+
   .animate-pulse-neon {
     animation: neon-pulse 2s ease-in-out infinite;
   }
-  
+
   /* Responsive utilities */
   .container-cyberpunk {
     @apply container mx-auto px-4 sm:px-6 lg:px-8;
   }
-  
+
   /* Accessibility utilities */
   .sr-only-focusable:focus {
     @apply not-sr-only;
   }
-  
+
   /* High contrast mode */
   @media (prefers-contrast: high) {
     .glass {
       @apply border-2;
     }
-    
+
     .neon-glow,
     .neon-glow-green,
     .neon-glow-blue,
     .neon-glow-purple {
       box-shadow: none;
     }
-    
+
     .text-gradient,
     .text-gradient-accent {
       @apply bg-none text-neon-green;
     }
   }
-  
+
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
     .animate-glow,
@@ -236,7 +238,7 @@
     .animate-neon-pulse {
       animation: none;
     }
-    
+
     .status-dot.running,
     .status-dot.error,
     .status-dot.warning {
@@ -247,7 +249,8 @@
 
 /* Custom keyframe animations */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -285,12 +288,12 @@
   .card-glass {
     @apply bg-white border-gray-300;
   }
-  
+
   .text-gradient,
   .text-gradient-accent {
     @apply bg-none text-black;
   }
-  
+
   .cyber-grid-bg::before {
     display: none;
   }

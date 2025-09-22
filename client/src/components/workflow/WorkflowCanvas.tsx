@@ -19,7 +19,12 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import { Workflow, NodeData, Connection as WorkflowConnection, NodeType } from '../../types/workflow';
+import {
+  Workflow,
+  NodeData,
+  Connection as WorkflowConnection,
+  NodeType,
+} from '../../types/workflow';
 import { DAGService } from '../../services/dag-service';
 import { WorkflowNode } from './WorkflowNode';
 import { WorkflowEdge } from './WorkflowEdge';
@@ -76,50 +81,59 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
     }))
   );
 
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const [validation, setValidation] = useState(DAGService.validateDAG(workflow));
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance | null>(null);
+  const [validation, setValidation] = useState(
+    DAGService.validateDAG(workflow)
+  );
 
   // معالج تحديث العقدة
-  const handleNodeUpdate = useCallback((nodeId: string, updates: Partial<NodeData>) => {
-    const updatedNodes = workflow.nodes.map(node =>
-      node.id === nodeId ? { ...node, ...updates } : node
-    );
+  const handleNodeUpdate = useCallback(
+    (nodeId: string, updates: Partial<NodeData>) => {
+      const updatedNodes = workflow.nodes.map(node =>
+        node.id === nodeId ? { ...node, ...updates } : node
+      );
 
-    const updatedWorkflow = {
-      ...workflow,
-      nodes: updatedNodes,
-    };
+      const updatedWorkflow = {
+        ...workflow,
+        nodes: updatedNodes,
+      };
 
-    // تحديث التحقق من DAG
-    const newValidation = DAGService.validateDAG(updatedWorkflow);
-    setValidation(newValidation);
+      // تحديث التحقق من DAG
+      const newValidation = DAGService.validateDAG(updatedWorkflow);
+      setValidation(newValidation);
 
-    onWorkflowChange(updatedWorkflow);
-  }, [workflow, onWorkflowChange]);
+      onWorkflowChange(updatedWorkflow);
+    },
+    [workflow, onWorkflowChange]
+  );
 
   // معالج إضافة اتصال جديد
-  const onConnect = useCallback((connection: Connection) => {
-    const newConnection: WorkflowConnection = {
-      id: `conn_${Date.now()}`,
-      source: connection.source!,
-      target: connection.target!,
-      sourceHandle: connection.sourceHandle,
-      targetHandle: connection.targetHandle,
-      type: 'default',
-    };
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      const newConnection: WorkflowConnection = {
+        id: `conn_${Date.now()}`,
+        source: connection.source!,
+        target: connection.target!,
+        sourceHandle: connection.sourceHandle,
+        targetHandle: connection.targetHandle,
+        type: 'default',
+      };
 
-    const updatedConnections = [...workflow.connections, newConnection];
-    const updatedWorkflow = {
-      ...workflow,
-      connections: updatedConnections,
-    };
+      const updatedConnections = [...workflow.connections, newConnection];
+      const updatedWorkflow = {
+        ...workflow,
+        connections: updatedConnections,
+      };
 
-    // تحديث التحقق من DAG
-    const newValidation = DAGService.validateDAG(updatedWorkflow);
-    setValidation(newValidation);
+      // تحديث التحقق من DAG
+      const newValidation = DAGService.validateDAG(updatedWorkflow);
+      setValidation(newValidation);
 
-    onWorkflowChange(updatedWorkflow);
-  }, [workflow, onWorkflowChange]);
+      onWorkflowChange(updatedWorkflow);
+    },
+    [workflow, onWorkflowChange]
+  );
 
   // معالج إسقاط العقدة
   const [, drop] = useDrop({
@@ -211,7 +225,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         <Controls className="bg-gray-800 border-gray-600" />
         <MiniMap
           className="bg-gray-800 border-gray-600"
-          nodeColor={(node) => {
+          nodeColor={node => {
             switch (node.data?.type) {
               case NodeType.START:
                 return '#10b981';
@@ -227,7 +241,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
             }
           }}
         />
-        
+
         {/* مؤشر التحقق من DAG */}
         {!validation.isValid && (
           <div className="absolute top-4 right-4 bg-red-600 text-white p-3 rounded-lg shadow-lg max-w-md">
@@ -261,7 +275,9 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
 };
 
 // مكون رئيسي مع DndProvider
-export const WorkflowCanvasWithProvider: React.FC<WorkflowCanvasProps> = (props) => (
+export const WorkflowCanvasWithProvider: React.FC<
+  WorkflowCanvasProps
+> = props => (
   <DndProvider backend={HTML5Backend}>
     <ReactFlowProvider>
       <WorkflowCanvas {...props} />

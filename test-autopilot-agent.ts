@@ -1,4 +1,3 @@
-
 import { AutopilotAgent } from './server/autopilot-agent.js';
 
 class AutopilotAgentTestSuite {
@@ -11,9 +10,9 @@ class AutopilotAgentTestSuite {
 
   async runTests() {
     console.log('🚀 Starting Autopilot Agent Test Suite...');
-    
+
     await this.testInitialization();
-    
+
     console.log('✅ Autopilot Agent tests completed!');
   }
 

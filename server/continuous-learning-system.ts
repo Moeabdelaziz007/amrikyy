@@ -168,17 +168,22 @@ export class ContinuousLearningSystem {
   }
 
   // تحديث تقدم التعلم
-  private async updateLearningProgress(session: LearningSession): Promise<void> {
+  private async updateLearningProgress(
+    session: LearningSession
+  ): Promise<void> {
     const userProgress = this.progress.get(session.userId) || [];
-    
+
     // تحليل التفاعلات لتحديد التقدم
     const interactions = session.interactions;
-    const learningValue = interactions.reduce((sum, interaction) => sum + interaction.learningValue, 0);
-    
+    const learningValue = interactions.reduce(
+      (sum, interaction) => sum + interaction.learningValue,
+      0
+    );
+
     // تحديث التقدم لكل هدف تعليمي
     session.learningGoals.forEach(goal => {
       let progress = userProgress.find(p => p.topic === goal);
-      
+
       if (!progress) {
         progress = {
           id: this.generateId(),
@@ -196,7 +201,10 @@ export class ContinuousLearningSystem {
       // تحديث التقدم
       const progressIncrease = Math.min(10, learningValue / 10); // زيادة تصل إلى 10%
       progress.progress = Math.min(100, progress.progress + progressIncrease);
-      progress.masteryScore = Math.min(100, progress.masteryScore + progressIncrease * 0.8);
+      progress.masteryScore = Math.min(
+        100,
+        progress.masteryScore + progressIncrease * 0.8
+      );
       progress.lastUpdated = new Date();
 
       // تحديث المستوى
@@ -229,7 +237,9 @@ export class ContinuousLearningSystem {
   }
 
   // إنشاء مسار تعليمي
-  async createLearningPath(pathData: Omit<LearningPath, 'id' | 'createdAt' | 'updatedAt'>): Promise<LearningPath> {
+  async createLearningPath(
+    pathData: Omit<LearningPath, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<LearningPath> {
     const path: LearningPath = {
       id: this.generateId(),
       createdAt: new Date(),
@@ -284,25 +294,36 @@ export class ContinuousLearningSystem {
   }
 
   // الحصول على التوصيات التعليمية
-  async getLearningRecommendations(userId: string, limit: number = 5): Promise<{
+  async getLearningRecommendations(
+    userId: string,
+    limit: number = 5
+  ): Promise<{
     paths: LearningPath[];
     resources: LearningResource[];
     assessments: LearningAssessment[];
   }> {
     const userProgress = this.progress.get(userId) || [];
-    const userSessions = Array.from(this.sessions.values()).filter(s => s.userId === userId);
-    
+    const userSessions = Array.from(this.sessions.values()).filter(
+      s => s.userId === userId
+    );
+
     // تحليل نقاط القوة والضعف
-    const strengths = userProgress.filter(p => p.masteryScore > 70).map(p => p.topic);
-    const weaknesses = userProgress.filter(p => p.masteryScore < 30).map(p => p.topic);
-    
+    const strengths = userProgress
+      .filter(p => p.masteryScore > 70)
+      .map(p => p.topic);
+    const weaknesses = userProgress
+      .filter(p => p.masteryScore < 30)
+      .map(p => p.topic);
+
     // العثور على المسارات المناسبة
     const recommendedPaths = Array.from(this.paths.values())
       .filter(path => {
         // مسارات تناسب نقاط الضعف
-        return weaknesses.some(weakness => path.topics.includes(weakness)) ||
-               // مسارات جديدة لم يتم استكشافها
-               !path.topics.some(topic => userProgress.some(p => p.topic === topic));
+        return (
+          weaknesses.some(weakness => path.topics.includes(weakness)) ||
+          // مسارات جديدة لم يتم استكشافها
+          !path.topics.some(topic => userProgress.some(p => p.topic === topic))
+        );
       })
       .sort((a, b) => {
         // ترتيب حسب الصعوبة المناسبة
@@ -333,22 +354,30 @@ export class ContinuousLearningSystem {
   }
 
   // تحديد المستوى العام للمستخدم
-  private getUserOverallLevel(userProgress: LearningProgress[]): 'beginner' | 'intermediate' | 'advanced' {
+  private getUserOverallLevel(
+    userProgress: LearningProgress[]
+  ): 'beginner' | 'intermediate' | 'advanced' {
     if (userProgress.length === 0) return 'beginner';
-    
-    const averageMastery = userProgress.reduce((sum, p) => sum + p.masteryScore, 0) / userProgress.length;
-    
+
+    const averageMastery =
+      userProgress.reduce((sum, p) => sum + p.masteryScore, 0) /
+      userProgress.length;
+
     if (averageMastery >= 70) return 'advanced';
     if (averageMastery >= 40) return 'intermediate';
     return 'beginner';
   }
 
   // حساب مطابقة الصعوبة
-  private getDifficultyMatch(pathDifficulty: string, userLevel: string): number {
+  private getDifficultyMatch(
+    pathDifficulty: string,
+    userLevel: string
+  ): number {
     const difficultyMap = { beginner: 1, intermediate: 2, advanced: 3 };
     const userLevelNum = difficultyMap[userLevel as keyof typeof difficultyMap];
-    const pathDifficultyNum = difficultyMap[pathDifficulty as keyof typeof difficultyMap];
-    
+    const pathDifficultyNum =
+      difficultyMap[pathDifficulty as keyof typeof difficultyMap];
+
     // أفضل مطابقة عندما تكون الصعوبة أعلى بقليل من مستوى المستخدم
     return 1 - Math.abs(userLevelNum - pathDifficultyNum) / 3;
   }
@@ -363,24 +392,34 @@ export class ContinuousLearningSystem {
     achievements: number;
     recommendations: string[];
   } {
-    const userSessions = Array.from(this.sessions.values()).filter(s => s.userId === userId);
+    const userSessions = Array.from(this.sessions.values()).filter(
+      s => s.userId === userId
+    );
     const userProgress = this.progress.get(userId) || [];
-    
-    const totalSessions = userSessions.length;
-    const totalInteractions = userSessions.reduce((sum, session) => sum + session.interactions.length, 0);
-    
-    const averageSessionDuration = userSessions.length > 0
-      ? userSessions.reduce((sum, session) => {
-          const duration = session.endTime 
-            ? session.endTime.getTime() - session.startTime.getTime()
-            : 0;
-          return sum + duration;
-        }, 0) / userSessions.length / (1000 * 60) // تحويل إلى دقائق
-      : 0;
 
-    const learningVelocity = userProgress.length > 0
-      ? userProgress.reduce((sum, p) => sum + p.progress, 0) / userProgress.length
-      : 0;
+    const totalSessions = userSessions.length;
+    const totalInteractions = userSessions.reduce(
+      (sum, session) => sum + session.interactions.length,
+      0
+    );
+
+    const averageSessionDuration =
+      userSessions.length > 0
+        ? userSessions.reduce((sum, session) => {
+            const duration = session.endTime
+              ? session.endTime.getTime() - session.startTime.getTime()
+              : 0;
+            return sum + duration;
+          }, 0) /
+          userSessions.length /
+          (1000 * 60) // تحويل إلى دقائق
+        : 0;
+
+    const learningVelocity =
+      userProgress.length > 0
+        ? userProgress.reduce((sum, p) => sum + p.progress, 0) /
+          userProgress.length
+        : 0;
 
     const masteryDistribution = {
       beginner: userProgress.filter(p => p.level === 'beginner').length,
@@ -389,19 +428,22 @@ export class ContinuousLearningSystem {
       expert: userProgress.filter(p => p.level === 'expert').length,
     };
 
-    const achievements = userProgress.reduce((sum, p) => sum + p.milestones.length, 0);
+    const achievements = userProgress.reduce(
+      (sum, p) => sum + p.milestones.length,
+      0
+    );
 
     // توليد التوصيات
     const recommendations: string[] = [];
-    
+
     if (learningVelocity < 30) {
       recommendations.push('Consider increasing study frequency');
     }
-    
+
     if (masteryDistribution.beginner > masteryDistribution.advanced) {
       recommendations.push('Focus on advancing to intermediate level');
     }
-    
+
     if (averageSessionDuration < 15) {
       recommendations.push('Try longer study sessions for better retention');
     }
@@ -426,10 +468,12 @@ export class ContinuousLearningSystem {
     achievements: LearningMilestone[];
   } {
     const userProgress = this.progress.get(userId) || [];
-    const userSessions = Array.from(this.sessions.values()).filter(s => s.userId === userId);
+    const userSessions = Array.from(this.sessions.values()).filter(
+      s => s.userId === userId
+    );
     const performance = this.analyzeLearningPerformance(userId);
     const recommendations = this.getLearningRecommendations(userId);
-    
+
     const allAchievements = userProgress.flatMap(p => p.milestones);
 
     return {
@@ -487,6 +531,8 @@ export class ContinuousLearningSystem {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 }

@@ -115,18 +115,46 @@ export interface UserAction {
   details?: Record<string, any>;
 }
 
-export type ActionType = 
-  | 'login' | 'logout' | 'signup'
-  | 'create' | 'update' | 'delete' | 'view' | 'search'
-  | 'like' | 'unlike' | 'share' | 'comment'
-  | 'execute' | 'pause' | 'resume' | 'stop'
-  | 'chat' | 'message' | 'command'
-  | 'navigate' | 'scroll' | 'click' | 'hover'
-  | 'upload' | 'download' | 'export' | 'import'
-  | 'error' | 'warning' | 'info';
+export type ActionType =
+  | 'login'
+  | 'logout'
+  | 'signup'
+  | 'create'
+  | 'update'
+  | 'delete'
+  | 'view'
+  | 'search'
+  | 'like'
+  | 'unlike'
+  | 'share'
+  | 'comment'
+  | 'execute'
+  | 'pause'
+  | 'resume'
+  | 'stop'
+  | 'chat'
+  | 'message'
+  | 'command'
+  | 'navigate'
+  | 'scroll'
+  | 'click'
+  | 'hover'
+  | 'upload'
+  | 'download'
+  | 'export'
+  | 'import'
+  | 'error'
+  | 'warning'
+  | 'info';
 
-export type ActionCategory = 
-  | 'authentication' | 'content' | 'social' | 'workflow' | 'ai' | 'navigation' | 'system';
+export type ActionCategory =
+  | 'authentication'
+  | 'content'
+  | 'social'
+  | 'workflow'
+  | 'ai'
+  | 'navigation'
+  | 'system';
 
 export interface UserSession {
   id: string;
@@ -214,7 +242,7 @@ export const COLLECTIONS = {
   NOTIFICATIONS: 'notifications',
   USER_HISTORY: 'userHistory',
   USER_SESSIONS: 'userSessions',
-  USER_ANALYTICS: 'userAnalytics'
+  USER_ANALYTICS: 'userAnalytics',
 } as const;
 
 // Firestore Query Types

@@ -17,7 +17,11 @@
   --popover-foreground: hsl(210, 20%, 95%);
 
   --primary: hsl(135, 100%, 52%); /* Electric Green */
-  --primary-foreground: hsl(135, 100%, 5%); /* Very dark green for text on primary */
+  --primary-foreground: hsl(
+    135,
+    100%,
+    5%
+  ); /* Very dark green for text on primary */
 
   --secondary: hsl(230, 15%, 25%);
   --secondary-foreground: hsl(210, 20%, 90%);
@@ -26,15 +30,19 @@
   --muted-foreground: hsl(230, 10%, 60%);
 
   --accent: hsl(187, 100%, 50%); /* Cyber Blue */
-  --accent-foreground: hsl(187, 100%, 5%); /* Very dark blue for text on accent */
+  --accent-foreground: hsl(
+    187,
+    100%,
+    5%
+  ); /* Very dark blue for text on accent */
 
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  
+
   --border: hsl(230, 15%, 20%);
   --input: hsl(230, 15%, 25%);
   --ring: hsl(187, 100%, 50%); /* Ring uses Cyber Blue */
-  
+
   --chart-1: hsl(135, 100%, 52%); /* Electric Green */
   --chart-2: hsl(187, 100%, 50%); /* Cyber Blue */
   --chart-3: hsl(277, 100%, 58%); /* Vivid Purple (adjusted for brightness) */
@@ -55,23 +63,37 @@
   --font-sans: 'Rajdhani', sans-serif; /* Fallback for shadcn components */
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
   --radius: 0.75rem;
-  
+
   /* Neon Shadows based on new palette */
   --shadow-2xs: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
   --shadow-xs: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
-  --shadow-sm: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1), 0px 1px 3px 0px hsla(135, 100%, 52%, 0.15);
-  --shadow: 0px 1px 3px 0px hsla(135, 100%, 52%, 0.15), 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
-  --shadow-md: 0px 4px 6px -1px hsla(135, 100%, 52%, 0.15), 0px 2px 4px -1px hsla(135, 100%, 52%, 0.1);
-  --shadow-lg: 0px 10px 15px -3px hsla(135, 100%, 52%, 0.15), 0px 4px 6px -2px hsla(135, 100%, 52%, 0.1);
-  --shadow-xl: 0px 20px 25px -5px hsla(135, 100%, 52%, 0.15), 0px 10px 10px -5px hsla(135, 100%, 52%, 0.08);
+  --shadow-sm:
+    0px 1px 2px 0px hsla(135, 100%, 52%, 0.1),
+    0px 1px 3px 0px hsla(135, 100%, 52%, 0.15);
+  --shadow:
+    0px 1px 3px 0px hsla(135, 100%, 52%, 0.15),
+    0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
+  --shadow-md:
+    0px 4px 6px -1px hsla(135, 100%, 52%, 0.15),
+    0px 2px 4px -1px hsla(135, 100%, 52%, 0.1);
+  --shadow-lg:
+    0px 10px 15px -3px hsla(135, 100%, 52%, 0.15),
+    0px 4px 6px -2px hsla(135, 100%, 52%, 0.1);
+  --shadow-xl:
+    0px 20px 25px -5px hsla(135, 100%, 52%, 0.15),
+    0px 10px 10px -5px hsla(135, 100%, 52%, 0.08);
   --shadow-2xl: 0px 25px 50px -12px hsla(135, 100%, 52%, 0.25);
 
   /* Neon Glow Effects */
-  --neon-glow-sm: 0 0 5px hsla(135, 100%, 52%, 0.4), 0 0 10px hsla(187, 100%, 50%, 0.2);
-  --neon-glow-md: 0 0 10px hsla(135, 100%, 52%, 0.5), 0 0 20px hsla(187, 100%, 50%, 0.3);
-  --neon-glow-lg: 0 0 15px hsla(135, 100%, 52%, 0.6), 0 0 30px hsla(187, 100%, 50%, 0.4);
-  --neon-glow-xl: 0 0 20px hsla(135, 100%, 52%, 0.7), 0 0 40px hsla(187, 100%, 50%, 0.5);
-  
+  --neon-glow-sm:
+    0 0 5px hsla(135, 100%, 52%, 0.4), 0 0 10px hsla(187, 100%, 50%, 0.2);
+  --neon-glow-md:
+    0 0 10px hsla(135, 100%, 52%, 0.5), 0 0 20px hsla(187, 100%, 50%, 0.3);
+  --neon-glow-lg:
+    0 0 15px hsla(135, 100%, 52%, 0.6), 0 0 30px hsla(187, 100%, 50%, 0.4);
+  --neon-glow-xl:
+    0 0 20px hsla(135, 100%, 52%, 0.7), 0 0 40px hsla(187, 100%, 50%, 0.5);
+
   /* Glass Morphism */
   --glass-bg: hsla(230, 15%, 12%, 0.5);
   --glass-border: hsla(230, 15%, 20%, 0.5);
@@ -90,16 +112,24 @@
   --popover-foreground: hsl(210, 20%, 95%);
 
   --primary: hsl(135, 100%, 52%); /* Electric Green */
-  --primary-foreground: hsl(135, 100%, 5%); /* Very dark green for text on primary */
-  
+  --primary-foreground: hsl(
+    135,
+    100%,
+    5%
+  ); /* Very dark green for text on primary */
+
   --secondary: hsl(230, 15%, 25%);
   --secondary-foreground: hsl(210, 20%, 90%);
-  
+
   --muted: hsl(230, 15%, 20%);
   --muted-foreground: hsl(230, 10%, 60%);
-  
+
   --accent: hsl(187, 100%, 50%); /* Cyber Blue */
-  --accent-foreground: hsl(187, 100%, 5%); /* Very dark blue for text on accent */
+  --accent-foreground: hsl(
+    187,
+    100%,
+    5%
+  ); /* Very dark blue for text on accent */
 
   --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
@@ -136,18 +166,55 @@
       linear-gradient(90deg, transparent 98%, hsla(var(--primary) / 0.03) 100%),
       linear-gradient(0deg, transparent 98%, hsla(var(--primary) / 0.03) 100%),
       /* Dynamic radial gradients */
-      radial-gradient(circle at 20% 50%, transparent 20%, hsla(var(--primary) / 0.04) 21%, hsla(var(--primary) / 0.04) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 80% 20%, transparent 20%, hsla(var(--accent) / 0.03) 21%, hsla(var(--accent) / 0.03) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 40% 80%, transparent 20%, hsla(277, 100%, 58% / 0.03) 21%, hsla(277, 100%, 58% / 0.03) 34%, transparent 35%, transparent),
+        radial-gradient(
+          circle at 20% 50%,
+          transparent 20%,
+          hsla(var(--primary) / 0.04) 21%,
+          hsla(var(--primary) / 0.04) 34%,
+          transparent 35%,
+          transparent
+        ),
+      radial-gradient(
+        circle at 80% 20%,
+        transparent 20%,
+        hsla(var(--accent) / 0.03) 21%,
+        hsla(var(--accent) / 0.03) 34%,
+        transparent 35%,
+        transparent
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        transparent 20%,
+        hsla(277, 100%, 58% / 0.03) 21%,
+        hsla(277, 100%, 58% / 0.03) 34%,
+        transparent 35%,
+        transparent
+      ),
       /* Base gradient */
-      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(230, 15%, 10%) 50%, hsl(var(--background)) 100%);
-    background-size: 50px 50px, 50px 50px, 800px 800px, 600px 600px, 700px 700px, 100% 100%;
+        linear-gradient(
+          135deg,
+          hsl(var(--background)) 0%,
+          hsl(230, 15%, 10%) 50%,
+          hsl(var(--background)) 100%
+        );
+    background-size:
+      50px 50px,
+      50px 50px,
+      800px 800px,
+      600px 600px,
+      700px 700px,
+      100% 100%;
     background-attachment: fixed;
     animation: backgroundShift 20s ease-in-out infinite;
   }
 
   /* Enhanced Typography */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-heading tracking-wider;
     font-weight: 700;
     letter-spacing: -0.025em;
@@ -157,7 +224,11 @@
   h1 {
     font-size: 2.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -174,19 +245,41 @@
   }
 
   /* Cyberpunk Font Weights */
-  .font-cyber-light { font-weight: 300; }
-  .font-cyber-normal { font-weight: 400; }
-  .font-cyber-medium { font-weight: 500; }
-  .font-cyber-semibold { font-weight: 600; }
-  .font-cyber-bold { font-weight: 700; }
-  .font-cyber-extrabold { font-weight: 800; }
-  .font-cyber-black { font-weight: 900; }
+  .font-cyber-light {
+    font-weight: 300;
+  }
+  .font-cyber-normal {
+    font-weight: 400;
+  }
+  .font-cyber-medium {
+    font-weight: 500;
+  }
+  .font-cyber-semibold {
+    font-weight: 600;
+  }
+  .font-cyber-bold {
+    font-weight: 700;
+  }
+  .font-cyber-extrabold {
+    font-weight: 800;
+  }
+  .font-cyber-black {
+    font-weight: 900;
+  }
 
   /* Cyberpunk Letter Spacing */
-  .tracking-cyber-tight { letter-spacing: -0.05em; }
-  .tracking-cyber-normal { letter-spacing: -0.025em; }
-  .tracking-cyber-wide { letter-spacing: 0.025em; }
-  .tracking-cyber-wider { letter-spacing: 0.05em; }
+  .tracking-cyber-tight {
+    letter-spacing: -0.05em;
+  }
+  .tracking-cyber-normal {
+    letter-spacing: -0.025em;
+  }
+  .tracking-cyber-wide {
+    letter-spacing: 0.025em;
+  }
+  .tracking-cyber-wider {
+    letter-spacing: 0.05em;
+  }
 }
 
 @layer components {
@@ -200,11 +293,17 @@
   }
 
   .neon-border {
-    box-shadow: 0 0 0 1px rgba(0,255,136,0.25) inset, 0 0 12px rgba(0,255,136,0.15);
+    box-shadow:
+      0 0 0 1px rgba(0, 255, 136, 0.25) inset,
+      0 0 12px rgba(0, 255, 136, 0.15);
   }
 
   .gradient-title {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -212,13 +311,17 @@
   /* Ultra Neon Button Effects */
   .neon-button {
     position: relative;
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
     border: 1px solid hsl(var(--primary));
     box-shadow: var(--neon-glow-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
   }
-  
+
   .neon-button::before {
     content: '';
     position: absolute;
@@ -226,24 +329,29 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
     transition: left 0.5s;
   }
-  
+
   .neon-button:hover::before {
     left: 100%;
   }
-  
+
   .neon-button:hover {
     transform: translateY(-2px);
     box-shadow: var(--neon-glow-lg);
   }
-  
+
   .neon-button:active {
     transform: translateY(0);
     box-shadow: var(--neon-glow-sm);
   }
-  
+
   /* Glass Morphism Cards */
   .glass-card {
     background: var(--glass-bg);
@@ -253,13 +361,13 @@
     box-shadow: var(--neon-glow-sm);
     transition: all 0.3s ease;
   }
-  
+
   .glass-card:hover {
     background: hsla(0, 0%, 6%, 0.9);
     box-shadow: var(--neon-glow-md);
     transform: translateY(-4px);
   }
-  
+
   /* Cyberpunk Text Effects */
   .cyber-text {
     background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
@@ -269,62 +377,65 @@
     text-shadow: 0 0 10px hsl(var(--primary));
     animation: cyber-pulse 3s ease-in-out infinite;
   }
-  
+
   .neon-text {
     color: hsl(var(--primary));
-    text-shadow: 
+    text-shadow:
       0 0 5px hsl(var(--primary)),
       0 0 10px hsl(var(--primary)),
       0 0 15px hsl(var(--primary)),
       0 0 20px hsl(var(--primary));
     animation: neon-flicker 2s ease-in-out infinite alternate;
   }
-  
+
   /* Advanced Neon Glow Classes */
   .neon-glow-sm {
     box-shadow: var(--neon-glow-sm);
   }
-  
+
   .neon-glow-md {
     box-shadow: var(--neon-glow-md);
   }
-  
+
   .neon-glow-lg {
     box-shadow: var(--neon-glow-lg);
   }
-  
+
   .neon-glow-xl {
     box-shadow: var(--neon-glow-xl);
   }
-  
+
   /* Optimized Green Cyberpunk Animations */
   @keyframes cyber-pulse {
-    0%, 100% { 
+    0%,
+    100% {
       opacity: 1;
     }
-    50% { 
+    50% {
       opacity: 0.9;
     }
   }
-  
+
   @keyframes neon-flicker {
-    0%, 100% { 
+    0%,
+    100% {
       opacity: 1;
     }
-    50% { 
+    50% {
       opacity: 0.95;
     }
   }
-  
+
   @keyframes neon-pulse {
-    0%, 100% { 
+    0%,
+    100% {
       opacity: 1;
     }
-    50% { 
+    50% {
       opacity: 0.8;
     }
   }
-  
+
   @keyframes cyber-scan {
     0% {
       transform: translateX(-100%);
@@ -338,7 +449,7 @@
       opacity: 0;
     }
   }
-  
+
   @keyframes matrix-rain {
     0% {
       transform: translateY(-100vh);
@@ -355,9 +466,10 @@
       opacity: 0;
     }
   }
-  
+
   @keyframes hologram-flicker {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
       transform: scale(1);
     }
@@ -374,55 +486,59 @@
       transform: scale(1.01);
     }
   }
-  
+
   /* Animation Classes */
   .animate-neon-pulse {
     animation: neon-pulse 2s ease-in-out infinite;
   }
-  
+
   .animate-cyber-scan {
     animation: cyber-scan 3s linear infinite;
   }
-  
+
   .animate-matrix-rain {
     animation: matrix-rain 4s linear infinite;
   }
-  
+
   .animate-hologram-flicker {
     animation: hologram-flicker 0.5s ease-in-out infinite;
   }
-  
+
   /* Green-Focused Cyberpunk Gradients */
   .gradient-cyber-primary {
-    background: linear-gradient(135deg, 
-      hsl(120, 100%, 60%), 
-      hsl(140, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(120, 100%, 60%),
+      hsl(140, 100%, 60%),
       hsl(160, 100%, 60%)
     );
   }
-  
+
   .gradient-cyber-secondary {
-    background: linear-gradient(135deg, 
-      hsl(100, 100%, 60%), 
-      hsl(120, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(100, 100%, 60%),
+      hsl(120, 100%, 60%),
       hsl(140, 100%, 60%)
     );
   }
-  
+
   .gradient-cyber-tertiary {
-    background: linear-gradient(135deg, 
-      hsl(80, 100%, 60%), 
-      hsl(120, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(80, 100%, 60%),
+      hsl(120, 100%, 60%),
       hsl(160, 100%, 60%)
     );
   }
 
   .gradient-cyber-aurora {
-    background: linear-gradient(135deg, 
-      hsl(100, 100%, 60%), 
-      hsl(120, 100%, 60%), 
-      hsl(140, 100%, 60%), 
-      hsl(160, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(100, 100%, 60%),
+      hsl(120, 100%, 60%),
+      hsl(140, 100%, 60%),
+      hsl(160, 100%, 60%),
       hsl(180, 100%, 60%)
     );
     background-size: 400% 400%;
@@ -430,25 +546,28 @@
   }
 
   .gradient-cyber-matrix {
-    background: linear-gradient(135deg, 
-      hsl(120, 100%, 60%), 
-      hsl(140, 100%, 60%), 
-      hsl(160, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(120, 100%, 60%),
+      hsl(140, 100%, 60%),
+      hsl(160, 100%, 60%),
       hsl(180, 100%, 60%)
     );
   }
 
   .gradient-cyber-synthwave {
-    background: linear-gradient(135deg, 
-      hsl(80, 100%, 60%), 
-      hsl(100, 100%, 60%), 
-      hsl(120, 100%, 60%), 
+    background: linear-gradient(
+      135deg,
+      hsl(80, 100%, 60%),
+      hsl(100, 100%, 60%),
+      hsl(120, 100%, 60%),
       hsl(140, 100%, 60%)
     );
   }
 
   @keyframes aurora-shift {
-    0%, 100% {
+    0%,
+    100% {
       background-position: 0% 50%;
     }
     25% {
@@ -461,30 +580,53 @@
       background-position: 0% 75%;
     }
   }
-  
+
   /* Carbon Texture Background */
   .carbon-texture {
-    background: 
-      radial-gradient(circle at 20% 50%, transparent 20%, rgba(0,255,65,0.03) 21%, rgba(0,255,65,0.03) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 80% 20%, transparent 20%, rgba(0,255,255,0.02) 21%, rgba(0,255,255,0.02) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 40% 80%, transparent 20%, rgba(255,0,255,0.02) 21%, rgba(255,0,255,0.02) 34%, transparent 35%, transparent),
-      linear-gradient(0deg, rgba(0,0,0,0.9) 50%, transparent 50%);
+    background:
+      radial-gradient(
+        circle at 20% 50%,
+        transparent 20%,
+        rgba(0, 255, 65, 0.03) 21%,
+        rgba(0, 255, 65, 0.03) 34%,
+        transparent 35%,
+        transparent
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        transparent 20%,
+        rgba(0, 255, 255, 0.02) 21%,
+        rgba(0, 255, 255, 0.02) 34%,
+        transparent 35%,
+        transparent
+      ),
+      radial-gradient(
+        circle at 40% 80%,
+        transparent 20%,
+        rgba(255, 0, 255, 0.02) 21%,
+        rgba(255, 0, 255, 0.02) 34%,
+        transparent 35%,
+        transparent
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.9) 50%, transparent 50%);
   }
-  
+
   /* Holographic Effects */
   .holographic {
-    background: linear-gradient(45deg, 
-      hsl(120, 100%, 60%), 
-      hsl(180, 100%, 60%), 
-      hsl(240, 100%, 60%), 
+    background: linear-gradient(
+      45deg,
+      hsl(120, 100%, 60%),
+      hsl(180, 100%, 60%),
+      hsl(240, 100%, 60%),
       hsl(300, 100%, 60%)
     );
     background-size: 400% 400%;
     animation: holographic-shift 3s ease-in-out infinite;
   }
-  
+
   @keyframes holographic-shift {
-    0%, 100% {
+    0%,
+    100% {
       background-position: 0% 50%;
     }
     50% {
@@ -493,17 +635,46 @@
   }
 
   @keyframes backgroundShift {
-    0%, 100% {
-      background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    0%,
+    100% {
+      background-position:
+        0% 0%,
+        0% 0%,
+        0% 0%,
+        0% 0%,
+        0% 0%,
+        0% 0%,
+        0% 0%;
     }
     25% {
-      background-position: 10px 10px, 5px 5px, 200px 100px, 150px 50px, 175px 125px, 125px 75px, 0% 0%;
+      background-position:
+        10px 10px,
+        5px 5px,
+        200px 100px,
+        150px 50px,
+        175px 125px,
+        125px 75px,
+        0% 0%;
     }
     50% {
-      background-position: 20px 20px, 10px 10px, 400px 200px, 300px 100px, 350px 250px, 250px 150px, 0% 0%;
+      background-position:
+        20px 20px,
+        10px 10px,
+        400px 200px,
+        300px 100px,
+        350px 250px,
+        250px 150px,
+        0% 0%;
     }
     75% {
-      background-position: 15px 15px, 8px 8px, 300px 150px, 225px 75px, 275px 200px, 200px 125px, 0% 0%;
+      background-position:
+        15px 15px,
+        8px 8px,
+        300px 150px,
+        225px 75px,
+        275px 200px,
+        200px 125px,
+        0% 0%;
     }
   }
 
@@ -539,7 +710,8 @@
   }
 
   @keyframes particleFloat {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0px) translateX(0px) rotate(0deg);
       opacity: 0.3;
     }
@@ -589,7 +761,8 @@
   }
 
   @keyframes pulseSlow {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1);
       opacity: 1;
     }
@@ -600,7 +773,8 @@
   }
 
   @keyframes bounceSlow {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
     }
     50% {
@@ -609,7 +783,8 @@
   }
 
   @keyframes pulseGentle {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
@@ -651,7 +826,8 @@
   }
 
   @keyframes glitchEffect {
-    0%, 100% {
+    0%,
+    100% {
       transform: translate(0);
       filter: hue-rotate(0deg);
     }
@@ -676,13 +852,13 @@
       filter: hue-rotate(0deg);
     }
   }
-  
+
   /* Cyberpunk Borders */
   .cyber-border {
     position: relative;
     border: 1px solid hsl(var(--primary));
   }
-  
+
   .cyber-border::before {
     content: '';
     position: absolute;
@@ -690,9 +866,10 @@
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, 
-      hsl(var(--primary)), 
-      hsl(var(--accent)), 
+    background: linear-gradient(
+      45deg,
+      hsl(var(--primary)),
+      hsl(var(--accent)),
       hsl(var(--primary))
     );
     border-radius: inherit;
@@ -700,57 +877,69 @@
     opacity: 0.5;
     filter: blur(1px);
   }
-  
+
   /* Neon Input Effects */
   .neon-input {
     background: hsl(var(--input));
     border: 1px solid hsl(var(--border));
     transition: all 0.3s ease;
   }
-  
+
   .neon-input:focus {
     border-color: hsl(var(--primary));
     box-shadow: var(--neon-glow-sm);
     outline: none;
   }
-  
+
   /* Cyberpunk Scrollbar */
   .cyber-scrollbar::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   .cyber-scrollbar::-webkit-scrollbar-track {
     background: hsl(var(--carbon-800));
   }
-  
+
   .cyber-scrollbar::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, hsl(var(--primary)), hsl(var(--accent)));
+    background: linear-gradient(
+      180deg,
+      hsl(var(--primary)),
+      hsl(var(--accent))
+    );
     border-radius: 4px;
   }
-  
+
   /* Responsive Neon Design Patterns */
   @media (max-width: 768px) {
     .neon-glow-sm {
-      box-shadow: 0 0 3px hsla(120, 100%, 60%, 0.4), 0 0 6px hsla(120, 100%, 60%, 0.2);
+      box-shadow:
+        0 0 3px hsla(120, 100%, 60%, 0.4),
+        0 0 6px hsla(120, 100%, 60%, 0.2);
     }
-    
+
     .neon-glow-md {
-      box-shadow: 0 0 6px hsla(120, 100%, 60%, 0.5), 0 0 12px hsla(120, 100%, 60%, 0.3);
+      box-shadow:
+        0 0 6px hsla(120, 100%, 60%, 0.5),
+        0 0 12px hsla(120, 100%, 60%, 0.3);
     }
-    
+
     .neon-glow-lg {
-      box-shadow: 0 0 8px hsla(120, 100%, 60%, 0.6), 0 0 16px hsla(120, 100%, 60%, 0.4);
+      box-shadow:
+        0 0 8px hsla(120, 100%, 60%, 0.6),
+        0 0 16px hsla(120, 100%, 60%, 0.4);
     }
-    
+
     .neon-glow-xl {
-      box-shadow: 0 0 10px hsla(120, 100%, 60%, 0.7), 0 0 20px hsla(120, 100%, 60%, 0.5);
+      box-shadow:
+        0 0 10px hsla(120, 100%, 60%, 0.7),
+        0 0 20px hsla(120, 100%, 60%, 0.5);
     }
-    
+
     .glass-card {
       -webkit-backdrop-filter: blur(15px);
       backdrop-filter: blur(15px);
     }
-    
+
     .cyber-scrollbar::-webkit-scrollbar {
       width: 4px;
     }
@@ -758,34 +947,42 @@
 
   @media (max-width: 480px) {
     .neon-glow-sm {
-      box-shadow: 0 0 2px hsla(120, 100%, 60%, 0.3), 0 0 4px hsla(120, 100%, 60%, 0.1);
+      box-shadow:
+        0 0 2px hsla(120, 100%, 60%, 0.3),
+        0 0 4px hsla(120, 100%, 60%, 0.1);
     }
-    
+
     .neon-glow-md {
-      box-shadow: 0 0 4px hsla(120, 100%, 60%, 0.4), 0 0 8px hsla(120, 100%, 60%, 0.2);
+      box-shadow:
+        0 0 4px hsla(120, 100%, 60%, 0.4),
+        0 0 8px hsla(120, 100%, 60%, 0.2);
     }
-    
+
     .neon-glow-lg {
-      box-shadow: 0 0 6px hsla(120, 100%, 60%, 0.5), 0 0 12px hsla(120, 100%, 60%, 0.3);
+      box-shadow:
+        0 0 6px hsla(120, 100%, 60%, 0.5),
+        0 0 12px hsla(120, 100%, 60%, 0.3);
     }
-    
+
     .neon-glow-xl {
-      box-shadow: 0 0 8px hsla(120, 100%, 60%, 0.6), 0 0 16px hsla(120, 100%, 60%, 0.4);
+      box-shadow:
+        0 0 8px hsla(120, 100%, 60%, 0.6),
+        0 0 16px hsla(120, 100%, 60%, 0.4);
     }
-    
+
     .glass-card {
       -webkit-backdrop-filter: blur(10px);
       backdrop-filter: blur(10px);
     }
-    
+
     h1 {
       font-size: 2rem;
     }
-    
+
     h2 {
       font-size: 1.5rem;
     }
-    
+
     h3 {
       font-size: 1.25rem;
     }
@@ -794,27 +991,35 @@
   /* High DPI Display Optimizations */
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .neon-text {
-      text-shadow: 
+      text-shadow:
         0 0 2px hsl(var(--primary)),
         0 0 4px hsl(var(--primary)),
         0 0 6px hsl(var(--primary)),
         0 0 8px hsl(var(--primary));
     }
-    
+
     .neon-glow-sm {
-      box-shadow: 0 0 2px hsla(120, 100%, 60%, 0.6), 0 0 4px hsla(120, 100%, 60%, 0.4);
+      box-shadow:
+        0 0 2px hsla(120, 100%, 60%, 0.6),
+        0 0 4px hsla(120, 100%, 60%, 0.4);
     }
-    
+
     .neon-glow-md {
-      box-shadow: 0 0 4px hsla(120, 100%, 60%, 0.7), 0 0 8px hsla(120, 100%, 60%, 0.5);
+      box-shadow:
+        0 0 4px hsla(120, 100%, 60%, 0.7),
+        0 0 8px hsla(120, 100%, 60%, 0.5);
     }
-    
+
     .neon-glow-lg {
-      box-shadow: 0 0 6px hsla(120, 100%, 60%, 0.8), 0 0 12px hsla(120, 100%, 60%, 0.6);
+      box-shadow:
+        0 0 6px hsla(120, 100%, 60%, 0.8),
+        0 0 12px hsla(120, 100%, 60%, 0.6);
     }
-    
+
     .neon-glow-xl {
-      box-shadow: 0 0 8px hsla(120, 100%, 60%, 0.9), 0 0 16px hsla(120, 100%, 60%, 0.7);
+      box-shadow:
+        0 0 8px hsla(120, 100%, 60%, 0.9),
+        0 0 16px hsla(120, 100%, 60%, 0.7);
     }
   }
 
@@ -831,11 +1036,11 @@
     .animate-cyber-border {
       animation: none;
     }
-    
+
     .neon-text {
       animation: none;
     }
-    
+
     .cyber-text {
       animation: none;
     }
@@ -847,13 +1052,34 @@
       background: hsla(0, 0%, 3%, 0.9);
       border-color: hsla(120, 50%, 20%, 0.4);
     }
-    
+
     .carbon-texture {
-      background: 
-        radial-gradient(circle at 20% 50%, transparent 20%, rgba(0,255,65,0.04) 21%, rgba(0,255,65,0.04) 34%, transparent 35%, transparent),
-        radial-gradient(circle at 80% 20%, transparent 20%, rgba(0,255,255,0.03) 21%, rgba(0,255,255,0.03) 34%, transparent 35%, transparent),
-        radial-gradient(circle at 40% 80%, transparent 20%, rgba(255,0,255,0.03) 21%, rgba(255,0,255,0.03) 34%, transparent 35%, transparent),
-        linear-gradient(0deg, rgba(0,0,0,0.98) 50%, transparent 50%);
+      background:
+        radial-gradient(
+          circle at 20% 50%,
+          transparent 20%,
+          rgba(0, 255, 65, 0.04) 21%,
+          rgba(0, 255, 65, 0.04) 34%,
+          transparent 35%,
+          transparent
+        ),
+        radial-gradient(
+          circle at 80% 20%,
+          transparent 20%,
+          rgba(0, 255, 255, 0.03) 21%,
+          rgba(0, 255, 255, 0.03) 34%,
+          transparent 35%,
+          transparent
+        ),
+        radial-gradient(
+          circle at 40% 80%,
+          transparent 20%,
+          rgba(255, 0, 255, 0.03) 21%,
+          rgba(255, 0, 255, 0.03) 34%,
+          transparent 35%,
+          transparent
+        ),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.98) 50%, transparent 50%);
     }
   }
 }

@@ -480,20 +480,23 @@ export class AIDecisionEngine extends EventEmitter {
    */
   async makeDecision(context: DecisionContext): Promise<Decision> {
     const startTime = Date.now();
-    
+
     try {
       // Analyze context
       const analysis = await this.analyzeContext(context);
-      
+
       // Generate recommendations
       const recommendations = await this.generateRecommendations(analysis);
-      
+
       // Assess risks
       const riskAssessment = await this.assessRisk(recommendations.primary);
-      
+
       // Calculate confidence
-      const confidence = await this.calculateConfidence(analysis, recommendations);
-      
+      const confidence = await this.calculateConfidence(
+        analysis,
+        recommendations
+      );
+
       // Create decision
       const decision: Decision = {
         id: uuidv4(),
@@ -511,13 +514,13 @@ export class AIDecisionEngine extends EventEmitter {
           algorithm: 'neural_network',
           processingTime: Date.now() - startTime,
           dataQuality: analysis.dataQuality,
-          confidenceThreshold: 0.7
-        }
+          confidenceThreshold: 0.7,
+        },
       };
 
       this.decisions.set(decision.id, decision);
       this.emit('decision:made', decision);
-      
+
       return decision;
     } catch (error) {
       this.emit('decision:error', { context, error });
@@ -542,7 +545,7 @@ export class AIDecisionEngine extends EventEmitter {
       confidence: this.calculateConfidenceBreakdown(decision),
       alternatives: this.explainAlternatives(decision.alternatives),
       risks: this.explainRisks(decision.riskAssessment),
-      recommendations: this.generateRecommendations(decision)
+      recommendations: this.generateRecommendations(decision),
     };
 
     return explanation;
@@ -551,7 +554,10 @@ export class AIDecisionEngine extends EventEmitter {
   /**
    * Evaluate a decision outcome
    */
-  async evaluateDecision(decisionId: string, outcome: DecisionOutcome): Promise<Evaluation> {
+  async evaluateDecision(
+    decisionId: string,
+    outcome: DecisionOutcome
+  ): Promise<Evaluation> {
     const decision = this.decisions.get(decisionId);
     if (!decision) {
       throw new Error(`Decision ${decisionId} not found`);
@@ -565,20 +571,26 @@ export class AIDecisionEngine extends EventEmitter {
       performanceImpact: outcome.performanceImpact,
       resourceEfficiency: this.calculateResourceEfficiency(decision, outcome),
       learningInsights: this.extractLearningInsights(decision, outcome),
-      recommendations: this.generateImprovementRecommendations(decision, outcome),
-      timestamp: new Date()
+      recommendations: this.generateImprovementRecommendations(
+        decision,
+        outcome
+      ),
+      timestamp: new Date(),
     };
 
     this.outcomes.set(decisionId, outcome);
     this.emit('decision:evaluated', evaluation);
-    
+
     return evaluation;
   }
 
   /**
    * Learn from decision outcome
    */
-  async learnFromOutcome(decisionId: string, outcome: DecisionOutcome): Promise<void> {
+  async learnFromOutcome(
+    decisionId: string,
+    outcome: DecisionOutcome
+  ): Promise<void> {
     const decision = this.decisions.get(decisionId);
     if (!decision) {
       throw new Error(`Decision ${decisionId} not found`);
@@ -586,20 +598,23 @@ export class AIDecisionEngine extends EventEmitter {
 
     // Update patterns
     await this.updateUsagePatterns(decision, outcome);
-    
+
     // Update models
     await this.updateModels(decision, outcome);
-    
+
     // Update performance metrics
     await this.updatePerformanceMetrics(decision, outcome);
-    
+
     this.emit('decision:learned', { decisionId, outcome });
   }
 
   /**
    * Update AI model
    */
-  async updateModel(modelId: string, trainingData: TrainingData): Promise<ModelUpdate> {
+  async updateModel(
+    modelId: string,
+    trainingData: TrainingData
+  ): Promise<ModelUpdate> {
     const model = this.models.get(modelId);
     if (!model) {
       throw new Error(`Model ${modelId} not found`);
@@ -614,17 +629,17 @@ export class AIDecisionEngine extends EventEmitter {
       recall: await this.calculateModelRecall(model, trainingData),
       f1Score: await this.calculateModelF1Score(model, trainingData),
       lastUpdated: new Date(),
-      changes: await this.identifyModelChanges(model, trainingData)
+      changes: await this.identifyModelChanges(model, trainingData),
     };
 
     // Update model
     model.version = update.version;
     model.accuracy = update.accuracy;
     model.lastUpdated = update.lastUpdated;
-    
+
     this.models.set(modelId, model);
     this.emit('model:updated', update);
-    
+
     return update;
   }
 
@@ -651,8 +666,8 @@ export class AIDecisionEngine extends EventEmitter {
         testAccuracy: model.testAccuracy,
         loss: model.loss,
         epochs: model.epochs,
-        learningRate: model.learningRate
-      }
+        learningRate: model.learningRate,
+      },
     };
 
     return performance;
@@ -661,14 +676,21 @@ export class AIDecisionEngine extends EventEmitter {
   /**
    * Predict user behavior
    */
-  async predictUserBehavior(userId: string, timeframe: TimeFrame): Promise<BehaviorPrediction> {
-    const userPatterns = Array.from(this.patterns.values())
-      .filter(pattern => pattern.context.userId === userId);
-    
-    const prediction = await this.generateBehaviorPrediction(userPatterns, timeframe);
-    
+  async predictUserBehavior(
+    userId: string,
+    timeframe: TimeFrame
+  ): Promise<BehaviorPrediction> {
+    const userPatterns = Array.from(this.patterns.values()).filter(
+      pattern => pattern.context.userId === userId
+    );
+
+    const prediction = await this.generateBehaviorPrediction(
+      userPatterns,
+      timeframe
+    );
+
     this.emit('prediction:generated', { userId, prediction });
-    
+
     return prediction;
   }
 
@@ -677,22 +699,30 @@ export class AIDecisionEngine extends EventEmitter {
    */
   async predictSystemLoad(timeframe: TimeFrame): Promise<LoadPrediction> {
     const historicalData = await this.getHistoricalLoadData(timeframe);
-    const prediction = await this.generateLoadPrediction(historicalData, timeframe);
-    
+    const prediction = await this.generateLoadPrediction(
+      historicalData,
+      timeframe
+    );
+
     this.emit('load:predicted', prediction);
-    
+
     return prediction;
   }
 
   /**
    * Predict resource needs
    */
-  async predictResourceNeeds(timeframe: TimeFrame): Promise<ResourcePrediction> {
+  async predictResourceNeeds(
+    timeframe: TimeFrame
+  ): Promise<ResourcePrediction> {
     const historicalData = await this.getHistoricalResourceData(timeframe);
-    const prediction = await this.generateResourcePrediction(historicalData, timeframe);
-    
+    const prediction = await this.generateResourcePrediction(
+      historicalData,
+      timeframe
+    );
+
     this.emit('resources:predicted', prediction);
-    
+
     return prediction;
   }
 
@@ -703,59 +733,67 @@ export class AIDecisionEngine extends EventEmitter {
     const riskFactors = await this.identifyRiskFactors(action);
     const mitigation = await this.identifyMitigationStrategies(riskFactors);
     const overallRisk = this.calculateOverallRisk(riskFactors);
-    
+
     const assessment: RiskAssessment = {
       level: this.categorizeRiskLevel(overallRisk),
       factors: riskFactors,
       mitigation,
       probability: this.calculateRiskProbability(riskFactors),
       impact: this.calculateRiskImpact(riskFactors),
-      overallRisk
+      overallRisk,
     };
-    
+
     return assessment;
   }
 
   /**
    * Evaluate risk mitigation strategy
    */
-  async evaluateRiskMitigation(strategy: RiskMitigationStrategy): Promise<MitigationEvaluation> {
+  async evaluateRiskMitigation(
+    strategy: RiskMitigationStrategy
+  ): Promise<MitigationEvaluation> {
     const evaluation: MitigationEvaluation = {
       strategy: strategy.name,
       effectiveness: await this.calculateMitigationEffectiveness(strategy),
       cost: await this.calculateMitigationCost(strategy),
       implementation: strategy.implementation,
       timeline: strategy.timeline,
-      dependencies: strategy.dependencies
+      dependencies: strategy.dependencies,
     };
-    
+
     return evaluation;
   }
 
   /**
    * Analyze context for decision making
    */
-  private async analyzeContext(context: DecisionContext): Promise<ContextAnalysis> {
+  private async analyzeContext(
+    context: DecisionContext
+  ): Promise<ContextAnalysis> {
     const analysis: ContextAnalysis = {
       userProfile: await this.analyzeUserProfile(context.userId),
-      environmentFactors: await this.analyzeEnvironmentFactors(context.environment),
+      environmentFactors: await this.analyzeEnvironmentFactors(
+        context.environment
+      ),
       historicalPatterns: await this.analyzeHistoricalPatterns(context.userId),
       currentState: await this.analyzeCurrentState(context.currentState),
       dataQuality: await this.calculateDataQuality(context),
-      relevance: await this.calculateContextRelevance(context)
+      relevance: await this.calculateContextRelevance(context),
     };
-    
+
     return analysis;
   }
 
   /**
    * Generate recommendations based on analysis
    */
-  private async generateRecommendations(analysis: ContextAnalysis): Promise<RecommendationResult> {
+  private async generateRecommendations(
+    analysis: ContextAnalysis
+  ): Promise<RecommendationResult> {
     const recommendations = await this.generateActionRecommendations(analysis);
     const primary = recommendations[0];
     const alternatives = recommendations.slice(1);
-    
+
     return {
       primary,
       alternatives: alternatives.map(alt => ({
@@ -763,10 +801,10 @@ export class AIDecisionEngine extends EventEmitter {
         confidence: alt.confidence,
         reasoning: alt.reasoning,
         pros: alt.pros,
-        cons: alt.cons
+        cons: alt.cons,
       })),
       reasoning: this.generateReasoning(analysis, primary),
-      expectedOutcome: await this.calculateExpectedOutcome(primary)
+      expectedOutcome: await this.calculateExpectedOutcome(primary),
     };
   }
 
@@ -790,7 +828,7 @@ export class AIDecisionEngine extends EventEmitter {
       testAccuracy: 0.83,
       loss: 0.15,
       epochs: 100,
-      learningRate: 0.001
+      learningRate: 0.001,
     });
 
     // Behavior prediction model
@@ -804,12 +842,12 @@ export class AIDecisionEngine extends EventEmitter {
       f1Score: 0.78,
       trainingDataSize: 50000,
       lastUpdated: new Date(),
-      trainingAccuracy: 0.80,
+      trainingAccuracy: 0.8,
       validationAccuracy: 0.78,
       testAccuracy: 0.76,
       loss: 0.22,
       epochs: 150,
-      learningRate: 0.0005
+      learningRate: 0.0005,
     });
 
     // Risk assessment model
@@ -818,17 +856,17 @@ export class AIDecisionEngine extends EventEmitter {
       type: 'random_forest',
       version: 1,
       accuracy: 0.92,
-      precision: 0.90,
+      precision: 0.9,
       recall: 0.94,
       f1Score: 0.92,
       trainingDataSize: 25000,
       lastUpdated: new Date(),
       trainingAccuracy: 0.94,
       validationAccuracy: 0.92,
-      testAccuracy: 0.90,
+      testAccuracy: 0.9,
       loss: 0.08,
       epochs: 50,
-      learningRate: 0.01
+      learningRate: 0.01,
     });
   }
 
@@ -847,15 +885,18 @@ export class AIDecisionEngine extends EventEmitter {
   private async performContinuousLearning(): Promise<void> {
     try {
       // Analyze recent outcomes
-      const recentOutcomes = Array.from(this.outcomes.values())
-        .filter(outcome => Date.now() - outcome.timestamp.getTime() < 3600000); // Last hour
-      
+      const recentOutcomes = Array.from(this.outcomes.values()).filter(
+        outcome => Date.now() - outcome.timestamp.getTime() < 3600000
+      ); // Last hour
+
       if (recentOutcomes.length > 0) {
         await this.updateModelsFromOutcomes(recentOutcomes);
         await this.updatePatternsFromOutcomes(recentOutcomes);
       }
-      
-      this.emit('learning:completed', { outcomesProcessed: recentOutcomes.length });
+
+      this.emit('learning:completed', {
+        outcomesProcessed: recentOutcomes.length,
+      });
     } catch (error) {
       this.emit('learning:error', error);
     }
@@ -867,7 +908,9 @@ export class AIDecisionEngine extends EventEmitter {
     return { userId, preferences: {}, behavior: {} };
   }
 
-  private async analyzeEnvironmentFactors(environment: EnvironmentContext): Promise<any> {
+  private async analyzeEnvironmentFactors(
+    environment: EnvironmentContext
+  ): Promise<any> {
     // Simplified implementation
     return { environment, factors: [] };
   }
@@ -882,17 +925,23 @@ export class AIDecisionEngine extends EventEmitter {
     return { state, analysis: {} };
   }
 
-  private async calculateDataQuality(context: DecisionContext): Promise<number> {
+  private async calculateDataQuality(
+    context: DecisionContext
+  ): Promise<number> {
     // Simplified implementation
     return 0.85;
   }
 
-  private async calculateContextRelevance(context: DecisionContext): Promise<number> {
+  private async calculateContextRelevance(
+    context: DecisionContext
+  ): Promise<number> {
     // Simplified implementation
-    return 0.90;
+    return 0.9;
   }
 
-  private async generateActionRecommendations(analysis: ContextAnalysis): Promise<any[]> {
+  private async generateActionRecommendations(
+    analysis: ContextAnalysis
+  ): Promise<any[]> {
     // Simplified implementation
     return [
       {
@@ -901,8 +950,8 @@ export class AIDecisionEngine extends EventEmitter {
         confidence: 0.85,
         reasoning: 'Based on user patterns',
         pros: ['Efficient', 'Time-saving'],
-        cons: ['Requires setup']
-      }
+        cons: ['Requires setup'],
+      },
     ];
   }
 
@@ -911,15 +960,17 @@ export class AIDecisionEngine extends EventEmitter {
     return 'Based on analysis of user behavior and system state';
   }
 
-  private async calculateExpectedOutcome(action: any): Promise<ExpectedOutcome> {
+  private async calculateExpectedOutcome(
+    action: any
+  ): Promise<ExpectedOutcome> {
     // Simplified implementation
     return {
       success: 0.85,
-      performance: 0.80,
-      userSatisfaction: 0.90,
-      resourceUsage: 0.70,
+      performance: 0.8,
+      userSatisfaction: 0.9,
+      resourceUsage: 0.7,
       timeToComplete: 300,
-      sideEffects: []
+      sideEffects: [],
     };
   }
 
@@ -935,29 +986,33 @@ export class AIDecisionEngine extends EventEmitter {
         weight: 0.4,
         impact: 'positive',
         description: 'Based on historical user actions',
-        evidence: ['Pattern analysis', 'Usage statistics']
-      }
+        evidence: ['Pattern analysis', 'Usage statistics'],
+      },
     ];
   }
 
-  private calculateConfidenceBreakdown(decision: Decision): ConfidenceBreakdown {
+  private calculateConfidenceBreakdown(
+    decision: Decision
+  ): ConfidenceBreakdown {
     // Simplified implementation
     return {
       overall: decision.confidence,
       dataQuality: 0.85,
       modelAccuracy: 0.82,
-      contextRelevance: 0.90,
-      historicalAccuracy: 0.88
+      contextRelevance: 0.9,
+      historicalAccuracy: 0.88,
     };
   }
 
-  private explainAlternatives(alternatives: AlternativeAction[]): AlternativeExplanation[] {
+  private explainAlternatives(
+    alternatives: AlternativeAction[]
+  ): AlternativeExplanation[] {
     // Simplified implementation
     return alternatives.map(alt => ({
       alternative: alt.action.type,
       confidence: alt.confidence,
       reasoning: alt.reasoning,
-      tradeoffs: [...alt.pros, ...alt.cons]
+      tradeoffs: [...alt.pros, ...alt.cons],
     }));
   }
 
@@ -967,7 +1022,7 @@ export class AIDecisionEngine extends EventEmitter {
       risk: factor.type,
       probability: factor.probability,
       impact: factor.description,
-      mitigation: 'Implement safety measures'
+      mitigation: 'Implement safety measures',
     }));
   }
 
@@ -976,64 +1031,103 @@ export class AIDecisionEngine extends EventEmitter {
     return ['Monitor execution', 'Collect feedback', 'Update model if needed'];
   }
 
-  private calculateAccuracy(decision: Decision, outcome: DecisionOutcome): number {
+  private calculateAccuracy(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): number {
     // Simplified implementation
     return outcome.success ? decision.confidence : 1 - decision.confidence;
   }
 
-  private calculateResourceEfficiency(decision: Decision, outcome: DecisionOutcome): number {
+  private calculateResourceEfficiency(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): number {
     // Simplified implementation
     return 0.85;
   }
 
-  private extractLearningInsights(decision: Decision, outcome: DecisionOutcome): string[] {
+  private extractLearningInsights(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): string[] {
     // Simplified implementation
     return ['User preferences updated', 'Pattern recognition improved'];
   }
 
-  private generateImprovementRecommendations(decision: Decision, outcome: DecisionOutcome): string[] {
+  private generateImprovementRecommendations(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): string[] {
     // Simplified implementation
     return ['Adjust confidence threshold', 'Update training data'];
   }
 
-  private async updateUsagePatterns(decision: Decision, outcome: DecisionOutcome): Promise<void> {
+  private async updateUsagePatterns(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): Promise<void> {
     // Simplified implementation
   }
 
-  private async updateModels(decision: Decision, outcome: DecisionOutcome): Promise<void> {
+  private async updateModels(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): Promise<void> {
     // Simplified implementation
   }
 
-  private async updatePerformanceMetrics(decision: Decision, outcome: DecisionOutcome): Promise<void> {
+  private async updatePerformanceMetrics(
+    decision: Decision,
+    outcome: DecisionOutcome
+  ): Promise<void> {
     // Simplified implementation
   }
 
-  private async calculateModelAccuracy(model: any, trainingData: TrainingData): Promise<number> {
+  private async calculateModelAccuracy(
+    model: any,
+    trainingData: TrainingData
+  ): Promise<number> {
     // Simplified implementation
     return 0.85;
   }
 
-  private async calculateModelPrecision(model: any, trainingData: TrainingData): Promise<number> {
+  private async calculateModelPrecision(
+    model: any,
+    trainingData: TrainingData
+  ): Promise<number> {
     // Simplified implementation
     return 0.82;
   }
 
-  private async calculateModelRecall(model: any, trainingData: TrainingData): Promise<number> {
+  private async calculateModelRecall(
+    model: any,
+    trainingData: TrainingData
+  ): Promise<number> {
     // Simplified implementation
     return 0.88;
   }
 
-  private async calculateModelF1Score(model: any, trainingData: TrainingData): Promise<number> {
+  private async calculateModelF1Score(
+    model: any,
+    trainingData: TrainingData
+  ): Promise<number> {
     // Simplified implementation
     return 0.85;
   }
 
-  private async identifyModelChanges(model: any, trainingData: TrainingData): Promise<string[]> {
+  private async identifyModelChanges(
+    model: any,
+    trainingData: TrainingData
+  ): Promise<string[]> {
     // Simplified implementation
     return ['Accuracy improved', 'Precision increased'];
   }
 
-  private async generateBehaviorPrediction(patterns: UsagePattern[], timeframe: TimeFrame): Promise<BehaviorPrediction> {
+  private async generateBehaviorPrediction(
+    patterns: UsagePattern[],
+    timeframe: TimeFrame
+  ): Promise<BehaviorPrediction> {
     // Simplified implementation
     return {
       userId: 'user123',
@@ -1042,7 +1136,7 @@ export class AIDecisionEngine extends EventEmitter {
       timeframe,
       factors: [],
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
@@ -1051,40 +1145,52 @@ export class AIDecisionEngine extends EventEmitter {
     return [];
   }
 
-  private async generateLoadPrediction(historicalData: any[], timeframe: TimeFrame): Promise<LoadPrediction> {
+  private async generateLoadPrediction(
+    historicalData: any[],
+    timeframe: TimeFrame
+  ): Promise<LoadPrediction> {
     // Simplified implementation
     return {
       timeframe,
       predictedLoad: 0.75,
-      confidence: 0.80,
+      confidence: 0.8,
       factors: [],
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private async getHistoricalResourceData(timeframe: TimeFrame): Promise<any[]> {
+  private async getHistoricalResourceData(
+    timeframe: TimeFrame
+  ): Promise<any[]> {
     // Simplified implementation
     return [];
   }
 
-  private async generateResourcePrediction(historicalData: any[], timeframe: TimeFrame): Promise<ResourcePrediction> {
+  private async generateResourcePrediction(
+    historicalData: any[],
+    timeframe: TimeFrame
+  ): Promise<ResourcePrediction> {
     // Simplified implementation
     return {
       timeframe,
       predictions: [],
-      confidence: 0.80,
+      confidence: 0.8,
       recommendations: [],
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
-  private async identifyRiskFactors(action: AutomationAction): Promise<RiskFactor[]> {
+  private async identifyRiskFactors(
+    action: AutomationAction
+  ): Promise<RiskFactor[]> {
     // Simplified implementation
     return [];
   }
 
-  private async identifyMitigationStrategies(riskFactors: RiskFactor[]): Promise<RiskMitigation[]> {
+  private async identifyMitigationStrategies(
+    riskFactors: RiskFactor[]
+  ): Promise<RiskMitigation[]> {
     // Simplified implementation
     return [];
   }
@@ -1094,7 +1200,9 @@ export class AIDecisionEngine extends EventEmitter {
     return 0.3;
   }
 
-  private categorizeRiskLevel(risk: number): 'low' | 'medium' | 'high' | 'critical' {
+  private categorizeRiskLevel(
+    risk: number
+  ): 'low' | 'medium' | 'high' | 'critical' {
     if (risk < 0.25) return 'low';
     if (risk < 0.5) return 'medium';
     if (risk < 0.75) return 'high';
@@ -1111,21 +1219,29 @@ export class AIDecisionEngine extends EventEmitter {
     return 0.4;
   }
 
-  private async calculateMitigationEffectiveness(strategy: RiskMitigationStrategy): Promise<number> {
+  private async calculateMitigationEffectiveness(
+    strategy: RiskMitigationStrategy
+  ): Promise<number> {
     // Simplified implementation
     return 0.85;
   }
 
-  private async calculateMitigationCost(strategy: RiskMitigationStrategy): Promise<number> {
+  private async calculateMitigationCost(
+    strategy: RiskMitigationStrategy
+  ): Promise<number> {
     // Simplified implementation
     return 100;
   }
 
-  private async updateModelsFromOutcomes(outcomes: DecisionOutcome[]): Promise<void> {
+  private async updateModelsFromOutcomes(
+    outcomes: DecisionOutcome[]
+  ): Promise<void> {
     // Simplified implementation
   }
 
-  private async updatePatternsFromOutcomes(outcomes: DecisionOutcome[]): Promise<void> {
+  private async updatePatternsFromOutcomes(
+    outcomes: DecisionOutcome[]
+  ): Promise<void> {
     // Simplified implementation
   }
 }

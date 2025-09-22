@@ -174,7 +174,10 @@ if (typeof firebase !== 'undefined') {
         // Optional: avoid errors on undefined props
         try { 
             if (db.settings && !db._settingsApplied) {
-                db.settings({ ignoreUndefinedProperties: true });
+                db.settings({ 
+                    ignoreUndefinedProperties: true,
+                    merge: true 
+                });
                 db._settingsApplied = true;
             }
         } catch (_) {}
@@ -268,16 +271,18 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // Scroll indicator click
-scrollIndicator.addEventListener('click', () => {
-    const featuresSection = document.querySelector('#features');
-    if (featuresSection) {
-        const offsetTop = featuresSection.offsetTop - 70;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
-        });
-    }
-});
+if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+        const featuresSection = document.querySelector('#features');
+        if (featuresSection) {
+            const offsetTop = featuresSection.offsetTop - 70;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+}
 
 // Intersection Observer for animations
 const observerOptions = {
@@ -445,7 +450,8 @@ document.querySelectorAll('.download-card .btn').forEach(button => {
 });
 
 // Watch demo button interaction
-document.querySelector('.btn-secondary').addEventListener('click', function(e) {
+const heroSecondaryBtn = document.querySelector('.btn-secondary');
+if (heroSecondaryBtn) heroSecondaryBtn.addEventListener('click', function(e) {
     e.preventDefault();
     
     // Create modal for demo video
@@ -624,6 +630,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Error handling for missing elements
+// فحص العناصر بعد تحميل الصفحة بالكامل
+function checkElementsAfterLoad() {
 const elementsToCheck = [
     '.navbar',
     '.hamburger',
@@ -635,8 +643,18 @@ const elementsToCheck = [
 elementsToCheck.forEach(selector => {
     if (!document.querySelector(selector)) {
         console.warn(`Element not found: ${selector}`);
-    }
-});
+        } else {
+            console.log(`✅ Element found: ${selector}`);
+        }
+    });
+}
+
+// تشغيل فحص العناصر بعد تحميل الصفحة
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkElementsAfterLoad);
+} else {
+    checkElementsAfterLoad();
+}
 
 // Enhanced Authentication System with Firebase
 class AuthSystem {
@@ -666,40 +684,40 @@ class AuthSystem {
 
     setupEventListeners() {
         // Login modal
-        document.getElementById('loginBtn').addEventListener('click', () => this.showLoginModal());
-        document.getElementById('closeLogin').addEventListener('click', () => this.hideModal('loginModal'));
-        document.getElementById('signupLink').addEventListener('click', (e) => {
+        document.getElementById('loginBtn')?.addEventListener('click', () => this.showLoginModal());
+        document.getElementById('closeLogin')?.addEventListener('click', () => this.hideModal('loginModal'));
+        document.getElementById('signupLink')?.addEventListener('click', (e) => {
             e.preventDefault();
             this.switchModal('loginModal', 'signupModal');
         });
 
         // Signup modal
-        document.getElementById('closeSignup').addEventListener('click', () => this.hideModal('signupModal'));
-        document.getElementById('loginLink').addEventListener('click', (e) => {
+        document.getElementById('closeSignup')?.addEventListener('click', () => this.hideModal('signupModal'));
+        document.getElementById('loginLink')?.addEventListener('click', (e) => {
             e.preventDefault();
             this.switchModal('signupModal', 'loginModal');
         });
 
         // Forms
-        document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
-        document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
+        document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e));
+        document.getElementById('signupForm')?.addEventListener('submit', (e) => this.handleSignup(e));
 
         // Password toggles
-        document.getElementById('togglePassword').addEventListener('click', () => this.togglePassword('password'));
-        document.getElementById('toggleSignupPassword').addEventListener('click', () => this.togglePassword('signupPassword'));
+        document.getElementById('togglePassword')?.addEventListener('click', () => this.togglePassword('password'));
+        document.getElementById('toggleSignupPassword')?.addEventListener('click', () => this.togglePassword('signupPassword'));
 
         // Password strength
-        document.getElementById('signupPassword').addEventListener('input', () => this.checkPasswordStrength());
+        document.getElementById('signupPassword')?.addEventListener('input', () => this.checkPasswordStrength());
 
         // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+        document.getElementById('logoutBtn')?.addEventListener('click', () => this.logout());
 
         // Guest login
-        document.getElementById('guestLoginBtn').addEventListener('click', () => this.guestLogin());
+        document.getElementById('guestLoginBtn')?.addEventListener('click', () => this.guestLogin());
 
         // Social login buttons
-        document.querySelector('.google-btn').addEventListener('click', () => this.googleLogin());
-        document.querySelector('.github-btn').addEventListener('click', () => this.githubLogin());
+        document.querySelector('.google-btn')?.addEventListener('click', () => this.googleLogin());
+        document.querySelector('.github-btn')?.addEventListener('click', () => this.githubLogin());
 
         // Close modals when clicking outside
         window.addEventListener('click', (e) => {
@@ -966,7 +984,7 @@ class AuthSystem {
     showUserDashboard() {
         // Update navbar
         const loginBtn = document.getElementById('loginBtn');
-        loginBtn.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'none';
 
         // Show user dashboard
         const dashboard = document.getElementById('userDashboard');
@@ -977,16 +995,16 @@ class AuthSystem {
         const displayName = this.currentUser.displayName || this.currentUser.name;
         const email = this.currentUser.email;
         
-        userName.textContent = `Welcome ${this.isGuest ? 'back, Guest' : 'back, ' + displayName}!`;
-        userEmail.textContent = email;
-        userAvatar.src = this.currentUser.photoURL || this.currentUser.avatar;
+        if (userName) userName.textContent = `Welcome ${this.isGuest ? 'back, Guest' : 'back, ' + displayName}!`;
+        if (userEmail) userEmail.textContent = email;
+        if (userAvatar) userAvatar.src = this.currentUser.photoURL || this.currentUser.avatar;
 
         // Add guest indicator if needed
-        if (this.isGuest) {
+        if (this.isGuest && userName) {
             userName.innerHTML += ' <span class="guest-badge">Guest</span>';
         }
 
-        dashboard.style.display = 'block';
+        if (dashboard) dashboard.style.display = 'block';
 
         // Update page title
         document.title = `${displayName} - AuraOS`;
@@ -1142,8 +1160,10 @@ class AuthSystem {
         this.isLoggedIn = false;
         this.isGuest = false;
         
-        document.getElementById('userDashboard').style.display = 'none';
-        document.getElementById('loginBtn').style.display = 'block';
+        const dashboardEl = document.getElementById('userDashboard');
+        const loginBtn2 = document.getElementById('loginBtn');
+        if (dashboardEl) dashboardEl.style.display = 'none';
+        if (loginBtn2) loginBtn2.style.display = 'block';
         document.title = 'AuraOS - Modern Operating System';
     }
 
@@ -1215,6 +1235,293 @@ class AuthSystem {
     }
 }
 
+// Enhanced Learning System Components
+class UserBehaviorAnalysis {
+    constructor() {
+        this.userPatterns = new Map();
+        this.interactionHistory = [];
+        this.preferences = new Map();
+        this.learningStyle = 'adaptive';
+    }
+
+    analyzeUserBehavior(message, response, satisfaction) {
+        const behavior = {
+            timestamp: Date.now(),
+            messageLength: message.length,
+            responseTime: response.responseTime || 0,
+            satisfaction: satisfaction || 0,
+            topic: this.extractTopic(message),
+            complexity: this.analyzeComplexity(message)
+        };
+
+        this.interactionHistory.push(behavior);
+        this.updateUserPatterns(behavior);
+        this.updatePreferences(behavior);
+    }
+
+    extractTopic(message) {
+        const topics = ['download', 'features', 'support', 'pricing', 'demo', 'help'];
+        return topics.find(topic => message.toLowerCase().includes(topic)) || 'general';
+    }
+
+    analyzeComplexity(message) {
+        const words = message.split(' ').length;
+        const hasQuestions = message.includes('?');
+        const hasTechnicalTerms = /[A-Z]{2,}|[0-9]+/.test(message);
+        
+        return words > 10 || hasQuestions || hasTechnicalTerms ? 'complex' : 'simple';
+    }
+
+    updateUserPatterns(behavior) {
+        const pattern = `${behavior.topic}_${behavior.complexity}`;
+        if (!this.userPatterns.has(pattern)) {
+            this.userPatterns.set(pattern, []);
+        }
+        this.userPatterns.get(pattern).push(behavior);
+    }
+
+    updatePreferences(behavior) {
+        const topic = behavior.topic;
+        if (!this.preferences.has(topic)) {
+            this.preferences.set(topic, { count: 0, satisfaction: 0 });
+        }
+        const pref = this.preferences.get(topic);
+        pref.count++;
+        pref.satisfaction = (pref.satisfaction + behavior.satisfaction) / 2;
+    }
+
+    getUserInsights() {
+        return {
+            preferredTopics: Array.from(this.preferences.entries())
+                .sort((a, b) => b[1].count - a[1].count)
+                .slice(0, 3)
+                .map(([topic]) => topic),
+            averageSatisfaction: this.interactionHistory.reduce((sum, b) => sum + b.satisfaction, 0) / this.interactionHistory.length,
+            learningStyle: this.determineLearningStyle()
+        };
+    }
+
+    determineLearningStyle() {
+        const complexCount = this.interactionHistory.filter(b => b.complexity === 'complex').length;
+        const totalCount = this.interactionHistory.length;
+        
+        if (complexCount / totalCount > 0.7) return 'advanced';
+        if (complexCount / totalCount < 0.3) return 'beginner';
+        return 'intermediate';
+    }
+}
+
+class AdaptiveLearningEngine {
+    constructor() {
+        this.learningRate = 0.1;
+        this.adaptationThreshold = 0.7;
+        this.learningHistory = [];
+        this.adaptationRules = new Map();
+    }
+
+    adaptResponse(userMessage, context) {
+        const adaptation = this.analyzeAdaptationNeeds(userMessage, context);
+        
+        if (adaptation.needsAdaptation) {
+            return this.applyAdaptation(userMessage, adaptation);
+        }
+        
+        return null;
+    }
+
+    analyzeAdaptationNeeds(message, context) {
+        const recentSatisfaction = this.getRecentSatisfaction();
+        const messageComplexity = this.analyzeMessageComplexity(message);
+        
+        return {
+            needsAdaptation: recentSatisfaction < this.adaptationThreshold,
+            adaptationType: messageComplexity > 0.7 ? 'simplify' : 'enhance',
+            confidence: this.calculateConfidence(message, context)
+        };
+    }
+
+    getRecentSatisfaction() {
+        const recent = this.learningHistory.slice(-10);
+        return recent.reduce((sum, h) => sum + h.satisfaction, 0) / recent.length || 0.5;
+    }
+
+    analyzeMessageComplexity(message) {
+        const words = message.split(' ').length;
+        const questions = (message.match(/\?/g) || []).length;
+        const technicalTerms = (message.match(/[A-Z]{2,}/g) || []).length;
+        
+        return Math.min(1, (words / 20) + (questions * 0.1) + (technicalTerms * 0.2));
+    }
+
+    applyAdaptation(message, adaptation) {
+        const adaptedResponse = {
+            originalMessage: message,
+            adaptationType: adaptation.adaptationType,
+            confidence: adaptation.confidence,
+            timestamp: Date.now()
+        };
+
+        this.learningHistory.push(adaptedResponse);
+        return adaptedResponse;
+    }
+
+    calculateConfidence(message, context) {
+        const similarMessages = this.learningHistory.filter(h => 
+            this.calculateSimilarity(message, h.originalMessage) > 0.7
+        );
+        
+        return similarMessages.length > 0 ? 
+            similarMessages.reduce((sum, h) => sum + h.confidence, 0) / similarMessages.length : 
+            0.5;
+    }
+
+    calculateSimilarity(str1, str2) {
+        const words1 = str1.toLowerCase().split(' ');
+        const words2 = str2.toLowerCase().split(' ');
+        const intersection = words1.filter(word => words2.includes(word));
+        return intersection.length / Math.max(words1.length, words2.length);
+    }
+}
+
+class PersonalizationEngine {
+    constructor() {
+        this.userProfile = new Map();
+        this.personalizationRules = new Map();
+        this.preferences = new Map();
+    }
+
+    personalizeResponse(response, userContext) {
+        const personalization = this.analyzePersonalizationNeeds(response, userContext);
+        
+        if (personalization.needsPersonalization) {
+            return this.applyPersonalization(response, personalization);
+        }
+        
+        return response;
+    }
+
+    analyzePersonalizationNeeds(response, userContext) {
+        const userLevel = this.getUserLevel(userContext);
+        const responseComplexity = this.analyzeResponseComplexity(response);
+        
+        return {
+            needsPersonalization: true,
+            userLevel: userLevel,
+            responseComplexity: responseComplexity,
+            personalizationType: this.determinePersonalizationType(userLevel, responseComplexity)
+        };
+    }
+
+    getUserLevel(userContext) {
+        const experience = userContext?.experience || 0;
+        if (experience < 3) return 'beginner';
+        if (experience < 7) return 'intermediate';
+        return 'advanced';
+    }
+
+    analyzeResponseComplexity(response) {
+        const words = response.split(' ').length;
+        const technicalTerms = (response.match(/[A-Z]{2,}/g) || []).length;
+        const sentences = (response.match(/[.!?]/g) || []).length;
+        
+        return Math.min(1, (words / 50) + (technicalTerms * 0.1) + (sentences * 0.05));
+    }
+
+    determinePersonalizationType(userLevel, complexity) {
+        if (userLevel === 'beginner' && complexity > 0.6) return 'simplify';
+        if (userLevel === 'advanced' && complexity < 0.4) return 'enhance';
+        return 'maintain';
+    }
+
+    applyPersonalization(response, personalization) {
+        switch (personalization.personalizationType) {
+            case 'simplify':
+                return this.simplifyResponse(response);
+            case 'enhance':
+                return this.enhanceResponse(response);
+            default:
+                return response;
+        }
+    }
+
+    simplifyResponse(response) {
+        // Simple simplification logic
+        return response.replace(/complex terms/gi, 'simple terms')
+                     .replace(/technical jargon/gi, 'easy language');
+    }
+
+    enhanceResponse(response) {
+        // Simple enhancement logic
+        return response + ' For more advanced users, you might also consider...';
+    }
+}
+
+class LearningMetrics {
+    constructor() {
+        this.metrics = {
+            totalInteractions: 0,
+            successfulInteractions: 0,
+            averageResponseTime: 0,
+            learningProgress: 0,
+            adaptationSuccess: 0,
+            personalizationEffectiveness: 0
+        };
+        this.history = [];
+    }
+
+    recordInteraction(interaction) {
+        this.metrics.totalInteractions++;
+        if (interaction.success) {
+            this.metrics.successfulInteractions++;
+        }
+        
+        this.updateAverageResponseTime(interaction.responseTime);
+        this.updateLearningProgress(interaction);
+        this.history.push(interaction);
+    }
+
+    updateAverageResponseTime(responseTime) {
+        const total = this.metrics.averageResponseTime * (this.metrics.totalInteractions - 1);
+        this.metrics.averageResponseTime = (total + responseTime) / this.metrics.totalInteractions;
+    }
+
+    updateLearningProgress(interaction) {
+        const progress = this.calculateLearningProgress(interaction);
+        this.metrics.learningProgress = (this.metrics.learningProgress + progress) / 2;
+    }
+
+    calculateLearningProgress(interaction) {
+        const satisfaction = interaction.satisfaction || 0;
+        const responseTime = interaction.responseTime || 0;
+        const adaptation = interaction.adaptation || false;
+        
+        return (satisfaction * 0.5) + ((1000 - responseTime) / 1000 * 0.3) + (adaptation ? 0.2 : 0);
+    }
+
+    getMetrics() {
+        return {
+            ...this.metrics,
+            successRate: this.metrics.successfulInteractions / this.metrics.totalInteractions,
+            recentTrend: this.calculateRecentTrend()
+        };
+    }
+
+    calculateRecentTrend() {
+        const recent = this.history.slice(-10);
+        if (recent.length < 2) return 'stable';
+        
+        const firstHalf = recent.slice(0, 5);
+        const secondHalf = recent.slice(5);
+        
+        const firstAvg = firstHalf.reduce((sum, h) => sum + h.satisfaction, 0) / firstHalf.length;
+        const secondAvg = secondHalf.reduce((sum, h) => sum + h.satisfaction, 0) / secondHalf.length;
+        
+        if (secondAvg > firstAvg * 1.1) return 'improving';
+        if (secondAvg < firstAvg * 0.9) return 'declining';
+        return 'stable';
+    }
+}
+
 // Enhanced Chatbot System with Meta-Learning and Zero-Shot Capabilities
 class ChatbotSystem {
     constructor() {
@@ -1225,12 +1532,22 @@ class ChatbotSystem {
         this.zeroShotCache = new Map();
         this.metaLearningModel = new MetaLearningModel();
         this.adaptationHistory = [];
+        
+        // Enhanced Learning System
+        this.userBehaviorAnalysis = new UserBehaviorAnalysis();
+        this.adaptiveLearningEngine = new AdaptiveLearningEngine();
+        this.personalizationEngine = new PersonalizationEngine();
+        this.learningMetrics = new LearningMetrics();
+        
         this.performanceMetrics = {
             accuracy: 0,
             responseTime: 0,
             userSatisfaction: 0,
-            learningRate: 0
+            learningRate: 0,
+            adaptationScore: 0,
+            personalizationLevel: 0
         };
+        
         this.init();
     }
 
@@ -1240,25 +1557,42 @@ class ChatbotSystem {
     }
 
     setupEventListeners() {
-        // Toggle chatbot
-        document.getElementById('chatbotToggle').addEventListener('click', () => this.toggleChatbot());
-        document.getElementById('minimizeChatbot').addEventListener('click', () => this.toggleChatbot());
+        // Toggle chatbot - فحص وجود العنصر
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        if (chatbotToggle) {
+            chatbotToggle.addEventListener('click', () => this.toggleChatbot());
+        }
 
-        // Send message
-        document.getElementById('sendMessage').addEventListener('click', () => this.sendMessage());
-        document.getElementById('chatbotInput').addEventListener('keypress', (e) => {
+        const minimizeChatbot = document.getElementById('minimizeChatbot');
+        if (minimizeChatbot) {
+            minimizeChatbot.addEventListener('click', () => this.toggleChatbot());
+        }
+
+        // Send message - فحص وجود العناصر
+        const sendMessage = document.getElementById('sendMessage');
+        if (sendMessage) {
+            sendMessage.addEventListener('click', () => this.sendMessage());
+        }
+
+        const chatbotInput = document.getElementById('chatbotInput');
+        if (chatbotInput) {
+            chatbotInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.sendMessage();
             }
         });
+        }
 
-        // Quick action buttons
-        document.querySelectorAll('.quick-btn').forEach(btn => {
+        // Quick action buttons - فحص وجود العناصر
+        const quickBtns = document.querySelectorAll('.quick-btn');
+        if (quickBtns.length > 0) {
+            quickBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const message = e.target.getAttribute('data-message');
                 this.sendQuickMessage(message);
             });
         });
+        }
 
         // Analytics button (add dynamically if not exists)
         if (!document.getElementById('showAnalytics')) {
@@ -1370,7 +1704,64 @@ class ChatbotSystem {
             return patternResponse;
         }
 
+    generateResponse(userMessage) {
+        const startTime = performance.now();
+        const message = userMessage.toLowerCase();
+        
+        // Enhanced Learning Pipeline
+        const userContext = this.userBehaviorAnalysis.getUserInsights();
+        const adaptationResult = this.adaptiveLearningEngine.adaptResponse(userMessage, userContext);
+        
+        let response = null;
+        
+        // Try adaptive learning first
+        if (adaptationResult && adaptationResult.confidence > 0.7) {
+            response = this.generateAdaptiveResponse(userMessage, adaptationResult);
+        }
+        
+        // Zero-shot learning: Try to generate response without prior examples
+        if (!response) {
+            const zeroShotResponse = this.zeroShotLearning(userMessage);
+            if (zeroShotResponse) {
+                response = zeroShotResponse;
+            }
+        }
+
+        // Meta-learning: Use learned patterns to adapt responses
+        if (!response) {
+            const metaResponse = this.metaLearningModel.adaptResponse(userMessage, this.conversationHistory);
+            if (metaResponse) {
+                response = metaResponse;
+            }
+        }
+
+        // Pattern-based learning: Check learned patterns
+        if (!response) {
+            const patternResponse = this.checkLearnedPatterns(message);
+            if (patternResponse) {
+                response = patternResponse;
+            }
+        }
+
         // Predefined responses based on keywords
+        if (!response) {
+            response = this.getPredefinedResponse(message);
+        }
+
+        // Apply personalization
+        if (response) {
+            response = this.personalizationEngine.personalizeResponse(response, userContext);
+        }
+
+        // Record interaction for learning
+        const responseTime = performance.now() - startTime;
+        this.recordLearningInteraction(userMessage, response, responseTime, true);
+        
+        this.updatePerformanceMetrics(responseTime, true);
+        return response || "I'm still learning! Could you please rephrase your question?";
+    }
+
+    getPredefinedResponse(message) {
         const responses = {
             'download': 'You can download AuraOS from our download section! We support Windows, macOS, and Linux. The download is free and takes about 2.1 GB of space.',
             'requirements': 'AuraOS system requirements: \n• 4GB RAM minimum (8GB recommended)\n• 10GB free disk space\n• Modern processor (Intel/AMD)\n• Graphics card with OpenGL 3.3 support\n• Internet connection for updates',
@@ -1404,6 +1795,68 @@ class ChatbotSystem {
         this.learnFromInteraction(userMessage, response);
         this.updatePerformanceMetrics(performance.now() - startTime, false);
         return response;
+    }
+
+    generateAdaptiveResponse(userMessage, adaptationResult) {
+        // Generate response based on adaptation analysis
+        const baseResponse = this.getPredefinedResponse(userMessage.toLowerCase());
+        
+        if (adaptationResult.adaptationType === 'simplify') {
+            return this.simplifyResponse(baseResponse);
+        } else if (adaptationResult.adaptationType === 'enhance') {
+            return this.enhanceResponse(baseResponse);
+        }
+        
+        return baseResponse;
+    }
+
+    simplifyResponse(response) {
+        return response.replace(/advanced/gi, 'basic')
+                     .replace(/complex/gi, 'simple')
+                     .replace(/sophisticated/gi, 'easy');
+    }
+
+    enhanceResponse(response) {
+        return response + '\n\nFor more detailed information, you can also check our advanced documentation.';
+    }
+
+    recordLearningInteraction(userMessage, response, responseTime, success) {
+        const interaction = {
+            userMessage,
+            response,
+            responseTime,
+            success,
+            satisfaction: success ? 0.8 : 0.3,
+            timestamp: Date.now()
+        };
+
+        // Record in learning metrics
+        this.learningMetrics.recordInteraction(interaction);
+        
+        // Analyze user behavior
+        this.userBehaviorAnalysis.analyzeUserBehavior(userMessage, { responseTime }, interaction.satisfaction);
+        
+        // Learn from interaction
+        this.learnFromInteraction(userMessage, response);
+    }
+
+    learnFromInteraction(userMessage, response) {
+        // Store successful interaction patterns
+        const pattern = this.extractPattern(userMessage);
+        if (pattern) {
+            this.learningPatterns.set(pattern, {
+                response: response,
+                count: (this.learningPatterns.get(pattern)?.count || 0) + 1,
+                lastUsed: Date.now()
+            });
+        }
+    }
+
+    extractPattern(message) {
+        // Extract key patterns from user message
+        const words = message.toLowerCase().split(' ');
+        const keyWords = words.filter(word => word.length > 3);
+        return keyWords.slice(0, 3).join('_');
     }
 
     // Zero-shot learning: Generate responses without prior examples
@@ -2078,8 +2531,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize authentication system
     window.authSystem = new AuthSystem();
     
-    // Initialize chatbot system
-    window.chatbotSystem = new ChatbotSystem();
+    // Chatbot system will be initialized by enhanced-chatbot.js
+    // This prevents duplicate initialization
     
     // Add toast animation styles
     const styleElement2 = document.createElement('style');

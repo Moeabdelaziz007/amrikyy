@@ -21,10 +21,21 @@ export interface IntegrationConnector {
   isOfficial?: boolean;
 }
 
-export type IntegrationCategory = 
-  | 'communication' | 'productivity' | 'development' | 'marketing' 
-  | 'sales' | 'finance' | 'analytics' | 'storage' | 'database' 
-  | 'ai' | 'social_media' | 'ecommerce' | 'travel' | 'utilities';
+export type IntegrationCategory =
+  | 'communication'
+  | 'productivity'
+  | 'development'
+  | 'marketing'
+  | 'sales'
+  | 'finance'
+  | 'analytics'
+  | 'storage'
+  | 'database'
+  | 'ai'
+  | 'social_media'
+  | 'ecommerce'
+  | 'travel'
+  | 'utilities';
 
 export interface CredentialType {
   name: string;
@@ -137,10 +148,10 @@ export class N8nIntegrationManager {
               name: 'token',
               type: 'password',
               required: true,
-              placeholder: '123456789:ABCdefGHIjklMNOpqrsTUVwxyz'
-            }
-          ]
-        }
+              placeholder: '123456789:ABCdefGHIjklMNOpqrsTUVwxyz',
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -153,7 +164,7 @@ export class N8nIntegrationManager {
           defaults: { name: 'Telegram Trigger', color: '#0088cc' },
           inputs: [],
           outputs: ['main'],
-          webhookUrl: '/webhook/telegram'
+          webhookUrl: '/webhook/telegram',
         },
         {
           name: 'telegram.sendMessage',
@@ -172,14 +183,14 @@ export class N8nIntegrationManager {
               name: 'chatId',
               type: 'string',
               required: true,
-              placeholder: 'Chat ID or @username'
+              placeholder: 'Chat ID or @username',
             },
             {
               displayName: 'Message',
               name: 'message',
               type: 'string',
               required: true,
-              placeholder: 'Message text'
+              placeholder: 'Message text',
             },
             {
               displayName: 'Parse Mode',
@@ -188,20 +199,20 @@ export class N8nIntegrationManager {
               options: [
                 { name: 'HTML', value: 'HTML' },
                 { name: 'Markdown', value: 'Markdown' },
-                { name: 'None', value: 'None' }
-              ]
-            }
-          ]
-        }
+                { name: 'None', value: 'None' },
+              ],
+            },
+          ],
+        },
       ],
       webhooks: [
         {
           name: 'telegramWebhook',
           httpMethod: 'POST',
           path: '/webhook/telegram',
-          responseMode: 'onReceived'
-        }
-      ]
+          responseMode: 'onReceived',
+        },
+      ],
     });
 
     // AI Integrations
@@ -226,10 +237,10 @@ export class N8nIntegrationManager {
               name: 'apiKey',
               type: 'password',
               required: true,
-              placeholder: 'sk-...'
-            }
-          ]
-        }
+              placeholder: 'sk-...',
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -251,25 +262,25 @@ export class N8nIntegrationManager {
               required: true,
               options: [
                 { name: 'GPT-4', value: 'gpt-4' },
-                { name: 'GPT-3.5 Turbo', value: 'gpt-3.5-turbo' }
-              ]
+                { name: 'GPT-3.5 Turbo', value: 'gpt-3.5-turbo' },
+              ],
             },
             {
               displayName: 'Messages',
               name: 'messages',
               type: 'collection',
               required: true,
-              placeholder: 'Chat messages'
+              placeholder: 'Chat messages',
             },
             {
               displayName: 'Temperature',
               name: 'temperature',
               type: 'number',
-              default: 0.7
-            }
-          ]
-        }
-      ]
+              default: 0.7,
+            },
+          ],
+        },
+      ],
     });
 
     // Social Media Integrations
@@ -293,16 +304,16 @@ export class N8nIntegrationManager {
               displayName: 'Client ID',
               name: 'clientId',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Client Secret',
               name: 'clientSecret',
               type: 'password',
-              required: true
-            }
-          ]
-        }
+              required: true,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -322,11 +333,11 @@ export class N8nIntegrationManager {
               name: 'text',
               type: 'string',
               required: true,
-              placeholder: 'Tweet text'
-            }
-          ]
-        }
-      ]
+              placeholder: 'Tweet text',
+            },
+          ],
+        },
+      ],
     });
 
     // Productivity Integrations
@@ -350,16 +361,16 @@ export class N8nIntegrationManager {
               displayName: 'Client ID',
               name: 'clientId',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Client Secret',
               name: 'clientSecret',
               type: 'password',
-              required: true
-            }
-          ]
-        }
+              required: true,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -379,18 +390,18 @@ export class N8nIntegrationManager {
               name: 'sheetId',
               type: 'string',
               required: true,
-              placeholder: 'Google Sheet ID'
+              placeholder: 'Google Sheet ID',
             },
             {
               displayName: 'Range',
               name: 'range',
               type: 'string',
               required: true,
-              placeholder: 'A:Z'
-            }
-          ]
-        }
-      ]
+              placeholder: 'A:Z',
+            },
+          ],
+        },
+      ],
     });
 
     // Database Integrations
@@ -415,34 +426,34 @@ export class N8nIntegrationManager {
               name: 'host',
               type: 'string',
               required: true,
-              default: 'localhost'
+              default: 'localhost',
             },
             {
               displayName: 'Database',
               name: 'database',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'User',
               name: 'user',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Password',
               name: 'password',
               type: 'password',
-              required: true
+              required: true,
             },
             {
               displayName: 'Port',
               name: 'port',
               type: 'number',
-              default: 3306
-            }
-          ]
-        }
+              default: 3306,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -462,11 +473,11 @@ export class N8nIntegrationManager {
               name: 'query',
               type: 'string',
               required: true,
-              placeholder: 'SELECT * FROM users'
-            }
-          ]
-        }
-      ]
+              placeholder: 'SELECT * FROM users',
+            },
+          ],
+        },
+      ],
     });
 
     // HTTP/API Integrations
@@ -501,31 +512,31 @@ export class N8nIntegrationManager {
                 { name: 'GET', value: 'GET' },
                 { name: 'POST', value: 'POST' },
                 { name: 'PUT', value: 'PUT' },
-                { name: 'DELETE', value: 'DELETE' }
-              ]
+                { name: 'DELETE', value: 'DELETE' },
+              ],
             },
             {
               displayName: 'URL',
               name: 'url',
               type: 'string',
               required: true,
-              placeholder: 'https://api.example.com'
+              placeholder: 'https://api.example.com',
             },
             {
               displayName: 'Headers',
               name: 'headers',
               type: 'collection',
-              placeholder: 'Request headers'
+              placeholder: 'Request headers',
             },
             {
               displayName: 'Body',
               name: 'body',
               type: 'string',
-              placeholder: 'Request body'
-            }
-          ]
-        }
-      ]
+              placeholder: 'Request body',
+            },
+          ],
+        },
+      ],
     });
 
     // Email Integrations
@@ -549,16 +560,16 @@ export class N8nIntegrationManager {
               displayName: 'Client ID',
               name: 'clientId',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Client Secret',
               name: 'clientSecret',
               type: 'password',
-              required: true
-            }
-          ]
-        }
+              required: true,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -578,25 +589,25 @@ export class N8nIntegrationManager {
               name: 'to',
               type: 'string',
               required: true,
-              placeholder: 'recipient@example.com'
+              placeholder: 'recipient@example.com',
             },
             {
               displayName: 'Subject',
               name: 'subject',
               type: 'string',
               required: true,
-              placeholder: 'Email subject'
+              placeholder: 'Email subject',
             },
             {
               displayName: 'Body',
               name: 'body',
               type: 'string',
               required: true,
-              placeholder: 'Email body'
-            }
-          ]
-        }
-      ]
+              placeholder: 'Email body',
+            },
+          ],
+        },
+      ],
     });
 
     // File Storage Integrations
@@ -620,16 +631,16 @@ export class N8nIntegrationManager {
               displayName: 'Client ID',
               name: 'clientId',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Client Secret',
               name: 'clientSecret',
               type: 'password',
-              required: true
-            }
-          ]
-        }
+              required: true,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -649,24 +660,24 @@ export class N8nIntegrationManager {
               name: 'fileName',
               type: 'string',
               required: true,
-              placeholder: 'document.pdf'
+              placeholder: 'document.pdf',
             },
             {
               displayName: 'File Content',
               name: 'fileContent',
               type: 'string',
               required: true,
-              placeholder: 'Base64 encoded file content'
+              placeholder: 'Base64 encoded file content',
             },
             {
               displayName: 'Folder ID',
               name: 'folderId',
               type: 'string',
-              placeholder: 'Google Drive folder ID'
-            }
-          ]
-        }
-      ]
+              placeholder: 'Google Drive folder ID',
+            },
+          ],
+        },
+      ],
     });
 
     // Analytics Integrations
@@ -690,16 +701,16 @@ export class N8nIntegrationManager {
               displayName: 'Client ID',
               name: 'clientId',
               type: 'string',
-              required: true
+              required: true,
             },
             {
               displayName: 'Client Secret',
               name: 'clientSecret',
               type: 'password',
-              required: true
-            }
-          ]
-        }
+              required: true,
+            },
+          ],
+        },
       ],
       nodes: [
         {
@@ -719,24 +730,24 @@ export class N8nIntegrationManager {
               name: 'viewId',
               type: 'string',
               required: true,
-              placeholder: 'Google Analytics view ID'
+              placeholder: 'Google Analytics view ID',
             },
             {
               displayName: 'Metrics',
               name: 'metrics',
               type: 'string',
               required: true,
-              placeholder: 'ga:sessions,ga:users'
+              placeholder: 'ga:sessions,ga:users',
             },
             {
               displayName: 'Dimensions',
               name: 'dimensions',
               type: 'string',
-              placeholder: 'ga:date,ga:country'
-            }
-          ]
-        }
-      ]
+              placeholder: 'ga:date,ga:country',
+            },
+          ],
+        },
+      ],
     });
 
     console.log(`🔌 Registered ${this.connectors.size} integration connectors`);
@@ -756,20 +767,32 @@ export class N8nIntegrationManager {
     return Array.from(this.connectors.values());
   }
 
-  getConnectorsByCategory(category: IntegrationCategory): IntegrationConnector[] {
-    return Array.from(this.connectors.values()).filter(c => c.category === category);
+  getConnectorsByCategory(
+    category: IntegrationCategory
+  ): IntegrationConnector[] {
+    return Array.from(this.connectors.values()).filter(
+      c => c.category === category
+    );
   }
 
   getPopularConnectors(): IntegrationConnector[] {
     // Return most commonly used connectors
-    const popularIds = ['telegram', 'openai', 'http_request', 'google_sheets', 'gmail'];
+    const popularIds = [
+      'telegram',
+      'openai',
+      'http_request',
+      'google_sheets',
+      'gmail',
+    ];
     return popularIds
       .map(id => this.connectors.get(id))
       .filter(Boolean) as IntegrationConnector[];
   }
 
   getFeaturedConnectors(): IntegrationConnector[] {
-    return Array.from(this.connectors.values()).filter(c => c.isOfficial && !c.isPremium);
+    return Array.from(this.connectors.values()).filter(
+      c => c.isOfficial && !c.isPremium
+    );
   }
 
   getPremiumConnectors(): IntegrationConnector[] {
@@ -781,13 +804,20 @@ export class N8nIntegrationManager {
   }
 
   // Credential Management
-  setCredentials(connectorId: string, credentialName: string, credentials: Record<string, any>): void {
+  setCredentials(
+    connectorId: string,
+    credentialName: string,
+    credentials: Record<string, any>
+  ): void {
     const key = `${connectorId}:${credentialName}`;
     this.credentials.set(key, credentials);
     console.log(`🔑 Stored credentials for ${connectorId}:${credentialName}`);
   }
 
-  getCredentials(connectorId: string, credentialName: string): Record<string, any> | undefined {
+  getCredentials(
+    connectorId: string,
+    credentialName: string
+  ): Record<string, any> | undefined {
     const key = `${connectorId}:${credentialName}`;
     return this.credentials.get(key);
   }
@@ -808,28 +838,35 @@ export class N8nIntegrationManager {
   // Search and Discovery
   searchConnectors(query: string): IntegrationConnector[] {
     const lowercaseQuery = query.toLowerCase();
-    return Array.from(this.connectors.values()).filter(connector =>
-      connector.name.toLowerCase().includes(lowercaseQuery) ||
-      connector.displayName.toLowerCase().includes(lowercaseQuery) ||
-      connector.description.toLowerCase().includes(lowercaseQuery) ||
-      connector.category.toLowerCase().includes(lowercaseQuery)
+    return Array.from(this.connectors.values()).filter(
+      connector =>
+        connector.name.toLowerCase().includes(lowercaseQuery) ||
+        connector.displayName.toLowerCase().includes(lowercaseQuery) ||
+        connector.description.toLowerCase().includes(lowercaseQuery) ||
+        connector.category.toLowerCase().includes(lowercaseQuery)
     );
   }
 
   getConnectorStatistics(): any {
     const connectors = Array.from(this.connectors.values());
     const categories = [...new Set(connectors.map(c => c.category))];
-    
+
     return {
       total: connectors.length,
-      byCategory: categories.reduce((acc, category) => {
-        acc[category] = connectors.filter(c => c.category === category).length;
-        return acc;
-      }, {} as Record<string, number>),
+      byCategory: categories.reduce(
+        (acc, category) => {
+          acc[category] = connectors.filter(
+            c => c.category === category
+          ).length;
+          return acc;
+        },
+        {} as Record<string, number>
+      ),
       official: connectors.filter(c => c.isOfficial).length,
       premium: connectors.filter(c => c.isPremium).length,
       community: connectors.filter(c => c.isCommunity).length,
-      withWebhooks: connectors.filter(c => c.webhooks && c.webhooks.length > 0).length
+      withWebhooks: connectors.filter(c => c.webhooks && c.webhooks.length > 0)
+        .length,
     };
   }
 
@@ -838,57 +875,67 @@ export class N8nIntegrationManager {
       isLive: this.isLive,
       totalConnectors: this.connectors.size,
       totalCredentials: this.credentials.size,
-      totalWebhooks: Array.from(this.webhooks.values()).reduce((sum, hooks) => sum + hooks.length, 0),
-      statistics: this.getConnectorStatistics()
+      totalWebhooks: Array.from(this.webhooks.values()).reduce(
+        (sum, hooks) => sum + hooks.length,
+        0
+      ),
+      statistics: this.getConnectorStatistics(),
     };
   }
 
   // Integration Testing
-  async testConnector(connectorId: string, credentialName: string): Promise<{ success: boolean; message: string }> {
+  async testConnector(
+    connectorId: string,
+    credentialName: string
+  ): Promise<{ success: boolean; message: string }> {
     const connector = this.getConnector(connectorId);
     const credentials = this.getCredentials(connectorId, credentialName);
-    
+
     if (!connector) {
       return { success: false, message: 'Connector not found' };
     }
-    
+
     if (!credentials) {
       return { success: false, message: 'Credentials not found' };
     }
-    
+
     try {
       // In a real implementation, this would test the actual API connection
       console.log(`🧪 Testing connector: ${connector.displayName}`);
-      
+
       // Simulate API test
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       return { success: true, message: 'Connection successful' };
     } catch (error) {
-      return { 
-        success: false, 
-        message: error instanceof Error ? error.message : 'Connection failed' 
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : 'Connection failed',
       };
     }
   }
 
   // Node Execution Helpers
-  async executeNode(node: IntegrationNode, parameters: Record<string, any>, inputData: any[]): Promise<any[]> {
+  async executeNode(
+    node: IntegrationNode,
+    parameters: Record<string, any>,
+    inputData: any[]
+  ): Promise<any[]> {
     console.log(`🔧 Executing ${node.displayName} node`);
-    
+
     try {
       // In a real implementation, this would execute the actual node logic
       // For now, we'll simulate the execution
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       return inputData.map(item => ({
         ...item,
         nodeResult: {
           success: true,
           nodeType: node.name,
           parameters,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       }));
     } catch (error) {
       console.error(`Node execution error: ${node.displayName}`, error);

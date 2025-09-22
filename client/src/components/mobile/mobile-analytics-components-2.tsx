@@ -25,7 +25,7 @@ export const MobileSwipeableTabs: React.FC<MobileSwipeableTabsProps> = ({
   tabs,
   activeTab,
   onTabChange,
-  className = ''
+  className = '',
 }) => {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -41,7 +41,7 @@ export const MobileSwipeableTabs: React.FC<MobileSwipeableTabsProps> = ({
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
-    
+
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
@@ -66,7 +66,7 @@ export const MobileSwipeableTabs: React.FC<MobileSwipeableTabsProps> = ({
     <div className={`space-y-4 ${className}`}>
       {/* Tab Navigation */}
       <div className="flex space-x-1 bg-muted p-1 rounded-lg">
-        {tabs.map((tab) => (
+        {tabs.map(tab => (
           <Button
             key={tab.id}
             variant={activeTab === tab.id ? 'default' : 'ghost'}
@@ -102,18 +102,14 @@ interface MobileCollapsibleSectionProps {
   className?: string;
 }
 
-export const MobileCollapsibleSection: React.FC<MobileCollapsibleSectionProps> = ({
-  title,
-  icon,
-  children,
-  defaultOpen = false,
-  className = ''
-}) => {
+export const MobileCollapsibleSection: React.FC<
+  MobileCollapsibleSectionProps
+> = ({ title, icon, children, defaultOpen = false, className = '' }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
     <Card className={`${className}`}>
-      <CardHeader 
+      <CardHeader
         className="pb-2 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -129,14 +125,8 @@ export const MobileCollapsibleSection: React.FC<MobileCollapsibleSectionProps> =
           )}
         </div>
       </CardHeader>
-      
-      {isOpen && (
-        <CardContent className="pt-0">
-          {children}
-        </CardContent>
-      )}
+
+      {isOpen && <CardContent className="pt-0">{children}</CardContent>}
     </Card>
   );
 };
-
-

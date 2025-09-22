@@ -37,62 +37,68 @@ const ROLES: Record<string, Role> = {
   admin: {
     name: 'admin',
     permissions: [
-      { resource: '*', actions: ['create', 'read', 'update', 'delete'] }
-    ]
+      { resource: '*', actions: ['create', 'read', 'update', 'delete'] },
+    ],
   },
   moderator: {
     name: 'moderator',
     permissions: [
       { resource: 'posts', actions: ['read', 'update', 'delete'] },
       { resource: 'users', actions: ['read'] },
-      { resource: 'analytics', actions: ['read'] }
-    ]
+      { resource: 'analytics', actions: ['read'] },
+    ],
   },
   user: {
     name: 'user',
     permissions: [
       { resource: 'posts', actions: ['create', 'read'] },
       { resource: 'profile', actions: ['read', 'update'] },
-      { resource: 'analytics', actions: ['read'] }
-    ]
-  }
+      { resource: 'analytics', actions: ['read'] },
+    ],
+  },
 };
 
 // Security configuration
 const JWT_CONFIG: JWTConfig = {
-  secret: process.env.JWT_SECRET || 'your-super-secure-jwt-secret-key-change-in-production',
+  secret:
+    process.env.JWT_SECRET ||
+    'your-super-secure-jwt-secret-key-change-in-production',
   expiresIn: '15m',
   refreshExpiresIn: '7d',
-  algorithm: 'HS256'
+  algorithm: 'HS256',
 };
 
 // Active sessions storage (in production, use Redis or database)
 const activeSessions = new Map<string, UserSession>();
 
 // Enhanced authentication middleware
-export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+export const authenticateToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
-      return res.status(401).json({ 
-        error: 'Access denied', 
+      return res.status(401).json({
+        error: 'Access denied',
         message: 'No token provided',
-        code: 'NO_TOKEN'
+        code: 'NO_TOKEN',
       });
     }
 
     // Verify Firebase token
     const decodedToken = await verifyToken(token);
-    
+
     // Check if session is active
     const session = activeSessions.get(decodedToken.uid);
     if (!session) {
-      return res.status(401).json({ 
-        error: 'Access denied', 
+      return res.status(401).json({
+        error: 'Access denied',
         message: 'Invalid or expired session',
-        code: 'INVALID_SESSION'
+        code: 'INVALID_SESSION',
       });
     }
 
@@ -107,16 +113,16 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
       email: decodedToken.email,
       role: session.role,
       permissions: session.permissions,
-      sessionId: session.sessionId
+      sessionId: session.sessionId,
     };
 
     next();
   } catch (error) {
     console.error('Authentication error:', error);
-    return res.status(403).json({ 
-      error: 'Access denied', 
+    return res.status(403).json({
+      error: 'Access denied',
       message: 'Invalid token',
-      code: 'INVALID_TOKEN'
+      code: 'INVALID_TOKEN',
     });
   }
 };
@@ -127,41 +133,47 @@ export const authorize = (resource: string, action: string) => {
     try {
       const user = req.user;
       if (!user) {
-        return res.status(401).json({ 
-          error: 'Unauthorized', 
+        return res.status(401).json({
+          error: 'Unauthorized',
           message: 'User not authenticated',
-          code: 'NOT_AUTHENTICATED'
+          code: 'NOT_AUTHENTICATED',
         });
       }
 
       // Check if user has permission
       const hasPermission = checkPermission(user.role, resource, action);
-      
+
       if (!hasPermission) {
         // Log unauthorized access attempt
-        console.warn(`Unauthorized access attempt: User ${user.uid} tried to ${action} ${resource}`);
-        
-        return res.status(403).json({ 
-          error: 'Forbidden', 
+        console.warn(
+          `Unauthorized access attempt: User ${user.uid} tried to ${action} ${resource}`
+        );
+
+        return res.status(403).json({
+          error: 'Forbidden',
           message: `Insufficient permissions to ${action} ${resource}`,
-          code: 'INSUFFICIENT_PERMISSIONS'
+          code: 'INSUFFICIENT_PERMISSIONS',
         });
       }
 
       next();
     } catch (error) {
       console.error('Authorization error:', error);
-      return res.status(500).json({ 
-        error: 'Authorization error', 
+      return res.status(500).json({
+        error: 'Authorization error',
         message: 'Failed to verify permissions',
-        code: 'AUTH_ERROR'
+        code: 'AUTH_ERROR',
       });
     }
   };
 };
 
 // Check if user has permission for specific resource and action
-function checkPermission(role: string, resource: string, action: string): boolean {
+function checkPermission(
+  role: string,
+  resource: string,
+  action: string
+): boolean {
   const roleConfig = ROLES[role];
   if (!roleConfig) return false;
 
@@ -197,7 +209,7 @@ export const createSession = (user: any, req: Request): UserSession => {
     sessionId,
     lastActivity: new Date(),
     ipAddress: req.ip || req.connection.remoteAddress || '',
-    userAgent: req.get('User-Agent') || ''
+    userAgent: req.get('User-Agent') || '',
   };
 
   activeSessions.set(user.uid, session);
@@ -221,7 +233,9 @@ export const updateSessionActivity = (userId: string): void => {
 
 // Utility functions
 function generateSessionId(): string {
-  return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  return (
+    'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+  );
 }
 
 function getRolePermissions(role: string): string[] {
@@ -252,13 +266,17 @@ export const cleanupExpiredSessions = (): void => {
 };
 
 // Admin-only middleware
-export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
+export const requireAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const user = req.user;
   if (!user || user.role !== 'admin') {
-    return res.status(403).json({ 
-      error: 'Forbidden', 
+    return res.status(403).json({
+      error: 'Forbidden',
       message: 'Admin privileges required',
-      code: 'ADMIN_REQUIRED'
+      code: 'ADMIN_REQUIRED',
     });
   }
   next();
@@ -267,7 +285,10 @@ export const requireAdmin = (req: Request, res: Response, next: NextFunction) =>
 // Rate limiting per user
 const userRateLimit = new Map<string, { count: number; resetTime: number }>();
 
-export const rateLimitPerUser = (maxRequests: number = 100, windowMs: number = 15 * 60 * 1000) => {
+export const rateLimitPerUser = (
+  maxRequests: number = 100,
+  windowMs: number = 15 * 60 * 1000
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
     if (!user) {
@@ -283,11 +304,11 @@ export const rateLimitPerUser = (maxRequests: number = 100, windowMs: number = 1
     }
 
     if (userLimit.count >= maxRequests) {
-      return res.status(429).json({ 
-        error: 'Too Many Requests', 
+      return res.status(429).json({
+        error: 'Too Many Requests',
         message: 'Rate limit exceeded',
         code: 'RATE_LIMIT_EXCEEDED',
-        retryAfter: Math.ceil((userLimit.resetTime - now) / 1000)
+        retryAfter: Math.ceil((userLimit.resetTime - now) / 1000),
       });
     }
 
@@ -297,13 +318,17 @@ export const rateLimitPerUser = (maxRequests: number = 100, windowMs: number = 1
 };
 
 // Security logging middleware
-export const securityLogger = (req: Request, res: Response, next: NextFunction) => {
+export const securityLogger = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const startTime = Date.now();
-  
+
   res.on('finish', () => {
     const duration = Date.now() - startTime;
     const user = req.user;
-    
+
     const logEntry = {
       timestamp: new Date().toISOString(),
       method: req.method,
@@ -314,11 +339,15 @@ export const securityLogger = (req: Request, res: Response, next: NextFunction) 
       userRole: user?.role,
       ipAddress: req.ip,
       userAgent: req.get('User-Agent'),
-      sessionId: user?.sessionId
+      sessionId: user?.sessionId,
     };
 
     // Log security events
-    if (res.statusCode === 401 || res.statusCode === 403 || res.statusCode === 429) {
+    if (
+      res.statusCode === 401 ||
+      res.statusCode === 403 ||
+      res.statusCode === 429
+    ) {
       console.warn('Security event:', logEntry);
     } else {
       console.log('API access:', logEntry);

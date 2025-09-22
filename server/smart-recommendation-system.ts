@@ -74,7 +74,9 @@ export class SmartRecommendationSystem {
   private interactions: Map<string, any[]> = new Map();
 
   // إنشاء عنصر توصية
-  async createItem(itemData: Omit<RecommendationItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<RecommendationItem> {
+  async createItem(
+    itemData: Omit<RecommendationItem, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<RecommendationItem> {
     const item: RecommendationItem = {
       id: this.generateId(),
       createdAt: new Date(),
@@ -87,7 +89,10 @@ export class SmartRecommendationSystem {
   }
 
   // إنشاء ملف تعريف المستخدم
-  async createUserProfile(userId: string, profileData?: Partial<UserProfile>): Promise<UserProfile> {
+  async createUserProfile(
+    userId: string,
+    profileData?: Partial<UserProfile>
+  ): Promise<UserProfile> {
     const profile: UserProfile = {
       id: this.generateId(),
       userId,
@@ -120,7 +125,10 @@ export class SmartRecommendationSystem {
   }
 
   // تحديث ملف تعريف المستخدم
-  async updateUserProfile(profileId: string, updates: Partial<UserProfile>): Promise<UserProfile | null> {
+  async updateUserProfile(
+    profileId: string,
+    updates: Partial<UserProfile>
+  ): Promise<UserProfile | null> {
     const profile = this.userProfiles.get(profileId);
     if (!profile) return null;
 
@@ -138,7 +146,13 @@ export class SmartRecommendationSystem {
   async recordInteraction(
     userId: string,
     itemId: string,
-    interactionType: 'view' | 'click' | 'like' | 'dislike' | 'complete' | 'share',
+    interactionType:
+      | 'view'
+      | 'click'
+      | 'like'
+      | 'dislike'
+      | 'complete'
+      | 'share',
     metadata?: Record<string, any>
   ): Promise<void> {
     const interaction = {
@@ -158,15 +172,15 @@ export class SmartRecommendationSystem {
     const profile = this.getUserProfileByUserId(userId);
     if (profile) {
       profile.behavior.interactionHistory.push(itemId);
-      
+
       if (interactionType === 'click') {
         profile.behavior.clickHistory.push(itemId);
       }
-      
+
       if (interactionType === 'complete') {
         profile.behavior.completionRate[itemId] = 1;
       }
-      
+
       profile.updatedAt = new Date();
       this.userProfiles.set(profile.id, profile);
     }
@@ -207,7 +221,7 @@ export class SmartRecommendationSystem {
     }
 
     let algorithm: RecommendationAlgorithm | null = null;
-    
+
     if (algorithmId) {
       algorithm = this.algorithms.get(algorithmId) || null;
     }
@@ -226,16 +240,32 @@ export class SmartRecommendationSystem {
 
     switch (algorithm.type) {
       case 'collaborative':
-        recommendations = await this.generateCollaborativeRecommendations(userId, algorithm, limit);
+        recommendations = await this.generateCollaborativeRecommendations(
+          userId,
+          algorithm,
+          limit
+        );
         break;
       case 'content_based':
-        recommendations = await this.generateContentBasedRecommendations(userId, algorithm, limit);
+        recommendations = await this.generateContentBasedRecommendations(
+          userId,
+          algorithm,
+          limit
+        );
         break;
       case 'hybrid':
-        recommendations = await this.generateHybridRecommendations(userId, algorithm, limit);
+        recommendations = await this.generateHybridRecommendations(
+          userId,
+          algorithm,
+          limit
+        );
         break;
       case 'deep_learning':
-        recommendations = await this.generateDeepLearningRecommendations(userId, algorithm, limit);
+        recommendations = await this.generateDeepLearningRecommendations(
+          userId,
+          algorithm,
+          limit
+        );
         break;
     }
 
@@ -264,7 +294,8 @@ export class SmartRecommendationSystem {
     const recommendedItems = new Map<string, number>();
 
     similarUsers.forEach(({ userId: similarUserId, similarity }) => {
-      const similarUserInteractions = this.interactions.get(similarUserId) || [];
+      const similarUserInteractions =
+        this.interactions.get(similarUserId) || [];
       const userItems = new Set(userInteractions.map(i => i.itemId));
 
       similarUserInteractions.forEach(interaction => {
@@ -322,7 +353,10 @@ export class SmartRecommendationSystem {
       // العثور على عناصر مشابهة
       Array.from(this.items.values()).forEach(candidateItem => {
         if (candidateItem.id !== itemId && !userItems.has(candidateItem.id)) {
-          const similarity = this.calculateContentSimilarity(item, candidateItem);
+          const similarity = this.calculateContentSimilarity(
+            item,
+            candidateItem
+          );
           if (similarity > 0.3) {
             const currentScore = recommendedItems.get(candidateItem.id) || 0;
             recommendedItems.set(candidateItem.id, currentScore + similarity);
@@ -359,8 +393,16 @@ export class SmartRecommendationSystem {
     limit: number
   ): Promise<Recommendation[]> {
     // دمج التوصيات التعاونية والقائمة على المحتوى
-    const collaborativeRecs = await this.generateCollaborativeRecommendations(userId, algorithm, limit);
-    const contentBasedRecs = await this.generateContentBasedRecommendations(userId, algorithm, limit);
+    const collaborativeRecs = await this.generateCollaborativeRecommendations(
+      userId,
+      algorithm,
+      limit
+    );
+    const contentBasedRecs = await this.generateContentBasedRecommendations(
+      userId,
+      algorithm,
+      limit
+    );
 
     // دمج التوصيات
     const combinedRecs = new Map<string, Recommendation>();
@@ -375,7 +417,8 @@ export class SmartRecommendationSystem {
         // دمج النقاط
         existing.score = (existing.score + rec.score) / 2;
         existing.confidence = Math.max(existing.confidence, rec.confidence);
-        existing.reason = 'Combined collaborative and content-based recommendation';
+        existing.reason =
+          'Combined collaborative and content-based recommendation';
       } else {
         combinedRecs.set(rec.itemId, rec);
       }
@@ -415,18 +458,22 @@ export class SmartRecommendationSystem {
         reason: 'Deep learning model prediction',
         confidence,
         algorithm: algorithm.name,
-        metadata: { modelVersion: '1.0', features: ['user_behavior', 'item_content', 'context'] },
+        metadata: {
+          modelVersion: '1.0',
+          features: ['user_behavior', 'item_content', 'context'],
+        },
         timestamp: new Date(),
       });
     });
 
-    return recommendations
-      .sort((a, b) => b.score - a.score)
-      .slice(0, limit);
+    return recommendations.sort((a, b) => b.score - a.score).slice(0, limit);
   }
 
   // العثور على مستخدمين مشابهين
-  private findSimilarUsers(userId: string, allInteractions: any[]): Array<{ userId: string; similarity: number }> {
+  private findSimilarUsers(
+    userId: string,
+    allInteractions: any[]
+  ): Array<{ userId: string; similarity: number }> {
     const userInteractions = this.interactions.get(userId) || [];
     const userItems = new Set(userInteractions.map(i => i.itemId));
     const similarities: Array<{ userId: string; similarity: number }> = [];
@@ -443,7 +490,9 @@ export class SmartRecommendationSystem {
 
     // حساب التشابه
     userInteractionMap.forEach((items, otherUserId) => {
-      const intersection = new Set([...userItems].filter(item => items.has(item)));
+      const intersection = new Set(
+        [...userItems].filter(item => items.has(item))
+      );
       const union = new Set([...userItems, ...items]);
       const similarity = intersection.size / union.size;
 
@@ -452,11 +501,16 @@ export class SmartRecommendationSystem {
       }
     });
 
-    return similarities.sort((a, b) => b.similarity - a.similarity).slice(0, 10);
+    return similarities
+      .sort((a, b) => b.similarity - a.similarity)
+      .slice(0, 10);
   }
 
   // حساب تشابه المحتوى
-  private calculateContentSimilarity(item1: RecommendationItem, item2: RecommendationItem): number {
+  private calculateContentSimilarity(
+    item1: RecommendationItem,
+    item2: RecommendationItem
+  ): number {
     let similarity = 0;
 
     // تشابه الفئة
@@ -472,8 +526,14 @@ export class SmartRecommendationSystem {
     }
 
     // تشابه العنوان والوصف
-    const titleSimilarity = this.calculateTextSimilarity(item1.title, item2.title);
-    const descriptionSimilarity = this.calculateTextSimilarity(item1.description, item2.description);
+    const titleSimilarity = this.calculateTextSimilarity(
+      item1.title,
+      item2.title
+    );
+    const descriptionSimilarity = this.calculateTextSimilarity(
+      item1.description,
+      item2.description
+    );
     similarity += (titleSimilarity + descriptionSimilarity) * 0.15;
 
     return Math.min(1, similarity);
@@ -483,13 +543,13 @@ export class SmartRecommendationSystem {
   private calculateTextSimilarity(text1: string, text2: string): number {
     const words1 = text1.toLowerCase().split(' ');
     const words2 = text2.toLowerCase().split(' ');
-    
+
     const set1 = new Set(words1);
     const set2 = new Set(words2);
-    
+
     const intersection = new Set([...set1].filter(word => set2.has(word)));
     const union = new Set([...set1, ...set2]);
-    
+
     return intersection.size / union.size;
   }
 
@@ -498,18 +558,23 @@ export class SmartRecommendationSystem {
     const algorithms = Array.from(this.algorithms.values())
       .filter(algo => algo.status === 'active')
       .sort((a, b) => b.accuracy - a.accuracy);
-    
+
     return algorithms.length > 0 ? algorithms[0] : null;
   }
 
   // تحديث التغذية الراجعة
-  async updateFeedback(recommendationId: string, feedback: 'positive' | 'negative' | 'neutral'): Promise<boolean> {
+  async updateFeedback(
+    recommendationId: string,
+    feedback: 'positive' | 'negative' | 'neutral'
+  ): Promise<boolean> {
     // البحث عن التوصية في جميع المستخدمين
     for (const [userId, recommendations] of this.recommendations.entries()) {
-      const recommendation = recommendations.find(r => r.id === recommendationId);
+      const recommendation = recommendations.find(
+        r => r.id === recommendationId
+      );
       if (recommendation) {
         recommendation.feedback = feedback;
-        
+
         // تحديث دقة الخوارزمية
         const algorithm = this.algorithms.get(recommendation.algorithm);
         if (algorithm) {
@@ -519,15 +584,15 @@ export class SmartRecommendationSystem {
           } else if (feedback === 'negative') {
             algorithm.accuracy = Math.max(0.1, algorithm.accuracy - 0.01);
           }
-          
+
           algorithm.updatedAt = new Date();
           this.algorithms.set(algorithm.id, algorithm);
         }
-        
+
         return true;
       }
     }
-    
+
     return false;
   }
 
@@ -543,19 +608,27 @@ export class SmartRecommendationSystem {
     const algorithms = Array.from(this.algorithms.values());
     const totalUsers = this.userProfiles.size;
     const totalItems = this.items.size;
-    const totalRecommendations = Array.from(this.recommendations.values()).flat().length;
+    const totalRecommendations = Array.from(
+      this.recommendations.values()
+    ).flat().length;
 
-    const averageAccuracy = algorithms.length > 0 
-      ? algorithms.reduce((sum, algo) => sum + algo.accuracy, 0) / algorithms.length 
-      : 0;
+    const averageAccuracy =
+      algorithms.length > 0
+        ? algorithms.reduce((sum, algo) => sum + algo.accuracy, 0) /
+          algorithms.length
+        : 0;
 
-    const averageCoverage = algorithms.length > 0 
-      ? algorithms.reduce((sum, algo) => sum + algo.coverage, 0) / algorithms.length 
-      : 0;
+    const averageCoverage =
+      algorithms.length > 0
+        ? algorithms.reduce((sum, algo) => sum + algo.coverage, 0) /
+          algorithms.length
+        : 0;
 
-    const averageDiversity = algorithms.length > 0 
-      ? algorithms.reduce((sum, algo) => sum + algo.diversity, 0) / algorithms.length 
-      : 0;
+    const averageDiversity =
+      algorithms.length > 0
+        ? algorithms.reduce((sum, algo) => sum + algo.diversity, 0) /
+          algorithms.length
+        : 0;
 
     return {
       totalUsers,
@@ -602,6 +675,8 @@ export class SmartRecommendationSystem {
 
   // إنشاء ID فريد
   private generateId(): string {
-    return createHash('md5').update(Date.now().toString() + Math.random().toString()).digest('hex');
+    return createHash('md5')
+      .update(Date.now().toString() + Math.random().toString())
+      .digest('hex');
   }
 }

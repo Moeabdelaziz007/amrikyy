@@ -147,10 +147,10 @@ export class EnterpriseAdminDashboard {
       position: { x: 0, y: 0, width: 4, height: 2 },
       config: {
         showDetails: true,
-        showHistory: false
+        showHistory: false,
       },
       data: null,
-      refreshInterval: 5000
+      refreshInterval: 5000,
     });
 
     // User Metrics Widget
@@ -162,10 +162,10 @@ export class EnterpriseAdminDashboard {
       position: { x: 4, y: 0, width: 4, height: 2 },
       config: {
         showTrends: true,
-        timeRange: '24h'
+        timeRange: '24h',
       },
       data: null,
-      refreshInterval: 30000
+      refreshInterval: 30000,
     });
 
     // Automation Performance Widget
@@ -178,10 +178,10 @@ export class EnterpriseAdminDashboard {
       config: {
         chartType: 'line',
         showLegend: true,
-        timeRange: '7d'
+        timeRange: '7d',
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
 
     // Workflow Analytics Widget
@@ -194,10 +194,10 @@ export class EnterpriseAdminDashboard {
       config: {
         chartType: 'bar',
         showTrends: true,
-        timeRange: '30d'
+        timeRange: '30d',
       },
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     });
 
     // Team Collaboration Widget
@@ -210,10 +210,10 @@ export class EnterpriseAdminDashboard {
       config: {
         sortable: true,
         filterable: true,
-        pagination: true
+        pagination: true,
       },
       data: null,
-      refreshInterval: 30000
+      refreshInterval: 30000,
     });
 
     // Security Alerts Widget
@@ -225,10 +225,10 @@ export class EnterpriseAdminDashboard {
       position: { x: 8, y: 6, width: 4, height: 4 },
       config: {
         showAcknowledged: false,
-        maxItems: 10
+        maxItems: 10,
       },
       data: null,
-      refreshInterval: 15000
+      refreshInterval: 15000,
     });
 
     // Performance Metrics Widget
@@ -240,10 +240,10 @@ export class EnterpriseAdminDashboard {
       position: { x: 0, y: 10, width: 6, height: 2 },
       config: {
         showHistory: true,
-        timeRange: '1h'
+        timeRange: '1h',
       },
       data: null,
-      refreshInterval: 10000
+      refreshInterval: 10000,
     });
 
     // Resource Usage Widget
@@ -255,10 +255,10 @@ export class EnterpriseAdminDashboard {
       position: { x: 6, y: 10, width: 6, height: 2 },
       config: {
         chartType: 'gauge',
-        showMultiple: true
+        showMultiple: true,
       },
       data: null,
-      refreshInterval: 5000
+      refreshInterval: 5000,
     });
   }
 
@@ -295,16 +295,19 @@ export class EnterpriseAdminDashboard {
         memoryUsage: {
           used: process.memoryUsage().heapUsed,
           total: process.memoryUsage().heapTotal,
-          percentage: Math.round((process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100)
+          percentage: Math.round(
+            (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) *
+              100
+          ),
         },
         cpuUsage: Math.random() * 100, // Simulate CPU usage
         diskUsage: {
           used: 50000000000, // 50GB
           total: 100000000000, // 100GB
-          percentage: 50
+          percentage: 50,
         },
         activeConnections: 0, // Will be updated from WebSocket
-        errorRate: 0.02 // 2% error rate
+        errorRate: 0.02, // 2% error rate
       };
 
       // Collect user metrics
@@ -313,17 +316,17 @@ export class EnterpriseAdminDashboard {
         activeUsers: 45,
         newUsersToday: 3,
         usersByRole: {
-          'admin': 5,
-          'manager': 15,
-          'developer': 25,
-          'user': 100,
-          'viewer': 5
+          admin: 5,
+          manager: 15,
+          developer: 25,
+          user: 100,
+          viewer: 5,
         },
         userActivity: {
           loginsLast24h: 89,
           loginsLast7d: 456,
-          averageSessionDuration: 1800000 // 30 minutes
-        }
+          averageSessionDuration: 1800000, // 30 minutes
+        },
       };
 
       // Collect automation metrics
@@ -335,12 +338,12 @@ export class EnterpriseAdminDashboard {
         successRate: automationStats.averageSuccessRate,
         averageExecutionTime: 2500, // 2.5 seconds
         rulesByCategory: {
-          'content_automation': 2,
-          'travel_optimization': 1,
-          'food_management': 1,
-          'shopping_intelligence': 1
+          content_automation: 2,
+          travel_optimization: 1,
+          food_management: 1,
+          shopping_intelligence: 1,
         },
-        recentExecutions: []
+        recentExecutions: [],
       };
 
       // Collect workflow metrics
@@ -352,28 +355,31 @@ export class EnterpriseAdminDashboard {
         successRate: workflowStats.averageSuccessRate,
         averageExecutionTime: 45000, // 45 seconds
         workflowsByType: {
-          'content_automation': 1,
-          'travel_optimization': 1,
-          'food_management': 1,
-          'shopping_intelligence': 1
+          content_automation: 1,
+          travel_optimization: 1,
+          food_management: 1,
+          shopping_intelligence: 1,
         },
-        recentExecutions: []
+        recentExecutions: [],
       };
 
       // Collect team metrics
       const allTeams = await teamManager.getAllTeams();
       const teamMetrics: TeamMetrics = {
         totalTeams: allTeams.length,
-        totalMembers: allTeams.reduce((sum, team) => sum + team.members.length, 0),
+        totalMembers: allTeams.reduce(
+          (sum, team) => sum + team.members.length,
+          0
+        ),
         activeTeams: allTeams.filter(team => team.status === 'active').length,
         teamsByOrganization: {
-          'default_org': allTeams.length
+          default_org: allTeams.length,
         },
         collaborationActivity: {
           realTimeEdits: 23,
           sharedWorkflows: 45,
-          teamComments: 67
-        }
+          teamComments: 67,
+        },
       };
 
       // Collect performance metrics
@@ -381,24 +387,24 @@ export class EnterpriseAdminDashboard {
         responseTime: {
           average: 150, // 150ms
           p95: 300, // 300ms
-          p99: 500 // 500ms
+          p99: 500, // 500ms
         },
         throughput: {
           requestsPerSecond: 25,
           workflowsPerMinute: 12,
-          automationsPerMinute: 48
+          automationsPerMinute: 48,
         },
         errorMetrics: {
           totalErrors: 15,
           errorRate: 0.02,
           errorsByType: {
-            'timeout': 5,
-            'validation': 3,
-            'authentication': 2,
-            'authorization': 1,
-            'other': 4
-          }
-        }
+            timeout: 5,
+            validation: 3,
+            authentication: 2,
+            authorization: 1,
+            other: 4,
+          },
+        },
       };
 
       // Collect security metrics
@@ -408,7 +414,7 @@ export class EnterpriseAdminDashboard {
         securityEvents: 3,
         activeSessions: 45,
         mfaEnabled: 15,
-        recentSecurityEvents: []
+        recentSecurityEvents: [],
       };
 
       this.metrics = {
@@ -419,12 +425,11 @@ export class EnterpriseAdminDashboard {
         workflowMetrics,
         teamMetrics,
         performanceMetrics,
-        securityMetrics
+        securityMetrics,
       };
 
       // Broadcast metrics update
       this.broadcastMetricsUpdate();
-
     } catch (error) {
       console.error('Error updating dashboard metrics:', error);
     }
@@ -439,7 +444,7 @@ export class EnterpriseAdminDashboard {
         type: 'critical',
         title: 'System Health Critical',
         message: 'System health is in critical state',
-        metadata: { systemHealth: this.metrics.systemHealth }
+        metadata: { systemHealth: this.metrics.systemHealth },
       });
     }
 
@@ -449,7 +454,7 @@ export class EnterpriseAdminDashboard {
         type: 'warning',
         title: 'High Error Rate',
         message: `Automation error rate is ${(this.metrics.automationMetrics.errorRate * 100).toFixed(1)}%`,
-        metadata: { errorRate: this.metrics.automationMetrics.errorRate }
+        metadata: { errorRate: this.metrics.automationMetrics.errorRate },
       });
     }
 
@@ -459,7 +464,7 @@ export class EnterpriseAdminDashboard {
         type: 'warning',
         title: 'High Memory Usage',
         message: `Memory usage is at ${this.metrics.systemHealth.memoryUsage.percentage}%`,
-        metadata: { memoryUsage: this.metrics.systemHealth.memoryUsage }
+        metadata: { memoryUsage: this.metrics.systemHealth.memoryUsage },
       });
     }
 
@@ -469,7 +474,7 @@ export class EnterpriseAdminDashboard {
         type: 'warning',
         title: 'Multiple Failed Logins',
         message: `${this.metrics.securityMetrics.failedLogins} failed login attempts detected`,
-        metadata: { failedLogins: this.metrics.securityMetrics.failedLogins }
+        metadata: { failedLogins: this.metrics.securityMetrics.failedLogins },
       });
     }
   }
@@ -482,7 +487,7 @@ export class EnterpriseAdminDashboard {
       message: alertData.message || 'System alert detected',
       timestamp: new Date(),
       acknowledged: false,
-      metadata: alertData.metadata || {}
+      metadata: alertData.metadata || {},
     };
 
     this.alerts.set(alert.id, alert);
@@ -497,7 +502,7 @@ export class EnterpriseAdminDashboard {
       try {
         const now = Date.now();
         const lastUpdate = widget.data?.lastUpdated || 0;
-        
+
         if (now - lastUpdate >= widget.refreshInterval) {
           await this.updateWidgetData(widget);
         }
@@ -514,14 +519,14 @@ export class EnterpriseAdminDashboard {
       case 'system_health':
         widget.data = {
           ...this.metrics.systemHealth,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
       case 'user_metrics':
         widget.data = {
           ...this.metrics.userMetrics,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -529,7 +534,7 @@ export class EnterpriseAdminDashboard {
         widget.data = {
           metrics: this.metrics.automationMetrics,
           chartData: this.generateChartData('automation'),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -537,7 +542,7 @@ export class EnterpriseAdminDashboard {
         widget.data = {
           metrics: this.metrics.workflowMetrics,
           chartData: this.generateChartData('workflow'),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -550,9 +555,9 @@ export class EnterpriseAdminDashboard {
             name: team.name,
             members: team.members.length,
             status: team.status,
-            lastActivity: team.updatedAt
+            lastActivity: team.updatedAt,
           })),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -562,14 +567,14 @@ export class EnterpriseAdminDashboard {
             .filter(alert => !alert.acknowledged)
             .slice(0, 10)
             .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime()),
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
       case 'performance_metrics':
         widget.data = {
           ...this.metrics.performanceMetrics,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
 
@@ -578,7 +583,7 @@ export class EnterpriseAdminDashboard {
           memory: this.metrics.systemHealth.memoryUsage,
           cpu: { usage: this.metrics.systemHealth.cpuUsage },
           disk: this.metrics.systemHealth.diskUsage,
-          lastUpdated: Date.now()
+          lastUpdated: Date.now(),
         };
         break;
     }
@@ -591,13 +596,13 @@ export class EnterpriseAdminDashboard {
     // Generate sample chart data
     const data = [];
     const now = Date.now();
-    
+
     for (let i = 29; i >= 0; i--) {
       const date = new Date(now - i * 24 * 60 * 60 * 1000);
       data.push({
         date: date.toISOString().split('T')[0],
         value: Math.floor(Math.random() * 100) + 50,
-        success: Math.floor(Math.random() * 20) + 80
+        success: Math.floor(Math.random() * 20) + 80,
       });
     }
 
@@ -615,11 +620,16 @@ export class EnterpriseAdminDashboard {
 
   async getAlerts(acknowledged: boolean = false): Promise<Alert[]> {
     return Array.from(this.alerts.values())
-      .filter(alert => acknowledged ? alert.acknowledged : !alert.acknowledged)
+      .filter(alert =>
+        acknowledged ? alert.acknowledged : !alert.acknowledged
+      )
       .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   }
 
-  async acknowledgeAlert(alertId: string, acknowledgedBy: string): Promise<boolean> {
+  async acknowledgeAlert(
+    alertId: string,
+    acknowledgedBy: string
+  ): Promise<boolean> {
     const alert = this.alerts.get(alertId);
     if (!alert) {
       return false;
@@ -649,7 +659,7 @@ export class EnterpriseAdminDashboard {
       position: { x: 0, y: 0, width: 4, height: 2 },
       config,
       data: null,
-      refreshInterval: 60000
+      refreshInterval: 60000,
     };
 
     this.widgets.set(id, widget);
@@ -657,7 +667,10 @@ export class EnterpriseAdminDashboard {
     return widget;
   }
 
-  async updateWidgetPosition(widgetId: string, position: { x: number; y: number; width: number; height: number }): Promise<boolean> {
+  async updateWidgetPosition(
+    widgetId: string,
+    position: { x: number; y: number; width: number; height: number }
+  ): Promise<boolean> {
     const widget = this.widgets.get(widgetId);
     if (!widget) {
       return false;
@@ -678,7 +691,7 @@ export class EnterpriseAdminDashboard {
     const update = {
       type: 'metrics_update',
       data: this.metrics,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.subscribers.forEach(callback => {
@@ -694,7 +707,7 @@ export class EnterpriseAdminDashboard {
     const update = {
       type: 'alert',
       data: alert,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.subscribers.forEach(callback => {
@@ -710,7 +723,7 @@ export class EnterpriseAdminDashboard {
     const update = {
       type: 'widget_update',
       data: widget,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
 
     this.subscribers.forEach(callback => {

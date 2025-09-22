@@ -1,24 +1,51 @@
-
 import { initializeApp } from 'firebase/app';
-import { getAnalytics, logEvent } from "firebase/analytics";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
+import { getAnalytics, logEvent } from 'firebase/analytics';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  User,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+} from 'firebase/firestore';
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyApDku-geNVplwIgRBz2U0rs46aAVo-_mE",
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "aios-97581.firebaseapp.com",
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID || "aios-97581",
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "aios-97581.appspot.com",
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "307575156824",
-  appId: process.env.VITE_FIREBASE_APP_ID || "1:307575156824:web:00924bd384df1f29909a2d"
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+export const analytics =
+  typeof window !== 'undefined' && firebaseConfig.measurementId
+    ? getAnalytics(app)
+    : undefined;
 
 // Google Auth Provider
 const googleProvider = new GoogleAuthProvider();
@@ -30,10 +57,10 @@ export class AuthService {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
-      
+
       // Save user data to Firestore
       await this.saveUserToFirestore(user);
-      
+
       return user;
     } catch (error) {
       console.error('Google sign-in error:', error);
@@ -69,16 +96,22 @@ export class AuthService {
     }
   }
 
-  static async signUpWithEmail(email: string, password: string, displayName?: string): Promise<User> {
+  static async signUpWithEmail(
+    email: string,
+    password: string,
+    displayName?: string
+  ): Promise<User> {
     try {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const result = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = result.user;
 
       // Update display name if provided
       if (displayName && user) {
-        await user.updateProfile({
-          displayName: displayName
-        });
+        await updateProfile(user, { displayName });
       }
 
       // Save user data to Firestore
@@ -105,8 +138,8 @@ export class AuthService {
         preferences: {
           theme: 'light',
           notifications: true,
-          language: 'en'
-        }
+          language: 'en',
+        },
       };
 
       await setDoc(userRef, userData, { merge: true });
@@ -120,7 +153,7 @@ export class AuthService {
     try {
       const userRef = doc(db, 'users', uid);
       const userSnap = await getDoc(userRef);
-      
+
       if (userSnap.exists()) {
         return userSnap.data();
       } else {
@@ -137,7 +170,7 @@ export class AuthService {
       const userRef = doc(db, 'users', uid);
       await updateDoc(userRef, {
         ...data,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
     } catch (error) {
       console.error('Error updating user data:', error);
@@ -154,7 +187,7 @@ export class FirestoreService {
         ...postData,
         userId,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
       return docRef.id;
     } catch (error) {
@@ -163,7 +196,10 @@ export class FirestoreService {
     }
   }
 
-  static async getPosts(userId?: string, limitCount: number = 10): Promise<any[]> {
+  static async getPosts(
+    userId?: string,
+    limitCount: number = 10
+  ): Promise<any[]> {
     try {
       let q = query(
         collection(db, 'posts'),
@@ -183,7 +219,7 @@ export class FirestoreService {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
     } catch (error) {
       console.error('Error getting posts:', error);
@@ -196,7 +232,7 @@ export class FirestoreService {
       const postRef = doc(db, 'posts', postId);
       await updateDoc(postRef, {
         ...data,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
     } catch (error) {
       console.error('Error updating post:', error);
@@ -215,13 +251,16 @@ export class FirestoreService {
   }
 
   // Workflows
-  static async createWorkflow(userId: string, workflowData: any): Promise<string> {
+  static async createWorkflow(
+    userId: string,
+    workflowData: any
+  ): Promise<string> {
     try {
       const docRef = await addDoc(collection(db, 'workflows'), {
         ...workflowData,
         userId,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
       return docRef.id;
     } catch (error) {
@@ -241,7 +280,7 @@ export class FirestoreService {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
     } catch (error) {
       console.error('Error getting workflows:', error);
@@ -256,7 +295,7 @@ export class FirestoreService {
         ...agentData,
         userId,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
       return docRef.id;
     } catch (error) {
@@ -276,7 +315,7 @@ export class FirestoreService {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
     } catch (error) {
       console.error('Error getting agents:', error);
@@ -285,12 +324,15 @@ export class FirestoreService {
   }
 
   // Chat Messages
-  static async createChatMessage(userId: string, messageData: any): Promise<string> {
+  static async createChatMessage(
+    userId: string,
+    messageData: any
+  ): Promise<string> {
     try {
       const docRef = await addDoc(collection(db, 'chatMessages'), {
         ...messageData,
         userId,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
       return docRef.id;
     } catch (error) {
@@ -299,7 +341,10 @@ export class FirestoreService {
     }
   }
 
-  static async getChatMessages(userId: string, limitCount: number = 50): Promise<any[]> {
+  static async getChatMessages(
+    userId: string,
+    limitCount: number = 50
+  ): Promise<any[]> {
     try {
       const q = query(
         collection(db, 'chatMessages'),
@@ -311,7 +356,7 @@ export class FirestoreService {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       }));
     } catch (error) {
       console.error('Error getting chat messages:', error);
@@ -320,8 +365,13 @@ export class FirestoreService {
   }
 }
 
-export const trackEvent = (eventName: string, eventParams?: { [key: string]: any }) => {
-  logEvent(analytics, eventName, eventParams);
+export const trackEvent = (
+  eventName: string,
+  eventParams?: { [key: string]: any }
+) => {
+  if (analytics) {
+    logEvent(analytics, eventName, eventParams);
+  }
 };
 
 export default app;

@@ -10,9 +10,13 @@ export default function Telegram() {
         <Header />
         <main className="flex-1 overflow-auto p-6">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl font-bold text-foreground mb-8">Telegram</h1>
+            <h1 className="text-3xl font-bold text-foreground mb-8">
+              Telegram
+            </h1>
             <div className="bg-card p-6 rounded-lg border">
-              <p className="text-muted-foreground">Telegram integration interface will be displayed here.</p>
+              <p className="text-muted-foreground">
+                Telegram integration interface will be displayed here.
+              </p>
             </div>
           </div>
         </main>

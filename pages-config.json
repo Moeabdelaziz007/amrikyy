@@ -1,1 +1,29 @@
- 
+{
+  "routes": {
+    "/": "index.html",
+    "/home": "index.html",
+    "/login": "login.html",
+    "/signup": "signup.html",
+    "/loading": "loading.html",
+    "/dashboard": "dashboard.html",
+    "/settings": "settings.html",
+    "/about": "about.html",
+    "/help": "help.html",
+    "/app-store": "app-store.html",
+    "/file-manager": "file-manager.html",
+    "/task-manager": "task-manager.html",
+    "/network-manager": "network-manager.html",
+    "/notifications": "notifications.html",
+    "/terminal": "terminal.html",
+    "/profile": "profile.html",
+    "/system-monitor": "system-monitor.html",
+    "/admin": "admin-panel.html",
+    "/autopilot-dashboard": "autopilot-dashboard.html",
+    "/test-dashboard": "test-dashboard.html",
+    "/offline": "offline.html",
+    "/chat": "chat.html",
+    "/share": "share.html",
+    "/file-handler": "file-handler.html",
+    "/protocol": "protocol.html"
+  }
+}

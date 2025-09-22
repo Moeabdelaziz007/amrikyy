@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 // Firestore Configuration and Rules for AuraOS
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, '__esModule', { value: true });
 exports.FirestoreConfig = void 0;
-const firebase_1 = require("./firebase");
-const firestore_types_1 = require("./firestore-types");
+const firebase_1 = require('./firebase');
+const firestore_types_1 = require('./firestore-types');
 /**
  * Firestore Security Rules Template
  *
@@ -79,148 +79,168 @@ const firestore_types_1 = require("./firestore-types");
  * Fields: userId (Ascending), agentId (Ascending), createdAt (Descending)
  */
 class FirestoreConfig {
-    /**
-     * Initialize Firestore with proper configuration
-     */
-    static initialize() {
-        // Enable offline persistence
-        if (typeof window !== 'undefined') {
-            // Client-side only
-            Promise.resolve().then(() => require('firebase/firestore')).then(({ enableNetwork, disableNetwork }) => {
-                // Enable network by default
-                enableNetwork(firebase_1.db);
-            });
-        }
+  /**
+   * Initialize Firestore with proper configuration
+   */
+  static initialize() {
+    // Enable offline persistence
+    if (typeof window !== 'undefined') {
+      // Client-side only
+      Promise.resolve()
+        .then(() => require('firebase/firestore'))
+        .then(({ enableNetwork, disableNetwork }) => {
+          // Enable network by default
+          enableNetwork(firebase_1.db);
+        });
     }
-    /**
-     * Get collection reference with proper typing
-     */
-    static getCollection(collectionName) {
-        return firestore_types_1.COLLECTIONS[collectionName];
+  }
+  /**
+   * Get collection reference with proper typing
+   */
+  static getCollection(collectionName) {
+    return firestore_types_1.COLLECTIONS[collectionName];
+  }
+  /**
+   * Validate data before writing to Firestore
+   */
+  static validateData(data, schema) {
+    try {
+      switch (schema) {
+        case 'user':
+          return this.validateUser(data);
+        case 'post':
+          return this.validatePost(data);
+        case 'workflow':
+          return this.validateWorkflow(data);
+        case 'agent':
+          return this.validateAgent(data);
+        case 'chatMessage':
+          return this.validateChatMessage(data);
+        default:
+          return true;
+      }
+    } catch (error) {
+      console.error('Data validation error:', error);
+      return false;
     }
-    /**
-     * Validate data before writing to Firestore
-     */
-    static validateData(data, schema) {
-        try {
-            switch (schema) {
-                case 'user':
-                    return this.validateUser(data);
-                case 'post':
-                    return this.validatePost(data);
-                case 'workflow':
-                    return this.validateWorkflow(data);
-                case 'agent':
-                    return this.validateAgent(data);
-                case 'chatMessage':
-                    return this.validateChatMessage(data);
-                default:
-                    return true;
-            }
-        }
-        catch (error) {
-            console.error('Data validation error:', error);
-            return false;
-        }
+  }
+  static validateUser(data) {
+    return !!(
+      data.uid &&
+      data.email &&
+      data.displayName &&
+      data.createdAt &&
+      data.preferences
+    );
+  }
+  static validatePost(data) {
+    return !!(
+      data.userId &&
+      data.content &&
+      data.createdAt &&
+      typeof data.likes === 'number' &&
+      typeof data.comments === 'number' &&
+      typeof data.shares === 'number'
+    );
+  }
+  static validateWorkflow(data) {
+    return !!(
+      data.userId &&
+      data.name &&
+      data.steps &&
+      Array.isArray(data.steps) &&
+      data.status &&
+      data.createdAt
+    );
+  }
+  static validateAgent(data) {
+    return !!(
+      data.userId &&
+      data.name &&
+      data.persona &&
+      data.capabilities &&
+      Array.isArray(data.capabilities) &&
+      data.status &&
+      data.createdAt
+    );
+  }
+  static validateChatMessage(data) {
+    return !!(
+      data.userId &&
+      data.content &&
+      data.type &&
+      data.sender &&
+      data.createdAt
+    );
+  }
+  /**
+   * Get Firestore connection status
+   */
+  static async getConnectionStatus() {
+    try {
+      // Try to read a simple document to test connection
+      const testRef = doc(firebase_1.db, 'test', 'connection');
+      await getDoc(testRef);
+      return true;
+    } catch (error) {
+      console.error('Firestore connection test failed:', error);
+      return false;
     }
-    static validateUser(data) {
-        return !!(data.uid &&
-            data.email &&
-            data.displayName &&
-            data.createdAt &&
-            data.preferences);
+  }
+  /**
+   * Clean up old data based on retention policies
+   */
+  static async cleanupOldData(userId) {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - 90); // 90 days retention
+      // Clean up old chat messages
+      const oldMessagesQuery = query(
+        collection(firebase_1.db, firestore_types_1.COLLECTIONS.CHAT_MESSAGES),
+        where('userId', '==', userId),
+        where('createdAt', '<', cutoffDate)
+      );
+      const oldMessagesSnap = await getDocs(oldMessagesQuery);
+      const batch = writeBatch(firebase_1.db);
+      oldMessagesSnap.docs.forEach(doc => {
+        batch.delete(doc.ref);
+      });
+      if (oldMessagesSnap.docs.length > 0) {
+        await batch.commit();
+        console.log(`Cleaned up ${oldMessagesSnap.docs.length} old messages`);
+      }
+    } catch (error) {
+      console.error('Error cleaning up old data:', error);
     }
-    static validatePost(data) {
-        return !!(data.userId &&
-            data.content &&
-            data.createdAt &&
-            typeof data.likes === 'number' &&
-            typeof data.comments === 'number' &&
-            typeof data.shares === 'number');
+  }
+  /**
+   * Backup user data to a separate collection
+   */
+  static async backupUserData(userId) {
+    try {
+      const userRef = doc(
+        firebase_1.db,
+        firestore_types_1.COLLECTIONS.USERS,
+        userId
+      );
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        const backupRef = doc(
+          firebase_1.db,
+          'backups',
+          `${userId}_${Date.now()}`
+        );
+        await setDoc(backupRef, {
+          ...userSnap.data(),
+          backedUpAt: new Date(),
+          originalUserId: userId,
+        });
+        console.log('User data backed up successfully');
+      }
+    } catch (error) {
+      console.error('Error backing up user data:', error);
     }
-    static validateWorkflow(data) {
-        return !!(data.userId &&
-            data.name &&
-            data.steps &&
-            Array.isArray(data.steps) &&
-            data.status &&
-            data.createdAt);
-    }
-    static validateAgent(data) {
-        return !!(data.userId &&
-            data.name &&
-            data.persona &&
-            data.capabilities &&
-            Array.isArray(data.capabilities) &&
-            data.status &&
-            data.createdAt);
-    }
-    static validateChatMessage(data) {
-        return !!(data.userId &&
-            data.content &&
-            data.type &&
-            data.sender &&
-            data.createdAt);
-    }
-    /**
-     * Get Firestore connection status
-     */
-    static async getConnectionStatus() {
-        try {
-            // Try to read a simple document to test connection
-            const testRef = doc(firebase_1.db, 'test', 'connection');
-            await getDoc(testRef);
-            return true;
-        }
-        catch (error) {
-            console.error('Firestore connection test failed:', error);
-            return false;
-        }
-    }
-    /**
-     * Clean up old data based on retention policies
-     */
-    static async cleanupOldData(userId) {
-        try {
-            const cutoffDate = new Date();
-            cutoffDate.setDate(cutoffDate.getDate() - 90); // 90 days retention
-            // Clean up old chat messages
-            const oldMessagesQuery = query(collection(firebase_1.db, firestore_types_1.COLLECTIONS.CHAT_MESSAGES), where('userId', '==', userId), where('createdAt', '<', cutoffDate));
-            const oldMessagesSnap = await getDocs(oldMessagesQuery);
-            const batch = writeBatch(firebase_1.db);
-            oldMessagesSnap.docs.forEach(doc => {
-                batch.delete(doc.ref);
-            });
-            if (oldMessagesSnap.docs.length > 0) {
-                await batch.commit();
-                console.log(`Cleaned up ${oldMessagesSnap.docs.length} old messages`);
-            }
-        }
-        catch (error) {
-            console.error('Error cleaning up old data:', error);
-        }
-    }
-    /**
-     * Backup user data to a separate collection
-     */
-    static async backupUserData(userId) {
-        try {
-            const userRef = doc(firebase_1.db, firestore_types_1.COLLECTIONS.USERS, userId);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-                const backupRef = doc(firebase_1.db, 'backups', `${userId}_${Date.now()}`);
-                await setDoc(backupRef, {
-                    ...userSnap.data(),
-                    backedUpAt: new Date(),
-                    originalUserId: userId
-                });
-                console.log('User data backed up successfully');
-            }
-        }
-        catch (error) {
-            console.error('Error backing up user data:', error);
-        }
-    }
+  }
 }
 exports.FirestoreConfig = FirestoreConfig;
 // Initialize Firestore configuration

@@ -1,10 +1,10 @@
 // Simple Test for Enhanced Cursor-Telegram Integration
 console.log('🚀 Testing Enhanced Cursor-Telegram Integration\n');
-console.log('=' .repeat(50));
+console.log('='.repeat(50));
 console.log('🤖 Telegram Bot: @Amrikyyybot');
 console.log('👨‍💻 Cursor Integration: Enhanced with Fallback');
 console.log('🔑 Gemini API: Connected (with fallback)');
-console.log('=' .repeat(50));
+console.log('='.repeat(50));
 
 // Test 1: Fallback System
 console.log('\n🧪 Test 1: Fallback System');
@@ -14,7 +14,7 @@ const fallbackResponses = {
   code_refactoring: '🔧 Code Refactoring (Fallback Mode) - Available',
   code_debugging: '🐛 Code Debugging (Fallback Mode) - Available',
   test_generation: '🧪 Test Generation (Fallback Mode) - Available',
-  general_query: '🤖 AI Assistant (Fallback Mode) - Available'
+  general_query: '🤖 AI Assistant (Fallback Mode) - Available',
 };
 
 Object.entries(fallbackResponses).forEach(([key, value]) => {
@@ -32,7 +32,7 @@ const commands = [
   '/test <code> - Generate tests',
   '/connect - Connect to Cursor',
   '/help - Show help',
-  '/status - Check status'
+  '/status - Check status',
 ];
 
 commands.forEach(command => {
@@ -47,7 +47,7 @@ const features = {
   'Fallback Responses': 6,
   'Interactive Menus': 1,
   'Status Monitoring': 1,
-  'Error Handling': 1
+  'Error Handling': 1,
 };
 
 Object.entries(features).forEach(([feature, count]) => {
@@ -64,7 +64,7 @@ const examples = [
   '/debug function divide(a,b) { return a/b; }',
   '/test function add(a,b) { return a+b; }',
   '/connect',
-  '/status'
+  '/status',
 ];
 
 examples.forEach((example, index) => {
@@ -79,7 +79,7 @@ const benefits = [
   'Maintains functionality during API limits',
   'Includes common programming solutions',
   'Educational content for developers',
-  'No interruption to user experience'
+  'No interruption to user experience',
 ];
 
 benefits.forEach(benefit => {
@@ -94,7 +94,7 @@ const statusChecks = [
   'Connection status tracking',
   'Error handling and recovery',
   'User notification system',
-  'Status command availability'
+  'Status command availability',
 ];
 
 statusChecks.forEach(check => {
@@ -102,9 +102,9 @@ statusChecks.forEach(check => {
 });
 
 // Summary
-console.log('\n' + '=' .repeat(50));
+console.log('\n' + '='.repeat(50));
 console.log('📊 ENHANCED CURSOR-TELEGRAM INTEGRATION SUMMARY');
-console.log('=' .repeat(50));
+console.log('='.repeat(50));
 console.log('✅ Fallback System: Implemented and working');
 console.log('✅ Commands: 9 commands available');
 console.log('✅ Features: 6 integration features');
@@ -129,4 +129,6 @@ console.log('4. Send /status to check current mode');
 console.log('5. Send /help for detailed command information');
 
 console.log('\n🎯 **Ready for Production:**');
-console.log('The enhanced integration now works reliably even when API quotas are exceeded!');
+console.log(
+  'The enhanced integration now works reliably even when API quotas are exceeded!'
+);

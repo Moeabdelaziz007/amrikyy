@@ -18,7 +18,7 @@ class ZeroShotLearningTester {
   async runAllTests() {
     console.log('🧠 Zero-Shot Learning Loop Test Suite');
     console.log('=====================================\n');
-    
+
     try {
       await this.testZeroShotClassification();
       await this.testZeroShotTranslation();
@@ -27,7 +27,7 @@ class ZeroShotLearningTester {
       await this.testAdaptiveLearning();
       await this.testKnowledgeTransfer();
       await this.testLearningAnalytics();
-      
+
       this.printTestResults();
       this.printLearningSummary();
     } catch (error) {
@@ -37,17 +37,20 @@ class ZeroShotLearningTester {
 
   async testZeroShotClassification() {
     console.log('🎯 Testing Zero-Shot Classification...');
-    
+
     const testCases = [
       {
         name: 'Sentiment Analysis',
         data: {
           userId: 'test_user_1',
           taskType: 'zero_shot_classification',
-          inputData: { text: 'This product is amazing!', category: 'sentiment' },
+          inputData: {
+            text: 'This product is amazing!',
+            category: 'sentiment',
+          },
           expectedOutput: 'positive',
-          metadata: { domain: 'product_review', confidence_threshold: 0.8 }
-        }
+          metadata: { domain: 'product_review', confidence_threshold: 0.8 },
+        },
       },
       {
         name: 'Topic Classification',
@@ -56,8 +59,8 @@ class ZeroShotLearningTester {
           taskType: 'zero_shot_classification',
           inputData: { text: 'The weather is sunny today', category: 'topic' },
           expectedOutput: 'weather',
-          metadata: { domain: 'general', confidence_threshold: 0.7 }
-        }
+          metadata: { domain: 'general', confidence_threshold: 0.7 },
+        },
       },
       {
         name: 'Intent Recognition',
@@ -66,34 +69,48 @@ class ZeroShotLearningTester {
           taskType: 'zero_shot_classification',
           inputData: { text: 'I want to book a flight', category: 'intent' },
           expectedOutput: 'booking_request',
-          metadata: { domain: 'travel', confidence_threshold: 0.9 }
-        }
-      }
+          metadata: { domain: 'travel', confidence_threshold: 0.9 },
+        },
+      },
     ];
 
     for (const testCase of testCases) {
       try {
-        const response = await this.makeRequest('POST', '/api/ai/smart-learning', testCase.data);
-        
+        const response = await this.makeRequest(
+          'POST',
+          '/api/ai/smart-learning',
+          testCase.data
+        );
+
         if (response.success && response.confidence > 0.5) {
-          this.addTestResult(`Zero-Shot Classification - ${testCase.name}`, 'PASS', 
-            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`);
+          this.addTestResult(
+            `Zero-Shot Classification - ${testCase.name}`,
+            'PASS',
+            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`
+          );
           console.log(`✅ ${testCase.name}: PASSED (${response.confidence})`);
-          
+
           this.learningData.push({
             task: testCase.name,
             type: 'zero_shot_classification',
             confidence: response.confidence,
             executionTime: response.executionTime,
-            strategy: response.strategy
+            strategy: response.strategy,
           });
         } else {
-          this.addTestResult(`Zero-Shot Classification - ${testCase.name}`, 'FAIL', 
-            `Low confidence: ${response.confidence}`);
+          this.addTestResult(
+            `Zero-Shot Classification - ${testCase.name}`,
+            'FAIL',
+            `Low confidence: ${response.confidence}`
+          );
           console.log(`❌ ${testCase.name}: FAILED (${response.confidence})`);
         }
       } catch (error) {
-        this.addTestResult(`Zero-Shot Classification - ${testCase.name}`, 'FAIL', error.message);
+        this.addTestResult(
+          `Zero-Shot Classification - ${testCase.name}`,
+          'FAIL',
+          error.message
+        );
         console.log(`❌ ${testCase.name}: FAILED - ${error.message}`);
       }
     }
@@ -101,61 +118,75 @@ class ZeroShotLearningTester {
 
   async testZeroShotTranslation() {
     console.log('🌍 Testing Zero-Shot Translation...');
-    
+
     const testCases = [
       {
         name: 'English to Spanish',
         data: {
           userId: 'test_user_4',
           taskType: 'zero_shot_translation',
-          inputData: { 
-            text: 'Hello, how are you?', 
-            source_language: 'english', 
-            target_language: 'spanish' 
+          inputData: {
+            text: 'Hello, how are you?',
+            source_language: 'english',
+            target_language: 'spanish',
           },
           expectedOutput: 'Hola, ¿cómo estás?',
-          metadata: { domain: 'language_translation', difficulty: 'beginner' }
-        }
+          metadata: { domain: 'language_translation', difficulty: 'beginner' },
+        },
       },
       {
         name: 'English to French',
         data: {
           userId: 'test_user_5',
           taskType: 'zero_shot_translation',
-          inputData: { 
-            text: 'Good morning', 
-            source_language: 'english', 
-            target_language: 'french' 
+          inputData: {
+            text: 'Good morning',
+            source_language: 'english',
+            target_language: 'french',
           },
           expectedOutput: 'Bonjour',
-          metadata: { domain: 'language_translation', difficulty: 'beginner' }
-        }
-      }
+          metadata: { domain: 'language_translation', difficulty: 'beginner' },
+        },
+      },
     ];
 
     for (const testCase of testCases) {
       try {
-        const response = await this.makeRequest('POST', '/api/ai/smart-learning', testCase.data);
-        
+        const response = await this.makeRequest(
+          'POST',
+          '/api/ai/smart-learning',
+          testCase.data
+        );
+
         if (response.success && response.confidence > 0.6) {
-          this.addTestResult(`Zero-Shot Translation - ${testCase.name}`, 'PASS', 
-            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`);
+          this.addTestResult(
+            `Zero-Shot Translation - ${testCase.name}`,
+            'PASS',
+            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`
+          );
           console.log(`✅ ${testCase.name}: PASSED (${response.confidence})`);
-          
+
           this.learningData.push({
             task: testCase.name,
             type: 'zero_shot_translation',
             confidence: response.confidence,
             executionTime: response.executionTime,
-            strategy: response.strategy
+            strategy: response.strategy,
           });
         } else {
-          this.addTestResult(`Zero-Shot Translation - ${testCase.name}`, 'FAIL', 
-            `Low confidence: ${response.confidence}`);
+          this.addTestResult(
+            `Zero-Shot Translation - ${testCase.name}`,
+            'FAIL',
+            `Low confidence: ${response.confidence}`
+          );
           console.log(`❌ ${testCase.name}: FAILED (${response.confidence})`);
         }
       } catch (error) {
-        this.addTestResult(`Zero-Shot Translation - ${testCase.name}`, 'FAIL', error.message);
+        this.addTestResult(
+          `Zero-Shot Translation - ${testCase.name}`,
+          'FAIL',
+          error.message
+        );
         console.log(`❌ ${testCase.name}: FAILED - ${error.message}`);
       }
     }
@@ -163,7 +194,7 @@ class ZeroShotLearningTester {
 
   async testFewShotLearning() {
     console.log('📚 Testing Few-Shot Learning...');
-    
+
     const testCases = [
       {
         name: 'Sentiment Analysis (2-shot)',
@@ -173,13 +204,13 @@ class ZeroShotLearningTester {
           inputData: {
             examples: [
               { input: 'I love this movie', output: 'positive' },
-              { input: 'This is terrible', output: 'negative' }
+              { input: 'This is terrible', output: 'negative' },
             ],
-            query: 'The food was delicious'
+            query: 'The food was delicious',
           },
           expectedOutput: 'positive',
-          metadata: { domain: 'sentiment_analysis', shots: 2 }
-        }
+          metadata: { domain: 'sentiment_analysis', shots: 2 },
+        },
       },
       {
         name: 'Text Classification (3-shot)',
@@ -190,39 +221,53 @@ class ZeroShotLearningTester {
             examples: [
               { input: 'The weather is sunny', output: 'weather' },
               { input: 'I want to buy shoes', output: 'shopping' },
-              { input: 'How to cook pasta', output: 'cooking' }
+              { input: 'How to cook pasta', output: 'cooking' },
             ],
-            query: 'Stock market prices are rising'
+            query: 'Stock market prices are rising',
           },
           expectedOutput: 'finance',
-          metadata: { domain: 'text_classification', shots: 3 }
-        }
-      }
+          metadata: { domain: 'text_classification', shots: 3 },
+        },
+      },
     ];
 
     for (const testCase of testCases) {
       try {
-        const response = await this.makeRequest('POST', '/api/ai/smart-learning', testCase.data);
-        
+        const response = await this.makeRequest(
+          'POST',
+          '/api/ai/smart-learning',
+          testCase.data
+        );
+
         if (response.success && response.confidence > 0.5) {
-          this.addTestResult(`Few-Shot Learning - ${testCase.name}`, 'PASS', 
-            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`);
+          this.addTestResult(
+            `Few-Shot Learning - ${testCase.name}`,
+            'PASS',
+            `Confidence: ${response.confidence}, Strategy: ${response.strategy}`
+          );
           console.log(`✅ ${testCase.name}: PASSED (${response.confidence})`);
-          
+
           this.learningData.push({
             task: testCase.name,
             type: 'few_shot_learning',
             confidence: response.confidence,
             executionTime: response.executionTime,
-            strategy: response.strategy
+            strategy: response.strategy,
           });
         } else {
-          this.addTestResult(`Few-Shot Learning - ${testCase.name}`, 'FAIL', 
-            `Low confidence: ${response.confidence}`);
+          this.addTestResult(
+            `Few-Shot Learning - ${testCase.name}`,
+            'FAIL',
+            `Low confidence: ${response.confidence}`
+          );
           console.log(`❌ ${testCase.name}: FAILED (${response.confidence})`);
         }
       } catch (error) {
-        this.addTestResult(`Few-Shot Learning - ${testCase.name}`, 'FAIL', error.message);
+        this.addTestResult(
+          `Few-Shot Learning - ${testCase.name}`,
+          'FAIL',
+          error.message
+        );
         console.log(`❌ ${testCase.name}: FAILED - ${error.message}`);
       }
     }
@@ -230,7 +275,7 @@ class ZeroShotLearningTester {
 
   async testMetaLearningLoop() {
     console.log('🔄 Testing Meta-Learning Loop...');
-    
+
     try {
       // Test continuous learning with multiple tasks
       const tasks = [
@@ -239,28 +284,32 @@ class ZeroShotLearningTester {
           taskType: 'zero_shot_classification',
           inputData: { text: 'Excellent service', category: 'sentiment' },
           expectedOutput: 'positive',
-          metadata: { domain: 'customer_service', iteration: 1 }
+          metadata: { domain: 'customer_service', iteration: 1 },
         },
         {
           userId: 'meta_user_1',
           taskType: 'zero_shot_classification',
           inputData: { text: 'Poor quality product', category: 'sentiment' },
           expectedOutput: 'negative',
-          metadata: { domain: 'product_review', iteration: 2 }
+          metadata: { domain: 'product_review', iteration: 2 },
         },
         {
           userId: 'meta_user_1',
           taskType: 'zero_shot_classification',
           inputData: { text: 'Average experience', category: 'sentiment' },
           expectedOutput: 'neutral',
-          metadata: { domain: 'general', iteration: 3 }
-        }
+          metadata: { domain: 'general', iteration: 3 },
+        },
       ];
 
       let successCount = 0;
       for (const task of tasks) {
         try {
-          const response = await this.makeRequest('POST', '/api/ai/smart-learning', task);
+          const response = await this.makeRequest(
+            'POST',
+            '/api/ai/smart-learning',
+            task
+          );
           if (response.success) {
             successCount++;
             this.learningData.push({
@@ -268,19 +317,29 @@ class ZeroShotLearningTester {
               type: 'meta_learning',
               confidence: response.confidence,
               executionTime: response.executionTime,
-              strategy: response.strategy
+              strategy: response.strategy,
             });
           }
         } catch (error) {
-          console.log(`⚠️ Meta-learning iteration ${task.metadata.iteration} failed: ${error.message}`);
+          console.log(
+            `⚠️ Meta-learning iteration ${task.metadata.iteration} failed: ${error.message}`
+          );
         }
       }
 
       if (successCount >= 2) {
-        this.addTestResult('Meta-Learning Loop', 'PASS', `${successCount}/3 iterations successful`);
+        this.addTestResult(
+          'Meta-Learning Loop',
+          'PASS',
+          `${successCount}/3 iterations successful`
+        );
         console.log(`✅ Meta-Learning Loop: PASSED (${successCount}/3)`);
       } else {
-        this.addTestResult('Meta-Learning Loop', 'FAIL', `Only ${successCount}/3 iterations successful`);
+        this.addTestResult(
+          'Meta-Learning Loop',
+          'FAIL',
+          `Only ${successCount}/3 iterations successful`
+        );
         console.log(`❌ Meta-Learning Loop: FAILED (${successCount}/3)`);
       }
     } catch (error) {
@@ -291,30 +350,40 @@ class ZeroShotLearningTester {
 
   async testAdaptiveLearning() {
     console.log('🧠 Testing Adaptive Learning...');
-    
+
     try {
       // Test adaptation to new domains
       const adaptiveTasks = [
         {
           userId: 'adaptive_user',
           taskType: 'zero_shot_classification',
-          inputData: { text: 'The stock price increased', category: 'sentiment' },
+          inputData: {
+            text: 'The stock price increased',
+            category: 'sentiment',
+          },
           expectedOutput: 'positive',
-          metadata: { domain: 'finance', adaptation: true }
+          metadata: { domain: 'finance', adaptation: true },
         },
         {
           userId: 'adaptive_user',
           taskType: 'zero_shot_classification',
-          inputData: { text: 'The patient is recovering well', category: 'sentiment' },
+          inputData: {
+            text: 'The patient is recovering well',
+            category: 'sentiment',
+          },
           expectedOutput: 'positive',
-          metadata: { domain: 'healthcare', adaptation: true }
-        }
+          metadata: { domain: 'healthcare', adaptation: true },
+        },
       ];
 
       let adaptiveSuccess = 0;
       for (const task of adaptiveTasks) {
         try {
-          const response = await this.makeRequest('POST', '/api/ai/smart-learning', task);
+          const response = await this.makeRequest(
+            'POST',
+            '/api/ai/smart-learning',
+            task
+          );
           if (response.success && response.confidence > 0.6) {
             adaptiveSuccess++;
             this.learningData.push({
@@ -322,19 +391,29 @@ class ZeroShotLearningTester {
               type: 'adaptive_learning',
               confidence: response.confidence,
               executionTime: response.executionTime,
-              strategy: response.strategy
+              strategy: response.strategy,
             });
           }
         } catch (error) {
-          console.log(`⚠️ Adaptive learning failed for ${task.metadata.domain}: ${error.message}`);
+          console.log(
+            `⚠️ Adaptive learning failed for ${task.metadata.domain}: ${error.message}`
+          );
         }
       }
 
       if (adaptiveSuccess >= 1) {
-        this.addTestResult('Adaptive Learning', 'PASS', `${adaptiveSuccess}/2 domains adapted`);
+        this.addTestResult(
+          'Adaptive Learning',
+          'PASS',
+          `${adaptiveSuccess}/2 domains adapted`
+        );
         console.log(`✅ Adaptive Learning: PASSED (${adaptiveSuccess}/2)`);
       } else {
-        this.addTestResult('Adaptive Learning', 'FAIL', `No successful adaptations`);
+        this.addTestResult(
+          'Adaptive Learning',
+          'FAIL',
+          `No successful adaptations`
+        );
         console.log(`❌ Adaptive Learning: FAILED`);
       }
     } catch (error) {
@@ -345,7 +424,7 @@ class ZeroShotLearningTester {
 
   async testKnowledgeTransfer() {
     console.log('🔄 Testing Knowledge Transfer...');
-    
+
     try {
       // Test transfer learning between related tasks
       const transferTasks = [
@@ -354,21 +433,28 @@ class ZeroShotLearningTester {
           taskType: 'zero_shot_classification',
           inputData: { text: 'This movie is fantastic', category: 'sentiment' },
           expectedOutput: 'positive',
-          metadata: { domain: 'entertainment', transfer_from: 'general_sentiment' }
+          metadata: {
+            domain: 'entertainment',
+            transfer_from: 'general_sentiment',
+          },
         },
         {
           userId: 'transfer_user',
           taskType: 'zero_shot_classification',
           inputData: { text: 'The book was boring', category: 'sentiment' },
           expectedOutput: 'negative',
-          metadata: { domain: 'literature', transfer_from: 'entertainment' }
-        }
+          metadata: { domain: 'literature', transfer_from: 'entertainment' },
+        },
       ];
 
       let transferSuccess = 0;
       for (const task of transferTasks) {
         try {
-          const response = await this.makeRequest('POST', '/api/ai/smart-learning', task);
+          const response = await this.makeRequest(
+            'POST',
+            '/api/ai/smart-learning',
+            task
+          );
           if (response.success && response.confidence > 0.5) {
             transferSuccess++;
             this.learningData.push({
@@ -376,19 +462,29 @@ class ZeroShotLearningTester {
               type: 'knowledge_transfer',
               confidence: response.confidence,
               executionTime: response.executionTime,
-              strategy: response.strategy
+              strategy: response.strategy,
             });
           }
         } catch (error) {
-          console.log(`⚠️ Knowledge transfer failed for ${task.metadata.domain}: ${error.message}`);
+          console.log(
+            `⚠️ Knowledge transfer failed for ${task.metadata.domain}: ${error.message}`
+          );
         }
       }
 
       if (transferSuccess >= 1) {
-        this.addTestResult('Knowledge Transfer', 'PASS', `${transferSuccess}/2 transfers successful`);
+        this.addTestResult(
+          'Knowledge Transfer',
+          'PASS',
+          `${transferSuccess}/2 transfers successful`
+        );
         console.log(`✅ Knowledge Transfer: PASSED (${transferSuccess}/2)`);
       } else {
-        this.addTestResult('Knowledge Transfer', 'FAIL', `No successful transfers`);
+        this.addTestResult(
+          'Knowledge Transfer',
+          'FAIL',
+          `No successful transfers`
+        );
         console.log(`❌ Knowledge Transfer: FAILED`);
       }
     } catch (error) {
@@ -399,34 +495,44 @@ class ZeroShotLearningTester {
 
   async testLearningAnalytics() {
     console.log('📊 Testing Learning Analytics...');
-    
+
     try {
       // Calculate learning analytics from our test data
       const totalTasks = this.learningData.length;
-      const avgConfidence = this.learningData.reduce((sum, task) => sum + task.confidence, 0) / totalTasks;
-      const avgExecutionTime = this.learningData.reduce((sum, task) => sum + task.executionTime, 0) / totalTasks;
-      
+      const avgConfidence =
+        this.learningData.reduce((sum, task) => sum + task.confidence, 0) /
+        totalTasks;
+      const avgExecutionTime =
+        this.learningData.reduce((sum, task) => sum + task.executionTime, 0) /
+        totalTasks;
+
       const taskTypes = [...new Set(this.learningData.map(task => task.type))];
-      const strategies = [...new Set(this.learningData.map(task => task.strategy))];
-      
+      const strategies = [
+        ...new Set(this.learningData.map(task => task.strategy)),
+      ];
+
       const analytics = {
         totalTasks,
         averageConfidence: avgConfidence,
         averageExecutionTime: avgExecutionTime,
         taskTypes,
         strategies,
-        learningProgress: this.learningData.length > 0 ? 'active' : 'inactive'
+        learningProgress: this.learningData.length > 0 ? 'active' : 'inactive',
       };
 
-      this.addTestResult('Learning Analytics', 'PASS', 
-        `Total tasks: ${totalTasks}, Avg confidence: ${avgConfidence.toFixed(2)}`);
+      this.addTestResult(
+        'Learning Analytics',
+        'PASS',
+        `Total tasks: ${totalTasks}, Avg confidence: ${avgConfidence.toFixed(2)}`
+      );
       console.log(`✅ Learning Analytics: PASSED`);
       console.log(`   📊 Total Tasks: ${totalTasks}`);
       console.log(`   📊 Average Confidence: ${avgConfidence.toFixed(2)}`);
-      console.log(`   📊 Average Execution Time: ${avgExecutionTime.toFixed(2)}ms`);
+      console.log(
+        `   📊 Average Execution Time: ${avgExecutionTime.toFixed(2)}ms`
+      );
       console.log(`   📊 Task Types: ${taskTypes.join(', ')}`);
       console.log(`   📊 Strategies: ${strategies.join(', ')}`);
-      
     } catch (error) {
       this.addTestResult('Learning Analytics', 'FAIL', error.message);
       console.log(`❌ Learning Analytics: FAILED - ${error.message}`);
@@ -441,13 +547,13 @@ class ZeroShotLearningTester {
         path: path,
         method: method,
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       };
 
-      const req = http.request(options, (res) => {
+      const req = http.request(options, res => {
         let body = '';
-        res.on('data', (chunk) => {
+        res.on('data', chunk => {
           body += chunk;
         });
         res.on('end', () => {
@@ -455,12 +561,14 @@ class ZeroShotLearningTester {
             const jsonData = JSON.parse(body);
             resolve(jsonData);
           } catch (error) {
-            reject(new Error(`Invalid JSON response: ${body.substring(0, 100)}...`));
+            reject(
+              new Error(`Invalid JSON response: ${body.substring(0, 100)}...`)
+            );
           }
         });
       });
 
-      req.on('error', (error) => {
+      req.on('error', error => {
         reject(error);
       });
 
@@ -477,11 +585,11 @@ class ZeroShotLearningTester {
 
   printTestResults() {
     console.log('\n📊 Zero-Shot Learning Test Results:');
-    console.log('=' .repeat(60));
-    
+    console.log('='.repeat(60));
+
     const passed = this.testResults.filter(r => r.status === 'PASS').length;
     const failed = this.testResults.filter(r => r.status === 'FAIL').length;
-    
+
     // Group results by category
     const categories = {};
     this.testResults.forEach(result => {
@@ -503,12 +611,16 @@ class ZeroShotLearningTester {
       });
       console.log(`  📊 ${cat.passed} passed, ${cat.failed} failed`);
     });
-    
-    console.log('\n' + '=' .repeat(60));
-    console.log(`🎯 Total: ${this.testResults.length} | ✅ Passed: ${passed} | ❌ Failed: ${failed}`);
-    
+
+    console.log('\n' + '='.repeat(60));
+    console.log(
+      `🎯 Total: ${this.testResults.length} | ✅ Passed: ${passed} | ❌ Failed: ${failed}`
+    );
+
     if (failed === 0) {
-      console.log('\n🎉 All zero-shot learning tests passed! The AI meta-learning system is fully operational!');
+      console.log(
+        '\n🎉 All zero-shot learning tests passed! The AI meta-learning system is fully operational!'
+      );
     } else {
       console.log('\n⚠️ Some tests failed. Please review the issues above.');
     }
@@ -516,22 +628,30 @@ class ZeroShotLearningTester {
 
   printLearningSummary() {
     console.log('\n🧠 Zero-Shot Learning Summary:');
-    console.log('=' .repeat(50));
-    
+    console.log('='.repeat(50));
+
     if (this.learningData.length > 0) {
-      const avgConfidence = this.learningData.reduce((sum, task) => sum + task.confidence, 0) / this.learningData.length;
-      const avgExecutionTime = this.learningData.reduce((sum, task) => sum + task.executionTime, 0) / this.learningData.length;
-      
+      const avgConfidence =
+        this.learningData.reduce((sum, task) => sum + task.confidence, 0) /
+        this.learningData.length;
+      const avgExecutionTime =
+        this.learningData.reduce((sum, task) => sum + task.executionTime, 0) /
+        this.learningData.length;
+
       console.log(`📊 Total Learning Tasks: ${this.learningData.length}`);
       console.log(`📊 Average Confidence: ${avgConfidence.toFixed(2)}`);
-      console.log(`📊 Average Execution Time: ${avgExecutionTime.toFixed(2)}ms`);
-      
+      console.log(
+        `📊 Average Execution Time: ${avgExecutionTime.toFixed(2)}ms`
+      );
+
       const taskTypes = [...new Set(this.learningData.map(task => task.type))];
       console.log(`📊 Task Types Tested: ${taskTypes.join(', ')}`);
-      
-      const strategies = [...new Set(this.learningData.map(task => task.strategy))];
+
+      const strategies = [
+        ...new Set(this.learningData.map(task => task.strategy)),
+      ];
       console.log(`📊 Learning Strategies: ${strategies.join(', ')}`);
-      
+
       console.log('\n🚀 **Zero-Shot Learning Capabilities Verified:**');
       console.log('• ✅ Zero-Shot Classification');
       console.log('• ✅ Zero-Shot Translation');
@@ -553,7 +673,7 @@ async function main() {
 }
 
 // Handle errors gracefully
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
   console.error('❌ Unhandled error:', error);
   process.exit(1);
 });

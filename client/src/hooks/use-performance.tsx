@@ -14,9 +14,10 @@ export function usePerformanceOptimization() {
     if ('memory' in performance) {
       const memory = (performance as any).memory;
       performanceRef.current.memoryUsage = memory.usedJSHeapSize;
-      
+
       // تحذير إذا تجاوز استخدام الذاكرة الحد المسموح
-      if (memory.usedJSHeapSize > 100 * 1024 * 1024) { // 100MB
+      if (memory.usedJSHeapSize > 100 * 1024 * 1024) {
+        // 100MB
         console.warn('High memory usage detected:', memory.usedJSHeapSize);
       }
     }
@@ -27,7 +28,7 @@ export function usePerformanceOptimization() {
     if (window.gc) {
       window.gc();
     }
-    
+
     // تنظيف المتغيرات المؤقتة
     if (performanceRef.current) {
       performanceRef.current = {
@@ -43,17 +44,18 @@ export function usePerformanceOptimization() {
     performanceRef.current.startTime = performance.now();
     fn();
     performanceRef.current.endTime = performance.now();
-    
-    const duration = performanceRef.current.endTime - performanceRef.current.startTime;
+
+    const duration =
+      performanceRef.current.endTime - performanceRef.current.startTime;
     console.log(`${name} took ${duration.toFixed(2)}ms`);
-    
+
     return duration;
   }, []);
 
   useEffect(() => {
     // مراقبة استخدام الذاكرة كل 30 ثانية
     const interval = setInterval(trackMemoryUsage, 30000);
-    
+
     return () => {
       clearInterval(interval);
       cleanupMemory();
@@ -69,25 +71,22 @@ export function usePerformanceOptimization() {
 }
 
 // Hook لتحسين التحميل البطيء
-export function useLazyLoading<T>(
-  data: T[],
-  pageSize: number = 20
-) {
+export function useLazyLoading<T>(data: T[], pageSize: number = 20) {
   const [visibleItems, setVisibleItems] = useState<T[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const loadMoreItems = useCallback(() => {
     if (isLoading) return;
-    
+
     setIsLoading(true);
-    
+
     // محاكاة التحميل البطيء
     setTimeout(() => {
       const startIndex = currentPage * pageSize;
       const endIndex = startIndex + pageSize;
       const newItems = data.slice(startIndex, endIndex);
-      
+
       setVisibleItems(prev => [...prev, ...newItems]);
       setCurrentPage(prev => prev + 1);
       setIsLoading(false);
@@ -121,7 +120,9 @@ export function useCache<T>(
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const cacheRef = useRef<Map<string, { data: T; timestamp: number }>>(new Map());
+  const cacheRef = useRef<Map<string, { data: T; timestamp: number }>>(
+    new Map()
+  );
 
   const getCachedData = useCallback(() => {
     const cached = cacheRef.current.get(key);
@@ -131,12 +132,15 @@ export function useCache<T>(
     return null;
   }, [key, ttl]);
 
-  const setCachedData = useCallback((newData: T) => {
-    cacheRef.current.set(key, {
-      data: newData,
-      timestamp: Date.now(),
-    });
-  }, [key]);
+  const setCachedData = useCallback(
+    (newData: T) => {
+      cacheRef.current.set(key, {
+        data: newData,
+        timestamp: Date.now(),
+      });
+    },
+    [key]
+  );
 
   const fetchData = useCallback(async () => {
     // تحقق من التخزين المؤقت أولاً
@@ -199,9 +203,7 @@ export function useDebounce<T>(value: T, delay: number): T {
 }
 
 // Hook لتحسين التحميل المتوازي
-export function useParallelLoading<T>(
-  loaders: (() => Promise<T>)[]
-) {
+export function useParallelLoading<T>(loaders: (() => Promise<T>)[]) {
   const [results, setResults] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Error[]>([]);
@@ -213,7 +215,7 @@ export function useParallelLoading<T>(
     try {
       const promises = loaders.map(loader => loader());
       const results = await Promise.allSettled(promises);
-      
+
       const successfulResults: T[] = [];
       const failedErrors: Error[] = [];
 
@@ -221,7 +223,9 @@ export function useParallelLoading<T>(
         if (result.status === 'fulfilled') {
           successfulResults.push(result.value);
         } else {
-          failedErrors.push(new Error(`Loader ${index} failed: ${result.reason}`));
+          failedErrors.push(
+            new Error(`Loader ${index} failed: ${result.reason}`)
+          );
         }
       });
 

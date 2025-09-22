@@ -33,7 +33,9 @@ export const StatusWidget: React.FC<StatusWidgetProps> = ({
   };
 
   const animationClasses = animate ? 'animate-cyber-pulse' : '';
-  const clickableClasses = onClick ? 'cursor-pointer hover:scale-105 active:scale-95' : '';
+  const clickableClasses = onClick
+    ? 'cursor-pointer hover:scale-105 active:scale-95'
+    : '';
 
   return (
     <div
@@ -55,15 +57,11 @@ export const StatusWidget: React.FC<StatusWidgetProps> = ({
       onClick={onClick}
     >
       {icon && (
-        <div className="w-4 h-4 flex items-center justify-center">
-          {icon}
-        </div>
+        <div className="w-4 h-4 flex items-center justify-center">{icon}</div>
       )}
-      
+
       <div className="flex flex-col items-center min-w-0">
-        <span className="cyberpunk-label text-xs">
-          {label}
-        </span>
+        <span className="cyberpunk-label text-xs">{label}</span>
         <span className="cyberpunk-status font-mono font-bold text-sm">
           {value}
         </span>

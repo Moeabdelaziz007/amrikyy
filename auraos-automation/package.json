@@ -8,7 +8,11 @@
     "dev": "NODE_ENV=development ts-node src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["automation", "task-engine", "firestore"],
+  "keywords": [
+    "automation",
+    "task-engine",
+    "firestore"
+  ],
   "author": "",
   "license": "ISC",
   "description": "AuraOS Task Automation Engine with Firestore persistence",

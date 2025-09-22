@@ -34,11 +34,11 @@ vi.mock('openai', () => ({
     chat: {
       completions: {
         create: vi.fn().mockResolvedValue({
-          choices: [{ message: { content: 'Mock AI response' } }]
-        })
-      }
-    }
-  }))
+          choices: [{ message: { content: 'Mock AI response' } }],
+        }),
+      },
+    },
+  })),
 }));
 
 // Mock WebSocket

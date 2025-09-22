@@ -2,15 +2,21 @@
 // Reusable components optimized for mobile devices
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  TrendingUp, 
+import {
+  ChevronDown,
+  ChevronUp,
+  TrendingUp,
   TrendingDown,
   Smartphone,
   Tablet,
@@ -18,7 +24,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Info,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 
 // Mobile Detection Hook
@@ -61,7 +67,7 @@ export const MobileAnalyticsCard: React.FC<MobileAnalyticsCardProps> = ({
   changeType = 'neutral',
   icon,
   description,
-  className = ''
+  className = '',
 }) => {
   const getChangeIcon = () => {
     switch (changeType) {
@@ -91,16 +97,20 @@ export const MobileAnalyticsCard: React.FC<MobileAnalyticsCardProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {icon}
-            <span className="text-xs font-medium text-muted-foreground">{title}</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              {title}
+            </span>
           </div>
           {change !== undefined && (
-            <div className={`flex items-center gap-1 text-xs ${getChangeColor()}`}>
+            <div
+              className={`flex items-center gap-1 text-xs ${getChangeColor()}`}
+            >
               {getChangeIcon()}
               <span>{Math.abs(change)}%</span>
             </div>
           )}
         </div>
-        
+
         <div className="space-y-1">
           <div className="text-lg font-bold">{value}</div>
           {description && (
@@ -111,5 +121,3 @@ export const MobileAnalyticsCard: React.FC<MobileAnalyticsCardProps> = ({
     </Card>
   );
 };
-
-

@@ -7,7 +7,7 @@ class CursorTelegramTestSuite {
     this.results = {
       passed: 0,
       failed: 0,
-      errors: []
+      errors: [],
     };
   }
 
@@ -17,11 +17,11 @@ class CursorTelegramTestSuite {
 
   async runTests() {
     console.log('🚀 Starting Cursor-Telegram Integration Tests\n');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log('🤖 Telegram Bot: @Amrikyyybot');
     console.log('👨‍💻 Cursor Integration: Active');
     console.log('🔑 Gemini API: Connected');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
 
     for (const test of this.tests) {
       try {
@@ -41,12 +41,14 @@ class CursorTelegramTestSuite {
   }
 
   printSummary() {
-    console.log('\n' + '=' .repeat(60));
+    console.log('\n' + '='.repeat(60));
     console.log('📊 CURSOR-TELEGRAM INTEGRATION TEST SUMMARY');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
     console.log(`✅ Passed: ${this.results.passed}`);
     console.log(`❌ Failed: ${this.results.failed}`);
-    console.log(`📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`);
+    console.log(
+      `📈 Success Rate: ${((this.results.passed / (this.results.passed + this.results.failed)) * 100).toFixed(1)}%`
+    );
 
     if (this.results.errors.length > 0) {
       console.log('\n🔍 FAILED TESTS:');
@@ -64,14 +66,14 @@ const testSuite = new CursorTelegramTestSuite();
 
 // Initialize Gemini for testing
 const genAI = new GoogleGenerativeAI('AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU');
-const model = genAI.getGenerativeModel({ 
+const model = genAI.getGenerativeModel({
   model: 'gemini-1.5-flash',
   generationConfig: {
     temperature: 0.7,
     topK: 40,
     topP: 0.95,
-    maxOutputTokens: 1024
-  }
+    maxOutputTokens: 1024,
+  },
 });
 
 // Test 1: Cursor AI Question Answering
@@ -110,7 +112,12 @@ Format the response with proper code blocks and explanations.`;
   const response = await result.response;
   const code = response.text();
 
-  if (!code || !code.includes('function') && !code.includes('const') && !code.includes('class')) {
+  if (
+    !code ||
+    (!code.includes('function') &&
+      !code.includes('const') &&
+      !code.includes('class'))
+  ) {
     throw new Error('Invalid code generation');
   }
 
@@ -244,7 +251,7 @@ Use Jest testing framework and include:
   const response = await result.response;
   const tests = response.text();
 
-  if (!tests || !tests.includes('test') && !tests.includes('describe')) {
+  if (!tests || (!tests.includes('test') && !tests.includes('describe'))) {
     throw new Error('Invalid test generation');
   }
 
@@ -261,7 +268,7 @@ testSuite.addTest('Integration Commands', async () => {
     { command: '/debug', description: 'Debug and fix code issues' },
     { command: '/test', description: 'Generate comprehensive tests' },
     { command: '/connect', description: 'Connect this chat to Cursor' },
-    { command: '/help', description: 'Show help message' }
+    { command: '/help', description: 'Show help message' },
   ];
 
   if (commands.length !== 8) {
@@ -276,11 +283,11 @@ testSuite.addTest('Integration Commands', async () => {
 // Test 8: Performance Test
 testSuite.addTest('Performance Test', async () => {
   const startTime = Date.now();
-  
+
   const promises = [
     model.generateContent('What is React?'),
     model.generateContent('What is JavaScript?'),
-    model.generateContent('What is TypeScript?')
+    model.generateContent('What is TypeScript?'),
   ];
 
   const results = await Promise.all(promises);
@@ -293,7 +300,9 @@ testSuite.addTest('Performance Test', async () => {
     }
   }
 
-  console.log(`   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime/3)}ms per operation)`);
+  console.log(
+    `   ⚡ Performance: 3 operations in ${totalTime}ms (avg: ${Math.round(totalTime / 3)}ms per operation)`
+  );
 });
 
 // Test 9: Error Handling
@@ -303,7 +312,7 @@ testSuite.addTest('Error Handling', async () => {
     const result = await model.generateContent('');
     const response = await result.response;
     const text = response.text();
-    
+
     // Should either succeed with empty response or fail gracefully
     console.log(`   🛡️ Error Handling: ${text ? 'Graceful' : 'Handled'}`);
   } catch (error) {
@@ -318,35 +327,61 @@ testSuite.addTest('Integration Status', async () => {
     gemini: true, // We know Gemini is working from previous tests
     cursor: true, // Cursor integration is implemented
     commands: true, // Commands are defined
-    api: true // API routes are implemented
+    api: true, // API routes are implemented
   };
-  
+
   const allSystemsOperational = Object.values(status).every(s => s === true);
-  
+
   if (!allSystemsOperational) {
     throw new Error('Not all systems operational');
   }
-  
-  console.log(`   🔗 Telegram: ${status.telegram ? 'Connected' : 'Disconnected'}`);
+
+  console.log(
+    `   🔗 Telegram: ${status.telegram ? 'Connected' : 'Disconnected'}`
+  );
   console.log(`   🤖 Gemini: ${status.gemini ? 'Active' : 'Inactive'}`);
-  console.log(`   👨‍💻 Cursor: ${status.cursor ? 'Integrated' : 'Not Integrated'}`);
-  console.log(`   📋 Commands: ${status.commands ? 'Available' : 'Not Available'}`);
+  console.log(
+    `   👨‍💻 Cursor: ${status.cursor ? 'Integrated' : 'Not Integrated'}`
+  );
+  console.log(
+    `   📋 Commands: ${status.commands ? 'Available' : 'Not Available'}`
+  );
   console.log(`   🔌 API: ${status.api ? 'Ready' : 'Not Ready'}`);
 });
 
 // Test 11: Feature Completeness
 testSuite.addTest('Feature Completeness', async () => {
   const features = {
-    aiCommands: ['/cursor', '/code', '/explain', '/refactor', '/debug', '/test'],
+    aiCommands: [
+      '/cursor',
+      '/code',
+      '/explain',
+      '/refactor',
+      '/debug',
+      '/test',
+    ],
     connectionCommands: ['/connect', '/help'],
-    apiEndpoints: ['/status', '/generate-code', '/explain-code', '/refactor-code', '/debug-code', '/generate-tests', '/ask-cursor'],
-    integrations: ['telegram', 'gemini', 'cursor']
+    apiEndpoints: [
+      '/status',
+      '/generate-code',
+      '/explain-code',
+      '/refactor-code',
+      '/debug-code',
+      '/generate-tests',
+      '/ask-cursor',
+    ],
+    integrations: ['telegram', 'gemini', 'cursor'],
   };
-  
-  const totalFeatures = Object.values(features).reduce((sum, arr) => sum + arr.length, 0);
-  
+
+  const totalFeatures = Object.values(features).reduce(
+    (sum, arr) => sum + arr.length,
+    0
+  );
+
   console.log(`   🎯 AI Commands: ${features.aiCommands.length}`);
-  console.log(`   🔗 Connection Commands: ${features.connectionCommands.length}`);
+  console.log(
+    `   🔗 Connection Commands: ${features.connectionCommands.length}`
+  );
   console.log(`   🔌 API Endpoints: ${features.apiEndpoints.length}`);
   console.log(`   🔌 Integrations: ${features.integrations.length}`);
   console.log(`   📊 Total Features: ${totalFeatures}`);
@@ -362,7 +397,7 @@ testSuite.addTest('Usage Examples', async () => {
     '/debug async function fetchUser(id) { ... }',
     '/test function calculateTotal(items) { ... }',
     '/connect',
-    '/help'
+    '/help',
   ];
 
   if (examples.length !== 8) {

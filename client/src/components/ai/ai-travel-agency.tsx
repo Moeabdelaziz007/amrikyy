@@ -17,7 +17,7 @@ const AITravelAgency = () => {
     departureDate: '',
     returnDate: '',
     passengers: 1,
-    class: 'economy'
+    class: 'economy',
   });
 
   const [hotelSearch, setHotelSearch] = useState({
@@ -25,7 +25,7 @@ const AITravelAgency = () => {
     checkIn: '',
     checkOut: '',
     guests: 1,
-    rooms: 1
+    rooms: 1,
   });
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const AITravelAgency = () => {
           bestTimeToVisit: ['April', 'May', 'September', 'October'],
           localCurrency: 'EUR',
           safetyLevel: 'medium',
-          attractions: ['Eiffel Tower', 'Louvre Museum']
+          attractions: ['Eiffel Tower', 'Louvre Museum'],
         },
         {
           id: 'tokyo_japan',
@@ -52,8 +52,8 @@ const AITravelAgency = () => {
           bestTimeToVisit: ['March', 'April', 'May'],
           localCurrency: 'JPY',
           safetyLevel: 'high',
-          attractions: ['Senso-ji Temple', 'Tokyo Skytree']
-        }
+          attractions: ['Senso-ji Temple', 'Tokyo Skytree'],
+        },
       ]);
     } catch (error) {
       console.error('Failed to load destinations:', error);
@@ -61,7 +61,11 @@ const AITravelAgency = () => {
   };
 
   const handleFlightSearch = async () => {
-    if (!flightSearch.origin || !flightSearch.destination || !flightSearch.departureDate) {
+    if (
+      !flightSearch.origin ||
+      !flightSearch.destination ||
+      !flightSearch.departureDate
+    ) {
       alert('Please fill in all required fields');
       return;
     }
@@ -76,8 +80,8 @@ const AITravelAgency = () => {
             flightNumber: 'AA123',
             departure: { time: '08:00', airport: flightSearch.origin },
             duration: '4h 00m',
-            price: { amount: 299, currency: 'USD' }
-          }
+            price: { amount: 299, currency: 'USD' },
+          },
         ]);
         setActiveTab('results');
         setLoading(false);
@@ -89,7 +93,11 @@ const AITravelAgency = () => {
   };
 
   const handleHotelSearch = async () => {
-    if (!hotelSearch.destination || !hotelSearch.checkIn || !hotelSearch.checkOut) {
+    if (
+      !hotelSearch.destination ||
+      !hotelSearch.checkIn ||
+      !hotelSearch.checkOut
+    ) {
       alert('Please fill in all required fields');
       return;
     }
@@ -103,8 +111,8 @@ const AITravelAgency = () => {
             name: 'Grand Hotel',
             address: '123 Main St, City Center',
             starRating: 4,
-            price: { perNight: 150, currency: 'USD' }
-          }
+            price: { perNight: 150, currency: 'USD' },
+          },
         ]);
         setActiveTab('results');
         setLoading(false);
@@ -118,7 +126,7 @@ const AITravelAgency = () => {
   const formatPrice = (amount: number, currency: string) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency || 'USD'
+      currency: currency || 'USD',
     }).format(amount);
   };
 
@@ -132,19 +140,19 @@ const AITravelAgency = () => {
       </div>
 
       <div className="flex space-x-2 mb-6">
-        <Button 
+        <Button
           variant={activeTab === 'search' ? 'default' : 'outline'}
           onClick={() => setActiveTab('search')}
         >
           Search & Book
         </Button>
-        <Button 
+        <Button
           variant={activeTab === 'results' ? 'default' : 'outline'}
           onClick={() => setActiveTab('results')}
         >
           Results
         </Button>
-        <Button 
+        <Button
           variant={activeTab === 'destinations' ? 'default' : 'outline'}
           onClick={() => setActiveTab('destinations')}
         >
@@ -168,7 +176,12 @@ const AITravelAgency = () => {
                   <Input
                     id="origin"
                     value={flightSearch.origin}
-                    onChange={(e) => setFlightSearch({...flightSearch, origin: e.target.value})}
+                    onChange={e =>
+                      setFlightSearch({
+                        ...flightSearch,
+                        origin: e.target.value,
+                      })
+                    }
                     placeholder="City or Airport"
                   />
                 </div>
@@ -177,7 +190,12 @@ const AITravelAgency = () => {
                   <Input
                     id="destination"
                     value={flightSearch.destination}
-                    onChange={(e) => setFlightSearch({...flightSearch, destination: e.target.value})}
+                    onChange={e =>
+                      setFlightSearch({
+                        ...flightSearch,
+                        destination: e.target.value,
+                      })
+                    }
                     placeholder="City or Airport"
                   />
                 </div>
@@ -190,7 +208,12 @@ const AITravelAgency = () => {
                     id="departure"
                     type="date"
                     value={flightSearch.departureDate}
-                    onChange={(e) => setFlightSearch({...flightSearch, departureDate: e.target.value})}
+                    onChange={e =>
+                      setFlightSearch({
+                        ...flightSearch,
+                        departureDate: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div>
@@ -199,13 +222,18 @@ const AITravelAgency = () => {
                     id="return"
                     type="date"
                     value={flightSearch.returnDate}
-                    onChange={(e) => setFlightSearch({...flightSearch, returnDate: e.target.value})}
+                    onChange={e =>
+                      setFlightSearch({
+                        ...flightSearch,
+                        returnDate: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
 
-              <Button 
-                onClick={handleFlightSearch} 
+              <Button
+                onClick={handleFlightSearch}
                 disabled={loading}
                 className="w-full"
               >
@@ -228,7 +256,12 @@ const AITravelAgency = () => {
                 <Input
                   id="hotel-destination"
                   value={hotelSearch.destination}
-                  onChange={(e) => setHotelSearch({...hotelSearch, destination: e.target.value})}
+                  onChange={e =>
+                    setHotelSearch({
+                      ...hotelSearch,
+                      destination: e.target.value,
+                    })
+                  }
                   placeholder="City or Hotel"
                 />
               </div>
@@ -240,7 +273,12 @@ const AITravelAgency = () => {
                     id="checkin"
                     type="date"
                     value={hotelSearch.checkIn}
-                    onChange={(e) => setHotelSearch({...hotelSearch, checkIn: e.target.value})}
+                    onChange={e =>
+                      setHotelSearch({
+                        ...hotelSearch,
+                        checkIn: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div>
@@ -249,13 +287,18 @@ const AITravelAgency = () => {
                     id="checkout"
                     type="date"
                     value={hotelSearch.checkOut}
-                    onChange={(e) => setHotelSearch({...hotelSearch, checkOut: e.target.value})}
+                    onChange={e =>
+                      setHotelSearch({
+                        ...hotelSearch,
+                        checkOut: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
 
-              <Button 
-                onClick={handleHotelSearch} 
+              <Button
+                onClick={handleHotelSearch}
                 disabled={loading}
                 className="w-full"
               >
@@ -276,7 +319,9 @@ const AITravelAgency = () => {
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                       <div className="space-y-2">
-                        <h3 className="text-xl font-semibold">{result.airline || result.name}</h3>
+                        <h3 className="text-xl font-semibold">
+                          {result.airline || result.name}
+                        </h3>
                         <p className="text-muted-foreground">
                           {result.flightNumber || result.address}
                         </p>
@@ -289,9 +334,7 @@ const AITravelAgency = () => {
                             <MapPin className="w-4 h-4" />
                             {result.departure?.airport || result.destination}
                           </span>
-                          {result.duration && (
-                            <span>{result.duration}</span>
-                          )}
+                          {result.duration && <span>{result.duration}</span>}
                           {result.starRating && (
                             <span className="flex items-center gap-1">
                               <Star className="w-4 h-4" />
@@ -302,10 +345,15 @@ const AITravelAgency = () => {
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold">
-                          {formatPrice(result.price?.amount || result.price?.perNight || 0, result.price?.currency || 'USD')}
+                          {formatPrice(
+                            result.price?.amount || result.price?.perNight || 0,
+                            result.price?.currency || 'USD'
+                          )}
                         </div>
                         {result.price?.perNight && (
-                          <div className="text-sm text-muted-foreground">per night</div>
+                          <div className="text-sm text-muted-foreground">
+                            per night
+                          </div>
                         )}
                         <Button className="mt-2">Book Now</Button>
                       </div>
@@ -317,7 +365,9 @@ const AITravelAgency = () => {
           ) : (
             <Card>
               <CardContent className="p-6 text-center">
-                <p className="text-muted-foreground">No results yet. Start by searching for flights or hotels.</p>
+                <p className="text-muted-foreground">
+                  No results yet. Start by searching for flights or hotels.
+                </p>
               </CardContent>
             </Card>
           )}
@@ -326,16 +376,23 @@ const AITravelAgency = () => {
 
       {activeTab === 'destinations' && (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {destinations.map((destination) => (
+          {destinations.map(destination => (
             <Card key={destination.id}>
               <CardContent className="p-6">
                 <div className="space-y-2">
                   <h3 className="text-xl font-semibold">{destination.name}</h3>
                   <p className="text-muted-foreground">{destination.country}</p>
                   <div className="space-y-1">
-                    <p className="text-sm"><strong>Best Time:</strong> {destination.bestTimeToVisit?.join(', ')}</p>
-                    <p className="text-sm"><strong>Currency:</strong> {destination.localCurrency}</p>
-                    <p className="text-sm"><strong>Safety:</strong> {destination.safetyLevel}</p>
+                    <p className="text-sm">
+                      <strong>Best Time:</strong>{' '}
+                      {destination.bestTimeToVisit?.join(', ')}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Currency:</strong> {destination.localCurrency}
+                    </p>
+                    <p className="text-sm">
+                      <strong>Safety:</strong> {destination.safetyLevel}
+                    </p>
                   </div>
                   <Button className="w-full mt-4" variant="outline">
                     Explore {destination.name}

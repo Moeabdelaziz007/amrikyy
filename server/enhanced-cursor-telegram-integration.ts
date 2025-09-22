@@ -14,23 +14,25 @@ export class EnhancedCursorTelegramIntegration {
   constructor(telegramToken: string, geminiApiKey: string) {
     this.bot = new TelegramBot(telegramToken, { polling: true });
     this.genAI = new GoogleGenerativeAI(geminiApiKey);
-    this.model = this.genAI.getGenerativeModel({ 
+    this.model = this.genAI.getGenerativeModel({
       model: 'gemini-1.5-flash',
       generationConfig: {
         temperature: 0.7,
         topK: 40,
         topP: 0.95,
-        maxOutputTokens: 1024
-      }
+        maxOutputTokens: 1024,
+      },
     });
-    
+
     this.initializeFallbackResponses();
     this.setupEventHandlers();
   }
 
   private initializeFallbackResponses() {
     // Fallback responses for when API quota is exceeded
-    this.fallbackResponses.set('code_generation', `
+    this.fallbackResponses.set(
+      'code_generation',
+      `
 💻 **Code Generation (Fallback Mode)**
 
 I can help you generate code! Here are some examples:
@@ -102,9 +104,12 @@ function useApi(url) {
 
 export default useApi;
 \`\`\`
-`);
+`
+    );
 
-    this.fallbackResponses.set('code_explanation', `
+    this.fallbackResponses.set(
+      'code_explanation',
+      `
 📚 **Code Explanation (Fallback Mode)**
 
 I can explain code patterns! Here are common explanations:
@@ -128,9 +133,12 @@ function fibonacci(n) {
 - Recursion: Function calls itself
 - Base case: Prevents infinite recursion
 - Mathematical sequence: 0, 1, 1, 2, 3, 5, 8, 13...
-`);
+`
+    );
 
-    this.fallbackResponses.set('code_refactoring', `
+    this.fallbackResponses.set(
+      'code_refactoring',
+      `
 🔧 **Code Refactoring (Fallback Mode)**
 
 I can help refactor code! Here are common improvements:
@@ -170,9 +178,12 @@ function add(a = 0, b = 0) {
 - Added edge case handling
 - Added JSDoc comments
 - Made function more robust
-`);
+`
+    );
 
-    this.fallbackResponses.set('code_debugging', `
+    this.fallbackResponses.set(
+      'code_debugging',
+      `
 🐛 **Code Debugging (Fallback Mode)**
 
 I can help debug code! Here are common issues and fixes:
@@ -218,9 +229,12 @@ async function fetchData() {
   return response.json();
 }
 \`\`\`
-`);
+`
+    );
 
-    this.fallbackResponses.set('test_generation', `
+    this.fallbackResponses.set(
+      'test_generation',
+      `
 🧪 **Test Generation (Fallback Mode)**
 
 I can help generate tests! Here are common test patterns:
@@ -277,9 +291,12 @@ describe('UserLogin Component', () => {
   });
 });
 \`\`\`
-`);
+`
+    );
 
-    this.fallbackResponses.set('general_query', `
+    this.fallbackResponses.set(
+      'general_query',
+      `
 🤖 **AI Assistant (Fallback Mode)**
 
 I'm here to help with programming questions! Here are some common topics:
@@ -311,27 +328,33 @@ I'm here to help with programming questions! Here are some common topics:
 - \`/refactor <code>\` - Refactor code
 - \`/debug <code>\` - Debug code
 - \`/test <code>\` - Generate tests
-`);
+`
+    );
   }
 
   private setupEventHandlers() {
     // Handle incoming messages
-    this.bot.on('message', async (msg) => {
+    this.bot.on('message', async msg => {
       try {
         await this.handleMessage(msg);
       } catch (error) {
         console.error('Error handling message:', error);
-        await this.sendErrorMessage(msg.chat.id, 'Sorry, an error occurred while processing your message.');
+        await this.sendErrorMessage(
+          msg.chat.id,
+          'Sorry, an error occurred while processing your message.'
+        );
       }
     });
 
     // Handle callback queries
-    this.bot.on('callback_query', async (callbackQuery) => {
+    this.bot.on('callback_query', async callbackQuery => {
       try {
         await this.handleCallbackQuery(callbackQuery);
       } catch (error) {
         console.error('Error handling callback query:', error);
-        await this.bot.answerCallbackQuery(callbackQuery.id, { text: 'Error processing request' });
+        await this.bot.answerCallbackQuery(callbackQuery.id, {
+          text: 'Error processing request',
+        });
       }
     });
 
@@ -370,11 +393,17 @@ I'm here to help with programming questions! Here are some common topics:
     }
   }
 
-  private async handleCursorCommand(chatId: number, text: string, username: string) {
+  private async handleCursorCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const query = text.replace('/cursor', '').trim();
-    
+
     if (!query) {
-      await this.sendMessage(chatId, `👨‍💻 **Cursor Integration Help**
+      await this.sendMessage(
+        chatId,
+        `👨‍💻 **Cursor Integration Help**
 
 Use these commands to interact with Cursor:
 
@@ -396,13 +425,20 @@ Use these commands to interact with Cursor:
 • \`/explain function fibonacci(n) { ... }\`
 • \`/cursor how to optimize React performance?\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode (API quota exceeded)' : '✅ Full AI Mode'}`, 'Markdown');
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode (API quota exceeded)' : '✅ Full AI Mode'}`,
+        'Markdown'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('general_query') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('general_query') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -416,35 +452,57 @@ Provide a helpful, technical response that would assist a developer using Cursor
       const response = await result.response;
       const answer = response.text();
 
-      await this.sendMessage(chatId, `👨‍💻 **Cursor AI Response:**
+      await this.sendMessage(
+        chatId,
+        `👨‍💻 **Cursor AI Response:**
 
-${answer}`, 'Markdown');
-
+${answer}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('general_query')}
 
-**Note:** The AI API has reached its daily limit. Using fallback responses until quota resets.`, 'Markdown');
+**Note:** The AI API has reached its daily limit. Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error processing your Cursor request.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error processing your Cursor request.'
+        );
       }
     }
   }
 
-  private async handleCodeCommand(chatId: number, text: string, username: string) {
+  private async handleCodeCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const description = text.replace('/code', '').trim();
-    
+
     if (!description) {
-      await this.sendMessage(chatId, 'Please provide a description for the code you want to generate.\n\nExample: `/code create a React component for user login`');
+      await this.sendMessage(
+        chatId,
+        'Please provide a description for the code you want to generate.\n\nExample: `/code create a React component for user login`'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('code_generation') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('code_generation') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -463,35 +521,57 @@ Format the response with proper code blocks and explanations.`;
       const response = await result.response;
       const code = response.text();
 
-      await this.sendMessage(chatId, `💻 **Generated Code:**
+      await this.sendMessage(
+        chatId,
+        `💻 **Generated Code:**
 
-${code}`, 'Markdown');
-
+${code}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('code_generation')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error generating code.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error generating code.'
+        );
       }
     }
   }
 
-  private async handleExplainCommand(chatId: number, text: string, username: string) {
+  private async handleExplainCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const code = text.replace('/explain', '').trim();
-    
+
     if (!code) {
-      await this.sendMessage(chatId, 'Please provide code to explain.\n\nExample: `/explain function fibonacci(n) { if (n <= 1) return n; return fibonacci(n-1) + fibonacci(n-2); }`');
+      await this.sendMessage(
+        chatId,
+        'Please provide code to explain.\n\nExample: `/explain function fibonacci(n) { if (n <= 1) return n; return fibonacci(n-1) + fibonacci(n-2); }`'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('code_explanation') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('code_explanation') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -514,35 +594,57 @@ Make it clear and educational for developers.`;
       const response = await result.response;
       const explanation = response.text();
 
-      await this.sendMessage(chatId, `📚 **Code Explanation:**
+      await this.sendMessage(
+        chatId,
+        `📚 **Code Explanation:**
 
-${explanation}`, 'Markdown');
-
+${explanation}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('code_explanation')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error explaining the code.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error explaining the code.'
+        );
       }
     }
   }
 
-  private async handleRefactorCommand(chatId: number, text: string, username: string) {
+  private async handleRefactorCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const code = text.replace('/refactor', '').trim();
-    
+
     if (!code) {
-      await this.sendMessage(chatId, 'Please provide code to refactor.\n\nExample: `/refactor function add(a,b) { return a+b; }`');
+      await this.sendMessage(
+        chatId,
+        'Please provide code to refactor.\n\nExample: `/refactor function add(a,b) { return a+b; }`'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('code_refactoring') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('code_refactoring') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -569,35 +671,57 @@ Focus on:
       const response = await result.response;
       const refactored = response.text();
 
-      await this.sendMessage(chatId, `🔧 **Refactored Code:**
+      await this.sendMessage(
+        chatId,
+        `🔧 **Refactored Code:**
 
-${refactored}`, 'Markdown');
-
+${refactored}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('code_refactoring')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error refactoring the code.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error refactoring the code.'
+        );
       }
     }
   }
 
-  private async handleDebugCommand(chatId: number, text: string, username: string) {
+  private async handleDebugCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const code = text.replace('/debug', '').trim();
-    
+
     if (!code) {
-      await this.sendMessage(chatId, 'Please provide code to debug.\n\nExample: `/debug function divide(a,b) { return a/b; }`');
+      await this.sendMessage(
+        chatId,
+        'Please provide code to debug.\n\nExample: `/debug function divide(a,b) { return a/b; }`'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('code_debugging') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('code_debugging') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -625,35 +749,57 @@ Focus on common issues like:
       const response = await result.response;
       const debugInfo = response.text();
 
-      await this.sendMessage(chatId, `🐛 **Debug Analysis:**
+      await this.sendMessage(
+        chatId,
+        `🐛 **Debug Analysis:**
 
-${debugInfo}`, 'Markdown');
-
+${debugInfo}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('code_debugging')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error debugging the code.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error debugging the code.'
+        );
       }
     }
   }
 
-  private async handleTestCommand(chatId: number, text: string, username: string) {
+  private async handleTestCommand(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     const code = text.replace('/test', '').trim();
-    
+
     if (!code) {
-      await this.sendMessage(chatId, 'Please provide code to test.\n\nExample: `/test function add(a,b) { return a+b; }`');
+      await this.sendMessage(
+        chatId,
+        'Please provide code to test.\n\nExample: `/test function add(a,b) { return a+b; }`'
+      );
       return;
     }
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('test_generation') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('test_generation') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -680,48 +826,58 @@ Use appropriate testing framework (Jest, Mocha, etc.) and include:
       const response = await result.response;
       const tests = response.text();
 
-      await this.sendMessage(chatId, `🧪 **Generated Tests:**
+      await this.sendMessage(
+        chatId,
+        `🧪 **Generated Tests:**
 
-${tests}`, 'Markdown');
-
+${tests}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('test_generation')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error generating tests.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error generating tests.'
+        );
       }
     }
   }
 
   private async handleConnectCommand(chatId: number, username: string) {
     this.cursorChatId = chatId;
-    
+
     const keyboard = {
       inline_keyboard: [
         [
           { text: '💻 Code Generation', callback_data: 'cursor_code' },
-          { text: '📚 Code Explanation', callback_data: 'cursor_explain' }
+          { text: '📚 Code Explanation', callback_data: 'cursor_explain' },
         ],
         [
           { text: '🔧 Refactoring', callback_data: 'cursor_refactor' },
-          { text: '🐛 Debugging', callback_data: 'cursor_debug' }
+          { text: '🐛 Debugging', callback_data: 'cursor_debug' },
         ],
         [
           { text: '🧪 Testing', callback_data: 'cursor_test' },
-          { text: '❓ Help', callback_data: 'cursor_help' }
+          { text: '❓ Help', callback_data: 'cursor_help' },
         ],
-        [
-          { text: '📊 Status', callback_data: 'cursor_status' }
-        ]
-      ]
+        [{ text: '📊 Status', callback_data: 'cursor_status' }],
+      ],
     };
 
-    await this.sendMessage(chatId, `🔗 **Cursor Integration Connected!**
+    await this.sendMessage(
+      chatId,
+      `🔗 **Cursor Integration Connected!**
 
 Welcome ${username}! This chat is now connected to Cursor AI.
 
@@ -735,15 +891,27 @@ Welcome ${username}! This chat is now connected to Cursor AI.
 • \`/status\` - Check integration status
 
 **Quick Actions:**
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode (API quota exceeded)' : '✅ Full AI Mode'}`, 'Markdown', { replyMarkup: keyboard });
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode (API quota exceeded)' : '✅ Full AI Mode'}`,
+      'Markdown',
+      { replyMarkup: keyboard }
+    );
   }
 
-  private async handleGeneralQuery(chatId: number, text: string, username: string) {
+  private async handleGeneralQuery(
+    chatId: number,
+    text: string,
+    username: string
+  ) {
     if (!text) return;
 
     try {
       if (this.apiQuotaExceeded) {
-        await this.sendMessage(chatId, this.fallbackResponses.get('general_query') || 'Fallback response not available', 'Markdown');
+        await this.sendMessage(
+          chatId,
+          this.fallbackResponses.get('general_query') ||
+            'Fallback response not available',
+          'Markdown'
+        );
         return;
       }
 
@@ -757,27 +925,37 @@ Provide a helpful response that could assist a developer. If it's coding-related
       const response = await result.response;
       const answer = response.text();
 
-      await this.sendMessage(chatId, `🤖 **AI Response:**
+      await this.sendMessage(
+        chatId,
+        `🤖 **AI Response:**
 
-${answer}`, 'Markdown');
-
+${answer}`,
+        'Markdown'
+      );
     } catch (error) {
       if (error.message.includes('429') || error.message.includes('quota')) {
         this.apiQuotaExceeded = true;
-        await this.sendMessage(chatId, `⚠️ **API Quota Exceeded**
+        await this.sendMessage(
+          chatId,
+          `⚠️ **API Quota Exceeded**
 
 ${this.fallbackResponses.get('general_query')}
 
-**Note:** Using fallback responses until quota resets.`, 'Markdown');
+**Note:** Using fallback responses until quota resets.`,
+          'Markdown'
+        );
       } else {
-        await this.sendMessage(chatId, '❌ Sorry, I encountered an error processing your request.');
+        await this.sendMessage(
+          chatId,
+          '❌ Sorry, I encountered an error processing your request.'
+        );
       }
     }
   }
 
   private async sendStatusMessage(chatId: number) {
     const status = this.getStatus();
-    
+
     const statusText = `📊 **Integration Status**
 
 **Connection Status:**
@@ -818,7 +996,9 @@ ${this.apiQuotaExceeded ? '**Note:** API quota exceeded. Using fallback response
 
     switch (data) {
       case 'cursor_code':
-        await this.sendMessage(chatId, `💻 **Code Generation**
+        await this.sendMessage(
+          chatId,
+          `💻 **Code Generation**
 
 Use \`/code <description>\` to generate code.
 
@@ -827,11 +1007,14 @@ Use \`/code <description>\` to generate code.
 • \`/code write a Python function to sort a list\`
 • \`/code create a REST API endpoint for user registration\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`);
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`
+        );
         break;
-      
+
       case 'cursor_explain':
-        await this.sendMessage(chatId, `📚 **Code Explanation**
+        await this.sendMessage(
+          chatId,
+          `📚 **Code Explanation**
 
 Use \`/explain <code>\` to explain code.
 
@@ -840,11 +1023,14 @@ Use \`/explain <code>\` to explain code.
 • \`/explain const users = data.map(user => ({ ...user, active: true }))\`
 • \`/explain useEffect(() => { ... }, [dependency])\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`);
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`
+        );
         break;
-      
+
       case 'cursor_refactor':
-        await this.sendMessage(chatId, `🔧 **Code Refactoring**
+        await this.sendMessage(
+          chatId,
+          `🔧 **Code Refactoring**
 
 Use \`/refactor <code>\` to refactor code.
 
@@ -853,11 +1039,14 @@ Use \`/refactor <code>\` to refactor code.
 • \`/refactor if (user && user.name && user.name.length > 0) { ... }\`
 • \`/refactor for (let i = 0; i < array.length; i++) { ... }\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`);
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`
+        );
         break;
-      
+
       case 'cursor_debug':
-        await this.sendMessage(chatId, `🐛 **Code Debugging**
+        await this.sendMessage(
+          chatId,
+          `🐛 **Code Debugging**
 
 Use \`/debug <code>\` to debug code.
 
@@ -866,11 +1055,14 @@ Use \`/debug <code>\` to debug code.
 • \`/debug const result = data.find(item => item.id === undefined)\`
 • \`/debug async function fetchData() { ... }\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`);
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`
+        );
         break;
-      
+
       case 'cursor_test':
-        await this.sendMessage(chatId, `🧪 **Test Generation**
+        await this.sendMessage(
+          chatId,
+          `🧪 **Test Generation**
 
 Use \`/test <code>\` to generate tests.
 
@@ -879,13 +1071,14 @@ Use \`/test <code>\` to generate tests.
 • \`/test class UserService { ... }\`
 • \`/test function validateEmail(email) { ... }\`
 
-**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`);
+**Status:** ${this.apiQuotaExceeded ? '⚠️ Fallback Mode' : '✅ AI Mode'}`
+        );
         break;
-      
+
       case 'cursor_help':
         await this.sendCursorHelp(chatId);
         break;
-      
+
       case 'cursor_status':
         await this.sendStatusMessage(chatId);
         break;
@@ -928,11 +1121,16 @@ Use \`/test <code>\` to generate tests.
     await this.sendMessage(chatId, helpText, 'Markdown');
   }
 
-  private async sendMessage(chatId: number, text: string, parseMode?: string, options?: any) {
+  private async sendMessage(
+    chatId: number,
+    text: string,
+    parseMode?: string,
+    options?: any
+  ) {
     try {
       await this.bot.sendMessage(chatId, text, {
         parse_mode: parseMode,
-        ...options
+        ...options,
       });
     } catch (error) {
       console.error('Error sending message:', error);
@@ -946,7 +1144,11 @@ Use \`/test <code>\` to generate tests.
   // Public methods
   public async sendToCursor(message: string) {
     if (this.cursorChatId) {
-      await this.sendMessage(this.cursorChatId, `📨 **From Cursor:**\n\n${message}`, 'Markdown');
+      await this.sendMessage(
+        this.cursorChatId,
+        `📨 **From Cursor:**\n\n${message}`,
+        'Markdown'
+      );
     }
   }
 
@@ -967,7 +1169,7 @@ Use \`/test <code>\` to generate tests.
       isConnected: this.isConnected,
       cursorConnected: this.isCursorConnected(),
       cursorChatId: this.cursorChatId,
-      apiQuotaExceeded: this.apiQuotaExceeded
+      apiQuotaExceeded: this.apiQuotaExceeded,
     };
   }
 
@@ -977,9 +1179,10 @@ Use \`/test <code>\` to generate tests.
 }
 
 // Export singleton instance
-export const enhancedCursorTelegramIntegration = new EnhancedCursorTelegramIntegration(
-  '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0',
-  'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
-);
+export const enhancedCursorTelegramIntegration =
+  new EnhancedCursorTelegramIntegration(
+    '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0',
+    'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
+  );
 
 export default enhancedCursorTelegramIntegration;

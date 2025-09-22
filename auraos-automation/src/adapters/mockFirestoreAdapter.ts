@@ -34,28 +34,38 @@ export const deleteTask = async (id: string): Promise<void> => {
 };
 
 // Task execution operations
-export const saveTaskExecution = async (execution: TaskExecution): Promise<void> => {
+export const saveTaskExecution = async (
+  execution: TaskExecution
+): Promise<void> => {
   executions.set(execution.id, execution);
   console.log(`Execution saved: ${execution.id} - Status: ${execution.status}`);
 };
 
-export const getTaskExecution = async (id: string): Promise<TaskExecution | null> => {
+export const getTaskExecution = async (
+  id: string
+): Promise<TaskExecution | null> => {
   return executions.get(id) || null;
 };
 
-export const getTaskExecutions = async (taskId: string): Promise<TaskExecution[]> => {
+export const getTaskExecutions = async (
+  taskId: string
+): Promise<TaskExecution[]> => {
   return Array.from(executions.values())
     .filter(exec => exec.taskId === taskId)
     .sort((a, b) => b.startedAt.getTime() - a.startedAt.getTime());
 };
 
 // Task schedule operations
-export const saveTaskSchedule = async (schedule: TaskSchedule): Promise<void> => {
+export const saveTaskSchedule = async (
+  schedule: TaskSchedule
+): Promise<void> => {
   schedules.set(schedule.id, schedule);
   console.log(`Schedule saved: ${schedule.id}`);
 };
 
-export const getTaskSchedule = async (id: string): Promise<TaskSchedule | null> => {
+export const getTaskSchedule = async (
+  id: string
+): Promise<TaskSchedule | null> => {
   return schedules.get(id) || null;
 };
 
@@ -88,6 +98,6 @@ export const getStorageStats = () => {
     tasks: tasks.size,
     executions: executions.size,
     schedules: schedules.size,
-    workers: workers.size
+    workers: workers.size,
   };
 };

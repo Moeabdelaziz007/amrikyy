@@ -7,10 +7,13 @@ async function testEnhancedMCPTools() {
   // Test 1: Sentiment Analysis
   console.log('1. Testing Sentiment Analysis Tool:');
   try {
-    const sentimentResult = await enhancedMCP.executeTool('sentiment_analysis_tool', {
-      text: 'I love this new AI system! It is amazing and wonderful.',
-      provider: 'fallback'
-    });
+    const sentimentResult = await enhancedMCP.executeTool(
+      'sentiment_analysis_tool',
+      {
+        text: 'I love this new AI system! It is amazing and wonderful.',
+        provider: 'fallback',
+      }
+    );
     console.log('✅ Sentiment Analysis Result:', sentimentResult);
   } catch (error) {
     console.log('❌ Sentiment Analysis Error:', error.message);
@@ -19,10 +22,13 @@ async function testEnhancedMCPTools() {
   // Test 2: Text Summarization
   console.log('\n2. Testing Text Summarization Tool:');
   try {
-    const summaryResult = await enhancedMCP.executeTool('text_summarization_tool', {
-      text: 'Artificial Intelligence (AI) is a branch of computer science that aims to create intelligent machines that can perform tasks that typically require human intelligence. These tasks include learning, reasoning, problem-solving, perception, and language understanding. AI has applications in various fields including healthcare, finance, transportation, and entertainment. The development of AI has accelerated in recent years due to advances in machine learning, deep learning, and neural networks.',
-      maxLength: 50
-    });
+    const summaryResult = await enhancedMCP.executeTool(
+      'text_summarization_tool',
+      {
+        text: 'Artificial Intelligence (AI) is a branch of computer science that aims to create intelligent machines that can perform tasks that typically require human intelligence. These tasks include learning, reasoning, problem-solving, perception, and language understanding. AI has applications in various fields including healthcare, finance, transportation, and entertainment. The development of AI has accelerated in recent years due to advances in machine learning, deep learning, and neural networks.',
+        maxLength: 50,
+      }
+    );
     console.log('✅ Text Summarization Result:', summaryResult);
   } catch (error) {
     console.log('❌ Text Summarization Error:', error.message);
@@ -31,12 +37,15 @@ async function testEnhancedMCPTools() {
   // Test 3: Translation
   console.log('\n3. Testing Translation Tool:');
   try {
-    const translationResult = await enhancedMCP.executeTool('translation_tool', {
-      text: 'Hello, how are you?',
-      from: 'en',
-      to: 'es',
-      provider: 'libre'
-    });
+    const translationResult = await enhancedMCP.executeTool(
+      'translation_tool',
+      {
+        text: 'Hello, how are you?',
+        from: 'en',
+        to: 'es',
+        provider: 'libre',
+      }
+    );
     console.log('✅ Translation Result:', translationResult);
   } catch (error) {
     console.log('❌ Translation Error:', error.message);
@@ -45,10 +54,13 @@ async function testEnhancedMCPTools() {
   // Test 4: Keyword Extraction
   console.log('\n4. Testing Keyword Extraction Tool:');
   try {
-    const keywordsResult = await enhancedMCP.executeTool('keyword_extraction_tool', {
-      text: 'Machine learning is a subset of artificial intelligence that focuses on algorithms and statistical models. Deep learning uses neural networks with multiple layers to process data.',
-      maxKeywords: 5
-    });
+    const keywordsResult = await enhancedMCP.executeTool(
+      'keyword_extraction_tool',
+      {
+        text: 'Machine learning is a subset of artificial intelligence that focuses on algorithms and statistical models. Deep learning uses neural networks with multiple layers to process data.',
+        maxKeywords: 5,
+      }
+    );
     console.log('✅ Keyword Extraction Result:', keywordsResult);
   } catch (error) {
     console.log('❌ Keyword Extraction Error:', error.message);
@@ -60,7 +72,7 @@ async function testEnhancedMCPTools() {
     const qrResult = await enhancedMCP.executeTool('qr_code_generator_tool', {
       text: 'https://auraos.dev',
       size: 200,
-      format: 'png'
+      format: 'png',
     });
     console.log('✅ QR Code Generation Result:', qrResult);
   } catch (error) {
@@ -70,13 +82,16 @@ async function testEnhancedMCPTools() {
   // Test 6: Password Generation
   console.log('\n6. Testing Password Generation Tool:');
   try {
-    const passwordResult = await enhancedMCP.executeTool('password_generator_tool', {
-      length: 16,
-      includeSymbols: true,
-      includeNumbers: true,
-      includeUppercase: true,
-      includeLowercase: true
-    });
+    const passwordResult = await enhancedMCP.executeTool(
+      'password_generator_tool',
+      {
+        length: 16,
+        includeSymbols: true,
+        includeNumbers: true,
+        includeUppercase: true,
+        includeLowercase: true,
+      }
+    );
     console.log('✅ Password Generation Result:', passwordResult);
   } catch (error) {
     console.log('❌ Password Generation Error:', error.message);
@@ -87,7 +102,7 @@ async function testEnhancedMCPTools() {
   try {
     const hashResult = await enhancedMCP.executeTool('hash_generator_tool', {
       text: 'Hello World',
-      algorithm: 'sha256'
+      algorithm: 'sha256',
     });
     console.log('✅ Hash Generation Result:', hashResult);
   } catch (error) {
@@ -98,8 +113,9 @@ async function testEnhancedMCPTools() {
   console.log('\n8. Testing JSON Validation Tool:');
   try {
     const jsonResult = await enhancedMCP.executeTool('json_validator_tool', {
-      jsonData: '{"name": "AuraOS", "version": "1.0.0", "features": ["AI", "MCP"]}',
-      operation: 'validate'
+      jsonData:
+        '{"name": "AuraOS", "version": "1.0.0", "features": ["AI", "MCP"]}',
+      operation: 'validate',
     });
     console.log('✅ JSON Validation Result:', jsonResult);
   } catch (error) {
@@ -110,8 +126,9 @@ async function testEnhancedMCPTools() {
   console.log('\n9. Testing CSV Processing Tool:');
   try {
     const csvResult = await enhancedMCP.executeTool('csv_parser_tool', {
-      csvData: 'Name,Age,City\nJohn,25,New York\nJane,30,Los Angeles\nBob,35,Chicago',
-      operation: 'stats'
+      csvData:
+        'Name,Age,City\nJohn,25,New York\nJane,30,Los Angeles\nBob,35,Chicago',
+      operation: 'stats',
     });
     console.log('✅ CSV Processing Result:', csvResult);
   } catch (error) {
@@ -123,7 +140,7 @@ async function testEnhancedMCPTools() {
   try {
     const scrapingResult = await enhancedMCP.executeTool('web_scraping_tool', {
       url: 'https://httpbin.org/html',
-      format: 'text'
+      format: 'text',
     });
     console.log('✅ Web Scraping Result:', scrapingResult);
   } catch (error) {
@@ -140,7 +157,7 @@ async function testEnhancedMCPTools() {
     web: enhancedMCP.getToolsByCategory('web').length,
     data: enhancedMCP.getToolsByCategory('data').length,
     utility: enhancedMCP.getToolsByCategory('utility').length,
-    ai: enhancedMCP.getToolsByCategory('ai').length
+    ai: enhancedMCP.getToolsByCategory('ai').length,
   };
 
   console.log(`Total Tools: ${allTools.length}`);

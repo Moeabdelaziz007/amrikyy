@@ -19,7 +19,7 @@ export enum TaskType {
   EMAIL_SEND = 'email_send',
   TELEGRAM_NOTIFY = 'telegram_notify',
   SLACK_NOTIFY = 'slack_notify',
-  CUSTOM_SCRIPT = 'custom_script'
+  CUSTOM_SCRIPT = 'custom_script',
 }
 
 export interface TaskConfig {
@@ -52,7 +52,7 @@ export enum ExecutionStatus {
   RUNNING = 'running',
   COMPLETED = 'completed',
   FAILED = 'failed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export interface ExecutionMetrics {
@@ -83,5 +83,5 @@ export interface Worker {
 export enum WorkerStatus {
   IDLE = 'idle',
   BUSY = 'busy',
-  OFFLINE = 'offline'
+  OFFLINE = 'offline',
 }
