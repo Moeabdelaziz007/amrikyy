@@ -268,15 +268,28 @@ class MobileEnhancements {
             // Enhanced mobile chatbot behavior
             chatbotToggle.addEventListener('click', () => {
                 if (this.isMobile) {
+                    chatbotWindow.classList.toggle('active');
                     chatbotWindow.classList.toggle('mobile-fullscreen');
+                    
+                    // Add swipe hint on first open
+                    if (!chatbotWindow.dataset.hintShown) {
+                        this.showSwipeHint();
+                        chatbotWindow.dataset.hintShown = 'true';
+                    }
                 }
             });
             
             // Resize chatbot for mobile
             if (this.isMobile) {
-                chatbotWindow.style.width = 'calc(100vw - 20px)';
-                chatbotWindow.style.height = '70vh';
-                chatbotWindow.style.maxWidth = '400px';
+                chatbotWindow.style.width = '100%';
+                chatbotWindow.style.height = '75vh';
+                chatbotWindow.style.maxWidth = 'none';
+                chatbotWindow.style.position = 'fixed';
+                chatbotWindow.style.bottom = '0';
+                chatbotWindow.style.left = '0';
+                chatbotWindow.style.right = '0';
+                chatbotWindow.style.transform = 'translateY(100%)';
+                chatbotWindow.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             }
             
             // Handle mobile keyboard
@@ -284,13 +297,56 @@ class MobileEnhancements {
             if (chatbotInput) {
                 chatbotInput.addEventListener('focus', () => {
                     if (this.isMobile) {
+                        document.body.classList.add('keyboard-open');
                         setTimeout(() => {
-                            chatbotWindow.scrollTop = chatbotWindow.scrollHeight;
+                            const messagesContainer = document.getElementById('chatbotMessages');
+                            if (messagesContainer) {
+                                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                            }
                         }, 300);
                     }
                 });
+                
+                chatbotInput.addEventListener('blur', () => {
+                    if (this.isMobile) {
+                        setTimeout(() => {
+                            document.body.classList.remove('keyboard-open');
+                        }, 100);
+                    }
+                });
             }
+            
+            // Close chatbot when clicking outside
+            document.addEventListener('click', (e) => {
+                if (this.isMobile && chatbotWindow.classList.contains('active')) {
+                    if (!chatbotToggle.contains(e.target) && !chatbotWindow.contains(e.target)) {
+                        chatbotWindow.classList.remove('active');
+                    }
+                }
+            });
         }
+    }
+    
+    showSwipeHint() {
+        const hint = document.createElement('div');
+        hint.className = 'swipe-hint';
+        hint.innerHTML = `
+            <i class="fas fa-hand-pointer"></i>
+            <span>Swipe to navigate</span>
+        `;
+        
+        document.body.appendChild(hint);
+        
+        setTimeout(() => {
+            hint.classList.add('show');
+        }, 500);
+        
+        setTimeout(() => {
+            hint.classList.remove('show');
+            setTimeout(() => {
+                hint.remove();
+            }, 300);
+        }, 3000);
     }
     
     setupMobileModals() {

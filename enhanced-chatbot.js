@@ -113,21 +113,27 @@ class EnhancedChatbot {
                 
                 <div class="input-content">
                     <div class="text-input active">
-                        <div class="input-group">
-                            <textarea id="chatbotInput" placeholder="Type your message or ask me anything..." rows="3"></textarea>
-                            <div class="input-actions">
-                                <button class="action-btn" id="emojiBtn" title="Add Emoji">
-                                    <i class="fas fa-smile"></i>
-                                </button>
-                                <button class="action-btn" id="attachBtn" title="Attach File">
-                                    <i class="fas fa-paperclip"></i>
-                                </button>
-                                <button class="action-btn" id="voiceInputBtn" title="Voice Input">
-                                    <i class="fas fa-microphone"></i>
-                                </button>
-                                <button id="sendMessage" class="send-btn" title="Send Message">
-                                    <i class="fas fa-paper-plane"></i>
-                                </button>
+                        <div class="input-group enhanced-input-group">
+                            <div class="input-wrapper">
+                                <textarea id="chatbotInput" placeholder="Type your message or ask me anything..." rows="3" class="enhanced-textarea"></textarea>
+                                <div class="input-actions enhanced-actions">
+                                    <button class="action-btn enhanced-action-btn" id="emojiBtn" title="Add Emoji">
+                                        <i class="fas fa-smile"></i>
+                                        <span class="action-tooltip">Emoji</span>
+                                    </button>
+                                    <button class="action-btn enhanced-action-btn" id="attachBtn" title="Attach File">
+                                        <i class="fas fa-paperclip"></i>
+                                        <span class="action-tooltip">Attach</span>
+                                    </button>
+                                    <button class="action-btn enhanced-action-btn" id="voiceInputBtn" title="Voice Input">
+                                        <i class="fas fa-microphone"></i>
+                                        <span class="action-tooltip">Voice</span>
+                                    </button>
+                                    <button id="sendMessage" class="send-btn enhanced-send-btn" title="Send Message">
+                                        <i class="fas fa-paper-plane"></i>
+                                        <span class="send-ripple"></span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -219,6 +225,20 @@ class EnhancedChatbot {
         // Emoji picker
         document.getElementById('emojiBtn')?.addEventListener('click', () => {
             this.showEmojiPicker();
+        });
+
+        // Reaction buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.reaction-btn')) {
+                const btn = e.target.closest('.reaction-btn');
+                const reaction = btn.dataset.reaction;
+                this.handleReaction(reaction, btn);
+            }
+        });
+
+        // Enhanced send button with ripple effect
+        document.getElementById('sendMessage')?.addEventListener('click', (e) => {
+            this.createRippleEffect(e);
         });
     }
 
@@ -733,13 +753,26 @@ class EnhancedChatbot {
         }
 
         messageDiv.innerHTML = `
-            <div class="message-wrapper">
-                <div class="message-avatar">${avatar}</div>
+            <div class="message-wrapper enhanced-wrapper">
+                <div class="message-avatar enhanced-avatar">${avatar}</div>
                 <div class="message-content enhanced-bubble">
-                    <div class="message-text">${messageContent}</div>
-                    <div class="message-footer">
-                        <span class="message-time">${this.formatTime(new Date())}</span>
-                        ${sender === 'bot' ? '<div class="message-status"><i class="fas fa-check"></i></div>' : ''}
+                    <div class="message-text enhanced-text">${messageContent}</div>
+                    <div class="message-footer enhanced-footer">
+                        <span class="message-time enhanced-time">${this.formatTime(new Date())}</span>
+                        ${sender === 'bot' ? '<div class="message-status enhanced-status"><i class="fas fa-check-double"></i></div>' : ''}
+                    </div>
+                    <div class="message-reactions">
+                        ${sender === 'bot' ? `
+                            <button class="reaction-btn" data-reaction="like" title="Like">
+                                <i class="fas fa-thumbs-up"></i>
+                            </button>
+                            <button class="reaction-btn" data-reaction="dislike" title="Dislike">
+                                <i class="fas fa-thumbs-down"></i>
+                            </button>
+                            <button class="reaction-btn" data-reaction="copy" title="Copy">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        ` : ''}
                     </div>
                 </div>
             </div>
@@ -910,6 +943,119 @@ class EnhancedChatbot {
     showToast(message, type) {
         if (window.Analytics) {
             window.Analytics.showToast(message, type);
+        }
+    }
+
+    // Enhanced interaction methods
+    handleReaction(reaction, button) {
+        const messageBubble = button.closest('.enhanced-bubble');
+        const messageElement = button.closest('.message');
+        
+        // Add visual feedback
+        button.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            button.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+            }, 150);
+        }, 100);
+
+        switch (reaction) {
+            case 'like':
+                this.showToast('👍 Thanks for the feedback!', 'success');
+                this.learnFromReaction('positive', messageElement);
+                break;
+            case 'dislike':
+                this.showToast('👎 We\'ll improve based on your feedback', 'info');
+                this.learnFromReaction('negative', messageElement);
+                break;
+            case 'copy':
+                const messageText = messageBubble.querySelector('.enhanced-text').textContent;
+                navigator.clipboard.writeText(messageText).then(() => {
+                    this.showToast('📋 Message copied to clipboard!', 'success');
+                }).catch(() => {
+                    this.showToast('❌ Failed to copy message', 'error');
+                });
+                break;
+        }
+    }
+
+    createRippleEffect(event) {
+        const button = event.currentTarget;
+        const ripple = button.querySelector('.send-ripple');
+        
+        if (ripple) {
+            ripple.style.width = '0px';
+            ripple.style.height = '0px';
+            
+            setTimeout(() => {
+                ripple.style.width = '60px';
+                ripple.style.height = '60px';
+                ripple.style.opacity = '1';
+                
+                setTimeout(() => {
+                    ripple.style.opacity = '0';
+                }, 300);
+            }, 10);
+        }
+    }
+
+    learnFromReaction(type, messageElement) {
+        // Store user feedback for learning
+        const messageData = {
+            type: type,
+            timestamp: Date.now(),
+            messageId: messageElement.dataset.messageId || Date.now()
+        };
+
+        // Store in learning data
+        if (!this.learningData.responseEffectiveness.feedback) {
+            this.learningData.responseEffectiveness.feedback = [];
+        }
+        
+        this.learningData.responseEffectiveness.feedback.push(messageData);
+        this.saveLearningData();
+    }
+
+    showEmojiPicker() {
+        // Simple emoji picker implementation
+        const emojis = ['😀', '😊', '😍', '🤔', '😮', '😢', '😡', '👍', '👎', '❤️', '🔥', '💯'];
+        
+        let picker = document.getElementById('emojiPicker');
+        if (!picker) {
+            picker = document.createElement('div');
+            picker.id = 'emojiPicker';
+            picker.className = 'emoji-picker';
+            picker.innerHTML = emojis.map(emoji => 
+                `<button class="emoji-btn" data-emoji="${emoji}">${emoji}</button>`
+            ).join('');
+            
+            document.body.appendChild(picker);
+            
+            // Position picker
+            const input = document.getElementById('chatbotInput');
+            const rect = input.getBoundingClientRect();
+            picker.style.position = 'fixed';
+            picker.style.top = `${rect.top - 60}px`;
+            picker.style.left = `${rect.left}px`;
+            picker.style.zIndex = '10000';
+            
+            // Handle emoji selection
+            picker.addEventListener('click', (e) => {
+                if (e.target.classList.contains('emoji-btn')) {
+                    const emoji = e.target.dataset.emoji;
+                    input.value += emoji;
+                    input.focus();
+                    picker.remove();
+                }
+            });
+            
+            // Close picker when clicking outside
+            setTimeout(() => {
+                document.addEventListener('click', () => {
+                    picker.remove();
+                }, { once: true });
+            }, 100);
         }
     }
 }
