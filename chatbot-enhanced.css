@@ -3,6 +3,7 @@
 /* Enhanced Chatbot Container */
 .enhanced-chatbot {
     border-radius: 25px;
+    -webkit-backdrop-filter: blur(25px);
     backdrop-filter: blur(25px);
     background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(25, 25, 25, 0.9));
     border: 2px solid transparent;
@@ -28,8 +29,8 @@
     padding: 2px;
     background: linear-gradient(135deg, #39FF14, #00E5FF, #9D00FF, #FF6B9D);
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
     -webkit-mask-composite: xor;
+    mask-composite: xor;
     pointer-events: none;
     animation: borderGlow 3s ease-in-out infinite;
 }
@@ -167,6 +168,7 @@
     background: rgba(255, 255, 255, 0.05);
     border-radius: 20px;
     border: 1px solid rgba(57, 255, 20, 0.2);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
@@ -287,6 +289,7 @@
     padding: 18px 22px;
     border-radius: 22px;
     position: relative;
+    -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
@@ -645,6 +648,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }

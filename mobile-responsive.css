@@ -30,6 +30,7 @@
         left: 0;
         width: 100%;
         background: rgba(15, 15, 15, 0.95);
+        -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         border-radius: 0 0 15px 15px;
         padding: 20px;
@@ -522,11 +523,10 @@
         transition: transform 0.1s ease;
     }
     
-    /* Improve scrolling */
-    .chatbot-messages {
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-    }
+        /* Improve scrolling */
+        .chatbot-messages {
+            scroll-behavior: smooth;
+        }
 }
 
 /* Landscape Mobile */
