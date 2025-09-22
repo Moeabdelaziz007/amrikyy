@@ -29,19 +29,12 @@ import {
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey:
-    process.env.VITE_FIREBASE_API_KEY ||
-    'AIzaSyApDku-geNVplwIgRBz2U0rs46aAVo-_mE',
-  authDomain:
-    process.env.VITE_FIREBASE_AUTH_DOMAIN || 'aios-97581.firebaseapp.com',
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID || 'aios-97581',
-  storageBucket:
-    process.env.VITE_FIREBASE_STORAGE_BUCKET || 'aios-97581.appspot.com',
-  messagingSenderId:
-    process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '307575156824',
-  appId:
-    process.env.VITE_FIREBASE_APP_ID ||
-    '1:307575156824:web:00924bd384df1f29909a2d',
+  apiKey: process.env.VITE_FIREBASE_API_KEY,
+  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VITE_FIREBASE_APP_ID,
   measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
