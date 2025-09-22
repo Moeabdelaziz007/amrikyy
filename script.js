@@ -2531,13 +2531,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize authentication system
     window.authSystem = new AuthSystem();
     
-    // Initialize chatbot system (only if EnhancedChatbot is not already initialized)
-    if (!window.AI || !window.AI.chatbot) {
-        window.chatbotSystem = new ChatbotSystem();
-    } else {
-        // Use the enhanced chatbot system
-        window.chatbotSystem = window.AI.chatbot;
-    }
+    // Chatbot system will be initialized by enhanced-chatbot.js
+    // This prevents duplicate initialization
     
     // Add toast animation styles
     const styleElement2 = document.createElement('style');

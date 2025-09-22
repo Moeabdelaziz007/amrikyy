@@ -1064,17 +1064,17 @@ class EnhancedChatbot {
 let enhancedChatbot = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Only initialize if not already initialized
-    if (!window.AI || !window.AI.chatbot) {
-        enhancedChatbot = new EnhancedChatbot();
-        
-        // Make chatbot available globally
-        window.AI = window.AI || {};
-        window.AI.chatbot = enhancedChatbot;
-        
-        // Also make it available as chatbotSystem for compatibility
-        window.chatbotSystem = enhancedChatbot;
-    }
+    // Initialize enhanced chatbot as the single chatbot system
+    enhancedChatbot = new EnhancedChatbot();
+    
+    // Make chatbot available globally
+    window.AI = window.AI || {};
+    window.AI.chatbot = enhancedChatbot;
+    
+    // Also make it available as chatbotSystem for compatibility
+    window.chatbotSystem = enhancedChatbot;
+    
+    console.log('✅ Enhanced Chatbot initialized successfully');
 });
 
 // Export for global access
