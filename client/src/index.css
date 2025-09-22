@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css');
 
 @tailwind base;
@@ -6,138 +6,122 @@
 @tailwind utilities;
 
 :root {
-  /* AuraOS Enhanced Green Theme */
-  --background: hsl(0, 0%, 3%); /* Deep dark background */
-  --foreground: hsl(120, 100%, 90%); /* Bright green text */
-  --card: hsl(0, 0%, 5%); /* Dark card background */
-  --card-foreground: hsl(120, 100%, 90%);
-  --popover: hsl(0, 0%, 5%);
-  --popover-foreground: hsl(120, 100%, 90%);
-  --primary: hsl(120, 100%, 60%); /* Pure bright green */
-  --primary-foreground: hsl(0, 0%, 3%);
-  --secondary: hsl(0, 0%, 10%); /* Dark secondary */
-  --secondary-foreground: hsl(120, 100%, 85%);
-  --muted: hsl(0, 0%, 10%);
-  --muted-foreground: hsl(120, 60%, 70%); /* Muted green text */
-  --accent: hsl(140, 100%, 60%); /* Slightly blue-tinted green */
-  --accent-foreground: hsl(0, 0%, 3%);
-  --destructive: hsl(0, 95%, 70%); /* Red for destructive actions */
+  /* Amrikyy | AuraOS Neon Theme */
+  --background: hsl(230, 15%, 8%); /* Near-black blueish grey */
+  --foreground: hsl(210, 20%, 95%); /* Off-white with a cool tint */
+
+  --card: hsl(230, 15%, 12%);
+  --card-foreground: hsl(210, 20%, 95%);
+
+  --popover: hsl(230, 15%, 12%);
+  --popover-foreground: hsl(210, 20%, 95%);
+
+  --primary: hsl(135, 100%, 52%); /* Electric Green */
+  --primary-foreground: hsl(135, 100%, 5%); /* Very dark green for text on primary */
+
+  --secondary: hsl(230, 15%, 25%);
+  --secondary-foreground: hsl(210, 20%, 90%);
+
+  --muted: hsl(230, 15%, 20%);
+  --muted-foreground: hsl(230, 10%, 60%);
+
+  --accent: hsl(187, 100%, 50%); /* Cyber Blue */
+  --accent-foreground: hsl(187, 100%, 5%); /* Very dark blue for text on accent */
+
+  --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --border: hsl(120, 40%, 20%); /* Green-tinted borders */
-  --input: hsl(0, 0%, 10%);
-  --ring: hsl(120, 100%, 60%); /* Green focus ring */
-  --chart-1: hsl(120, 100%, 60%); /* Primary green */
-  --chart-2: hsl(140, 100%, 60%); /* Accent green */
-  --chart-3: hsl(100, 100%, 60%); /* Light green */
-  --chart-4: hsl(160, 100%, 60%); /* Teal green */
-  --chart-5: hsl(80, 100%, 60%); /* Yellow-green */
-  --sidebar: hsl(0, 0%, 5%);
-  --sidebar-foreground: hsl(120, 100%, 90%);
-  --sidebar-primary: hsl(120, 100%, 60%);
-  --sidebar-primary-foreground: hsl(0, 0%, 3%);
-  --sidebar-accent: hsl(0, 0%, 10%);
-  --sidebar-accent-foreground: hsl(120, 100%, 85%);
-  --sidebar-border: hsl(120, 40%, 20%);
-  --sidebar-ring: hsl(120, 100%, 60%);
-  --font-sans: 'Inter', 'SF Pro Display', system-ui, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+  
+  --border: hsl(230, 15%, 20%);
+  --input: hsl(230, 15%, 25%);
+  --ring: hsl(187, 100%, 50%); /* Ring uses Cyber Blue */
+  
+  --chart-1: hsl(135, 100%, 52%); /* Electric Green */
+  --chart-2: hsl(187, 100%, 50%); /* Cyber Blue */
+  --chart-3: hsl(277, 100%, 58%); /* Vivid Purple (adjusted for brightness) */
+  --chart-4: hsl(45, 100%, 55%); /* Cyber Yellow */
+  --chart-5: hsl(320, 100%, 60%); /* Neon Pink */
+
+  --sidebar: hsl(230, 15%, 10%);
+  --sidebar-foreground: hsl(210, 20%, 95%);
+  --sidebar-primary: hsl(135, 100%, 52%);
+  --sidebar-primary-foreground: hsl(135, 100%, 5%);
+  --sidebar-accent: hsl(230, 15%, 15%);
+  --sidebar-accent-foreground: hsl(210, 20%, 90%);
+  --sidebar-border: hsl(230, 15%, 18%);
+  --sidebar-ring: hsl(187, 100%, 50%);
+
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-sans: 'Rajdhani', sans-serif; /* Fallback for shadcn components */
   --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-  --radius: 1rem;
+  --radius: 0.75rem;
   
-  /* Green Neon Shadows */
-  --shadow-2xs: 0px 1px 2px 0px hsla(120, 100%, 60%, 0.2);
-  --shadow-xs: 0px 1px 2px 0px hsla(120, 100%, 60%, 0.2);
-  --shadow-sm: 0px 1px 2px 0px hsla(120, 100%, 60%, 0.2), 0px 1px 3px 0px hsla(120, 100%, 60%, 0.3);
-  --shadow: 0px 1px 3px 0px hsla(120, 100%, 60%, 0.3), 0px 1px 2px 0px hsla(120, 100%, 60%, 0.2);
-  --shadow-md: 0px 4px 6px -1px hsla(120, 100%, 60%, 0.3), 0px 2px 4px -1px hsla(120, 100%, 60%, 0.2);
-  --shadow-lg: 0px 10px 15px -3px hsla(120, 100%, 60%, 0.3), 0px 4px 6px -2px hsla(120, 100%, 60%, 0.2);
-  --shadow-xl: 0px 20px 25px -5px hsla(120, 100%, 60%, 0.3), 0px 10px 10px -5px hsla(120, 100%, 60%, 0.15);
-  --shadow-2xl: 0px 25px 50px -12px hsla(120, 100%, 60%, 0.5);
-  
-  /* Green Neon Glow Effects */
-  --neon-glow-sm: 0 0 5px hsla(120, 100%, 60%, 0.5), 0 0 10px hsla(120, 100%, 60%, 0.3);
-  --neon-glow-md: 0 0 10px hsla(120, 100%, 60%, 0.6), 0 0 20px hsla(120, 100%, 60%, 0.4);
-  --neon-glow-lg: 0 0 15px hsla(120, 100%, 60%, 0.7), 0 0 30px hsla(120, 100%, 60%, 0.5);
-  --neon-glow-xl: 0 0 20px hsla(120, 100%, 60%, 0.8), 0 0 40px hsla(120, 100%, 60%, 0.6);
-  
-  /* Green-Focused Cyberpunk Color Palette */
-  --cyber-green: hsl(120, 100%, 60%); /* Primary bright green */
-  --cyber-green-light: hsl(100, 100%, 60%); /* Light green */
-  --cyber-green-dark: hsl(140, 100%, 50%); /* Darker green */
-  --cyber-teal: hsl(160, 100%, 60%); /* Teal green */
-  --cyber-mint: hsl(150, 100%, 60%); /* Mint green */
-  --cyber-lime: hsl(80, 100%, 60%); /* Lime green */
-  --cyber-emerald: hsl(130, 100%, 60%); /* Emerald green */
-  --cyber-forest: hsl(110, 100%, 50%); /* Forest green */
-  --cyber-jade: hsl(125, 100%, 60%); /* Jade green */
-  --cyber-sage: hsl(105, 100%, 60%); /* Sage green */
-  --cyber-olive: hsl(90, 100%, 50%); /* Olive green */
+  /* Neon Shadows based on new palette */
+  --shadow-2xs: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
+  --shadow-xs: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
+  --shadow-sm: 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1), 0px 1px 3px 0px hsla(135, 100%, 52%, 0.15);
+  --shadow: 0px 1px 3px 0px hsla(135, 100%, 52%, 0.15), 0px 1px 2px 0px hsla(135, 100%, 52%, 0.1);
+  --shadow-md: 0px 4px 6px -1px hsla(135, 100%, 52%, 0.15), 0px 2px 4px -1px hsla(135, 100%, 52%, 0.1);
+  --shadow-lg: 0px 10px 15px -3px hsla(135, 100%, 52%, 0.15), 0px 4px 6px -2px hsla(135, 100%, 52%, 0.1);
+  --shadow-xl: 0px 20px 25px -5px hsla(135, 100%, 52%, 0.15), 0px 10px 10px -5px hsla(135, 100%, 52%, 0.08);
+  --shadow-2xl: 0px 25px 50px -12px hsla(135, 100%, 52%, 0.25);
+
+  /* Neon Glow Effects */
+  --neon-glow-sm: 0 0 5px hsla(135, 100%, 52%, 0.4), 0 0 10px hsla(187, 100%, 50%, 0.2);
+  --neon-glow-md: 0 0 10px hsla(135, 100%, 52%, 0.5), 0 0 20px hsla(187, 100%, 50%, 0.3);
+  --neon-glow-lg: 0 0 15px hsla(135, 100%, 52%, 0.6), 0 0 30px hsla(187, 100%, 50%, 0.4);
+  --neon-glow-xl: 0 0 20px hsla(135, 100%, 52%, 0.7), 0 0 40px hsla(187, 100%, 50%, 0.5);
   
   /* Glass Morphism */
-  --glass-bg: hsla(0, 0%, 4%, 0.8);
-  --glass-border: hsla(120, 40%, 15%, 0.3);
-  --glass-blur: blur(20px);
-  
-  /* Carbon Texture */
-  --carbon-900: hsl(0, 0%, 2%);
-  --carbon-800: hsl(0, 0%, 4%);
-  --carbon-700: hsl(0, 0%, 8%);
-  --carbon-600: hsl(0, 0%, 12%);
-  --carbon-500: hsl(0, 0%, 16%);
+  --glass-bg: hsla(230, 15%, 12%, 0.5);
+  --glass-border: hsla(230, 15%, 20%, 0.5);
+  --glass-blur: blur(16px);
 }
 
 .dark {
-  /* Enhanced Green Dark Mode */
-  --background: hsl(0, 0%, 2%); /* Pure dark background */
-  --foreground: hsl(120, 100%, 95%); /* Maximum green brightness */
-  --card: hsl(0, 0%, 4%);
-  --card-foreground: hsl(120, 100%, 95%);
-  --popover: hsl(0, 0%, 4%);
-  --popover-foreground: hsl(120, 100%, 95%);
-  --primary: hsl(120, 100%, 65%); /* Brighter green in dark mode */
-  --primary-foreground: hsl(0, 0%, 2%);
-  --secondary: hsl(0, 0%, 8%);
-  --secondary-foreground: hsl(120, 100%, 90%);
-  --muted: hsl(0, 0%, 8%);
-  --muted-foreground: hsl(120, 70%, 80%); /* Better dark mode muted contrast */
-  --accent: hsl(140, 100%, 65%); /* Brighter accent green */
-  --accent-foreground: hsl(0, 0%, 2%);
-  --destructive: hsl(0, 98%, 75%); /* Brighter destructive in dark mode */
+  /* Amrikyy | AuraOS Neon Theme */
+  --background: hsl(230, 15%, 8%); /* Near-black blueish grey */
+  --foreground: hsl(210, 20%, 95%); /* Off-white with a cool tint */
+
+  --card: hsl(230, 15%, 12%);
+  --card-foreground: hsl(210, 20%, 95%);
+
+  --popover: hsl(230, 15%, 12%);
+  --popover-foreground: hsl(210, 20%, 95%);
+
+  --primary: hsl(135, 100%, 52%); /* Electric Green */
+  --primary-foreground: hsl(135, 100%, 5%); /* Very dark green for text on primary */
+  
+  --secondary: hsl(230, 15%, 25%);
+  --secondary-foreground: hsl(210, 20%, 90%);
+  
+  --muted: hsl(230, 15%, 20%);
+  --muted-foreground: hsl(230, 10%, 60%);
+  
+  --accent: hsl(187, 100%, 50%); /* Cyber Blue */
+  --accent-foreground: hsl(187, 100%, 5%); /* Very dark blue for text on accent */
+
+  --destructive: hsl(0, 84%, 60%);
   --destructive-foreground: hsl(0, 0%, 98%);
-  --border: hsl(120, 50%, 25%); /* More visible green border in dark mode */
-  --input: hsl(0, 0%, 8%);
-  --ring: hsl(120, 100%, 65%);
-  --chart-1: hsl(120, 100%, 65%); /* Primary green chart */
-  --chart-2: hsl(140, 100%, 65%); /* Accent green chart */
-  --chart-3: hsl(100, 100%, 65%); /* Light green chart */
-  --chart-4: hsl(160, 100%, 65%); /* Teal green chart */
-  --chart-5: hsl(80, 100%, 65%); /* Yellow-green chart */
-  --sidebar: hsl(0, 0%, 4%);
-  --sidebar-foreground: hsl(120, 100%, 95%);
-  --sidebar-primary: hsl(120, 100%, 65%);
-  --sidebar-primary-foreground: hsl(0, 0%, 2%);
-  --sidebar-accent: hsl(0, 0%, 8%);
-  --sidebar-accent-foreground: hsl(120, 100%, 90%);
-  --sidebar-border: hsl(120, 50%, 25%);
-  --sidebar-ring: hsl(120, 100%, 65%);
-  
-  /* Enhanced Neon Glow Effects */
-  --neon-glow-sm: 0 0 8px hsla(120, 100%, 65%, 0.6), 0 0 15px hsla(120, 100%, 65%, 0.4);
-  --neon-glow-md: 0 0 15px hsla(120, 100%, 65%, 0.7), 0 0 25px hsla(120, 100%, 65%, 0.5);
-  --neon-glow-lg: 0 0 20px hsla(120, 100%, 65%, 0.8), 0 0 35px hsla(120, 100%, 65%, 0.6);
-  --neon-glow-xl: 0 0 25px hsla(120, 100%, 65%, 0.9), 0 0 45px hsla(120, 100%, 65%, 0.7);
-  
-  /* Ultra Dark Glass Morphism */
-  --glass-bg: hsla(0, 0%, 3%, 0.9);
-  --glass-border: hsla(120, 50%, 20%, 0.4);
-  --glass-blur: blur(25px);
-  
-  /* Ultra Dark Carbon Texture */
-  --carbon-900: hsl(0, 0%, 1%);
-  --carbon-800: hsl(0, 0%, 3%);
-  --carbon-700: hsl(0, 0%, 6%);
-  --carbon-600: hsl(0, 0%, 10%);
-  --carbon-500: hsl(0, 0%, 14%);
+
+  --border: hsl(230, 15%, 20%);
+  --input: hsl(230, 15%, 25%);
+  --ring: hsl(187, 100%, 50%); /* Ring uses Cyber Blue */
+
+  --chart-1: hsl(135, 100%, 52%); /* Electric Green */
+  --chart-2: hsl(187, 100%, 50%); /* Cyber Blue */
+  --chart-3: hsl(277, 100%, 58%); /* Vivid Purple (adjusted for brightness) */
+  --chart-4: hsl(45, 100%, 55%); /* Cyber Yellow */
+  --chart-5: hsl(320, 100%, 60%); /* Neon Pink */
+
+  --sidebar: hsl(230, 15%, 10%);
+  --sidebar-foreground: hsl(210, 20%, 95%);
+  --sidebar-primary: hsl(135, 100%, 52%);
+  --sidebar-primary-foreground: hsl(135, 100%, 5%);
+  --sidebar-accent: hsl(230, 15%, 15%);
+  --sidebar-accent-foreground: hsl(210, 20%, 90%);
+  --sidebar-border: hsl(230, 15%, 18%);
+  --sidebar-ring: hsl(187, 100%, 50%);
 }
 
 @layer base {
@@ -146,26 +130,25 @@
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
+    @apply font-body antialiased bg-background text-foreground;
     background: 
       /* Animated grid pattern */
-      linear-gradient(90deg, transparent 98%, rgba(0,255,65,0.03) 100%),
-      linear-gradient(0deg, transparent 98%, rgba(0,255,65,0.03) 100%),
+      linear-gradient(90deg, transparent 98%, hsla(var(--primary) / 0.03) 100%),
+      linear-gradient(0deg, transparent 98%, hsla(var(--primary) / 0.03) 100%),
       /* Dynamic radial gradients */
-      radial-gradient(circle at 20% 50%, transparent 20%, rgba(0,255,65,0.04) 21%, rgba(0,255,65,0.04) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 80% 20%, transparent 20%, rgba(0,255,255,0.03) 21%, rgba(0,255,255,0.03) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 40% 80%, transparent 20%, rgba(255,0,255,0.03) 21%, rgba(255,0,255,0.03) 34%, transparent 35%, transparent),
-      radial-gradient(circle at 60% 30%, transparent 20%, rgba(255,255,0,0.02) 21%, rgba(255,255,0,0.02) 34%, transparent 35%, transparent),
+      radial-gradient(circle at 20% 50%, transparent 20%, hsla(var(--primary) / 0.04) 21%, hsla(var(--primary) / 0.04) 34%, transparent 35%, transparent),
+      radial-gradient(circle at 80% 20%, transparent 20%, hsla(var(--accent) / 0.03) 21%, hsla(var(--accent) / 0.03) 34%, transparent 35%, transparent),
+      radial-gradient(circle at 40% 80%, transparent 20%, hsla(277, 100%, 58% / 0.03) 21%, hsla(277, 100%, 58% / 0.03) 34%, transparent 35%, transparent),
       /* Base gradient */
-      linear-gradient(135deg, rgba(0,0,0,0.98) 0%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.98) 100%);
-    background-size: 50px 50px, 50px 50px, 800px 800px, 600px 600px, 700px 700px, 500px 500px, 100% 100%;
+      linear-gradient(135deg, hsl(var(--background)) 0%, hsl(230, 15%, 10%) 50%, hsl(var(--background)) 100%);
+    background-size: 50px 50px, 50px 50px, 800px 800px, 600px 600px, 700px 700px, 100% 100%;
     background-attachment: fixed;
     animation: backgroundShift 20s ease-in-out infinite;
   }
 
   /* Enhanced Typography */
   h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-wider;
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.2;
