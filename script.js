@@ -632,17 +632,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // Error handling for missing elements
 // فحص العناصر بعد تحميل الصفحة بالكامل
 function checkElementsAfterLoad() {
-    const elementsToCheck = [
-        '.navbar',
-        '.hamburger',
-        '.nav-menu',
-        '.hero-title',
-        '.hero-stats'
-    ];
+const elementsToCheck = [
+    '.navbar',
+    '.hamburger',
+    '.nav-menu',
+    '.hero-title',
+    '.hero-stats'
+];
 
-    elementsToCheck.forEach(selector => {
-        if (!document.querySelector(selector)) {
-            console.warn(`Element not found: ${selector}`);
+elementsToCheck.forEach(selector => {
+    if (!document.querySelector(selector)) {
+        console.warn(`Element not found: ${selector}`);
         } else {
             console.log(`✅ Element found: ${selector}`);
         }
@@ -1577,21 +1577,21 @@ class ChatbotSystem {
         const chatbotInput = document.getElementById('chatbotInput');
         if (chatbotInput) {
             chatbotInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    this.sendMessage();
-                }
-            });
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
+        });
         }
 
         // Quick action buttons - فحص وجود العناصر
         const quickBtns = document.querySelectorAll('.quick-btn');
         if (quickBtns.length > 0) {
             quickBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    const message = e.target.getAttribute('data-message');
-                    this.sendQuickMessage(message);
-                });
+            btn.addEventListener('click', (e) => {
+                const message = e.target.getAttribute('data-message');
+                this.sendQuickMessage(message);
             });
+        });
         }
 
         // Analytics button (add dynamically if not exists)

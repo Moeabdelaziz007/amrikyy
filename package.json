@@ -12,7 +12,16 @@
     "test:performance": "node test-performance.js",
     "test:all": "npm run test && npm run test:performance",
     "build:production": "npm run build && npm run test:all",
-    "predeploy": "npm run build:production"
+    "predeploy": "npm run build:production",
+    "env:check": "./protect-env.sh check",
+    "env:backup": "./protect-env.sh backup",
+    "env:protect": "./protect-env.sh protect",
+    "env:status": "./protect-env.sh status",
+    "env:restore": "./protect-env.sh restore",
+    "env:recreate": "./protect-env.sh recreate",
+    "env:setup": "cp .env.example .env && echo 'Please edit .env file with your actual values'",
+    "prestart": "npm run env:check",
+    "predev": "npm run env:check"
   },
   "keywords": [
     "operating-system",
@@ -41,7 +50,8 @@
     "express": "^4.18.0",
     "helmet": "^7.0.0",
     "cors": "^2.8.5",
-    "compression": "^1.7.4"
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.18.1",

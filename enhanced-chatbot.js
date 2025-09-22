@@ -83,28 +83,28 @@ class EnhancedChatbot {
                 <div class="input-tabs enhanced-tabs">
                     <button class="tab-btn active" data-mode="text">
                         <div class="tab-icon">
-                            <i class="fas fa-keyboard"></i>
+                        <i class="fas fa-keyboard"></i>
                         </div>
                         <span class="tab-label">Text</span>
                         <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="voice">
                         <div class="tab-icon">
-                            <i class="fas fa-microphone"></i>
+                        <i class="fas fa-microphone"></i>
                         </div>
                         <span class="tab-label">Voice</span>
                         <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="image">
                         <div class="tab-icon">
-                            <i class="fas fa-image"></i>
+                        <i class="fas fa-image"></i>
                         </div>
                         <span class="tab-label">Image</span>
                         <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="file">
                         <div class="tab-icon">
-                            <i class="fas fa-file"></i>
+                        <i class="fas fa-file"></i>
                         </div>
                         <span class="tab-label">File</span>
                         <div class="tab-indicator"></div>
@@ -118,21 +118,21 @@ class EnhancedChatbot {
                                 <textarea id="chatbotInput" placeholder="Type your message or ask me anything..." rows="3" class="enhanced-textarea"></textarea>
                                 <div class="input-actions enhanced-actions">
                                     <button class="action-btn enhanced-action-btn" id="emojiBtn" title="Add Emoji">
-                                        <i class="fas fa-smile"></i>
+                                    <i class="fas fa-smile"></i>
                                         <span class="action-tooltip">Emoji</span>
-                                    </button>
+                                </button>
                                     <button class="action-btn enhanced-action-btn" id="attachBtn" title="Attach File">
-                                        <i class="fas fa-paperclip"></i>
+                                    <i class="fas fa-paperclip"></i>
                                         <span class="action-tooltip">Attach</span>
-                                    </button>
+                                </button>
                                     <button class="action-btn enhanced-action-btn" id="voiceInputBtn" title="Voice Input">
-                                        <i class="fas fa-microphone"></i>
+                                    <i class="fas fa-microphone"></i>
                                         <span class="action-tooltip">Voice</span>
-                                    </button>
+                                </button>
                                     <button id="sendMessage" class="send-btn enhanced-send-btn" title="Send Message">
-                                        <i class="fas fa-paper-plane"></i>
+                                    <i class="fas fa-paper-plane"></i>
                                         <span class="send-ripple"></span>
-                                    </button>
+                                </button>
                                 </div>
                             </div>
                         </div>
@@ -810,14 +810,14 @@ class EnhancedChatbot {
         typingDiv.className = 'message bot-message typing-indicator enhanced-typing';
         typingDiv.innerHTML = `
             <div class="message-wrapper">
-                <div class="message-avatar">
+            <div class="message-avatar">
                     <div class="avatar-circle bot-avatar">
-                        <i class="fas fa-robot"></i>
-                    </div>
+                <i class="fas fa-robot"></i>
+            </div>
                 </div>
                 <div class="message-content enhanced-bubble">
                     <div class="typing-indicator-enhanced">
-                        <div class="typing-dots">
+                <div class="typing-dots">
                             <span class="dot"></span>
                             <span class="dot"></span>
                             <span class="dot"></span>
