@@ -121,7 +121,7 @@ async function cacheFirst(request, cacheName) {
     }
 
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    if (networkResponse.ok && request.method === 'GET') {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
@@ -138,7 +138,10 @@ async function networkFirst(request, cacheName) {
     
     if (networkResponse.ok) {
       const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+      // فحص نوع الطلب قبل التخزين - Cache API لا يدعم POST
+      if (request.method === 'GET') {
+        cache.put(request, networkResponse.clone());
+      }
     }
     
     return networkResponse;
@@ -161,7 +164,7 @@ async function staleWhileRevalidate(request, cacheName) {
   const cachedResponse = await cache.match(request);
   
   const fetchPromise = fetch(request).then((networkResponse) => {
-    if (networkResponse.ok) {
+    if (networkResponse.ok && request.method === 'GET') {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;

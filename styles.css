@@ -1569,7 +1569,8 @@
     .mobile-platform img {
         image-rendering: -webkit-optimize-contrast;
         image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+        image-rendering: -webkit-optimize-contrast; /* Edge support */
+        image-rendering: crisp-edges;
     }
 }
 
@@ -3034,7 +3035,6 @@ html {
     background-color: rgba(0, 0, 0, 0.6);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     animation: modalFadeIn 0.3s ease-out;
 }
 
