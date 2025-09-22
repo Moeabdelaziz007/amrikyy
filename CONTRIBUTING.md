@@ -1,55 +1,224 @@
-# Contributing to AuraOS
+# 🤝 دليل المساهمة في AuraOS
 
-We welcome contributions to AuraOS! This document provides guidelines for contributing to the project.
+شكراً لاهتمامك بالمساهمة في AuraOS! هذا الدليل سيساعدك على البدء.
 
-## Development Setup
+## 📋 طرق المساهمة
 
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Set up environment variables (see `.env.example`)
-4. Run development server: `npm run dev`
+### 🐛 الإبلاغ عن الأخطاء
+1. تحقق من [Issues الموجودة](https://github.com/yourusername/auraos/issues)
+2. أنشئ issue جديد مع:
+   - وصف واضح للمشكلة
+   - خطوات إعادة إنتاج المشكلة
+   - معلومات النظام والبيئة
+   - لقطات شاشة إن أمكن
 
-## Code Style
+### ✨ اقتراح ميزات جديدة
+1. تحقق من [الميزات المخطط لها](#ميزات-مخطط-لها)
+2. أنشئ issue مع:
+   - وصف مفصل للميزة
+   - حالة الاستخدام
+   - فوائد المستخدمين
+   - أمثلة مرئية إن أمكن
 
-- **TypeScript/JavaScript**: We use ESLint and Prettier for code formatting
-- **Python**: We use Black and Ruff for code formatting
-- **Commits**: Follow conventional commit format (`feat:`, `fix:`, `docs:`, etc.)
+### 💻 المساهمة بالكود
+1. Fork المشروع
+2. أنشئ branch جديد (`git checkout -b feature/amazing-feature`)
+3. اعمل على التطوير
+4. اختبر التغييرات
+5. اعمل commit (`git commit -m 'Add amazing feature'`)
+6. ادفع التغييرات (`git push origin feature/amazing-feature`)
+7. أنشئ Pull Request
 
-## Pull Request Process
+## 🛠️ إعداد البيئة التطويرية
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes following our code style guidelines
-4. Add tests for new functionality
-5. Ensure all tests pass: `npm test`
-6. Run linting: `npm run lint`
-7. Commit your changes with a descriptive message
-8. Push to your fork and create a pull request
+### المتطلبات
+- Node.js 18.x أو أحدث
+- npm 9.x أو أحدث
+- Git
 
-## Pull Request Requirements
+### خطوات الإعداد
+```bash
+# 1. استنساخ المشروع
+git clone https://github.com/yourusername/auraos.git
+cd auraos
 
-- [ ] Code follows project style guidelines
-- [ ] Tests pass (minimum 70% coverage)
-- [ ] Documentation is updated if needed
-- [ ] PR description clearly explains the changes
-- [ ] Two approving reviews required for merge
+# 2. تثبيت التبعيات
+npm install
 
-## Design System
+# 3. إعداد متغيرات البيئة
+cp env.example .env
+# عدّل .env حسب الحاجة
 
-- Use Neon color palette (Electric Green #39FF14, Cyber Blue #00E5FF, Vivid Purple #9D00FF)
-- Apply Glassmorphism effects for cards and controls
-- Follow Cyberpunk aesthetic with appropriate fonts and effects
-- Ensure accessibility standards (WCAG AA+) are met
+# 4. تشغيل المشروع
+npm run dev
 
-## Testing
+# 5. تشغيل الاختبارات
+npm run test:all
+```
 
-- Write unit tests for new functions
-- Add integration tests for API endpoints
-- Include E2E tests for critical user flows
-- Test accessibility with screen readers
+## 📝 معايير الكود
 
-## Questions?
+### JavaScript/TypeScript
+- استخدم **TypeScript** للكود الجديد
+- اتبع **ESLint** rules
+- استخدم **Prettier** للتنسيق
+- اكتب **JSDoc** للدوال العامة
 
-Feel free to open an issue for discussion or reach out to the maintainers.
+### CSS/Tailwind
+- استخدم **Tailwind CSS** للتصميم
+- اتبع **mobile-first** approach
+- استخدم **CSS variables** للألوان
+- اختبر **dark mode**
 
-Thank you for contributing! 🚀
+### React Components
+- استخدم **Functional Components**
+- استخدم **Custom Hooks** للدوال المشتركة
+- استخدم **TypeScript interfaces** للـ props
+- اكتب **tests** للمكونات المهمة
+
+## 🧪 الاختبارات
+
+### أنواع الاختبارات
+- **Unit Tests**: للدوال والمكونات
+- **Integration Tests**: للـ APIs والخدمات
+- **E2E Tests**: للمسارات الكاملة
+- **Performance Tests**: للأداء
+
+### تشغيل الاختبارات
+```bash
+# جميع الاختبارات
+npm run test:all
+
+# اختبارات الإنتاج
+npm run test
+
+# اختبارات الأداء
+npm run test:performance
+
+# اختبارات محددة
+npm test -- --grep "specific test"
+```
+
+## 📚 التوثيق
+
+### أنواع التوثيق
+- **README**: نظرة عامة على المشروع
+- **API Docs**: توثيق الـ APIs
+- **Component Docs**: توثيق المكونات
+- **Deployment Guide**: دليل النشر
+
+### معايير التوثيق
+- استخدم **Markdown** للتوثيق
+- اكتب باللغة **العربية** أو **الإنجليزية**
+- اتبع **GitHub Flavored Markdown**
+- أضف **أمثلة كود** واضحة
+
+## 🎨 التصميم
+
+### نظام التصميم
+- **Neon Cyberpunk Theme**
+- **Glassmorphism Effects**
+- **Responsive Design**
+- **Accessibility First**
+
+### الألوان
+```css
+/* الألوان الأساسية */
+--neon-green: #39FF14;
+--cyber-blue: #00E5FF;
+--vivid-purple: #9D00FF;
+```
+
+### الخطوط
+- **Orbitron**: للعناوين
+- **Rajdhani**: للنصوص
+- **Oxanium**: للأزرار
+- **Audiowide**: للكود
+
+## 🔄 عملية المراجعة
+
+### Pull Request Process
+1. **تحديث**: تأكد من تحديث branch مع main
+2. **اختبار**: شغل جميع الاختبارات
+3. **توثيق**: حدث التوثيق إذا لزم الأمر
+4. **مراجعة**: اطلب مراجعة من المطورين
+
+### معايير المراجعة
+- **الكود**: صحيح ومنظم
+- **الاختبارات**: شاملة وناجحة
+- **الأداء**: لا يؤثر سلباً
+- **الأمان**: آمن ولا يحتوي على ثغرات
+
+## 📋 ميزات مخطط لها
+
+### قصيرة المدى (1-3 أشهر)
+- [ ] تحسين الأداء
+- [ ] دعم PWA أفضل
+- [ ] اختبارات شاملة
+- [ ] توثيق محسن
+
+### متوسطة المدى (3-6 أشهر)
+- [ ] دعم متعدد اللغات
+- [ ] تطبيق موبايل
+- [ ] تكاملات إضافية
+- [ ] نظام إشعارات
+
+### طويلة المدى (6-12 شهر)
+- [ ] API عامة
+- [ ] نظام plugin
+- [ ] تكامل AI متقدم
+- [ ] دعم المؤسسات
+
+## 🏷️ التصنيفات (Labels)
+
+### للمساهمات
+- `good first issue`: للمبتدئين
+- `help wanted`: يحتاج مساعدة
+- `enhancement`: ميزة جديدة
+- `bug`: خطأ
+- `documentation`: توثيق
+
+### للمناطق
+- `frontend`: واجهة المستخدم
+- `backend`: الخادم
+- `ai`: الذكاء الاصطناعي
+- `security`: الأمان
+- `performance`: الأداء
+
+## 💬 التواصل
+
+### قنوات التواصل
+- **GitHub Discussions**: للمناقشات العامة
+- **Discord**: للدردشة المباشرة
+- **Email**: للتواصل الرسمي
+
+### اجتماعات المجتمع
+- **أسبوعية**: مراجعة التقدم
+- **شهرية**: تخطيط الميزات
+- **ربعية**: مراجعة الاستراتيجية
+
+## 🎉 الاعتراف
+
+### أنواع الاعتراف
+- **Contributors**: في README
+- **Hall of Fame**: للمساهمين المتميزين
+- **Badges**: للمساهمات المختلفة
+- **Certificates**: للمساهمات الكبيرة
+
+## 📞 الدعم
+
+### للمبتدئين
+- ابدأ بـ `good first issue`
+- اقرأ التوثيق بعناية
+- اسأل في Discord
+- لا تتردد في طلب المساعدة
+
+### للمطورين المتقدمين
+- راجع الكود الحالي
+- اقترح تحسينات
+- ساعد الآخرين
+- شارك في المراجعات
+
+---
+
+**شكراً لمساهمتك في جعل AuraOS أفضل! 🚀**

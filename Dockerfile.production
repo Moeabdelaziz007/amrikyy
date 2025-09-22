@@ -1,0 +1,86 @@
+# AuraOS Production Dockerfile - Docker للإنتاج
+FROM node:18-alpine AS builder
+
+# إعداد متغيرات البيئة
+ENV NODE_ENV=production
+ENV CI=true
+
+# تثبيت التبعيات المطلوبة
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    git
+
+# إنشاء مجلد التطبيق
+WORKDIR /app
+
+# نسخ ملفات التبعيات
+COPY package*.json ./
+COPY client/package*.json ./client/
+
+# تثبيت التبعيات
+RUN npm ci --only=production --silent
+
+# نسخ الكود المصدري
+COPY . .
+
+# بناء التطبيق
+RUN npm run build
+
+# =============================================================================
+# Production Stage
+# =============================================================================
+FROM node:18-alpine AS production
+
+# إعداد متغيرات البيئة
+ENV NODE_ENV=production
+ENV PORT=3001
+
+# إنشاء مستخدم غير root
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S auraos -u 1001
+
+# تثبيت التبعيات المطلوبة
+RUN apk add --no-cache \
+    dumb-init \
+    curl
+
+# إنشاء مجلد التطبيق
+WORKDIR /app
+
+# نسخ التبعيات المثبتة
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/client/dist ./client/dist
+COPY --from=builder /app/client/package*.json ./client/
+
+# نسخ ملفات الخادم
+COPY --from=builder /app/server ./server
+COPY --from=builder /app/shared ./shared
+COPY --from=builder /app/package*.json ./
+
+# نسخ ملفات الإنتاج
+COPY --from=builder /app/production.env ./.env
+COPY --from=builder /app/firebase.json ./
+COPY --from=builder /app/manifest.json ./
+
+# نسخ ملفات الأمان
+COPY --from=builder /app/security-headers.js ./
+
+# إنشاء مجلدات مطلوبة
+RUN mkdir -p /app/logs /app/uploads /app/temp
+
+# تغيير ملكية الملفات
+RUN chown -R auraos:nodejs /app
+USER auraos
+
+# فتح المنفذ
+EXPOSE 3001
+
+# إضافة health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3001/health || exit 1
+
+# تشغيل التطبيق
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "server/index.js"]

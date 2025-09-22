@@ -654,5 +654,20 @@
     <script src="enhanced-chatbot.js"></script>
     <script src="mobile-platform.js"></script>
     <script src="cross-platform-config.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker مسجل بنجاح:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('❌ فشل تسجيل Service Worker:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

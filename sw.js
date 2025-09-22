@@ -1,212 +1,163 @@
-// AuraOS Service Worker
-const CACHE_NAME = 'auraos-v1.1.0';
-const STATIC_CACHE = 'auraos-static-v1.1.0';
-const DYNAMIC_CACHE = 'auraos-dynamic-v1.1.0';
-const FONTS_CACHE = 'auraos-fonts-v1.1.0';
-const IMAGES_CACHE = 'auraos-images-v1.1.0';
-const ICONS_CACHE = 'auraos-icons-v1.1.0';
+// AuraOS Service Worker - تحسين الأداء والتخزين المؤقت
+const CACHE_NAME = 'auraos-v2.0.1';
+const STATIC_CACHE = 'auraos-static-v2.0.1';
+const DYNAMIC_CACHE = 'auraos-dynamic-v2.0.1';
 
-// Files to cache for offline functionality
+// ملفات للتخزين المؤقت الثابت
 const STATIC_ASSETS = [
   '/',
   '/index.html',
+  '/manifest.json',
   '/styles.css',
   '/script.js',
-  '/manifest.json',
-  '/offline.html',
-  '/router.js',
-  '/about.html',
-  '/login.html',
-  '/signup.html',
-  '/loading.html',
-  '/dashboard.html',
-  '/settings.html',
-  '/help.html',
-  '/app-store.html',
-  '/file-manager.html',
-  '/task-manager.html',
-  '/network-manager.html',
-  '/notifications.html',
-  '/terminal.html',
-  '/profile.html',
-  '/system-monitor.html',
-  '/admin-panel.html',
-  '/autopilot-dashboard.html',
-  '/test-dashboard.html',
-  '/chat.html',
-  '/share.html',
-  '/file-handler.html',
-  '/protocol.html',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2',
-  'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js',
-  'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js',
-  'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js'
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png',
+  '/icons/favicon.ico'
 ];
 
-// Install event - cache static assets
+// ملفات للتخزين المؤقت الديناميكي
+const DYNAMIC_PATTERNS = [
+  /^https:\/\/fonts\.googleapis\.com/,
+  /^https:\/\/cdnjs\.cloudflare\.com/,
+  /^https:\/\/www\.gstatic\.com\/firebasejs/
+];
+
+// تثبيت Service Worker
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
+  console.log('🔧 Service Worker: تثبيت AuraOS');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
-        console.log('Service Worker: Caching static assets');
+        console.log('📦 Service Worker: تخزين الملفات الثابتة');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => {
-        console.log('Service Worker: Static assets cached successfully');
+        console.log('✅ Service Worker: التثبيت مكتمل');
         return self.skipWaiting();
-      })
-      .catch((error) => {
-        console.error('Service Worker: Failed to cache static assets', error);
       })
   );
 });
 
-// Activate event - clean up old caches
+// تفعيل Service Worker
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
+  console.log('🚀 Service Worker: تفعيل AuraOS');
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (
-              cacheName !== STATIC_CACHE &&
-              cacheName !== DYNAMIC_CACHE &&
-              cacheName !== FONTS_CACHE &&
-              cacheName !== IMAGES_CACHE &&
-              cacheName !== ICONS_CACHE
-            ) {
-              console.log('Service Worker: Deleting old cache', cacheName);
+          cacheNames
+            .filter((cacheName) => {
+              return cacheName !== STATIC_CACHE && 
+                     cacheName !== DYNAMIC_CACHE;
+            })
+            .map((cacheName) => {
+              console.log('🗑️ Service Worker: حذف cache قديم:', cacheName);
               return caches.delete(cacheName);
-            }
-          })
+            })
         );
       })
       .then(() => {
-        console.log('Service Worker: Activated successfully');
+        console.log('✅ Service Worker: التفعيل مكتمل');
         return self.clients.claim();
       })
   );
 });
 
-// Fetch event - serve from cache or network
+// معالجة الطلبات
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
+  // تجاهل طلبات غير HTTP
+  if (!request.url.startsWith('http')) {
     return;
   }
 
-  // Handle different types of requests
-  if (STATIC_ASSETS.includes(url.pathname) || STATIC_ASSETS.includes(request.url)) {
-    // Static assets - Cache First strategy
-    event.respondWith(cacheFirst(request));
-  } else if (
-    request.destination === 'font' ||
-    url.pathname.endsWith('.woff2') ||
-    url.pathname.endsWith('.woff') ||
-    url.pathname.endsWith('.ttf') ||
-    url.pathname.includes('/webfonts/')
-  ) {
-    // Fonts - Cache First (long-lived)
-    event.respondWith(cacheFirstFonts(request));
-  } else if (url.pathname.startsWith('/icons/') || request.url.includes('/icons/')) {
-    // Icons - Cache First (stable assets)
-    event.respondWith(cacheFirstIcons(request));
-  } else if (url.pathname.startsWith('/api/')) {
-    // API requests - Network First with cache fallback
-    event.respondWith(networkFirst(request));
-  } else if (request.destination === 'image') {
-    // Images - Stale While Revalidate strategy
-    event.respondWith(staleWhileRevalidateImages(request));
-  } else {
-    // Other requests - Network First
-    event.respondWith(networkFirst(request));
+  // استراتيجية Cache First للملفات الثابتة
+  if (STATIC_ASSETS.some(asset => url.pathname === asset)) {
+    event.respondWith(cacheFirst(request, STATIC_CACHE));
+    return;
   }
+
+  // استراتيجية Stale While Revalidate للملفات الخارجية
+  if (DYNAMIC_PATTERNS.some(pattern => pattern.test(url.href))) {
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // استراتيجية Network First للصفحات
+  if (request.mode === 'navigate') {
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // استراتيجية Cache First للصور والملفات الأخرى
+  if (request.destination === 'image' || 
+      request.destination === 'font' ||
+      request.destination === 'style') {
+    event.respondWith(cacheFirst(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // استراتيجية Network First للـ API
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // افتراضي: Network First
+  event.respondWith(networkFirst(request, DYNAMIC_CACHE));
 });
 
-// Cache First strategy for static assets
-async function cacheFirst(request) {
+// استراتيجية Cache First
+async function cacheFirst(request, cacheName) {
   try {
-    const cachedResponse = await caches.match(request);
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(request);
+    
     if (cachedResponse) {
+      console.log('📦 Service Worker: استرجاع من cache:', request.url);
       return cachedResponse;
     }
-    
+
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      const cache = await caches.open(STATIC_CACHE);
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
   } catch (error) {
-    console.error('Cache First failed:', error);
-    return new Response('Offline - Resource not available', {
-      status: 503,
-      statusText: 'Service Unavailable'
-    });
+    console.error('❌ Service Worker: خطأ في cache first:', error);
+    return new Response('خطأ في التحميل', { status: 503 });
   }
 }
 
-// Cache First for fonts (separate cache bucket)
-async function cacheFirstFonts(request) {
-  try {
-    const cache = await caches.open(FONTS_CACHE);
-    const cachedResponse = await cache.match(request, { ignoreVary: true });
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-
-    const networkResponse = await fetch(request, { mode: 'cors' }).catch(() => fetch(request));
-    if (networkResponse && (networkResponse.ok || networkResponse.type === 'opaque')) {
-      await cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    console.error('Fonts cacheFirst failed:', error);
-    return caches.match(request);
-  }
-}
-
-// Network First strategy for dynamic content
-async function networkFirst(request) {
+// استراتيجية Network First
+async function networkFirst(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
+    
     if (networkResponse.ok) {
-      const cache = await caches.open(DYNAMIC_CACHE);
+      const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
+    
     return networkResponse;
   } catch (error) {
-    console.log('Network failed, trying cache:', error);
-    const cachedResponse = await caches.match(request);
+    console.log('🌐 Service Worker: محاولة الاسترجاع من cache:', request.url);
+    const cache = await caches.open(cacheName);
+    const cachedResponse = await cache.match(request);
+    
     if (cachedResponse) {
       return cachedResponse;
     }
     
-    // Return offline page for navigation requests
-    if (request.destination === 'document') {
-      return caches.match('/offline.html') || new Response(
-        '<html><body><h1>Offline</h1><p>You are offline. Please check your connection.</p></body></html>',
-        { headers: { 'Content-Type': 'text/html' } }
-      );
-    }
-    
-    return new Response('Offline - Resource not available', {
-      status: 503,
-      statusText: 'Service Unavailable'
-    });
+    return new Response('خطأ في الاتصال', { status: 503 });
   }
 }
 
-// Stale While Revalidate strategy for general images
-async function staleWhileRevalidateImages(request) {
-  const cache = await caches.open(IMAGES_CACHE);
+// استراتيجية Stale While Revalidate
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
   const cachedResponse = await cache.match(request);
   
   const fetchPromise = fetch(request).then((networkResponse) => {
@@ -214,119 +165,12 @@ async function staleWhileRevalidateImages(request) {
       cache.put(request, networkResponse.clone());
     }
     return networkResponse;
-  }).catch(() => cachedResponse);
-  
+  });
+
   return cachedResponse || fetchPromise;
 }
 
-// Cache First for icons (stable, app-local)
-async function cacheFirstIcons(request) {
-  try {
-    const cache = await caches.open(ICONS_CACHE);
-    const cachedResponse = await cache.match(request);
-    if (cachedResponse) return cachedResponse;
-
-    const networkResponse = await fetch(request);
-    if (networkResponse.ok || networkResponse.type === 'opaque') {
-      await cache.put(request, networkResponse.clone());
-    }
-    return networkResponse;
-  } catch (error) {
-    console.error('Icons cacheFirst failed:', error);
-    return caches.match(request);
-  }
-}
-
-// Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  console.log('Service Worker: Background sync triggered');
-  
-  if (event.tag === 'background-sync') {
-    event.waitUntil(doBackgroundSync());
-  }
-});
-
-async function doBackgroundSync() {
-  try {
-    // Get offline actions from IndexedDB
-    const offlineActions = await getOfflineActions();
-    
-    for (const action of offlineActions) {
-      try {
-        await fetch(action.url, {
-          method: action.method,
-          headers: action.headers,
-          body: action.body
-        });
-        
-        // Remove successful action from offline storage
-        await removeOfflineAction(action.id);
-        console.log('Background sync: Action completed', action.id);
-      } catch (error) {
-        console.error('Background sync: Action failed', action.id, error);
-      }
-    }
-  } catch (error) {
-    console.error('Background sync failed:', error);
-  }
-}
-
-// Push notifications
-self.addEventListener('push', (event) => {
-  console.log('Service Worker: Push notification received');
-  
-  const options = {
-    body: event.data ? event.data.text() : 'New notification from AuraOS',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/badge-72x72.png',
-    vibrate: [200, 100, 200],
-    data: {
-      url: '/'
-    },
-    actions: [
-      {
-        action: 'open',
-        title: 'Open AuraOS',
-        icon: '/icons/icon-192x192.png'
-      },
-      {
-        action: 'close',
-        title: 'Close',
-        icon: '/icons/close.png'
-      }
-    ]
-  };
-  
-  event.waitUntil(
-    self.registration.showNotification('AuraOS', options)
-  );
-});
-
-// Notification click handler
-self.addEventListener('notificationclick', (event) => {
-  console.log('Service Worker: Notification clicked');
-  
-  event.notification.close();
-  
-  if (event.action === 'open') {
-    event.waitUntil(
-      clients.openWindow(event.notification.data.url || '/')
-    );
-  }
-});
-
-// Utility functions for offline storage
-async function getOfflineActions() {
-  // Implementation would use IndexedDB
-  return [];
-}
-
-async function removeOfflineAction(actionId) {
-  // Implementation would remove from IndexedDB
-  console.log('Removed offline action:', actionId);
-}
-
-// Message handling from main thread
+// معالجة رسائل الخلفية
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
@@ -335,46 +179,16 @@ self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'GET_VERSION') {
     event.ports[0].postMessage({ version: CACHE_NAME });
   }
-  
-  if (event.data && event.data.type === 'WARM_CACHE') {
-    const urls = Array.isArray(event.data.urls) ? event.data.urls : [];
-    event.waitUntil(warmCache(urls));
-  }
 });
 
-console.log('Service Worker: Loaded successfully');
+// معالجة الأخطاء
+self.addEventListener('error', (event) => {
+  console.error('❌ Service Worker: خطأ:', event.error);
+});
 
-// Warm cache helper
-async function warmCache(urls) {
-  const tasks = urls.map(async (url) => {
-    try {
-      const request = new Request(url, { mode: 'cors' });
-      const ext = url.split('?')[0].split('#')[0].split('.').pop() || '';
-      if (ext === 'woff2' || ext === 'woff' || ext === 'ttf') {
-        const cache = await caches.open(FONTS_CACHE);
-        const res = await fetch(request).catch(() => null);
-        if (res && (res.ok || res.type === 'opaque')) await cache.put(request, res.clone());
-        return;
-      }
-      if (url.includes('/icons/')) {
-        const cache = await caches.open(ICONS_CACHE);
-        const res = await fetch(request).catch(() => null);
-        if (res && (res.ok || res.type === 'opaque')) await cache.put(request, res.clone());
-        return;
-      }
-      if (/\/(png|jpg|jpeg|gif|webp|svg)$/.test(ext)) {
-        const cache = await caches.open(IMAGES_CACHE);
-        const res = await fetch(request).catch(() => null);
-        if (res && (res.ok || res.type === 'opaque')) await cache.put(request, res.clone());
-        return;
-      }
-      // Default to static cache
-      const cache = await caches.open(STATIC_CACHE);
-      const res = await fetch(request).catch(() => null);
-      if (res && (res.ok || res.type === 'opaque')) await cache.put(request, res.clone());
-    } catch (e) {
-      // noop
-    }
-  });
-  await Promise.allSettled(tasks);
-}
+// معالجة الرفض غير المعالج
+self.addEventListener('unhandledrejection', (event) => {
+  console.error('❌ Service Worker: رفض غير معالج:', event.reason);
+});
+
+console.log('🎉 AuraOS Service Worker جاهز للعمل!');

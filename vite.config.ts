@@ -174,4 +174,10 @@ export default defineConfig({
     __DEV__: process.env.NODE_ENV === 'development',
     __PROD__: process.env.NODE_ENV === 'production',
   },
+  // إعدادات إضافية للأداء
+  experimental: {
+    renderBuiltUrl(filename: string) {
+      return `/${filename}`;
+    },
+  },
 });

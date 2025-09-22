@@ -1,11 +1,11 @@
 {
   "servers": {
     "auraos": {
-      "command": "python",
-      "args": ["auraos-mcp/server.py"],
+      "command": "npx",
+      "args": ["tsx", "cursor-mcp-server.ts"],
+      "cwd": "/Users/cryptojoker710/Downloads/AuraOS",
       "env": {
-        "AURAOS_API_URL": "http://localhost:8001",
-        "AURAOS_API_KEY": "${AURAOS_API_KEY}"
+        "NODE_ENV": "development"
       }
     }
   }
