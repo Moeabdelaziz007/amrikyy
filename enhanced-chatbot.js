@@ -70,26 +70,44 @@ class EnhancedChatbot {
         const chatbotContainer = document.getElementById('chatbotContainer');
         if (!chatbotContainer) return;
 
-        // Enhanced input area
+        // Enhanced chatbot window with better styling
+        const chatbotWindow = chatbotContainer.querySelector('.chatbot-window');
+        if (chatbotWindow) {
+            chatbotWindow.classList.add('enhanced-chatbot');
+        }
+
+        // Enhanced input area with improved design
         const inputArea = chatbotContainer.querySelector('.chatbot-input');
         if (inputArea) {
             inputArea.innerHTML = `
-                <div class="input-tabs">
+                <div class="input-tabs enhanced-tabs">
                     <button class="tab-btn active" data-mode="text">
-                        <i class="fas fa-keyboard"></i>
-                        <span>Text</span>
+                        <div class="tab-icon">
+                            <i class="fas fa-keyboard"></i>
+                        </div>
+                        <span class="tab-label">Text</span>
+                        <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="voice">
-                        <i class="fas fa-microphone"></i>
-                        <span>Voice</span>
+                        <div class="tab-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <span class="tab-label">Voice</span>
+                        <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="image">
-                        <i class="fas fa-image"></i>
-                        <span>Image</span>
+                        <div class="tab-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <span class="tab-label">Image</span>
+                        <div class="tab-indicator"></div>
                     </button>
                     <button class="tab-btn" data-mode="file">
-                        <i class="fas fa-file"></i>
-                        <span>File</span>
+                        <div class="tab-icon">
+                            <i class="fas fa-file"></i>
+                        </div>
+                        <span class="tab-label">File</span>
+                        <div class="tab-indicator"></div>
                     </button>
                 </div>
                 
@@ -686,42 +704,69 @@ class EnhancedChatbot {
         if (!messagesContainer) return;
 
         const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}-message`;
+        messageDiv.className = `message ${sender}-message enhanced-message`;
         
         if (metadata.error) {
             messageDiv.classList.add('error-message');
         }
 
         const avatar = sender === 'user' ? 
-            '<i class="fas fa-user"></i>' : 
-            '<i class="fas fa-robot"></i>';
+            '<div class="avatar-circle user-avatar"><i class="fas fa-user"></i></div>' : 
+            '<div class="avatar-circle bot-avatar"><i class="fas fa-robot"></i></div>';
 
         let messageContent = content;
         
         // Add suggestions if available
         if (metadata.suggestions && metadata.suggestions.length > 0) {
             const suggestionsHtml = metadata.suggestions.map(suggestion => 
-                `<button class="suggestion-btn" onclick="window.AI.chatbot.addSuggestion('${suggestion}')">${suggestion}</button>`
+                `<button class="suggestion-btn enhanced-suggestion" onclick="window.AI.chatbot.addSuggestion('${suggestion}')">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>${suggestion}</span>
+                </button>`
             ).join('');
-            messageContent += `<div class="suggestions">${suggestionsHtml}</div>`;
+            messageContent += `<div class="suggestions enhanced-suggestions">${suggestionsHtml}</div>`;
+        }
+
+        // Add typing animation for bot messages
+        if (sender === 'bot' && !metadata.error) {
+            messageContent = this.addTypingEffect(messageContent);
         }
 
         messageDiv.innerHTML = `
-            <div class="message-avatar">${avatar}</div>
-            <div class="message-content">
-                <p>${messageContent}</p>
-                <span class="message-time">${this.formatTime(new Date())}</span>
+            <div class="message-wrapper">
+                <div class="message-avatar">${avatar}</div>
+                <div class="message-content enhanced-bubble">
+                    <div class="message-text">${messageContent}</div>
+                    <div class="message-footer">
+                        <span class="message-time">${this.formatTime(new Date())}</span>
+                        ${sender === 'bot' ? '<div class="message-status"><i class="fas fa-check"></i></div>' : ''}
+                    </div>
+                </div>
             </div>
         `;
 
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Animate message
+        // Enhanced animation
+        messageDiv.style.opacity = '0';
+        messageDiv.style.transform = sender === 'user' ? 'translateX(20px)' : 'translateX(-20px)';
+        
         setTimeout(() => {
+            messageDiv.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
             messageDiv.style.opacity = '1';
-            messageDiv.style.transform = 'translateY(0)';
+            messageDiv.style.transform = 'translateX(0)';
         }, 100);
+
+        // Add glow effect for important messages
+        if (metadata.important) {
+            messageDiv.classList.add('important-message');
+        }
+    }
+
+    // Add typing effect for bot messages
+    addTypingEffect(content) {
+        return content.replace(/([.!?])/g, '<span class="typing-char">$1</span>');
     }
 
     showTypingIndicator() {
@@ -729,16 +774,23 @@ class EnhancedChatbot {
         if (!messagesContainer) return;
 
         const typingDiv = document.createElement('div');
-        typingDiv.className = 'message bot-message typing-indicator';
+        typingDiv.className = 'message bot-message typing-indicator enhanced-typing';
         typingDiv.innerHTML = `
-            <div class="message-avatar">
-                <i class="fas fa-robot"></i>
-            </div>
-            <div class="message-content">
-                <div class="typing-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+            <div class="message-wrapper">
+                <div class="message-avatar">
+                    <div class="avatar-circle bot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+                <div class="message-content enhanced-bubble">
+                    <div class="typing-indicator-enhanced">
+                        <div class="typing-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <span class="typing-text">AuraOS is typing...</span>
+                    </div>
                 </div>
             </div>
         `;
