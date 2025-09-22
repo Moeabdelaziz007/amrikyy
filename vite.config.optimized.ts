@@ -24,14 +24,18 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
-    // Skip TypeScript checks for now
-    target: 'esnext',
+    // تحسين الأداء المتقدم
     minify: 'terser',
     terserOptions: {
       compress: {
         drop_console: true,
         drop_debugger: true,
         pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2,
+        unsafe: true,
+        unsafe_comps: true,
+        unsafe_math: true,
+        unsafe_proto: true,
       },
       mangle: {
         safari10: true,
@@ -40,31 +44,59 @@ export default defineConfig({
         comments: false,
       },
     },
+    // تقسيم الكود المحسن
     rollupOptions: {
       output: {
         manualChunks: (id) => {
+          // فصل مكتبات React
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-vendor';
           }
+          // فصل مكتبات UI
           if (id.includes('@radix-ui') || id.includes('lucide-react')) {
             return 'ui-vendor';
           }
+          // فصل مكتبات Firebase
           if (id.includes('firebase')) {
             return 'firebase-vendor';
           }
-          if (id.includes('node_modules')) {
+          // فصل مكتبات AI
+          if (id.includes('openai') || id.includes('@google/genai')) {
+            return 'ai-vendor';
+          }
+          // فصل مكتبات أخرى
+          if (id.includes('axios') || id.includes('date-fns') || id.includes('clsx')) {
+            return 'utils-vendor';
+          }
+          // فصل مكتبات التطوير
+          if (id.includes('node_modules') && !id.includes('react') && !id.includes('firebase')) {
             return 'vendor';
           }
         },
+        // تحسين أسماء الملفات
         chunkFileNames: 'assets/[name]-[hash:8].js',
         entryFileNames: 'assets/[name]-[hash:8].js',
         assetFileNames: 'assets/[name]-[hash:8].[ext]',
+        // تحسين التحميل
+        experimentalMinChunkSize: 20000,
+      },
+      // تحسين الأداء
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false,
       },
     },
-    chunkSizeWarningLimit: 1000,
+    // تحسين الحجم
+    chunkSizeWarningLimit: 500,
+    // تحسين التحميل
+    target: 'esnext',
     cssCodeSplit: true,
+    // تحسين CSS
     cssMinify: true,
-    sourcemap: false,
+    // تحسين المصادر
+    sourcemap: process.env.NODE_ENV === 'development',
+    // تحسين الأداء
     reportCompressedSize: false,
   },
   server: {
@@ -72,10 +104,12 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    // تحسين الأداء في التطوير
     hmr: {
       overlay: false,
     },
   },
+  // تحسين الأداء العام المتقدم
   optimizeDeps: {
     include: [
       'react',
@@ -83,6 +117,7 @@ export default defineConfig({
       'firebase/app',
       'firebase/auth',
       'firebase/firestore',
+      'openai',
       'axios',
       'date-fns',
       'clsx',
@@ -93,19 +128,31 @@ export default defineConfig({
       '@replit/vite-plugin-dev-banner',
       'rollup-plugin-visualizer'
     ],
+    // تحسين التحميل
     force: true,
   },
+  // تحسين التحميل المتقدم
   esbuild: {
     target: 'esnext',
     minifyIdentifiers: true,
     minifySyntax: true,
     minifyWhitespace: true,
+    // تحسين الأداء
     treeShaking: true,
+    // تحسين التطوير
     jsx: 'automatic',
+    // تحسين الإنتاج
     drop: ['console', 'debugger'],
   },
+  // تحسين الأداء الإضافي
   define: {
     __DEV__: process.env.NODE_ENV === 'development',
     __PROD__: process.env.NODE_ENV === 'production',
+  },
+  // إعدادات إضافية للأداء
+  experimental: {
+    renderBuiltUrl(filename: string) {
+      return `/${filename}`;
+    },
   },
 });
