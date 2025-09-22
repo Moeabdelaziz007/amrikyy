@@ -5,6 +5,68 @@
     box-sizing: border-box;
 }
 
+/* 🎨 Advanced Cyberpunk Color System 2024 */
+:root {
+    /* Primary Cyberpunk Colors */
+    --cyber-primary: #00d9ff;        /* Electric Cyan */
+    --cyber-secondary: #ff0080;      /* Neon Magenta */
+    --cyber-accent: #00ff88;         /* Matrix Green */
+    --cyber-warning: #ffaa00;        /* Neon Orange */
+    --cyber-danger: #ff0040;         /* Neon Red */
+    
+    /* Advanced Neon Gradients */
+    --gradient-primary: linear-gradient(135deg, #00d9ff 0%, #0099cc 50%, #006699 100%);
+    --gradient-secondary: linear-gradient(135deg, #ff0080 0%, #cc0066 50%, #990033 100%);
+    --gradient-accent: linear-gradient(135deg, #00ff88 0%, #00cc66 50%, #009944 100%);
+    --gradient-warning: linear-gradient(135deg, #ffaa00 0%, #ff8800 50%, #ff6600 100%);
+    --gradient-danger: linear-gradient(135deg, #ff0040 0%, #cc0033 50%, #990022 100%);
+    
+    /* Dark Theme Base */
+    --bg-primary: #0a0a0f;           /* Deep Space Black */
+    --bg-secondary: #1a1a2e;        /* Dark Navy */
+    --bg-tertiary: #16213e;         /* Dark Blue-Gray */
+    --bg-glass: rgba(26, 26, 46, 0.8); /* Glass Effect */
+    
+    /* Text Colors */
+    --text-primary: #ffffff;        /* Pure White */
+    --text-secondary: #b8c5d1;      /* Light Blue-Gray */
+    --text-muted: #8a9ba8;          /* Muted Blue-Gray */
+    --text-accent: #00d9ff;         /* Electric Cyan */
+    
+    /* Border and Effects */
+    --border-primary: rgba(0, 217, 255, 0.3);
+    --border-secondary: rgba(255, 0, 128, 0.3);
+    --border-accent: rgba(0, 255, 136, 0.3);
+    
+    /* Glow Effects */
+    --glow-primary: 0 0 20px rgba(0, 217, 255, 0.5);
+    --glow-secondary: 0 0 20px rgba(255, 0, 128, 0.5);
+    --glow-accent: 0 0 20px rgba(0, 255, 136, 0.5);
+    --glow-warning: 0 0 20px rgba(255, 170, 0, 0.5);
+    
+    /* Advanced Shadows */
+    --shadow-primary: 0 8px 32px rgba(0, 217, 255, 0.2);
+    --shadow-secondary: 0 8px 32px rgba(255, 0, 128, 0.2);
+    --shadow-accent: 0 8px 32px rgba(0, 255, 136, 0.2);
+    --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.4);
+    
+    /* Hover Effects */
+    --hover-primary: rgba(0, 217, 255, 0.1);
+    --hover-secondary: rgba(255, 0, 128, 0.1);
+    --hover-accent: rgba(0, 255, 136, 0.1);
+    
+    /* Status Colors */
+    --success: #00ff88;
+    --info: #00d9ff;
+    --warning: #ffaa00;
+    --error: #ff0040;
+    
+    /* Glass Morphism */
+    --glass-bg: rgba(26, 26, 46, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-backdrop: blur(16px);
+}
+
 /* PWA Specific Styles */
 .update-notification {
     position: fixed;
@@ -1763,11 +1825,11 @@
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: var(--font-size-base);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
     line-height: 1.6;
     color: var(--text-primary);
-    background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-primary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%, var(--bg-primary) 100%);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
     background-attachment: fixed;
     overflow-x: hidden;
     position: relative;
@@ -1782,10 +1844,10 @@ body::before {
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 20%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 40% 60%, rgba(157, 78, 221, 0.06) 0%, transparent 50%),
-        radial-gradient(circle at 60% 40%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 0, 128, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(0, 255, 136, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 60% 60%, rgba(255, 170, 0, 0.05) 0%, transparent 50%);
     pointer-events: none;
     z-index: -1;
     animation: ambient-glow 8s ease-in-out infinite alternate;
@@ -1813,19 +1875,19 @@ body::before {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(15, 23, 42, 0.8);
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+    backdrop-filter: var(--glass-backdrop);
+    border-bottom: 1px solid var(--border-primary);
     z-index: 1000;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-primary);
 }
 
 .navbar.scrolled {
-    background: rgba(15, 23, 42, 0.95);
-    box-shadow: var(--glow-md), 0 8px 32px rgba(0, 0, 0, 0.2);
-    border-bottom: 1px solid var(--primary-color);
+    background: var(--bg-glass);
+    box-shadow: var(--glow-primary), var(--shadow-primary);
+    border-bottom: 1px solid var(--cyber-primary);
     -webkit-backdrop-filter: blur(30px);
     backdrop-filter: blur(30px);
 }
@@ -2097,13 +2159,14 @@ body::before {
 }
 
 .btn-primary {
-    background: var(--primary-gradient);
+    background: var(--gradient-primary);
     color: #000000;
-    box-shadow: var(--glow-md), var(--shadow-md);
-    border: 1px solid var(--primary-color);
+    box-shadow: var(--glow-primary), var(--shadow-primary);
+    border: 1px solid var(--cyber-primary);
     font-weight: 600;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .btn-primary::before {
@@ -2118,10 +2181,10 @@ body::before {
 }
 
 .btn-primary:hover {
-    background: var(--secondary-gradient);
+    background: var(--gradient-secondary);
     transform: translateY(-2px) scale(1.02);
-    box-shadow: var(--glow-lg), var(--shadow-lg);
-    border-color: var(--secondary-color);
+    box-shadow: var(--glow-secondary), var(--shadow-secondary);
+    border-color: var(--cyber-secondary);
 }
 
 .btn-primary:hover::before {
