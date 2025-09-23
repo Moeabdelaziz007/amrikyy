@@ -1,5 +1,19 @@
 // AuraOS Components Export Index
 
+// OS Components
+export { OSDesktop } from './os/OSDesktop';
+export { AppDock } from './os/AppDock';
+export { AppWindow } from './os/AppWindow';
+export { WindowManager } from './os/WindowManager';
+
+// AI Applications
+export { AIChatbotApp } from './apps/AIChatbotApp';
+export { AINotesApp } from './apps/AINotesApp';
+export { AITravelApp } from './apps/AITravelApp';
+export { AICalculatorApp } from './apps/AICalculatorApp';
+export { AIWeatherApp } from './apps/AIWeatherApp';
+export { SettingsApp } from './apps/SettingsApp';
+
 // Dashboard Components
 export { Dashboard } from './dashboard/Dashboard';
 export { GlassCard } from './dashboard/GlassCard';
@@ -15,5 +29,5 @@ export type {
   ClientCardProps,
 } from './dashboard/types';
 
-// Default dashboard export for convenience
-export default Dashboard;
+// Default OS Desktop export for convenience
+export { OSDesktop as default } from './os/OSDesktop';

@@ -51,12 +51,10 @@ const router = Router();
 const authenticate = (req: any, res: any, next: any) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   if (!token) {
-    return res
-      .status(401)
-      .json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
+    return res.status(401).json({
+      success: false,
+      error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+    });
   }
 
   // In a real app, you'd verify the JWT token here
@@ -119,12 +117,10 @@ router.get(
       .where(eq(users.id, req.user.id))
       .limit(1);
     if (!user) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'User not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'User not found' },
+      });
     }
 
     const allPrefs = await loadAllPreferences();
@@ -157,12 +153,10 @@ router.put(
       .where(eq(users.id, req.user.id))
       .returning();
     if (!updated) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'User not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'User not found' },
+      });
     }
     res.json({
       success: true,
@@ -264,12 +258,10 @@ router.get(
       .limit(1);
 
     if (workspace.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Workspace not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Workspace not found' },
+      });
     }
 
     res.json({ success: true, data: workspace[0] });
@@ -317,12 +309,10 @@ router.put(
       .returning();
 
     if (!updatedWorkspace) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Workspace not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Workspace not found' },
+      });
     }
 
     res.json({ success: true, data: updatedWorkspace });
@@ -420,12 +410,10 @@ router.get(
       .limit(1);
 
     if (task.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Task not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Task not found' },
+      });
     }
 
     res.json({ success: true, data: task[0] });
@@ -467,12 +455,10 @@ router.put(
       .returning();
 
     if (!updatedTask) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Task not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Task not found' },
+      });
     }
 
     res.json({ success: true, data: updatedTask });
@@ -559,12 +545,10 @@ router.patch(
       .returning();
 
     if (!updatedTask) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Task not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Task not found' },
+      });
     }
 
     res.json({ success: true, data: updatedTask });
@@ -583,12 +567,10 @@ router.patch(
       .returning();
 
     if (!updatedTask) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Task not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Task not found' },
+      });
     }
 
     res.json({ success: true, data: updatedTask });
@@ -607,12 +589,10 @@ router.patch(
       .returning();
 
     if (!updatedTask) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Task not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Task not found' },
+      });
     }
 
     res.json({ success: true, data: updatedTask });
@@ -668,12 +648,10 @@ router.get(
       .limit(1);
 
     if (execution.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Execution not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Execution not found' },
+      });
     }
 
     res.json({ success: true, data: execution[0] });
@@ -772,12 +750,10 @@ router.get(
       .limit(1);
 
     if (tool.length === 0) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'MCP Tool not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'MCP Tool not found' },
+      });
     }
 
     res.json({ success: true, data: tool[0] });
@@ -796,12 +772,10 @@ router.post(
       .returning();
 
     if (!updatedTool) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'MCP Tool not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'MCP Tool not found' },
+      });
     }
 
     res.json({ success: true, data: updatedTool });
@@ -954,15 +928,13 @@ router.get('/system/realtime', async (req: any, res: any) => {
   try {
     const wsServer = getWebSocketServer();
     if (!wsServer) {
-      return res
-        .status(503)
-        .json({
-          success: false,
-          error: {
-            code: 'WS_UNAVAILABLE',
-            message: 'WebSocket server not initialized',
-          },
-        });
+      return res.status(503).json({
+        success: false,
+        error: {
+          code: 'WS_UNAVAILABLE',
+          message: 'WebSocket server not initialized',
+        },
+      });
     }
     res.json({
       success: true,
@@ -973,15 +945,13 @@ router.get('/system/realtime', async (req: any, res: any) => {
       },
     });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'Failed to fetch realtime info',
-        },
-      });
+    res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Failed to fetch realtime info',
+      },
+    });
   }
 });
 
@@ -999,12 +969,10 @@ router.get('/agents', async (req: any, res: any) => {
     }));
     res.json({ success: true, data: agents });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agents' },
-      });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agents' },
+    });
   }
 });
 
@@ -1013,21 +981,17 @@ router.get('/agents/:id', async (req: any, res: any) => {
     const agentSystem = getAdvancedAIAgentSystem();
     const agent = agentSystem.getAgent(req.params.id);
     if (!agent) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Agent not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Agent not found' },
+      });
     }
     res.json({ success: true, data: agent });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agent' },
-      });
+    res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Failed to fetch agent' },
+    });
   }
 });
 
@@ -1036,12 +1000,10 @@ router.get('/agents/:id/metrics', async (req: any, res: any) => {
     const agentSystem = getAdvancedAIAgentSystem();
     const agent = agentSystem.getAgent(req.params.id);
     if (!agent) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Agent not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Agent not found' },
+      });
     }
     const now = Date.now();
     const metrics = {
@@ -1053,15 +1015,13 @@ router.get('/agents/:id/metrics', async (req: any, res: any) => {
     };
     res.json({ success: true, data: metrics });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: {
-          code: 'INTERNAL_ERROR',
-          message: 'Failed to fetch agent metrics',
-        },
-      });
+    res.status(500).json({
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Failed to fetch agent metrics',
+      },
+    });
   }
 });
 
@@ -1151,12 +1111,10 @@ router.get(
     const travelAgency = getEnhancedTravelAgency();
     const destination = await travelAgency.getDestination(id);
     if (!destination) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Destination not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Destination not found' },
+      });
     }
     res.json({ success: true, data: destination });
   })
@@ -1185,15 +1143,13 @@ router.post(
   withDatabaseErrorHandling(async (req: any, res: any) => {
     const { destination } = req.body;
     if (!destination) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Destination is required',
-          },
-        });
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Destination is required',
+        },
+      });
     }
     const travelAgency = getEnhancedTravelAgency();
     const packages = await travelAgency.getPersonalizedRecommendations(
@@ -1233,12 +1189,10 @@ router.get(
     const travelAgency = getEnhancedTravelAgency();
     const booking = await travelAgency.getBooking(id);
     if (!booking) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          error: { code: 'NOT_FOUND', message: 'Booking not found' },
-        });
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Booking not found' },
+      });
     }
     res.json({ success: true, data: booking });
   })

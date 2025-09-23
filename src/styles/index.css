@@ -11,6 +11,102 @@
 /* Import Fonts */
 @import './fonts.css';
 
+/* Amrikyy AI System Design System - Premium AI-Powered OS Interface */
+@layer base {
+  :root {
+    /* OS Background - Deep space gradient */
+    --background: 242 100% 4%;
+    --foreground: 0 0% 98%;
+
+    /* Glass morphism cards */
+    --card: 245 20% 12%;
+    --card-foreground: 0 0% 98%;
+
+    /* App containers */
+    --popover: 245 25% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    /* AI Primary - Electric purple */
+    --primary: 258 100% 70%;
+    --primary-foreground: 0 0% 10%;
+
+    /* AI Secondary - Cyber cyan */
+    --secondary: 188 100% 50%;
+    --secondary-foreground: 0 0% 10%;
+
+    /* Muted elements */
+    --muted: 245 15% 20%;
+    --muted-foreground: 240 10% 70%;
+
+    /* AI Accent - Neon green */
+    --accent: 120 100% 65%;
+    --accent-foreground: 0 0% 10%;
+
+    /* Danger/Error */
+    --destructive: 0 85% 65%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Borders and inputs with glass effect */
+    --border: 245 20% 25%;
+    --input: 245 20% 15%;
+    --ring: 258 100% 70%;
+
+    /* Enhanced radius for modern look */
+    --radius: 1rem;
+
+    /* AI System Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(258 100% 70%) 0%, hsl(285 100% 60%) 50%, hsl(188 100% 50%) 100%);
+    --gradient-secondary: linear-gradient(45deg, hsl(188 100% 50%) 0%, hsl(258 100% 70%) 100%);
+    --gradient-background: linear-gradient(135deg, hsl(242 100% 4%) 0%, hsl(250 50% 8%) 50%, hsl(258 30% 12%) 100%);
+    --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    
+    /* Glass effects */
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    /* AI Glow effects */
+    --glow-primary: 0 0 30px hsl(258 100% 70% / 0.3);
+    --glow-secondary: 0 0 20px hsl(188 100% 50% / 0.25);
+    --glow-accent: 0 0 15px hsl(120 100% 65% / 0.2);
+
+    /* Animations */
+    --transition-smooth: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --transition-fast: all 0.2s ease-out;
+  }
+
+  .dark {
+    /* Enhanced dark mode for AI OS */
+    --background: 240 100% 2%;
+    --foreground: 0 0% 98%;
+
+    --card: 245 25% 6%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 245 30% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 258 100% 75%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 188 100% 55%;
+    --secondary-foreground: 0 0% 8%;
+
+    --muted: 245 20% 15%;
+    --muted-foreground: 240 15% 75%;
+
+    --accent: 120 100% 70%;
+    --accent-foreground: 0 0% 8%;
+
+    --destructive: 0 90% 70%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 245 25% 20%;
+    --input: 245 25% 10%;
+    --ring: 258 100% 75%;
+  }
+}
+
 /* Base Styles */
 @layer base {
   * {
@@ -18,12 +114,94 @@
   }
 
   body {
-    @apply bg-background text-foreground font-modern;
+    @apply text-foreground font-sans antialiased;
+    background: var(--gradient-background);
+    background-attachment: fixed;
+    overflow-x: hidden;
     font-feature-settings:
       'rlig' 1,
       'calt' 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Glass morphism utilities */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+  }
+
+  /* AI Glow effects */
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+
+  .glow-secondary {
+    box-shadow: var(--glow-secondary);
+  }
+
+  .glow-accent {
+    box-shadow: var(--glow-accent);
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--glass-bg);
+    border-radius: 4px;
+    border: 1px solid var(--glass-border);
+  }
+
+  /* Floating animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(5px) rotate(-1deg); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.5s ease-out;
   }
 
   html {
@@ -38,141 +216,7 @@
 
 /* Component Layer */
 @layer components {
-  /* Glass morphism utilities */
-  .glass {
-    @apply bg-glass-primary backdrop-blur-glass-md border border-glass-border;
-  }
-
-  .glass-hover {
-    @apply transition-all duration-300 hover:bg-glass-secondary hover:border-glass-border-secondary;
-  }
-
-  /* Neon utilities */
-  .neon-glow {
-    @apply shadow-glow-md;
-  }
-
-  .neon-glow-green {
-    @apply shadow-glow-green-md;
-  }
-
-  .neon-glow-blue {
-    @apply shadow-glow-blue-md;
-  }
-
-  .neon-glow-purple {
-    @apply shadow-glow-purple-md;
-  }
-
-  /* Cyberpunk grid background */
-  .cyber-grid-bg {
-    @apply bg-cyber-grid bg-grid relative;
-  }
-
-  .cyber-grid-bg::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-bg-primary pointer-events-none;
-  }
-
-  /* Status indicators */
-  .status-dot {
-    @apply w-2 h-2 rounded-full;
-  }
-
-  .status-dot.running {
-    @apply bg-status-success shadow-glow-green-sm animate-pulse;
-  }
-
-  .status-dot.error {
-    @apply bg-status-error animate-pulse;
-    box-shadow: 0 0 8px rgba(255, 0, 64, 0.7);
-  }
-
-  .status-dot.warning {
-    @apply bg-status-warning animate-pulse;
-    box-shadow: 0 0 8px rgba(255, 255, 0, 0.7);
-  }
-
-  .status-dot.idle {
-    @apply bg-glass-border;
-  }
-
-  /* Progress bars */
-  .progress-bar {
-    @apply w-full bg-glass-secondary rounded-full h-2 overflow-hidden;
-  }
-
-  .progress-fill {
-    @apply h-full bg-gradient-accent transition-all duration-300;
-  }
-
-  .progress-fill.animated {
-    @apply animate-cyber-scan;
-  }
-
-  /* Buttons */
-  .btn-cyberpunk {
-    @apply inline-flex items-center justify-center gap-2 px-4 py-2 border rounded-md backdrop-blur-glass-sm font-futuristic font-medium uppercase tracking-wider transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .btn-primary {
-    @apply btn-cyberpunk bg-glass-primary border-neon-green text-neon-green hover:bg-neon-green hover:text-bg-primary hover:shadow-glow-green-md;
-  }
-
-  .btn-secondary {
-    @apply btn-cyberpunk bg-glass-primary border-cyber-blue text-cyber-blue hover:bg-cyber-blue hover:text-bg-primary hover:shadow-glow-blue-md;
-  }
-
-  .btn-success {
-    @apply btn-cyberpunk bg-glass-primary border-status-success text-status-success hover:bg-status-success hover:text-bg-primary hover:shadow-glow-green-md;
-  }
-
-  .btn-danger {
-    @apply btn-cyberpunk bg-glass-primary border-status-error text-status-error hover:bg-status-error hover:text-bg-primary;
-  }
-
-  .btn-danger:hover {
-    box-shadow: 0 0 16px rgba(255, 0, 64, 0.7);
-  }
-
-  /* Cards */
-  .card-glass {
-    @apply glass glass-hover rounded-lg p-6 relative;
-  }
-
-  .card-glass::before {
-    content: '';
-    @apply absolute inset-0 bg-cyber-grid bg-grid opacity-10 rounded-lg pointer-events-none;
-  }
-
-  /* Form elements */
-  .input-cyberpunk {
-    @apply glass rounded-md px-3 py-2 text-sm placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-neon-green focus:border-neon-green transition-colors;
-  }
-
-  /* Scrollbars */
-  .scrollbar-cyberpunk {
-    scrollbar-width: thin;
-    scrollbar-color: var(--cyber-blue) var(--glass-bg-primary);
-  }
-
-  .scrollbar-cyberpunk::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  .scrollbar-cyberpunk::-webkit-scrollbar-track {
-    @apply bg-glass-primary rounded-full;
-  }
-
-  .scrollbar-cyberpunk::-webkit-scrollbar-thumb {
-    @apply bg-cyber-blue rounded-full;
-  }
-
-  .scrollbar-cyberpunk::-webkit-scrollbar-thumb:hover {
-    @apply bg-neon-green;
-    box-shadow: var(--glow-green-sm);
-  }
+  /* Additional utility classes can be added here */
 }
 
 /* Utilities Layer */
@@ -224,7 +268,7 @@
 
     .text-gradient,
     .text-gradient-accent {
-      @apply bg-none text-neon-green;
+      @apply bg-none text-green-400;
     }
   }
 

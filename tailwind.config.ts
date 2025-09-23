@@ -299,6 +299,12 @@ export default {
         'holographic-shift': 'holographic-shift 3s ease-in-out infinite',
         'neon-glow': 'neon-glow 2s ease-in-out infinite',
         'cyber-border': 'cyber-border 2s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
+        'slide-up': 'slide-up 0.5s ease-out',
+      },
+      transitionTimingFunction: {
+        'smooth': 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
       },
       boxShadow: {
         '2xs': 'var(--shadow-2xs)',
@@ -338,6 +344,8 @@ export default {
         'gradient-secondary': 'var(--gradient-secondary)',
         'gradient-bg-primary': 'var(--gradient-bg-primary)',
         'gradient-bg-secondary': 'var(--gradient-bg-secondary)',
+        'gradient-background': 'var(--gradient-background)',
+        'gradient-glass': 'var(--gradient-glass)',
         'cyber-grid': `
           linear-gradient(var(--grid-color) 1px, transparent 1px),
           linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)

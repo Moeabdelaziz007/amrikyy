@@ -18,9 +18,7 @@ class GeminiTestSuite {
   async runTests() {
     console.log('🚀 Starting Gemini MCP Integration Tests\n');
     console.log('='.repeat(60));
-    console.log(
-      '🔑 Using Gemini API Key: AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU'
-    );
+    console.log('🔑 Using Gemini API Key: [CONFIGURED]');
     console.log('='.repeat(60));
 
     for (const test of this.tests) {
@@ -72,8 +70,8 @@ testSuite.addTest('Gemini API Connection', async () => {
     throw new Error('Gemini API key not configured');
   }
 
-  if (config.apiKey !== 'AIzaSyAA01N65C8bwPf1WnNj9qsR7nHfmXYoLjU') {
-    throw new Error('Incorrect API key');
+  if (!config.apiKey || config.apiKey === 'your-gemini-api-key-here') {
+    throw new Error('Gemini API key not properly configured');
   }
 
   if (!config.model) {

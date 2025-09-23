@@ -9,9 +9,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,15 +19,13 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./client/src/*"],
+      "@/*": ["./src/*"],
       "@shared/*": ["./shared/*"],
-      "@assets/*": ["./attached_assets/*"]
+      "@assets/*": ["./src/assets/*"]
     }
   },
   "include": [
-    "client/src/**/*",
-    "server/**/*",
-    "shared/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

@@ -22,7 +22,7 @@ interface HeaderProps {
 
 /**
  * Enhanced Header Component with improved styling and functionality
- * 
+ *
  * Features:
  * - Modern glass morphism design
  * - Animated neon effects
@@ -81,8 +81,8 @@ export default function Header({
             >
               <Bell className="h-5 w-5" />
               {notificationCount > 0 && (
-                <Badge 
-                  variant="destructive" 
+                <Badge
+                  variant="destructive"
                   className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs animate-neon-pulse neon-glow-sm"
                 >
                   {notificationCount > 99 ? '99+' : notificationCount}
@@ -117,8 +117,8 @@ export default function Header({
                 aria-label={`User profile for ${user.name}`}
               >
                 {user.avatar ? (
-                  <img 
-                    src={user.avatar} 
+                  <img
+                    src={user.avatar}
                     alt={user.name}
                     className="h-6 w-6 rounded-full object-cover"
                   />
@@ -129,7 +129,7 @@ export default function Header({
                   <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-green-500 rounded-full border-2 border-background animate-neon-pulse"></div>
                 )}
               </Button>
-              
+
               {/* User Name */}
               <span className="text-sm font-medium text-foreground hidden sm:block">
                 {user.name}

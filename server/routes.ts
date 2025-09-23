@@ -2926,12 +2926,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         req.body;
 
       if (!type || !resourceId || !resourceName || !teamId || !creatorId) {
-        return res
-          .status(400)
-          .json({
-            message:
-              'type, resourceId, resourceName, teamId, and creatorId are required',
-          });
+        return res.status(400).json({
+          message:
+            'type, resourceId, resourceName, teamId, and creatorId are required',
+        });
       }
 
       const session = await collaborationSystem.createCollaborationSession(

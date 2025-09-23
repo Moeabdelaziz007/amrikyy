@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom';
-import { beforeAll, afterEach, afterAll } from 'vitest';
+import { beforeAll, afterEach, afterAll, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
 
 // Mock Firebase
@@ -48,6 +48,14 @@ global.WebSocket = vi.fn().mockImplementation(() => ({
   addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
 }));
+
+// Mock environment variables
+process.env.VITE_FIREBASE_API_KEY = 'test-api-key';
+process.env.VITE_FIREBASE_AUTH_DOMAIN = 'test-project.firebaseapp.com';
+process.env.VITE_FIREBASE_PROJECT_ID = 'test-project-id';
+process.env.VITE_FIREBASE_STORAGE_BUCKET = 'test-project.appspot.com';
+process.env.VITE_FIREBASE_MESSAGING_SENDER_ID = '123456789';
+process.env.VITE_FIREBASE_APP_ID = 'test-app-id';
 
 // Setup and teardown
 beforeAll(() => {

@@ -7,8 +7,9 @@
 
 const TelegramBot = require('node-telegram-bot-api');
 
-// Bot token
-const BOT_TOKEN = '8310343758:AAFLtyqdQ5PE8YtyChwJ4uGfAgy4s5qMYi0';
+// Bot token - Use environment variable for security
+const BOT_TOKEN =
+  process.env.TELEGRAM_BOT_TOKEN || 'your-telegram-bot-token-here';
 
 class ComprehensiveBotTester {
   constructor(token) {

@@ -1,13 +1,6 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
-exports.default = LoginPage;
-const react_1 = require('react');
-const use_auth_1 = require('@/hooks/use-auth');
-const card_1 = require('@/components/ui/card');
-const button_1 = require('@/components/ui/button');
-const alert_1 = require('@/components/ui/alert');
-const separator_1 = require('@/components/ui/separator');
-const tooltip_1 = require('@/components/ui/tooltip');
+import React from 'react';
+import { EnhancedLoginForm } from '@/components/auth/EnhancedLoginForm';
+import { EnhancedAuthProvider } from '@/hooks/use-enhanced-auth';
 const FloatingParticles = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none">
     {[...Array(30)].map((_, i) => (

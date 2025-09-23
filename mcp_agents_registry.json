@@ -1,7 +1,67 @@
 {
   "agents": [
     "httpie-agent",
-    "jq-agent"
+    "jq-agent",
+    "git-agent",
+    "docker-agent",
+    "kubernetes-agent",
+    "terraform-agent",
+    "ansible-agent",
+    "aws-agent",
+    "gcp-agent",
+    "azure-agent",
+    "prometheus-agent",
+    "grafana-agent",
+    "elasticsearch-agent",
+    "redis-agent",
+    "postgres-agent",
+    "mongodb-agent",
+    "nginx-agent",
+    "apache-agent",
+    "nodejs-agent",
+    "python-agent",
+    "npm-agent",
+    "yarn-agent",
+    "pip-agent",
+    "curl-agent",
+    "wget-agent",
+    "ssh-agent",
+    "rsync-agent",
+    "tar-agent",
+    "gzip-agent",
+    "find-agent",
+    "grep-agent",
+    "sed-agent",
+    "awk-agent"
   ],
-  "last_updated": "2025-09-20T20:51:56.128105"
+  "last_updated": "2025-01-21T12:00:00.000000",
+  "total_agents": 32,
+  "categories": {
+    "api": ["httpie-agent", "curl-agent"],
+    "data": ["jq-agent", "elasticsearch-agent", "redis-agent", "postgres-agent", "mongodb-agent"],
+    "version-control": ["git-agent"],
+    "containerization": ["docker-agent", "kubernetes-agent"],
+    "infrastructure": ["terraform-agent", "ansible-agent"],
+    "cloud": ["aws-agent", "gcp-agent", "azure-agent"],
+    "monitoring": ["prometheus-agent", "grafana-agent"],
+    "web-server": ["nginx-agent", "apache-agent"],
+    "runtime": ["nodejs-agent", "python-agent"],
+    "package-manager": ["npm-agent", "yarn-agent", "pip-agent"],
+    "network": ["wget-agent", "ssh-agent", "rsync-agent"],
+    "archive": ["tar-agent", "gzip-agent"],
+    "file-system": ["find-agent"],
+    "text-processing": ["grep-agent", "sed-agent", "awk-agent"]
+  },
+  "status": {
+    "available": ["httpie-agent", "jq-agent"],
+    "created": ["git-agent", "docker-agent"],
+    "missing": [
+      "kubernetes-agent", "terraform-agent", "ansible-agent", "aws-agent", "gcp-agent", 
+      "azure-agent", "prometheus-agent", "grafana-agent", "elasticsearch-agent", 
+      "redis-agent", "postgres-agent", "mongodb-agent", "nginx-agent", "apache-agent", 
+      "nodejs-agent", "python-agent", "npm-agent", "yarn-agent", "pip-agent", 
+      "curl-agent", "wget-agent", "ssh-agent", "rsync-agent", "tar-agent", 
+      "gzip-agent", "find-agent", "grep-agent", "sed-agent", "awk-agent"
+    ]
+  }
 }

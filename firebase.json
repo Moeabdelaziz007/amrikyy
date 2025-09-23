@@ -1,71 +1,16 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "client/**",
-      "scripts/**",
-      "analytics/**",
-      ".mypy_cache/**",
-      "*.log",
-      "DEBUGGING_PLAN.md",
-      "COMPREHENSIVE_BUGS_AND_ERRORS_REPORT.md",
-      "تقرير_شامل_للأخطاء_والأعطال.md"
+      "**/node_modules/**"
     ],
     "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
       }
-    ],
-    "headers": [
-      {
-        "source": "**/*.@(js|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=31536000"
-          }
-        ]
-      },
-      {
-        "source": "**/*.@(html|json)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0"
-          }
-        ]
-      }
     ]
-  },
-  "public": ".",
-  "rewrites": [
-    {
-      "source": "**",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "**/*.@(js|css)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "max-age=31536000"
-        }
-      ]
-    },
-    {
-      "source": "**/*.@(html|json)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "max-age=0"
-        }
-      ]
-    }
-  ]
+  }
 }

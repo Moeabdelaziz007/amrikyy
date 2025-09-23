@@ -44,6 +44,6 @@ describe('Button Component', () => {
     render(<Button loading>Loading Button</Button>);
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
-    expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+    expect(button).toHaveClass('cursor-wait');
   });
 });
