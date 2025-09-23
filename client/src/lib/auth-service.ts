@@ -183,7 +183,7 @@ class AuthService {
       };
 
       const mockToken = 'google_token_' + Date.now();
-      
+
       this.storeAuth(mockUser, mockToken);
       this.trackLoginSuccess(mockUser);
 
@@ -223,7 +223,7 @@ class AuthService {
       };
 
       const guestToken = 'guest_token_' + Date.now();
-      
+
       this.storeAuth(guestUser, guestToken);
       this.trackLoginSuccess(guestUser);
 
@@ -248,7 +248,7 @@ class AuthService {
         await fetch(`${this.baseUrl}/auth/logout`, {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${this.token}`,
+            Authorization: `Bearer ${this.token}`,
           },
         });
       }
@@ -299,9 +299,12 @@ class AuthService {
 
     try {
       const response = await automationApi.updateMyPreferences(preferences);
-      
+
       if (response.success) {
-        this.user.preferences = { ...this.user.preferences, ...preferences } as UserPreferences;
+        this.user.preferences = {
+          ...this.user.preferences,
+          ...preferences,
+        } as UserPreferences;
         localStorage.setItem('user_data', JSON.stringify(this.user));
         return true;
       }
@@ -336,10 +339,10 @@ class AuthService {
     localStorage.removeItem('loginAttempts');
     localStorage.removeItem('lockoutTime');
     localStorage.removeItem('lastFailedLogin');
-    
+
     // Mark device as trusted after successful login
     localStorage.setItem('deviceTrusted', 'true');
-    
+
     // Update last login time
     user.lastLogin = new Date();
     localStorage.setItem('user_data', JSON.stringify(user));
@@ -370,14 +373,14 @@ class AuthService {
       });
 
       const data = await response.json();
-      
+
       if (response.ok && data.success) {
         return {
           qrCode: data.qrCode,
           secret: data.secret,
         };
       }
-      
+
       throw new Error(data.error || 'Failed to enable 2FA');
     } catch (error) {
       console.error('2FA enable error:', error);
@@ -451,13 +454,13 @@ class AuthService {
   async getUserProfile(): Promise<User | null> {
     try {
       const response = await automationApi.getMe();
-      
+
       if (response.success) {
         this.user = response.data;
         localStorage.setItem('user_data', JSON.stringify(this.user));
         return this.user;
       }
-      
+
       return null;
     } catch (error) {
       console.error('Get user profile error:', error);
@@ -469,13 +472,13 @@ class AuthService {
   async updateUserProfile(updates: Partial<User>): Promise<boolean> {
     try {
       const response = await automationApi.updateMe(updates);
-      
+
       if (response.success) {
         this.user = { ...this.user, ...updates } as User;
         localStorage.setItem('user_data', JSON.stringify(this.user));
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('Update user profile error:', error);

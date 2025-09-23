@@ -26,6 +26,7 @@
 /* Premium Glassmorphism Effects */
 .glass-premium {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
@@ -146,6 +147,7 @@
 .card-premium {
   position: relative;
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
@@ -324,11 +326,13 @@
 /* Premium Responsive Design */
 @media (max-width: 768px) {
   .glass-premium {
-    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px);
   }
   
   .glass-strong {
-    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   }
   
   .glass-ultra {

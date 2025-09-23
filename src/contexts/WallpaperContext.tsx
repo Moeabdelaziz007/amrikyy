@@ -1,5 +1,14 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { WALLPAPER_THEMES, WallpaperTheme } from '../components/os/WallpaperManager';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
+import {
+  WALLPAPER_THEMES,
+  WallpaperTheme,
+} from '../components/os/WallpaperManager';
 
 interface WallpaperContextType {
   currentWallpaper: string;
@@ -10,7 +19,9 @@ interface WallpaperContextType {
   timeOfDay: 'day' | 'night';
 }
 
-const WallpaperContext = createContext<WallpaperContextType | undefined>(undefined);
+const WallpaperContext = createContext<WallpaperContextType | undefined>(
+  undefined
+);
 
 export const useWallpaper = () => {
   const context = useContext(WallpaperContext);
@@ -24,7 +35,9 @@ interface WallpaperProviderProps {
   children: ReactNode;
 }
 
-export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({ children }) => {
+export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({
+  children,
+}) => {
   const [currentWallpaper, setCurrentWallpaper] = useState('aurora');
   const [timeBasedWallpaper, setTimeBasedWallpaper] = useState(false);
   const [timeOfDay, setTimeOfDay] = useState<'day' | 'night'>('day');
@@ -40,11 +53,12 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({ children }
       if (timeBasedWallpaper) {
         const timeBasedThemes = {
           day: ['sunset', 'ocean', 'aurora'],
-          night: ['cyberpunk', 'matrix', 'galaxy']
+          night: ['cyberpunk', 'matrix', 'galaxy'],
         };
-        
+
         const availableThemes = timeBasedThemes[newTimeOfDay];
-        const randomTheme = availableThemes[Math.floor(Math.random() * availableThemes.length)];
+        const randomTheme =
+          availableThemes[Math.floor(Math.random() * availableThemes.length)];
         setCurrentWallpaper(randomTheme);
       }
     };
@@ -58,7 +72,7 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({ children }
   useEffect(() => {
     const savedWallpaper = localStorage.getItem('auraos-wallpaper');
     const savedTimeBased = localStorage.getItem('auraos-time-based-wallpaper');
-    
+
     if (savedWallpaper) {
       setCurrentWallpaper(savedWallpaper);
     }
@@ -73,7 +87,10 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({ children }
   }, [currentWallpaper]);
 
   useEffect(() => {
-    localStorage.setItem('auraos-time-based-wallpaper', JSON.stringify(timeBasedWallpaper));
+    localStorage.setItem(
+      'auraos-time-based-wallpaper',
+      JSON.stringify(timeBasedWallpaper)
+    );
   }, [timeBasedWallpaper]);
 
   const value: WallpaperContextType = {
@@ -82,7 +99,7 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({ children }
     availableThemes: WALLPAPER_THEMES,
     timeBasedWallpaper,
     setTimeBasedWallpaper,
-    timeOfDay
+    timeOfDay,
   };
 
   return (

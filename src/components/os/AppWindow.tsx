@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { X, Minus, Maximize2, Minimize2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useState } from 'react';
+import { X, Minus, Maximize2, Minimize2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface AppWindowProps {
   appId: string;
@@ -20,7 +20,7 @@ export const AppWindow = ({
   onMinimize,
   onFocus,
   children,
-  style
+  style,
 }: AppWindowProps) => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -32,7 +32,7 @@ export const AppWindow = ({
       setIsDragging(true);
       setDragStart({
         x: e.clientX - position.x,
-        y: e.clientY - position.y
+        y: e.clientY - position.y,
       });
       onFocus();
     }
@@ -42,7 +42,7 @@ export const AppWindow = ({
     if (isDragging && !isMaximized) {
       setPosition({
         x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
+        y: e.clientY - dragStart.y,
       });
     }
   };
@@ -60,7 +60,7 @@ export const AppWindow = ({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging]);
+  }, [isDragging, handleMouseMove]);
 
   const toggleMaximize = () => {
     setIsMaximized(!isMaximized);
@@ -69,26 +69,31 @@ export const AppWindow = ({
   return (
     <div
       className={cn(
-        "absolute glass-strong rounded-xl overflow-hidden border border-white/20 transition-all duration-300",
-        isActive ? "shadow-glow-primary" : "shadow-glass",
-        isMaximized ? "inset-4" : "w-[800px] h-[600px]",
-        isDragging && "transition-none",
-        !isActive && "opacity-90"
+        'absolute glass-strong rounded-xl overflow-hidden border border-white/20 transition-all duration-300 backdrop-blur-xl',
+        isActive
+          ? 'shadow-glow-primary shadow-2xl border-primary/30'
+          : 'shadow-glass shadow-lg',
+        isMaximized ? 'inset-4' : 'w-[800px] h-[600px]',
+        isDragging && 'transition-none',
+        !isActive && 'opacity-90 scale-[0.98]'
       )}
       style={{
         ...style,
-        ...(isMaximized ? {} : {
-          left: position.x,
-          top: position.y
-        })
+        ...(isMaximized
+          ? {}
+          : {
+              left: position.x,
+              top: position.y,
+            }),
       }}
       onClick={onFocus}
     >
       {/* Window Title Bar */}
       <div
         className={cn(
-          "h-10 glass border-b border-white/10 flex items-center justify-between px-4 cursor-move",
-          isDragging && "cursor-grabbing"
+          'h-12 glass border-b border-white/10 flex items-center justify-between px-4 cursor-move backdrop-blur-md',
+          isDragging && 'cursor-grabbing',
+          isActive && 'bg-gradient-to-r from-primary/10 to-secondary/10'
         )}
         onMouseDown={handleMouseDown}
       >
@@ -97,33 +102,43 @@ export const AppWindow = ({
           <div className="flex space-x-2">
             <button
               onClick={onClose}
-              className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 transition-colors"
+              className="w-3 h-3 bg-red-500 rounded-full hover:bg-red-400 transition-all duration-200 hover:scale-110 shadow-sm"
+              title="Close window"
+              aria-label="Close window"
             />
             <button
               onClick={onMinimize}
-              className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 transition-colors"
+              className="w-3 h-3 bg-yellow-500 rounded-full hover:bg-yellow-400 transition-all duration-200 hover:scale-110 shadow-sm"
+              title="Minimize window"
+              aria-label="Minimize window"
             />
             <button
               onClick={toggleMaximize}
-              className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 transition-colors"
+              className="w-3 h-3 bg-green-500 rounded-full hover:bg-green-400 transition-all duration-200 hover:scale-110 shadow-sm"
+              title="Maximize window"
+              aria-label="Maximize window"
             />
           </div>
-          
-          <span className="text-sm font-medium text-foreground">
+
+          <span className="text-sm font-semibold text-foreground/90 tracking-wide">
             {title}
           </span>
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           <button
             onClick={onMinimize}
-            className="p-1 hover:bg-white/10 rounded transition-colors"
+            className="p-2 hover:bg-white/10 rounded-md transition-all duration-200 hover:scale-105"
+            title="Minimize window"
+            aria-label="Minimize window"
           >
             <Minus className="w-4 h-4" />
           </button>
           <button
             onClick={toggleMaximize}
-            className="p-1 hover:bg-white/10 rounded transition-colors"
+            className="p-2 hover:bg-white/10 rounded-md transition-all duration-200 hover:scale-105"
+            title={isMaximized ? 'Restore window' : 'Maximize window'}
+            aria-label={isMaximized ? 'Restore window' : 'Maximize window'}
           >
             {isMaximized ? (
               <Minimize2 className="w-4 h-4" />
@@ -133,7 +148,9 @@ export const AppWindow = ({
           </button>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-destructive/20 rounded transition-colors"
+            className="p-2 hover:bg-red-500/20 rounded-md transition-all duration-200 hover:scale-105"
+            title="Close window"
+            aria-label="Close window"
           >
             <X className="w-4 h-4" />
           </button>
@@ -141,7 +158,7 @@ export const AppWindow = ({
       </div>
 
       {/* Window Content */}
-      <div className="h-[calc(100%-2.5rem)] overflow-hidden">
+      <div className="h-[calc(100%-3rem)] overflow-hidden bg-gradient-to-br from-background/95 to-background/90 backdrop-blur-sm">
         {children}
       </div>
     </div>

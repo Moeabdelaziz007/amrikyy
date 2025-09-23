@@ -1,0 +1,346 @@
+# AuraOS Kubernetes Deployment - إعداد Kubernetes للنشر المرن
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auraos-deployment
+  labels:
+    app: auraos
+    version: v1.0.0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: auraos
+  template:
+    metadata:
+      labels:
+        app: auraos
+        version: v1.0.0
+    spec:
+      containers:
+      - name: auraos
+        image: auraos:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: TELEGRAM_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: auraos-secrets
+              key: telegram-bot-token
+        - name: GOOGLE_AI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: auraos-secrets
+              key: google-ai-api-key
+        - name: WEBHOOK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: auraos-config
+              key: webhook-url
+        - name: WEBHOOK_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: auraos-secrets
+              key: webhook-secret-token
+        - name: PORT
+          value: "3000"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+        - name: reports
+          mountPath: /app/reports
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: auraos-logs-pvc
+      - name: reports
+        persistentVolumeClaim:
+          claimName: auraos-reports-pvc
+      restartPolicy: Always
+
+---
+# Service للوصول الداخلي
+apiVersion: v1
+kind: Service
+metadata:
+  name: auraos-service
+  labels:
+    app: auraos
+spec:
+  selector:
+    app: auraos
+  ports:
+  - port: 3000
+    targetPort: 3000
+    protocol: TCP
+  type: ClusterIP
+
+---
+# Ingress للوصول الخارجي
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: auraos-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - auraos.yourdomain.com
+    secretName: auraos-tls
+  rules:
+  - host: auraos.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: auraos-service
+            port:
+              number: 3000
+
+---
+# ConfigMap للإعدادات
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auraos-config
+data:
+  webhook-url: "https://auraos.yourdomain.com/webhook"
+  prometheus-url: "http://prometheus-service:9090"
+  grafana-url: "http://grafana-service:3000"
+
+---
+# Secret للمعلومات الحساسة
+apiVersion: v1
+kind: Secret
+metadata:
+  name: auraos-secrets
+type: Opaque
+data:
+  telegram-bot-token: <base64-encoded-token>
+  google-ai-api-key: <base64-encoded-key>
+  webhook-secret-token: <base64-encoded-secret>
+
+---
+# PersistentVolumeClaim للسجلات
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auraos-logs-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd
+
+---
+# PersistentVolumeClaim للتقارير
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: auraos-reports-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: fast-ssd
+
+---
+# HorizontalPodAutoscaler للتوسع التلقائي
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: auraos-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: auraos-deployment
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+---
+# Prometheus Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deployment
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+      - name: prometheus
+        image: prom/prometheus:latest
+        ports:
+        - containerPort: 9090
+        volumeMounts:
+        - name: prometheus-config
+          mountPath: /etc/prometheus
+        - name: prometheus-data
+          mountPath: /prometheus
+      volumes:
+      - name: prometheus-config
+        configMap:
+          name: prometheus-config
+      - name: prometheus-data
+        persistentVolumeClaim:
+          claimName: prometheus-pvc
+
+---
+# Prometheus Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+spec:
+  selector:
+    app: prometheus
+  ports:
+  - port: 9090
+    targetPort: 9090
+
+---
+# Grafana Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-secrets
+              key: admin-password
+        volumeMounts:
+        - name: grafana-data
+          mountPath: /var/lib/grafana
+      volumes:
+      - name: grafana-data
+        persistentVolumeClaim:
+          claimName: grafana-pvc
+
+---
+# Grafana Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+spec:
+  selector:
+    app: grafana
+  ports:
+  - port: 3000
+    targetPort: 3000
+
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-pvc
+
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379

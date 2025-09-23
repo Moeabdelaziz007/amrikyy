@@ -25,23 +25,26 @@ export default function ChatWidget() {
   const fileInputRef = useRef(null);
 
   // WebSocket connection for real-time updates
-  const { isConnected, sendMessage: sendWSMessage } = useWebSocket('/ws', (data) => {
-    if (data.type === 'chat_message') {
-      setMessages(prev => [
-        ...prev,
-        {
-          id: data.id,
-          type: 'ai',
-          content: data.content,
-          timestamp: new Date(data.timestamp),
-          metadata: data.metadata || {},
-        },
-      ]);
-      setIsTyping(false);
-    } else if (data.type === 'typing') {
-      setIsTyping(true);
+  const { isConnected, sendMessage: sendWSMessage } = useWebSocket(
+    '/ws',
+    data => {
+      if (data.type === 'chat_message') {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: data.id,
+            type: 'ai',
+            content: data.content,
+            timestamp: new Date(data.timestamp),
+            metadata: data.metadata || {},
+          },
+        ]);
+        setIsTyping(false);
+      } else if (data.type === 'typing') {
+        setIsTyping(true);
+      }
     }
-  });
+  );
 
   // Fetch chat history
   const {
@@ -71,7 +74,7 @@ export default function ChatWidget() {
 
   // Chat mutation for sending messages
   const chatMutation = useMutation({
-    mutationFn: async (messageData) => {
+    mutationFn: async messageData => {
       const response = await apiRequest('POST', '/api/chat', {
         message: messageData.message,
         userId: 'user-1',
@@ -80,7 +83,7 @@ export default function ChatWidget() {
       });
       return response.json();
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       setMessages(prev => [
         ...prev,
         {
@@ -94,7 +97,7 @@ export default function ChatWidget() {
       ]);
       setIsTyping(false);
     },
-    onError: (error) => {
+    onError: error => {
       ErrorHandler.getInstance().handleError(error, {
         logToConsole: true,
         reportToService: true,
@@ -121,7 +124,7 @@ export default function ChatWidget() {
           'Show me AuraOS features',
           'Help with installation',
           'Explain AI capabilities',
-          'Get technical support'
+          'Get technical support',
         ],
       };
       const history = chatHistory.map(m => ({
@@ -136,14 +139,15 @@ export default function ChatWidget() {
         {
           id: 'welcome',
           type: 'ai',
-          content: "Hi! I'm your AI assistant. I can help you create content, set up automations, or analyze your social media performance. What would you like to do?",
+          content:
+            "Hi! I'm your AI assistant. I can help you create content, set up automations, or analyze your social media performance. What would you like to do?",
           timestamp: new Date(),
           metadata: { isWelcome: true },
           suggestions: [
             'Try voice commands',
             'Upload an image',
             'Ask for help',
-            'Explore features'
+            'Explore features',
           ],
         },
       ]);
@@ -163,7 +167,7 @@ export default function ChatWidget() {
     };
 
     setMessages(prev => [...prev, userMessage]);
-    
+
     // Send via WebSocket for real-time updates
     sendWSMessage({
       type: 'chat_message',
@@ -185,7 +189,7 @@ export default function ChatWidget() {
   }, [message, attachments, inputMode, sendWSMessage, chatMutation]);
 
   // Handle key press
-  const handleKeyPress = (e) => {
+  const handleKeyPress = e => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
@@ -193,7 +197,7 @@ export default function ChatWidget() {
   };
 
   // Handle file upload
-  const handleFileUpload = (e) => {
+  const handleFileUpload = e => {
     const files = Array.from(e.target.files);
     const newAttachments = files.map(file => ({
       id: Date.now().toString() + Math.random(),
@@ -206,18 +210,18 @@ export default function ChatWidget() {
   };
 
   // Remove attachment
-  const removeAttachment = (id) => {
+  const removeAttachment = id => {
     setAttachments(prev => prev.filter(att => att.id !== id));
   };
 
   // Handle suggestion click
-  const handleSuggestionClick = (suggestion) => {
+  const handleSuggestionClick = suggestion => {
     setMessage(suggestion);
     inputRef.current?.focus();
   };
 
   // Toggle input mode
-  const toggleInputMode = (mode) => {
+  const toggleInputMode = mode => {
     setInputMode(mode);
   };
 
@@ -227,10 +231,10 @@ export default function ChatWidget() {
         {/* Chat Toggle Button */}
         <Button
           className={cn(
-            "w-16 h-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group relative overflow-hidden",
-            "bg-gradient-to-br from-primary via-accent to-secondary",
-            "hover:scale-110 active:scale-95",
-            "before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+            'w-16 h-16 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 group relative overflow-hidden',
+            'bg-gradient-to-br from-primary via-accent to-secondary',
+            'hover:scale-110 active:scale-95',
+            'before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:to-transparent before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300'
           )}
           onClick={() => setIsOpen(!isOpen)}
           data-testid="button-toggle-chat"
@@ -238,33 +242,35 @@ export default function ChatWidget() {
           <div className="relative z-10">
             <i
               className={cn(
-                "fas text-xl transition-all duration-300",
+                'fas text-xl transition-all duration-300',
                 isOpen ? 'fa-times' : 'fa-robot',
-                "group-hover:scale-110 group-hover:rotate-12"
+                'group-hover:scale-110 group-hover:rotate-12'
               )}
             />
           </div>
-          
+
           {/* Pulse animation when receiving messages */}
           {isTyping && (
             <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
           )}
-          
+
           {/* Connection status indicator */}
-          <div className={cn(
-            "absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-background transition-colors",
-            isConnected ? "bg-green-500" : "bg-red-500"
-          )} />
+          <div
+            className={cn(
+              'absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-background transition-colors',
+              isConnected ? 'bg-green-500' : 'bg-red-500'
+            )}
+          />
         </Button>
 
         {/* Chat Window */}
         {isOpen && (
           <Card
             className={cn(
-              "absolute bottom-20 right-0 w-96 h-[600px] shadow-2xl",
-              "bg-gradient-to-br from-background/95 via-background/90 to-background/95",
-              "backdrop-blur-xl border border-border/50",
-              "animate-in slide-in-from-bottom-4 fade-in duration-300"
+              'absolute bottom-20 right-0 w-96 h-[600px] shadow-2xl',
+              'bg-gradient-to-br from-background/95 via-background/90 to-background/95',
+              'backdrop-blur-xl border border-border/50',
+              'animate-in slide-in-from-bottom-4 fade-in duration-300'
             )}
             data-testid="chat-widget"
           >
@@ -284,14 +290,19 @@ export default function ChatWidget() {
                       variant={isConnected ? 'default' : 'destructive'}
                       className="text-xs px-2 py-1"
                     >
-                      <div className={cn(
-                        "w-2 h-2 rounded-full mr-1",
-                        isConnected ? "bg-green-500" : "bg-red-500"
-                      )} />
+                      <div
+                        className={cn(
+                          'w-2 h-2 rounded-full mr-1',
+                          isConnected ? 'bg-green-500' : 'bg-red-500'
+                        )}
+                      />
                       {isConnected ? 'Online' : 'Offline'}
                     </Badge>
                     {isTyping && (
-                      <Badge variant="secondary" className="text-xs animate-pulse">
+                      <Badge
+                        variant="secondary"
+                        className="text-xs animate-pulse"
+                      >
                         Typing...
                       </Badge>
                     )}
@@ -313,11 +324,11 @@ export default function ChatWidget() {
               {/* Messages Area */}
               <ScrollArea className="flex-1 p-4">
                 <div className="space-y-4">
-                  {messages.map((msg) => (
+                  {messages.map(msg => (
                     <div
                       key={msg.id}
                       className={cn(
-                        "flex gap-3 animate-in slide-in-from-right-2 fade-in duration-300",
+                        'flex gap-3 animate-in slide-in-from-right-2 fade-in duration-300',
                         msg.type === 'user' ? 'justify-end' : 'justify-start'
                       )}
                     >
@@ -328,48 +339,61 @@ export default function ChatWidget() {
                           </AvatarFallback>
                         </Avatar>
                       )}
-                      
+
                       <div className="flex flex-col max-w-[80%]">
                         {/* Message Bubble */}
                         <div
                           className={cn(
-                            "p-4 rounded-2xl text-sm relative overflow-hidden",
-                            "backdrop-blur-sm border",
-                            msg.type === 'user' 
-                              ? "bg-gradient-to-br from-primary to-accent text-primary-foreground ml-auto border-primary/30" 
-                              : "bg-gradient-to-br from-muted/80 to-muted/60 text-foreground border-border/30",
-                            "shadow-lg hover:shadow-xl transition-shadow duration-300"
+                            'p-4 rounded-2xl text-sm relative overflow-hidden',
+                            'backdrop-blur-sm border',
+                            msg.type === 'user'
+                              ? 'bg-gradient-to-br from-primary to-accent text-primary-foreground ml-auto border-primary/30'
+                              : 'bg-gradient-to-br from-muted/80 to-muted/60 text-foreground border-border/30',
+                            'shadow-lg hover:shadow-xl transition-shadow duration-300'
                           )}
                         >
                           {/* Message content */}
                           <div className="relative z-10">
                             {msg.content}
-                            
+
                             {/* Attachments */}
                             {msg.attachments && msg.attachments.length > 0 && (
                               <div className="mt-2 space-y-2">
-                                {msg.attachments.map((att) => (
-                                  <div key={att.id} className="flex items-center gap-2 p-2 bg-background/50 rounded-lg">
-                                    <i className={cn(
-                                      "fas text-xs",
-                                      att.type === 'image' ? 'fa-image' : 'fa-file'
-                                    )} />
-                                    <span className="text-xs truncate">{att.name}</span>
+                                {msg.attachments.map(att => (
+                                  <div
+                                    key={att.id}
+                                    className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"
+                                  >
+                                    <i
+                                      className={cn(
+                                        'fas text-xs',
+                                        att.type === 'image'
+                                          ? 'fa-image'
+                                          : 'fa-file'
+                                      )}
+                                    />
+                                    <span className="text-xs truncate">
+                                      {att.name}
+                                    </span>
                                   </div>
                                 ))}
                               </div>
                             )}
                           </div>
-                          
+
                           {/* Gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
                         </div>
-                        
+
                         {/* Message metadata */}
-                        <div className={cn(
-                          "flex items-center gap-2 mt-1 text-xs text-muted-foreground",
-                          msg.type === 'user' ? 'justify-end' : 'justify-start'
-                        )}>
+                        <div
+                          className={cn(
+                            'flex items-center gap-2 mt-1 text-xs text-muted-foreground',
+                            msg.type === 'user'
+                              ? 'justify-end'
+                              : 'justify-start'
+                          )}
+                        >
                           <span>{msg.timestamp.toLocaleTimeString()}</span>
                           {msg.type === 'ai' && (
                             <div className="flex items-center gap-1">
@@ -378,7 +402,7 @@ export default function ChatWidget() {
                             </div>
                           )}
                         </div>
-                        
+
                         {/* Suggestions */}
                         {msg.suggestions && msg.suggestions.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
@@ -387,7 +411,9 @@ export default function ChatWidget() {
                                 key={index}
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleSuggestionClick(suggestion)}
+                                onClick={() =>
+                                  handleSuggestionClick(suggestion)
+                                }
                                 className="text-xs h-7 px-3 hover:bg-primary/10 hover:border-primary/30 transition-all duration-200"
                               >
                                 <i className="fas fa-lightbulb mr-1 text-xs" />
@@ -397,7 +423,7 @@ export default function ChatWidget() {
                           </div>
                         )}
                       </div>
-                      
+
                       {msg.type === 'user' && (
                         <Avatar className="w-8 h-8 flex-shrink-0 ring-1 ring-primary/20">
                           <AvatarFallback className="bg-gradient-to-br from-accent to-secondary text-accent-foreground">
@@ -407,7 +433,7 @@ export default function ChatWidget() {
                       )}
                     </div>
                   ))}
-                  
+
                   {/* Typing Indicator */}
                   {isTyping && (
                     <div className="flex gap-3 justify-start animate-in slide-in-from-left-2 fade-in duration-300">
@@ -419,16 +445,27 @@ export default function ChatWidget() {
                       <div className="bg-gradient-to-br from-muted/80 to-muted/60 p-4 rounded-2xl border border-border/30 backdrop-blur-sm">
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            <div
+                              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                              style={{ animationDelay: '0ms' }}
+                            />
+                            <div
+                              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                              style={{ animationDelay: '150ms' }}
+                            />
+                            <div
+                              className="w-2 h-2 bg-primary rounded-full animate-bounce"
+                              style={{ animationDelay: '300ms' }}
+                            />
                           </div>
-                          <span className="text-sm text-muted-foreground">AI is thinking...</span>
+                          <span className="text-sm text-muted-foreground">
+                            AI is thinking...
+                          </span>
                         </div>
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Error Message */}
                   {chatMutation.isError && (
                     <div className="flex gap-3 justify-start animate-in slide-in-from-left-2 fade-in duration-300">
@@ -438,7 +475,9 @@ export default function ChatWidget() {
                         </AvatarFallback>
                       </Avatar>
                       <div className="bg-destructive/10 border border-destructive/20 p-4 rounded-2xl backdrop-blur-sm">
-                        <p className="font-medium text-destructive">Error sending message</p>
+                        <p className="font-medium text-destructive">
+                          Error sending message
+                        </p>
                         <p className="text-xs mt-1 text-destructive/80">
                           {chatMutation.error?.message || 'Please try again'}
                         </p>
@@ -453,7 +492,7 @@ export default function ChatWidget() {
                       </div>
                     </div>
                   )}
-                  
+
                   <div ref={messagesEndRef} />
                 </div>
               </ScrollArea>
@@ -473,13 +512,13 @@ export default function ChatWidget() {
                       size="sm"
                       onClick={() => toggleInputMode(mode)}
                       className={cn(
-                        "flex-1 h-8 text-xs transition-all duration-200",
-                        inputMode === mode 
-                          ? "bg-primary text-primary-foreground shadow-md" 
-                          : "hover:bg-muted/50"
+                        'flex-1 h-8 text-xs transition-all duration-200',
+                        inputMode === mode
+                          ? 'bg-primary text-primary-foreground shadow-md'
+                          : 'hover:bg-muted/50'
                       )}
                     >
-                      <i className={cn("fas", icon, "mr-1")} />
+                      <i className={cn('fas', icon, 'mr-1')} />
                       {label}
                     </Button>
                   ))}
@@ -488,12 +527,17 @@ export default function ChatWidget() {
                 {/* Attachments Preview */}
                 {attachments.length > 0 && (
                   <div className="mb-3 flex flex-wrap gap-2">
-                    {attachments.map((att) => (
-                      <div key={att.id} className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg text-xs">
-                        <i className={cn(
-                          "fas",
-                          att.type === 'image' ? 'fa-image' : 'fa-file'
-                        )} />
+                    {attachments.map(att => (
+                      <div
+                        key={att.id}
+                        className="flex items-center gap-2 p-2 bg-muted/50 rounded-lg text-xs"
+                      >
+                        <i
+                          className={cn(
+                            'fas',
+                            att.type === 'image' ? 'fa-image' : 'fa-file'
+                          )}
+                        />
                         <span className="truncate max-w-20">{att.name}</span>
                         <Button
                           variant="ghost"
@@ -515,12 +559,12 @@ export default function ChatWidget() {
                       ref={inputRef}
                       placeholder="Type a message..."
                       value={message}
-                      onChange={(e) => setMessage(e.target.value)}
+                      onChange={e => setMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       disabled={chatMutation.isPending}
                       className="pr-12 bg-background/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
                     />
-                    
+
                     {/* File Upload Button */}
                     <Button
                       variant="ghost"
@@ -530,7 +574,7 @@ export default function ChatWidget() {
                     >
                       <i className="fas fa-paperclip text-xs" />
                     </Button>
-                    
+
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -540,10 +584,13 @@ export default function ChatWidget() {
                       accept="image/*,.pdf,.doc,.docx,.txt"
                     />
                   </div>
-                  
+
                   <Button
                     onClick={handleSendMessage}
-                    disabled={chatMutation.isPending || (!message.trim() && attachments.length === 0)}
+                    disabled={
+                      chatMutation.isPending ||
+                      (!message.trim() && attachments.length === 0)
+                    }
                     className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50"
                   >
                     {chatMutation.isPending ? (

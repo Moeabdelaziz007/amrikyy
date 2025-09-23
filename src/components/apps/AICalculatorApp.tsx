@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Calculator, History, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useState } from 'react';
+import { Calculator, History, RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const AICalculatorApp = () => {
-  const [display, setDisplay] = useState("0");
+  const [display, setDisplay] = useState('0');
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operation, setOperation] = useState<string | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
@@ -15,7 +15,7 @@ export const AICalculatorApp = () => {
       setDisplay(num);
       setWaitingForOperand(false);
     } else {
-      setDisplay(display === "0" ? num : display + num);
+      setDisplay(display === '0' ? num : display + num);
     }
   };
 
@@ -36,17 +36,21 @@ export const AICalculatorApp = () => {
     setOperation(nextOperation);
   };
 
-  const calculate = (firstValue: number, secondValue: number, operation: string): number => {
+  const calculate = (
+    firstValue: number,
+    secondValue: number,
+    operation: string
+  ): number => {
     switch (operation) {
-      case "+":
+      case '+':
         return firstValue + secondValue;
-      case "-":
+      case '-':
         return firstValue - secondValue;
-      case "×":
+      case '×':
         return firstValue * secondValue;
-      case "÷":
+      case '÷':
         return firstValue / secondValue;
-      case "=":
+      case '=':
         return secondValue;
       default:
         return secondValue;
@@ -59,7 +63,7 @@ export const AICalculatorApp = () => {
     if (previousValue !== null && operation) {
       const newValue = calculate(previousValue, inputValue, operation);
       const calculation = `${previousValue} ${operation} ${inputValue} = ${newValue}`;
-      
+
       setHistory(prev => [calculation, ...prev.slice(0, 9)]);
       setDisplay(String(newValue));
       setPreviousValue(null);
@@ -69,7 +73,7 @@ export const AICalculatorApp = () => {
   };
 
   const clear = () => {
-    setDisplay("0");
+    setDisplay('0');
     setPreviousValue(null);
     setOperation(null);
     setWaitingForOperand(false);
@@ -80,28 +84,101 @@ export const AICalculatorApp = () => {
   };
 
   const buttons = [
-    { label: "C", onClick: clear, className: "bg-destructive/20 hover:bg-destructive/30" },
-    { label: "⌫", onClick: () => setDisplay(display.slice(0, -1) || "0"), className: "bg-secondary/20" },
-    { label: "÷", onClick: () => inputOperation("÷"), className: "bg-primary/20" },
-    { label: "×", onClick: () => inputOperation("×"), className: "bg-primary/20" },
-    
-    { label: "7", onClick: () => inputNumber("7"), className: "bg-glass-secondary" },
-    { label: "8", onClick: () => inputNumber("8"), className: "bg-glass-secondary" },
-    { label: "9", onClick: () => inputNumber("9"), className: "bg-glass-secondary" },
-    { label: "-", onClick: () => inputOperation("-"), className: "bg-primary/20" },
-    
-    { label: "4", onClick: () => inputNumber("4"), className: "bg-glass-secondary" },
-    { label: "5", onClick: () => inputNumber("5"), className: "bg-glass-secondary" },
-    { label: "6", onClick: () => inputNumber("6"), className: "bg-glass-secondary" },
-    { label: "+", onClick: () => inputOperation("+"), className: "bg-primary/20" },
-    
-    { label: "1", onClick: () => inputNumber("1"), className: "bg-glass-secondary" },
-    { label: "2", onClick: () => inputNumber("2"), className: "bg-glass-secondary" },
-    { label: "3", onClick: () => inputNumber("3"), className: "bg-glass-secondary" },
-    { label: "=", onClick: performCalculation, className: "bg-gradient-primary hover:opacity-90 row-span-2" },
-    
-    { label: "0", onClick: () => inputNumber("0"), className: "bg-glass-secondary col-span-2" },
-    { label: ".", onClick: () => setDisplay(display.includes(".") ? display : display + "."), className: "bg-glass-secondary" }
+    {
+      label: 'C',
+      onClick: clear,
+      className: 'bg-destructive/20 hover:bg-destructive/30',
+    },
+    {
+      label: '⌫',
+      onClick: () => setDisplay(display.slice(0, -1) || '0'),
+      className: 'bg-secondary/20',
+    },
+    {
+      label: '÷',
+      onClick: () => inputOperation('÷'),
+      className: 'bg-primary/20',
+    },
+    {
+      label: '×',
+      onClick: () => inputOperation('×'),
+      className: 'bg-primary/20',
+    },
+
+    {
+      label: '7',
+      onClick: () => inputNumber('7'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '8',
+      onClick: () => inputNumber('8'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '9',
+      onClick: () => inputNumber('9'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '-',
+      onClick: () => inputOperation('-'),
+      className: 'bg-primary/20',
+    },
+
+    {
+      label: '4',
+      onClick: () => inputNumber('4'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '5',
+      onClick: () => inputNumber('5'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '6',
+      onClick: () => inputNumber('6'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '+',
+      onClick: () => inputOperation('+'),
+      className: 'bg-primary/20',
+    },
+
+    {
+      label: '1',
+      onClick: () => inputNumber('1'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '2',
+      onClick: () => inputNumber('2'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '3',
+      onClick: () => inputNumber('3'),
+      className: 'bg-glass-secondary',
+    },
+    {
+      label: '=',
+      onClick: performCalculation,
+      className: 'bg-gradient-primary hover:opacity-90 row-span-2',
+    },
+
+    {
+      label: '0',
+      onClick: () => inputNumber('0'),
+      className: 'bg-glass-secondary col-span-2',
+    },
+    {
+      label: '.',
+      onClick: () =>
+        setDisplay(display.includes('.') ? display : display + '.'),
+      className: 'bg-glass-secondary',
+    },
   ];
 
   return (
@@ -112,7 +189,9 @@ export const AICalculatorApp = () => {
           <Calculator className="w-6 h-6 text-primary" />
           <div>
             <h2 className="text-xl font-semibold">AI Calculator</h2>
-            <p className="text-sm text-muted-foreground">Smart calculations made easy</p>
+            <p className="text-sm text-muted-foreground">
+              Smart calculations made easy
+            </p>
           </div>
         </div>
 
@@ -161,7 +240,7 @@ export const AICalculatorApp = () => {
             <RotateCcw className="w-4 h-4" />
           </Button>
         </div>
-        
+
         <div className="space-y-2">
           {history.length === 0 ? (
             <p className="text-muted-foreground text-sm">No calculations yet</p>

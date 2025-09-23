@@ -1,9 +1,17 @@
-import { useState, useEffect } from "react";
-import { Cloud, Sun, CloudRain, CloudSnow, Wind, Droplets, Thermometer } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
+import {
+  Cloud,
+  Sun,
+  CloudRain,
+  CloudSnow,
+  Wind,
+  Droplets,
+  Thermometer,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 interface WeatherData {
   location: string;
@@ -20,28 +28,32 @@ interface WeatherData {
 }
 
 export const AIWeatherApp = () => {
-  const [searchLocation, setSearchLocation] = useState("");
+  const [searchLocation, setSearchLocation] = useState('');
   const [weather, setWeather] = useState<WeatherData>({
-    location: "New York",
+    location: 'New York',
     temperature: 22,
-    condition: "Partly Cloudy",
+    condition: 'Partly Cloudy',
     humidity: 65,
     windSpeed: 12,
     forecast: [
-      { day: "Today", high: 25, low: 18, condition: "Sunny" },
-      { day: "Tomorrow", high: 23, low: 16, condition: "Cloudy" },
-      { day: "Wednesday", high: 20, low: 14, condition: "Rain" },
-      { day: "Thursday", high: 24, low: 17, condition: "Partly Cloudy" },
-      { day: "Friday", high: 26, low: 19, condition: "Sunny" }
-    ]
+      { day: 'Today', high: 25, low: 18, condition: 'Sunny' },
+      { day: 'Tomorrow', high: 23, low: 16, condition: 'Cloudy' },
+      { day: 'Wednesday', high: 20, low: 14, condition: 'Rain' },
+      { day: 'Thursday', high: 24, low: 17, condition: 'Partly Cloudy' },
+      { day: 'Friday', high: 26, low: 19, condition: 'Sunny' },
+    ],
   });
 
   const getWeatherIcon = (condition: string) => {
     const conditionLower = condition.toLowerCase();
-    if (conditionLower.includes("sun")) return <Sun className="w-8 h-8 text-yellow-500" />;
-    if (conditionLower.includes("cloud")) return <Cloud className="w-8 h-8 text-gray-400" />;
-    if (conditionLower.includes("rain")) return <CloudRain className="w-8 h-8 text-blue-500" />;
-    if (conditionLower.includes("snow")) return <CloudSnow className="w-8 h-8 text-blue-200" />;
+    if (conditionLower.includes('sun'))
+      return <Sun className="w-8 h-8 text-yellow-500" />;
+    if (conditionLower.includes('cloud'))
+      return <Cloud className="w-8 h-8 text-gray-400" />;
+    if (conditionLower.includes('rain'))
+      return <CloudRain className="w-8 h-8 text-blue-500" />;
+    if (conditionLower.includes('snow'))
+      return <CloudSnow className="w-8 h-8 text-blue-200" />;
     return <Cloud className="w-8 h-8 text-gray-400" />;
   };
 
@@ -52,7 +64,9 @@ export const AIWeatherApp = () => {
         ...prev,
         location: searchLocation,
         temperature: Math.floor(Math.random() * 30) + 10,
-        condition: ["Sunny", "Cloudy", "Partly Cloudy", "Rain", "Snow"][Math.floor(Math.random() * 5)]
+        condition: ['Sunny', 'Cloudy', 'Partly Cloudy', 'Rain', 'Snow'][
+          Math.floor(Math.random() * 5)
+        ],
       }));
     }
   };
@@ -65,19 +79,24 @@ export const AIWeatherApp = () => {
           <Cloud className="w-6 h-6 text-primary" />
           <div>
             <h2 className="text-xl font-semibold">AI Weather</h2>
-            <p className="text-sm text-muted-foreground">Smart weather insights</p>
+            <p className="text-sm text-muted-foreground">
+              Smart weather insights
+            </p>
           </div>
         </div>
-        
+
         <div className="flex gap-3">
           <Input
             placeholder="Enter city name..."
             value={searchLocation}
-            onChange={(e) => setSearchLocation(e.target.value)}
+            onChange={e => setSearchLocation(e.target.value)}
             className="flex-1 glass border-white/20 bg-white/5"
-            onKeyPress={(e) => e.key === 'Enter' && searchWeather()}
+            onKeyPress={e => e.key === 'Enter' && searchWeather()}
           />
-          <Button onClick={searchWeather} className="bg-gradient-primary hover:opacity-90">
+          <Button
+            onClick={searchWeather}
+            className="bg-gradient-primary hover:opacity-90"
+          >
             Search
           </Button>
         </div>
@@ -96,7 +115,9 @@ export const AIWeatherApp = () => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-4xl font-bold">{weather.temperature}°C</div>
+                <div className="text-4xl font-bold">
+                  {weather.temperature}°C
+                </div>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
                   <div className="flex items-center gap-1">
                     <Droplets className="w-4 h-4" />
@@ -122,9 +143,13 @@ export const AIWeatherApp = () => {
                   <div className="flex justify-center mb-2">
                     {getWeatherIcon(day.condition)}
                   </div>
-                  <div className="text-sm text-muted-foreground mb-2">{day.condition}</div>
+                  <div className="text-sm text-muted-foreground mb-2">
+                    {day.condition}
+                  </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-primary font-semibold">{day.high}°</span>
+                    <span className="text-primary font-semibold">
+                      {day.high}°
+                    </span>
                     <span className="text-muted-foreground">{day.low}°</span>
                   </div>
                 </div>

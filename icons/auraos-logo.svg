@@ -1,93 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Gradient definitions -->
+    <!-- Premium gradient definitions -->
     <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#8b5cf6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#f5576c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
     </linearGradient>
     
     <linearGradient id="secondaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#00c6ff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0072ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
     </linearGradient>
     
     <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.3" />
-      <stop offset="70%" style="stop-color:#6366f1;stop-opacity:0.1" />
-      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:0" />
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="30%" style="stop-color:#667eea;stop-opacity:0.2" />
+      <stop offset="70%" style="stop-color:#764ba2;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:0" />
     </radialGradient>
     
-    <!-- Filter for glow effect -->
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+    <radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#00c6ff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Advanced filters for premium effects -->
+    <filter id="premiumGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
       <feMerge> 
         <feMergeNode in="coloredBlur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    
+    <filter id="innerShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="textShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1"/>
+      <feOffset dx="0" dy="1" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
   
-  <!-- Background circle with gradient -->
-  <circle cx="256" cy="256" r="240" fill="url(#primaryGradient)" opacity="0.1"/>
+  <!-- Background with premium gradient -->
+  <rect width="512" height="512" rx="64" fill="url(#primaryGradient)" opacity="0.1"/>
   
-  <!-- Main geometric shape - represents OS/System -->
+  <!-- Outer glow ring -->
+  <circle cx="256" cy="256" r="220" fill="none" stroke="url(#secondaryGradient)" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Main logo container -->
   <g transform="translate(256, 256)">
-    <!-- Central hexagon representing core system -->
-    <polygon points="0,-80 69.28,-40 69.28,40 0,80 -69.28,40 -69.28,-40" 
+    <!-- Central hexagon with premium styling -->
+    <polygon points="0,-90 77.94,-45 77.94,45 0,90 -77.94,45 -77.94,-45" 
              fill="url(#primaryGradient)" 
              stroke="url(#secondaryGradient)" 
-             stroke-width="4"
-             filter="url(#glow)"/>
+             stroke-width="3"
+             filter="url(#premiumGlow)"/>
     
-    <!-- Inner AI/Neural network pattern -->
-    <g opacity="0.8">
-      <!-- Central node -->
-      <circle cx="0" cy="0" r="8" fill="#ffffff"/>
+    <!-- Inner hexagon for depth -->
+    <polygon points="0,-70 60.62,-35 60.62,35 0,70 -60.62,35 -60.62,-35" 
+             fill="url(#innerGlow)" 
+             opacity="0.6"/>
+    
+    <!-- AI Neural Network Core -->
+    <g opacity="0.9">
+      <!-- Central processing unit -->
+      <circle cx="0" cy="0" r="12" fill="#ffffff" filter="url(#innerShadow)"/>
+      <circle cx="0" cy="0" r="8" fill="url(#secondaryGradient)"/>
       
-      <!-- Neural connections -->
-      <line x1="0" y1="0" x2="0" y2="-60" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-      <line x1="0" y1="0" x2="52" y2="-30" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-      <line x1="0" y1="0" x2="52" y2="30" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-      <line x1="0" y1="0" x2="0" y2="60" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-      <line x1="0" y1="0" x2="-52" y2="30" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
-      <line x1="0" y1="0" x2="-52" y2="-30" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+      <!-- Neural network connections -->
+      <g stroke="#ffffff" stroke-width="2" opacity="0.8">
+        <line x1="0" y1="0" x2="0" y2="-70"/>
+        <line x1="0" y1="0" x2="60.62" y2="-35"/>
+        <line x1="0" y1="0" x2="60.62" y2="35"/>
+        <line x1="0" y1="0" x2="0" y2="70"/>
+        <line x1="0" y1="0" x2="-60.62" y2="35"/>
+        <line x1="0" y1="0" x2="-60.62" y2="-35"/>
+      </g>
       
-      <!-- Connection nodes -->
-      <circle cx="0" cy="-60" r="4" fill="#06b6d4"/>
-      <circle cx="52" cy="-30" r="4" fill="#06b6d4"/>
-      <circle cx="52" cy="30" r="4" fill="#06b6d4"/>
-      <circle cx="0" cy="60" r="4" fill="#06b6d4"/>
-      <circle cx="-52" cy="30" r="4" fill="#06b6d4"/>
-      <circle cx="-52" cy="-30" r="4" fill="#06b6d4"/>
+      <!-- Connection nodes with premium styling -->
+      <g>
+        <circle cx="0" cy="-70" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+        <circle cx="60.62" cy="-35" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+        <circle cx="60.62" cy="35" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+        <circle cx="0" cy="70" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+        <circle cx="-60.62" cy="35" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+        <circle cx="-60.62" cy="-35" r="6" fill="url(#secondaryGradient)" filter="url(#premiumGlow)"/>
+      </g>
     </g>
     
-    <!-- Outer ring representing connectivity -->
-    <circle cx="0" cy="0" r="100" fill="none" stroke="url(#secondaryGradient)" stroke-width="2" opacity="0.4"/>
-    
-    <!-- Data flow indicators -->
-    <g opacity="0.6">
-      <circle cx="0" cy="-100" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+    <!-- Data flow particles with enhanced animation -->
+    <g opacity="0.7">
+      <circle cx="0" cy="-90" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="87" cy="-50" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.3s" repeatCount="indefinite"/>
+      <circle cx="77.94" cy="-45" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" begin="0.4s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="87" cy="50" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.6s" repeatCount="indefinite"/>
+      <circle cx="77.94" cy="45" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="0" cy="100" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.9s" repeatCount="indefinite"/>
+      <circle cx="0" cy="90" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" begin="1.2s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="-87" cy="50" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="1.2s" repeatCount="indefinite"/>
+      <circle cx="-77.94" cy="45" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
       </circle>
-      <circle cx="-87" cy="-50" r="3" fill="#06b6d4">
-        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+      <circle cx="-77.94" cy="-45" r="4" fill="#00c6ff">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" begin="2s" repeatCount="indefinite"/>
+        <animate attributeName="r" values="3;5;3" dur="2.5s" begin="2s" repeatCount="indefinite"/>
       </circle>
     </g>
   </g>
   
-  <!-- Glow effect overlay -->
-  <circle cx="256" cy="256" r="200" fill="url(#glowGradient)" opacity="0.3"/>
+  <!-- Premium text with gradient -->
+  <g transform="translate(256, 420)">
+    <text x="0" y="0" text-anchor="middle" fill="url(#primaryGradient)" 
+          font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" 
+          font-size="48" font-weight="700" letter-spacing="2px"
+          filter="url(#textShadow)">
+      AURA
+    </text>
+    <text x="0" y="25" text-anchor="middle" fill="url(#secondaryGradient)" 
+          font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" 
+          font-size="16" font-weight="500" letter-spacing="8px" opacity="0.8">
+      OPERATING SYSTEM
+    </text>
+  </g>
+  
+  <!-- Enhanced glow overlay -->
+  <circle cx="256" cy="256" r="200" fill="url(#glowGradient)" opacity="0.4"/>
 </svg>

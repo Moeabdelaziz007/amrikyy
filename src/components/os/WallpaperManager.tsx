@@ -24,43 +24,43 @@ const WALLPAPER_THEMES: WallpaperTheme[] = [
     name: 'Aurora Borealis',
     type: 'animated',
     colors: ['#0f0f23', '#1a1a2e', '#16213e', '#0f3460', '#533483'],
-    animation: { duration: 20, direction: 'radial' }
+    animation: { duration: 20, direction: 'radial' },
   },
   {
     id: 'cyberpunk',
     name: 'Cyberpunk Neon',
     type: 'animated',
     colors: ['#0a0a0a', '#1a0033', '#330066', '#6600cc', '#00ff88'],
-    animation: { duration: 15, direction: 'diagonal' }
+    animation: { duration: 15, direction: 'diagonal' },
   },
   {
     id: 'sunset',
     name: 'Digital Sunset',
     type: 'animated',
     colors: ['#ff6b6b', '#ffa726', '#ffcc02', '#4ecdc4', '#45b7d1'],
-    animation: { duration: 25, direction: 'horizontal' }
+    animation: { duration: 25, direction: 'horizontal' },
   },
   {
     id: 'ocean',
     name: 'Deep Ocean',
     type: 'animated',
     colors: ['#001122', '#003366', '#0066aa', '#0099ff', '#00ccff'],
-    animation: { duration: 30, direction: 'vertical' }
+    animation: { duration: 30, direction: 'vertical' },
   },
   {
     id: 'matrix',
     name: 'Matrix Code',
     type: 'particle',
     colors: ['#000000', '#001100', '#003300', '#00ff00'],
-    particles: { count: 50, speed: 2, size: 2 }
+    particles: { count: 50, speed: 2, size: 2 },
   },
   {
     id: 'galaxy',
     name: 'Galaxy Spiral',
     type: 'animated',
     colors: ['#000000', '#1a0033', '#330066', '#6600cc', '#9900ff'],
-    animation: { duration: 40, direction: 'radial' }
-  }
+    animation: { duration: 40, direction: 'radial' },
+  },
 ];
 
 interface WallpaperManagerProps {
@@ -77,7 +77,8 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
   const [timeOfDay, setTimeOfDay] = useState<'day' | 'night'>('day');
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const theme = WALLPAPER_THEMES.find(t => t.id === currentTheme) || WALLPAPER_THEMES[0];
+  const theme =
+    WALLPAPER_THEMES.find(t => t.id === currentTheme) || WALLPAPER_THEMES[0];
 
   // Update time of day based on actual time
   useEffect(() => {
@@ -85,7 +86,7 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
       const hour = new Date().getHours();
       setTimeOfDay(hour >= 6 && hour < 18 ? 'day' : 'night');
     };
-    
+
     updateTimeOfDay();
     const interval = setInterval(updateTimeOfDay, 60000); // Update every minute
     return () => clearInterval(interval);
@@ -108,12 +109,12 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
     const baseColors = theme.colors;
     const adjustedColors =
       timeOfDay === 'night'
-        ? baseColors.map((color) => color + '80') // Add transparency for night
+        ? baseColors.map(color => color + '80') // Add transparency for night
         : baseColors;
 
     if (theme.type === 'animated' && theme.animation) {
       const { direction, duration } = theme.animation;
-      
+
       let gradientDirection = '';
       switch (direction) {
         case 'horizontal':
@@ -137,23 +138,23 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
             background: [
               `linear-gradient(${gradientDirection}, ${adjustedColors.join(', ')})`,
               `linear-gradient(${gradientDirection}, ${[...adjustedColors].reverse().join(', ')})`,
-              `linear-gradient(${gradientDirection}, ${adjustedColors.join(', ')})`
-            ]
+              `linear-gradient(${gradientDirection}, ${adjustedColors.join(', ')})`,
+            ],
           }}
           transition={{
             duration: duration,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'linear',
           }}
         />
       );
     }
 
     return (
-      <div 
+      <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(135deg, ${adjustedColors.join(', ')})`
+          background: `linear-gradient(135deg, ${adjustedColors.join(', ')})`,
         }}
       />
     );
@@ -163,16 +164,16 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
     if (theme.type !== 'particle' || !theme.particles) return null;
 
     const { count } = theme.particles;
-    
+
     // Special particle effects for specific themes
     if (theme.id === 'matrix') {
       return <MatrixParticles className="opacity-30" />;
     }
-    
+
     if (theme.id === 'galaxy') {
       return <StarField className="opacity-40" />;
     }
-    
+
     // Default particle system
     return (
       <ParticleSystem
@@ -192,15 +193,15 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
           background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, 
             rgba(255,255,255,0.1) 0%, 
             rgba(255,255,255,0.05) 30%, 
-            transparent 70%)`
+            transparent 70%)`,
         }}
         animate={{
-          opacity: [0.3, 0.6, 0.3]
+          opacity: [0.3, 0.6, 0.3],
         }}
         transition={{
           duration: 3,
           repeat: Infinity,
-          ease: "easeInOut"
+          ease: 'easeInOut',
         }}
       />
     );
@@ -211,12 +212,12 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
       {renderGradientBackground()}
       {renderParticleEffect()}
       {renderInteractiveOverlay()}
-      
+
       {/* Glass morphism overlay */}
       <div className="absolute inset-0 bg-black/10 backdrop-blur-[0.5px]" />
-      
+
       {/* Subtle noise texture */}
-      <div 
+      <div
         className="absolute inset-0 opacity-5"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,

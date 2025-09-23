@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Palette, 
-  Sparkles, 
-  Moon, 
-  Sun, 
-  Cloud, 
-  Mountain, 
+import {
+  Palette,
+  Sparkles,
+  Moon,
+  Sun,
+  Cloud,
+  Mountain,
   Waves,
   Zap,
   Heart,
@@ -16,7 +16,7 @@ import {
   Snowflake,
   Leaf,
   Droplets,
-  Wind
+  Wind,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,12 +52,13 @@ const premiumThemes: Theme[] = [
       secondary: '#ff00ff',
       accent: '#00ff88',
       background: '#0a0a0f',
-      surface: '#1a1a2e'
+      surface: '#1a1a2e',
     },
-    gradient: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%)',
+    gradient:
+      'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%)',
     particles: true,
     animation: 'aurora',
-    premium: true
+    premium: true,
   },
   {
     id: 'cosmic-ocean',
@@ -70,12 +71,13 @@ const premiumThemes: Theme[] = [
       secondary: '#0099cc',
       accent: '#ff6b6b',
       background: '#0c0c0c',
-      surface: '#1a1a2e'
+      surface: '#1a1a2e',
     },
-    gradient: 'radial-gradient(ellipse at center, #0c0c0c 0%, #1a1a2e 35%, #16213e 70%, #0f3460 100%)',
+    gradient:
+      'radial-gradient(ellipse at center, #0c0c0c 0%, #1a1a2e 35%, #16213e 70%, #0f3460 100%)',
     particles: true,
     animation: 'cosmic',
-    premium: true
+    premium: true,
   },
   {
     id: 'cyberpunk-neon',
@@ -88,12 +90,13 @@ const premiumThemes: Theme[] = [
       secondary: '#ff0080',
       accent: '#00d4ff',
       background: '#0a0a0a',
-      surface: '#1a1a1a'
+      surface: '#1a1a1a',
     },
-    gradient: 'linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)',
+    gradient:
+      'linear-gradient(45deg, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%, #0a0a0a 100%)',
     particles: true,
     animation: 'cyberpunk',
-    premium: true
+    premium: true,
   },
   {
     id: 'galaxy-spiral',
@@ -106,12 +109,13 @@ const premiumThemes: Theme[] = [
       secondary: '#4ecdc4',
       accent: '#ffe66d',
       background: '#000000',
-      surface: '#1a1a2e'
+      surface: '#1a1a2e',
     },
-    gradient: 'radial-gradient(ellipse at center, #000000 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%)',
+    gradient:
+      'radial-gradient(ellipse at center, #000000 0%, #1a1a2e 30%, #16213e 60%, #0f3460 100%)',
     particles: true,
     animation: 'galaxy',
-    premium: true
+    premium: true,
   },
   {
     id: 'mountain-sunset',
@@ -124,12 +128,13 @@ const premiumThemes: Theme[] = [
       secondary: '#f7931e',
       accent: '#ffd23f',
       background: '#1a1a2e',
-      surface: '#16213e'
+      surface: '#16213e',
     },
-    gradient: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%)',
+    gradient:
+      'linear-gradient(180deg, #1a1a2e 0%, #16213e 25%, #0f3460 50%, #533483 75%, #e94560 100%)',
     particles: false,
     animation: 'sunset',
-    premium: true
+    premium: true,
   },
   {
     id: 'ocean-depths',
@@ -142,12 +147,13 @@ const premiumThemes: Theme[] = [
       secondary: '#0099cc',
       accent: '#00ff88',
       background: '#0a0a0f',
-      surface: '#1a1a2e'
+      surface: '#1a1a2e',
     },
-    gradient: 'linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0099cc 100%)',
+    gradient:
+      'linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0099cc 100%)',
     particles: true,
     animation: 'ocean',
-    premium: true
+    premium: true,
   },
   {
     id: 'fire-kingdom',
@@ -160,12 +166,13 @@ const premiumThemes: Theme[] = [
       secondary: '#ff6347',
       accent: '#ffd700',
       background: '#1a0a0a',
-      surface: '#2a1a1a'
+      surface: '#2a1a1a',
     },
-    gradient: 'radial-gradient(ellipse at center, #1a0a0a 0%, #2a1a1a 25%, #3a2a2a 50%, #4a3a3a 75%, #5a4a4a 100%)',
+    gradient:
+      'radial-gradient(ellipse at center, #1a0a0a 0%, #2a1a1a 25%, #3a2a2a 50%, #4a3a3a 75%, #5a4a4a 100%)',
     particles: true,
     animation: 'fire',
-    premium: true
+    premium: true,
   },
   {
     id: 'ice-crystal',
@@ -178,12 +185,13 @@ const premiumThemes: Theme[] = [
       secondary: '#87ceeb',
       accent: '#ffffff',
       background: '#0a0a1a',
-      surface: '#1a1a2e'
+      surface: '#1a1a2e',
     },
-    gradient: 'linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 25%, #2a2a3e 50%, #3a3a4e 75%, #4a4a5e 100%)',
+    gradient:
+      'linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 25%, #2a2a3e 50%, #3a3a4e 75%, #4a4a5e 100%)',
     particles: true,
     animation: 'ice',
-    premium: true
+    premium: true,
   },
   {
     id: 'forest-magic',
@@ -196,12 +204,13 @@ const premiumThemes: Theme[] = [
       secondary: '#32cd32',
       accent: '#ffd700',
       background: '#0a1a0a',
-      surface: '#1a2a1a'
+      surface: '#1a2a1a',
     },
-    gradient: 'radial-gradient(ellipse at center, #0a1a0a 0%, #1a2a1a 25%, #2a3a2a 50%, #3a4a3a 75%, #4a5a4a 100%)',
+    gradient:
+      'radial-gradient(ellipse at center, #0a1a0a 0%, #1a2a1a 25%, #2a3a2a 50%, #3a4a3a 75%, #4a5a4a 100%)',
     particles: true,
     animation: 'forest',
-    premium: true
+    premium: true,
   },
   {
     id: 'royal-purple',
@@ -214,12 +223,13 @@ const premiumThemes: Theme[] = [
       secondary: '#a855f7',
       accent: '#fbbf24',
       background: '#1a0a2e',
-      surface: '#2a1a3e'
+      surface: '#2a1a3e',
     },
-    gradient: 'linear-gradient(135deg, #1a0a2e 0%, #2a1a3e 25%, #3a2a4e 50%, #4a3a5e 75%, #5a4a6e 100%)',
+    gradient:
+      'linear-gradient(135deg, #1a0a2e 0%, #2a1a3e 25%, #3a2a4e 50%, #4a3a5e 75%, #5a4a6e 100%)',
     particles: true,
     animation: 'royal',
-    premium: true
+    premium: true,
   },
   {
     id: 'diamond-luxury',
@@ -232,12 +242,13 @@ const premiumThemes: Theme[] = [
       secondary: '#e5e7eb',
       accent: '#fbbf24',
       background: '#0a0a0a',
-      surface: '#1a1a1a'
+      surface: '#1a1a1a',
     },
-    gradient: 'radial-gradient(ellipse at center, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #3a3a3a 75%, #4a4a4a 100%)',
+    gradient:
+      'radial-gradient(ellipse at center, #0a0a0a 0%, #1a1a1a 25%, #2a2a2a 50%, #3a3a3a 75%, #4a4a4a 100%)',
     particles: true,
     animation: 'diamond',
-    premium: true
+    premium: true,
   },
   {
     id: 'minimal-dark',
@@ -250,13 +261,13 @@ const premiumThemes: Theme[] = [
       secondary: '#e5e7eb',
       accent: '#3b82f6',
       background: '#0a0a0a',
-      surface: '#1a1a1a'
+      surface: '#1a1a1a',
     },
     gradient: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%)',
     particles: false,
     animation: 'minimal',
-    premium: false
-  }
+    premium: false,
+  },
 ];
 
 interface PremiumWallpaperManagerProps {
@@ -264,10 +275,9 @@ interface PremiumWallpaperManagerProps {
   onThemeChange: (themeId: string) => void;
 }
 
-export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = ({
-  currentTheme,
-  onThemeChange
-}) => {
+export const PremiumWallpaperManager: React.FC<
+  PremiumWallpaperManagerProps
+> = ({ currentTheme, onThemeChange }) => {
   const [selectedTheme, setSelectedTheme] = useState<Theme>(
     premiumThemes.find(t => t.id === currentTheme) || premiumThemes[0]
   );
@@ -280,11 +290,12 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
     { id: 'space', name: 'Space', icon: Star },
     { id: 'cyber', name: 'Cyber', icon: Zap },
     { id: 'premium', name: 'Premium', icon: Crown },
-    { id: 'minimal', name: 'Minimal', icon: Moon }
+    { id: 'minimal', name: 'Minimal', icon: Moon },
   ];
 
   const filteredThemes = premiumThemes.filter(theme => {
-    const matchesCategory = selectedCategory === 'all' || theme.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === 'all' || theme.category === selectedCategory;
     const matchesPremium = !showPremiumOnly || theme.premium;
     return matchesCategory && matchesPremium;
   });
@@ -300,20 +311,23 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
     root.style.setProperty('--theme-primary', selectedTheme.colors.primary);
     root.style.setProperty('--theme-secondary', selectedTheme.colors.secondary);
     root.style.setProperty('--theme-accent', selectedTheme.colors.accent);
-    root.style.setProperty('--theme-background', selectedTheme.colors.background);
+    root.style.setProperty(
+      '--theme-background',
+      selectedTheme.colors.background
+    );
     root.style.setProperty('--theme-surface', selectedTheme.colors.surface);
   }, [selectedTheme]);
 
   return (
     <div className="fixed inset-0 z-40 pointer-events-none">
       {/* Dynamic Background */}
-      <div 
+      <div
         className="absolute inset-0 transition-all duration-1000 ease-out"
         style={{
           background: selectedTheme.gradient,
         }}
       />
-      
+
       {/* Animated Overlay */}
       {selectedTheme.particles && (
         <div className="absolute inset-0 overflow-hidden">
@@ -325,7 +339,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-green-400/20 to-transparent animate-pulse delay-2000" />
             </div>
           )}
-          
+
           {/* Cosmic Effect */}
           {selectedTheme.animation === 'cosmic' && (
             <div className="absolute inset-0 opacity-20">
@@ -337,13 +351,13 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
                     animationDelay: `${Math.random() * 5}s`,
-                    animationDuration: `${2 + Math.random() * 3}s`
+                    animationDuration: `${2 + Math.random() * 3}s`,
                   }}
                 />
               ))}
             </div>
           )}
-          
+
           {/* Cyberpunk Effect */}
           {selectedTheme.animation === 'cyberpunk' && (
             <div className="absolute inset-0 opacity-25">
@@ -352,11 +366,14 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent animate-pulse delay-1000" />
             </div>
           )}
-          
+
           {/* Galaxy Effect */}
           {selectedTheme.animation === 'galaxy' && (
             <div className="absolute inset-0 opacity-15">
-              <div className="absolute inset-0 bg-gradient-radial from-transparent via-white/10 to-transparent animate-spin" style={{ animationDuration: '20s' }} />
+              <div
+                className="absolute inset-0 bg-gradient-radial from-transparent via-white/10 to-transparent animate-spin"
+                style={{ animationDuration: '20s' }}
+              />
               {[...Array(100)].map((_, i) => (
                 <div
                   key={i}
@@ -365,13 +382,13 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
                     left: `${Math.random() * 100}%`,
                     top: `${Math.random() * 100}%`,
                     animationDelay: `${Math.random() * 10}s`,
-                    animationDuration: `${1 + Math.random() * 2}s`
+                    animationDuration: `${1 + Math.random() * 2}s`,
                   }}
                 />
               ))}
             </div>
           )}
-          
+
           {/* Ocean Effect */}
           {selectedTheme.animation === 'ocean' && (
             <div className="absolute inset-0 opacity-20">
@@ -379,7 +396,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-blue-400/20 to-transparent animate-pulse delay-1000" />
             </div>
           )}
-          
+
           {/* Fire Effect */}
           {selectedTheme.animation === 'fire' && (
             <div className="absolute inset-0 opacity-25">
@@ -387,7 +404,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-orange-500/30 to-transparent animate-pulse delay-500" />
             </div>
           )}
-          
+
           {/* Ice Effect */}
           {selectedTheme.animation === 'ice' && (
             <div className="absolute inset-0 opacity-20">
@@ -395,7 +412,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute inset-0 bg-gradient-to-tl from-transparent via-white/10 to-transparent animate-pulse delay-1000" />
             </div>
           )}
-          
+
           {/* Forest Effect */}
           {selectedTheme.animation === 'forest' && (
             <div className="absolute inset-0 opacity-15">
@@ -403,7 +420,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-green-600/20 to-transparent animate-pulse delay-1000" />
             </div>
           )}
-          
+
           {/* Royal Effect */}
           {selectedTheme.animation === 'royal' && (
             <div className="absolute inset-0 opacity-20">
@@ -411,7 +428,7 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/20 to-transparent animate-pulse delay-1000" />
             </div>
           )}
-          
+
           {/* Diamond Effect */}
           {selectedTheme.animation === 'diamond' && (
             <div className="absolute inset-0 opacity-15">
@@ -421,12 +438,12 @@ export const PremiumWallpaperManager: React.FC<PremiumWallpaperManagerProps> = (
           )}
         </div>
       )}
-      
+
       {/* Grid Pattern Overlay */}
       <div className="absolute inset-0 opacity-5">
         <div className="w-full h-full bg-grid-pattern" />
       </div>
-      
+
       {/* Scan Line Effect */}
       <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent animate-pulse" />
     </div>
@@ -451,11 +468,12 @@ export const ThemeSelector: React.FC<{
     { id: 'space', name: 'Space', icon: Star },
     { id: 'cyber', name: 'Cyber', icon: Zap },
     { id: 'premium', name: 'Premium', icon: Crown },
-    { id: 'minimal', name: 'Minimal', icon: Moon }
+    { id: 'minimal', name: 'Minimal', icon: Moon },
   ];
 
   const filteredThemes = premiumThemes.filter(theme => {
-    const matchesCategory = selectedCategory === 'all' || theme.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === 'all' || theme.category === selectedCategory;
     const matchesPremium = !showPremiumOnly || theme.premium;
     return matchesCategory && matchesPremium;
   });
@@ -487,10 +505,10 @@ export const ThemeSelector: React.FC<{
                   key={category.id}
                   onClick={() => setSelectedCategory(category.id)}
                   className={cn(
-                    "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
+                    'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all',
                     selectedCategory === category.id
-                      ? "bg-purple-500 text-white"
-                      : "bg-white/10 text-gray-300 hover:bg-white/20"
+                      ? 'bg-purple-500 text-white'
+                      : 'bg-white/10 text-gray-300 hover:bg-white/20'
                   )}
                 >
                   <Icon className="w-4 h-4" />
@@ -499,13 +517,13 @@ export const ThemeSelector: React.FC<{
               );
             })}
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <label className="flex items-center space-x-2 text-sm text-gray-300">
               <input
                 type="checkbox"
                 checked={showPremiumOnly}
-                onChange={(e) => setShowPremiumOnly(e.target.checked)}
+                onChange={e => setShowPremiumOnly(e.target.checked)}
                 className="rounded border-gray-600 bg-white/10 text-purple-500 focus:ring-purple-500"
               />
               <span>Premium Only</span>
@@ -519,15 +537,15 @@ export const ThemeSelector: React.FC<{
             {filteredThemes.map(theme => {
               const Icon = theme.icon;
               const isSelected = currentTheme === theme.id;
-              
+
               return (
                 <div
                   key={theme.id}
                   onClick={() => onThemeChange(theme.id)}
                   className={cn(
-                    "group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 cursor-pointer",
-                    "hover:bg-white/10 hover:scale-105 hover:shadow-xl",
-                    isSelected && "ring-2 ring-purple-500 bg-purple-500/10"
+                    'group relative bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 cursor-pointer',
+                    'hover:bg-white/10 hover:scale-105 hover:shadow-xl',
+                    isSelected && 'ring-2 ring-purple-500 bg-purple-500/10'
                   )}
                 >
                   {/* Premium Badge */}
@@ -541,7 +559,7 @@ export const ThemeSelector: React.FC<{
                   )}
 
                   {/* Theme Preview */}
-                  <div 
+                  <div
                     className="w-full h-32 rounded-xl mb-4 relative overflow-hidden"
                     style={{ background: theme.gradient }}
                   >
@@ -559,18 +577,18 @@ export const ThemeSelector: React.FC<{
                     <p className="text-sm text-gray-400 mb-4 line-clamp-2">
                       {theme.description}
                     </p>
-                    
+
                     {/* Color Palette */}
                     <div className="flex items-center justify-center space-x-2 mb-4">
-                      <div 
+                      <div
                         className="w-4 h-4 rounded-full border border-white/20"
                         style={{ backgroundColor: theme.colors.primary }}
                       />
-                      <div 
+                      <div
                         className="w-4 h-4 rounded-full border border-white/20"
                         style={{ backgroundColor: theme.colors.secondary }}
                       />
-                      <div 
+                      <div
                         className="w-4 h-4 rounded-full border border-white/20"
                         style={{ backgroundColor: theme.colors.accent }}
                       />

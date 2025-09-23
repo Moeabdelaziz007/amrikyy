@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      margin: 0; 
+      padding: 0; 
+      background: transparent; 
+      width: 16px; 
+      height: 16px; 
+      overflow: hidden;
+    }
+    .icon-container { 
+      width: 16px; 
+      height: 16px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+    }
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="icon-container">
+    <?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="faviconGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.6" />
+      <stop offset="70%" style="stop-color:#00c6ff;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:0" />
+    </radialGradient>
+    
+    <filter id="faviconGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="32" height="32" rx="8" fill="url(#faviconGradient)"/>
+  
+  <!-- Main logo centered -->
+  <g transform="translate(16, 16)">
+    <!-- Hexagon representing the OS core -->
+    <polygon points="0,-10 8.66,-5 8.66,5 0,10 -8.66,5 -8.66,-5" 
+             fill="#ffffff" 
+             opacity="0.95"
+             filter="url(#faviconGlowFilter)"/>
+    
+    <!-- Inner hexagon for depth -->
+    <polygon points="0,-7 6.06,-3.5 6.06,3.5 0,7 -6.06,3.5 -6.06,-3.5" 
+             fill="url(#faviconGlow)" 
+             opacity="0.8"/>
+    
+    <!-- Central AI node -->
+    <circle cx="0" cy="0" r="3" fill="#00c6ff"/>
+    
+    <!-- Neural connections -->
+    <g stroke="#00c6ff" stroke-width="1" opacity="0.8">
+      <line x1="0" y1="0" x2="0" y2="-7"/>
+      <line x1="0" y1="0" x2="6.06" y2="-3.5"/>
+      <line x1="0" y1="0" x2="6.06" y2="3.5"/>
+      <line x1="0" y1="0" x2="0" y2="7"/>
+      <line x1="0" y1="0" x2="-6.06" y2="3.5"/>
+      <line x1="0" y1="0" x2="-6.06" y2="-3.5"/>
+    </g>
+    
+    <!-- Connection nodes -->
+    <circle cx="0" cy="-7" r="1.5" fill="#00c6ff"/>
+    <circle cx="6.06" cy="-3.5" r="1.5" fill="#00c6ff"/>
+    <circle cx="6.06" cy="3.5" r="1.5" fill="#00c6ff"/>
+    <circle cx="0" cy="7" r="1.5" fill="#00c6ff"/>
+    <circle cx="-6.06" cy="3.5" r="1.5" fill="#00c6ff"/>
+    <circle cx="-6.06" cy="-3.5" r="1.5" fill="#00c6ff"/>
+  </g>
+</svg>
+  </div>
+</body>
+</html>

@@ -1,10 +1,5 @@
 /* AuraOS - Main Styles Entry Point */
 
-/* Import Tailwind CSS */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Import Design Tokens */
 @import './design-tokens.css';
 
@@ -13,6 +8,11 @@
 
 /* Import Premium Effects */
 @import './premium-effects.css';
+
+/* Import Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Amrikyy AI System Design System - Premium AI-Powered OS Interface */
 @layer base {

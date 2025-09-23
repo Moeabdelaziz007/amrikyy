@@ -1,7 +1,7 @@
 // =============================================================================
 // 📝 AuraOS Client-Side Logging Service
 // =============================================================================
-// 
+//
 // Client-side logging service with browser-specific features
 // Supports console, localStorage, remote logging, and error tracking
 //
@@ -119,7 +119,6 @@ export class AuraOSClientLogger {
           sessionId: this.sessionId,
         },
       });
-
     } catch (error) {
       console.error('Failed to initialize AuraOS Client Logger:', error);
       throw error;
@@ -130,23 +129,43 @@ export class AuraOSClientLogger {
   // 📝 Core Logging Methods
   // =============================================================================
 
-  public error(message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  public error(
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     this.log(ClientLogLevel.ERROR, message, context, metadata);
   }
 
-  public warn(message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  public warn(
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     this.log(ClientLogLevel.WARN, message, context, metadata);
   }
 
-  public info(message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  public info(
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     this.log(ClientLogLevel.INFO, message, context, metadata);
   }
 
-  public debug(message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  public debug(
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     this.log(ClientLogLevel.DEBUG, message, context, metadata);
   }
 
-  public verbose(message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  public verbose(
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     this.log(ClientLogLevel.VERBOSE, message, context, metadata);
   }
 
@@ -154,7 +173,12 @@ export class AuraOSClientLogger {
   // 🔍 Main Log Method
   // =============================================================================
 
-  private log(level: ClientLogLevel, message: string, context?: Record<string, any>, metadata?: ClientLogEntry['metadata']): void {
+  private log(
+    level: ClientLogLevel,
+    message: string,
+    context?: Record<string, any>,
+    metadata?: ClientLogEntry['metadata']
+  ): void {
     if (level > this.config.level) {
       return; // Skip if level is below configured threshold
     }
@@ -173,8 +197,12 @@ export class AuraOSClientLogger {
           width: window.innerWidth,
           height: window.innerHeight,
         },
-        memory: this.config.enablePerformanceMonitoring ? this.getMemoryUsage() : undefined,
-        performance: this.config.enablePerformanceMonitoring ? this.getPerformanceMetrics() : undefined,
+        memory: this.config.enablePerformanceMonitoring
+          ? this.getMemoryUsage()
+          : undefined,
+        performance: this.config.enablePerformanceMonitoring
+          ? this.getPerformanceMetrics()
+          : undefined,
       },
       tags: this.generateTags(level, context),
     };
@@ -228,11 +256,15 @@ export class AuraOSClientLogger {
   private logToConsole(logEntry: ClientLogEntry): void {
     const levelName = ClientLogLevel[logEntry.level];
     const timestamp = logEntry.timestamp;
-    const contextStr = logEntry.context ? JSON.stringify(logEntry.context, null, 2) : '';
-    const metadataStr = logEntry.metadata ? JSON.stringify(logEntry.metadata, null, 2) : '';
+    const contextStr = logEntry.context
+      ? JSON.stringify(logEntry.context, null, 2)
+      : '';
+    const metadataStr = logEntry.metadata
+      ? JSON.stringify(logEntry.metadata, null, 2)
+      : '';
 
     const logMessage = `[${timestamp}] ${levelName}: ${logEntry.message}`;
-    
+
     // Apply colors if enabled
     if (this.config.enableConsoleColors) {
       const colors = {
@@ -274,11 +306,13 @@ export class AuraOSClientLogger {
       const key = 'auraos_logs';
       const existingLogs = this.getStoredLogs(key);
       const logs = [...existingLogs, logEntry];
-      
+
       // Keep only recent logs to avoid exceeding storage limit
-      const maxLogs = Math.floor(this.config.maxLocalStorageSize! / JSON.stringify(logEntry).length);
+      const maxLogs = Math.floor(
+        this.config.maxLocalStorageSize! / JSON.stringify(logEntry).length
+      );
       const trimmedLogs = logs.slice(-maxLogs);
-      
+
       localStorage.setItem(key, JSON.stringify(trimmedLogs));
     } catch (error) {
       console.warn('Failed to store log in localStorage:', error);
@@ -290,10 +324,10 @@ export class AuraOSClientLogger {
       const key = 'auraos_session_logs';
       const existingLogs = this.getStoredLogs(key);
       const logs = [...existingLogs, logEntry];
-      
+
       // Keep only recent logs
       const trimmedLogs = logs.slice(-100);
-      
+
       sessionStorage.setItem(key, JSON.stringify(trimmedLogs));
     } catch (error) {
       console.warn('Failed to store log in sessionStorage:', error);
@@ -308,7 +342,7 @@ export class AuraOSClientLogger {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.config.remoteApiKey}`,
+        Authorization: `Bearer ${this.config.remoteApiKey}`,
       },
       body: JSON.stringify(logEntry),
     }).catch(error => {
@@ -331,7 +365,8 @@ export class AuraOSClientLogger {
     if ('memory' in performance) {
       setInterval(() => {
         const memUsage = this.getMemoryUsage();
-        if (memUsage > 50 * 1024 * 1024) { // 50MB threshold
+        if (memUsage > 50 * 1024 * 1024) {
+          // 50MB threshold
           this.warn('High memory usage detected', { memoryUsage: memUsage });
         }
       }, 30000); // Every 30 seconds
@@ -340,7 +375,9 @@ export class AuraOSClientLogger {
 
   private getPerformanceMetrics(): number {
     // Get performance metrics from Performance API
-    const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const navigation = performance.getEntriesByType(
+      'navigation'
+    )[0] as PerformanceNavigationTiming;
     if (navigation) {
       return navigation.loadEventEnd - navigation.loadEventStart;
     }
@@ -360,7 +397,7 @@ export class AuraOSClientLogger {
 
   private setupErrorTracking(): void {
     // Global error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener('error', event => {
       this.error('Global error', {
         message: event.message,
         filename: event.filename,
@@ -371,7 +408,7 @@ export class AuraOSClientLogger {
     });
 
     // Unhandled promise rejection handler
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener('unhandledrejection', event => {
       this.error('Unhandled promise rejection', {
         reason: event.reason,
         promise: event.promise,
@@ -379,14 +416,20 @@ export class AuraOSClientLogger {
     });
 
     // Resource loading errors
-    window.addEventListener('error', (event) => {
-      if (event.target !== window) {
-        this.warn('Resource loading error', {
-          tagName: (event.target as HTMLElement).tagName,
-          src: (event.target as HTMLImageElement).src || (event.target as HTMLLinkElement).href,
-        });
-      }
-    }, true);
+    window.addEventListener(
+      'error',
+      event => {
+        if (event.target !== window) {
+          this.warn('Resource loading error', {
+            tagName: (event.target as HTMLElement).tagName,
+            src:
+              (event.target as HTMLImageElement).src ||
+              (event.target as HTMLLinkElement).href,
+          });
+        }
+      },
+      true
+    );
   }
 
   private trackError(message: string, context?: Record<string, any>): void {
@@ -406,31 +449,36 @@ export class AuraOSClientLogger {
 
   private addToBuffer(logEntry: ClientLogEntry): void {
     this.logBuffer.push(logEntry);
-    
+
     // Keep buffer size manageable
     if (this.logBuffer.length > this.config.maxMemoryLogs!) {
       this.logBuffer = this.logBuffer.slice(-this.config.maxMemoryLogs! / 2);
     }
   }
 
-  private generateTags(level: ClientLogLevel, context?: Record<string, any>): string[] {
+  private generateTags(
+    level: ClientLogLevel,
+    context?: Record<string, any>
+  ): string[] {
     const tags: string[] = [];
-    
+
     // Add level tag
     tags.push(ClientLogLevel[level].toLowerCase());
-    
+
     // Add context-based tags
     if (context) {
       if (context.userId) tags.push('user-action');
       if (context.component) tags.push(`component:${context.component}`);
       if (context.action) tags.push(`action:${context.action}`);
     }
-    
+
     return tags;
   }
 
   private generateSessionId(): string {
-    return 'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+    return (
+      'session_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now()
+    );
   }
 
   private getStoredLogs(key: string): ClientLogEntry[] {
@@ -446,7 +494,7 @@ export class AuraOSClientLogger {
     try {
       const keys = Object.keys(localStorage);
       const logKeys = keys.filter(key => key.startsWith('auraos_logs'));
-      
+
       let totalSize = 0;
       logKeys.forEach(key => {
         totalSize += localStorage.getItem(key)?.length || 0;
@@ -469,21 +517,21 @@ export class AuraOSClientLogger {
 
   public getLogs(level?: ClientLogLevel, limit = 100): ClientLogEntry[] {
     let logs = this.logBuffer;
-    
+
     if (level !== undefined) {
       logs = logs.filter(log => log.level === level);
     }
-    
+
     return logs.slice(-limit);
   }
 
   public getStoredLogs(level?: ClientLogLevel, limit = 100): ClientLogEntry[] {
     const logs = this.getStoredLogs('auraos_logs');
-    
+
     if (level !== undefined) {
       return logs.filter(log => log.level === level).slice(-limit);
     }
-    
+
     return logs.slice(-limit);
   }
 
@@ -522,7 +570,11 @@ export class AuraOSClientLogger {
   // 🎯 Specialized Logging Methods
   // =============================================================================
 
-  public logUserAction(userId: string, action: string, context?: Record<string, any>): void {
+  public logUserAction(
+    userId: string,
+    action: string,
+    context?: Record<string, any>
+  ): void {
     this.info(`User action: ${action}`, context, {
       userId,
       action,
@@ -530,7 +582,11 @@ export class AuraOSClientLogger {
     });
   }
 
-  public logPerformance(operation: string, duration: number, context?: Record<string, any>): void {
+  public logPerformance(
+    operation: string,
+    duration: number,
+    context?: Record<string, any>
+  ): void {
     this.info(`Performance: ${operation}`, context, {
       action: 'performance',
       duration,
@@ -538,24 +594,37 @@ export class AuraOSClientLogger {
     });
   }
 
-  public logNavigation(from: string, to: string, context?: Record<string, any>): void {
+  public logNavigation(
+    from: string,
+    to: string,
+    context?: Record<string, any>
+  ): void {
     this.info(`Navigation: ${from} → ${to}`, context, {
       action: 'navigation',
       component: 'router',
     });
   }
 
-  public logAPI(method: string, endpoint: string, statusCode: number, duration?: number): void {
-    this.info(`API ${method} ${endpoint}`, {
-      method,
-      endpoint,
-      statusCode,
-      duration,
-    }, {
-      action: 'api-call',
-      component: 'api',
-      duration,
-    });
+  public logAPI(
+    method: string,
+    endpoint: string,
+    statusCode: number,
+    duration?: number
+  ): void {
+    this.info(
+      `API ${method} ${endpoint}`,
+      {
+        method,
+        endpoint,
+        statusCode,
+        duration,
+      },
+      {
+        action: 'api-call',
+        component: 'api',
+        duration,
+      }
+    );
   }
 
   public logSecurity(event: string, context?: Record<string, any>): void {
@@ -572,14 +641,18 @@ export class AuraOSClientLogger {
 
 let clientLoggerInstance: AuraOSClientLogger | null = null;
 
-export function getClientLogger(config?: Partial<ClientLogConfig>): AuraOSClientLogger {
+export function getClientLogger(
+  config?: Partial<ClientLogConfig>
+): AuraOSClientLogger {
   if (!clientLoggerInstance) {
     clientLoggerInstance = new AuraOSClientLogger(config);
   }
   return clientLoggerInstance;
 }
 
-export function createClientLogger(config?: Partial<ClientLogConfig>): AuraOSClientLogger {
+export function createClientLogger(
+  config?: Partial<ClientLogConfig>
+): AuraOSClientLogger {
   return new AuraOSClientLogger(config);
 }
 

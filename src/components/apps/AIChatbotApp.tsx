@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Send, Bot, User, Sparkles, Trash2, Download } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { Send, Bot, User, Sparkles, Trash2, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from '@/lib/utils';
 
 interface Message {
   id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
 }
@@ -15,13 +15,14 @@ interface Message {
 export const AIChatbotApp = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: "1",
-      role: "assistant",
-      content: "Hello! I'm your AI assistant powered by AuraOS AI System. How can I help you today?",
-      timestamp: new Date()
-    }
+      id: '1',
+      role: 'assistant',
+      content:
+        "Hello! I'm your AI assistant powered by AuraOS AI System. How can I help you today?",
+      timestamp: new Date(),
+    },
   ]);
-  const [inputMessage, setInputMessage] = useState("");
+  const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
   const sendMessage = async () => {
@@ -29,31 +30,31 @@ export const AIChatbotApp = () => {
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
+      role: 'user',
       content: inputMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     setMessages(prev => [...prev, userMessage]);
-    setInputMessage("");
+    setInputMessage('');
     setIsTyping(true);
 
     // Simulate AI response
     setTimeout(() => {
       const responses = [
-        "I understand your question. Let me help you with that.",
+        'I understand your question. Let me help you with that.',
         "That's an interesting point. Here's what I think...",
-        "Based on my analysis, I can suggest the following approach...",
+        'Based on my analysis, I can suggest the following approach...',
         "I'm here to assist you with any questions or tasks you have.",
-        "Let me break this down for you in a clear and helpful way.",
-        "I can help you solve this problem step by step."
+        'Let me break this down for you in a clear and helpful way.',
+        'I can help you solve this problem step by step.',
       ];
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: "assistant", 
+        role: 'assistant',
         content: responses[Math.floor(Math.random() * responses.length)],
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, aiMessage]);
@@ -64,19 +65,22 @@ export const AIChatbotApp = () => {
   const clearChat = () => {
     setMessages([
       {
-        id: "1",
-        role: "assistant",
-        content: "Chat cleared! How can I help you today?",
-        timestamp: new Date()
-      }
+        id: '1',
+        role: 'assistant',
+        content: 'Chat cleared! How can I help you today?',
+        timestamp: new Date(),
+      },
     ]);
   };
 
   const exportChat = () => {
-    const chatContent = messages.map(msg => 
-      `[${msg.timestamp.toLocaleTimeString()}] ${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`
-    ).join('\n\n');
-    
+    const chatContent = messages
+      .map(
+        msg =>
+          `[${msg.timestamp.toLocaleTimeString()}] ${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`
+      )
+      .join('\n\n');
+
     const blob = new Blob([chatContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -96,10 +100,12 @@ export const AIChatbotApp = () => {
           </div>
           <div>
             <h2 className="font-semibold">AI Assistant</h2>
-            <p className="text-xs text-muted-foreground">Powered by AuraOS AI</p>
+            <p className="text-xs text-muted-foreground">
+              Powered by AuraOS AI
+            </p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button
             onClick={exportChat}
@@ -123,26 +129,26 @@ export const AIChatbotApp = () => {
       {/* Messages */}
       <ScrollArea className="flex-1 p-4">
         <div className="space-y-4">
-          {messages.map((message) => (
+          {messages.map(message => (
             <div
               key={message.id}
               className={cn(
-                "flex gap-3 animate-slide-up",
-                message.role === "user" ? "justify-end" : "justify-start"
+                'flex gap-3 animate-slide-up',
+                message.role === 'user' ? 'justify-end' : 'justify-start'
               )}
             >
-              {message.role === "assistant" && (
+              {message.role === 'assistant' && (
                 <div className="w-8 h-8 rounded-full bg-gradient-secondary flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
               )}
-              
+
               <div
                 className={cn(
-                  "max-w-[70%] p-3 rounded-2xl glass border",
-                  message.role === "user" 
-                    ? "bg-primary/20 border-primary/30 text-primary-foreground" 
-                    : "border-white/20"
+                  'max-w-[70%] p-3 rounded-2xl glass border',
+                  message.role === 'user'
+                    ? 'bg-primary/20 border-primary/30 text-primary-foreground'
+                    : 'border-white/20'
                 )}
               >
                 <p className="text-sm leading-relaxed">{message.content}</p>
@@ -151,14 +157,14 @@ export const AIChatbotApp = () => {
                 </p>
               </div>
 
-              {message.role === "user" && (
+              {message.role === 'user' && (
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0">
                   <User className="w-4 h-4 text-white" />
                 </div>
               )}
             </div>
           ))}
-          
+
           {/* Typing indicator */}
           {isTyping && (
             <div className="flex gap-3 animate-slide-up">
@@ -168,8 +174,14 @@ export const AIChatbotApp = () => {
               <div className="glass border border-white/20 p-3 rounded-2xl">
                 <div className="flex items-center gap-1">
                   <div className="w-2 h-2 bg-accent rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                  <div className="w-2 h-2 bg-accent rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <div
+                    className="w-2 h-2 bg-accent rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  />
+                  <div
+                    className="w-2 h-2 bg-accent rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  />
                 </div>
               </div>
             </div>
@@ -183,8 +195,8 @@ export const AIChatbotApp = () => {
           <div className="relative flex-1">
             <Input
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+              onChange={e => setInputMessage(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && sendMessage()}
               placeholder="Type your message..."
               className="pr-12 glass border-white/20 bg-white/5"
               disabled={isTyping}
@@ -199,9 +211,14 @@ export const AIChatbotApp = () => {
             <Send className="w-4 h-4" />
           </Button>
         </div>
-        
+
         <div className="flex flex-wrap gap-2 mt-3">
-          {["What can you do?", "Help me plan my day", "Explain AI technology", "Creative writing tips"].map((suggestion) => (
+          {[
+            'What can you do?',
+            'Help me plan my day',
+            'Explain AI technology',
+            'Creative writing tips',
+          ].map(suggestion => (
             <Button
               key={suggestion}
               onClick={() => setInputMessage(suggestion)}

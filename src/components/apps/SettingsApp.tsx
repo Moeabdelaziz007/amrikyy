@@ -1,12 +1,20 @@
-import { useState } from "react";
-import { Settings, Palette, Bell, Shield, Monitor, User, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Slider } from "@/components/ui/slider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { WALLPAPER_THEMES, WallpaperTheme } from "../os/WallpaperManager";
-import { useWallpaper } from "../../contexts/WallpaperContext";
+import { useState } from 'react';
+import {
+  Settings,
+  Palette,
+  Bell,
+  Shield,
+  Monitor,
+  User,
+  Clock,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { WALLPAPER_THEMES, WallpaperTheme } from '../os/WallpaperManager';
+import { useWallpaper } from '../../contexts/WallpaperContext';
 
 export const SettingsApp = () => {
   const [notifications, setNotifications] = useState(true);
@@ -15,13 +23,13 @@ export const SettingsApp = () => {
   const [brightness, setBrightness] = useState([80]);
   const [volume, setVolume] = useState([70]);
   const [selectedWallpaper, setSelectedWallpaper] = useState('aurora');
-  
-  const { 
-    currentWallpaper, 
-    setCurrentWallpaper, 
-    timeBasedWallpaper, 
+
+  const {
+    currentWallpaper,
+    setCurrentWallpaper,
+    timeBasedWallpaper,
     setTimeBasedWallpaper,
-    timeOfDay 
+    timeOfDay,
   } = useWallpaper();
 
   return (
@@ -32,7 +40,9 @@ export const SettingsApp = () => {
           <Settings className="w-6 h-6 text-primary" />
           <div>
             <h2 className="text-xl font-semibold">System Settings</h2>
-            <p className="text-sm text-muted-foreground">Customize your AuraOS experience</p>
+            <p className="text-sm text-muted-foreground">
+              Customize your AuraOS experience
+            </p>
           </div>
         </div>
       </div>
@@ -45,7 +55,10 @@ export const SettingsApp = () => {
               <Palette className="w-4 h-4" />
               Appearance
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="flex items-center gap-2">
+            <TabsTrigger
+              value="notifications"
+              className="flex items-center gap-2"
+            >
               <Bell className="w-4 h-4" />
               Notifications
             </TabsTrigger>
@@ -71,14 +84,13 @@ export const SettingsApp = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Dark Mode</h4>
-                    <p className="text-sm text-muted-foreground">Enable dark theme</p>
+                    <p className="text-sm text-muted-foreground">
+                      Enable dark theme
+                    </p>
                   </div>
-                  <Switch
-                    checked={darkMode}
-                    onCheckedChange={setDarkMode}
-                  />
+                  <Switch checked={darkMode} onCheckedChange={setDarkMode} />
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Brightness</label>
                   <Slider
@@ -88,9 +100,11 @@ export const SettingsApp = () => {
                     step={1}
                     className="w-full"
                   />
-                  <p className="text-xs text-muted-foreground">{brightness[0]}%</p>
+                  <p className="text-xs text-muted-foreground">
+                    {brightness[0]}%
+                  </p>
                 </div>
-                
+
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Time-based Wallpaper</h4>
@@ -118,12 +132,12 @@ export const SettingsApp = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
-                  {WALLPAPER_THEMES.map((theme) => (
+                  {WALLPAPER_THEMES.map(theme => (
                     <div
                       key={theme.id}
                       className={`relative aspect-video rounded-lg cursor-pointer transition-all duration-300 ${
-                        currentWallpaper === theme.id 
-                          ? 'ring-2 ring-primary/70 shadow-lg scale-105' 
+                        currentWallpaper === theme.id
+                          ? 'ring-2 ring-primary/70 shadow-lg scale-105'
                           : 'hover:ring-2 hover:ring-primary/30 hover:scale-102'
                       }`}
                       onClick={() => {
@@ -131,31 +145,35 @@ export const SettingsApp = () => {
                         setCurrentWallpaper(theme.id);
                       }}
                       style={{
-                        background: `linear-gradient(135deg, ${theme.colors.join(', ')})`
+                        background: `linear-gradient(135deg, ${theme.colors.join(', ')})`,
                       }}
                     >
                       {/* Theme preview overlay */}
                       <div className="absolute inset-0 rounded-lg bg-black/20 flex items-center justify-center">
                         <div className="text-center text-white/90">
-                          <div className="text-sm font-medium">{theme.name}</div>
-                          <div className="text-xs opacity-75 capitalize">{theme.type}</div>
+                          <div className="text-sm font-medium">
+                            {theme.name}
+                          </div>
+                          <div className="text-xs opacity-75 capitalize">
+                            {theme.type}
+                          </div>
                         </div>
                       </div>
-                      
+
                       {/* Selection indicator */}
                       {currentWallpaper === theme.id && (
                         <div className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
                           <div className="w-2 h-2 bg-white rounded-full" />
                         </div>
                       )}
-                      
+
                       {/* Animation indicator */}
                       {theme.type === 'animated' && (
                         <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/50 rounded text-xs text-white/80">
                           ✨ Animated
                         </div>
                       )}
-                      
+
                       {/* Particle indicator */}
                       {theme.type === 'particle' && (
                         <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/50 rounded text-xs text-white/80">
@@ -165,12 +183,18 @@ export const SettingsApp = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Current wallpaper info */}
                 <div className="mt-4 p-3 bg-black/20 rounded-lg">
                   <div className="flex items-center gap-2 text-sm">
                     <Clock className="w-4 h-4" />
-                    <span>Current: {WALLPAPER_THEMES.find(t => t.id === currentWallpaper)?.name}</span>
+                    <span>
+                      Current:{' '}
+                      {
+                        WALLPAPER_THEMES.find(t => t.id === currentWallpaper)
+                          ?.name
+                      }
+                    </span>
                     {timeBasedWallpaper && (
                       <span className="text-primary">• Auto-changing</span>
                     )}
@@ -192,14 +216,16 @@ export const SettingsApp = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Enable Notifications</h4>
-                    <p className="text-sm text-muted-foreground">Receive system notifications</p>
+                    <p className="text-sm text-muted-foreground">
+                      Receive system notifications
+                    </p>
                   </div>
                   <Switch
                     checked={notifications}
                     onCheckedChange={setNotifications}
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Volume</label>
                   <Slider
@@ -227,18 +253,18 @@ export const SettingsApp = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-medium">Auto-save Data</h4>
-                    <p className="text-sm text-muted-foreground">Automatically save your work</p>
+                    <p className="text-sm text-muted-foreground">
+                      Automatically save your work
+                    </p>
                   </div>
-                  <Switch
-                    checked={autoSave}
-                    onCheckedChange={setAutoSave}
-                  />
+                  <Switch checked={autoSave} onCheckedChange={setAutoSave} />
                 </div>
-                
+
                 <div className="space-y-2">
                   <h4 className="font-medium">Data Collection</h4>
                   <p className="text-sm text-muted-foreground">
-                    We collect minimal data to improve your experience. Your data is encrypted and secure.
+                    We collect minimal data to improve your experience. Your
+                    data is encrypted and secure.
                   </p>
                 </div>
               </CardContent>
@@ -272,12 +298,18 @@ export const SettingsApp = () => {
                     <p className="font-medium">Today</p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-2">
-                  <Button variant="outline" className="flex-1 glass border-white/20">
+                  <Button
+                    variant="outline"
+                    className="flex-1 glass border-white/20"
+                  >
                     Check Updates
                   </Button>
-                  <Button variant="outline" className="flex-1 glass border-white/20">
+                  <Button
+                    variant="outline"
+                    className="flex-1 glass border-white/20"
+                  >
                     Restart System
                   </Button>
                 </div>

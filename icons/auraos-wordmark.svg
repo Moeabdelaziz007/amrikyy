@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Premium gradient for text -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#f093fb;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#f5576c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Secondary gradient for subtitle -->
+    <linearGradient id="subtitleGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00c6ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect for the icon -->
+    <radialGradient id="iconGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="70%" style="stop-color:#667eea;stop-opacity:0.2" />
+      <stop offset="100%" style="stop-color:#667eea;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Filters -->
+    <filter id="textShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="offset"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <filter id="iconGlowFilter" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Icon on the left -->
+  <g transform="translate(60, 60)">
+    <!-- Hexagon background -->
+    <polygon points="0,-25 21.65,-12.5 21.65,12.5 0,25 -21.65,12.5 -21.65,-12.5" 
+             fill="url(#textGradient)" 
+             filter="url(#iconGlowFilter)"/>
+    
+    <!-- Inner hexagon -->
+    <polygon points="0,-18 15.59,-9 15.59,9 0,18 -15.59,9 -15.59,-9" 
+             fill="url(#iconGlow)" 
+             opacity="0.6"/>
+    
+    <!-- Central AI node -->
+    <circle cx="0" cy="0" r="4" fill="#ffffff"/>
+    
+    <!-- Neural connections -->
+    <g stroke="#ffffff" stroke-width="1.5" opacity="0.8">
+      <line x1="0" y1="0" x2="0" y2="-15"/>
+      <line x1="0" y1="0" x2="13" y2="-7.5"/>
+      <line x1="0" y1="0" x2="13" y2="7.5"/>
+      <line x1="0" y1="0" x2="0" y2="15"/>
+      <line x1="0" y1="0" x2="-13" y2="7.5"/>
+      <line x1="0" y1="0" x2="-13" y2="-7.5"/>
+    </g>
+    
+    <!-- Connection nodes -->
+    <circle cx="0" cy="-15" r="2" fill="#00c6ff"/>
+    <circle cx="13" cy="-7.5" r="2" fill="#00c6ff"/>
+    <circle cx="13" cy="7.5" r="2" fill="#00c6ff"/>
+    <circle cx="0" cy="15" r="2" fill="#00c6ff"/>
+    <circle cx="-13" cy="7.5" r="2" fill="#00c6ff"/>
+    <circle cx="-13" cy="-7.5" r="2" fill="#00c6ff"/>
+  </g>
+  
+  <!-- Main text -->
+  <text x="120" y="50" fill="url(#textGradient)" 
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="42" font-weight="800" letter-spacing="1px"
+        filter="url(#textShadow)">
+    AURA
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="120" y="75" fill="url(#subtitleGradient)" 
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="14" font-weight="500" letter-spacing="3px" opacity="0.9">
+    OPERATING SYSTEM
+  </text>
+  
+  <!-- Tagline -->
+  <text x="120" y="95" fill="url(#subtitleGradient)" 
+        font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" 
+        font-size="12" font-weight="400" letter-spacing="1px" opacity="0.7">
+    AI-POWERED • NEXT-GEN • PREMIUM
+  </text>
+</svg>

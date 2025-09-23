@@ -58,10 +58,16 @@ export default defineConfig({
   },
   define: {
     'import.meta.env.VITE_FIREBASE_API_KEY': JSON.stringify('test-api-key'),
-    'import.meta.env.VITE_FIREBASE_AUTH_DOMAIN': JSON.stringify('test-project.firebaseapp.com'),
-    'import.meta.env.VITE_FIREBASE_PROJECT_ID': JSON.stringify('test-project-id'),
-    'import.meta.env.VITE_FIREBASE_STORAGE_BUCKET': JSON.stringify('test-project.appspot.com'),
-    'import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID': JSON.stringify('123456789'),
+    'import.meta.env.VITE_FIREBASE_AUTH_DOMAIN': JSON.stringify(
+      'test-project.firebaseapp.com'
+    ),
+    'import.meta.env.VITE_FIREBASE_PROJECT_ID':
+      JSON.stringify('test-project-id'),
+    'import.meta.env.VITE_FIREBASE_STORAGE_BUCKET': JSON.stringify(
+      'test-project.appspot.com'
+    ),
+    'import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID':
+      JSON.stringify('123456789'),
     'import.meta.env.VITE_FIREBASE_APP_ID': JSON.stringify('test-app-id'),
   },
 });

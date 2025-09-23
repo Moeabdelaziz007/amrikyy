@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Clock, Wifi, Battery, Volume2, Grid3X3, Palette } from "lucide-react";
-import { AppDock } from "./AppDock";
-import { WindowManager } from "./WindowManager";
-import { WallpaperManager } from "./WallpaperManager";
-import { SmartAppLauncher } from "./SmartAppLauncher";
-import { AppStore } from "./AppStore";
-import { PremiumWallpaperManager, ThemeSelector } from "./PremiumWallpaperManager";
-import { useWallpaper } from "../../contexts/WallpaperContext";
+import React, { useState } from 'react';
+import { Clock, Wifi, Battery, Volume2, Grid3X3, Palette } from 'lucide-react';
+import { AppDock } from './AppDock';
+import { WindowManager } from './WindowManager';
+import { WallpaperManager } from './WallpaperManager';
+import { SmartAppLauncher } from './SmartAppLauncher';
+import { AppStore } from './AppStore';
+import {
+  PremiumWallpaperManager,
+  ThemeSelector,
+} from './PremiumWallpaperManager';
+import { useWallpaper } from '../../contexts/WallpaperContext';
 
 export const OSDesktop = () => {
   const [time, setTime] = useState(new Date());
@@ -46,11 +49,11 @@ export const OSDesktop = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {/* Premium Dynamic Wallpaper */}
-      <PremiumWallpaperManager 
+      <PremiumWallpaperManager
         currentTheme={currentWallpaper}
         onThemeChange={setCurrentWallpaper}
       />
-      
+
       {/* Top Menu Bar */}
       <div className="relative z-50 h-8 w-full glass-premium border-b border-white/10 flex items-center justify-between px-4">
         <div className="flex items-center space-x-4">
@@ -83,7 +86,7 @@ export const OSDesktop = () => {
             </button>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-4 text-sm text-foreground/80">
           <div className="flex items-center space-x-2">
             <Wifi className="w-4 h-4" />
@@ -92,14 +95,19 @@ export const OSDesktop = () => {
           </div>
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4" />
-            <span>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            <span>
+              {time.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
           </div>
         </div>
       </div>
 
       {/* Desktop Content Area */}
       <div className="relative flex-1 h-[calc(100vh-8rem)]">
-        <WindowManager 
+        <WindowManager
           openApps={openApps}
           activeApp={activeApp}
           onClose={closeApp}
@@ -109,17 +117,13 @@ export const OSDesktop = () => {
       </div>
 
       {/* App Dock */}
-      <AppDock 
-        onAppClick={openApp}
-        openApps={openApps}
-        activeApp={activeApp}
-      />
+      <AppDock onAppClick={openApp} openApps={openApps} activeApp={activeApp} />
 
       {/* Smart App Launcher */}
       <SmartAppLauncher
         isOpen={isAppLauncherOpen}
         onClose={() => setIsAppLauncherOpen(false)}
-        onAppClick={(appId) => {
+        onAppClick={appId => {
           openApp(appId);
           setIsAppLauncherOpen(false);
         }}
@@ -129,7 +133,7 @@ export const OSDesktop = () => {
       <AppStore
         isOpen={isAppStoreOpen}
         onClose={() => setIsAppStoreOpen(false)}
-        onInstall={(appId) => {
+        onInstall={appId => {
           console.log(`Installing app: ${appId}`);
           // Here you would implement the actual installation logic
           setIsAppStoreOpen(false);

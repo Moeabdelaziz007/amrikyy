@@ -25,7 +25,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   theme,
   colors,
   particleCount = 30,
-  className = ''
+  className = '',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
@@ -50,7 +50,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
     // Initialize particles based on theme
     const initializeParticles = () => {
       particlesRef.current = [];
-      
+
       for (let i = 0; i < particleCount; i++) {
         const particle: Particle = {
           id: i,
@@ -62,7 +62,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
           opacity: Math.random() * 0.5 + 0.2,
           color: colors[Math.floor(Math.random() * colors.length)],
           life: 0,
-          maxLife: Math.random() * 300 + 200
+          maxLife: Math.random() * 300 + 200,
         };
         particlesRef.current.push(particle);
       }
@@ -117,7 +117,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
 
           if (distance < 100) {
             ctx.save();
-            ctx.globalAlpha = (100 - distance) / 100 * 0.1;
+            ctx.globalAlpha = ((100 - distance) / 100) * 0.1;
             ctx.strokeStyle = particle.color;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
@@ -152,11 +152,14 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
 };
 
 // Specialized particle systems for different themes
-export const MatrixParticles: React.FC<{ className?: string }> = ({ className = '' }) => {
+export const MatrixParticles: React.FC<{ className?: string }> = ({
+  className = '',
+}) => {
   const [matrixChars, setMatrixChars] = React.useState<string[]>([]);
 
   useEffect(() => {
-    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const chars =
+      '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
     setMatrixChars(chars.split(''));
   }, []);
 
@@ -172,13 +175,13 @@ export const MatrixParticles: React.FC<{ className?: string }> = ({ className = 
           }}
           animate={{
             y: [0, window.innerHeight + 100],
-            opacity: [0, 0.3, 0]
+            opacity: [0, 0.3, 0],
           }}
           transition={{
             duration: Math.random() * 10 + 5,
             repeat: Infinity,
             delay: Math.random() * 5,
-            ease: "linear"
+            ease: 'linear',
           }}
         >
           {matrixChars[Math.floor(Math.random() * matrixChars.length)]}
@@ -188,7 +191,9 @@ export const MatrixParticles: React.FC<{ className?: string }> = ({ className = 
   );
 };
 
-export const StarField: React.FC<{ className?: string }> = ({ className = '' }) => {
+export const StarField: React.FC<{ className?: string }> = ({
+  className = '',
+}) => {
   return (
     <div className={`absolute inset-0 ${className}`}>
       {Array.from({ length: 100 }).map((_, i) => (
@@ -201,13 +206,13 @@ export const StarField: React.FC<{ className?: string }> = ({ className = '' }) 
           }}
           animate={{
             opacity: [0, 1, 0],
-            scale: [0.5, 1, 0.5]
+            scale: [0.5, 1, 0.5],
           }}
           transition={{
             duration: Math.random() * 3 + 1,
             repeat: Infinity,
             delay: Math.random() * 2,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
         />
       ))}
