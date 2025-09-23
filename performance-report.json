@@ -1,0 +1,28 @@
+{
+  "bundleSize": {
+    "totalSize": 56477,
+    "totalSizeMB": "0.05",
+    "status": "good"
+  },
+  "loadTime": {},
+  "optimization": {
+    "Terser Minification": true,
+    "Code Splitting": true,
+    "Tree Shaking": true,
+    "CSS Code Split": true,
+    "Bundle Analyzer": true,
+    "Console Removal": true,
+    "Source Map (Dev Only)": true,
+    "Tailwind Purge Content": true,
+    "Tailwind Dark Mode": true,
+    "Tailwind Custom Colors": true,
+    "Tailwind Custom Animations": true,
+    "Tailwind Custom Fonts": true,
+    "SW Static Caching": true,
+    "SW Dynamic Caching": true,
+    "SW Cache First Strategy": true,
+    "SW Network First Strategy": true,
+    "SW Stale While Revalidate": true,
+    "SW Cache Cleanup": true
+  }
+}

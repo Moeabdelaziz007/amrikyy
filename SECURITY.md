@@ -5,32 +5,87 @@
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.0.x   | :white_check_mark: |
+| < 1.0   | :x:                |
 
 ## Reporting a Vulnerability
 
-We take the security of AuraOS seriously. If you discover a security vulnerability, please follow these steps:
+We take security vulnerabilities seriously. If you discover a security vulnerability, please follow these steps:
 
-1. **Do not** create a public GitHub issue for the vulnerability
-2. Email security concerns to: [security@auraos.dev] or create a private security advisory
-3. Include as much information as possible:
+1. **DO NOT** create a public GitHub issue
+2. Email us at security@auraos.com with:
    - Description of the vulnerability
    - Steps to reproduce
    - Potential impact
    - Suggested fix (if any)
 
+3. We will:
+   - Acknowledge receipt within 24 hours
+   - Provide regular updates on our progress
+   - Credit you in our security advisories (if desired)
+
 ## Security Measures
 
-- All secrets and API keys must be stored in environment variables
-- Firebase service account keys should never be committed to the repository
-- All API endpoints implement proper authentication and authorization
-- Input validation is enforced on all user inputs
-- HTTPS is enforced in production environments
-- Regular security audits are performed using CodeQL and other tools
+### Authentication & Authorization
+- JWT-based authentication with secure token handling
+- Role-based access control (RBAC)
+- Multi-factor authentication support
+- Session management with secure cookies
 
-## Response Timeline
+### Data Protection
+- Encryption at rest and in transit
+- Secure password hashing with bcrypt
+- Input validation and sanitization
+- SQL injection prevention
+- XSS protection
 
-- We will acknowledge receipt of your vulnerability report within 48 hours
-- We will provide a detailed response within 7 days
-- We will work on a fix and coordinate disclosure timing with you
+### Infrastructure Security
+- Container security with non-root users
+- Network segmentation
+- Regular security updates
+- Vulnerability scanning
+- Security headers implementation
 
-Thank you for helping keep AuraOS secure!
+### Code Security
+- Static code analysis with Bandit
+- Dependency vulnerability scanning
+- Secure coding practices
+- Regular security audits
+
+## Security Best Practices
+
+### For Developers
+1. Never commit secrets or API keys
+2. Use environment variables for sensitive data
+3. Validate all inputs
+4. Use parameterized queries
+5. Implement proper error handling
+6. Keep dependencies updated
+7. Follow OWASP guidelines
+
+### For Deployment
+1. Use HTTPS in production
+2. Implement rate limiting
+3. Configure proper CORS policies
+4. Use security headers
+5. Monitor for suspicious activity
+6. Regular backup and recovery testing
+7. Keep systems updated
+
+## Security Checklist
+
+- [ ] All secrets stored in environment variables
+- [ ] HTTPS enabled in production
+- [ ] Security headers configured
+- [ ] Rate limiting implemented
+- [ ] Input validation in place
+- [ ] Authentication required for sensitive endpoints
+- [ ] Logging and monitoring configured
+- [ ] Regular security updates scheduled
+- [ ] Vulnerability scanning automated
+- [ ] Backup and recovery tested
+
+## Contact
+
+For security-related questions or concerns, contact us at:
+- Email: security@auraos.com
+- PGP Key: [Available upon request]

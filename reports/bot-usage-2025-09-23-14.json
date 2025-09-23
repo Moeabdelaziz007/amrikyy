@@ -1,0 +1,45 @@
+{
+  "reportType": "bot_usage",
+  "period": "hourly",
+  "timestamp": "2025-09-23T11:59:10.121Z",
+  "users": {
+    "total": 5,
+    "active": 1,
+    "new": 2
+  },
+  "messages": {
+    "total": 29,
+    "commands": 16,
+    "responses": 9
+  },
+  "commands": {
+    "/start": 2,
+    "/help": 0,
+    "/status": 3,
+    "/menu": 4,
+    "/task": 4,
+    "/autopilot": 7
+  },
+  "performance": {
+    "averageResponseTime": "55.42ms",
+    "successRate": "100.0%",
+    "errorCount": 0
+  },
+  "topUsers": [
+    {
+      "userId": "user_001",
+      "messageCount": 9,
+      "username": "محمد"
+    },
+    {
+      "userId": "user_002",
+      "messageCount": 12,
+      "username": "فاطمة"
+    },
+    {
+      "userId": "user_003",
+      "messageCount": 7,
+      "username": "أحمد"
+    }
+  ]
+}

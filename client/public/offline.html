@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraOS - غير متصل</title>
+    <meta name="theme-color" content="#1a73e8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .offline-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .offline-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1557b0;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 600px) {
+            .offline-container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>غير متصل بالإنترنت</h1>
+        <p>
+            يبدو أنك غير متصل بالإنترنت حالياً.
+            لا تقلق، يمكنك الاستمرار في استخدام AuraOS مع المحتوى المحفوظ.
+        </p>
+
+        <div class="actions">
+            <button class="btn btn-primary" onclick="tryAgain()">
+                المحاولة مرة أخرى
+            </button>
+            <button class="btn btn-secondary" onclick="goOffline()">
+                متابعة العمل دون اتصال
+            </button>
+            <button class="btn btn-secondary" onclick="viewCachedContent()">
+                عرض المحتوى المحفوظ
+            </button>
+        </div>
+
+        <div class="status">
+            <p id="status-text">
+                جاري التحقق من حالة الاتصال...
+            </p>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>جاري المحاولة...</p>
+        </div>
+    </div>
+
+    <script>
+        // Check online status
+        function updateOnlineStatus() {
+            const statusText = document.getElementById('status-text');
+
+            if (navigator.onLine) {
+                statusText.textContent = 'متصل بالإنترنت ✅';
+                statusText.style.color = '#4CAF50';
+            } else {
+                statusText.textContent = 'غير متصل بالإنترنت ❌';
+                statusText.style.color = '#f44336';
+            }
+        }
+
+        // Try to reconnect
+        function tryAgain() {
+            const loading = document.getElementById('loading');
+            const btnPrimary = document.querySelector('.btn-primary');
+
+            loading.classList.add('show');
+            btnPrimary.disabled = true;
+            btnPrimary.textContent = 'جاري المحاولة...';
+
+            setTimeout(() => {
+                loading.classList.remove('show');
+                btnPrimary.disabled = false;
+                btnPrimary.textContent = 'المحاولة مرة أخرى';
+
+                updateOnlineStatus();
+
+                if (navigator.onLine) {
+                    // Try to reload the main app
+                    window.location.href = '/';
+                } else {
+                    alert('لا يزال الاتصال غير متاح. يرجى التحقق من إعدادات الشبكة.');
+                }
+            }, 3000);
+        }
+
+        // Go offline mode
+        function goOffline() {
+            alert('تم تفعيل وضع العمل دون اتصال. يمكنك الوصول للمحتوى المحفوظ.');
+        }
+
+        // View cached content
+        function viewCachedContent() {
+            alert('سيتم عرض المحتوى المحفوظ قريباً.');
+        }
+
+        // Check initial status
+        updateOnlineStatus();
+
+        // Listen for online/offline events
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Service worker registration check
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // Auto retry when coming back online
+        window.addEventListener('online', () => {
+            setTimeout(() => {
+                if (confirm('تم استعادة الاتصال! هل تريد إعادة تحميل التطبيق؟')) {
+                    window.location.href = '/';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

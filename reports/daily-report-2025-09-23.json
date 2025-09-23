@@ -1,0 +1,33 @@
+{
+  "date": "2025-09-23",
+  "totalEvents": 3,
+  "eventsByType": {
+    "system_event": 1,
+    "performance": 1,
+    "user_action": 1
+  },
+  "eventsByLevel": {
+    "info": 3
+  },
+  "timeline": [
+    {
+      "time": "2025-09-23T11:58:13.977Z",
+      "type": "system_event",
+      "level": "info",
+      "message": "تم تشغيل نظام تسجيل الأحداث"
+    },
+    {
+      "time": "2025-09-23T11:58:14.073Z",
+      "type": "performance",
+      "level": "info",
+      "message": "اختبار الأداء مكتمل"
+    },
+    {
+      "time": "2025-09-23T11:58:14.074Z",
+      "type": "user_action",
+      "level": "info",
+      "message": "مستخدم جديد بدأ استخدام البوت"
+    }
+  ],
+  "generatedAt": "2025-09-23T11:58:14.076Z"
+}

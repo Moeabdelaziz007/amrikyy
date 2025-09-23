@@ -1,0 +1,1097 @@
+/* 🚀 AmrikyyOS Professional AI Theme */
+/* Modern professional design with AmrikyyOS brand identity and AI enhancements */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* 🚀 AmrikyyOS Brand Colors */
+  --amrikyyos-primary: #00ff88; /* Electric Green - AmrikyyOS signature color */
+  --amrikyyos-primary-dark: #00cc6a;
+  --amrikyyos-primary-light: #33ff99;
+  --amrikyyos-secondary: #00d9ff; /* Cyber Blue */
+  --amrikyyos-secondary-dark: #00b8e6;
+  --amrikyyos-secondary-light: #33e0ff;
+  --amrikyyos-accent: #9d4edd; /* Vivid Purple */
+  --amrikyyos-accent-dark: #7c3aed;
+  --amrikyyos-accent-light: #b366e6;
+  --amrikyyos-warning: #ffb347; /* Cyber Orange */
+  --amrikyyos-warning-dark: #ff9500;
+  --amrikyyos-warning-light: #ffc266;
+  --amrikyyos-error: #ff4757; /* Cyber Red */
+  --amrikyyos-error-dark: #ff3742;
+  --amrikyyos-error-light: #ff6b77;
+  --amrikyyos-success: #00ff88; /* Electric Green */
+  --amrikyyos-success-dark: #00cc6a;
+  --amrikyyos-success-light: #33ff99;
+  --amrikyyos-info: #00d9ff; /* Cyber Blue */
+  --amrikyyos-info-dark: #00b8e6;
+  --amrikyyos-info-light: #33e0ff;
+
+  /* 🎨 AI Enhanced Colors */
+  --ai-primary: var(--amrikyyos-primary);
+  --ai-primary-dark: var(--amrikyyos-primary-dark);
+  --ai-secondary: var(--amrikyyos-secondary);
+  --ai-accent: var(--amrikyyos-accent);
+  --ai-warning: var(--amrikyyos-warning);
+  --ai-error: var(--amrikyyos-error);
+  --ai-success: var(--amrikyyos-success);
+  --ai-info: var(--amrikyyos-info);
+
+  /* 🌟 Professional System Colors */
+  --system-background: #ffffff;
+  --system-background-secondary: #f8fafc;
+  --system-background-tertiary: #f1f5f9;
+  --system-grouped-background: #f8fafc;
+  --system-grouped-background-secondary: #ffffff;
+  --system-fill: #e2e8f0;
+  --system-fill-secondary: #cbd5e1;
+  --system-fill-tertiary: #94a3b8;
+  --system-fill-quaternary: #64748b;
+
+  /* 🌙 Dark Mode Colors */
+  --system-background-dark: #0f172a;
+  --system-background-secondary-dark: #1e293b;
+  --system-background-tertiary-dark: #334155;
+  --system-grouped-background-dark: #0f172a;
+  --system-grouped-background-secondary-dark: #1e293b;
+  --system-fill-dark: #334155;
+  --system-fill-secondary-dark: #475569;
+  --system-fill-tertiary-dark: #64748b;
+  --system-fill-quaternary-dark: #94a3b8;
+
+  /* 🎭 Professional Glass Morphism */
+  --glass-background: rgba(255, 255, 255, 0.85);
+  --glass-background-dark: rgba(15, 23, 42, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-border-dark: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --glass-shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  /* 🔮 AmrikyyOS AI Glow Effects */
+  --amrikyyos-glow-primary: 0 0 20px rgba(0, 255, 136, 0.4);
+  --amrikyyos-glow-secondary: 0 0 20px rgba(0, 217, 255, 0.4);
+  --amrikyyos-glow-accent: 0 0 20px rgba(157, 78, 221, 0.4);
+  --amrikyyos-glow-warning: 0 0 20px rgba(255, 179, 71, 0.4);
+  --amrikyyos-glow-error: 0 0 20px rgba(255, 71, 87, 0.4);
+
+  /* 📐 Professional Typography */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-text: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+
+  /* 🎯 Professional Spacing System */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* 🔄 Professional Border Radius */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ⚡ Professional Transitions */
+  --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* 🎨 Professional Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+  --shadow-2xl: 0 24px 64px rgba(0, 0, 0, 0.3);
+
+  /* 🌊 Professional Blur Effects */
+  --blur-sm: blur(8px);
+  --blur-md: blur(16px);
+  --blur-lg: blur(24px);
+  --blur-xl: blur(32px);
+}
+
+/* 🌙 Dark Mode Variables */
+.dark {
+  --system-background: var(--system-background-dark);
+  --system-background-secondary: var(--system-background-secondary-dark);
+  --system-background-tertiary: var(--system-background-tertiary-dark);
+  --system-grouped-background: var(--system-grouped-background-dark);
+  --system-grouped-background-secondary: var(--system-grouped-background-secondary-dark);
+  --system-fill: var(--system-fill-dark);
+  --system-fill-secondary: var(--system-fill-secondary-dark);
+  --system-fill-tertiary: var(--system-fill-tertiary-dark);
+  --system-fill-quaternary: var(--system-fill-quaternary-dark);
+  --glass-background: var(--glass-background-dark);
+  --glass-border: var(--glass-border-dark);
+  --glass-shadow: var(--glass-shadow-dark);
+}
+
+/* 🎯 Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--system-background-dark);
+  background: linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.1) 0%, transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.1) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.1) 0%, transparent 40%);
+  animation: amrikyyos-background-pulse 20s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: amrikyyos-grid-move 30s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes amrikyyos-background-pulse {
+  0%, 100% { 
+    opacity: 0.3; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.6; 
+    transform: scale(1.1); 
+  }
+}
+
+@keyframes amrikyyos-grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.dark body {
+  color: var(--system-background);
+  background: linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%);
+}
+
+.dark body::before {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.15) 0%, transparent 40%);
+}
+
+/* 🚀 AmrikyyOS Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; }
+h2 { font-size: 2rem; font-weight: 600; }
+h3 { font-size: 1.5rem; font-weight: 600; }
+h4 { font-size: 1.25rem; font-weight: 500; }
+h5 { font-size: 1.125rem; font-weight: 500; }
+h6 { font-size: 1rem; font-weight: 500; }
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 🎨 AmrikyyOS Glass Components */
+.amrikyyos-glass {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  transition: all var(--transition-normal);
+}
+
+.amrikyyos-glass:hover {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.dark .amrikyyos-glass {
+  background: var(--glass-background-dark);
+  border-color: var(--glass-border-dark);
+}
+
+.dark .amrikyyos-glass:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Glass */
+.amrikyyos-ai-glass {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow), var(--amrikyyos-glow-primary);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.amrikyyos-ai-glass::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.1),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.amrikyyos-ai-glass:hover::before {
+  left: 100%;
+}
+
+.amrikyyos-ai-glass:hover {
+  box-shadow: var(--shadow-xl), var(--amrikyyos-glow-primary);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.dark .amrikyyos-ai-glass {
+  background: var(--glass-background-dark);
+  border-color: var(--glass-border-dark);
+}
+
+/* 🎯 AmrikyyOS Buttons */
+.amrikyyos-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-family: var(--font-text);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.amrikyyos-button-primary {
+  background: var(--amrikyyos-primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.amrikyyos-button-primary:hover {
+  background: var(--amrikyyos-primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.amrikyyos-button-secondary {
+  background: var(--system-fill);
+  color: var(--system-background-dark);
+  border: 1px solid var(--system-fill-secondary);
+}
+
+.amrikyyos-button-secondary:hover {
+  background: var(--system-fill-secondary);
+  transform: translateY(-1px);
+}
+
+.dark .amrikyyos-button-secondary {
+  color: var(--system-background);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Buttons */
+.amrikyyos-ai-button {
+  background: linear-gradient(135deg, var(--amrikyyos-primary), var(--amrikyyos-secondary));
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--amrikyyos-glow-primary);
+}
+
+.amrikyyos-ai-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.amrikyyos-ai-button:hover::before {
+  left: 100%;
+}
+
+.amrikyyos-ai-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-lg), var(--amrikyyos-glow-primary);
+}
+
+.amrikyyos-ai-button:active {
+  transform: translateY(0) scale(1);
+}
+
+/* 🎨 AmrikyyOS Cards */
+.amrikyyos-card {
+  background: var(--system-background);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--system-fill-secondary);
+  transition: all var(--transition-normal);
+  overflow: hidden;
+}
+
+.amrikyyos-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.dark .amrikyyos-card {
+  background: var(--system-background-secondary-dark);
+  border-color: var(--system-fill-secondary-dark);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Cards */
+.amrikyyos-ai-card {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-md);
+  -webkit-backdrop-filter: var(--blur-md);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow), var(--amrikyyos-glow-primary);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.amrikyyos-ai-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--amrikyyos-primary),
+    var(--amrikyyos-secondary),
+    var(--amrikyyos-accent)
+  );
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.amrikyyos-ai-card:hover::before {
+  opacity: 1;
+}
+
+.amrikyyos-ai-card:hover {
+  box-shadow: var(--shadow-lg), var(--amrikyyos-glow-primary);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.dark .amrikyyos-ai-card {
+  background: var(--glass-background-dark);
+  border-color: var(--glass-border-dark);
+}
+
+/* 🎯 AmrikyyOS Navigation */
+.amrikyyos-nav {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-bottom: 1px solid var(--glass-border);
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.amrikyyos-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  color: var(--system-background-dark);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+}
+
+.amrikyyos-nav-item:hover {
+  background: var(--system-fill);
+  color: var(--amrikyyos-primary);
+}
+
+.amrikyyos-nav-item.active {
+  background: var(--amrikyyos-primary);
+  color: white;
+  box-shadow: var(--amrikyyos-glow-primary);
+}
+
+.dark .amrikyyos-nav-item {
+  color: var(--system-background);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Navigation */
+.amrikyyos-ai-nav {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-xl);
+  -webkit-backdrop-filter: var(--blur-xl);
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+}
+
+.amrikyyos-ai-nav::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--amrikyyos-primary),
+    var(--amrikyyos-secondary),
+    var(--amrikyyos-accent),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.amrikyyos-ai-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  color: var(--system-background-dark);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.amrikyyos-ai-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.1),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.amrikyyos-ai-nav-item:hover::before {
+  left: 100%;
+}
+
+.amrikyyos-ai-nav-item:hover {
+  background: var(--system-fill);
+  color: var(--amrikyyos-primary);
+  transform: translateX(4px);
+}
+
+.amrikyyos-ai-nav-item.active {
+  background: linear-gradient(135deg, var(--amrikyyos-primary), var(--amrikyyos-secondary));
+  color: white;
+  box-shadow: var(--amrikyyos-glow-primary);
+}
+
+.amrikyyos-ai-nav-item.active::before {
+  display: none;
+}
+
+.dark .amrikyyos-ai-nav-item {
+  color: var(--system-background);
+}
+
+/* 🎨 AmrikyyOS Sidebar */
+.amrikyyos-sidebar {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-lg);
+  -webkit-backdrop-filter: var(--blur-lg);
+  border-right: 1px solid var(--glass-border);
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
+
+.amrikyyos-sidebar-header {
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.amrikyyos-sidebar-nav {
+  padding: var(--spacing-lg);
+}
+
+.amrikyyos-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  color: var(--system-background-dark);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+}
+
+.amrikyyos-sidebar-item:hover {
+  background: var(--system-fill);
+  color: var(--amrikyyos-primary);
+  transform: translateX(4px);
+}
+
+.amrikyyos-sidebar-item.active {
+  background: var(--amrikyyos-primary);
+  color: white;
+  box-shadow: var(--amrikyyos-glow-primary);
+}
+
+.dark .amrikyyos-sidebar-item {
+  color: var(--system-background);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Sidebar */
+.amrikyyos-ai-sidebar {
+  background: var(--glass-background);
+  backdrop-filter: var(--blur-xl);
+  -webkit-backdrop-filter: var(--blur-xl);
+  border-right: 1px solid var(--glass-border);
+  width: 300px;
+  height: 100vh;
+  overflow-y: auto;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  position: relative;
+}
+
+.amrikyyos-ai-sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--amrikyyos-primary),
+    var(--amrikyyos-secondary),
+    var(--amrikyyos-accent),
+    transparent
+  );
+  opacity: 0.3;
+}
+
+.amrikyyos-ai-sidebar-header {
+  padding: var(--spacing-2xl);
+  border-bottom: 1px solid var(--glass-border);
+  position: relative;
+}
+
+.amrikyyos-ai-sidebar-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--amrikyyos-primary),
+    var(--amrikyyos-secondary),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+.amrikyyos-ai-sidebar-nav {
+  padding: var(--spacing-xl);
+}
+
+.amrikyyos-ai-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-xl);
+  color: var(--system-background-dark);
+  text-decoration: none;
+  transition: all var(--transition-normal);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.amrikyyos-ai-sidebar-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.1),
+    transparent
+  );
+  transition: left var(--transition-slow);
+}
+
+.amrikyyos-ai-sidebar-item:hover::before {
+  left: 100%;
+}
+
+.amrikyyos-ai-sidebar-item:hover {
+  background: var(--system-fill);
+  color: var(--amrikyyos-primary);
+  transform: translateX(8px) scale(1.02);
+  box-shadow: var(--amrikyyos-glow-primary);
+}
+
+.amrikyyos-ai-sidebar-item.active {
+  background: linear-gradient(135deg, var(--amrikyyos-primary), var(--amrikyyos-secondary));
+  color: white;
+  box-shadow: var(--amrikyyos-glow-primary);
+  transform: translateX(8px);
+}
+
+.amrikyyos-ai-sidebar-item.active::before {
+  display: none;
+}
+
+.dark .amrikyyos-ai-sidebar-item {
+  color: var(--system-background);
+}
+
+/* 🎯 AmrikyyOS Main Content */
+.amrikyyos-main {
+  margin-left: 280px;
+  padding: var(--spacing-xl);
+  min-height: 100vh;
+  background: var(--system-background);
+}
+
+.amrikyyos-ai-main {
+  margin-left: 300px;
+  padding: var(--spacing-2xl);
+  min-height: 100vh;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position: relative;
+}
+
+.amrikyyos-ai-main::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(0, 255, 136, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 217, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(157, 78, 221, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.dark .amrikyyos-main,
+.dark .amrikyyos-ai-main {
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* 🔮 AmrikyyOS AI Animations */
+@keyframes amrikyyos-pulse {
+  0%, 100% {
+    box-shadow: var(--amrikyyos-glow-primary);
+  }
+  50% {
+    box-shadow: var(--amrikyyos-glow-primary), 0 0 40px rgba(0, 255, 136, 0.5);
+  }
+}
+
+@keyframes amrikyyos-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes amrikyyos-glow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes amrikyyos-scan {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes amrikyyos-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* 🎨 Animation Classes */
+.amrikyyos-pulse {
+  animation: amrikyyos-pulse 2s ease-in-out infinite;
+}
+
+.amrikyyos-float {
+  animation: amrikyyos-float 3s ease-in-out infinite;
+}
+
+.amrikyyos-glow {
+  animation: amrikyyos-glow 2s ease-in-out infinite;
+}
+
+.amrikyyos-scan {
+  animation: amrikyyos-scan 3s linear infinite;
+}
+
+.amrikyyos-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 136, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: amrikyyos-shimmer 2s ease-in-out infinite;
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 1024px) {
+  .amrikyyos-sidebar,
+  .amrikyyos-ai-sidebar {
+    width: 280px;
+  }
+  
+  .amrikyyos-main,
+  .amrikyyos-ai-main {
+    margin-left: 280px;
+    padding: var(--spacing-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  .amrikyyos-sidebar,
+  .amrikyyos-ai-sidebar {
+    width: 100%;
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+    z-index: 1000;
+  }
+  
+  .amrikyyos-sidebar.open,
+  .amrikyyos-ai-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .amrikyyos-main,
+  .amrikyyos-ai-main {
+    margin-left: 0;
+    padding: var(--spacing-md);
+  }
+  
+  .amrikyyos-ai-nav {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .amrikyyos-ai-nav h1 {
+    font-size: 1.5rem;
+  }
+  
+  .amrikyyos-ai-nav p {
+    font-size: 0.875rem;
+  }
+  
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+  
+  .amrikyyos-ai-card,
+  .amrikyyos-card {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .amrikyyos-ai-button,
+  .amrikyyos-button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .amrikyyos-main,
+  .amrikyyos-ai-main {
+    padding: var(--spacing-sm);
+  }
+  
+  .amrikyyos-ai-nav {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .amrikyyos-ai-nav h1 {
+    font-size: 1.25rem;
+  }
+  
+  .amrikyyos-ai-nav p {
+    font-size: 0.75rem;
+  }
+  
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.125rem; }
+  h4 { font-size: 1rem; }
+  
+  .amrikyyos-ai-sidebar-header {
+    padding: var(--spacing-lg);
+  }
+  
+  .amrikyyos-ai-sidebar-nav {
+    padding: var(--spacing-md);
+  }
+  
+  .amrikyyos-ai-sidebar-item {
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+  
+  .amrikyyos-ai-card,
+  .amrikyyos-card {
+    border-radius: var(--radius-md);
+  }
+  
+  .amrikyyos-ai-button,
+  .amrikyyos-button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+  
+  .amrikyyos-ai-sidebar-item {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .amrikyyos-main,
+  .amrikyyos-ai-main {
+    padding: var(--spacing-xs);
+  }
+  
+  .amrikyyos-ai-nav {
+    padding: var(--spacing-xs);
+  }
+  
+  .amrikyyos-ai-nav h1 {
+    font-size: 1.125rem;
+  }
+  
+  .amrikyyos-ai-nav p {
+    font-size: 0.625rem;
+  }
+  
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.125rem; }
+  h3 { font-size: 1rem; }
+  h4 { font-size: 0.875rem; }
+  
+  .amrikyyos-ai-sidebar-header {
+    padding: var(--spacing-md);
+  }
+  
+  .amrikyyos-ai-sidebar-nav {
+    padding: var(--spacing-sm);
+  }
+  
+  .amrikyyos-ai-sidebar-item {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-xs);
+    font-size: 0.75rem;
+  }
+  
+  .amrikyyos-ai-button,
+  .amrikyyos-button {
+    padding: var(--spacing-xs);
+    font-size: 0.625rem;
+  }
+}
+
+/* 🎯 Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .amrikyyos-pulse,
+  .amrikyyos-float,
+  .amrikyyos-glow,
+  .amrikyyos-scan,
+  .amrikyyos-shimmer {
+    animation: none;
+  }
+  
+  * {
+    transition: none !important;
+  }
+}
+
+/* 🌙 Dark Mode Optimizations */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --system-background: var(--system-background-dark);
+    --system-background-secondary: var(--system-background-secondary-dark);
+    --system-background-tertiary: var(--system-background-tertiary-dark);
+    --system-grouped-background: var(--system-grouped-background-dark);
+    --system-grouped-background-secondary: var(--system-grouped-background-secondary-dark);
+    --system-fill: var(--system-fill-dark);
+    --system-fill-secondary: var(--system-fill-secondary-dark);
+    --system-fill-tertiary: var(--system-fill-tertiary-dark);
+    --system-fill-quaternary: var(--system-fill-quaternary-dark);
+    --glass-background: var(--glass-background-dark);
+    --glass-border: var(--glass-border-dark);
+    --glass-shadow: var(--glass-shadow-dark);
+  }
+}
+
+/* 🎨 Custom Scrollbar */
+.amrikyyos-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.amrikyyos-scrollbar::-webkit-scrollbar-track {
+  background: var(--system-fill);
+  border-radius: var(--radius-full);
+}
+
+.amrikyyos-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--amrikyyos-primary);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+
+.amrikyyos-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--amrikyyos-primary-dark);
+}
+
+/* 🔮 AmrikyyOS AI Enhanced Scrollbar */
+.amrikyyos-ai-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.amrikyyos-ai-scrollbar::-webkit-scrollbar-track {
+  background: var(--system-fill);
+  border-radius: var(--radius-full);
+}
+
+.amrikyyos-ai-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--amrikyyos-primary), var(--amrikyyos-secondary));
+  border-radius: var(--radius-full);
+  box-shadow: var(--amrikyyos-glow-primary);
+  transition: all var(--transition-normal);
+}
+
+.amrikyyos-ai-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--amrikyyos-primary-dark), var(--amrikyyos-secondary-dark));
+  box-shadow: var(--amrikyyos-glow-primary), 0 0 20px rgba(0, 255, 136, 0.5);
+}

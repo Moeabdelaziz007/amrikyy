@@ -1,0 +1,51 @@
+{
+  "name": "AuraOS Development Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "auraos-server",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "ms-python.flake8",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "typescript.preferences.quoteStyle": "single",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [3000, 3001, 5432, 6379, 9090],
+  
+  "postCreateCommand": "npm install && pip install -r requirements.txt || echo 'تحقق من ملف requirements.txt'",
+  
+  "remoteUser": "node"
+}

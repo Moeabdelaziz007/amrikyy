@@ -1,125 +1,141 @@
-version: "3.8"
+version: '3.8'
 
 services:
+  # Core Services
   redis:
-    image: redis:7-alpine
-    container_name: aura_redis
+    image: redis:7.2-alpine
+    container_name: auraos-redis
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
-    restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  logic_agent:
-    build: 
-      context: ./mcp
-      dockerfile: Dockerfile
-    container_name: aura_logic_agent
-    volumes:
-      - ./mcp/agents:/app/agents
-      - ./mcp/shared:/app/shared
-    working_dir: /app
-    command: python agents/logic_agent.py
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      AGENT_TYPE: logic
-      LOG_LEVEL: INFO
-    depends_on:
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import redis; r=redis.Redis(host='redis'); r.ping()"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  creativity_agent:
-    build: 
-      context: ./mcp
-      dockerfile: Dockerfile
-    container_name: aura_creativity_agent
-    volumes:
-      - ./mcp/agents:/app/agents
-      - ./mcp/shared:/app/shared
-    working_dir: /app
-    command: python agents/creativity_agent.py
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      AGENT_TYPE: creativity
-      LOG_LEVEL: INFO
-    depends_on:
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import redis; r=redis.Redis(host='redis'); r.ping()"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  optimization_agent:
-    build: 
-      context: ./mcp
-      dockerfile: Dockerfile
-    container_name: aura_optimization_agent
-    volumes:
-      - ./mcp/agents:/app/agents
-      - ./mcp/shared:/app/shared
-    working_dir: /app
-    command: python agents/optimization_agent.py
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      AGENT_TYPE: optimization
-      LOG_LEVEL: INFO
-    depends_on:
-      redis:
-        condition: service_healthy
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "python", "-c", "import redis; r=redis.Redis(host='redis'); r.ping()"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  mcp_bridge:
-    build: 
-      context: ./mcp
-      dockerfile: Dockerfile
-    container_name: aura_mcp_bridge
-    volumes:
-      - ./mcp/agents:/app/agents
-      - ./mcp/shared:/app/shared
-      - ./mcp/cursor_integration:/app/cursor_integration
-    working_dir: /app
-    command: python cursor_integration/mcp_bridge.py
-    environment:
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      BRIDGE_PORT: 8080
-      LOG_LEVEL: INFO
+  # Monitoring Stack
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: auraos-prometheus
     ports:
-      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: auraos-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
     depends_on:
-      redis:
-        condition: service_healthy
-      logic_agent:
-        condition: service_healthy
-      creativity_agent:
-        condition: service_healthy
-      optimization_agent:
-        condition: service_healthy
-    restart: unless-stopped
+      - prometheus
+
+  # Node Exporter for system metrics
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: auraos-node-exporter
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+
+  # AuraOS Services
+  conversational-core:
+    build:
+      context: .
+      dockerfile: services/templates/conversational-core/Dockerfile
+    container_name: auraos-conversational-core
+    ports:
+      - "8001:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PROMETHEUS_PORT=8000
+    depends_on:
+      - redis
+      - prometheus
+    volumes:
+      - ./services/templates/conversational-core:/app
+    command: ["python", "run.py"]
+
+  file-organizer:
+    build:
+      context: .
+      dockerfile: services/templates/file-organizer/Dockerfile
+    container_name: auraos-file-organizer
+    ports:
+      - "8002:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PROMETHEUS_PORT=8000
+    depends_on:
+      - redis
+      - prometheus
+    volumes:
+      - ./services/templates/file-organizer:/app
+    command: ["python", "run.py"]
+
+  ide-agent:
+    build:
+      context: .
+      dockerfile: services/templates/ide-agent/Dockerfile
+    container_name: auraos-ide-agent
+    ports:
+      - "8003:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PROMETHEUS_PORT=8000
+    depends_on:
+      - redis
+      - prometheus
+    volumes:
+      - ./services/templates/ide-agent:/app
+    command: ["python", "run.py"]
+
+  # Development Services
+  nginx:
+    image: nginx:alpine
+    container_name: auraos-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - conversational-core
+      - file-organizer
+      - ide-agent
 
 volumes:
   redis_data:
-    driver: local
+  prometheus_data:
+  grafana_data:
+
+networks:
+  default:
+    name: auraos-network

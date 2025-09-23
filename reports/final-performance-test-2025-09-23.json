@@ -1,0 +1,214 @@
+{
+  "timestamp": "2025-09-23T12:54:01.234Z",
+  "testResults": {
+    "taskCompletion": {
+      "rate": 100,
+      "tests": [
+        "✅ إنشاء مهمة جديدة - 88.48ms",
+        "✅ عرض المهام - 177.69ms",
+        "✅ تحديث مهمة - 110.91ms",
+        "✅ حذف مهمة - 118.28ms",
+        "✅ جدولة تذكير - 67.89ms",
+        "✅ الحصول على حالة - 135.56ms",
+        "✅ رد ذكي - 126.72ms",
+        "✅ نشر محتوى - 112.03ms",
+        "✅ تقرير تحليلي - 76.51ms",
+        "✅ فحص الأداء - 60.83ms"
+      ]
+    },
+    "responseTime": {
+      "average": 284.53365660000037,
+      "tests": [
+        "✅ بدء المحادثة - 234.76ms",
+        "✅ المساعدة - 300.29ms",
+        "✅ حالة النظام - 225.80ms",
+        "✅ القائمة الرئيسية - 266.97ms",
+        "✅ إدارة المهام - 284.10ms",
+        "✅ حالة Autopilot - 340.52ms",
+        "✅ إنشاء مهمة (NLP) - 248.67ms",
+        "✅ عرض المهام (NLP) - 201.96ms",
+        "✅ استعلام الحالة (NLP) - 392.66ms",
+        "✅ تحية (NLP) - 349.60ms"
+      ]
+    },
+    "userExperience": {
+      "score": 100,
+      "tests": [
+        "✅ استجابة الواجهة: 100/100 (25.0 weighted)",
+        "✅ التعرف على الأوامر: 100/100 (25.0 weighted)",
+        "✅ معالجة الأخطاء: 100/100 (20.0 weighted)",
+        "✅ الميزات الذكية: 100/100 (30.0 weighted)"
+      ]
+    },
+    "systemStability": {
+      "score": 100,
+      "tests": [
+        "✅ استخدام الذاكرة: 100/100 (30.0 weighted)",
+        "✅ استعادة الأخطاء: 100/100 (25.0 weighted)",
+        "✅ المستخدمون المتزامنون: 100/100 (25.0 weighted)",
+        "✅ سلامة البيانات: 100/100 (20.0 weighted)"
+      ]
+    },
+    "overall": {
+      "score": 100,
+      "success": true
+    }
+  },
+  "taskTests": [
+    {
+      "type": "create_task",
+      "description": "إنشاء مهمة جديدة",
+      "success": true,
+      "executionTime": 88.47708899999998,
+      "timestamp": "2025-09-23T12:53:57.292Z"
+    },
+    {
+      "type": "view_tasks",
+      "description": "عرض المهام",
+      "success": true,
+      "executionTime": 177.68833300000006,
+      "timestamp": "2025-09-23T12:53:57.470Z"
+    },
+    {
+      "type": "update_task",
+      "description": "تحديث مهمة",
+      "success": true,
+      "executionTime": 110.90598399999999,
+      "timestamp": "2025-09-23T12:53:57.586Z"
+    },
+    {
+      "type": "delete_task",
+      "description": "حذف مهمة",
+      "success": true,
+      "executionTime": 118.28255900000022,
+      "timestamp": "2025-09-23T12:53:57.705Z"
+    },
+    {
+      "type": "schedule_reminder",
+      "description": "جدولة تذكير",
+      "success": true,
+      "executionTime": 67.8866280000002,
+      "timestamp": "2025-09-23T12:53:57.774Z"
+    },
+    {
+      "type": "get_status",
+      "description": "الحصول على حالة",
+      "success": true,
+      "executionTime": 135.56422199999997,
+      "timestamp": "2025-09-23T12:53:57.914Z"
+    },
+    {
+      "type": "smart_response",
+      "description": "رد ذكي",
+      "success": true,
+      "executionTime": 126.71581500000138,
+      "timestamp": "2025-09-23T12:53:58.057Z"
+    },
+    {
+      "type": "content_publish",
+      "description": "نشر محتوى",
+      "success": true,
+      "executionTime": 112.02992400000039,
+      "timestamp": "2025-09-23T12:53:58.170Z"
+    },
+    {
+      "type": "analytics_report",
+      "description": "تقرير تحليلي",
+      "success": true,
+      "executionTime": 76.51199300000007,
+      "timestamp": "2025-09-23T12:53:58.247Z"
+    },
+    {
+      "type": "performance_check",
+      "description": "فحص الأداء",
+      "success": true,
+      "executionTime": 60.83086899999944,
+      "timestamp": "2025-09-23T12:53:58.308Z"
+    }
+  ],
+  "responseTimeTests": [
+    {
+      "command": "/start",
+      "description": "بدء المحادثة",
+      "responseTime": 234.76374800000121,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:58.544Z"
+    },
+    {
+      "command": "/help",
+      "description": "المساعدة",
+      "responseTime": 300.29043100000126,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:58.844Z"
+    },
+    {
+      "command": "/status",
+      "description": "حالة النظام",
+      "responseTime": 225.79835400000047,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:59.071Z"
+    },
+    {
+      "command": "/menu",
+      "description": "القائمة الرئيسية",
+      "responseTime": 266.97283199999947,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:59.339Z"
+    },
+    {
+      "command": "/task",
+      "description": "إدارة المهام",
+      "responseTime": 284.1014809999997,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:59.624Z"
+    },
+    {
+      "command": "/autopilot",
+      "description": "حالة Autopilot",
+      "responseTime": 340.51849700000093,
+      "success": true,
+      "timestamp": "2025-09-23T12:53:59.965Z"
+    },
+    {
+      "command": "أنشئ مهمة جديدة",
+      "description": "إنشاء مهمة (NLP)",
+      "responseTime": 248.67235900000014,
+      "success": true,
+      "timestamp": "2025-09-23T12:54:00.214Z"
+    },
+    {
+      "command": "أظهر مهامي",
+      "description": "عرض المهام (NLP)",
+      "responseTime": 201.96211200000107,
+      "success": true,
+      "timestamp": "2025-09-23T12:54:00.416Z"
+    },
+    {
+      "command": "ما حالة النظام؟",
+      "description": "استعلام الحالة (NLP)",
+      "responseTime": 392.65589199999886,
+      "success": true,
+      "timestamp": "2025-09-23T12:54:00.809Z"
+    },
+    {
+      "command": "مرحباً",
+      "description": "تحية (NLP)",
+      "responseTime": 349.60086000000047,
+      "success": true,
+      "timestamp": "2025-09-23T12:54:01.159Z"
+    }
+  ],
+  "summary": {
+    "taskCompletionRate": 100,
+    "averageResponseTime": 284.53365660000037,
+    "userExperienceScore": 100,
+    "systemStabilityScore": 100,
+    "overallScore": 100,
+    "success": true
+  },
+  "recommendations": [
+    "مراقبة الأداء باستمرار",
+    "تحديث النظام بانتظام",
+    "اختبار الأداء دورياً"
+  ]
+}

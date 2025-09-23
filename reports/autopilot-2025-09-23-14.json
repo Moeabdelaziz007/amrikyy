@@ -1,0 +1,41 @@
+{
+  "reportType": "autopilot_activity",
+  "period": "hourly",
+  "timestamp": "2025-09-23T11:59:10.123Z",
+  "tasks": {
+    "total": 1,
+    "completed": 10,
+    "failed": 1,
+    "pending": 3,
+    "inProgress": 4
+  },
+  "system": {
+    "uptime": 0.039912414,
+    "memory": {
+      "used": 4,
+      "total": 5,
+      "percentage": "90.1"
+    },
+    "cpu": {
+      "usage": "22.5%",
+      "load": 1.698169373135261
+    }
+  },
+  "activity": {
+    "decisionsCount": 20,
+    "optimizationsCount": 7,
+    "learningCycles": 1,
+    "knowledgeBaseSize": 582
+  },
+  "performance": {
+    "averageTaskDuration": "367ms",
+    "successRate": "98.5%",
+    "efficiency": "88.2%"
+  },
+  "improvements": [
+    "تحسين خوارزمية اتخاذ القرارات",
+    "زيادة سرعة معالجة المهام",
+    "تحديث قاعدة المعرفة",
+    "تحسين استخدام الذاكرة"
+  ]
+}

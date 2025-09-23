@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface AppleCardProps {
+interface AmrikyyOSCardProps {
   children: React.ReactNode;
   className?: string;
   variant?: 'default' | 'glass' | 'ai';
@@ -11,33 +11,33 @@ interface AppleCardProps {
 }
 
 /**
- * 🍎 Apple-style Card Component
+ * 🚀 AmrikyyOS Card Component
  * 
  * Features:
- * - Apple-inspired design language
+ * - AmrikyyOS brand design language
  * - Glass morphism effects
  * - AI-enhanced animations
  * - Responsive design
  * - Accessibility support
  */
-export function AppleCard({
+export function AmrikyyOSCard({
   children,
   className,
   variant = 'default',
   hover = true,
   glow = false,
   onClick,
-}: AppleCardProps) {
+}: AmrikyyOSCardProps) {
   const baseClasses = 'rounded-xl transition-all duration-300';
   
   const variantClasses = {
-    default: 'apple-card',
-    glass: 'apple-glass',
-    ai: 'ai-card',
+    default: 'amrikyyos-card',
+    glass: 'amrikyyos-glass',
+    ai: 'amrikyyos-ai-card',
   };
 
   const hoverClasses = hover ? 'cursor-pointer' : '';
-  const glowClasses = glow ? 'ai-pulse' : '';
+  const glowClasses = glow ? 'amrikyyos-pulse' : '';
 
   return (
     <div
@@ -63,12 +63,12 @@ export function AppleCard({
   );
 }
 
-interface AppleCardHeaderProps {
+interface AmrikyyOSCardHeaderProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export function AppleCardHeader({ children, className }: AppleCardHeaderProps) {
+export function AmrikyyOSCardHeader({ children, className }: AmrikyyOSCardHeaderProps) {
   return (
     <div className={cn('p-6 pb-4', className)}>
       {children}
@@ -76,12 +76,12 @@ export function AppleCardHeader({ children, className }: AppleCardHeaderProps) {
   );
 }
 
-interface AppleCardContentProps {
+interface AmrikyyOSCardContentProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export function AppleCardContent({ children, className }: AppleCardContentProps) {
+export function AmrikyyOSCardContent({ children, className }: AmrikyyOSCardContentProps) {
   return (
     <div className={cn('p-6 pt-0', className)}>
       {children}
@@ -89,12 +89,12 @@ export function AppleCardContent({ children, className }: AppleCardContentProps)
   );
 }
 
-interface AppleCardFooterProps {
+interface AmrikyyOSCardFooterProps {
   children: React.ReactNode;
   className?: string;
 }
 
-export function AppleCardFooter({ children, className }: AppleCardFooterProps) {
+export function AmrikyyOSCardFooter({ children, className }: AmrikyyOSCardFooterProps) {
   return (
     <div className={cn('p-6 pt-4 border-t border-gray-200 dark:border-gray-700', className)}>
       {children}

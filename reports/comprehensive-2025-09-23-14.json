@@ -1,0 +1,166 @@
+{
+  "reportType": "comprehensive",
+  "period": "hourly",
+  "timestamp": "2025-09-23T11:59:10.124Z",
+  "summary": {
+    "totalUsers": 5,
+    "totalTasks": 1,
+    "systemHealth": "healthy",
+    "overallScore": 96
+  },
+  "botUsage": {
+    "reportType": "bot_usage",
+    "period": "hourly",
+    "timestamp": "2025-09-23T11:59:10.121Z",
+    "users": {
+      "total": 5,
+      "active": 1,
+      "new": 2
+    },
+    "messages": {
+      "total": 29,
+      "commands": 16,
+      "responses": 9
+    },
+    "commands": {
+      "/start": 2,
+      "/help": 0,
+      "/status": 3,
+      "/menu": 4,
+      "/task": 4,
+      "/autopilot": 7
+    },
+    "performance": {
+      "averageResponseTime": "55.42ms",
+      "successRate": "100.0%",
+      "errorCount": 0
+    },
+    "topUsers": [
+      {
+        "userId": "user_001",
+        "messageCount": 9,
+        "username": "محمد"
+      },
+      {
+        "userId": "user_002",
+        "messageCount": 12,
+        "username": "فاطمة"
+      },
+      {
+        "userId": "user_003",
+        "messageCount": 7,
+        "username": "أحمد"
+      }
+    ]
+  },
+  "autopilotActivity": {
+    "reportType": "autopilot_activity",
+    "period": "hourly",
+    "timestamp": "2025-09-23T11:59:10.123Z",
+    "tasks": {
+      "total": 1,
+      "completed": 10,
+      "failed": 1,
+      "pending": 3,
+      "inProgress": 4
+    },
+    "system": {
+      "uptime": 0.039912414,
+      "memory": {
+        "used": 4,
+        "total": 5,
+        "percentage": "90.1"
+      },
+      "cpu": {
+        "usage": "22.5%",
+        "load": 1.698169373135261
+      }
+    },
+    "activity": {
+      "decisionsCount": 20,
+      "optimizationsCount": 7,
+      "learningCycles": 1,
+      "knowledgeBaseSize": 582
+    },
+    "performance": {
+      "averageTaskDuration": "367ms",
+      "successRate": "98.5%",
+      "efficiency": "88.2%"
+    },
+    "improvements": [
+      "تحسين خوارزمية اتخاذ القرارات",
+      "زيادة سرعة معالجة المهام",
+      "تحديث قاعدة المعرفة",
+      "تحسين استخدام الذاكرة"
+    ]
+  },
+  "systemHealth": {
+    "reportType": "system_health",
+    "period": "hourly",
+    "timestamp": "2025-09-23T11:59:10.124Z",
+    "health": {
+      "status": "healthy",
+      "score": 91,
+      "uptime": 0.040490741
+    },
+    "resources": {
+      "memory": {
+        "used": 4,
+        "total": 5,
+        "percentage": "90.3",
+        "rss": 27
+      },
+      "cpu": {
+        "usage": "9.4%",
+        "processes": 5
+      },
+      "disk": {
+        "usage": "39.1%",
+        "available": "2703MB"
+      }
+    },
+    "services": {
+      "telegramBot": {
+        "status": "running",
+        "responseTime": "64ms"
+      },
+      "webhook": {
+        "status": "active",
+        "lastUpdate": "2025-09-23T11:59:10.124Z"
+      },
+      "autopilot": {
+        "status": "running",
+        "tasksProcessed": 5
+      },
+      "database": {
+        "status": "connected",
+        "queries": 9
+      }
+    },
+    "security": {
+      "threats": 0,
+      "blockedRequests": 3,
+      "lastSecurityScan": "2025-09-23T11:59:10.124Z"
+    },
+    "recommendations": [
+      "مراقبة استخدام الذاكرة بانتظام",
+      "تحديث الاعتمادات الأمنية",
+      "تحسين أداء قاعدة البيانات",
+      "إجراء نسخ احتياطية دورية",
+      "مراجعة إعدادات الأمان",
+      "تحديث نظام التشغيل"
+    ]
+  },
+  "insights": [
+    "النظام يعمل بكفاءة 91%",
+    "تم معالجة 10 مهمة بنجاح",
+    "متوسط وقت الاستجابة: 55.42ms",
+    "المستخدمون النشطون: 1"
+  ],
+  "nextActions": [
+    "مراجعة الأداء العام",
+    "تحسين المهام المعلقة",
+    "تحديث قاعدة المعرفة",
+    "مراقبة استخدام الموارد"
+  ]
+}

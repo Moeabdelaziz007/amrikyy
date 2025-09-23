@@ -1,0 +1,241 @@
+{
+  "passed": 47,
+  "failed": 0,
+  "tests": [
+    {
+      "testName": "ملف package.json",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف Dockerfile.production",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف production.env",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف security-headers.js",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف sw.js",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف firebase.json",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ملف manifest.json",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "تبعية react",
+      "passed": true,
+      "message": "الإصدار: ^18.2.0"
+    },
+    {
+      "testName": "تبعية react-dom",
+      "passed": true,
+      "message": "الإصدار: ^18.2.0"
+    },
+    {
+      "testName": "تبعية typescript",
+      "passed": true,
+      "message": "الإصدار: ^5.0.0"
+    },
+    {
+      "testName": "تبعية vite",
+      "passed": true,
+      "message": "الإصدار: ^4.4.0"
+    },
+    {
+      "testName": "تبعية firebase",
+      "passed": true,
+      "message": "الإصدار: ^10.0.0"
+    },
+    {
+      "testName": "تبعية tailwindcss",
+      "passed": true,
+      "message": "الإصدار: ^3.3.0"
+    },
+    {
+      "testName": "تبعية express",
+      "passed": true,
+      "message": "الإصدار: ^4.18.0"
+    },
+    {
+      "testName": "سكريبت build",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "سكريبت start",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "سكريبت dev",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد أمان contentSecurityPolicy",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد أمان hsts",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد أمان frameguard",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد أمان noSniff",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد أمان referrerPolicy",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ميزة SW CACHE_NAME",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ميزة SW STATIC_ASSETS",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ميزة SW install",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ميزة SW activate",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "ميزة SW fetch",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Docker FROM",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Docker WORKDIR",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Docker EXPOSE",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Docker HEALTHCHECK",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Docker USER",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Firebase hosting",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Firebase public",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Firebase rewrites",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Firebase headers",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA name",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA short_name",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA start_url",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA display",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA icons",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد PWA theme_color",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Tailwind neon",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Tailwind cyberpunk",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Tailwind glassmorphism",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Tailwind darkMode",
+      "passed": true,
+      "message": "موجود"
+    },
+    {
+      "testName": "إعداد Tailwind content",
+      "passed": true,
+      "message": "موجود"
+    }
+  ]
+}

@@ -12,9 +12,6 @@
       "**/*.md",
       "**/*.log",
       "**/*.py",
-      "**/*.js",
-      "**/*.ts",
-      "**/*.json",
       "**/package*.json",
       "**/tsconfig*.json",
       "**/vite.config.*",
@@ -242,8 +239,38 @@
     ],
     "headers": [
       {
-        "source": "**/*.@(js|css)",
+        "source": "**/*.js",
         "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript; charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.mjs",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/javascript; charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.css",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css; charset=utf-8"
+          },
           {
             "key": "Cache-Control",
             "value": "max-age=31536000"
