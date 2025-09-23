@@ -1,7 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { authService, User, LoginCredentials, AuthResponse, SecurityMetrics } from '@/lib/auth-service';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { authService, User, LoginCredentials, AuthResponse, SecurityMetrics } from '../lib/auth-service';
 
 type AuthContextType = {
   user: User | null;

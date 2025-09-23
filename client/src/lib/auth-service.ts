@@ -1,5 +1,5 @@
 // Enhanced Authentication Service
-import { automationApi } from '@/services/automation-api';
+import { automationApi } from '../services/automation-api';
 
 export interface User {
   id: string;
@@ -292,14 +292,16 @@ class AuthService {
   }
 
   // Update user preferences
-  async updatePreferences(preferences: Partial<UserPreferences>): Promise<boolean> {
+  async updatePreferences(
+    preferences: Partial<UserPreferences>
+  ): Promise<boolean> {
     if (!this.user) return false;
 
     try {
       const response = await automationApi.updateMyPreferences(preferences);
       
       if (response.success) {
-        this.user.preferences = { ...this.user.preferences, ...preferences };
+        this.user.preferences = { ...this.user.preferences, ...preferences } as UserPreferences;
         localStorage.setItem('user_data', JSON.stringify(this.user));
         return true;
       }
@@ -312,7 +314,9 @@ class AuthService {
 
   // Get security metrics
   getSecurityMetrics(): SecurityMetrics {
-    const loginAttempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+    const loginAttempts = parseInt(
+      localStorage.getItem('loginAttempts') || '0'
+    );
     const lastFailedLogin = localStorage.getItem('lastFailedLogin');
     const lockoutTime = localStorage.getItem('lockoutTime');
     const isLocked = lockoutTime ? new Date(lockoutTime) > new Date() : false;
@@ -342,7 +346,7 @@ class AuthService {
   }
 
   // Track failed login
-  private trackLoginFailure(email: string) {
+  private trackLoginFailure(_email: string) {
     const attempts = parseInt(localStorage.getItem('loginAttempts') || '0') + 1;
     localStorage.setItem('loginAttempts', attempts.toString());
     localStorage.setItem('lastFailedLogin', new Date().toISOString());
@@ -360,7 +364,7 @@ class AuthService {
       const response = await fetch(`${this.baseUrl}/auth/2fa/enable`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
         },
       });
@@ -387,7 +391,7 @@ class AuthService {
       const response = await fetch(`${this.baseUrl}/auth/2fa/verify`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ code }),
@@ -421,12 +425,15 @@ class AuthService {
   }
 
   // Change password
-  async changePassword(currentPassword: string, newPassword: string): Promise<boolean> {
+  async changePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseUrl}/auth/change-password`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.token}`,
+          Authorization: `Bearer ${this.token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ currentPassword, newPassword }),
@@ -464,7 +471,7 @@ class AuthService {
       const response = await automationApi.updateMe(updates);
       
       if (response.success) {
-        this.user = { ...this.user, ...updates };
+        this.user = { ...this.user, ...updates } as User;
         localStorage.setItem('user_data', JSON.stringify(this.user));
         return true;
       }
