@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Settings, Palette, Bell, Shield, Monitor, User } from "lucide-react";
+import { Settings, Palette, Bell, Shield, Monitor, User, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { WALLPAPER_THEMES, WallpaperTheme } from "../os/WallpaperManager";
+import { useWallpaper } from "../../contexts/WallpaperContext";
 
 export const SettingsApp = () => {
   const [notifications, setNotifications] = useState(true);
@@ -12,6 +14,15 @@ export const SettingsApp = () => {
   const [autoSave, setAutoSave] = useState(true);
   const [brightness, setBrightness] = useState([80]);
   const [volume, setVolume] = useState([70]);
+  const [selectedWallpaper, setSelectedWallpaper] = useState('aurora');
+  
+  const { 
+    currentWallpaper, 
+    setCurrentWallpaper, 
+    timeBasedWallpaper, 
+    setTimeBasedWallpaper,
+    timeOfDay 
+  } = useWallpaper();
 
   return (
     <div className="h-full flex flex-col bg-gradient-to-br from-slate-900/20 to-gray-900/20">
@@ -79,21 +90,91 @@ export const SettingsApp = () => {
                   />
                   <p className="text-xs text-muted-foreground">{brightness[0]}%</p>
                 </div>
+                
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h4 className="font-medium">Time-based Wallpaper</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Automatically change wallpaper based on time of day
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Current time: {timeOfDay} mode
+                    </p>
+                  </div>
+                  <Switch
+                    checked={timeBasedWallpaper}
+                    onCheckedChange={setTimeBasedWallpaper}
+                  />
+                </div>
               </CardContent>
             </Card>
 
             <Card className="glass border-white/20">
               <CardHeader>
-                <CardTitle>Wallpaper</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Palette className="w-5 h-5" />
+                  Wallpaper Themes
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-3 gap-2">
-                  {[1, 2, 3].map((i) => (
+                <div className="grid grid-cols-2 gap-3">
+                  {WALLPAPER_THEMES.map((theme) => (
                     <div
-                      key={i}
-                      className="aspect-video rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 cursor-pointer hover:ring-2 hover:ring-primary/50 transition-all"
-                    />
+                      key={theme.id}
+                      className={`relative aspect-video rounded-lg cursor-pointer transition-all duration-300 ${
+                        currentWallpaper === theme.id 
+                          ? 'ring-2 ring-primary/70 shadow-lg scale-105' 
+                          : 'hover:ring-2 hover:ring-primary/30 hover:scale-102'
+                      }`}
+                      onClick={() => {
+                        setSelectedWallpaper(theme.id);
+                        setCurrentWallpaper(theme.id);
+                      }}
+                      style={{
+                        background: `linear-gradient(135deg, ${theme.colors.join(', ')})`
+                      }}
+                    >
+                      {/* Theme preview overlay */}
+                      <div className="absolute inset-0 rounded-lg bg-black/20 flex items-center justify-center">
+                        <div className="text-center text-white/90">
+                          <div className="text-sm font-medium">{theme.name}</div>
+                          <div className="text-xs opacity-75 capitalize">{theme.type}</div>
+                        </div>
+                      </div>
+                      
+                      {/* Selection indicator */}
+                      {currentWallpaper === theme.id && (
+                        <div className="absolute top-2 right-2 w-6 h-6 bg-primary rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        </div>
+                      )}
+                      
+                      {/* Animation indicator */}
+                      {theme.type === 'animated' && (
+                        <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/50 rounded text-xs text-white/80">
+                          ✨ Animated
+                        </div>
+                      )}
+                      
+                      {/* Particle indicator */}
+                      {theme.type === 'particle' && (
+                        <div className="absolute bottom-2 left-2 px-2 py-1 bg-black/50 rounded text-xs text-white/80">
+                          ⭐ Particles
+                        </div>
+                      )}
+                    </div>
                   ))}
+                </div>
+                
+                {/* Current wallpaper info */}
+                <div className="mt-4 p-3 bg-black/20 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Clock className="w-4 h-4" />
+                    <span>Current: {WALLPAPER_THEMES.find(t => t.id === currentWallpaper)?.name}</span>
+                    {timeBasedWallpaper && (
+                      <span className="text-primary">• Auto-changing</span>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>

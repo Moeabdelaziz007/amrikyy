@@ -1,11 +1,14 @@
 import { OSDesktop } from './components/os/OSDesktop';
+import { WallpaperProvider } from './contexts/WallpaperContext';
 import './styles/index.css';
 
 function App() {
   return (
-    <div className="App">
-      <OSDesktop />
-    </div>
+    <WallpaperProvider>
+      <div className="App">
+        <OSDesktop />
+      </div>
+    </WallpaperProvider>
   );
 }
 

@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { Clock, Wifi, Battery, Volume2 } from "lucide-react";
+import { Clock, Wifi, Battery, Volume2, Grid3X3 } from "lucide-react";
 import { AppDock } from "./AppDock";
 import { WindowManager } from "./WindowManager";
+import { WallpaperManager } from "./WallpaperManager";
+import { SmartAppLauncher } from "./SmartAppLauncher";
+import { AppStore } from "./AppStore";
+import { useWallpaper } from "../../contexts/WallpaperContext";
 
 export const OSDesktop = () => {
   const [time, setTime] = useState(new Date());
   const [openApps, setOpenApps] = useState<string[]>([]);
   const [activeApp, setActiveApp] = useState<string | null>(null);
+  const [isAppLauncherOpen, setIsAppLauncherOpen] = useState(false);
+  const [isAppStoreOpen, setIsAppStoreOpen] = useState(false);
+  const { currentWallpaper, setCurrentWallpaper } = useWallpaper();
 
   // Update time every second
   React.useEffect(() => {
@@ -35,17 +42,36 @@ export const OSDesktop = () => {
   };
 
   return (
-    <div 
-      className="relative h-screen w-full overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
-    >
-      {/* Desktop overlay for glass effect */}
-      <div className="absolute inset-0 bg-black/20" />
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Dynamic Wallpaper */}
+      <WallpaperManager 
+        currentTheme={currentWallpaper}
+        onThemeChange={setCurrentWallpaper}
+      />
       
       {/* Top Menu Bar */}
       <div className="relative z-50 h-8 w-full glass border-b border-white/10 flex items-center justify-between px-4">
         <div className="flex items-center space-x-4">
           <div className="text-sm font-medium bg-gradient-primary bg-clip-text text-transparent">
             AuraOS AI System
+          </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setIsAppLauncherOpen(true)}
+              className="flex items-center space-x-2 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200"
+            >
+              <Grid3X3 className="w-4 h-4" />
+              <span className="text-sm">Apps</span>
+            </button>
+            <button
+              onClick={() => setIsAppStoreOpen(true)}
+              className="flex items-center space-x-2 px-3 py-1 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 rounded-lg transition-all duration-200"
+            >
+              <div className="w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-white">$</span>
+              </div>
+              <span className="text-sm">Store</span>
+            </button>
           </div>
         </div>
         
@@ -78,6 +104,27 @@ export const OSDesktop = () => {
         onAppClick={openApp}
         openApps={openApps}
         activeApp={activeApp}
+      />
+
+      {/* Smart App Launcher */}
+      <SmartAppLauncher
+        isOpen={isAppLauncherOpen}
+        onClose={() => setIsAppLauncherOpen(false)}
+        onAppClick={(appId) => {
+          openApp(appId);
+          setIsAppLauncherOpen(false);
+        }}
+      />
+
+      {/* App Store */}
+      <AppStore
+        isOpen={isAppStoreOpen}
+        onClose={() => setIsAppStoreOpen(false)}
+        onInstall={(appId) => {
+          console.log(`Installing app: ${appId}`);
+          // Here you would implement the actual installation logic
+          setIsAppStoreOpen(false);
+        }}
       />
     </div>
   );
