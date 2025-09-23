@@ -60,7 +60,7 @@ export const AppDock = ({ onAppClick, openApps, activeApp }: AppDockProps) => {
 
   return (
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50">
-      <div className="glass-strong rounded-2xl p-3 border border-white/20">
+      <div className="glass-ultra rounded-2xl p-3 border border-white/20 shadow-premium">
         <div className="flex items-center space-x-2">
           {dockApps.map((app) => {
             const Icon = app.icon;
@@ -86,11 +86,11 @@ export const AppDock = ({ onAppClick, openApps, activeApp }: AppDockProps) => {
                 <button
                   onClick={() => onAppClick(app.id)}
                   className={cn(
-                    "relative w-14 h-14 rounded-xl transition-all duration-300 ease-smooth",
+                    "relative w-14 h-14 rounded-xl transition-premium",
                     "flex items-center justify-center",
-                    "hover:scale-110 hover:-translate-y-2",
+                    "hover:scale-110 hover:-translate-y-2 hover-glow",
                     "focus:outline-none focus:ring-2 focus:ring-primary/50",
-                    isActive && "scale-105 -translate-y-1",
+                    isActive && "scale-105 -translate-y-1 glow-pulse",
                     isHovered && "scale-110 -translate-y-2"
                   )}
                 >

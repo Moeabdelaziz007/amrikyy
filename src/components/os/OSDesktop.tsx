@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Clock, Wifi, Battery, Volume2, Grid3X3 } from "lucide-react";
+import { Clock, Wifi, Battery, Volume2, Grid3X3, Palette } from "lucide-react";
 import { AppDock } from "./AppDock";
 import { WindowManager } from "./WindowManager";
 import { WallpaperManager } from "./WallpaperManager";
 import { SmartAppLauncher } from "./SmartAppLauncher";
 import { AppStore } from "./AppStore";
+import { PremiumWallpaperManager, ThemeSelector } from "./PremiumWallpaperManager";
 import { useWallpaper } from "../../contexts/WallpaperContext";
 
 export const OSDesktop = () => {
@@ -13,6 +14,7 @@ export const OSDesktop = () => {
   const [activeApp, setActiveApp] = useState<string | null>(null);
   const [isAppLauncherOpen, setIsAppLauncherOpen] = useState(false);
   const [isAppStoreOpen, setIsAppStoreOpen] = useState(false);
+  const [isThemeSelectorOpen, setIsThemeSelectorOpen] = useState(false);
   const { currentWallpaper, setCurrentWallpaper } = useWallpaper();
 
   // Update time every second
@@ -43,14 +45,14 @@ export const OSDesktop = () => {
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
-      {/* Dynamic Wallpaper */}
-      <WallpaperManager 
+      {/* Premium Dynamic Wallpaper */}
+      <PremiumWallpaperManager 
         currentTheme={currentWallpaper}
         onThemeChange={setCurrentWallpaper}
       />
       
       {/* Top Menu Bar */}
-      <div className="relative z-50 h-8 w-full glass border-b border-white/10 flex items-center justify-between px-4">
+      <div className="relative z-50 h-8 w-full glass-premium border-b border-white/10 flex items-center justify-between px-4">
         <div className="flex items-center space-x-4">
           <div className="text-sm font-medium bg-gradient-primary bg-clip-text text-transparent">
             AuraOS AI System
@@ -71,6 +73,13 @@ export const OSDesktop = () => {
                 <span className="text-xs font-bold text-white">$</span>
               </div>
               <span className="text-sm">Store</span>
+            </button>
+            <button
+              onClick={() => setIsThemeSelectorOpen(true)}
+              className="flex items-center space-x-2 px-3 py-1 bg-purple-500/20 hover:bg-purple-500/30 text-purple-400 rounded-lg transition-all duration-200"
+            >
+              <Palette className="w-4 h-4" />
+              <span className="text-sm">Themes</span>
             </button>
           </div>
         </div>
@@ -125,6 +134,14 @@ export const OSDesktop = () => {
           // Here you would implement the actual installation logic
           setIsAppStoreOpen(false);
         }}
+      />
+
+      {/* Theme Selector */}
+      <ThemeSelector
+        isOpen={isThemeSelectorOpen}
+        onClose={() => setIsThemeSelectorOpen(false)}
+        currentTheme={currentWallpaper}
+        onThemeChange={setCurrentWallpaper}
       />
     </div>
   );

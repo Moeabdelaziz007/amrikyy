@@ -11,6 +11,9 @@
 /* Import Fonts */
 @import './fonts.css';
 
+/* Import Premium Effects */
+@import './premium-effects.css';
+
 /* Amrikyy AI System Design System - Premium AI-Powered OS Interface */
 @layer base {
   :root {

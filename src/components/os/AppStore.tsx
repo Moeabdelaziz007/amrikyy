@@ -221,7 +221,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-7xl h-[90vh] bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className="w-full max-w-7xl h-[90vh] glass-ultra rounded-3xl border border-white/10 shadow-premium overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/10">
           <div className="flex items-center space-x-4">
@@ -328,7 +328,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
                 return (
                   <div
                     key={app.id}
-                    className="group relative bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-xl"
+                    className="group relative card-premium rounded-2xl p-6 transition-premium cursor-pointer hover:scale-105 hover:shadow-xl"
                     onClick={() => setSelectedApp(app)}
                   >
                     {/* Featured Badge */}
@@ -388,7 +388,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
                               handleInstall(app.id);
                             }}
                             disabled={isInstalling === app.id}
-                            className="flex items-center space-x-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-all disabled:opacity-50"
+                            className="flex items-center space-x-2 px-4 py-2 btn-premium text-white rounded-lg transition-all disabled:opacity-50"
                           >
                             {isInstalling === app.id ? (
                               <>

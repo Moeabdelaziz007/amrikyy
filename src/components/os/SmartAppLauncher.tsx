@@ -441,7 +441,7 @@ export const SmartAppLauncher: React.FC<SmartAppLauncherProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl h-[80vh] bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className="w-full max-w-6xl h-[80vh] glass-ultra rounded-3xl border border-white/10 shadow-premium overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/10">
           <div className="flex items-center space-x-4">
@@ -631,8 +631,8 @@ export const SmartAppLauncher: React.FC<SmartAppLauncherProps> = ({
                   <div
                     key={app.id}
                     className={cn(
-                      "group relative bg-white/5 backdrop-blur-sm rounded-2xl p-4 border border-white/10 transition-all duration-300 cursor-pointer",
-                      "hover:bg-white/10 hover:scale-105 hover:shadow-xl",
+                      "group relative card-premium rounded-2xl p-4 transition-premium cursor-pointer",
+                      "hover:scale-105 hover:shadow-xl",
                       isSelected && "ring-2 ring-purple-500 bg-purple-500/10",
                       isSelectMode && "cursor-pointer"
                     )}
