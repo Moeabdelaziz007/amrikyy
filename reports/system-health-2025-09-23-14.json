@@ -1,0 +1,57 @@
+{
+  "reportType": "system_health",
+  "period": "hourly",
+  "timestamp": "2025-09-23T11:59:10.124Z",
+  "health": {
+    "status": "healthy",
+    "score": 91,
+    "uptime": 0.040490741
+  },
+  "resources": {
+    "memory": {
+      "used": 4,
+      "total": 5,
+      "percentage": "90.3",
+      "rss": 27
+    },
+    "cpu": {
+      "usage": "9.4%",
+      "processes": 5
+    },
+    "disk": {
+      "usage": "39.1%",
+      "available": "2703MB"
+    }
+  },
+  "services": {
+    "telegramBot": {
+      "status": "running",
+      "responseTime": "64ms"
+    },
+    "webhook": {
+      "status": "active",
+      "lastUpdate": "2025-09-23T11:59:10.124Z"
+    },
+    "autopilot": {
+      "status": "running",
+      "tasksProcessed": 5
+    },
+    "database": {
+      "status": "connected",
+      "queries": 9
+    }
+  },
+  "security": {
+    "threats": 0,
+    "blockedRequests": 3,
+    "lastSecurityScan": "2025-09-23T11:59:10.124Z"
+  },
+  "recommendations": [
+    "مراقبة استخدام الذاكرة بانتظام",
+    "تحديث الاعتمادات الأمنية",
+    "تحسين أداء قاعدة البيانات",
+    "إجراء نسخ احتياطية دورية",
+    "مراجعة إعدادات الأمان",
+    "تحديث نظام التشغيل"
+  ]
+}

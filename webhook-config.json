@@ -1,0 +1,18 @@
+{
+  "webhook": {
+    "url": "https://your-domain.com/webhooks",
+    "secretToken": "GXckObuMuQkQ1rDpbS35l7nz27Ce0TYB",
+    "port": 3001
+  },
+  "bot": {
+    "token": "8310343758...",
+    "username": "configured"
+  },
+  "features": {
+    "inlineKeyboards": true,
+    "taskManagement": true,
+    "autopilotIntegration": true,
+    "realTimeUpdates": true
+  },
+  "createdAt": "2025-09-23T11:44:04.425Z"
+}

@@ -1,16 +1,11 @@
-# Prometheus Configuration for AuraOS Automation Platform
+# Prometheus configuration for AuraOS
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
 rule_files:
-  - 'rules/*.yml'
-
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-            - alertmanager:9093
+  # - "first_rules.yml"
+  # - "second_rules.yml"
 
 scrape_configs:
   # Prometheus itself
@@ -18,10 +13,22 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # AuraOS Backend Server
-  - job_name: 'auraos-server'
+  # AuraOS Services
+  - job_name: 'conversational-core'
     static_configs:
-      - targets: ['auraos-server:3001']
+      - targets: ['conversational-core:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  - job_name: 'file-organizer'
+    static_configs:
+      - targets: ['file-organizer:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 10s
+
+  - job_name: 'ide-agent'
+    static_configs:
+      - targets: ['ide-agent:8000']
     metrics_path: '/metrics'
     scrape_interval: 10s
 
@@ -29,23 +36,16 @@ scrape_configs:
   - job_name: 'node-exporter'
     static_configs:
       - targets: ['node-exporter:9100']
+    scrape_interval: 15s
 
-  # PostgreSQL Exporter
-  - job_name: 'postgres-exporter'
+  # Redis metrics (if redis_exporter is available)
+  - job_name: 'redis'
     static_configs:
-      - targets: ['postgres-exporter:9187']
+      - targets: ['redis:6379']
+    scrape_interval: 15s
 
-  # Redis Exporter
-  - job_name: 'redis-exporter'
+  # Nginx metrics (if nginx_exporter is available)
+  - job_name: 'nginx'
     static_configs:
-      - targets: ['redis-exporter:9121']
-
-  # Nginx Exporter
-  - job_name: 'nginx-exporter'
-    static_configs:
-      - targets: ['nginx-exporter:9113']
-
-  # Docker metrics
-  - job_name: 'docker'
-    static_configs:
-      - targets: ['docker-exporter:9323']
+      - targets: ['nginx:80']
+    scrape_interval: 15s

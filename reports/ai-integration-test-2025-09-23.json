@@ -1,0 +1,41 @@
+{
+  "timestamp": "2025-09-23T12:17:56.459Z",
+  "testResults": {
+    "botConnection": {
+      "success": true,
+      "responseTime": 434.327274
+    },
+    "aiFeatures": {
+      "success": true,
+      "tests": [
+        "✅ Arabic task creation: أنشئ مهمة مراجعة التقرير",
+        "✅ Arabic task viewing: أظهر مهامي الحالية",
+        "✅ Arabic system status: ما حالة النظام؟",
+        "✅ Arabic greeting: مرحباً، كيف حالك؟",
+        "✅ Task created: مهمة اختبار 1 (task_1758629876364_oclpvcvqg)",
+        "✅ Task created: Test Task 2 (task_1758629876365_6ux6xfvei)",
+        "✅ Content published: أخبار جديدة في التكنولوجيا (content_1758629876365_von306jjb)",
+        "✅ Content published: New business update (content_1758629876365_vrmmwumbd)"
+      ]
+    },
+    "performance": {
+      "success": true,
+      "tests": [
+        "✅ Bot Response Time: 85.65ms (excellent)",
+        "✅ NLP Processing: 0.01ms (excellent)",
+        "✅ Task Creation: 0.14ms (excellent)",
+        "✅ Content Publishing: 0.16ms (excellent)"
+      ]
+    },
+    "overall": {
+      "success": true,
+      "score": 100
+    }
+  },
+  "summary": {
+    "totalTests": 12,
+    "passedTests": 12,
+    "score": 100,
+    "success": true
+  }
+}

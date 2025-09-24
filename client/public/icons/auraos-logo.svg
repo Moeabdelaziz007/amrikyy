@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="128" fill="url(#gradient)"/>
+  <circle cx="256" cy="256" r="120" fill="none" stroke="white" stroke-width="8"/>
+  <circle cx="256" cy="256" r="80" fill="none" stroke="white" stroke-width="6"/>
+  <circle cx="256" cy="256" r="40" fill="none" stroke="white" stroke-width="4"/>
+  <path d="M256 136 L256 200 L320 200 L320 136 Z" fill="white"/>
+  <path d="M256 312 L256 376 L320 376 L320 312 Z" fill="white"/>
+  <path d="M192 200 L192 264 L256 264 L256 200 Z" fill="white"/>
+  <path d="M192 312 L192 376 L256 376 L256 312 Z" fill="white"/>
+  <text x="256" y="460" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="48" font-weight="bold">AURA</text>
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#764ba2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a73e8;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,267 @@
+/* 🎨 AmrikyyOS Creative Wallpaper */
+/* Eye-catching futuristic AI-powered wallpaper design */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;700&display=swap');
+
+/* 🌟 Main Wallpaper Container */
+.amrikyyos-wallpaper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+  background: linear-gradient(135deg, #000000 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #000000 100%);
+}
+
+/* 🚀 Animated Background Elements */
+.amrikyyos-wallpaper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.2) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.2) 0%, transparent 40%);
+  animation: amrikyyos-wallpaper-pulse 20s ease-in-out infinite;
+}
+
+.amrikyyos-wallpaper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    linear-gradient(45deg, transparent 30%, rgba(0, 255, 136, 0.1) 50%, transparent 70%),
+    linear-gradient(-45deg, transparent 30%, rgba(0, 217, 255, 0.1) 50%, transparent 70%);
+  animation: amrikyyos-wallpaper-shift 25s linear infinite;
+}
+
+/* 🎯 Quantum Grid Pattern */
+.amrikyyos-quantum-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 255, 136, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.2) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: amrikyyos-grid-move 30s linear infinite;
+}
+
+/* 🌌 Floating Particles */
+.amrikyyos-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.amrikyyos-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, rgba(0, 255, 136, 1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: amrikyyos-particle-float 15s linear infinite;
+}
+
+.amrikyyos-particle:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+.amrikyyos-particle:nth-child(2) { top: 20%; left: 80%; animation-delay: 2s; }
+.amrikyyos-particle:nth-child(3) { top: 60%; left: 20%; animation-delay: 4s; }
+.amrikyyos-particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
+.amrikyyos-particle:nth-child(5) { top: 30%; left: 50%; animation-delay: 8s; }
+.amrikyyos-particle:nth-child(6) { top: 70%; left: 90%; animation-delay: 10s; }
+.amrikyyos-particle:nth-child(7) { top: 40%; left: 30%; animation-delay: 12s; }
+.amrikyyos-particle:nth-child(8) { top: 90%; left: 40%; animation-delay: 14s; }
+
+/* 🔮 AI Neural Network */
+.amrikyyos-neural-network {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.amrikyyos-neural-node {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, rgba(0, 217, 255, 1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: amrikyyos-neural-pulse 3s ease-in-out infinite;
+}
+
+.amrikyyos-neural-node:nth-child(1) { top: 15%; left: 15%; animation-delay: 0s; }
+.amrikyyos-neural-node:nth-child(2) { top: 25%; left: 75%; animation-delay: 0.5s; }
+.amrikyyos-neural-node:nth-child(3) { top: 65%; left: 25%; animation-delay: 1s; }
+.amrikyyos-neural-node:nth-child(4) { top: 75%; left: 85%; animation-delay: 1.5s; }
+.amrikyyos-neural-node:nth-child(5) { top: 35%; left: 45%; animation-delay: 2s; }
+.amrikyyos-neural-node:nth-child(6) { top: 55%; left: 65%; animation-delay: 2.5s; }
+
+/* 🎨 AmrikyyOS Logo Animation */
+.amrikyyos-logo-wallpaper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Orbitron', monospace;
+  font-size: 8rem;
+  font-weight: 900;
+  color: transparent;
+  background: linear-gradient(45deg, #00ff88, #00d9ff, #9d4edd, #00ff88);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: amrikyyos-logo-gradient 4s ease-in-out infinite;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+/* 🌊 Wave Effects */
+.amrikyyos-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 200px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 136, 0.2) 100%);
+  animation: amrikyyos-waves-move 20s ease-in-out infinite;
+}
+
+/* 🎭 Animations */
+@keyframes amrikyyos-wallpaper-pulse {
+  0%, 100% { 
+    opacity: 0.5; 
+    transform: scale(1); 
+  }
+  50% { 
+    opacity: 0.8; 
+    transform: scale(1.1); 
+  }
+}
+
+@keyframes amrikyyos-wallpaper-shift {
+  0% { transform: translateX(-100%) translateY(-100%); }
+  100% { transform: translateX(100%) translateY(100%); }
+}
+
+@keyframes amrikyyos-grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes amrikyyos-particle-float {
+  0% { 
+    transform: translateY(0) translateX(0) scale(1); 
+    opacity: 0; 
+  }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { 
+    transform: translateY(-100vh) translateX(50px) scale(0.5); 
+    opacity: 0; 
+  }
+}
+
+@keyframes amrikyyos-neural-pulse {
+  0%, 100% { 
+    transform: scale(1); 
+    opacity: 0.5; 
+  }
+  50% { 
+    transform: scale(1.5); 
+    opacity: 1; 
+  }
+}
+
+@keyframes amrikyyos-logo-gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes amrikyyos-waves-move {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-50px); }
+}
+
+/* 📱 Responsive Design */
+@media (max-width: 768px) {
+  .amrikyyos-logo-wallpaper {
+    font-size: 4rem;
+  }
+  
+  .amrikyyos-quantum-grid {
+    background-size: 30px 30px;
+  }
+  
+  .amrikyyos-particle {
+    width: 3px;
+    height: 3px;
+  }
+  
+  .amrikyyos-neural-node {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .amrikyyos-logo-wallpaper {
+    font-size: 3rem;
+  }
+  
+  .amrikyyos-quantum-grid {
+    background-size: 25px 25px;
+  }
+  
+  .amrikyyos-particle {
+    width: 2px;
+    height: 2px;
+  }
+  
+  .amrikyyos-neural-node {
+    width: 4px;
+    height: 4px;
+  }
+}
+
+/* 🌙 Dark Mode Enhancements */
+.dark .amrikyyos-wallpaper {
+  background: linear-gradient(135deg, #000000 0%, #0a0a0a 25%, #1a1a2e 50%, #16213e 75%, #000000 100%);
+}
+
+.dark .amrikyyos-wallpaper::before {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.25) 0%, transparent 30%),
+    radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.25) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(157, 78, 221, 0.25) 0%, transparent 40%);
+}
+
+/* 🎯 Performance Optimizations */
+.amrikyyos-wallpaper * {
+  will-change: transform, opacity;
+}
+
+/* 🎨 Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .amrikyyos-wallpaper::before,
+  .amrikyyos-wallpaper::after,
+  .amrikyyos-quantum-grid,
+  .amrikyyos-particle,
+  .amrikyyos-neural-node,
+  .amrikyyos-logo-wallpaper,
+  .amrikyyos-waves {
+    animation: none;
+  }
+}
