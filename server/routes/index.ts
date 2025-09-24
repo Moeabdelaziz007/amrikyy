@@ -21,6 +21,7 @@ import { setupAutomationRoutes } from './routes/automation-routes.js';
 import { setupEnterpriseRoutes } from './routes/enterprise-routes.js';
 import { setupTravelRoutes } from './routes/travel-routes.js';
 import { setupMonitoringRoutes } from './routes/monitoring-routes.js';
+import advancedAIRoutes from './routes/advanced-ai-routes.js';
 
 // Import services
 import { initializeServices } from './services/service-initializer.js';
@@ -49,6 +50,9 @@ export async function setupRoutes(app: Express): Promise<Server> {
     setupEnterpriseRoutes(app);
     setupTravelRoutes(app);
     setupMonitoringRoutes(app);
+    
+    // Setup advanced AI routes
+    app.use('/api/advanced-ai', advancedAIRoutes);
 
     // Setup WebSocket server
     const server = createServer(app);

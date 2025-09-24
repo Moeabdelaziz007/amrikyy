@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  Hotel, 
-  Calendar, 
-  Users, 
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Hotel,
+  Calendar,
+  Users,
   Search,
   Filter,
   Star,
@@ -16,23 +16,23 @@ import {
   Utensils,
   Heart,
   Share2,
-  Eye
-} from 'lucide-react'
-import toast from 'react-hot-toast'
+  Eye,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface HotelData {
-  id: string
-  name: string
-  location: string
-  rating: number
-  price: number
-  originalPrice?: number
-  image: string
-  amenities: string[]
-  distance: string
-  reviews: number
-  description: string
-  provider: string
+  id: string;
+  name: string;
+  location: string;
+  rating: number;
+  price: number;
+  originalPrice?: number;
+  image: string;
+  amenities: string[];
+  distance: string;
+  reviews: number;
+  description: string;
+  provider: string;
 }
 
 const HotelSearch: React.FC = () => {
@@ -41,17 +41,17 @@ const HotelSearch: React.FC = () => {
     checkIn: '',
     checkOut: '',
     guests: 2,
-    rooms: 1
-  })
+    rooms: 1,
+  });
 
-  const [searchResults, setSearchResults] = useState<HotelData[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const [selectedHotel, setSelectedHotel] = useState<HotelData | null>(null)
+  const [searchResults, setSearchResults] = useState<HotelData[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedHotel, setSelectedHotel] = useState<HotelData | null>(null);
   const [filters, setFilters] = useState({
     priceRange: [0, 1000],
     rating: 0,
-    amenities: [] as string[]
-  })
+    amenities: [] as string[],
+  });
 
   const popularDestinations = [
     { city: 'New York', country: 'USA', image: '🏙️' },
@@ -59,8 +59,8 @@ const HotelSearch: React.FC = () => {
     { city: 'London', country: 'UK', image: '🏰' },
     { city: 'Tokyo', country: 'Japan', image: '🏯' },
     { city: 'Dubai', country: 'UAE', image: '🏢' },
-    { city: 'Sydney', country: 'Australia', image: '🏖️' }
-  ]
+    { city: 'Sydney', country: 'Australia', image: '🏖️' },
+  ];
 
   const amenities = [
     { name: 'Free WiFi', icon: Wifi },
@@ -68,8 +68,8 @@ const HotelSearch: React.FC = () => {
     { name: 'Restaurant', icon: Utensils },
     { name: 'Pool', icon: Pool },
     { name: 'Gym', icon: Dumbbell },
-    { name: 'Breakfast', icon: Coffee }
-  ]
+    { name: 'Breakfast', icon: Coffee },
+  ];
 
   const mockHotels: HotelData[] = [
     {
@@ -83,8 +83,9 @@ const HotelSearch: React.FC = () => {
       amenities: ['Free WiFi', 'Restaurant', 'Gym', 'Pool'],
       distance: '0.2 miles from center',
       reviews: 1247,
-      description: 'Luxury hotel in the heart of Manhattan with stunning city views and world-class amenities.',
-      provider: 'Booking.com'
+      description:
+        'Luxury hotel in the heart of Manhattan with stunning city views and world-class amenities.',
+      provider: 'Booking.com',
     },
     {
       id: '2',
@@ -97,8 +98,9 @@ const HotelSearch: React.FC = () => {
       amenities: ['Free WiFi', 'Breakfast', 'Restaurant'],
       distance: '0.1 miles from center',
       reviews: 892,
-      description: 'Charming boutique hotel near the famous Champs-Élysées with authentic Parisian charm.',
-      provider: 'Expedia'
+      description:
+        'Charming boutique hotel near the famous Champs-Élysées with authentic Parisian charm.',
+      provider: 'Expedia',
     },
     {
       id: '3',
@@ -110,8 +112,9 @@ const HotelSearch: React.FC = () => {
       amenities: ['Free WiFi', 'Gym', 'Restaurant'],
       distance: '0.5 miles from center',
       reviews: 634,
-      description: 'Contemporary hotel in vibrant Shibuya district with modern amenities and excellent service.',
-      provider: 'Trip.com'
+      description:
+        'Contemporary hotel in vibrant Shibuya district with modern amenities and excellent service.',
+      provider: 'Trip.com',
     },
     {
       id: '4',
@@ -123,49 +126,57 @@ const HotelSearch: React.FC = () => {
       amenities: ['Free WiFi', 'Kitchen', 'Parking'],
       distance: '1.2 miles from center',
       reviews: 423,
-      description: 'Beautiful apartment in trendy Camden with full kitchen and local neighborhood charm.',
-      provider: 'Airbnb'
-    }
-  ]
+      description:
+        'Beautiful apartment in trendy Camden with full kitchen and local neighborhood charm.',
+      provider: 'Airbnb',
+    },
+  ];
 
   const handleSearch = async () => {
-    if (!searchForm.destination || !searchForm.checkIn || !searchForm.checkOut) {
-      toast.error('Please fill in all required fields')
-      return
+    if (
+      !searchForm.destination ||
+      !searchForm.checkIn ||
+      !searchForm.checkOut
+    ) {
+      toast.error('Please fill in all required fields');
+      return;
     }
 
-    setIsSearching(true)
-    
+    setIsSearching(true);
+
     // Simulate API call
     setTimeout(() => {
-      setSearchResults(mockHotels)
-      setIsSearching(false)
-      toast.success('Found hotels for your search!')
-    }, 2000)
-  }
+      setSearchResults(mockHotels);
+      setIsSearching(false);
+      toast.success('Found hotels for your search!');
+    }, 2000);
+  };
 
   const handleBookHotel = (hotel: HotelData) => {
-    setSelectedHotel(hotel)
-    toast.success(`Selected ${hotel.name} for $${hotel.price}/night`)
-  }
+    setSelectedHotel(hotel);
+    toast.success(`Selected ${hotel.name} for $${hotel.price}/night`);
+  };
 
   const handleAmenityFilter = (amenity: string) => {
     setFilters(prev => ({
       ...prev,
       amenities: prev.amenities.includes(amenity)
         ? prev.amenities.filter(a => a !== amenity)
-        : [...prev.amenities, amenity]
-    }))
-  }
+        : [...prev.amenities, amenity],
+    }));
+  };
 
   const filteredHotels = searchResults.filter(hotel => {
-    const priceInRange = hotel.price >= filters.priceRange[0] && hotel.price <= filters.priceRange[1]
-    const ratingMatch = hotel.rating >= filters.rating
-    const amenitiesMatch = filters.amenities.length === 0 || 
-      filters.amenities.every(amenity => hotel.amenities.includes(amenity))
-    
-    return priceInRange && ratingMatch && amenitiesMatch
-  })
+    const priceInRange =
+      hotel.price >= filters.priceRange[0] &&
+      hotel.price <= filters.priceRange[1];
+    const ratingMatch = hotel.rating >= filters.rating;
+    const amenitiesMatch =
+      filters.amenities.length === 0 ||
+      filters.amenities.every(amenity => hotel.amenities.includes(amenity));
+
+    return priceInRange && ratingMatch && amenitiesMatch;
+  });
 
   return (
     <div className="space-y-8">
@@ -184,13 +195,20 @@ const HotelSearch: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           {/* Destination */}
           <div className="lg:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Destination</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Destination
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="text"
                 value={searchForm.destination}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, destination: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({
+                    ...prev,
+                    destination: e.target.value,
+                  }))
+                }
                 placeholder="City, hotel, or area"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -199,13 +217,17 @@ const HotelSearch: React.FC = () => {
 
           {/* Check-in Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Check-in</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Check-in
+            </label>
             <div className="relative">
               <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="date"
                 value={searchForm.checkIn}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, checkIn: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({ ...prev, checkIn: e.target.value }))
+                }
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -213,13 +235,17 @@ const HotelSearch: React.FC = () => {
 
           {/* Check-out Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Check-out</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Check-out
+            </label>
             <div className="relative">
               <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="date"
                 value={searchForm.checkOut}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, checkOut: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({ ...prev, checkOut: e.target.value }))
+                }
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -227,14 +253,18 @@ const HotelSearch: React.FC = () => {
 
           {/* Guests and Rooms */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Guests & Rooms</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Guests & Rooms
+            </label>
             <div className="relative">
               <Users className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <select
                 value={`${searchForm.guests} guests, ${searchForm.rooms} room`}
-                onChange={(e) => {
-                  const [guests, rooms] = e.target.value.split(' guests, ').map(v => parseInt(v))
-                  setSearchForm(prev => ({ ...prev, guests, rooms }))
+                onChange={e => {
+                  const [guests, rooms] = e.target.value
+                    .split(' guests, ')
+                    .map(v => parseInt(v));
+                  setSearchForm(prev => ({ ...prev, guests, rooms }));
                 }}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
@@ -275,12 +305,16 @@ const HotelSearch: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
       >
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">
+          Popular Destinations
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {popularDestinations.map((dest, index) => (
             <button
               key={index}
-              onClick={() => setSearchForm(prev => ({ ...prev, destination: dest.city }))}
+              onClick={() =>
+                setSearchForm(prev => ({ ...prev, destination: dest.city }))
+              }
               className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
             >
               <div className="text-2xl mb-2">{dest.image}</div>
@@ -309,14 +343,24 @@ const HotelSearch: React.FC = () => {
 
               {/* Price Range */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Price Range</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Price Range
+                </label>
                 <div className="space-y-2">
                   <input
                     type="range"
                     min="0"
                     max="1000"
                     value={filters.priceRange[1]}
-                    onChange={(e) => setFilters(prev => ({ ...prev, priceRange: [prev.priceRange[0], parseInt(e.target.value)] }))}
+                    onChange={e =>
+                      setFilters(prev => ({
+                        ...prev,
+                        priceRange: [
+                          prev.priceRange[0],
+                          parseInt(e.target.value),
+                        ],
+                      }))
+                    }
                     className="w-full"
                   />
                   <div className="flex justify-between text-sm text-gray-600">
@@ -328,21 +372,34 @@ const HotelSearch: React.FC = () => {
 
               {/* Rating */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-3">Minimum Rating</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Minimum Rating
+                </label>
                 <div className="space-y-2">
                   {[4, 3, 2, 1].map(rating => (
-                    <label key={rating} className="flex items-center space-x-2 cursor-pointer">
+                    <label
+                      key={rating}
+                      className="flex items-center space-x-2 cursor-pointer"
+                    >
                       <input
                         type="radio"
                         name="rating"
                         value={rating}
                         checked={filters.rating === rating}
-                        onChange={(e) => setFilters(prev => ({ ...prev, rating: parseInt(e.target.value) }))}
+                        onChange={e =>
+                          setFilters(prev => ({
+                            ...prev,
+                            rating: parseInt(e.target.value),
+                          }))
+                        }
                         className="text-blue-600"
                       />
                       <div className="flex items-center space-x-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          />
                         ))}
                         <span className="text-sm text-gray-600">& up</span>
                       </div>
@@ -353,12 +410,17 @@ const HotelSearch: React.FC = () => {
 
               {/* Amenities */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-3">Amenities</label>
+                <label className="block text-sm font-medium text-gray-700 mb-3">
+                  Amenities
+                </label>
                 <div className="space-y-2">
                   {amenities.map((amenity, index) => {
-                    const Icon = amenity.icon
+                    const Icon = amenity.icon;
                     return (
-                      <label key={index} className="flex items-center space-x-2 cursor-pointer">
+                      <label
+                        key={index}
+                        className="flex items-center space-x-2 cursor-pointer"
+                      >
                         <input
                           type="checkbox"
                           checked={filters.amenities.includes(amenity.name)}
@@ -366,9 +428,11 @@ const HotelSearch: React.FC = () => {
                           className="text-blue-600 rounded"
                         />
                         <Icon className="h-4 w-4 text-gray-600" />
-                        <span className="text-sm text-gray-700">{amenity.name}</span>
+                        <span className="text-sm text-gray-700">
+                          {amenity.name}
+                        </span>
                       </label>
-                    )
+                    );
                   })}
                 </div>
               </div>
@@ -397,7 +461,7 @@ const HotelSearch: React.FC = () => {
               </div>
             </div>
 
-            {filteredHotels.map((hotel) => (
+            {filteredHotels.map(hotel => (
               <motion.div
                 key={hotel.id}
                 whileHover={{ scale: 1.01 }}
@@ -413,7 +477,9 @@ const HotelSearch: React.FC = () => {
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-1">{hotel.name}</h3>
+                        <h3 className="text-xl font-bold text-gray-900 mb-1">
+                          {hotel.name}
+                        </h3>
                         <div className="flex items-center space-x-2 text-gray-600 mb-2">
                           <MapPin className="h-4 w-4" />
                           <span className="text-sm">{hotel.location}</span>
@@ -435,29 +501,43 @@ const HotelSearch: React.FC = () => {
                     <div className="flex items-center space-x-2 mb-3">
                       <div className="flex items-center space-x-1">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={`h-4 w-4 ${i < Math.floor(hotel.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
+                          <Star
+                            key={i}
+                            className={`h-4 w-4 ${i < Math.floor(hotel.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`}
+                          />
                         ))}
                       </div>
-                      <span className="text-sm font-medium text-gray-900">{hotel.rating}</span>
-                      <span className="text-sm text-gray-600">({hotel.reviews} reviews)</span>
+                      <span className="text-sm font-medium text-gray-900">
+                        {hotel.rating}
+                      </span>
+                      <span className="text-sm text-gray-600">
+                        ({hotel.reviews} reviews)
+                      </span>
                       <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
                         {hotel.provider}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">{hotel.description}</p>
+                    <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                      {hotel.description}
+                    </p>
 
                     {/* Amenities */}
                     <div className="flex items-center space-x-4 mb-4">
                       {hotel.amenities.slice(0, 4).map((amenity, index) => (
-                        <div key={index} className="flex items-center space-x-1 text-xs text-gray-600">
+                        <div
+                          key={index}
+                          className="flex items-center space-x-1 text-xs text-gray-600"
+                        >
                           <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
                           <span>{amenity}</span>
                         </div>
                       ))}
                       {hotel.amenities.length > 4 && (
-                        <span className="text-xs text-gray-500">+{hotel.amenities.length - 4} more</span>
+                        <span className="text-xs text-gray-500">
+                          +{hotel.amenities.length - 4} more
+                        </span>
                       )}
                     </div>
 
@@ -465,20 +545,27 @@ const HotelSearch: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-2xl font-bold text-gray-900">${hotel.price}</span>
+                          <span className="text-2xl font-bold text-gray-900">
+                            ${hotel.price}
+                          </span>
                           <span className="text-sm text-gray-600">/night</span>
                           {hotel.originalPrice && (
-                            <span className="text-sm text-gray-500 line-through">${hotel.originalPrice}</span>
+                            <span className="text-sm text-gray-500 line-through">
+                              ${hotel.originalPrice}
+                            </span>
                           )}
                         </div>
                         <div className="text-xs text-green-600 font-medium">
-                          {hotel.originalPrice && `Save $${hotel.originalPrice - hotel.price} per night`}
+                          {hotel.originalPrice &&
+                            `Save $${hotel.originalPrice - hotel.price} per night`}
                         </div>
                       </div>
                       <div className="flex items-center space-x-3">
                         <button className="flex items-center space-x-1 text-blue-600 hover:text-blue-700 transition-colors">
                           <Eye className="h-4 w-4" />
-                          <span className="text-sm font-medium">View Details</span>
+                          <span className="text-sm font-medium">
+                            View Details
+                          </span>
                         </button>
                         <button
                           onClick={() => handleBookHotel(hotel)}
@@ -508,14 +595,14 @@ const HotelSearch: React.FC = () => {
             <h3 className="font-semibold text-green-900">Hotel Selected</h3>
           </div>
           <p className="text-green-800 mb-4">
-            You've selected {selectedHotel.name} in {selectedHotel.location} 
+            You've selected {selectedHotel.name} in {selectedHotel.location}
             for ${selectedHotel.price}/night. Ready to proceed with booking?
           </p>
           <div className="flex space-x-4">
             <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
               Continue Booking
             </button>
-            <button 
+            <button
               onClick={() => setSelectedHotel(null)}
               className="border border-green-600 text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors"
             >
@@ -525,7 +612,7 @@ const HotelSearch: React.FC = () => {
         </motion.div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default HotelSearch
+export default HotelSearch;

@@ -11,7 +11,7 @@ import { KeyboardNavigation } from '@/components/ui/keyboard-navigation';
 import { queryClient } from '@/lib/queryClient';
 
 // Lazy load pages for better performance
-const AuraOSPage = lazy(() => import('@/pages/AuraOS'));
+const AmrikyyPage = lazy(() => import('@/pages/AuraOS'));
 const GalleryPage = lazy(() => import('@/pages/Gallery'));
 const Dashboard = lazy(() => import('@/pages/dashboard'));
 const SocialFeed = lazy(() => import('@/pages/social-feed'));
@@ -21,16 +21,17 @@ const TelegramPage = lazy(() => import('@/pages/telegram'));
 const SmartLearningPage = lazy(() => import('@/pages/smart-learning'));
 const AdvancedAIToolsPage = lazy(() => import('@/pages/advanced-ai-tools'));
 const LearningDashboard = lazy(() => import('@/pages/learning-dashboard'));
-const MCPToolsPage = lazy(() => import('@/pages/mcp-tools'));
-const PromptLibraryPage = lazy(() => import('@/pages/prompt-library'));
-const AnalyticsPage = lazy(() => import('@/pages/analytics'));
-const SettingsPage = lazy(() => import('@/pages/settings'));
-const AutomationPage = lazy(() => import('@/pages/automation'));
-const AutomationTasksPage = lazy(() => import('@/pages/automation-tasks'));
-const NotFound = lazy(() => import('@/pages/not-found'));
-const DebugView = lazy(() => import('@/pages/DebugView'));
-const Workspace = lazy(() => import('@/pages/Workspace'));
-const AITravelAgencyPage = lazy(() => import('@/pages/ai-travel-agency'));
+const MCPToolsPage = lazy(() => import('@/pages/mcp-tools').then(m => ({ default: m.default })));
+const PromptLibraryPage = lazy(() => import('@/pages/prompt-library').then(m => ({ default: m.default })));
+const AnalyticsPage = lazy(() => import('@/pages/analytics').then(m => ({ default: m.default })));
+const SettingsPage = lazy(() => import('@/pages/settings').then(m => ({ default: m.default })));
+const AutomationPage = lazy(() => import('@/pages/automation').then(m => ({ default: m.default })));
+const AutomationTasksPage = lazy(() => import('@/pages/automation-tasks').then(m => ({ default: m.default })));
+const NotFound = lazy(() => import('@/pages/not-found').then(m => ({ default: m.default })));
+const DebugView = lazy(() => import('@/pages/DebugView').then(m => ({ default: m.default })));
+const Workspace = lazy(() => import('@/pages/Workspace').then(m => ({ default: m.default })));
+const AITravelAgencyPage = lazy(() => import('@/pages/ai-travel-agency').then(m => ({ default: m.default })));
+const ModernDesktopPage = lazy(() => import('@/pages/ModernDesktopPage'));
 
 // Loading component
 const PageLoader = () => (
@@ -44,7 +45,7 @@ function AppRouter() {
     <ProtectedRoute>
       <Suspense fallback={<PageLoader />}>
         <Switch>
-          <Route path="/auraos" component={AuraOSPage} />
+          <Route path="/amrikyy" component={AmrikyyPage} />
           <Route path="/gallery" component={GalleryPage} />
           <Route path="/" component={Dashboard} />
           <Route path="/social-feed" component={SocialFeed} />
@@ -63,6 +64,7 @@ function AppRouter() {
           <Route path="/debug" component={DebugView} />
           <Route path="/workspace" component={Workspace} />
           <Route path="/ai-travel-agency" component={AITravelAgencyPage} />
+          <Route path="/modern-desktop" component={ModernDesktopPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

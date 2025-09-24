@@ -1,8 +1,10 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
-const client_1 = require('react-dom/client');
-const App_1 = require('./App');
-require('./index.css');
-(0, client_1.createRoot)(document.getElementById('root')).render(
-  <App_1.default />
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );

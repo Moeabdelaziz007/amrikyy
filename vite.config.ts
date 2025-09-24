@@ -16,7 +16,7 @@ export default defineConfig({
     minify: 'terser',
     rollupOptions: {
       output: {
-        manualChunks: id => {
+        manualChunks: (id) => {
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-vendor';
           }

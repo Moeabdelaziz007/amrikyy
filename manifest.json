@@ -1,7 +1,7 @@
 {
-  "name": "AuraOS - AI-Powered Operating System",
-  "short_name": "AuraOS",
-  "description": "Modern, AI-powered operating system platform with advanced features",
+  "name": "Amrikyy Automation System",
+  "short_name": "AmrikyyAS",
+  "description": "Advanced AI-powered automation system with intelligent workflow management",
   "version": "1.0.0",
   "start_url": "/",
   "display": "standalone",
@@ -119,7 +119,7 @@
   "related_applications": [
     {
       "platform": "webapp",
-      "url": "https://auraos.web.app/manifest.json"
+      "url": "https://aios-97581.web.app/manifest.json"
     }
   ],
   "prefer_related_applications": false,

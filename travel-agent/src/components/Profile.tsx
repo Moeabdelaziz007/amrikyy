@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  User, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Calendar, 
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
   Edit3,
   Save,
   X,
@@ -20,40 +20,40 @@ import {
   Settings,
   LogOut,
   Globe,
-  Languages
-} from 'lucide-react'
-import toast from 'react-hot-toast'
+  Languages,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface UserProfile {
-  id: string
-  name: string
-  email: string
-  phone: string
-  location: string
-  joinDate: string
-  avatar: string
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  location: string;
+  joinDate: string;
+  avatar: string;
   preferences: {
-    language: string
-    currency: string
-    notifications: boolean
-    marketing: boolean
-  }
+    language: string;
+    currency: string;
+    notifications: boolean;
+    marketing: boolean;
+  };
   stats: {
-    tripsCompleted: number
-    countriesVisited: number
-    totalSpent: number
-    averageRating: number
-  }
+    tripsCompleted: number;
+    countriesVisited: number;
+    totalSpent: number;
+    averageRating: number;
+  };
   recentTrips: Array<{
-    id: string
-    destination: string
-    date: string
-    status: 'completed' | 'upcoming' | 'cancelled'
-  }>
+    id: string;
+    destination: string;
+    date: string;
+    status: 'completed' | 'upcoming' | 'cancelled';
+  }>;
 }
 
 const Profile: React.FC = () => {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile>({
     id: '1',
     name: 'John Traveler',
@@ -66,77 +66,101 @@ const Profile: React.FC = () => {
       language: 'English',
       currency: 'USD',
       notifications: true,
-      marketing: false
+      marketing: false,
     },
     stats: {
       tripsCompleted: 12,
       countriesVisited: 8,
       totalSpent: 15420,
-      averageRating: 4.8
+      averageRating: 4.8,
     },
     recentTrips: [
-      { id: '1', destination: 'Paris, France', date: '2024-03-15', status: 'completed' },
-      { id: '2', destination: 'Tokyo, Japan', date: '2024-05-20', status: 'upcoming' },
-      { id: '3', destination: 'London, UK', date: '2024-02-10', status: 'completed' },
-      { id: '4', destination: 'Dubai, UAE', date: '2024-01-05', status: 'completed' }
-    ]
-  })
+      {
+        id: '1',
+        destination: 'Paris, France',
+        date: '2024-03-15',
+        status: 'completed',
+      },
+      {
+        id: '2',
+        destination: 'Tokyo, Japan',
+        date: '2024-05-20',
+        status: 'upcoming',
+      },
+      {
+        id: '3',
+        destination: 'London, UK',
+        date: '2024-02-10',
+        status: 'completed',
+      },
+      {
+        id: '4',
+        destination: 'Dubai, UAE',
+        date: '2024-01-05',
+        status: 'completed',
+      },
+    ],
+  });
 
   const [editForm, setEditForm] = useState({
     name: userProfile.name,
     email: userProfile.email,
     phone: userProfile.phone,
-    location: userProfile.location
-  })
+    location: userProfile.location,
+  });
 
   const handleEdit = () => {
-    setIsEditing(true)
+    setIsEditing(true);
     setEditForm({
       name: userProfile.name,
       email: userProfile.email,
       phone: userProfile.phone,
-      location: userProfile.location
-    })
-  }
+      location: userProfile.location,
+    });
+  };
 
   const handleSave = () => {
     setUserProfile(prev => ({
       ...prev,
-      ...editForm
-    }))
-    setIsEditing(false)
-    toast.success('Profile updated successfully!')
-  }
+      ...editForm,
+    }));
+    setIsEditing(false);
+    toast.success('Profile updated successfully!');
+  };
 
   const handleCancel = () => {
-    setIsEditing(false)
+    setIsEditing(false);
     setEditForm({
       name: userProfile.name,
       email: userProfile.email,
       phone: userProfile.phone,
-      location: userProfile.location
-    })
-  }
+      location: userProfile.location,
+    });
+  };
 
   const handlePreferenceChange = (key: string, value: any) => {
     setUserProfile(prev => ({
       ...prev,
       preferences: {
         ...prev.preferences,
-        [key]: value
-      }
-    }))
-    toast.success('Preferences updated!')
-  }
+        [key]: value,
+      },
+    }));
+    toast.success('Preferences updated!');
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-100 text-green-800'
-      case 'upcoming': return 'bg-blue-100 text-blue-800'
-      case 'cancelled': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'upcoming':
+        return 'bg-blue-100 text-blue-800';
+      case 'cancelled':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   return (
     <div className="space-y-8">
@@ -168,9 +192,10 @@ const Profile: React.FC = () => {
               </div>
             </div>
             <div className="mt-2 text-blue-100">
-              Member since {new Date(userProfile.joinDate).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long' 
+              Member since{' '}
+              {new Date(userProfile.joinDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
               })}
             </div>
           </div>
@@ -195,8 +220,12 @@ const Profile: React.FC = () => {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Trips Completed</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{userProfile.stats.tripsCompleted}</p>
+              <p className="text-gray-600 text-sm font-medium">
+                Trips Completed
+              </p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
+                {userProfile.stats.tripsCompleted}
+              </p>
             </div>
             <Plane className="h-8 w-8 text-blue-600" />
           </div>
@@ -205,8 +234,12 @@ const Profile: React.FC = () => {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Countries Visited</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{userProfile.stats.countriesVisited}</p>
+              <p className="text-gray-600 text-sm font-medium">
+                Countries Visited
+              </p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
+                {userProfile.stats.countriesVisited}
+              </p>
             </div>
             <Globe className="h-8 w-8 text-green-600" />
           </div>
@@ -216,7 +249,9 @@ const Profile: React.FC = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-sm font-medium">Total Spent</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">${userProfile.stats.totalSpent.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
+                ${userProfile.stats.totalSpent.toLocaleString()}
+              </p>
             </div>
             <CreditCard className="h-8 w-8 text-purple-600" />
           </div>
@@ -225,8 +260,12 @@ const Profile: React.FC = () => {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">Average Rating</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{userProfile.stats.averageRating}</p>
+              <p className="text-gray-600 text-sm font-medium">
+                Average Rating
+              </p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">
+                {userProfile.stats.averageRating}
+              </p>
             </div>
             <Star className="h-8 w-8 text-yellow-600" />
           </div>
@@ -242,7 +281,9 @@ const Profile: React.FC = () => {
           className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
         >
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Profile Information</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              Profile Information
+            </h2>
             {!isEditing ? (
               <button
                 onClick={handleEdit}
@@ -273,12 +314,16 @@ const Profile: React.FC = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </label>
               {isEditing ? (
                 <input
                   type="text"
                   value={editForm.name}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={e =>
+                    setEditForm(prev => ({ ...prev, name: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
@@ -290,12 +335,16 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
               {isEditing ? (
                 <input
                   type="email"
                   value={editForm.email}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={e =>
+                    setEditForm(prev => ({ ...prev, email: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
@@ -307,12 +356,16 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Phone Number
+              </label>
               {isEditing ? (
                 <input
                   type="tel"
                   value={editForm.phone}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, phone: e.target.value }))}
+                  onChange={e =>
+                    setEditForm(prev => ({ ...prev, phone: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
@@ -324,12 +377,16 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Location
+              </label>
               {isEditing ? (
                 <input
                   type="text"
                   value={editForm.location}
-                  onChange={(e) => setEditForm(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={e =>
+                    setEditForm(prev => ({ ...prev, location: e.target.value }))
+                  }
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               ) : (
@@ -350,13 +407,17 @@ const Profile: React.FC = () => {
           className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
         >
           <h2 className="text-xl font-bold text-gray-900 mb-6">Preferences</h2>
-          
+
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Language</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Language
+              </label>
               <select
                 value={userProfile.preferences.language}
-                onChange={(e) => handlePreferenceChange('language', e.target.value)}
+                onChange={e =>
+                  handlePreferenceChange('language', e.target.value)
+                }
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="English">English</option>
@@ -368,10 +429,14 @@ const Profile: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Currency</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Currency
+              </label>
               <select
                 value={userProfile.preferences.currency}
-                onChange={(e) => handlePreferenceChange('currency', e.target.value)}
+                onChange={e =>
+                  handlePreferenceChange('currency', e.target.value)
+                }
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="USD">USD ($)</option>
@@ -385,14 +450,20 @@ const Profile: React.FC = () => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-gray-900">Push Notifications</h3>
-                  <p className="text-sm text-gray-600">Receive updates about your trips</p>
+                  <h3 className="font-medium text-gray-900">
+                    Push Notifications
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Receive updates about your trips
+                  </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     checked={userProfile.preferences.notifications}
-                    onChange={(e) => handlePreferenceChange('notifications', e.target.checked)}
+                    onChange={e =>
+                      handlePreferenceChange('notifications', e.target.checked)
+                    }
                     className="sr-only peer"
                   />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -401,14 +472,20 @@ const Profile: React.FC = () => {
 
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-gray-900">Marketing Emails</h3>
-                  <p className="text-sm text-gray-600">Receive travel deals and promotions</p>
+                  <h3 className="font-medium text-gray-900">
+                    Marketing Emails
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Receive travel deals and promotions
+                  </p>
                 </div>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
                     checked={userProfile.preferences.marketing}
-                    onChange={(e) => handlePreferenceChange('marketing', e.target.checked)}
+                    onChange={e =>
+                      handlePreferenceChange('marketing', e.target.checked)
+                    }
                     className="sr-only peer"
                   />
                   <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
@@ -434,25 +511,32 @@ const Profile: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          {userProfile.recentTrips.map((trip) => (
-            <div key={trip.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          {userProfile.recentTrips.map(trip => (
+            <div
+              key={trip.id}
+              className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+            >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                   <Plane className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">{trip.destination}</h3>
+                  <h3 className="font-semibold text-gray-900">
+                    {trip.destination}
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    {new Date(trip.date).toLocaleDateString('en-US', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
+                    {new Date(trip.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(trip.status)}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(trip.status)}`}
+                >
                   {trip.status.charAt(0).toUpperCase() + trip.status.slice(1)}
                 </span>
                 <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
@@ -472,20 +556,20 @@ const Profile: React.FC = () => {
         className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
       >
         <h2 className="text-xl font-bold text-gray-900 mb-6">Achievements</h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="text-center p-4 border border-gray-200 rounded-lg">
             <Award className="h-12 w-12 text-yellow-500 mx-auto mb-3" />
             <h3 className="font-semibold text-gray-900 mb-1">Explorer</h3>
             <p className="text-sm text-gray-600">Visited 5+ countries</p>
           </div>
-          
+
           <div className="text-center p-4 border border-gray-200 rounded-lg">
             <Star className="h-12 w-12 text-blue-500 mx-auto mb-3" />
             <h3 className="font-semibold text-gray-900 mb-1">Top Reviewer</h3>
             <p className="text-sm text-gray-600">High rating contributor</p>
           </div>
-          
+
           <div className="text-center p-4 border border-gray-200 rounded-lg">
             <Plane className="h-12 w-12 text-green-500 mx-auto mb-3" />
             <h3 className="font-semibold text-gray-900 mb-1">Frequent Flyer</h3>
@@ -494,7 +578,7 @@ const Profile: React.FC = () => {
         </div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

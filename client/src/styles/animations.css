@@ -1,0 +1,869 @@
+/* 🎭 Advanced Animation System for AuraOS */
+/* Smooth, performant animations with accessibility support */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+/* 🎯 Base Animation Variables */
+:root {
+  --animation-duration-fast: 150ms;
+  --animation-duration-normal: 250ms;
+  --animation-duration-slow: 350ms;
+  --animation-duration-slower: 500ms;
+  
+  --animation-easing-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --animation-easing-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --animation-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-easing-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animation-easing-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  
+  --animation-stagger-delay: 50ms;
+}
+
+/* 🌟 Entrance Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleInUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 🎨 Interactive Animations */
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    animation-timing-function: var(--animation-easing-ease-out);
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    animation-timing-function: var(--animation-easing-ease-in);
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    animation-timing-function: var(--animation-easing-ease-in);
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-2px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1deg);
+  }
+  75% {
+    transform: rotate(-1deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-20px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-30px) rotate(-1deg);
+  }
+  66% {
+    transform: translateY(-15px) rotate(1deg);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 🎭 Advanced Animations */
+@keyframes morphing {
+  0%, 100% {
+    border-radius: 50%;
+    transform: rotate(0deg);
+  }
+  25% {
+    border-radius: 25%;
+    transform: rotate(90deg);
+  }
+  50% {
+    border-radius: 0%;
+    transform: rotate(180deg);
+  }
+  75% {
+    border-radius: 25%;
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes liquid {
+  0%, 100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  }
+  50% {
+    border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  75% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1);
+  }
+  75% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: perspective(400px) rotateY(0);
+  }
+  40% {
+    transform: perspective(400px) rotateY(-90deg);
+  }
+  60% {
+    transform: perspective(400px) rotateY(-90deg);
+  }
+  100% {
+    transform: perspective(400px) rotateY(0);
+  }
+}
+
+@keyframes roll {
+  0% {
+    transform: rotate(0deg) translateX(0);
+  }
+  100% {
+    transform: rotate(360deg) translateX(100px);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes rubberBand {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes tada {
+  from {
+    transform: scale3d(1, 1, 1);
+  }
+  10%, 20% {
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+  30%, 50%, 70%, 90% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+  40%, 60%, 80% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+  to {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes wobble {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  15% {
+    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+  }
+  30% {
+    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+  }
+  45% {
+    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+  }
+  60% {
+    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+  75% {
+    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 🎪 Animation Classes */
+.animate-fade-in {
+  animation: fadeIn var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-scale-in-up {
+  animation: scaleInUp var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-slide-in-up {
+  animation: slideInUp var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-bounce {
+  animation: bounce 1s infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s var(--animation-easing-ease-in-out);
+}
+
+.animate-wiggle {
+  animation: wiggle 0.5s var(--animation-easing-ease-in-out);
+}
+
+.animate-float {
+  animation: float 6s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s var(--animation-easing-ease-in-out) infinite;
+  animation-delay: -2s;
+}
+
+.animate-glow {
+  animation: glow 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-ping {
+  animation: ping 1s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-morphing {
+  animation: morphing 4s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-liquid {
+  animation: liquid 4s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-wave {
+  animation: wave 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-flip {
+  animation: flip 0.6s var(--animation-easing-ease-in-out);
+}
+
+.animate-roll {
+  animation: roll 2s var(--animation-easing-ease-in-out) infinite;
+}
+
+.animate-zoom-in {
+  animation: zoomIn var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-zoom-out {
+  animation: zoomOut var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.animate-rubber-band {
+  animation: rubberBand 1s var(--animation-easing-ease);
+}
+
+.animate-tada {
+  animation: tada 1s var(--animation-easing-ease);
+}
+
+.animate-wobble {
+  animation: wobble 1s var(--animation-easing-ease);
+}
+
+/* 🎯 Animation Utilities */
+.animate-delay-75 {
+  animation-delay: 75ms;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animate-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animate-delay-700 {
+  animation-delay: 700ms;
+}
+
+.animate-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+.animate-duration-75 {
+  animation-duration: 75ms;
+}
+
+.animate-duration-100 {
+  animation-duration: 100ms;
+}
+
+.animate-duration-150 {
+  animation-duration: 150ms;
+}
+
+.animate-duration-200 {
+  animation-duration: 200ms;
+}
+
+.animate-duration-300 {
+  animation-duration: 300ms;
+}
+
+.animate-duration-500 {
+  animation-duration: 500ms;
+}
+
+.animate-duration-700 {
+  animation-duration: 700ms;
+}
+
+.animate-duration-1000 {
+  animation-duration: 1000ms;
+}
+
+.animate-ease {
+  animation-timing-function: var(--animation-easing-ease);
+}
+
+.animate-ease-in {
+  animation-timing-function: var(--animation-easing-ease-in);
+}
+
+.animate-ease-out {
+  animation-timing-function: var(--animation-easing-ease-out);
+}
+
+.animate-ease-in-out {
+  animation-timing-function: var(--animation-easing-ease-in-out);
+}
+
+.animate-bounce-ease {
+  animation-timing-function: var(--animation-easing-bounce);
+}
+
+.animate-spring {
+  animation-timing-function: var(--animation-easing-spring);
+}
+
+.animate-elastic {
+  animation-timing-function: var(--animation-easing-elastic);
+}
+
+/* 🎨 Stagger Animations */
+.animate-stagger > * {
+  animation-delay: calc(var(--stagger-delay, 0) * var(--i, 0));
+}
+
+.animate-stagger-1 > *:nth-child(1) { --i: 0; }
+.animate-stagger-1 > *:nth-child(2) { --i: 1; }
+.animate-stagger-1 > *:nth-child(3) { --i: 2; }
+.animate-stagger-1 > *:nth-child(4) { --i: 3; }
+.animate-stagger-1 > *:nth-child(5) { --i: 4; }
+
+/* 🎭 Hover Animations */
+.hover-lift {
+  transition: transform var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+.hover-scale {
+  transition: transform var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-rotate {
+  transition: transform var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.hover-glow {
+  transition: box-shadow var(--animation-duration-normal) var(--animation-easing-ease);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.hover-bounce {
+  transition: transform var(--animation-duration-fast) var(--animation-easing-bounce);
+}
+
+.hover-bounce:hover {
+  transform: translateY(-2px);
+}
+
+/* 🎯 Focus Animations */
+.focus-ring {
+  transition: box-shadow var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+.focus-ring:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  outline: none;
+}
+
+.focus-scale {
+  transition: transform var(--animation-duration-fast) var(--animation-easing-ease);
+}
+
+.focus-scale:focus {
+  transform: scale(1.02);
+}
+
+/* 🎪 Loading Animations */
+.loading-dots {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.loading-dots > * {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 1.4s var(--animation-easing-ease-in-out) infinite both;
+}
+
+.loading-dots > *:nth-child(1) { animation-delay: -0.32s; }
+.loading-dots > *:nth-child(2) { animation-delay: -0.16s; }
+.loading-dots > *:nth-child(3) { animation-delay: 0s; }
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-wave {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.loading-wave > * {
+  width: 4px;
+  height: 20px;
+  background: currentColor;
+  animation: wave 1.2s var(--animation-easing-ease-in-out) infinite both;
+}
+
+.loading-wave > *:nth-child(1) { animation-delay: -0.4s; }
+.loading-wave > *:nth-child(2) { animation-delay: -0.2s; }
+.loading-wave > *:nth-child(3) { animation-delay: 0s; }
+.loading-wave > *:nth-child(4) { animation-delay: 0.2s; }
+.loading-wave > *:nth-child(5) { animation-delay: 0.4s; }
+
+/* 🎭 Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-spin,
+  .animate-ping,
+  .animate-pulse,
+  .animate-bounce {
+    animation: none;
+  }
+}
+
+/* 🎨 Performance Optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* 🎪 Animation States */
+.animation-paused {
+  animation-play-state: paused;
+}
+
+.animation-running {
+  animation-play-state: running;
+}
+
+/* 🎯 Custom Animation Mixins */
+@mixin fade-in($duration: var(--animation-duration-normal)) {
+  animation: fadeIn $duration var(--animation-easing-ease);
+}
+
+@mixin slide-in-up($duration: var(--animation-duration-normal)) {
+  animation: slideInUp $duration var(--animation-easing-ease);
+}
+
+@mixin bounce-in($duration: var(--animation-duration-slower)) {
+  animation: rubberBand $duration var(--animation-easing-bounce);
+}
+
+@mixin glow-effect($color: rgba(59, 130, 246, 0.4)) {
+  animation: glow 2s var(--animation-easing-ease-in-out) infinite;
+  box-shadow: 0 0 10px $color;
+}
+
+/* 🎨 Responsive Animations */
+@media (max-width: 768px) {
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .hover-rotate:hover {
+    transform: none;
+  }
+  
+  .animate-bounce,
+  .animate-wiggle,
+  .animate-shake {
+    animation: none;
+  }
+}
+
+/* 🎭 Print Styles */
+@media print {
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-fade-in-down,
+  .animate-fade-in-left,
+  .animate-fade-in-right,
+  .animate-scale-in,
+  .animate-slide-in-up,
+  .animate-slide-in-down,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-bounce,
+  .animate-pulse,
+  .animate-shake,
+  .animate-wiggle,
+  .animate-float,
+  .animate-glow,
+  .animate-shimmer,
+  .animate-spin,
+  .animate-ping,
+  .animate-morphing,
+  .animate-liquid,
+  .animate-wave,
+  .animate-heartbeat,
+  .animate-flip,
+  .animate-roll,
+  .animate-zoom-in,
+  .animate-zoom-out,
+  .animate-rubber-band,
+  .animate-tada,
+  .animate-wobble {
+    animation: none !important;
+  }
+}

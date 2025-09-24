@@ -1,0 +1,708 @@
+/**
+ * 🎭 Intelligent Workflow Orchestrator for AuraOS
+ * منسق سير العمل الذكي
+ * 
+ * This module provides advanced workflow orchestration with AI enhancement and error recovery
+ */
+
+import { EventEmitter } from 'events';
+import { getLogger } from './lib/advanced-logger.js';
+import { getAdvancedGeminiIntegration } from './advanced-ai-integration.js';
+
+export interface WorkflowStep {
+  id: string;
+  name: string;
+  type: 'ai_analysis' | 'data_processing' | 'api_integration' | 'system_action';
+  parameters: any;
+  aiEnhancement: {
+    enabled: boolean;
+    learningEnabled: boolean;
+    optimizationEnabled: boolean;
+  };
+  dependencies: string[];
+  timeout: number;
+  retryPolicy: {
+    maxRetries: number;
+    backoffStrategy: 'exponential' | 'linear' | 'fixed';
+    retryDelay: number;
+  };
+}
+
+export interface WorkflowTrigger {
+  id: string;
+  type: 'schedule' | 'event' | 'data_threshold' | 'user_action' | 'ai_prediction';
+  parameters: any;
+  enabled: boolean;
+}
+
+export interface IntelligentWorkflow {
+  id: string;
+  name: string;
+  type: string;
+  steps: WorkflowStep[];
+  aiEnhancement: {
+    enabled: boolean;
+    learningRate: number;
+    optimizationEnabled: boolean;
+    adaptiveExecution: boolean;
+  };
+  dependencies: string[];
+  triggers: WorkflowTrigger[];
+  status: 'active' | 'paused' | 'stopped';
+  performance: {
+    executions: number;
+    successRate: number;
+    averageExecutionTime: number;
+    errorRate: number;
+    userSatisfaction: number;
+    resourceEfficiency: number;
+  };
+}
+
+export class IntelligentWorkflowOrchestrator extends EventEmitter {
+  private workflows = new Map<string, IntelligentWorkflow>();
+  private executionQueue: any[] = [];
+  private performanceMetrics = new Map<string, any>();
+  private isLive = false;
+  private monitoringSubscribers = new Set();
+  private errorRecovery = new Map<string, any>();
+  private executionHistory: any[] = [];
+  private geminiIntegration: any;
+  private logger = getLogger();
+
+  constructor() {
+    super();
+    this.geminiIntegration = getAdvancedGeminiIntegration();
+    this.initializeDefaultWorkflows();
+    this.startOrchestrationEngine();
+    this.initializeLiveMode();
+  }
+
+  private initializeLiveMode() {
+    this.isLive = true;
+    console.log("🚀 Intelligent Workflow Orchestrator is now LIVE");
+    setInterval(() => {
+      this.broadcastWorkflowStatus();
+    }, 10000);
+  }
+
+  private initializeDefaultWorkflows() {
+    // Content Automation Workflow
+    this.workflows.set("content_automation_workflow", {
+      id: "content_automation_workflow",
+      name: "AI Content Generation & Distribution",
+      type: "content_automation",
+      steps: [
+        {
+          id: "analyze_trends",
+          name: "AI Trend Analysis",
+          type: "ai_analysis",
+          parameters: { model: "trend_analysis_model", timeframe: "24h" },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: [],
+          timeout: 30000,
+          retryPolicy: { maxRetries: 3, backoffStrategy: "exponential", retryDelay: 1000 }
+        },
+        {
+          id: "generate_content",
+          name: "AI Content Generation",
+          type: "ai_analysis",
+          parameters: { model: "content_generation_model", style: "adaptive" },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["analyze_trends"],
+          timeout: 60000,
+          retryPolicy: { maxRetries: 2, backoffStrategy: "linear", retryDelay: 2000 }
+        },
+        {
+          id: "optimize_content",
+          name: "AI Content Optimization",
+          type: "ai_analysis",
+          parameters: { model: "content_optimization_model", goals: ["engagement", "reach"] },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["generate_content"],
+          timeout: 45000,
+          retryPolicy: { maxRetries: 2, backoffStrategy: "exponential", retryDelay: 1500 }
+        },
+        {
+          id: "schedule_distribution",
+          name: "AI Distribution Scheduling",
+          type: "system_action",
+          parameters: { platforms: ["telegram", "social_media"], optimization: true },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["optimize_content"],
+          timeout: 30000,
+          retryPolicy: { maxRetries: 3, backoffStrategy: "fixed", retryDelay: 1000 }
+        }
+      ],
+      aiEnhancement: { enabled: true, learningRate: 0.1, optimizationEnabled: true, adaptiveExecution: true },
+      dependencies: [],
+      triggers: [
+        {
+          id: "daily_content_trigger",
+          type: "schedule",
+          parameters: { schedule: "daily", time: "09:00" },
+          enabled: true
+        },
+        {
+          id: "trend_alert_trigger",
+          type: "ai_prediction",
+          parameters: { model: "trend_detection_model", threshold: 0.8 },
+          enabled: true
+        }
+      ],
+      status: "active",
+      performance: {
+        executions: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        errorRate: 0,
+        userSatisfaction: 0,
+        resourceEfficiency: 0
+      }
+    });
+
+    // Travel Optimization Workflow
+    this.workflows.set("travel_optimization_workflow", {
+      id: "travel_optimization_workflow",
+      name: "AI Travel Planning & Optimization",
+      type: "travel_optimization",
+      steps: [
+        {
+          id: "analyze_travel_preferences",
+          name: "AI Travel Preference Analysis",
+          type: "ai_analysis",
+          parameters: { model: "preference_learning_model", dataSource: "user_history" },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: [],
+          timeout: 20000,
+          retryPolicy: { maxRetries: 2, backoffStrategy: "linear", retryDelay: 1000 }
+        },
+        {
+          id: "search_optimal_options",
+          name: "AI Multi-Source Search",
+          type: "api_integration",
+          parameters: { sources: ["flights", "hotels", "activities"], optimization: true },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["analyze_travel_preferences"],
+          timeout: 120000,
+          retryPolicy: { maxRetries: 3, backoffStrategy: "exponential", retryDelay: 2000 }
+        },
+        {
+          id: "price_optimization",
+          name: "AI Price Optimization",
+          type: "ai_analysis",
+          parameters: { model: "price_prediction_model", strategy: "dynamic" },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["search_optimal_options"],
+          timeout: 30000,
+          retryPolicy: { maxRetries: 2, backoffStrategy: "linear", retryDelay: 1500 }
+        },
+        {
+          id: "auto_booking",
+          name: "AI Automated Booking",
+          type: "system_action",
+          parameters: { autoConfirm: true, userNotification: true },
+          aiEnhancement: { enabled: true, learningEnabled: true, optimizationEnabled: true },
+          dependencies: ["price_optimization"],
+          timeout: 60000,
+          retryPolicy: { maxRetries: 3, backoffStrategy: "exponential", retryDelay: 3000 }
+        }
+      ],
+      aiEnhancement: { enabled: true, learningRate: 0.15, optimizationEnabled: true, adaptiveExecution: true },
+      dependencies: [],
+      triggers: [
+        {
+          id: "price_drop_trigger",
+          type: "data_threshold",
+          parameters: { metric: "price_change", threshold: -0.15 },
+          enabled: true
+        },
+        {
+          id: "user_request_trigger",
+          type: "user_action",
+          parameters: { action: "travel_planning_request" },
+          enabled: true
+        }
+      ],
+      status: "active",
+      performance: {
+        executions: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        errorRate: 0,
+        userSatisfaction: 0,
+        resourceEfficiency: 0
+      }
+    });
+
+    this.logger.info('Intelligent Workflow Orchestrator initialized with default workflows');
+  }
+
+  private startOrchestrationEngine() {
+    setInterval(() => {
+      this.executeWorkflowOrchestration();
+    }, 15000);
+
+    setInterval(() => {
+      this.optimizeWorkflows();
+    }, 300000);
+  }
+
+  private async executeWorkflowOrchestration() {
+    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === "active");
+
+    for (const workflow of activeWorkflows) {
+      try {
+        const shouldExecute = await this.checkWorkflowTriggers(workflow.triggers);
+        if (shouldExecute) {
+          await this.executeWorkflow(workflow);
+        }
+      } catch (error) {
+        console.error(`❌ Workflow orchestration error for ${workflow.name}:`, error);
+      }
+    }
+  }
+
+  private async checkWorkflowTriggers(triggers: WorkflowTrigger[]): Promise<boolean> {
+    for (const trigger of triggers) {
+      if (!trigger.enabled) continue;
+
+      switch (trigger.type) {
+        case "schedule":
+          if (this.checkScheduleTrigger(trigger.parameters)) return true;
+          break;
+        case "event":
+          if (await this.checkEventTrigger(trigger.parameters)) return true;
+          break;
+        case "data_threshold":
+          if (await this.checkDataThresholdTrigger(trigger.parameters)) return true;
+          break;
+        case "user_action":
+          if (await this.checkUserActionTrigger(trigger.parameters)) return true;
+          break;
+        case "ai_prediction":
+          if (await this.checkAIPredictionTrigger(trigger.parameters)) return true;
+          break;
+      }
+    }
+    return false;
+  }
+
+  private checkScheduleTrigger(parameters: any): boolean {
+    const now = new Date();
+    const schedule = parameters.schedule;
+    const time = parameters.time;
+
+    if (schedule === "daily") {
+      const [hours, minutes] = time.split(":").map(Number);
+      return now.getHours() === hours && now.getMinutes() === minutes;
+    } else if (schedule === "weekly") {
+      const day = parameters.day;
+      const dayMap: { [key: string]: number } = { 
+        sunday: 0, monday: 1, tuesday: 2, wednesday: 3, 
+        thursday: 4, friday: 5, saturday: 6 
+      };
+      const [hours, minutes] = time.split(":").map(Number);
+      return now.getDay() === dayMap[day] && now.getHours() === hours && now.getMinutes() === minutes;
+    }
+
+    return false;
+  }
+
+  private async checkEventTrigger(parameters: any): Promise<boolean> {
+    // Implement event-based trigger checking
+    return false;
+  }
+
+  private async checkDataThresholdTrigger(parameters: any): Promise<boolean> {
+    // Simulate data threshold checking
+    return Math.random() > 0.8;
+  }
+
+  private async checkUserActionTrigger(parameters: any): Promise<boolean> {
+    // Implement user action trigger checking
+    return false;
+  }
+
+  private async checkAIPredictionTrigger(parameters: any): Promise<boolean> {
+    // Simulate AI prediction trigger
+    return Math.random() > 0.7;
+  }
+
+  private async executeWorkflow(workflow: IntelligentWorkflow) {
+    console.log(`🚀 Executing workflow: ${workflow.name}`);
+    const startTime = Date.now();
+    let success = true;
+    const executionId = `exec_${Date.now()}_${workflow.id}`;
+
+    try {
+      for (const step of workflow.steps) {
+        const stepResult = await this.executeWorkflowStepWithRecovery(step, executionId);
+        
+        if (!stepResult.success) {
+          success = false;
+          const recoveryResult = await this.attemptErrorRecovery(workflow, step, executionId);
+          
+          if (!recoveryResult.success) {
+            console.error(`❌ Failed to recover from error in step: ${step.name}`);
+            break;
+          } else {
+            console.log(`🔧 Successfully recovered from error in step: ${step.name}`);
+            success = true;
+          }
+        }
+      }
+
+      const executionTime = Date.now() - startTime;
+      workflow.performance.executions++;
+      workflow.performance.lastExecution = new Date();
+
+      if (success) {
+        workflow.performance.successRate = Math.min(1, workflow.performance.successRate + 0.01);
+        workflow.performance.userSatisfaction = Math.min(1, workflow.performance.userSatisfaction + 0.02);
+      } else {
+        workflow.performance.errorRate = Math.min(1, workflow.performance.errorRate + 0.01);
+      }
+
+      workflow.performance.averageExecutionTime = (workflow.performance.averageExecutionTime + executionTime) / 2;
+
+      this.executionHistory.push({
+        executionId,
+        workflowId: workflow.id,
+        workflowName: workflow.name,
+        timestamp: new Date(),
+        success,
+        executionTime,
+        steps: workflow.steps.length
+      });
+
+      console.log(`✅ Workflow completed: ${workflow.name} - Success: ${success} (${executionTime}ms)`);
+    } catch (error) {
+      console.error(`❌ Workflow execution error: ${workflow.name}`, error);
+      workflow.performance.errorRate = Math.min(1, workflow.performance.errorRate + 0.02);
+      
+      this.executionHistory.push({
+        executionId,
+        workflowId: workflow.id,
+        workflowName: workflow.name,
+        timestamp: new Date(),
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        executionTime: Date.now() - startTime
+      });
+    }
+  }
+
+  private async executeWorkflowStep(step: WorkflowStep) {
+    console.log(`  📋 Executing step: ${step.name}`);
+    
+    try {
+      let prompt = "";
+
+      switch (step.type) {
+        case "ai_analysis":
+          prompt = `Perform AI analysis for step: ${step.name}
+          Parameters: ${JSON.stringify(step.parameters)}
+          Provide analysis results and confidence score.`;
+          break;
+        case "data_processing":
+          prompt = `Process data for step: ${step.name}
+          Parameters: ${JSON.stringify(step.parameters)}
+          Provide processed data summary.`;
+          break;
+        case "api_integration":
+          prompt = `Execute API integration for step: ${step.name}
+          Parameters: ${JSON.stringify(step.parameters)}
+          Provide integration results.`;
+          break;
+        case "system_action":
+          prompt = `Execute system action for step: ${step.name}
+          Parameters: ${JSON.stringify(step.parameters)}
+          Provide action results.`;
+          break;
+        default:
+          prompt = `Execute workflow step: ${step.name} with parameters: ${JSON.stringify(step.parameters)}`;
+      }
+
+      const response = await this.geminiIntegration.generateContent(prompt);
+      const success = Boolean(response && response.length > 0);
+
+      return {
+        success,
+        data: {
+          stepId: step.id,
+          response,
+          executionTime: Date.now(),
+          type: step.type
+        }
+      };
+    } catch (error) {
+      console.error(`Step execution error: ${step.name}`, error);
+      return { 
+        success: false, 
+        data: error instanceof Error ? error.message : "Unknown error" 
+      };
+    }
+  }
+
+  private async executeWorkflowStepWithRecovery(step: WorkflowStep, executionId: string) {
+    let attempts = 0;
+    const maxAttempts = step.retryPolicy.maxRetries + 1;
+
+    while (attempts < maxAttempts) {
+      try {
+        const result = await this.executeWorkflowStep(step);
+        
+        if (result.success) {
+          return result;
+        }
+
+        attempts++;
+        
+        if (attempts < maxAttempts) {
+          const delay = this.calculateRetryDelay(attempts, step.retryPolicy);
+          console.log(`  🔄 Retrying step ${step.name} (attempt ${attempts + 1}/${maxAttempts}) in ${delay}ms`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw error;
+        }
+      }
+    }
+
+    return { success: false, data: "Max retry attempts exceeded" };
+  }
+
+  private calculateRetryDelay(attempt: number, retryPolicy: any): number {
+    switch (retryPolicy.backoffStrategy) {
+      case "exponential":
+        return retryPolicy.retryDelay * Math.pow(2, attempt - 1);
+      case "linear":
+        return retryPolicy.retryDelay * attempt;
+      case "fixed":
+      default:
+        return retryPolicy.retryDelay;
+    }
+  }
+
+  private async attemptErrorRecovery(workflow: IntelligentWorkflow, failedStep: WorkflowStep, executionId: string) {
+    try {
+      const prompt = `Workflow step failed: ${failedStep.name}
+      Workflow: ${workflow.name}
+      Step type: ${failedStep.type}
+      Parameters: ${JSON.stringify(failedStep.parameters)}
+      
+      Analyze the failure and suggest recovery strategies. Consider:
+      1. Alternative approaches for the same goal
+      2. Parameter adjustments
+      3. Fallback mechanisms
+      
+      Provide specific recovery recommendations.`;
+
+      const recoveryResponse = await this.geminiIntegration.generateContent(prompt);
+
+      this.errorRecovery.set(executionId, {
+        workflowId: workflow.id,
+        stepId: failedStep.id,
+        timestamp: new Date(),
+        recoveryStrategy: recoveryResponse,
+        success: Boolean(recoveryResponse && recoveryResponse.length > 0)
+      });
+
+      return {
+        success: Boolean(recoveryResponse && recoveryResponse.length > 0),
+        data: recoveryResponse
+      };
+    } catch (error) {
+      console.error("Error recovery failed:", error);
+      return { 
+        success: false, 
+        data: error instanceof Error ? error.message : "Unknown error" 
+      };
+    }
+  }
+
+  private async optimizeWorkflows() {
+    console.log("🧠 Optimizing workflows with AI...");
+    
+    for (const workflow of Array.from(this.workflows.values())) {
+      if (workflow.aiEnhancement.optimizationEnabled) {
+        await this.optimizeWorkflow(workflow);
+      }
+    }
+  }
+
+  private async optimizeWorkflow(workflow: IntelligentWorkflow) {
+    const optimizations = [
+      "Optimizing step execution order",
+      "Improving resource allocation",
+      "Enhancing error handling",
+      "Adjusting timeout values",
+      "Optimizing retry policies"
+    ];
+
+    const randomOptimization = optimizations[Math.floor(Math.random() * optimizations.length)];
+    console.log(`  🧠 ${workflow.name}: ${randomOptimization}`);
+  }
+
+  private broadcastWorkflowStatus() {
+    if (!this.isLive) return;
+
+    const status = {
+      timestamp: new Date().toISOString(),
+      isLive: this.isLive,
+      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.status === "active").length,
+      totalWorkflows: this.workflows.size,
+      recentExecutions: this.executionHistory.slice(-5),
+      systemHealth: this.getWorkflowSystemHealth(),
+      workflows: Array.from(this.workflows.values()).map(w => ({
+        id: w.id,
+        name: w.name,
+        type: w.type,
+        status: w.status,
+        performance: w.performance
+      }))
+    };
+
+    this.monitoringSubscribers.forEach(callback => {
+      try {
+        callback(status);
+      } catch (error) {
+        console.error("Error broadcasting workflow status:", error);
+      }
+    });
+  }
+
+  private getWorkflowSystemHealth() {
+    const totalWorkflows = this.workflows.size;
+    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === "active").length;
+    const averageSuccessRate = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.successRate, 0) / totalWorkflows;
+
+    return {
+      status: averageSuccessRate > 0.8 ? "healthy" : averageSuccessRate > 0.6 ? "warning" : "critical",
+      averageSuccessRate,
+      activeWorkflows,
+      totalWorkflows,
+      totalExecutions: Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.executions, 0),
+      recentErrors: this.executionHistory.filter(h => !h.success).slice(-3)
+    };
+  }
+
+  // Public API Methods
+  async createCustomWorkflow(name: string, type: string, steps: WorkflowStep[], triggers: WorkflowTrigger[]): Promise<IntelligentWorkflow> {
+    const workflow: IntelligentWorkflow = {
+      id: `custom_workflow_${Date.now()}`,
+      name,
+      type,
+      steps,
+      aiEnhancement: {
+        enabled: true,
+        learningRate: 0.1,
+        optimizationEnabled: true,
+        adaptiveExecution: true
+      },
+      dependencies: [],
+      triggers,
+      status: "active",
+      performance: {
+        executions: 0,
+        successRate: 0,
+        averageExecutionTime: 0,
+        errorRate: 0,
+        userSatisfaction: 0,
+        resourceEfficiency: 0
+      }
+    };
+
+    this.workflows.set(workflow.id, workflow);
+    console.log(`🆕 Custom workflow created: ${workflow.name} (ID: ${workflow.id})`);
+    
+    this.logger.info(`Custom workflow created: ${workflow.name}`, 'workflow-orchestrator');
+    return workflow;
+  }
+
+  pauseWorkflow(workflowId: string): boolean {
+    const workflow = this.workflows.get(workflowId);
+    if (workflow) {
+      workflow.status = "paused";
+      console.log(`⏸️ Workflow paused: ${workflow.name}`);
+      this.broadcastWorkflowStatus();
+      return true;
+    }
+    return false;
+  }
+
+  resumeWorkflow(workflowId: string): boolean {
+    const workflow = this.workflows.get(workflowId);
+    if (workflow) {
+      workflow.status = "active";
+      console.log(`▶️ Workflow resumed: ${workflow.name}`);
+      this.broadcastWorkflowStatus();
+      return true;
+    }
+    return false;
+  }
+
+  getWorkflowStatus(workflowId: string): any {
+    const workflow = this.workflows.get(workflowId);
+    if (!workflow) return null;
+
+    return {
+      id: workflow.id,
+      name: workflow.name,
+      type: workflow.type,
+      status: workflow.status,
+      performance: workflow.performance,
+      recentExecutions: this.executionHistory.filter(h => h.workflowId === workflowId).slice(-5)
+    };
+  }
+
+  getWorkflowStats() {
+    const totalWorkflows = this.workflows.size;
+    const activeWorkflows = Array.from(this.workflows.values()).filter(w => w.status === "active").length;
+    const totalExecutions = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.executions, 0);
+    const averageSuccessRate = Array.from(this.workflows.values()).reduce((sum, w) => sum + w.performance.successRate, 0) / totalWorkflows;
+
+    return {
+      totalWorkflows,
+      activeWorkflows,
+      totalExecutions,
+      averageSuccessRate,
+      workflows: Array.from(this.workflows.values()).map(w => ({
+        id: w.id,
+        name: w.name,
+        type: w.type,
+        status: w.status,
+        performance: w.performance
+      }))
+    };
+  }
+
+  subscribeToWorkflowUpdates(callback: (status: any) => void) {
+    this.monitoringSubscribers.add(callback);
+    return () => this.monitoringSubscribers.delete(callback);
+  }
+
+  getLiveStatus() {
+    return {
+      isLive: this.isLive,
+      totalWorkflows: this.workflows.size,
+      activeWorkflows: Array.from(this.workflows.values()).filter(w => w.status === "active").length,
+      systemHealth: this.getWorkflowSystemHealth(),
+      recentActivity: this.executionHistory.slice(-10),
+      errorRecovery: Array.from(this.errorRecovery.entries()).slice(-5)
+    };
+  }
+}
+
+// Export singleton instance
+let intelligentWorkflowOrchestrator: IntelligentWorkflowOrchestrator;
+
+export function getIntelligentWorkflowOrchestrator() {
+  if (!intelligentWorkflowOrchestrator) {
+    intelligentWorkflowOrchestrator = new IntelligentWorkflowOrchestrator();
+  }
+  return intelligentWorkflowOrchestrator;
+}

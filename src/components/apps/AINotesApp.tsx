@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
-import { 
-  Plus, 
-  Search, 
-  Trash2, 
-  Edit3, 
-  Save, 
-  Brain, 
-  Sparkles, 
+import {
+  Plus,
+  Search,
+  Trash2,
+  Edit3,
+  Save,
+  Brain,
+  Sparkles,
   Star,
   Archive,
   MoreVertical,
@@ -17,7 +17,7 @@ import {
   CheckCircle,
   Clock,
   Filter,
-  SortAsc
+  SortAsc,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -77,21 +77,31 @@ export const AINotesApp = () => {
       readingTime: 1,
       aiInsights: {
         summary: 'Welcome message introducing AI-powered note-taking features',
-        keyPoints: ['AI assistance', 'Note organization', 'Writing improvement'],
+        keyPoints: [
+          'AI assistance',
+          'Note organization',
+          'Writing improvement',
+        ],
         sentiment: 'positive',
         topics: ['productivity', 'AI', 'note-taking'],
-        suggestions: ['Try creating a new note', 'Explore AI suggestions', 'Organize with tags']
-      }
+        suggestions: [
+          'Try creating a new note',
+          'Explore AI suggestions',
+          'Organize with tags',
+        ],
+      },
     },
   ]);
-  
+
   const [selectedNote, setSelectedNote] = useState<Note | null>(notes[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
   const [editTags, setEditTags] = useState<string[]>([]);
-  const [editPriority, setEditPriority] = useState<'low' | 'medium' | 'high'>('medium');
+  const [editPriority, setEditPriority] = useState<'low' | 'medium' | 'high'>(
+    'medium'
+  );
   const [sortBy, setSortBy] = useState<SortOption>('date');
   const [filterBy, setFilterBy] = useState<FilterOption>('all');
   const [showAIPanel, setShowAIPanel] = useState(false);
@@ -101,37 +111,52 @@ export const AINotesApp = () => {
 
   // Utility functions
   const calculateWordCount = (text: string): number => {
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    return text
+      .trim()
+      .split(/\s+/)
+      .filter(word => word.length > 0).length;
   };
 
   const calculateReadingTime = (wordCount: number): number => {
     return Math.ceil(wordCount / 200); // Average reading speed: 200 words per minute
   };
 
-  const generateAIInsights = async (content: string): Promise<Note['aiInsights']> => {
+  const generateAIInsights = async (
+    content: string
+  ): Promise<Note['aiInsights']> => {
     if (!content.trim()) return undefined;
-    
+
     setIsLoadingAI(true);
     try {
       // Simulate AI processing
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const words = content.toLowerCase().split(/\s+/);
       const topics = ['productivity', 'ideas', 'notes', 'planning', 'thoughts'];
-      const detectedTopics = topics.filter(topic => 
+      const detectedTopics = topics.filter(topic =>
         words.some(word => word.includes(topic))
       );
 
       return {
-        summary: content.length > 100 ? `${content.substring(0, 100)}...` : content,
-        keyPoints: content.split('.').slice(0, 3).map(point => point.trim()).filter(Boolean),
-        sentiment: content.includes('!') || content.includes('amazing') || content.includes('great') ? 'positive' : 'neutral',
+        summary:
+          content.length > 100 ? `${content.substring(0, 100)}...` : content,
+        keyPoints: content
+          .split('.')
+          .slice(0, 3)
+          .map(point => point.trim())
+          .filter(Boolean),
+        sentiment:
+          content.includes('!') ||
+          content.includes('amazing') ||
+          content.includes('great')
+            ? 'positive'
+            : 'neutral',
         topics: detectedTopics.length > 0 ? detectedTopics : ['general'],
         suggestions: [
           'Consider adding more details',
           'Try organizing with bullet points',
-          'Add relevant tags for better organization'
-        ]
+          'Add relevant tags for better organization',
+        ],
       };
     } catch (error) {
       console.error('AI insights generation failed:', error);
@@ -243,7 +268,7 @@ export const AINotesApp = () => {
     try {
       // Simulate AI processing
       await new Promise(resolve => setTimeout(resolve, 800));
-      
+
       const suggestions: AISuggestion[] = [
         {
           id: '1',
@@ -252,9 +277,10 @@ export const AINotesApp = () => {
           description: 'Enhance clarity and structure',
           action: () => {
             // Simulate AI improvement
-            const improved = content + '\n\n[AI Enhanced: Added structure and clarity]';
+            const improved =
+              content + '\n\n[AI Enhanced: Added structure and clarity]';
             setEditContent(improved);
-          }
+          },
         },
         {
           id: '2',
@@ -264,7 +290,7 @@ export const AINotesApp = () => {
           action: () => {
             const summary = `Summary: ${content.substring(0, 100)}...`;
             setEditContent(content + '\n\n' + summary);
-          }
+          },
         },
         {
           id: '3',
@@ -272,12 +298,14 @@ export const AINotesApp = () => {
           title: 'Organize Content',
           description: 'Structure with bullet points',
           action: () => {
-            const organized = content.split('.').map(point => 
-              point.trim() ? `• ${point.trim()}` : ''
-            ).filter(Boolean).join('\n');
+            const organized = content
+              .split('.')
+              .map(point => (point.trim() ? `• ${point.trim()}` : ''))
+              .filter(Boolean)
+              .join('\n');
             setEditContent(organized);
-          }
-        }
+          },
+        },
       ];
 
       setAiSuggestions(suggestions);
@@ -301,18 +329,23 @@ export const AINotesApp = () => {
   // Filtering and sorting logic
   const filteredNotes = notes
     .filter(note => {
-      const matchesSearch = 
+      const matchesSearch =
         note.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         note.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        note.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      
+        note.tags.some(tag =>
+          tag.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
       switch (filterBy) {
         case 'starred':
           return matchesSearch && note.isStarred;
         case 'archived':
           return matchesSearch && note.isArchived;
         case 'recent':
-          return matchesSearch && (Date.now() - note.updatedAt.getTime()) < 7 * 24 * 60 * 60 * 1000; // Last 7 days
+          return (
+            matchesSearch &&
+            Date.now() - note.updatedAt.getTime() < 7 * 24 * 60 * 60 * 1000
+          ); // Last 7 days
         default:
           return matchesSearch && !note.isArchived;
       }
@@ -333,10 +366,14 @@ export const AINotesApp = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-400 bg-red-400/10';
-      case 'medium': return 'text-yellow-400 bg-yellow-400/10';
-      case 'low': return 'text-green-400 bg-green-400/10';
-      default: return 'text-gray-400 bg-gray-400/10';
+      case 'high':
+        return 'text-red-400 bg-red-400/10';
+      case 'medium':
+        return 'text-yellow-400 bg-yellow-400/10';
+      case 'low':
+        return 'text-green-400 bg-green-400/10';
+      default:
+        return 'text-gray-400 bg-gray-400/10';
     }
   };
 
@@ -375,9 +412,9 @@ export const AINotesApp = () => {
 
           {/* Filters and Sort */}
           <div className="flex gap-2 mb-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="flex-1 glass border-white/20"
               onClick={() => {
                 const filters = ['all', 'starred', 'recent', 'archived'];
@@ -390,9 +427,9 @@ export const AINotesApp = () => {
               {filterBy}
             </Button>
 
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="flex-1 glass border-white/20"
               onClick={() => {
                 const sorts = ['date', 'title', 'priority', 'wordCount'];
@@ -431,27 +468,33 @@ export const AINotesApp = () => {
                 )}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-medium text-sm truncate flex-1">{note.title}</h3>
+                  <h3 className="font-medium text-sm truncate flex-1">
+                    {note.title}
+                  </h3>
                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Button
                       size="sm"
                       variant="ghost"
                       className="h-6 w-6 p-0"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         toggleStar(note.id);
                       }}
                     >
-                      <Star className={cn(
-                        "w-3 h-3",
-                        note.isStarred ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"
-                      )} />
+                      <Star
+                        className={cn(
+                          'w-3 h-3',
+                          note.isStarred
+                            ? 'fill-yellow-400 text-yellow-400'
+                            : 'text-muted-foreground'
+                        )}
+                      />
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       className="h-6 w-6 p-0"
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         toggleArchive(note.id);
                       }}
@@ -461,18 +504,27 @@ export const AINotesApp = () => {
                     </Button>
                   </div>
                 </div>
-                
+
                 <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
                   {note.content || 'No content'}
                 </p>
-                
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Badge className={cn("text-xs px-2 py-0", getPriorityColor(note.priority))}>
+                    <Badge
+                      className={cn(
+                        'text-xs px-2 py-0',
+                        getPriorityColor(note.priority)
+                      )}
+                    >
                       {note.priority}
                     </Badge>
                     {note.tags.slice(0, 2).map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs px-1 py-0">
+                      <Badge
+                        key={tag}
+                        variant="outline"
+                        className="text-xs px-1 py-0"
+                      >
                         {tag}
                       </Badge>
                     ))}
@@ -482,7 +534,7 @@ export const AINotesApp = () => {
                     {note.readingTime}m
                   </div>
                 </div>
-                
+
                 <p className="text-xs text-muted-foreground mt-2">
                   {note.updatedAt.toLocaleDateString()}
                 </p>
@@ -516,7 +568,12 @@ export const AINotesApp = () => {
                         {selectedNote.isStarred && (
                           <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                         )}
-                        <Badge className={cn("text-xs", getPriorityColor(selectedNote.priority))}>
+                        <Badge
+                          className={cn(
+                            'text-xs',
+                            getPriorityColor(selectedNote.priority)
+                          )}
+                        >
                           {selectedNote.priority}
                         </Badge>
                       </div>
@@ -561,10 +618,14 @@ export const AINotesApp = () => {
                         size="sm"
                         className="glass border-white/20"
                       >
-                        <Star className={cn(
-                          "w-4 h-4",
-                          selectedNote.isStarred ? "fill-yellow-400 text-yellow-400" : ""
-                        )} />
+                        <Star
+                          className={cn(
+                            'w-4 h-4',
+                            selectedNote.isStarred
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : ''
+                          )}
+                        />
                       </Button>
                       <Button
                         onClick={() => deleteNote(selectedNote.id)}
@@ -586,7 +647,9 @@ export const AINotesApp = () => {
                     <div className="flex items-center gap-4">
                       <span>{selectedNote.wordCount} words</span>
                       <span>{selectedNote.readingTime} min read</span>
-                      <span>Updated {selectedNote.updatedAt.toLocaleDateString()}</span>
+                      <span>
+                        Updated {selectedNote.updatedAt.toLocaleDateString()}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2">
                       {selectedNote.tags.map(tag => (
@@ -606,10 +669,16 @@ export const AINotesApp = () => {
                     {/* Tags and Priority Editor */}
                     <div className="flex gap-4">
                       <div className="flex-1">
-                        <label className="text-sm font-medium mb-2 block">Tags</label>
+                        <label className="text-sm font-medium mb-2 block">
+                          Tags
+                        </label>
                         <div className="flex flex-wrap gap-2 mb-2">
                           {editTags.map(tag => (
-                            <Badge key={tag} variant="outline" className="text-xs">
+                            <Badge
+                              key={tag}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {tag}
                               <button
                                 onClick={() => removeTag(tag)}
@@ -642,15 +711,21 @@ export const AINotesApp = () => {
                         </div>
                       </div>
                       <div>
-                        <label className="text-sm font-medium mb-2 block">Priority</label>
-                        <Button 
-                          variant="outline" 
+                        <label className="text-sm font-medium mb-2 block">
+                          Priority
+                        </label>
+                        <Button
+                          variant="outline"
                           className="w-32"
                           onClick={() => {
                             const priorities = ['low', 'medium', 'high'];
-                            const currentIndex = priorities.indexOf(editPriority);
-                            const nextIndex = (currentIndex + 1) % priorities.length;
-                            setEditPriority(priorities[nextIndex] as 'low' | 'medium' | 'high');
+                            const currentIndex =
+                              priorities.indexOf(editPriority);
+                            const nextIndex =
+                              (currentIndex + 1) % priorities.length;
+                            setEditPriority(
+                              priorities[nextIndex] as 'low' | 'medium' | 'high'
+                            );
                           }}
                         >
                           {editPriority}
@@ -677,13 +752,24 @@ export const AINotesApp = () => {
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                           {aiSuggestions.map(suggestion => (
-                            <Card key={suggestion.id} className="glass border-white/20">
+                            <Card
+                              key={suggestion.id}
+                              className="glass border-white/20"
+                            >
                               <CardContent className="p-3">
                                 <div className="flex items-center gap-2 mb-2">
-                                  {suggestion.type === 'improve' && <Zap className="w-4 h-4 text-yellow-400" />}
-                                  {suggestion.type === 'summarize' && <BookOpen className="w-4 h-4 text-blue-400" />}
-                                  {suggestion.type === 'organize' && <Target className="w-4 h-4 text-green-400" />}
-                                  <h5 className="text-sm font-medium">{suggestion.title}</h5>
+                                  {suggestion.type === 'improve' && (
+                                    <Zap className="w-4 h-4 text-yellow-400" />
+                                  )}
+                                  {suggestion.type === 'summarize' && (
+                                    <BookOpen className="w-4 h-4 text-blue-400" />
+                                  )}
+                                  {suggestion.type === 'organize' && (
+                                    <Target className="w-4 h-4 text-green-400" />
+                                  )}
+                                  <h5 className="text-sm font-medium">
+                                    {suggestion.title}
+                                  </h5>
                                 </div>
                                 <p className="text-xs text-muted-foreground mb-3">
                                   {suggestion.description}
@@ -729,45 +815,72 @@ export const AINotesApp = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {selectedNote.aiInsights.summary && (
                             <div>
-                              <h5 className="text-xs font-medium text-muted-foreground mb-1">Summary</h5>
-                              <p className="text-sm">{selectedNote.aiInsights.summary}</p>
+                              <h5 className="text-xs font-medium text-muted-foreground mb-1">
+                                Summary
+                              </h5>
+                              <p className="text-sm">
+                                {selectedNote.aiInsights.summary}
+                              </p>
                             </div>
                           )}
-                          {selectedNote.aiInsights.keyPoints && selectedNote.aiInsights.keyPoints.length > 0 && (
-                            <div>
-                              <h5 className="text-xs font-medium text-muted-foreground mb-1">Key Points</h5>
-                              <ul className="text-sm space-y-1">
-                                {selectedNote.aiInsights.keyPoints.map((point, index) => (
-                                  <li key={index} className="flex items-start gap-2">
-                                    <CheckCircle className="w-3 h-3 text-green-400 mt-0.5 flex-shrink-0" />
-                                    {point}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          {selectedNote.aiInsights.topics && selectedNote.aiInsights.topics.length > 0 && (
-                            <div>
-                              <h5 className="text-xs font-medium text-muted-foreground mb-1">Topics</h5>
-                              <div className="flex flex-wrap gap-1">
-                                {selectedNote.aiInsights.topics.map(topic => (
-                                  <Badge key={topic} variant="outline" className="text-xs">
-                                    {topic}
-                                  </Badge>
-                                ))}
+                          {selectedNote.aiInsights.keyPoints &&
+                            selectedNote.aiInsights.keyPoints.length > 0 && (
+                              <div>
+                                <h5 className="text-xs font-medium text-muted-foreground mb-1">
+                                  Key Points
+                                </h5>
+                                <ul className="text-sm space-y-1">
+                                  {selectedNote.aiInsights.keyPoints.map(
+                                    (point, index) => (
+                                      <li
+                                        key={index}
+                                        className="flex items-start gap-2"
+                                      >
+                                        <CheckCircle className="w-3 h-3 text-green-400 mt-0.5 flex-shrink-0" />
+                                        {point}
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
                               </div>
-                            </div>
-                          )}
+                            )}
+                          {selectedNote.aiInsights.topics &&
+                            selectedNote.aiInsights.topics.length > 0 && (
+                              <div>
+                                <h5 className="text-xs font-medium text-muted-foreground mb-1">
+                                  Topics
+                                </h5>
+                                <div className="flex flex-wrap gap-1">
+                                  {selectedNote.aiInsights.topics.map(topic => (
+                                    <Badge
+                                      key={topic}
+                                      variant="outline"
+                                      className="text-xs"
+                                    >
+                                      {topic}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
                           {selectedNote.aiInsights.sentiment && (
                             <div>
-                              <h5 className="text-xs font-medium text-muted-foreground mb-1">Sentiment</h5>
-                              <Badge 
-                                variant="outline" 
+                              <h5 className="text-xs font-medium text-muted-foreground mb-1">
+                                Sentiment
+                              </h5>
+                              <Badge
+                                variant="outline"
                                 className={cn(
-                                  "text-xs",
-                                  selectedNote.aiInsights.sentiment === 'positive' && "text-green-400 border-green-400/30",
-                                  selectedNote.aiInsights.sentiment === 'negative' && "text-red-400 border-red-400/30",
-                                  selectedNote.aiInsights.sentiment === 'neutral' && "text-gray-400 border-gray-400/30"
+                                  'text-xs',
+                                  selectedNote.aiInsights.sentiment ===
+                                    'positive' &&
+                                    'text-green-400 border-green-400/30',
+                                  selectedNote.aiInsights.sentiment ===
+                                    'negative' &&
+                                    'text-red-400 border-red-400/30',
+                                  selectedNote.aiInsights.sentiment ===
+                                    'neutral' &&
+                                    'text-gray-400 border-gray-400/30'
                                 )}
                               >
                                 {selectedNote.aiInsights.sentiment}
@@ -789,7 +902,10 @@ export const AINotesApp = () => {
                 <p className="text-muted-foreground mb-4">
                   Choose a note from the sidebar or create a new one.
                 </p>
-                <Button onClick={createNote} className="bg-gradient-primary hover:opacity-90">
+                <Button
+                  onClick={createNote}
+                  className="bg-gradient-primary hover:opacity-90"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Create Your First Note
                 </Button>
@@ -807,7 +923,7 @@ export const AINotesApp = () => {
                 <h3 className="font-semibold">AI Assistant</h3>
               </div>
             </div>
-            
+
             <ScrollArea className="flex-1 p-4">
               <div className="space-y-4">
                 <Card className="glass border-white/20">
@@ -884,11 +1000,15 @@ export const AINotesApp = () => {
                     </div>
                     <div className="flex justify-between text-xs">
                       <span>Total Words:</span>
-                      <span>{notes.reduce((sum, n) => sum + n.wordCount, 0)}</span>
+                      <span>
+                        {notes.reduce((sum, n) => sum + n.wordCount, 0)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-xs">
                       <span>Reading Time:</span>
-                      <span>{notes.reduce((sum, n) => sum + n.readingTime, 0)}m</span>
+                      <span>
+                        {notes.reduce((sum, n) => sum + n.readingTime, 0)}m
+                      </span>
                     </div>
                   </CardContent>
                 </Card>

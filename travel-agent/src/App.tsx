@@ -29,7 +29,7 @@ function App() {
             </Routes>
           </main>
         </div>
-        <Toaster 
+        <Toaster
           position="top-right"
           toastOptions={{
             duration: 4000,
@@ -38,10 +38,11 @@ function App() {
               color: '#fff',
             },
           }}
-        />;
+        />
+        ;
       </div>
     </Router>
-  )
+  );
 }
 
 export default App;

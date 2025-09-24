@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  Plane, 
-  Calendar, 
-  Users, 
-  ArrowRightLeft, 
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Plane,
+  Calendar,
+  Users,
+  ArrowRightLeft,
   Search,
   Filter,
   Star,
@@ -12,23 +12,23 @@ import {
   MapPin,
   TrendingUp,
   Shield,
-  Wifi
-} from 'lucide-react'
-import toast from 'react-hot-toast'
+  Wifi,
+} from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface Flight {
-  id: string
-  airline: string
-  departure: string
-  arrival: string
-  departureTime: string
-  arrivalTime: string
-  duration: string
-  price: number
-  stops: number
-  aircraft: string
-  rating: number
-  amenities: string[]
+  id: string;
+  airline: string;
+  departure: string;
+  arrival: string;
+  departureTime: string;
+  arrivalTime: string;
+  duration: string;
+  price: number;
+  stops: number;
+  aircraft: string;
+  rating: number;
+  amenities: string[];
 }
 
 const FlightSearch: React.FC = () => {
@@ -38,13 +38,13 @@ const FlightSearch: React.FC = () => {
     departureDate: '',
     returnDate: '',
     passengers: 1,
-    class: 'economy'
-  })
+    class: 'economy',
+  });
 
-  const [isRoundTrip, setIsRoundTrip] = useState(false)
-  const [searchResults, setSearchResults] = useState<Flight[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null)
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const [searchResults, setSearchResults] = useState<Flight[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
 
   const popularDestinations = [
     { city: 'New York', code: 'NYC', country: 'USA' },
@@ -52,8 +52,8 @@ const FlightSearch: React.FC = () => {
     { city: 'Paris', code: 'CDG', country: 'France' },
     { city: 'Tokyo', code: 'NRT', country: 'Japan' },
     { city: 'Dubai', code: 'DXB', country: 'UAE' },
-    { city: 'Sydney', code: 'SYD', country: 'Australia' }
-  ]
+    { city: 'Sydney', code: 'SYD', country: 'Australia' },
+  ];
 
   const airlines = [
     { name: 'American Airlines', logo: 'AA', color: 'bg-blue-600' },
@@ -61,8 +61,8 @@ const FlightSearch: React.FC = () => {
     { name: 'United Airlines', logo: 'UA', color: 'bg-blue-800' },
     { name: 'Lufthansa', logo: 'LH', color: 'bg-yellow-600' },
     { name: 'Emirates', logo: 'EK', color: 'bg-red-700' },
-    { name: 'British Airways', logo: 'BA', color: 'bg-blue-900' }
-  ]
+    { name: 'British Airways', logo: 'BA', color: 'bg-blue-900' },
+  ];
 
   const mockFlights: Flight[] = [
     {
@@ -77,7 +77,7 @@ const FlightSearch: React.FC = () => {
       stops: 0,
       aircraft: 'Boeing 777',
       rating: 4.2,
-      amenities: ['WiFi', 'Entertainment', 'Meals']
+      amenities: ['WiFi', 'Entertainment', 'Meals'],
     },
     {
       id: '2',
@@ -91,7 +91,7 @@ const FlightSearch: React.FC = () => {
       stops: 0,
       aircraft: 'Airbus A350',
       rating: 4.5,
-      amenities: ['WiFi', 'Entertainment', 'Meals', 'Lounge Access']
+      amenities: ['WiFi', 'Entertainment', 'Meals', 'Lounge Access'],
     },
     {
       id: '3',
@@ -105,38 +105,38 @@ const FlightSearch: React.FC = () => {
       stops: 0,
       aircraft: 'Boeing 767',
       rating: 4.0,
-      amenities: ['WiFi', 'Entertainment']
-    }
-  ]
+      amenities: ['WiFi', 'Entertainment'],
+    },
+  ];
 
   const handleSearch = async () => {
     if (!searchForm.from || !searchForm.to || !searchForm.departureDate) {
-      toast.error('Please fill in all required fields')
-      return
+      toast.error('Please fill in all required fields');
+      return;
     }
 
-    setIsSearching(true)
-    
+    setIsSearching(true);
+
     // Simulate API call
     setTimeout(() => {
-      setSearchResults(mockFlights)
-      setIsSearching(false)
-      toast.success('Found flights for your search!')
-    }, 2000)
-  }
+      setSearchResults(mockFlights);
+      setIsSearching(false);
+      toast.success('Found flights for your search!');
+    }, 2000);
+  };
 
   const handleBookFlight = (flight: Flight) => {
-    setSelectedFlight(flight)
-    toast.success(`Selected ${flight.airline} flight for $${flight.price}`)
-  }
+    setSelectedFlight(flight);
+    toast.success(`Selected ${flight.airline} flight for $${flight.price}`);
+  };
 
   const swapLocations = () => {
     setSearchForm(prev => ({
       ...prev,
       from: prev.to,
-      to: prev.from
-    }))
-  }
+      to: prev.from,
+    }));
+  };
 
   return (
     <div className="space-y-8">
@@ -179,13 +179,17 @@ const FlightSearch: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           {/* From */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              From
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="text"
                 value={searchForm.from}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, from: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({ ...prev, from: e.target.value }))
+                }
                 placeholder="City or Airport"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -194,13 +198,17 @@ const FlightSearch: React.FC = () => {
 
           {/* To */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              To
+            </label>
             <div className="relative">
               <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="text"
                 value={searchForm.to}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, to: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({ ...prev, to: e.target.value }))
+                }
                 placeholder="City or Airport"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -215,13 +223,20 @@ const FlightSearch: React.FC = () => {
 
           {/* Departure Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Departure</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Departure
+            </label>
             <div className="relative">
               <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="date"
                 value={searchForm.departureDate}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, departureDate: e.target.value }))}
+                onChange={e =>
+                  setSearchForm(prev => ({
+                    ...prev,
+                    departureDate: e.target.value,
+                  }))
+                }
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
@@ -230,13 +245,20 @@ const FlightSearch: React.FC = () => {
           {/* Return Date */}
           {isRoundTrip && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Return</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Return
+              </label>
               <div className="relative">
                 <Calendar className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <input
                   type="date"
                   value={searchForm.returnDate}
-                  onChange={(e) => setSearchForm(prev => ({ ...prev, returnDate: e.target.value }))}
+                  onChange={e =>
+                    setSearchForm(prev => ({
+                      ...prev,
+                      returnDate: e.target.value,
+                    }))
+                  }
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
@@ -247,26 +269,39 @@ const FlightSearch: React.FC = () => {
         {/* Passengers and Class */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Passengers</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Passengers
+            </label>
             <div className="relative">
               <Users className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <select
                 value={searchForm.passengers}
-                onChange={(e) => setSearchForm(prev => ({ ...prev, passengers: parseInt(e.target.value) }))}
+                onChange={e =>
+                  setSearchForm(prev => ({
+                    ...prev,
+                    passengers: parseInt(e.target.value),
+                  }))
+                }
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {[1, 2, 3, 4, 5, 6].map(num => (
-                  <option key={num} value={num}>{num} {num === 1 ? 'Passenger' : 'Passengers'}</option>
+                  <option key={num} value={num}>
+                    {num} {num === 1 ? 'Passenger' : 'Passengers'}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Class</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Class
+            </label>
             <select
               value={searchForm.class}
-              onChange={(e) => setSearchForm(prev => ({ ...prev, class: e.target.value }))}
+              onChange={e =>
+                setSearchForm(prev => ({ ...prev, class: e.target.value }))
+              }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="economy">Economy</option>
@@ -304,12 +339,16 @@ const FlightSearch: React.FC = () => {
         transition={{ delay: 0.1 }}
         className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200"
       >
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Popular Destinations</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-4">
+          Popular Destinations
+        </h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {popularDestinations.map((dest, index) => (
             <button
               key={index}
-              onClick={() => setSearchForm(prev => ({ ...prev, to: dest.city }))}
+              onClick={() =>
+                setSearchForm(prev => ({ ...prev, to: dest.city }))
+              }
               className="p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left"
             >
               <div className="font-semibold text-gray-900">{dest.city}</div>
@@ -329,14 +368,16 @@ const FlightSearch: React.FC = () => {
           className="space-y-4"
         >
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-900">Available Flights</h2>
+            <h2 className="text-xl font-bold text-gray-900">
+              Available Flights
+            </h2>
             <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
               <Filter className="h-4 w-4" />
               <span>Filter</span>
             </button>
           </div>
 
-          {searchResults.map((flight) => (
+          {searchResults.map(flight => (
             <motion.div
               key={flight.id}
               whileHover={{ scale: 1.02 }}
@@ -345,10 +386,15 @@ const FlightSearch: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center space-x-4">
                   <div className="bg-blue-600 text-white px-3 py-2 rounded-lg font-bold">
-                    {flight.airline.split(' ').map(word => word[0]).join('')}
+                    {flight.airline
+                      .split(' ')
+                      .map(word => word[0])
+                      .join('')}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{flight.airline}</h3>
+                    <h3 className="font-semibold text-gray-900">
+                      {flight.airline}
+                    </h3>
                     <div className="flex items-center space-x-1 text-sm text-gray-600">
                       <Star className="h-4 w-4 text-yellow-500" />
                       <span>{flight.rating}</span>
@@ -356,28 +402,40 @@ const FlightSearch: React.FC = () => {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">${flight.price}</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    ${flight.price}
+                  </div>
                   <div className="text-sm text-gray-600">per person</div>
                 </div>
               </div>
 
               <div className="flex items-center justify-between mb-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{flight.departureTime}</div>
-                  <div className="text-sm text-gray-600">{flight.departure}</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {flight.departureTime}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    {flight.departure}
+                  </div>
                 </div>
                 <div className="flex-1 mx-4">
                   <div className="flex items-center">
                     <div className="flex-1 h-px bg-gray-300"></div>
-                    <div className="px-2 text-xs text-gray-500">{flight.duration}</div>
+                    <div className="px-2 text-xs text-gray-500">
+                      {flight.duration}
+                    </div>
                     <div className="flex-1 h-px bg-gray-300"></div>
                   </div>
                   <div className="text-center text-xs text-gray-500 mt-1">
-                    {flight.stops === 0 ? 'Non-stop' : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
+                    {flight.stops === 0
+                      ? 'Non-stop'
+                      : `${flight.stops} stop${flight.stops > 1 ? 's' : ''}`}
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{flight.arrivalTime}</div>
+                  <div className="text-2xl font-bold text-gray-900">
+                    {flight.arrivalTime}
+                  </div>
                   <div className="text-sm text-gray-600">{flight.arrival}</div>
                 </div>
               </div>
@@ -424,14 +482,15 @@ const FlightSearch: React.FC = () => {
             <h3 className="font-semibold text-green-900">Flight Selected</h3>
           </div>
           <p className="text-green-800 mb-4">
-            You've selected {selectedFlight.airline} flight from {selectedFlight.departure} to {selectedFlight.arrival} 
+            You've selected {selectedFlight.airline} flight from{' '}
+            {selectedFlight.departure} to {selectedFlight.arrival}
             for ${selectedFlight.price}. Ready to proceed with booking?
           </p>
           <div className="flex space-x-4">
             <button className="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors">
               Continue Booking
             </button>
-            <button 
+            <button
               onClick={() => setSelectedFlight(null)}
               className="border border-green-600 text-green-600 px-6 py-2 rounded-lg font-semibold hover:bg-green-50 transition-colors"
             >
@@ -441,7 +500,7 @@ const FlightSearch: React.FC = () => {
         </motion.div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default FlightSearch
+export default FlightSearch;

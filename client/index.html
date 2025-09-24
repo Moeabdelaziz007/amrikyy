@@ -6,15 +6,82 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5"
     />
-    <title>AuraOS - نظام التشغيل الذكي</title>
+    <title>Amrikyy Automation System - نظام الأتمتة الذكي</title>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="/manifest.json" />
+    <script type="application/json" id="manifest-data">
+    {
+      "name": "Amrikyy Automation System",
+      "short_name": "AmrikyyAS",
+      "description": "Advanced AI-powered automation system with intelligent workflow management",
+      "version": "1.0.0",
+      "start_url": "/",
+      "display": "standalone",
+      "orientation": "portrait-primary",
+      "theme_color": "#00ff88",
+      "background_color": "#0f0f0f",
+      "scope": "/",
+      "lang": "en-US",
+      "dir": "ltr",
+      "categories": ["productivity", "utilities", "business"],
+      "icons": [
+        {
+          "src": "/icons/icon-72x72.png",
+          "sizes": "72x72",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-128x128.png",
+          "sizes": "128x128",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-144x144.png",
+          "sizes": "144x144",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-152x152.png",
+          "sizes": "152x152",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-384x384.png",
+          "sizes": "384x384",
+          "type": "image/png",
+          "purpose": "maskable any"
+        },
+        {
+          "src": "/icons/icon-512x512.png",
+          "sizes": "512x512",
+          "type": "image/png",
+          "purpose": "maskable any"
+        }
+      ]
+    }
+    </script>
 
     <!-- Performance Optimizations -->
     <meta
       name="description"
-      content="AuraOS - نظام تشغيل ذكي متقدم يعمل بالذكاء الاصطناعي مع أتمتة ذكية وإدارة مسارات العمل"
+      content="Amrikyy Automation System - نظام أتمتة ذكي متقدم يعمل بالذكاء الاصطناعي مع إدارة مسارات العمل الذكية"
     />
     <meta
       name="keywords"
@@ -60,7 +127,7 @@
     <meta name="color-scheme" content="dark light" />
 
     <!-- Apple Specific Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
@@ -80,12 +147,12 @@
     <link rel="dns-prefetch" href="//api.openai.com" />
 
     <!-- Preload Critical Resources -->
-    <link rel="preload" href="/src/main.tsx" as="script" crossorigin />
+    <link rel="preload" href="/src/main.tsx" as="script" crossorigin="anonymous" />
     <link
       rel="preload"
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       as="style"
-      crossorigin
+      crossorigin="anonymous"
     />
 
     <!-- Preload Critical Images -->
@@ -122,10 +189,7 @@
     />
 
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#6366f1" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="AuraOS" />
 
     <!-- Optimized Font Loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -283,7 +347,7 @@
         const daysSinceDismissed =
           (Date.now() - parseInt(dismissedTime)) / (1000 * 60 * 60 * 24);
         if (daysSinceDismissed < 7) {
-          return; // Don't show prompt
+          // Don't show prompt
         }
       }
 

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amrikyy Logo Generator</title>
+</head>
+<body>
+    <canvas id="logoCanvas" width="200" height="200"></canvas>
+    <br>
+    <button onclick="downloadLogo()">Download Logo as PNG</button>
+    
+    <script>
+        const canvas = document.getElementById('logoCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Create gradient
+        const gradient1 = ctx.createLinearGradient(0, 0, 200, 200);
+        gradient1.addColorStop(0, '#00ff88');
+        gradient1.addColorStop(1, '#0088ff');
+        
+        const gradient2 = ctx.createLinearGradient(0, 0, 200, 200);
+        gradient2.addColorStop(0, '#ff6b6b');
+        gradient2.addColorStop(1, '#4ecdc4');
+        
+        // Draw background circle
+        ctx.beginPath();
+        ctx.arc(100, 100, 95, 0, 2 * Math.PI);
+        ctx.fillStyle = gradient1;
+        ctx.globalAlpha = 0.1;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        
+        // Draw main gear
+        ctx.save();
+        ctx.translate(100, 100);
+        
+        // Outer gear teeth
+        ctx.fillStyle = gradient1;
+        ctx.beginPath();
+        ctx.moveTo(-30, -30);
+        ctx.lineTo(-20, -30);
+        ctx.lineTo(-15, -20);
+        ctx.lineTo(-20, -10);
+        ctx.lineTo(-30, -10);
+        ctx.lineTo(-35, -20);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(30, -30);
+        ctx.lineTo(40, -30);
+        ctx.lineTo(45, -20);
+        ctx.lineTo(40, -10);
+        ctx.lineTo(30, -10);
+        ctx.lineTo(25, -20);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(30, 10);
+        ctx.lineTo(40, 10);
+        ctx.lineTo(45, 20);
+        ctx.lineTo(40, 30);
+        ctx.lineTo(30, 30);
+        ctx.lineTo(25, 20);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(-30, 10);
+        ctx.lineTo(-20, 10);
+        ctx.lineTo(-15, 20);
+        ctx.lineTo(-20, 30);
+        ctx.lineTo(-30, 30);
+        ctx.lineTo(-35, 20);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(-10, -40);
+        ctx.lineTo(10, -40);
+        ctx.lineTo(15, -30);
+        ctx.lineTo(10, -20);
+        ctx.lineTo(-10, -20);
+        ctx.lineTo(-15, -30);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.moveTo(-10, 20);
+        ctx.lineTo(10, 20);
+        ctx.lineTo(15, 30);
+        ctx.lineTo(10, 40);
+        ctx.lineTo(-10, 40);
+        ctx.lineTo(-15, 30);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Inner gear
+        ctx.strokeStyle = gradient2;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(0, 0, 25, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        ctx.fillStyle = gradient2;
+        ctx.globalAlpha = 0.8;
+        ctx.beginPath();
+        ctx.arc(0, 0, 15, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        
+        // AI Brain symbol
+        ctx.fillStyle = 'white';
+        ctx.globalAlpha = 0.9;
+        ctx.fillRect(-8, -8, 16, 16);
+        ctx.globalAlpha = 1;
+        
+        // Circuit pattern
+        ctx.strokeStyle = gradient1;
+        ctx.lineWidth = 2;
+        ctx.globalAlpha = 0.7;
+        
+        ctx.beginPath();
+        ctx.moveTo(-35, -35);
+        ctx.lineTo(-25, -25);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(35, -35);
+        ctx.lineTo(25, -25);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(-35, 35);
+        ctx.lineTo(-25, 25);
+        ctx.stroke();
+        
+        ctx.beginPath();
+        ctx.moveTo(35, 35);
+        ctx.lineTo(25, 25);
+        ctx.stroke();
+        
+        // Circuit nodes
+        ctx.fillStyle = gradient1;
+        ctx.beginPath();
+        ctx.arc(-35, -35, 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(35, -35, 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(-35, 35, 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.arc(35, 35, 2, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        ctx.restore();
+        
+        // Text
+        ctx.fillStyle = gradient1;
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Amrikyy Automation', 100, 160);
+        
+        ctx.fillStyle = gradient2;
+        ctx.globalAlpha = 0.8;
+        ctx.font = '12px Arial';
+        ctx.fillText('System', 100, 180);
+        
+        function downloadLogo() {
+            const link = document.createElement('a');
+            link.download = 'amrikyy-logo.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>

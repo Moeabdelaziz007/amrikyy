@@ -1,20 +1,20 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { 
-  Home, 
-  Plane, 
-  Hotel, 
-  Car, 
-  MapPin, 
-  MessageCircle, 
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import {
+  Home,
+  Plane,
+  Hotel,
+  Car,
+  MapPin,
+  MessageCircle,
   User,
   TrendingUp,
   Calendar,
-  Heart
-} from 'lucide-react'
+  Heart,
+} from 'lucide-react';
 
 const Sidebar: React.FC = () => {
-  const location = useLocation()
+  const location = useLocation();
 
   const menuItems = [
     { path: '/', icon: Home, label: 'Dashboard' },
@@ -23,18 +23,18 @@ const Sidebar: React.FC = () => {
     { path: '/cars', icon: Car, label: 'Car Rental' },
     { path: '/planner', icon: MapPin, label: 'Travel Planner' },
     { path: '/ai-chat', icon: MessageCircle, label: 'AI Assistant' },
-  ]
+  ];
 
   const isActive = (path: string) => {
-    return location.pathname === path
-  }
+    return location.pathname === path;
+  };
 
   return (
     <aside className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
       <div className="p-6">
         <nav className="space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon
+          {menuItems.map(item => {
+            const Icon = item.icon;
             return (
               <Link
                 key={item.path}
@@ -48,10 +48,10 @@ const Sidebar: React.FC = () => {
                 <Icon className="h-5 w-5" />
                 <span className="font-medium">{item.label}</span>
               </Link>
-            )
+            );
           })}
         </nav>
-        
+
         <div className="mt-8 pt-6 border-t border-gray-200">
           <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
             Quick Actions
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
     </aside>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
