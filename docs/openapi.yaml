@@ -1,70 +1,47 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
-  title: A2A API Gateway
-  description: |
-    نظام تكامل شامل للتطبيقات (Application-to-Application) يربط بين التطبيقات المحلية ونظام الأوتوبيلوت وبوت تيليجرام.
-    
-    ## الميزات الرئيسية
-    - API Gateway موحد لإدارة جميع الاتصالات
-    - Message Broker للتواصل غير المتزامن
-    - تكامل الأوتوبيلوت لإدارة المهام التلقائية
-    - تكامل تيليجرام للتفاعل مع المستخدمين
-    - نظام مراقبة شامل مع Prometheus و Grafana
-    - أمان متقدم مع JWT و Rate Limiting
+  title: AuraOS A2A Gateway API
+  description: API Gateway for Application-to-Application integration system
   version: 1.0.0
   contact:
     name: AuraOS Team
     email: support@auraos.com
-    url: https://auraos.com
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-
 servers:
   - url: http://localhost:3001
     description: Development server
   - url: https://api.auraos.com
     description: Production server
 
-security:
-  - BearerAuth: []
-  - ApiKeyAuth: []
-
 paths:
   /:
     get:
-      summary: Get system status
-      description: Get basic system status and information
-      security: []
+      summary: Gateway information
+      description: Returns basic information about the A2A Gateway
       responses:
         '200':
-          description: System status
+          description: Gateway information
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  name:
+                  message:
                     type: string
-                    example: A2A API Gateway
+                    example: "AuraOS A2A Gateway"
                   version:
                     type: string
-                    example: 1.0.0
+                    example: "1.0.0"
                   status:
                     type: string
-                    example: running
+                    example: "running"
                   timestamp:
                     type: string
                     format: date-time
-                  uptime:
-                    type: number
-                    example: 3600
 
   /api/auth/login:
     post:
       summary: User login
-      description: Authenticate user and get access token
-      security: []
+      description: Authenticate user and receive JWT token
       requestBody:
         required: true
         content:
@@ -77,10 +54,10 @@ paths:
               properties:
                 username:
                   type: string
-                  example: admin
+                  example: "admin"
                 password:
                   type: string
-                  example: password123
+                  example: "admin123"
       responses:
         '200':
           description: Login successful
@@ -89,122 +66,38 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                    example: true
                   token:
                     type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
                   user:
-                    $ref: '#/components/schemas/User'
-                  expiresIn:
-                    type: string
-                    example: 24h
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      username:
+                        type: string
+                      role:
+                        type: string
+                      permissions:
+                        type: array
+                        items:
+                          type: string
         '401':
           description: Invalid credentials
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
-  /api/auth/register:
-    post:
-      summary: User registration
-      description: Register a new user account
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - username
-                - email
-                - password
-              properties:
-                username:
-                  type: string
-                  example: newuser
-                email:
-                  type: string
-                  format: email
-                  example: user@example.com
-                password:
-                  type: string
-                  minLength: 6
-                  example: password123
-                role:
-                  type: string
-                  enum: [user, admin, service]
-                  example: user
-      responses:
-        '201':
-          description: User created successfully
-          content:
-            application/json:
-              schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
-                    example: true
-                  user:
-                    $ref: '#/components/schemas/User'
-                  message:
+                  error:
                     type: string
-                    example: User created successfully
-        '409':
-          description: User already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /api/auth/refresh:
-    post:
-      summary: Refresh token
-      description: Refresh authentication token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - token
-              properties:
-                token:
-                  type: string
-                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-      responses:
-        '200':
-          description: Token refreshed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  token:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                  expiresIn:
-                    type: string
-                    example: 24h
-        '401':
-          description: Invalid token
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                    example: "Invalid credentials"
 
   /api/messages/publish:
     post:
       summary: Publish message
-      description: Publish a message to a topic
+      description: Publish a message to the message broker
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -212,32 +105,22 @@ paths:
             schema:
               type: object
               required:
-                - topic
+                - source
                 - type
-                - target
                 - payload
               properties:
-                topic:
+                source:
                   type: string
-                  example: telegram.updates
+                  example: "my-app"
                 type:
                   type: string
-                  example: notification
-                target:
-                  type: string
-                  example: telegram
+                  example: "notification"
                 payload:
                   type: object
-                  example:
-                    message: Hello from A2A System!
-                    chatId: 123456789
-                priority:
+                  example: {"message": "Hello World!"}
+                correlation_id:
                   type: string
-                  enum: [low, normal, high, critical]
-                  default: normal
-                correlationId:
-                  type: string
-                  example: req_123456
+                  example: "req-123"
       responses:
         '200':
           description: Message published successfully
@@ -249,29 +132,22 @@ paths:
                   success:
                     type: boolean
                     example: true
-                  messageId:
+                  eventId:
                     type: string
-                    example: msg_1234567890_abc123
-                  topic:
-                    type: string
-                    example: telegram.updates
-                  timestamp:
-                    type: string
-                    format: date-time
                   message:
                     type: string
-                    example: Message published successfully
+                    example: "Event published successfully"
         '400':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          description: Missing required fields
+        '401':
+          description: Invalid API key
 
-  /api/messages/subscribe:
+  /api/webhooks/incoming:
     post:
-      summary: Subscribe to topic
-      description: Subscribe to a topic for receiving messages
+      summary: Generic webhook
+      description: Handle incoming webhooks from external applications
+      security:
+        - ApiKeyAuth: []
       requestBody:
         required: true
         content:
@@ -279,192 +155,34 @@ paths:
             schema:
               type: object
               required:
-                - topic
+                - source
+                - type
               properties:
-                topic:
+                source:
                   type: string
-                  example: autopilot.events
-                handler:
-                  type: string
-                  format: uri
-                  example: https://your-app.com/webhook
-      responses:
-        '200':
-          description: Successfully subscribed to topic
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  topic:
-                    type: string
-                    example: autopilot.events
-                  handler:
-                    type: string
-                    example: https://your-app.com/webhook
-                  message:
-                    type: string
-                    example: Successfully subscribed to topic
-        '403':
-          description: Insufficient permissions
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /api/messages/subscribe/{topic}:
-    delete:
-      summary: Unsubscribe from topic
-      description: Unsubscribe from a topic
-      parameters:
-        - name: topic
-          in: path
-          required: true
-          schema:
-            type: string
-          example: autopilot.events
-      responses:
-        '200':
-          description: Successfully unsubscribed from topic
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  topic:
-                    type: string
-                    example: autopilot.events
-                  message:
-                    type: string
-                    example: Successfully unsubscribed from topic
-        '404':
-          description: Topic not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /api/webhooks/telegram:
-    post:
-      summary: Telegram webhook
-      description: Receive Telegram bot updates
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                update_id:
-                  type: integer
-                  example: 123456
-                message:
-                  type: object
-                  properties:
-                    message_id:
-                      type: integer
-                      example: 1
-                    from:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 123456789
-                        username:
-                          type: string
-                          example: john_doe
-                        first_name:
-                          type: string
-                          example: John
-                    chat:
-                      type: object
-                      properties:
-                        id:
-                          type: integer
-                          example: 123456789
-                        type:
-                          type: string
-                          example: private
-                    text:
-                      type: string
-                      example: Hello Bot!
-      responses:
-        '200':
-          description: Webhook processed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  messageId:
-                    type: string
-                    example: msg_1234567890_abc123
-                  timestamp:
-                    type: string
-                    format: date-time
-
-  /api/webhooks/autopilot:
-    post:
-      summary: Autopilot webhook
-      description: Receive Autopilot system events
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
+                  example: "external-app"
                 type:
                   type: string
-                  example: task_completed
-                taskId:
-                  type: string
-                  example: task_123456
-                status:
-                  type: string
-                  example: completed
-                result:
+                  example: "webhook"
+                payload:
                   type: object
-                timestamp:
+                correlation_id:
                   type: string
-                  format: date-time
       responses:
         '200':
           description: Webhook processed successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  messageId:
-                    type: string
-                    example: msg_1234567890_abc123
-                  timestamp:
-                    type: string
-                    format: date-time
+        '400':
+          description: Missing required fields
+        '401':
+          description: Invalid API key
 
   /api/health:
     get:
       summary: Health check
-      description: Get system health status
-      security: []
+      description: Check the health status of the gateway and its services
       responses:
         '200':
-          description: System is healthy
+          description: Service is healthy
           content:
             application/json:
               schema:
@@ -472,271 +190,87 @@ paths:
                 properties:
                   status:
                     type: string
-                    enum: [healthy, degraded, unhealthy]
-                    example: healthy
+                    example: "healthy"
                   timestamp:
                     type: string
                     format: date-time
+                  services:
+                    type: object
+                    properties:
+                      redis:
+                        type: string
+                        example: "healthy"
+                      gateway:
+                        type: string
+                        example: "healthy"
                   uptime:
                     type: number
                     example: 3600
-                  version:
-                    type: string
-                    example: 1.0.0
-                  checks:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        name:
-                          type: string
-                          example: Redis
-                        status:
-                          type: string
-                          enum: [healthy, unhealthy, degraded]
-                          example: healthy
-                        responseTime:
-                          type: number
-                          example: 15
-                        message:
-                          type: string
-                          example: Connection successful
+                  memory:
+                    type: object
         '503':
-          description: System is unhealthy
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: unhealthy
-                  timestamp:
-                    type: string
-                    format: date-time
-                  error:
-                    type: string
-                    example: Health check failed
+          description: Service is unhealthy
 
   /api/metrics:
     get:
-      summary: Get metrics
-      description: Get system metrics and statistics
+      summary: Prometheus metrics
+      description: Expose Prometheus metrics for monitoring
       responses:
         '200':
-          description: Metrics retrieved successfully
+          description: Metrics data
           content:
-            application/json:
+            text/plain:
               schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                    example: true
-                  metrics:
-                    type: object
-                    properties:
-                      requests:
-                        type: object
-                        properties:
-                          totalRequests:
-                            type: integer
-                            example: 1000
-                          averageResponseTime:
-                            type: number
-                            example: 150.5
-                          requestsPerMinute:
-                            type: integer
-                            example: 50
-                          statusCodeDistribution:
-                            type: object
-                            additionalProperties:
-                              type: integer
-                      system:
-                        type: object
-                        properties:
-                          cpu:
-                            type: object
-                            properties:
-                              usage:
-                                type: number
-                                example: 45.2
-                              loadAverage:
-                                type: array
-                                items:
-                                  type: number
-                          memory:
-                            type: object
-                            properties:
-                              used:
-                                type: number
-                                example: 512
-                              total:
-                                type: number
-                                example: 1024
-                              percentage:
-                                type: number
-                                example: 50.0
-                          uptime:
-                            type: number
-                            example: 3600
-                      health:
-                        type: object
-                        properties:
-                          isHealthy:
-                            type: boolean
-                            example: true
-                          uptime:
-                            type: number
-                            example: 3600
-                          memoryUsage:
-                            type: number
-                            example: 50.0
-                          cpuUsage:
-                            type: number
-                            example: 45.2
-                          requestRate:
-                            type: number
-                            example: 50
-                          errorRate:
-                            type: number
-                            example: 2.5
-                  timestamp:
-                    type: string
-                    format: date-time
+                type: string
+
+securitySchemes:
+  ApiKeyAuth:
+    type: apiKey
+    in: header
+    name: X-API-Key
+  BearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
 
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: JWT token for authentication
-    ApiKeyAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: API key for service authentication
-
   schemas:
+    Event:
+      type: object
+      properties:
+        event_id:
+          type: string
+        source:
+          type: string
+        type:
+          type: string
+        payload:
+          type: object
+        timestamp:
+          type: string
+          format: date-time
+        correlation_id:
+          type: string
     User:
       type: object
       properties:
         id:
           type: string
-          example: user_1234567890_abc123
         username:
           type: string
-          example: admin
-        email:
-          type: string
-          format: email
-          example: admin@auraos.com
         role:
           type: string
-          enum: [user, admin, service]
-          example: admin
         permissions:
           type: array
           items:
             type: string
-          example: [read, write, admin]
-        isActive:
-          type: boolean
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-        lastLogin:
-          type: string
-          format: date-time
-
     Error:
       type: object
       properties:
         error:
           type: string
-          example: Validation failed
         message:
           type: string
-          example: Invalid request parameters
-        details:
-          type: array
-          items:
-            type: object
-            properties:
-              field:
-                type: string
-                example: username
-              message:
-                type: string
-                example: Username is required
         timestamp:
           type: string
           format: date-time
-        requestId:
-          type: string
-          example: req_1234567890_abc123
-
-    Message:
-      type: object
-      properties:
-        id:
-          type: string
-          example: msg_1234567890_abc123
-        type:
-          type: string
-          example: notification
-        source:
-          type: string
-          example: api-gateway
-        target:
-          type: string
-          example: telegram
-        payload:
-          type: object
-          example:
-            message: Hello from A2A System!
-            chatId: 123456789
-        timestamp:
-          type: string
-          format: date-time
-        correlationId:
-          type: string
-          example: req_1234567890_abc123
-        priority:
-          type: string
-          enum: [low, normal, high, critical]
-          example: normal
-
-    HealthCheck:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Redis
-        status:
-          type: string
-          enum: [healthy, unhealthy, degraded]
-          example: healthy
-        responseTime:
-          type: number
-          example: 15
-        message:
-          type: string
-          example: Connection successful
-        timestamp:
-          type: string
-          format: date-time
-
-tags:
-  - name: Authentication
-    description: User authentication and authorization
-  - name: Messages
-    description: Message publishing and subscription
-  - name: Webhooks
-    description: Webhook endpoints for external services
-  - name: Health
-    description: System health and monitoring
-  - name: Metrics
-    description: System metrics and statistics
