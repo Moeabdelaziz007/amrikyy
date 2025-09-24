@@ -1,23 +1,24 @@
-# 🚀 AuraOS A2A Integration System
+# 🚀 Amrikyy AIOS System
 
-نظام تكامل شامل للتطبيقات (Application-to-Application) يربط بين التطبيقات المحلية ونظام الأوتوبيلوت وبوت تيليجرام.
+Advanced AI-Powered Operating System with intelligent agents, automation, and modern design.
 
-## 📋 نظرة عامة
+## 📋 Overview
 
-نظام A2A هو حل متكامل يوفر:
+Amrikyy AIOS System is a comprehensive solution that provides:
 
-- **API Gateway** موحد لإدارة جميع الاتصالات
-- **Message Broker** للتواصل غير المتزامن
-- **تكامل الأوتوبيلوت** لإدارة المهام التلقائية
-- **تكامل تيليجرام** للتفاعل مع المستخدمين
-- **نظام مراقبة شامل** مع Prometheus و Grafana
-- **أمان متقدم** مع JWT و Rate Limiting
+- **Modern Desktop Interface** with glassmorphism and 3D effects
+- **AI-Powered Applications** with intelligent automation
+- **Advanced Wallpaper System** with dynamic animations
+- **Telegram Integration** for remote control
+- **Autopilot Dashboard** for task automation
+- **Theme Customization** with multiple visual styles
+- **Real-time Monitoring** and system health checks
 
-## 🏗️ البنية المعمارية
+## 🏗️ Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Applications  │    │   Telegram Bot   │    │   Autopilot     │
+│   Desktop Apps  │    │   Telegram Bot   │    │   Autopilot     │
 │                 │    │                 │    │                 │
 └─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
           │                      │                      │
@@ -35,51 +36,55 @@
                     └───────────────────────────┘
 ```
 
-## 🚀 البدء السريع
+## 🚀 Quick Start
 
-### المتطلبات
+### Requirements
 
 - Docker & Docker Compose
-- Node.js 18+ (للتطوير المحلي)
+- Node.js 18+ (for local development)
 - Git
 
-### التثبيت
+### Installation
 
-1. **استنساخ المشروع**
+1. **Clone the project**
 ```bash
-git clone <repository-url>
+git clone https://github.com/amrikyy/aios-system.git
 cd AuraOS
 ```
 
-2. **تشغيل النظام**
+2. **Start the system**
 ```bash
 npm start
-# أو
+# or
 ./start-a2a-system.sh
 ```
 
-3. **التحقق من الحالة**
+3. **Check status**
 ```bash
 npm run status
 npm run health
 ```
 
-## 📚 الخدمات المتاحة
+## 📚 Available Services
+
+### Frontend (Port 5173)
+- **Main Interface**: http://localhost:5173
+- **Live Demo**: https://aios-97581.web.app
 
 ### API Gateway (Port 3001)
-- **الرئيسي**: http://localhost:3001
+- **Main**: http://localhost:3001
 - **WebSocket**: ws://localhost:3004/ws/a2a
-- **الوثائق**: http://localhost:3001/api/docs
+- **Documentation**: http://localhost:3001/api/docs
 
 ### Autopilot Service (Port 3002)
-- **الرئيسي**: http://localhost:3002
-- **الصحة**: http://localhost:3002/health
+- **Main**: http://localhost:3002
+- **Health**: http://localhost:3002/health
 
 ### Telegram Bot (Port 3003)
-- **الرئيسي**: http://localhost:3003
-- **الصحة**: http://localhost:3003/health
+- **Main**: http://localhost:3003
+- **Health**: http://localhost:3003/health
 
-### مراقبة النظام
+### System Monitoring
 - **Grafana**: http://localhost:3000 (admin/admin123)
 - **Prometheus**: http://localhost:9090
 - **RabbitMQ Management**: http://localhost:15672 (admin/admin123)
@@ -237,27 +242,29 @@ docker-compose up -d
 
 هذا المشروع مرخص تحت رخصة MIT - راجع ملف [LICENSE](LICENSE) للتفاصيل.
 
-## 🆘 الدعم
+## 🆘 Support
 
-- **Issues**: [GitHub Issues](https://github.com/auraos/a2a-system/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/auraos/a2a-system/discussions)
-- **Email**: support@auraos.com
+- **Issues**: [GitHub Issues](https://github.com/amrikyy/aios-system/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/amrikyy/aios-system/discussions)
+- **Email**: support@amrikyy-aios.com
 
-## 🔄 التحديثات
+## 🔄 Updates
 
-### الإصدار 1.0.0
-- إطلاق النظام الأساسي
-- API Gateway مع المصادقة
-- تكامل الأوتوبيلوت
-- تكامل تيليجرام
-- نظام المراقبة
+### Version 1.0.0
+- Initial system launch
+- Modern desktop interface with glassmorphism
+- AI-powered applications
+- Advanced wallpaper system
+- Telegram integration
+- Autopilot dashboard
 
-### الإصدارات القادمة
-- دعم المزيد من منصات المراسلة
-- تحسينات الأداء
-- واجهات مستخدم محسنة
-- دعم Kubernetes محسن
+### Upcoming Versions
+- Enhanced AI capabilities
+- More visual themes
+- Performance improvements
+- Mobile app support
+- Cloud synchronization
 
 ---
 
-**تم تطوير هذا النظام بواسطة فريق AuraOS** 🚀
+**Developed by the Amrikyy AIOS Team** 🚀

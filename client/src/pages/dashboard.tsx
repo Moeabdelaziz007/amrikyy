@@ -2,6 +2,7 @@ import React from 'react';
 import { AmrikyyOSSidebar } from '@/components/layout/amrikyyos-sidebar';
 import { AmrikyyOSCard, AmrikyyOSCardHeader, AmrikyyOSCardContent } from '@/components/ui/amrikyyos-card';
 import { AmrikyyOSButton } from '@/components/ui/amrikyyos-button';
+import { PopupQuickAccess } from '@/components/ui/popup-navigation';
 import {
   Zap,
   Brain,
@@ -240,6 +241,9 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
+      
+      {/* Popup Quick Access for Development */}
+      <PopupQuickAccess />
     </div>
   );
 }

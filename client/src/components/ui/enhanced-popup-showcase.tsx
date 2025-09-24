@@ -6,6 +6,7 @@ import {
   EnhancedToastProvider, 
   useEnhancedToastNotifications 
 } from './enhanced-popup-system';
+import { PopupNavigation } from './popup-navigation';
 import {
   Popover,
   EnhancedPopoverTrigger,
@@ -566,34 +567,37 @@ const ContextMenuDemo: React.FC = () => {
 // Main Showcase Component
 const EnhancedPopupShowcaseContent: React.FC = () => {
   return (
-    <div className="p-8 space-y-12 bg-gradient-to-br from-background to-background/80 min-h-screen">
-      {/* Header */}
-      <div className="text-center space-y-6">
-        <div className="relative">
-          <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent">
-            Enhanced Popup System
-          </h1>
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-accent/20 blur-xl -z-10" />
+    <div className="bg-gradient-to-br from-background to-background/80 min-h-screen">
+      <PopupNavigation />
+      
+      <div className="p-8 space-y-12">
+        {/* Header */}
+        <div className="text-center space-y-6">
+          <div className="relative">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-primary via-purple-500 to-accent bg-clip-text text-transparent">
+              Enhanced Popup System
+            </h1>
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-purple-500/20 to-accent/20 blur-xl -z-10" />
+          </div>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Experience the next generation of popup components with modern design, 
+            smooth animations, and enhanced user interactions.
+          </p>
+          <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-green-500" />
+              <span>Accessibility First</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-yellow-500" />
+              <span>Performance Optimized</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-purple-500" />
+              <span>Modern Animations</span>
+            </div>
+          </div>
         </div>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Experience the next generation of popup components with modern design, 
-          smooth animations, and enhanced user interactions.
-        </p>
-        <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-500" />
-            <span>Accessibility First</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-500" />
-            <span>Performance Optimized</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-purple-500" />
-            <span>Modern Animations</span>
-          </div>
-        </div>
-      </div>
 
       {/* Demo Sections */}
       <div className="max-w-6xl mx-auto space-y-16">

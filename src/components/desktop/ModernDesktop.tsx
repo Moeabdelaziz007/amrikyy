@@ -27,9 +27,16 @@ import {
   Brain,
   TrendingUp,
   Star,
+  Activity,
 } from 'lucide-react';
 import TelegramControlPanel from './TelegramControlPanel';
 import AutopilotDashboard from './AutopilotDashboard';
+import WallpaperSelector from './WallpaperSelector';
+import MainAutomationDashboard from './MainAutomationDashboard';
+import AdvancedAutomationDashboard from './AdvancedAutomationDashboard';
+import SmartDesktop from './SmartDesktop';
+import TestDashboard from './TestDashboard';
+import UltimateDesktop from './UltimateDesktop';
 
 interface DesktopApp {
   id: string;
@@ -60,19 +67,33 @@ interface DesktopWindow {
 
 const ModernDesktop: React.FC = () => {
   const [apps, setApps] = useState<DesktopApp[]>([
-    {
-      id: 'dashboard',
-      name: 'Neural Hub',
-      icon: <Brain className="w-8 h-8" />,
-      description: 'AI-Powered Command Center',
-      category: 'system',
-      isInstalled: true,
-      isRunning: false,
-      gradient: 'from-purple-500 via-pink-500 to-red-500',
-      glowColor: 'purple-500',
-      animationType: 'pulse',
-      featured: true,
-    },
+        {
+          id: 'ultimate-desktop',
+          name: 'Ultimate Desktop',
+          icon: <Sparkles className="w-8 h-8" />,
+          description: 'AI-Powered themes beyond iOS & Windows',
+          category: 'system',
+          isInstalled: true,
+          isRunning: false,
+          gradient: 'from-purple-500 via-pink-500 to-red-500',
+          glowColor: 'purple-500',
+          animationType: 'pulse',
+          featured: true,
+          premium: true,
+        },
+        {
+          id: 'test-dashboard',
+          name: 'Test Dashboard',
+          icon: <Star className="w-8 h-8" />,
+          description: 'Comprehensive MCP server testing suite',
+          category: 'development',
+          isInstalled: true,
+          isRunning: false,
+          gradient: 'from-green-500 to-emerald-500',
+          glowColor: 'green-500',
+          animationType: 'glow',
+          premium: true,
+        },
     {
       id: 'gallery',
       name: 'Quantum Gallery',
@@ -192,6 +213,16 @@ const ModernDesktop: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [wifiConnected] = useState(true);
+  const [currentWallpaper, setCurrentWallpaper] = useState('aurora');
+  const [isWallpaperSelectorOpen, setIsWallpaperSelectorOpen] = useState(false);
+  const [isMainDashboardOpen, setIsMainDashboardOpen] = useState(false);
+  const [isAdvancedDashboardOpen, setIsAdvancedDashboardOpen] = useState(false);
+  const [isSmartDesktopOpen, setIsSmartDesktopOpen] = useState(false);
+  const [isTestDashboardOpen, setIsTestDashboardOpen] = useState(false);
+  const [isUltimateDesktopOpen, setIsUltimateDesktopOpen] = useState(false);
+  const [isTelegramOpen, setIsTelegramOpen] = useState(false);
+  const [isAutopilotOpen, setIsAutopilotOpen] = useState(false);
+  const [isThemeCustomizerOpen, setIsThemeCustomizerOpen] = useState(false);
 
   // Update time every second
   useEffect(() => {
@@ -280,45 +311,78 @@ const ModernDesktop: React.FC = () => {
       const app = apps.find(a => a.id === appId);
       if (!app) return;
 
-      // Check if app is already running
-      const existingWindow = windows.find(
-        w => w.appId === appId && !w.isMinimized
+      // Update app running status
+      setApps(prevApps =>
+        prevApps.map(a =>
+          a.id === appId ? { ...a, isRunning: true } : a
+        )
       );
-      if (existingWindow) {
-        // Restore window
-        setWindows(prev =>
-          prev.map(w =>
-            w.id === existingWindow.id
-              ? {
-                  ...w,
-                  isMinimized: false,
-                  zIndex: Math.max(...prev.map(w => w.zIndex)) + 1,
-                }
-              : w
-          )
-        );
-        return;
+
+      // Handle different app launches
+      switch (appId) {
+        case 'ultimate-desktop':
+          setIsUltimateDesktopOpen(true);
+          break;
+        case 'smart-desktop':
+          setIsSmartDesktopOpen(true);
+          break;
+        case 'test-dashboard':
+          setIsTestDashboardOpen(true);
+          break;
+        case 'advanced-automation':
+          setIsAdvancedDashboardOpen(true);
+          break;
+        case 'dashboard':
+          setIsMainDashboardOpen(true);
+          break;
+        case 'telegram':
+          setIsTelegramOpen(true);
+          break;
+        case 'autopilot':
+          setIsAutopilotOpen(true);
+          break;
+        case 'theme-customizer':
+          setIsThemeCustomizerOpen(true);
+          break;
+        default:
+          // Check if app is already running
+          const existingWindow = windows.find(
+            w => w.appId === appId && !w.isMinimized
+          );
+          if (existingWindow) {
+            // Restore window
+            setWindows(prev =>
+              prev.map(w =>
+                w.id === existingWindow.id
+                  ? {
+                      ...w,
+                      isMinimized: false,
+                      zIndex: Math.max(...prev.map(w => w.zIndex)) + 1,
+                    }
+                  : w
+              )
+            );
+            return;
+          }
+
+          // Create new window
+          const newWindow: DesktopWindow = {
+            id: `window-${Date.now()}`,
+            appId,
+            title: app.name,
+            isMinimized: false,
+            isMaximized: false,
+            position: {
+              x: 100 + windows.length * 30,
+              y: 100 + windows.length * 30,
+            },
+            size: { width: 800, height: 600 },
+            zIndex: Math.max(...windows.map(w => w.zIndex), 0) + 1,
+          };
+
+          setWindows(prev => [...prev, newWindow]);
+          break;
       }
-
-      // Create new window
-      const newWindow: DesktopWindow = {
-        id: `window-${Date.now()}`,
-        appId,
-        title: app.name,
-        isMinimized: false,
-        isMaximized: false,
-        position: {
-          x: 100 + windows.length * 30,
-          y: 100 + windows.length * 30,
-        },
-        size: { width: 800, height: 600 },
-        zIndex: Math.max(...windows.map(w => w.zIndex), 0) + 1,
-      };
-
-      setWindows(prev => [...prev, newWindow]);
-      setApps(prev =>
-        prev.map(a => (a.id === appId ? { ...a, isRunning: true } : a))
-      );
     },
     [apps, windows]
   );
@@ -378,11 +442,19 @@ const ModernDesktop: React.FC = () => {
   const runningApps = apps.filter(app => app.isRunning);
 
   return (
-    <div className="desktop-container">
-      {/* Enhanced Background with 3D Elements */}
-      <div className="desktop-background relative overflow-hidden">
-        {/* Main Gradient with Animation */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 animate-gradient-shift" />
+    <div className="desktop-container wallpaper-container">
+      {/* Enhanced Background with Advanced Wallpaper System */}
+      <div className={`desktop-background relative overflow-hidden ${
+        currentWallpaper === 'aurora' ? 'wallpaper-aurora' :
+        currentWallpaper === 'cyberpunk' ? 'wallpaper-cyberpunk' :
+        currentWallpaper === 'galaxy' ? 'wallpaper-galaxy' :
+        currentWallpaper === 'ocean' ? 'wallpaper-ocean' :
+        currentWallpaper === 'sunset' ? 'wallpaper-sunset' :
+        currentWallpaper === 'matrix' ? 'wallpaper-matrix' :
+        'wallpaper-aurora'
+      }`}>
+        {/* Dynamic Wallpaper Background */}
+        <div className="absolute inset-0 wallpaper-aurora"></div>
 
         {/* Animated Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-100/30 to-purple-100/30 dark:via-blue-800/20 dark:to-purple-800/20 animate-pulse" />
@@ -424,10 +496,10 @@ const ModernDesktop: React.FC = () => {
             </div>
             <div>
               <span className="font-bold text-lg gradient-text">
-                AuraOS
+                Amrikyy AIOS
               </span>
               <p className="text-xs text-gray-500 dark:text-gray-400 -mt-1 animate-neon-pulse">
-                AI-Powered OS
+                Advanced AI System
               </p>
             </div>
           </div>
@@ -501,6 +573,13 @@ const ModernDesktop: React.FC = () => {
 
             {/* Theme Toggle */}
             <button
+              onClick={() => setIsWallpaperSelectorOpen(true)}
+              className="p-2 rounded-xl glass-premium hover-lift hover-glow transition-all duration-300"
+              title="Change Wallpaper"
+            >
+              <Sparkles className="w-4 h-4 text-purple-500" />
+            </button>
+            <button
               onClick={() => setIsDarkMode(!isDarkMode)}
               className="p-2 rounded-xl glass-premium hover-lift hover-glow transition-all duration-300"
             >
@@ -514,112 +593,176 @@ const ModernDesktop: React.FC = () => {
         </div>
       </div>
 
-      {/* Enhanced Desktop Icons */}
-      <div className="desktop-icons grid grid-cols-6 gap-6 p-8">
-        {apps.map(app => (
+      {/* Main Automation Dashboard */}
+      {isMainDashboardOpen && (
+        <>
+          <div className="dashboard-overlay active" onClick={() => setIsMainDashboardOpen(false)}></div>
+          <MainAutomationDashboard />
+        </>
+      )}
+
+      {/* Advanced Automation Dashboard */}
+      {isAdvancedDashboardOpen && (
+        <>
+          <div className="dashboard-overlay active" onClick={() => setIsAdvancedDashboardOpen(false)}></div>
+          <AdvancedAutomationDashboard onClose={() => setIsAdvancedDashboardOpen(false)} />
+        </>
+      )}
+
+      {/* Smart Desktop */}
+      {isSmartDesktopOpen && (
+        <>
+          <div className="dashboard-overlay active" onClick={() => setIsSmartDesktopOpen(false)}></div>
+          <SmartDesktop onClose={() => setIsSmartDesktopOpen(false)} />
+        </>
+      )}
+
+      {/* Ultimate Desktop */}
+      {isUltimateDesktopOpen && (
+        <>
+          <div className="dashboard-overlay active" onClick={() => setIsUltimateDesktopOpen(false)}></div>
+          <UltimateDesktop onClose={() => setIsUltimateDesktopOpen(false)} />
+        </>
+      )}
+
+      {/* Test Dashboard */}
+      {isTestDashboardOpen && (
+        <>
+          <div className="dashboard-overlay active" onClick={() => setIsTestDashboardOpen(false)}></div>
+          <TestDashboard onClose={() => setIsTestDashboardOpen(false)} />
+        </>
+      )}
+
+      {/* Bubble Layout Desktop */}
+      <div className="desktop-bubble-layout">
+        {/* Center Dashboard Button */}
+        <div className="bubble-center">
           <button
-            key={app.id}
-            className={`desktop-icon group ${selectedApp === app.id ? 'selected' : ''} relative`}
-            onClick={() => selectApp(app.id)}
-            onDoubleClick={() => launchApp(app.id)}
-            title={app.description}
+            onClick={() => setIsMainDashboardOpen(true)}
+            className="dashboard-center-button glass-premium hover-lift transition-all duration-500"
+            title="Open Automation Dashboard"
           >
-            <div className="desktop-icon-image relative">
-              {/* Glassmorphism Background */}
-              <div className="absolute inset-0 bg-white/10 dark:bg-white/5 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-2xl"></div>
-              
-              {/* Dynamic Gradient Background */}
-              <div
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${app.gradient || 'from-gray-500 to-slate-600'} opacity-80`}
-              ></div>
-              
-              {/* Glow Effect */}
-              <div
-                className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${app.gradient || 'from-gray-500 to-slate-600'} opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl scale-110`}
-                style={{
-                  filter: `drop-shadow(0 0 20px ${app.glowColor ? `var(--${app.glowColor})` : 'rgba(0,0,0,0.3)'})`
-                }}
-              ></div>
-
-              {/* Premium Badge */}
-              {app.premium && (
-                <div className="absolute -top-2 -right-2 z-20">
-                  <div className="w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                    <Star className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-              )}
-
-              {/* Featured Badge */}
-              {app.featured && (
-                <div className="absolute -top-2 -left-2 z-20">
-                  <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                    <Sparkles className="w-3 h-3 text-white" />
-                  </div>
-                </div>
-              )}
-
-              {/* Icon Container with 3D Effect */}
-              <div
-                className={`relative z-10 w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 ${
-                  app.animationType === 'float' ? 'animate-float' :
-                  app.animationType === 'pulse' ? 'animate-pulse' :
-                  app.animationType === 'rotate' ? 'animate-spin' :
-                  app.animationType === 'glow' ? 'animate-pulse' :
-                  app.animationType === 'bounce' ? 'animate-bounce' : ''
-                }`}
-                style={{
-                  background: `linear-gradient(145deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))`,
-                  boxShadow: `
-                    inset 0 1px 0 rgba(255,255,255,0.3),
-                    inset 0 -1px 0 rgba(0,0,0,0.1),
-                    0 10px 30px rgba(0,0,0,0.2),
-                    0 0 0 1px rgba(255,255,255,0.1)
-                  `
-                }}
-              >
-                <div className="transform group-hover:scale-125 transition-transform duration-300 text-white drop-shadow-lg">
-                  {app.icon}
-                </div>
-              </div>
-
-              {/* Running Indicator with Enhanced Animation */}
-              {app.isRunning && (
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-800 shadow-lg">
-                  <div className="absolute inset-1 bg-white rounded-full opacity-90 animate-ping"></div>
-                  <div className="absolute inset-2 bg-green-400 rounded-full"></div>
-                </div>
-              )}
-
-              {/* Hover Effect Ring with Neon Glow */}
-              <div 
-                className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/50 dark:group-hover:border-white/30 transition-all duration-300"
-                style={{
-                  boxShadow: `0 0 20px ${app.glowColor ? `var(--${app.glowColor})` : 'rgba(255,255,255,0.3)'}`
-                }}
-              ></div>
-
-              {/* Particle Effects for Premium Apps */}
-              {app.premium && (
-                <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-                  <div className="absolute top-2 left-2 w-1 h-1 bg-white/60 rounded-full animate-ping"></div>
-                  <div className="absolute top-4 right-3 w-1 h-1 bg-white/40 rounded-full animate-ping animation-delay-200"></div>
-                  <div className="absolute bottom-3 left-4 w-1 h-1 bg-white/50 rounded-full animate-ping animation-delay-400"></div>
-                </div>
-              )}
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-2xl">
+              <Activity className="w-10 h-10 text-white" />
             </div>
-
-            {/* Enhanced Icon Label */}
-            <span className="desktop-icon-label mt-2 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-white transition-all duration-300 group-hover:drop-shadow-lg">
-              {app.name}
-            </span>
-
-            {/* Selection Indicator with Glow */}
-            {selectedApp === app.id && (
-              <div className="absolute -inset-2 rounded-xl border-2 border-blue-500 dark:border-blue-400 bg-blue-500/10 animate-pulse"></div>
-            )}
+            <span className="mt-2 text-sm font-medium text-white text-center">Automation Hub</span>
           </button>
-        ))}
+        </div>
+
+        {/* Bubble Apps Around Dashboard */}
+        <div className="bubble-apps">
+          {apps.map((app, index) => (
+            <div key={app.id} className="bubble-app">
+              <button
+                className={`desktop-icon group ${selectedApp === app.id ? 'selected' : ''} relative`}
+                onClick={() => selectApp(app.id)}
+                onDoubleClick={() => launchApp(app.id)}
+                title={app.description}
+              >
+                <div className="desktop-icon-image relative">
+                  {/* Glassmorphism Background */}
+                  <div className="absolute inset-0 bg-white/10 dark:bg-white/5 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 shadow-2xl"></div>
+
+                  {/* Dynamic Gradient Background */}
+                  <div
+                    className={`absolute inset-0 rounded-full bg-gradient-to-br ${app.gradient || 'from-gray-500 to-slate-600'} opacity-80`}
+                  ></div>
+
+                  {/* Glow Effect */}
+                  <div
+                    className={`absolute inset-0 rounded-full bg-gradient-to-br ${app.gradient || 'from-gray-500 to-slate-600'} opacity-0 group-hover:opacity-100 transition-all duration-500 blur-xl scale-110`}
+                    style={{
+                      filter: `drop-shadow(0 0 20px ${app.glowColor ? `var(--${app.glowColor})` : 'rgba(0,0,0,0.3)'})`
+                    }}
+                  ></div>
+
+                  {/* Premium Badge */}
+                  {app.premium && (
+                    <div className="absolute -top-2 -right-2 z-20">
+                      <div className="w-6 h-6 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                        <Star className="w-3 h-3 text-white" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Featured Badge */}
+                  {app.featured && (
+                    <div className="absolute -top-2 -left-2 z-20">
+                      <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                        <Sparkles className="w-3 h-3 text-white" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Enhanced Icon Container with Advanced 3D Effect */}
+                  <div
+                    className={`relative z-10 w-16 h-16 rounded-full flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 ${
+                      app.animationType === 'float' ? 'app-animate-float-advanced' :
+                      app.animationType === 'pulse' ? 'app-animate-pulse-advanced' :
+                      app.animationType === 'rotate' ? 'app-animate-rotate-advanced' :
+                      app.animationType === 'glow' ? 'app-animate-glow-advanced' :
+                      app.animationType === 'bounce' ? 'app-animate-bounce-advanced' : ''
+                    }`}
+                    style={{
+                      background: `linear-gradient(145deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))`,
+                      boxShadow: `
+                        inset 0 2px 0 rgba(255,255,255,0.4),
+                        inset 0 -2px 0 rgba(0,0,0,0.15),
+                        0 15px 40px rgba(0,0,0,0.3),
+                        0 0 0 1px rgba(255,255,255,0.15),
+                        0 0 30px ${app.glowColor ? `var(--${app.glowColor})` : 'rgba(0,0,0,0.2)'}
+                      `
+                    }}
+                  >
+                    <div className="transform group-hover:scale-125 transition-transform duration-300 text-white drop-shadow-lg neon-text">
+                      {app.icon}
+                    </div>
+                  </div>
+
+                  {/* Running Indicator with Enhanced Animation */}
+                  {app.isRunning && (
+                    <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-800 shadow-lg">
+                      <div className="absolute inset-1 bg-white rounded-full opacity-90 animate-ping"></div>
+                      <div className="absolute inset-2 bg-green-400 rounded-full"></div>
+                    </div>
+                  )}
+
+                  {/* Hover Effect Ring with Neon Glow */}
+                  <div
+                    className="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-white/50 dark:group-hover:border-white/30 transition-all duration-300"
+                    style={{
+                      boxShadow: `0 0 20px ${app.glowColor ? `var(--${app.glowColor})` : 'rgba(255,255,255,0.3)'}`
+                    }}
+                  ></div>
+
+                  {/* Enhanced Particle Effects for Premium Apps */}
+                  {app.premium && (
+                    <div className="absolute inset-0 overflow-hidden rounded-full pointer-events-none particle-effect">
+                      <div className="absolute top-2 left-2 w-1 h-1 bg-white/80 rounded-full animate-ping"></div>
+                      <div className="absolute top-4 right-3 w-1 h-1 bg-white/60 rounded-full animate-ping animation-delay-200"></div>
+                      <div className="absolute bottom-3 left-4 w-1 h-1 bg-white/70 rounded-full animate-ping animation-delay-400"></div>
+                      <div className="absolute top-1/2 left-1/2 w-0.5 h-0.5 bg-white/50 rounded-full animate-ping animation-delay-600"></div>
+                      <div className="absolute bottom-1 right-1 w-0.5 h-0.5 bg-white/40 rounded-full animate-ping animation-delay-800"></div>
+                      
+                      {/* Holographic Shimmer Effect */}
+                      <div className="absolute inset-0 holographic-effect opacity-20"></div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Enhanced Icon Label */}
+                <span className="desktop-icon-label mt-2 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-white transition-all duration-300 group-hover:drop-shadow-lg">
+                  {app.name}
+                </span>
+
+                {/* Selection Indicator with Glow */}
+                {selectedApp === app.id && (
+                  <div className="absolute -inset-2 rounded-xl border-2 border-blue-500 dark:border-blue-400 bg-blue-500/10 animate-pulse"></div>
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Desktop Windows */}
@@ -867,6 +1010,14 @@ const ModernDesktop: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Wallpaper Selector */}
+      <WallpaperSelector
+        currentWallpaper={currentWallpaper}
+        onWallpaperChange={setCurrentWallpaper}
+        isOpen={isWallpaperSelectorOpen}
+        onClose={() => setIsWallpaperSelectorOpen(false)}
+      />
     </div>
   );
 };

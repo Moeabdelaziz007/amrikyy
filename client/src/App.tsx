@@ -8,6 +8,7 @@ import { AuthProvider } from '@/hooks/use-auth';
 import ProtectedRoute from '@/components/auth/protected-route';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { KeyboardNavigation } from '@/components/ui/keyboard-navigation';
+import { EnhancedToastProvider } from '@/components/ui/enhanced-popup-system';
 import { queryClient } from '@/lib/queryClient';
 
 // Lazy load pages for better performance
@@ -27,6 +28,8 @@ const AnalyticsPage = lazy(() => import('@/pages/analytics').then(m => ({ defaul
 const SettingsPage = lazy(() => import('@/pages/settings').then(m => ({ default: m.default })));
 const AutomationPage = lazy(() => import('@/pages/automation').then(m => ({ default: m.default })));
 const AutomationTasksPage = lazy(() => import('@/pages/automation-tasks').then(m => ({ default: m.default })));
+const PopupShowcasePage = lazy(() => import('@/pages/popup-showcase'));
+const PopupTestPage = lazy(() => import('@/pages/popup-test'));
 const NotFound = lazy(() => import('@/pages/not-found').then(m => ({ default: m.default })));
 const DebugView = lazy(() => import('@/pages/DebugView').then(m => ({ default: m.default })));
 const Workspace = lazy(() => import('@/pages/Workspace').then(m => ({ default: m.default })));
@@ -61,6 +64,8 @@ function AppRouter() {
           <Route path="/settings" component={SettingsPage} />
           <Route path="/automation" component={AutomationPage} />
           <Route path="/automation-tasks" component={AutomationTasksPage} />
+          <Route path="/popup-showcase" component={PopupShowcasePage} />
+          <Route path="/popup-test" component={PopupTestPage} />
           <Route path="/debug" component={DebugView} />
           <Route path="/workspace" component={Workspace} />
           <Route path="/ai-travel-agency" component={AITravelAgencyPage} />
@@ -78,14 +83,16 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <AuthProvider>
-            <TooltipProvider>
-              <Router>
-                <KeyboardNavigation>
-                  <AppRouter />
-                </KeyboardNavigation>
-                <Toaster />
-              </Router>
-            </TooltipProvider>
+            <EnhancedToastProvider>
+              <TooltipProvider>
+                <Router>
+                  <KeyboardNavigation>
+                    <AppRouter />
+                  </KeyboardNavigation>
+                  <Toaster />
+                </Router>
+              </TooltipProvider>
+            </EnhancedToastProvider>
           </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>

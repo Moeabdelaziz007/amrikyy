@@ -1,7 +1,7 @@
 {
-  "name": "auraos-a2a-system",
+  "name": "amrikyy-aios-system",
   "version": "1.0.0",
-  "description": "A2A Integration System for AuraOS - نظام تكامل شامل للتطبيقات",
+  "description": "Amrikyy AIOS System - Advanced AI-Powered Operating System with intelligent agents and automation",
   "main": "index.js",
   "scripts": {
     "start": "./start-a2a-system.sh",
@@ -23,25 +23,25 @@
     "update": "docker-compose -f docker-compose.dev.yml pull && docker-compose -f docker-compose.dev.yml up -d --build"
   },
   "keywords": [
-    "a2a",
-    "api-gateway",
-    "integration",
-    "microservices",
-    "telegram",
-    "autopilot",
-    "message-broker",
-    "auraos"
+    "aios",
+    "ai",
+    "operating-system",
+    "automation",
+    "intelligent-agents",
+    "modern-ui",
+    "amrikyy",
+    "aios-system"
   ],
-  "author": "AuraOS Team",
+  "author": "Amrikyy AIOS Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/auraos/a2a-system.git"
+    "url": "https://github.com/amrikyy/aios-system.git"
   },
   "bugs": {
-    "url": "https://github.com/auraos/a2a-system/issues"
+    "url": "https://github.com/amrikyy/aios-system/issues"
   },
-  "homepage": "https://auraos.com",
+  "homepage": "https://amrikyy-aios.web.app",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
