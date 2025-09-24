@@ -1,12 +1,13 @@
-import { OSDesktop } from './components/os/OSDesktop';
+import ModernDesktop from './components/desktop/ModernDesktop';
 import { WallpaperProvider } from './contexts/WallpaperContext';
 import './styles/index.css';
+import './styles/modern-desktop.css';
 
 function App() {
   return (
     <WallpaperProvider>
       <div className="App">
-        <OSDesktop />
+        <ModernDesktop />
       </div>
     </WallpaperProvider>
   );
