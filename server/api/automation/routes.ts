@@ -229,7 +229,7 @@ router.get(
 
     const [workspacesData, totalCount] = await Promise.all([
       query
-        .limit(parseInt(limit))
+        .limit(parseInt(limit || '10'))
         .offset(offset)
         .orderBy(desc(workspaces.createdAt)),
       db.select({ count: count() }).from(workspaces),

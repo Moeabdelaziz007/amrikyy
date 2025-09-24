@@ -1,5 +1,12 @@
-import * as fs from 'fs';
-import * as path from 'path';
+/**
+ * 📝 Enhanced Logger for AuraOS
+ * مسجل محسن
+ * 
+ * This module provides comprehensive logging with rotation, multiple outputs, and structured logging
+ */
+
+import fs from 'fs';
+import path from 'path';
 import { createWriteStream } from 'fs';
 
 export enum LogLevel {
@@ -7,19 +14,7 @@ export enum LogLevel {
   INFO = 1,
   WARN = 2,
   ERROR = 3,
-  CRITICAL = 4,
-}
-
-export interface LogEntry {
-  timestamp: string;
-  level: LogLevel;
-  message: string;
-  source: string;
-  context?: Record<string, any>;
-  stack?: string;
-  userId?: string;
-  sessionId?: string;
-  requestId?: string;
+  CRITICAL = 4
 }
 
 export interface LoggerConfig {
@@ -35,12 +30,24 @@ export interface LoggerConfig {
   enableSource: boolean;
 }
 
-class EnhancedLogger {
+export interface LogEntry {
+  timestamp: string;
+  level: string;
+  message: string;
+  source: string;
+  context?: any;
+  stack?: string;
+  userId?: string;
+  sessionId?: string;
+  requestId?: string;
+}
+
+export class EnhancedLogger {
   private config: LoggerConfig;
   private logStream: fs.WriteStream | null = null;
-  private currentLogFile: string = '';
+  private currentLogFile = "";
   private logBuffer: LogEntry[] = [];
-  private bufferSize: number = 100;
+  private bufferSize = 100;
   private flushInterval: NodeJS.Timeout | null = null;
 
   constructor(config: Partial<LoggerConfig> = {}) {
@@ -49,76 +56,56 @@ class EnhancedLogger {
       enableConsole: true,
       enableFile: true,
       enableDatabase: false,
-      logDirectory: './logs',
+      logDirectory: "./logs",
       maxFileSize: 10, // 10MB
       maxFiles: 5,
       enableColors: true,
       enableTimestamp: true,
       enableSource: true,
-      ...config,
+      ...config
     };
 
     this.initializeLogging();
   }
 
-  /**
-   * Initialize logging system
-   */
-  private initializeLogging(): void {
-    // Create logs directory if it doesn't exist
+  private initializeLogging() {
     if (this.config.enableFile && !fs.existsSync(this.config.logDirectory)) {
       fs.mkdirSync(this.config.logDirectory, { recursive: true });
     }
 
-    // Set up log file rotation
     if (this.config.enableFile) {
       this.setupLogFile();
     }
 
-    // Set up buffer flushing
     if (this.config.enableDatabase) {
       this.flushInterval = setInterval(() => {
         this.flushBuffer();
-      }, 5000); // Flush every 5 seconds
+      }, 5000);
     }
 
-    // Log initialization
-    this.info('Enhanced Logger initialized', 'logger', {
+    this.info("Enhanced Logger initialized", "logger", {
       config: {
         level: LogLevel[this.config.level],
         enableConsole: this.config.enableConsole,
         enableFile: this.config.enableFile,
-        enableDatabase: this.config.enableDatabase,
-      },
+        enableDatabase: this.config.enableDatabase
+      }
     });
   }
 
-  /**
-   * Set up log file with rotation
-   */
-  private setupLogFile(): void {
+  private setupLogFile() {
     const timestamp = new Date().toISOString().split('T')[0];
-    this.currentLogFile = path.join(
-      this.config.logDirectory,
-      `auraos-${timestamp}.log`
-    );
+    this.currentLogFile = path.join(this.config.logDirectory, `auraos-${timestamp}.log`);
 
-    // Close existing stream
     if (this.logStream) {
       this.logStream.end();
     }
 
-    // Create new stream
     this.logStream = createWriteStream(this.currentLogFile, { flags: 'a' });
-
-    // Check file size and rotate if necessary
     this.checkLogRotation();
   }
 
-  /**
-   * Check if log rotation is needed
-   */
-  private checkLogRotation(): void {
+  private checkLogRotation() {
     if (!fs.existsSync(this.currentLogFile)) return;
 
     const stats = fs.statSync(this.currentLogFile);
@@ -129,88 +116,60 @@ class EnhancedLogger {
     }
   }
 
-  /**
-   * Rotate log files
-   */
-  private rotateLogFile(): void {
+  private rotateLogFile() {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const rotatedFile = path.join(
-      this.config.logDirectory,
-      `auraos-${timestamp}.log`
-    );
-
-    // Rename current file
+    const rotatedFile = path.join(this.config.logDirectory, `auraos-${timestamp}.log`);
+    
     fs.renameSync(this.currentLogFile, rotatedFile);
-
-    // Clean up old files
     this.cleanupOldLogs();
-
-    // Set up new log file
     this.setupLogFile();
   }
 
-  /**
-   * Clean up old log files
-   */
-  private cleanupOldLogs(): void {
+  private cleanupOldLogs() {
     try {
-      const files = fs
-        .readdirSync(this.config.logDirectory)
+      const files = fs.readdirSync(this.config.logDirectory)
         .filter(file => file.startsWith('auraos-') && file.endsWith('.log'))
         .map(file => ({
           name: file,
           path: path.join(this.config.logDirectory, file),
-          mtime: fs.statSync(path.join(this.config.logDirectory, file)).mtime,
+          mtime: fs.statSync(path.join(this.config.logDirectory, file)).mtime
         }))
         .sort((a, b) => b.mtime.getTime() - a.mtime.getTime());
 
-      // Remove files beyond maxFiles limit
       if (files.length > this.config.maxFiles) {
         files.slice(this.config.maxFiles).forEach(file => {
           fs.unlinkSync(file.path);
-          this.debug(`Removed old log file: ${file.name}`, 'logger');
+          this.debug(`Removed old log file: ${file.name}`, "logger");
         });
       }
     } catch (error) {
-      console.error('Failed to cleanup old logs:', error);
+      console.error("Failed to cleanup old logs:", error);
     }
   }
 
-  /**
-   * Log a message with specified level
-   */
-  private log(
-    level: LogLevel,
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>,
-    error?: Error
-  ): void {
+  private log(level: LogLevel, message: string, source: string = "system", context?: any, error?: Error) {
     if (level < this.config.level) return;
 
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
-      level,
+      level: LogLevel[level],
       message,
       source,
       context,
       stack: error?.stack,
       userId: context?.userId,
       sessionId: context?.sessionId,
-      requestId: context?.requestId,
+      requestId: context?.requestId
     };
 
-    // Console logging
     if (this.config.enableConsole) {
       this.logToConsole(entry);
     }
 
-    // File logging
     if (this.config.enableFile) {
       this.logToFile(entry);
     }
 
-    // Database logging
     if (this.config.enableDatabase) {
       this.logBuffer.push(entry);
       if (this.logBuffer.length >= this.bufferSize) {
@@ -219,268 +178,160 @@ class EnhancedLogger {
     }
   }
 
-  /**
-   * Log to console with colors
-   */
-  private logToConsole(entry: LogEntry): void {
-    const levelName = LogLevel[entry.level];
-    const timestamp = this.config.enableTimestamp ? `[${entry.timestamp}]` : '';
-    const source = this.config.enableSource ? `[${entry.source}]` : '';
-    const levelColor = this.getLevelColor(entry.level);
-    const message = entry.context
-      ? `${entry.message} ${JSON.stringify(entry.context)}`
-      : entry.message;
+  private logToConsole(entry: LogEntry) {
+    const levelName = entry.level;
+    const timestamp = this.config.enableTimestamp ? `[${entry.timestamp}]` : "";
+    const source = this.config.enableSource ? `[${entry.source}]` : "";
+    const levelColor = this.getLevelColor(LogLevel[levelName as keyof typeof LogLevel]);
+    const message = entry.context ? `${entry.message} ${JSON.stringify(entry.context)}` : entry.message;
 
     if (this.config.enableColors) {
-      console.log(
-        `${levelColor}${levelName}${timestamp}${source} ${message}\x1b[0m`
-      );
+      console.log(`${levelColor}${levelName}${timestamp}${source} ${message}\x1B[0m`);
     } else {
       console.log(`${levelName}${timestamp}${source} ${message}`);
     }
 
-    // Log stack trace for errors
-    if (entry.stack && entry.level >= LogLevel.ERROR) {
+    if (entry.stack && LogLevel[levelName as keyof typeof LogLevel] >= LogLevel.ERROR) {
       console.error(entry.stack);
     }
   }
 
-  /**
-   * Log to file
-   */
-  private logToFile(entry: LogEntry): void {
+  private logToFile(entry: LogEntry) {
     if (!this.logStream) return;
 
-    const logLine =
-      JSON.stringify({
-        timestamp: entry.timestamp,
-        level: LogLevel[entry.level],
-        message: entry.message,
-        source: entry.source,
-        context: entry.context,
-        stack: entry.stack,
-        userId: entry.userId,
-        sessionId: entry.sessionId,
-        requestId: entry.requestId,
-      }) + '\n';
+    const logLine = JSON.stringify({
+      timestamp: entry.timestamp,
+      level: entry.level,
+      message: entry.message,
+      source: entry.source,
+      context: entry.context,
+      stack: entry.stack,
+      userId: entry.userId,
+      sessionId: entry.sessionId,
+      requestId: entry.requestId
+    }) + '\n';
 
     this.logStream.write(logLine);
   }
 
-  /**
-   * Flush log buffer to database
-   */
-  private flushBuffer(): void {
+  private flushBuffer() {
     if (this.logBuffer.length === 0) return;
-
-    // This would integrate with your database system
-    // For now, we'll just clear the buffer
+    // In a real implementation, this would write to a database
     this.logBuffer = [];
   }
 
-  /**
-   * Get color for log level
-   */
   private getLevelColor(level: LogLevel): string {
     const colors = {
-      [LogLevel.DEBUG]: '\x1b[36m', // Cyan
-      [LogLevel.INFO]: '\x1b[32m', // Green
-      [LogLevel.WARN]: '\x1b[33m', // Yellow
-      [LogLevel.ERROR]: '\x1b[31m', // Red
-      [LogLevel.CRITICAL]: '\x1b[35m', // Magenta
+      [LogLevel.DEBUG]: '\x1B[36m',    // Cyan
+      [LogLevel.INFO]: '\x1B[32m',     // Green
+      [LogLevel.WARN]: '\x1B[33m',     // Yellow
+      [LogLevel.ERROR]: '\x1B[31m',    // Red
+      [LogLevel.CRITICAL]: '\x1B[35m'  // Magenta
     };
-    return colors[level] || '';
+    return colors[level] || "";
   }
 
-  /**
-   * Debug level logging
-   */
-  debug(
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>
-  ): void {
+  // Public logging methods
+  debug(message: string, source: string = "system", context?: any) {
     this.log(LogLevel.DEBUG, message, source, context);
   }
 
-  /**
-   * Info level logging
-   */
-  info(
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>
-  ): void {
+  info(message: string, source: string = "system", context?: any) {
     this.log(LogLevel.INFO, message, source, context);
   }
 
-  /**
-   * Warning level logging
-   */
-  warn(
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>
-  ): void {
+  warn(message: string, source: string = "system", context?: any) {
     this.log(LogLevel.WARN, message, source, context);
   }
 
-  /**
-   * Error level logging
-   */
-  error(
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>,
-    error?: Error
-  ): void {
+  error(message: string, source: string = "system", context?: any, error?: Error) {
     this.log(LogLevel.ERROR, message, source, context, error);
   }
 
-  /**
-   * Critical level logging
-   */
-  critical(
-    message: string,
-    source: string = 'system',
-    context?: Record<string, any>,
-    error?: Error
-  ): void {
+  critical(message: string, source: string = "system", context?: any, error?: Error) {
     this.log(LogLevel.CRITICAL, message, source, context, error);
   }
 
-  /**
-   * Log HTTP requests
-   */
-  logRequest(
-    method: string,
-    url: string,
-    statusCode: number,
-    duration: number,
-    userId?: string,
-    requestId?: string
-  ): void {
-    this.info(`HTTP ${method} ${url}`, 'http', {
+  // Specialized logging methods
+  logRequest(method: string, url: string, statusCode: number, duration: number, userId?: string, requestId?: string) {
+    this.info(`HTTP ${method} ${url}`, "http", {
       method,
       url,
       statusCode,
       duration,
       userId,
-      requestId,
+      requestId
     });
   }
 
-  /**
-   * Log AI agent activities
-   */
-  logAgentActivity(
-    agentId: string,
-    action: string,
-    result: any,
-    context?: Record<string, any>
-  ): void {
-    this.info(`Agent ${agentId}: ${action}`, 'ai-agent', {
+  logAgentActivity(agentId: string, action: string, result: any, context?: any) {
+    this.info(`Agent ${agentId}: ${action}`, "ai-agent", {
       agentId,
       action,
       result,
-      ...context,
+      ...context
     });
   }
 
-  /**
-   * Log autopilot activities
-   */
-  logAutopilotActivity(
-    action: string,
-    ruleId?: string,
-    workflowId?: string,
-    context?: Record<string, any>
-  ): void {
-    this.info(`Autopilot: ${action}`, 'autopilot', {
+  logAutopilotActivity(action: string, ruleId?: string, workflowId?: string, context?: any) {
+    this.info(`Autopilot: ${action}`, "autopilot", {
       action,
       ruleId,
       workflowId,
-      ...context,
+      ...context
     });
   }
 
-  /**
-   * Log system performance metrics
-   */
-  logPerformance(
-    metric: string,
-    value: number,
-    unit: string,
-    context?: Record<string, any>
-  ): void {
-    this.info(`Performance: ${metric} = ${value}${unit}`, 'performance', {
+  logPerformance(metric: string, value: number, unit: string, context?: any) {
+    this.info(`Performance: ${metric} = ${value}${unit}`, "performance", {
       metric,
       value,
       unit,
-      ...context,
+      ...context
     });
   }
 
-  /**
-   * Get recent logs
-   */
+  // Utility methods
   getRecentLogs(limit: number = 100, level?: LogLevel): LogEntry[] {
-    // This would read from your database or log files
-    // For now, return empty array
+    // In a real implementation, this would read from a database
     return [];
   }
 
-  /**
-   * Search logs
-   */
-  searchLogs(
-    query: string,
-    startDate?: Date,
-    endDate?: Date,
-    level?: LogLevel
-  ): LogEntry[] {
-    // This would search through your database or log files
-    // For now, return empty array
+  searchLogs(query: string, startDate?: Date, endDate?: Date, level?: LogLevel): LogEntry[] {
+    // In a real implementation, this would search a database
     return [];
   }
 
-  /**
-   * Update configuration
-   */
-  updateConfig(newConfig: Partial<LoggerConfig>): void {
+  updateConfig(newConfig: Partial<LoggerConfig>) {
     this.config = { ...this.config, ...newConfig };
-    this.info('Logger configuration updated', 'logger', { newConfig });
+    this.info("Logger configuration updated", "logger", { newConfig });
   }
 
-  /**
-   * Cleanup resources
-   */
-  cleanup(): void {
+  cleanup() {
     if (this.flushInterval) {
       clearInterval(this.flushInterval);
     }
-
     if (this.logStream) {
       this.logStream.end();
     }
-
-    // Flush remaining buffer
     this.flushBuffer();
   }
 }
 
-// Create singleton instance
-const enhancedLogger = new EnhancedLogger({
-  level: process.env.LOG_LEVEL
-    ? parseInt(process.env.LOG_LEVEL)
-    : LogLevel.INFO,
-  enableConsole: process.env.NODE_ENV !== 'production',
-  enableFile: true,
-  enableDatabase: false, // Set to true when you want to store logs in database
-  logDirectory: './logs',
-  maxFileSize: 10,
-  maxFiles: 5,
-});
+// Export singleton instance
+let enhancedLogger: EnhancedLogger;
 
-export { enhancedLogger, EnhancedLogger };
-export default enhancedLogger;
+export function getLogger(): EnhancedLogger {
+  if (!enhancedLogger) {
+    enhancedLogger = new EnhancedLogger({
+      level: process.env.LOG_LEVEL ? parseInt(process.env.LOG_LEVEL) : LogLevel.INFO,
+      enableConsole: process.env.NODE_ENV !== "production",
+      enableFile: true,
+      enableDatabase: false, // Set to true when you want to store logs in database
+      logDirectory: "./logs",
+      maxFileSize: 10,
+      maxFiles: 5
+    });
+  }
+  return enhancedLogger;
+}

@@ -12,7 +12,6 @@
       "**/*.md",
       "**/*.log",
       "**/*.py",
-      "**/*.js",
       "**/*.ts",
       "**/*.json",
       "**/package*.json",
@@ -93,8 +92,7 @@
       "**/cli.js",
       "**/cli.ts",
       "**/stock-*.ts",
-      "**/sw.js",
-      "**/manifest.json",
+        "**/sw.js",
       "**/components.json",
       "**/pages-config.json",
       "**/webhook-config.json",
@@ -236,7 +234,7 @@
     ],
     "rewrites": [
       {
-        "source": "**",
+        "source": "!/**/*.@(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|json)",
         "destination": "/index.html"
       }
     ],
