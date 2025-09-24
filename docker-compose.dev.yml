@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api-gateway:
     build: ./gateway
     ports:
@@ -12,24 +25,23 @@ services:
       - REDIS_PORT=6379
       - JWT_SECRET=development_jwt_secret
       - EXTERNAL_APP_API_KEY=dev_api_key_123
+      - TELEGRAM_BOT_TOKEN=demo_telegram_token
+      - AUTOPILOT_API_KEY=demo_autopilot_key
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     volumes:
       - ./gateway:/app
       - /app/node_modules
     command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
-
-  # Autopilot Service (Placeholder)
   autopilot-service:
-    image: node:18-alpine
+    build: ./autopilot-service
     ports:
       - "3002:3002"
     environment:
@@ -37,26 +49,47 @@ services:
       - PORT=3002
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - AUTOPILOT_API_URL=http://localhost:3000
+      - AUTOPILOT_API_KEY=demo_autopilot_key
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
+      api-gateway:
+        condition: service_healthy
     volumes:
-      - ./autopilot:/app
-    command: sh -c "echo 'Autopilot service placeholder' && sleep infinity"
+      - ./autopilot-service:/app
+      - /app/node_modules
+    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-  # Telegram Bot Service (Placeholder)
   telegram-bot:
-    image: python:3.11-alpine
+    build: ./telegram-bot
     ports:
       - "3003:3003"
     environment:
-      - PYTHONUNBUFFERED=1
+      - NODE_ENV=development
+      - PORT=3003
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - TELEGRAM_BOT_TOKEN=demo_telegram_token
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
+      api-gateway:
+        condition: service_healthy
     volumes:
-      - ./telegram_bot:/app
-    command: sh -c "echo 'Telegram bot service placeholder' && sleep infinity"
+      - ./telegram-bot:/app
+      - /app/node_modules
+    command: npm run dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
   redis_data:
