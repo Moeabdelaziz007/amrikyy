@@ -165,7 +165,7 @@ const AdvancedAutomationDashboard: React.FC<AdvancedAutomationDashboardProps> = 
       case 'opc-ua-fx': return <Factory className="w-5 h-5" />;
       case 'process-mining-ai': return <Brain className="w-5 h-5" />;
       case 'digital-twin-engine': return <Layers className="w-5 h-5" />;
-      default: return <Cogs className="w-5 h-5" />;
+      default: return <Cog className="w-5 h-5" />;
     }
   };
 

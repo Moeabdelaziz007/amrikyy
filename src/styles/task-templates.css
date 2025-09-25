@@ -1,0 +1,567 @@
+/* Task Templates & Automation App Styles */
+
+.task-templates-app {
+  padding: 20px;
+  height: 100%;
+  animation: slideInFromTop 0.5s ease-out;
+  overflow-y: auto;
+  position: relative;
+}
+
+.templates-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.templates-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 24px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.create-btn {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+/* Tab Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.tab-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border-color: #00ff88;
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 255, 136, 0.2);
+}
+
+/* Templates Section */
+.templates-section {
+  margin-bottom: 30px;
+}
+
+.templates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.template-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.template-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.template-header h4 {
+  color: white;
+  margin: 0;
+  font-size: 16px;
+}
+
+.template-usage {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.template-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.template-meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.template-category {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.template-tasks {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.template-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Automations Section */
+.automations-section {
+  margin-bottom: 30px;
+}
+
+.automations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.automation-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.automation-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.automation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.automation-header h4 {
+  color: white;
+  margin: 0;
+  font-size: 16px;
+}
+
+.automation-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.status-dot.active {
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+}
+
+.status-dot.inactive {
+  background: #6b7280;
+}
+
+.automation-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.automation-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.automation-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.trigger-icon {
+  font-size: 14px;
+}
+
+.automation-schedule {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.automation-runs {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.automation-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.action-btn.success {
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: white;
+}
+
+.action-btn.warning {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.action-btn.danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Empty State */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: white;
+}
+
+.empty-state h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.empty-state p {
+  margin: 0 0 30px 0;
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+.create-first-btn {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.create-first-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+/* Create Form */
+.create-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.create-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  padding: 30px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.create-form h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.create-form input,
+.create-form textarea,
+.create-form select {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.create-form input::placeholder,
+.create-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.create-form input:focus,
+.create-form textarea:focus,
+.create-form select:focus {
+  outline: none;
+  border-color: #00ff88;
+  box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.3);
+}
+
+/* Template Tasks Section */
+.template-tasks-section {
+  margin-top: 20px;
+}
+
+.template-tasks-section h4 {
+  color: white;
+  margin: 0 0 15px 0;
+  font-size: 16px;
+}
+
+.template-task-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.template-task-item input,
+.template-task-item textarea {
+  margin-bottom: 10px;
+}
+
+.task-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.remove-task-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.remove-task-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.add-task-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.add-task-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.submit-btn,
+.cancel-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border: none;
+  color: white;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  font-size: 18px;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #00ff88;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Authentication Required */
+.auth-required {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  color: white;
+}
+
+.auth-required h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.auth-required p {
+  margin-bottom: 30px;
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+.auth-btn {
+  background: linear-gradient(135deg, #00ff88, #00cc6a);
+  border: none;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+}
+
+@keyframes slideInFromTop {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

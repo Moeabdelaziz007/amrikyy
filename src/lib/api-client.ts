@@ -1,6 +1,6 @@
 // API Configuration for AuraOS Frontend
 const API_CONFIG = {
-  baseURL: 'http://localhost:3001',
+  baseURL: 'http://localhost:3002',
   endpoints: {
     health: '/health',
     auth: {
@@ -15,14 +15,17 @@ const API_CONFIG = {
   },
   headers: {
     'Content-Type': 'application/json',
-    'Accept': 'application/json'
-  }
+    Accept: 'application/json',
+  },
 };
 
 // Development authentication bypass
 const DEV_AUTH_TOKEN = 'dev-token-' + Date.now();
 
 class AuraOSAPIClient {
+  baseURL: string;
+  authToken: string;
+
   constructor() {
     this.baseURL = API_CONFIG.baseURL;
     this.authToken = localStorage.getItem('auraos-auth-token') || DEV_AUTH_TOKEN;
@@ -35,8 +38,8 @@ class AuraOSAPIClient {
       headers: {
         ...API_CONFIG.headers,
         ...options.headers,
-        'Authorization': `Bearer ${this.authToken}`
-      }
+        Authorization: `Bearer ${this.authToken}`,
+      },
     };
 
     try {

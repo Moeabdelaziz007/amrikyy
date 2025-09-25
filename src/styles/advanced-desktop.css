@@ -1,0 +1,1108 @@
+/* Amrikyy AIOS System - Advanced Desktop Styles */
+
+.amrikyy-desktop {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Dynamic Background */
+.desktop-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.background-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    #0f0f23 0%, 
+    #1a1a2e 25%, 
+    #16213e 50%, 
+    #0f3460 75%, 
+    #533483 100%);
+  animation: gradientShift 20s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { 
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+  }
+  50% { 
+    background: linear-gradient(135deg, #533483 0%, #0f3460 25%, #16213e 50%, #1a1a2e 75%, #0f0f23 100%);
+  }
+}
+
+.background-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+  animation: particleFloat 15s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+}
+
+.background-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 30s linear infinite;
+}
+
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+/* System Status Bar */
+.system-status-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.status-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.system-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  font-weight: 600;
+}
+
+.logo-icon {
+  font-size: 18px;
+}
+
+.logo-text {
+  font-size: 14px;
+}
+
+.system-time {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-center {
+  display: flex;
+  align-items: center;
+}
+
+.system-indicators {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+.indicator.online {
+  color: #00ff88;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-right {
+  display: flex;
+  align-items: center;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* System Widgets */
+.system-widgets {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 999;
+}
+
+.system-widget {
+  width: 200px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+
+.system-widget:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-5px);
+}
+
+.widget-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.widget-content {
+  flex: 1;
+}
+
+.widget-title {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.widget-value {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.widget-blue .widget-icon { background: rgba(59, 130, 246, 0.2); }
+.widget-green .widget-icon { background: rgba(34, 197, 94, 0.2); }
+.widget-purple .widget-icon { background: rgba(147, 51, 234, 0.2); }
+.widget-cyan .widget-icon { background: rgba(6, 182, 212, 0.2); }
+
+/* Organized Desktop Apps */
+.organized-desktop-apps {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  right: 20px;
+  bottom: 80px;
+  overflow-y: auto;
+  z-index: 998;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* App Categories */
+.app-category {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 5px;
+}
+
+.category-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.category-title {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.category-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Apps within each category */
+.category-apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  padding: 0 10px;
+}
+
+/* Desktop Apps (fallback) */
+.desktop-apps {
+  position: fixed;
+  top: 60px;
+  left: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  z-index: 998;
+}
+
+.app-icon {
+  width: 80px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.app-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.app-icon.active {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.app-icon-image {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.app-icon:hover .app-icon-image {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+.app-icon-content {
+  font-size: 28px;
+}
+
+.app-icon-label {
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Taskbar */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.taskbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.start-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+}
+
+.start-icon {
+  font-size: 16px;
+}
+
+.start-text {
+  font-size: 14px;
+}
+
+.taskbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.running-apps {
+  display: flex;
+  gap: 8px;
+}
+
+.running-app {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.running-app.active {
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+.app-icon-small {
+  font-size: 14px;
+}
+
+.app-name {
+  font-weight: 500;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.system-tray {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+}
+
+.tray-item {
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.tray-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* App Windows */
+.app-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  max-width: 800px;
+  height: 70vh;
+  max-height: 600px;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  z-index: 2000;
+}
+
+.window-header {
+  height: 40px;
+  background: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-btn {
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn.close {
+  background: #ff5f57;
+}
+
+.control-btn.minimize {
+  background: #ffbd2e;
+}
+
+.control-btn.maximize {
+  background: #28ca42;
+}
+
+.control-btn:hover {
+  transform: scale(1.1);
+}
+
+.window-title {
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.window-content {
+  padding: 20px;
+  height: calc(100% - 40px);
+  overflow-y: auto;
+}
+
+.app-content h2 {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.app-content p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.app-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.feature-card h3 {
+  color: white;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.feature-card p {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .organized-desktop-apps {
+    left: 10px;
+    right: 10px;
+    gap: 20px;
+  }
+  
+  .category-header {
+    padding: 12px 15px;
+  }
+  
+  .category-title {
+    font-size: 16px;
+  }
+  
+  .category-description {
+    font-size: 12px;
+  }
+  
+  .category-apps {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 15px;
+  }
+  
+  .desktop-apps {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  
+  .app-icon {
+    width: 70px;
+    height: 90px;
+  }
+  
+  .app-icon-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .app-icon-content {
+    font-size: 24px;
+  }
+  
+  .system-widgets {
+    right: 10px;
+    top: 50px;
+  }
+  
+  .system-widget {
+    width: 160px;
+    height: 70px;
+  }
+  
+  .app-window {
+    width: 95vw;
+    height: 80vh;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* User Profile Styles */
+.user-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.user-profile:hover .user-avatar {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.2s ease-in-out;
+  z-index: 1000;
+}
+
+.user-profile:hover .user-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-info {
+  margin-bottom: 8px;
+}
+
+.user-name {
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-email {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+}
+
+.logout-btn {
+  width: 100%;
+  background: rgba(255, 0, 0, 0.2);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #ff6b6b;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 0, 0, 0.3);
+  border-color: rgba(255, 0, 0, 0.5);
+}
+
+/* Loading Screen Styles */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-logo {
+  font-size: 64px;
+  margin-bottom: 20px;
+  animation: logoFloat 2s ease-in-out infinite;
+}
+
+.loading-text {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #00ff88, #ff0080, #8000ff);
+  background-clip: text;
+    -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid #00ff88;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Ultra-Modern Liquid Bubble Design - 2024 Style */
+.app-icon {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 2px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Liquid bubble surface effect */
+.app-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.2) 0%, transparent 40%);
+  opacity: 0;
+  transition: all 0.4s ease;
+  animation: liquidSurface 4s ease-in-out infinite;
+}
+
+/* Liquid bubble inner glow */
+.app-icon::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  border-radius: 50%;
+  background: inherit;
+  opacity: 0;
+  filter: blur(20px) brightness(1.2);
+  transition: all 0.4s ease;
+  z-index: -1;
+}
+
+/* Advanced hover effects */
+.app-icon:hover {
+  transform: translateY(-12px) scale(1.15) rotateY(5deg);
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.2),
+    0 0 0 2px rgba(255, 255, 255, 0.2),
+    inset 0 3px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.app-icon:hover::before {
+  opacity: 1;
+  animation: liquidSurfaceHover 0.8s ease-in-out infinite;
+}
+
+.app-icon:hover::after {
+  opacity: 0.4;
+}
+
+/* Active floating state */
+.app-icon.active {
+  animation: liquidFloat 3s ease-in-out infinite;
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 255, 255, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Click ripple effect */
+.app-icon:active {
+  transform: translateY(-6px) scale(1.08);
+  transition: all 0.15s ease;
+}
+
+/* Ultra-modern liquid bubble colors with advanced gradients */
+.app-icon.blue {
+  background: 
+    linear-gradient(135deg, 
+      rgba(59, 130, 246, 0.7) 0%, 
+      rgba(29, 78, 216, 0.8) 30%,
+      rgba(37, 99, 235, 0.9) 60%,
+      rgba(59, 130, 246, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.green {
+  background: 
+    linear-gradient(135deg, 
+      rgba(16, 185, 129, 0.7) 0%, 
+      rgba(4, 120, 87, 0.8) 30%,
+      rgba(5, 150, 105, 0.9) 60%,
+      rgba(16, 185, 129, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.purple {
+  background: 
+    linear-gradient(135deg, 
+      rgba(139, 92, 246, 0.7) 0%, 
+      rgba(109, 40, 217, 0.8) 30%,
+      rgba(124, 58, 237, 0.9) 60%,
+      rgba(139, 92, 246, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.orange {
+  background: 
+    linear-gradient(135deg, 
+      rgba(249, 115, 22, 0.7) 0%, 
+      rgba(234, 88, 12, 0.8) 30%,
+      rgba(251, 146, 60, 0.9) 60%,
+      rgba(249, 115, 22, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.cyan {
+  background: 
+    linear-gradient(135deg, 
+      rgba(6, 182, 212, 0.7) 0%, 
+      rgba(8, 145, 178, 0.8) 30%,
+      rgba(14, 165, 233, 0.9) 60%,
+      rgba(6, 182, 212, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.gray {
+  background: 
+    linear-gradient(135deg, 
+      rgba(107, 114, 128, 0.7) 0%, 
+      rgba(75, 85, 99, 0.8) 30%,
+      rgba(156, 163, 175, 0.9) 60%,
+      rgba(107, 114, 128, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.red {
+  background: 
+    linear-gradient(135deg, 
+      rgba(239, 68, 68, 0.7) 0%, 
+      rgba(220, 38, 38, 0.8) 30%,
+      rgba(248, 113, 113, 0.9) 60%,
+      rgba(239, 68, 68, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.yellow {
+  background: 
+    linear-gradient(135deg, 
+      rgba(234, 179, 8, 0.7) 0%, 
+      rgba(202, 138, 4, 0.8) 30%,
+      rgba(245, 158, 11, 0.9) 60%,
+      rgba(234, 179, 8, 0.7) 100%);
+  color: white;
+}
+
+.app-icon.gold {
+  background: 
+    linear-gradient(135deg, 
+      rgba(245, 158, 11, 0.7) 0%, 
+      rgba(217, 119, 6, 0.8) 30%,
+      rgba(251, 191, 36, 0.9) 60%,
+      rgba(245, 158, 11, 0.7) 100%);
+  color: white;
+}
+
+/* Advanced liquid animations */
+@keyframes liquidFloat {
+  0%, 100% { 
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg); 
+  }
+  25% { 
+    transform: translateY(-4px) rotateX(2deg) rotateY(1deg); 
+  }
+  50% { 
+    transform: translateY(-8px) rotateX(0deg) rotateY(0deg); 
+  }
+  75% { 
+    transform: translateY(-4px) rotateX(-2deg) rotateY(-1deg); 
+  }
+}
+
+@keyframes liquidSurface {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1); 
+    opacity: 0.3;
+  }
+  50% { 
+    transform: rotate(180deg) scale(1.1); 
+    opacity: 0.6;
+  }
+}
+
+@keyframes liquidSurfaceHover {
+  0%, 100% { 
+    transform: rotate(0deg) scale(1); 
+    opacity: 0.8;
+  }
+  50% { 
+    transform: rotate(90deg) scale(1.2); 
+    opacity: 1;
+  }
+}
+
+/* Premium small taskbar bubbles */
+.app-icon-small {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-right: 10px;
+  position: relative;
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.app-icon-small:hover {
+  transform: translateY(-3px) scale(1.1);
+  box-shadow: 
+    0 12px 25px rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Small bubble colors with liquid effects */
+.app-icon-small.blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(29, 78, 216, 0.9));
+  color: white;
+}
+
+.app-icon-small.green {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.8), rgba(4, 120, 87, 0.9));
+  color: white;
+}
+
+.app-icon-small.purple {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.8), rgba(109, 40, 217, 0.9));
+  color: white;
+}
+
+.app-icon-small.orange {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.8), rgba(234, 88, 12, 0.9));
+  color: white;
+}
+
+.app-icon-small.cyan {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.8), rgba(8, 145, 178, 0.9));
+  color: white;
+}
+
+.app-icon-small.gray {
+  background: linear-gradient(135deg, rgba(107, 114, 128, 0.8), rgba(75, 85, 99, 0.9));
+  color: white;
+}
+
+.app-icon-small.red {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.8), rgba(220, 38, 38, 0.9));
+  color: white;
+}
+
+.app-icon-small.yellow {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.8), rgba(202, 138, 4, 0.9));
+  color: white;
+}
+
+.app-icon-small.gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.8), rgba(217, 119, 6, 0.9));
+  color: white;
+}

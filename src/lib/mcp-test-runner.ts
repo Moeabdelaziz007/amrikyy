@@ -548,6 +548,9 @@ export class MCPTestRunner {
 // Export singleton instance
 export const mcpTestRunner = new MCPTestRunner();
 
+// Export mcpServerManager for system-test-runner
+export { mcpServerManager } from './mcp-servers';
+
 // Helper function for test expectations (simplified version)
 export const expect = {
   any: (type: any) => ({ __expectAny: type }),

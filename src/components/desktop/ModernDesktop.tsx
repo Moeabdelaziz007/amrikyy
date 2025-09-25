@@ -67,14 +67,14 @@ interface DesktopWindow {
 
 const ModernDesktop: React.FC = () => {
   const [apps, setApps] = useState<DesktopApp[]>([
-        {
+    {
           id: 'ultimate-desktop',
           name: 'Ultimate Desktop',
           icon: <Sparkles className="w-8 h-8" />,
           description: 'AI-Powered themes beyond iOS & Windows',
-          category: 'system',
-          isInstalled: true,
-          isRunning: false,
+      category: 'system',
+      isInstalled: true,
+      isRunning: false,
           gradient: 'from-purple-500 via-pink-500 to-red-500',
           glowColor: 'purple-500',
           animationType: 'pulse',
@@ -93,7 +93,7 @@ const ModernDesktop: React.FC = () => {
           glowColor: 'green-500',
           animationType: 'glow',
           premium: true,
-        },
+    },
     {
       id: 'gallery',
       name: 'Quantum Gallery',
@@ -345,42 +345,42 @@ const ModernDesktop: React.FC = () => {
           setIsThemeCustomizerOpen(true);
           break;
         default:
-          // Check if app is already running
-          const existingWindow = windows.find(
-            w => w.appId === appId && !w.isMinimized
-          );
-          if (existingWindow) {
-            // Restore window
-            setWindows(prev =>
-              prev.map(w =>
-                w.id === existingWindow.id
-                  ? {
-                      ...w,
-                      isMinimized: false,
-                      zIndex: Math.max(...prev.map(w => w.zIndex)) + 1,
-                    }
-                  : w
-              )
-            );
-            return;
-          }
+      // Check if app is already running
+      const existingWindow = windows.find(
+        w => w.appId === appId && !w.isMinimized
+      );
+      if (existingWindow) {
+        // Restore window
+        setWindows(prev =>
+          prev.map(w =>
+            w.id === existingWindow.id
+              ? {
+                  ...w,
+                  isMinimized: false,
+                  zIndex: Math.max(...prev.map(w => w.zIndex)) + 1,
+                }
+              : w
+          )
+        );
+        return;
+      }
 
-          // Create new window
-          const newWindow: DesktopWindow = {
-            id: `window-${Date.now()}`,
-            appId,
-            title: app.name,
-            isMinimized: false,
-            isMaximized: false,
-            position: {
-              x: 100 + windows.length * 30,
-              y: 100 + windows.length * 30,
-            },
-            size: { width: 800, height: 600 },
-            zIndex: Math.max(...windows.map(w => w.zIndex), 0) + 1,
-          };
+      // Create new window
+      const newWindow: DesktopWindow = {
+        id: `window-${Date.now()}`,
+        appId,
+        title: app.name,
+        isMinimized: false,
+        isMaximized: false,
+        position: {
+          x: 100 + windows.length * 30,
+          y: 100 + windows.length * 30,
+        },
+        size: { width: 800, height: 600 },
+        zIndex: Math.max(...windows.map(w => w.zIndex), 0) + 1,
+      };
 
-          setWindows(prev => [...prev, newWindow]);
+      setWindows(prev => [...prev, newWindow]);
           break;
       }
     },
@@ -548,8 +548,8 @@ const ModernDesktop: React.FC = () => {
             {/* Enhanced System Icons */}
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg glass-premium hover-lift">
-                <Wifi className="w-4 h-4 text-blue-500" />
-              </div>
+                  <Wifi className="w-4 h-4 text-blue-500" />
+                </div>
               <div className="p-2 rounded-lg glass-premium hover-lift">
                 <Battery className="w-4 h-4 text-green-500" />
               </div>
@@ -568,8 +568,8 @@ const ModernDesktop: React.FC = () => {
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400">
                 {currentTime.toLocaleDateString()}
-              </div>
-            </div>
+        </div>
+      </div>
 
             {/* Theme Toggle */}
             <button
@@ -654,12 +654,12 @@ const ModernDesktop: React.FC = () => {
           {apps.map((app, index) => (
             <div key={app.id} className="bubble-app">
               <button
-                className={`desktop-icon group ${selectedApp === app.id ? 'selected' : ''} relative`}
-                onClick={() => selectApp(app.id)}
-                onDoubleClick={() => launchApp(app.id)}
-                title={app.description}
-              >
-                <div className="desktop-icon-image relative">
+            className={`desktop-icon group ${selectedApp === app.id ? 'selected' : ''} relative`}
+            onClick={() => selectApp(app.id)}
+            onDoubleClick={() => launchApp(app.id)}
+            title={app.description}
+          >
+            <div className="desktop-icon-image relative">
                   {/* Glassmorphism Background */}
                   <div className="absolute inset-0 bg-white/10 dark:bg-white/5 backdrop-blur-md rounded-full border border-white/20 dark:border-white/10 shadow-2xl"></div>
 
@@ -715,17 +715,17 @@ const ModernDesktop: React.FC = () => {
                     }}
                   >
                     <div className="transform group-hover:scale-125 transition-transform duration-300 text-white drop-shadow-lg neon-text">
-                      {app.icon}
-                    </div>
-                  </div>
+                  {app.icon}
+                </div>
+              </div>
 
                   {/* Running Indicator with Enhanced Animation */}
-                  {app.isRunning && (
+              {app.isRunning && (
                     <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-2 border-white dark:border-gray-800 shadow-lg">
                       <div className="absolute inset-1 bg-white rounded-full opacity-90 animate-ping"></div>
                       <div className="absolute inset-2 bg-green-400 rounded-full"></div>
-                    </div>
-                  )}
+                </div>
+              )}
 
                   {/* Hover Effect Ring with Neon Glow */}
                   <div
@@ -748,20 +748,20 @@ const ModernDesktop: React.FC = () => {
                       <div className="absolute inset-0 holographic-effect opacity-20"></div>
                     </div>
                   )}
-                </div>
+            </div>
 
                 {/* Enhanced Icon Label */}
                 <span className="desktop-icon-label mt-2 text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-white transition-all duration-300 group-hover:drop-shadow-lg">
-                  {app.name}
-                </span>
+              {app.name}
+            </span>
 
                 {/* Selection Indicator with Glow */}
-                {selectedApp === app.id && (
-                  <div className="absolute -inset-2 rounded-xl border-2 border-blue-500 dark:border-blue-400 bg-blue-500/10 animate-pulse"></div>
-                )}
-              </button>
+            {selectedApp === app.id && (
+              <div className="absolute -inset-2 rounded-xl border-2 border-blue-500 dark:border-blue-400 bg-blue-500/10 animate-pulse"></div>
+            )}
+          </button>
             </div>
-          ))}
+        ))}
         </div>
       </div>
 

@@ -5,10 +5,67 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
-import {
-  WALLPAPER_THEMES,
-  WallpaperTheme,
-} from '../components/os/WallpaperManager';
+
+export interface WallpaperTheme {
+  id: string;
+  name: string;
+  type: 'gradient' | 'animated' | 'particle';
+  colors: string[];
+  animation?: {
+    duration: number;
+    direction: 'horizontal' | 'vertical' | 'radial' | 'diagonal';
+  };
+  particles?: {
+    count: number;
+    speed: number;
+    size: number;
+  };
+}
+
+const WALLPAPER_THEMES: WallpaperTheme[] = [
+  {
+    id: 'aurora',
+    name: 'Aurora Borealis',
+    type: 'animated',
+    colors: ['#0f0f23', '#1a1a2e', '#16213e', '#0f3460', '#533483'],
+    animation: { duration: 20, direction: 'radial' },
+  },
+  {
+    id: 'cyberpunk',
+    name: 'Cyberpunk Neon',
+    type: 'animated',
+    colors: ['#0a0a0a', '#1a0033', '#330066', '#6600cc', '#00ff88'],
+    animation: { duration: 15, direction: 'diagonal' },
+  },
+  {
+    id: 'sunset',
+    name: 'Digital Sunset',
+    type: 'animated',
+    colors: ['#ff6b6b', '#ffa726', '#ffcc02', '#4ecdc4', '#45b7d1'],
+    animation: { duration: 25, direction: 'horizontal' },
+  },
+  {
+    id: 'ocean',
+    name: 'Deep Ocean',
+    type: 'animated',
+    colors: ['#001122', '#003366', '#0066aa', '#0099ff', '#00ccff'],
+    animation: { duration: 30, direction: 'vertical' },
+  },
+  {
+    id: 'matrix',
+    name: 'Matrix Code',
+    type: 'particle',
+    colors: ['#000000', '#001100', '#003300', '#00ff00'],
+    particles: { count: 50, speed: 2, size: 2 },
+  },
+  {
+    id: 'galaxy',
+    name: 'Galaxy Spiral',
+    type: 'animated',
+    colors: ['#000000', '#1a0033', '#330066', '#6600cc', '#9900ff'],
+    animation: { duration: 40, direction: 'radial' },
+  },
+];
 
 interface WallpaperContextType {
   currentWallpaper: string;
