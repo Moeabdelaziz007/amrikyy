@@ -1,7 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { storage } from './storage.js';
 import { getSmartMenuService } from './smart-menu.js';
-import { autopilotAgent } from './autopilot-agent.js';
+import { AutopilotAgent } from './autopilot-agent.js';
 
 export class TelegramService {
   private bot: TelegramBot;

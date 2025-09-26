@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -86,6 +85,7 @@ export default function AutopilotDashboard({ onExecute }: AutopilotDashboardProp
 
   // Load autopilot data
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadAutopilotStatus();
     loadTasks();
     loadMetrics();

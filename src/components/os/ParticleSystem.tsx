@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface Particle {
@@ -32,6 +31,7 @@ export const ParticleSystem: React.FC<ParticleSystemProps> = ({
   const particlesRef = useRef<Particle[]>([]);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -158,6 +158,7 @@ export const MatrixParticles: React.FC<{ className?: string }> = ({
   const [matrixChars, setMatrixChars] = React.useState<string[]>([]);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const chars =
       '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
     setMatrixChars(chars.split(''));

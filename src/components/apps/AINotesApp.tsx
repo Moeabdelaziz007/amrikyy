@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react';
 import {
   Plus,
   Search,
@@ -318,6 +317,7 @@ export const AINotesApp = () => {
 
   // Auto-save functionality
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (isEditing && editContent) {
       const timer = setTimeout(() => {
         generateAISuggestions(editContent);

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import {
   Palette,
   Sparkles,
@@ -307,6 +306,7 @@ export const PremiumWallpaperManager: React.FC<
 
   // Apply theme to document
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const root = document.documentElement;
     root.style.setProperty('--theme-primary', selectedTheme.colors.primary);
     root.style.setProperty('--theme-secondary', selectedTheme.colors.secondary);

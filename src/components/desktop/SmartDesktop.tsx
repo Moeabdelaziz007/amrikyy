@@ -3,7 +3,6 @@
  * Intelligent desktop layout with automation hub
  */
 
-import React, { useState, useEffect } from 'react';
 import {
   Brain,
   Cpu,

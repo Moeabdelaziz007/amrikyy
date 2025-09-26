@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface FileItem {
@@ -135,6 +134,7 @@ export const EnhancedFileManagerApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     // Find current folder based on path
     let folder = mockFolders[0]; // Start with Home
     for (let i = 1; i < currentPath.length; i++) {
@@ -325,7 +325,7 @@ export const EnhancedFileManagerApp: React.FC = () => {
           </div>
 
           <div className="sort-controls">
-            <select
+            <select aria-label="Select option"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
             >

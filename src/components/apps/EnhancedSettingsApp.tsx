@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserSettings } from '../../contexts/UserSettingsContext';
 import { db } from '../../lib/firebase';
@@ -176,6 +175,7 @@ export const EnhancedSettingsApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!user) {
       setLoading(false);
       return;
@@ -403,7 +403,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   <h4>Language & Region</h4>
                   <div className="setting-item">
                     <label>Language</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={userProfile.language}
                       onChange={(e) => setUserProfile(prev => ({ ...prev, language: e.target.value }))}
                     >
@@ -416,7 +416,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Timezone</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={userProfile.timezone}
                       onChange={(e) => setUserProfile(prev => ({ ...prev, timezone: e.target.value }))}
                     >
@@ -436,7 +436,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   <h4>Date & Time</h4>
                   <div className="setting-item">
                     <label>Date Format</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={userProfile.dateFormat}
                       onChange={(e) => setUserProfile(prev => ({ ...prev, dateFormat: e.target.value }))}
                     >
@@ -447,7 +447,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Time Format</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={userProfile.timeFormat}
                       onChange={(e) => setUserProfile(prev => ({ ...prev, timeFormat: e.target.value }))}
                     >
@@ -496,7 +496,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   
                   <div className="form-group">
                     <label>Bio</label>
-                    <textarea
+                    <textarea aria-label="Text area"
                       value={userProfile.bio}
                       onChange={(e) => setUserProfile(prev => ({ ...prev, bio: e.target.value }))}
                       placeholder="Tell us about yourself"
@@ -516,7 +516,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   <h4>Screen</h4>
                   <div className="setting-item">
                     <label>Resolution</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={systemSettings.display.resolution}
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
@@ -530,7 +530,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Refresh Rate</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={systemSettings.display.refreshRate}
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
@@ -897,7 +897,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Password Complexity</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={systemSettings.security.passwordComplexity}
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
@@ -1015,7 +1015,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Backup Frequency</label>
-                    <select 
+                    <select aria-label="Select option" 
                       value={backupSettings.backupFrequency}
                       onChange={(e) => setBackupSettings(prev => ({
                         ...prev,

@@ -1,4 +1,3 @@
-import React, { useState, useMemo } from 'react';
 import { GlassCard } from '../dashboard/GlassCard';
 
 interface MCPTool {
@@ -214,7 +213,7 @@ export const MCPToolsPanel: React.FC<MCPToolsPanelProps> = ({
               </svg>
             </div>
           </div>
-          <select
+          <select aria-label="Select option"
             value={selectedCategory}
             onChange={e => setSelectedCategory(e.target.value)}
             className="px-4 py-2 bg-glass-primary border border-glass-border rounded-lg text-text-primary focus:border-cyber-blue focus:outline-none"

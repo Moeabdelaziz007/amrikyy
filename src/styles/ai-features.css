@@ -185,8 +185,14 @@
   font-weight: 700;
   margin-bottom: 10px;
   background: linear-gradient(135deg, #00ff88, #00cc6a);
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
   background-clip: text;
 }
 

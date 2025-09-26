@@ -1,10 +1,8 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.trackEvent = exports.FirestoreService = exports.AuthService = exports.analytics = exports.db = exports.auth = void 0;
-const app_1 = require("firebase/app");
-const analytics_1 = require("firebase/analytics");
-const auth_1 = require("firebase/auth");
-const firestore_1 = require("firebase/firestore");
+import { initializeApp } from 'firebase/app';
+import { getAnalytics, logEvent } from 'firebase/analytics';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, getDocs, orderBy, limit, } from 'firebase/firestore';
+// Firebase configuration
 const firebaseConfig = {
     apiKey: process.env.VITE_FIREBASE_API_KEY,
     authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -14,20 +12,23 @@ const firebaseConfig = {
     appId: process.env.VITE_FIREBASE_APP_ID,
     measurementId: process.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
-const app = (0, app_1.initializeApp)(firebaseConfig);
-exports.auth = (0, auth_1.getAuth)(app);
-exports.db = (0, firestore_1.getFirestore)(app);
-exports.analytics = typeof window !== 'undefined' && firebaseConfig.measurementId
-    ? (0, analytics_1.getAnalytics)(app)
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const analytics = typeof window !== 'undefined' && firebaseConfig.measurementId
+    ? getAnalytics(app)
     : undefined;
-const googleProvider = new auth_1.GoogleAuthProvider();
+// Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
 googleProvider.addScope('email');
 googleProvider.addScope('profile');
-class AuthService {
+export class AuthService {
     static async signInWithGoogle() {
         try {
-            const result = await (0, auth_1.signInWithPopup)(exports.auth, googleProvider);
+            const result = await signInWithPopup(auth, googleProvider);
             const user = result.user;
+            // Save user data to Firestore
             await this.saveUserToFirestore(user);
             return user;
         }
@@ -38,7 +39,7 @@ class AuthService {
     }
     static async signOut() {
         try {
-            await (0, auth_1.signOut)(exports.auth);
+            await signOut(auth);
         }
         catch (error) {
             console.error('Sign-out error:', error);
@@ -46,12 +47,13 @@ class AuthService {
         }
     }
     static onAuthStateChanged(callback) {
-        return (0, auth_1.onAuthStateChanged)(exports.auth, callback);
+        return onAuthStateChanged(auth, callback);
     }
     static async signInWithEmail(email, password) {
         try {
-            const result = await (0, auth_1.signInWithEmailAndPassword)(exports.auth, email, password);
+            const result = await signInWithEmailAndPassword(auth, email, password);
             const user = result.user;
+            // Save user data to Firestore
             await this.saveUserToFirestore(user);
             return user;
         }
@@ -62,11 +64,13 @@ class AuthService {
     }
     static async signUpWithEmail(email, password, displayName) {
         try {
-            const result = await (0, auth_1.createUserWithEmailAndPassword)(exports.auth, email, password);
+            const result = await createUserWithEmailAndPassword(auth, email, password);
             const user = result.user;
+            // Update display name if provided
             if (displayName && user) {
-                await (0, auth_1.updateProfile)(user, { displayName });
+                await updateProfile(user, { displayName });
             }
+            // Save user data to Firestore
             await this.saveUserToFirestore(user);
             return user;
         }
@@ -77,7 +81,7 @@ class AuthService {
     }
     static async saveUserToFirestore(user) {
         try {
-            const userRef = (0, firestore_1.doc)(exports.db, 'users', user.uid);
+            const userRef = doc(db, 'users', user.uid);
             const userData = {
                 uid: user.uid,
                 email: user.email,
@@ -92,7 +96,7 @@ class AuthService {
                     language: 'en',
                 },
             };
-            await (0, firestore_1.setDoc)(userRef, userData, { merge: true });
+            await setDoc(userRef, userData, { merge: true });
         }
         catch (error) {
             console.error('Error saving user to Firestore:', error);
@@ -101,8 +105,8 @@ class AuthService {
     }
     static async getUserData(uid) {
         try {
-            const userRef = (0, firestore_1.doc)(exports.db, 'users', uid);
-            const userSnap = await (0, firestore_1.getDoc)(userRef);
+            const userRef = doc(db, 'users', uid);
+            const userSnap = await getDoc(userRef);
             if (userSnap.exists()) {
                 return userSnap.data();
             }
@@ -117,8 +121,8 @@ class AuthService {
     }
     static async updateUserData(uid, data) {
         try {
-            const userRef = (0, firestore_1.doc)(exports.db, 'users', uid);
-            await (0, firestore_1.updateDoc)(userRef, {
+            const userRef = doc(db, 'users', uid);
+            await updateDoc(userRef, {
                 ...data,
                 updatedAt: new Date(),
             });
@@ -129,11 +133,11 @@ class AuthService {
         }
     }
 }
-exports.AuthService = AuthService;
-class FirestoreService {
+export class FirestoreService {
+    // Posts
     static async createPost(userId, postData) {
         try {
-            const docRef = await (0, firestore_1.addDoc)((0, firestore_1.collection)(exports.db, 'posts'), {
+            const docRef = await addDoc(collection(db, 'posts'), {
                 ...postData,
                 userId,
                 createdAt: new Date(),
@@ -148,11 +152,11 @@ class FirestoreService {
     }
     static async getPosts(userId, limitCount = 10) {
         try {
-            let q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, 'posts'), (0, firestore_1.orderBy)('createdAt', 'desc'), (0, firestore_1.limit)(limitCount));
+            let q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(limitCount));
             if (userId) {
-                q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, 'posts'), (0, firestore_1.where)('userId', '==', userId), (0, firestore_1.orderBy)('createdAt', 'desc'), (0, firestore_1.limit)(limitCount));
+                q = query(collection(db, 'posts'), where('userId', '==', userId), orderBy('createdAt', 'desc'), limit(limitCount));
             }
-            const querySnapshot = await (0, firestore_1.getDocs)(q);
+            const querySnapshot = await getDocs(q);
             return querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
@@ -165,8 +169,8 @@ class FirestoreService {
     }
     static async updatePost(postId, data) {
         try {
-            const postRef = (0, firestore_1.doc)(exports.db, 'posts', postId);
-            await (0, firestore_1.updateDoc)(postRef, {
+            const postRef = doc(db, 'posts', postId);
+            await updateDoc(postRef, {
                 ...data,
                 updatedAt: new Date(),
             });
@@ -178,17 +182,18 @@ class FirestoreService {
     }
     static async deletePost(postId) {
         try {
-            const postRef = (0, firestore_1.doc)(exports.db, 'posts', postId);
-            await (0, firestore_1.deleteDoc)(postRef);
+            const postRef = doc(db, 'posts', postId);
+            await deleteDoc(postRef);
         }
         catch (error) {
             console.error('Error deleting post:', error);
             throw error;
         }
     }
+    // Workflows
     static async createWorkflow(userId, workflowData) {
         try {
-            const docRef = await (0, firestore_1.addDoc)((0, firestore_1.collection)(exports.db, 'workflows'), {
+            const docRef = await addDoc(collection(db, 'workflows'), {
                 ...workflowData,
                 userId,
                 createdAt: new Date(),
@@ -203,8 +208,8 @@ class FirestoreService {
     }
     static async getWorkflows(userId) {
         try {
-            const q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, 'workflows'), (0, firestore_1.where)('userId', '==', userId), (0, firestore_1.orderBy)('createdAt', 'desc'));
-            const querySnapshot = await (0, firestore_1.getDocs)(q);
+            const q = query(collection(db, 'workflows'), where('userId', '==', userId), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
             return querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
@@ -215,9 +220,10 @@ class FirestoreService {
             throw error;
         }
     }
+    // AI Agents
     static async createAgent(userId, agentData) {
         try {
-            const docRef = await (0, firestore_1.addDoc)((0, firestore_1.collection)(exports.db, 'agents'), {
+            const docRef = await addDoc(collection(db, 'agents'), {
                 ...agentData,
                 userId,
                 createdAt: new Date(),
@@ -232,8 +238,8 @@ class FirestoreService {
     }
     static async getAgents(userId) {
         try {
-            const q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, 'agents'), (0, firestore_1.where)('userId', '==', userId), (0, firestore_1.orderBy)('createdAt', 'desc'));
-            const querySnapshot = await (0, firestore_1.getDocs)(q);
+            const q = query(collection(db, 'agents'), where('userId', '==', userId), orderBy('createdAt', 'desc'));
+            const querySnapshot = await getDocs(q);
             return querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
@@ -244,9 +250,10 @@ class FirestoreService {
             throw error;
         }
     }
+    // Chat Messages
     static async createChatMessage(userId, messageData) {
         try {
-            const docRef = await (0, firestore_1.addDoc)((0, firestore_1.collection)(exports.db, 'chatMessages'), {
+            const docRef = await addDoc(collection(db, 'chatMessages'), {
                 ...messageData,
                 userId,
                 createdAt: new Date(),
@@ -260,8 +267,8 @@ class FirestoreService {
     }
     static async getChatMessages(userId, limitCount = 50) {
         try {
-            const q = (0, firestore_1.query)((0, firestore_1.collection)(exports.db, 'chatMessages'), (0, firestore_1.where)('userId', '==', userId), (0, firestore_1.orderBy)('createdAt', 'desc'), (0, firestore_1.limit)(limitCount));
-            const querySnapshot = await (0, firestore_1.getDocs)(q);
+            const q = query(collection(db, 'chatMessages'), where('userId', '==', userId), orderBy('createdAt', 'desc'), limit(limitCount));
+            const querySnapshot = await getDocs(q);
             return querySnapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data(),
@@ -273,12 +280,10 @@ class FirestoreService {
         }
     }
 }
-exports.FirestoreService = FirestoreService;
-const trackEvent = (eventName, eventParams) => {
-    if (exports.analytics) {
-        (0, analytics_1.logEvent)(exports.analytics, eventName, eventParams);
+export const trackEvent = (eventName, eventParams) => {
+    if (analytics) {
+        logEvent(analytics, eventName, eventParams);
     }
 };
-exports.trackEvent = trackEvent;
-exports.default = app;
+export default app;
 //# sourceMappingURL=firebase.js.map

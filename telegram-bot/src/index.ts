@@ -2,10 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import TelegramBot from 'node-telegram-bot-api';
-import { logger } from './src/utils/logger.js';
-import { redisClient } from './src/services/redis.js';
-import { messageBroker } from './src/services/messageBroker.js';
-import { telegramHandler } from './src/handlers/telegramHandler.js';
+import { logger } from './utils/logger.js';
+import { redisClient } from './services/redis.js';
+import { messageBroker } from './services/messageBroker.js';
+import { telegramHandler } from './handlers/telegramHandler.js';
 
 dotenv.config();
 

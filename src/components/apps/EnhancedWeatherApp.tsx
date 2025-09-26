@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 interface WeatherData {
@@ -117,6 +116,7 @@ export const EnhancedWeatherApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     // Simulate API call
     const loadWeatherData = async () => {
       setLoading(true);

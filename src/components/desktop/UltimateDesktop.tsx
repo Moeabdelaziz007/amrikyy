@@ -4,7 +4,6 @@
  * Features: Liquid Glass, Holographic UI, Quantum Desktop, Neural Networks
  */
 
-import React, { useState, useCallback } from 'react';
 import {
   Brain,
   Zap,
@@ -440,7 +439,7 @@ const UltimateDesktop: React.FC<UltimateDesktopProps> = ({ onClose }) => {
               <div className="flex items-center gap-2">
                 <Brain className="w-4 h-4 text-blue-400" />
                 <span className="text-sm text-white">Neural Intensity:</span>
-                <select
+                <select aria-label="Select option"
                   value={neuralIntensity}
                   onChange={(e) => setNeuralIntensity(e.target.value as any)}
                   className="px-3 py-1 bg-white/10 border border-white/20 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"

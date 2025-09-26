@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useUserSettings } from '../../contexts/UserSettingsContext';
 
 interface Theme {
   id: string;
   name: string;
   description: string;
-  category: 'modern' | 'classic' | 'futuristic' | 'minimal' | 'creative';
   colors: {
     primary: string;
     secondary: string;
@@ -14,194 +12,215 @@ interface Theme {
     surface: string;
     text: string;
   };
-  effects: {
-    blur: number;
-    glow: boolean;
-    animation: 'smooth' | 'bounce' | 'float' | 'none';
-    particles: boolean;
+  gradients: {
+    primary: string;
+    secondary: string;
+    accent: string;
   };
-  preview: string;
+  effects: {
+    glassOpacity: number;
+    blurIntensity: number;
+    shadowIntensity: number;
+  };
+  animations: {
+    duration: string;
+    easing: string;
+  };
 }
 
+const themes: Theme[] = [
+  {
+    id: 'default',
+    name: 'Amrikyy Classic',
+    description: 'The original Amrikyy AIOS theme with blue and purple gradients',
+    colors: {
+      primary: '#3b82f6',
+      secondary: '#8b5cf6',
+      accent: '#ec4899',
+      background: '#0f0f23',
+      surface: '#1a1a2e',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      secondary: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      accent: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+    },
+    effects: {
+      glassOpacity: 0.1,
+      blurIntensity: 20,
+      shadowIntensity: 0.37
+    },
+    animations: {
+      duration: '0.3s',
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+    }
+  },
+  {
+    id: 'dark',
+    name: 'Midnight Pro',
+    description: 'Deep dark theme with neon accents',
+    colors: {
+      primary: '#00ffff',
+      secondary: '#ff00ff',
+      accent: '#ffff00',
+      background: '#000000',
+      surface: '#111111',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #00ffff 0%, #0080ff 100%)',
+      secondary: 'linear-gradient(135deg, #ff00ff 0%, #ff0080 100%)',
+      accent: 'linear-gradient(135deg, #ffff00 0%, #ff8000 100%)'
+    },
+    effects: {
+      glassOpacity: 0.2,
+      blurIntensity: 25,
+      shadowIntensity: 0.5
+    },
+    animations: {
+      duration: '0.4s',
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+    }
+  },
+  {
+    id: 'cyberpunk',
+    name: 'Cyberpunk Neon',
+    description: 'High-contrast cyberpunk theme with electric colors',
+    colors: {
+      primary: '#ff0080',
+      secondary: '#00ff80',
+      accent: '#8000ff',
+      background: '#0a0a0a',
+      surface: '#1a0a1a',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #ff0080 0%, #ff4000 100%)',
+      secondary: 'linear-gradient(135deg, #00ff80 0%, #00ff40 100%)',
+      accent: 'linear-gradient(135deg, #8000ff 0%, #4000ff 100%)'
+    },
+    effects: {
+      glassOpacity: 0.15,
+      blurIntensity: 30,
+      shadowIntensity: 0.6
+    },
+    animations: {
+      duration: '0.2s',
+      easing: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+    }
+  },
+  {
+    id: 'ocean',
+    name: 'Ocean Depths',
+    description: 'Calming ocean theme with blue-green gradients',
+    colors: {
+      primary: '#0891b2',
+      secondary: '#0d9488',
+      accent: '#06b6d4',
+      background: '#0c4a6e',
+      surface: '#075985',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #0891b2 0%, #0d9488 100%)',
+      secondary: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+      accent: 'linear-gradient(135deg, #0d9488 0%, #06b6d4 100%)'
+    },
+    effects: {
+      glassOpacity: 0.12,
+      blurIntensity: 18,
+      shadowIntensity: 0.35
+    },
+    animations: {
+      duration: '0.5s',
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+    }
+  },
+  {
+    id: 'sunset',
+    name: 'Sunset Vibes',
+    description: 'Warm sunset theme with orange and pink tones',
+    colors: {
+      primary: '#f97316',
+      secondary: '#ec4899',
+      accent: '#f59e0b',
+      background: '#7c2d12',
+      surface: '#9a3412',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+      secondary: 'linear-gradient(135deg, #ec4899 0%, #be185d 100%)',
+      accent: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'
+    },
+    effects: {
+      glassOpacity: 0.08,
+      blurIntensity: 15,
+      shadowIntensity: 0.3
+    },
+    animations: {
+      duration: '0.6s',
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+    }
+  },
+  {
+    id: 'forest',
+    name: 'Forest Green',
+    description: 'Natural forest theme with green and earth tones',
+    colors: {
+      primary: '#16a34a',
+      secondary: '#059669',
+      accent: '#10b981',
+      background: '#14532d',
+      surface: '#166534',
+      text: '#ffffff'
+    },
+    gradients: {
+      primary: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+      secondary: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+      accent: 'linear-gradient(135deg, #10b981 0%, #059669 100%)'
+    },
+    effects: {
+      glassOpacity: 0.1,
+      blurIntensity: 20,
+      shadowIntensity: 0.4
+    },
+    animations: {
+      duration: '0.4s',
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)'
+    }
+  }
+];
+
 export const AdvancedThemeSelector: React.FC = () => {
-  const { settings, updateSetting } = useUserSettings();
-  const [selectedTheme, setSelectedTheme] = useState<string>(settings.theme || 'dark');
-  const [previewMode, setPreviewMode] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState<Theme>(themes[0]);
+  const [isOpen, setIsOpen] = useState(false);
   const [customTheme, setCustomTheme] = useState<Partial<Theme>>({});
 
-  const themes: Theme[] = [
-    {
-      id: 'quantum-glass',
-      name: 'Quantum Glass',
-      description: 'Ultra-modern glassmorphism with quantum effects',
-      category: 'futuristic',
-      colors: {
-        primary: '#00FFFF',
-        secondary: '#FF00FF',
-        accent: '#FFFF00',
-        background: 'linear-gradient(135deg, #0a0a0a, #1a1a2e, #16213e)',
-        surface: 'rgba(0, 255, 255, 0.1)',
-        text: '#FFFFFF'
-      },
-      effects: {
-        blur: 25,
-        glow: true,
-        animation: 'float',
-        particles: true
-      },
-      preview: '🌌'
-    },
-    {
-      id: 'neural-network',
-      name: 'Neural Network',
-      description: 'AI-inspired interface with neural patterns',
-      category: 'futuristic',
-      colors: {
-        primary: '#00FF88',
-        secondary: '#FF0080',
-        accent: '#8000FF',
-        background: 'radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.3) 0%, transparent 50%)',
-        surface: 'rgba(0, 255, 136, 0.15)',
-        text: '#FFFFFF'
-      },
-      effects: {
-        blur: 20,
-        glow: true,
-        animation: 'smooth',
-        particles: true
-      },
-      preview: '🧠'
-    },
-    {
-      id: 'cyberpunk-neon',
-      name: 'Cyberpunk Neon',
-      description: 'High-tech neon aesthetics with grid patterns',
-      category: 'futuristic',
-      colors: {
-        primary: '#00FF00',
-        secondary: '#FF0080',
-        accent: '#00FFFF',
-        background: 'linear-gradient(135deg, #000000, #010101, #030303)',
-        surface: 'rgba(0, 255, 0, 0.2)',
-        text: '#00FF00'
-      },
-      effects: {
-        blur: 15,
-        glow: true,
-        animation: 'bounce',
-        particles: false
-      },
-      preview: '🌃'
-    },
-    {
-      id: 'liquid-metal',
-      name: 'Liquid Metal',
-      description: 'Smooth metallic surfaces with liquid animations',
-      category: 'modern',
-      colors: {
-        primary: '#C0C0C0',
-        secondary: '#808080',
-        accent: '#FFD700',
-        background: 'linear-gradient(135deg, #1a1a1a, #2d2d2d, #404040)',
-        surface: 'rgba(192, 192, 192, 0.1)',
-        text: '#FFFFFF'
-      },
-      effects: {
-        blur: 30,
-        glow: false,
-        animation: 'smooth',
-        particles: true
-      },
-      preview: '💎'
-    },
-    {
-      id: 'aurora-borealis',
-      name: 'Aurora Borealis',
-      description: 'Natural aurora effects with organic colors',
-      category: 'creative',
-      colors: {
-        primary: '#00FF88',
-        secondary: '#FF6B6B',
-        accent: '#4ECDC4',
-        background: 'linear-gradient(135deg, #0f0f23, #1a1a2e, #16213e)',
-        surface: 'rgba(0, 255, 136, 0.1)',
-        text: '#FFFFFF'
-      },
-      effects: {
-        blur: 20,
-        glow: true,
-        animation: 'float',
-        particles: true
-      },
-      preview: '🌌'
-    },
-    {
-      id: 'minimal-dark',
-      name: 'Minimal Dark',
-      description: 'Clean, minimal design with subtle animations',
-      category: 'minimal',
-      colors: {
-        primary: '#FFFFFF',
-        secondary: '#CCCCCC',
-        accent: '#007AFF',
-        background: '#000000',
-        surface: 'rgba(255, 255, 255, 0.05)',
-        text: '#FFFFFF'
-      },
-      effects: {
-        blur: 10,
-        glow: false,
-        animation: 'smooth',
-        particles: false
-      },
-      preview: '⚫'
-    }
-  ];
+  useEffect(() => {
+    // Apply theme to document root
+    const root = document.documentElement;
+    const theme = selectedTheme;
+    
+    root.style.setProperty('--primary-color', theme.colors.primary);
+    root.style.setProperty('--secondary-color', theme.colors.secondary);
+    root.style.setProperty('--accent-color', theme.colors.accent);
+    root.style.setProperty('--bg-gradient-primary', theme.gradients.primary);
+    root.style.setProperty('--bg-gradient-secondary', theme.gradients.secondary);
+    root.style.setProperty('--bg-gradient-accent', theme.gradients.accent);
+    root.style.setProperty('--glass-bg', `rgba(255, 255, 255, ${theme.effects.glassOpacity})`);
+    root.style.setProperty('--animation-normal', theme.animations.duration);
+    root.style.setProperty('--ease-out-quart', theme.animations.easing);
+    
+    // Apply background
+    document.body.style.background = theme.gradients.primary;
+    document.body.style.backgroundSize = '400% 400%';
+  }, [selectedTheme]);
 
   const applyTheme = (theme: Theme) => {
-    const root = document.documentElement;
-    
-    // Apply CSS custom properties
-    root.style.setProperty('--theme-primary', theme.colors.primary);
-    root.style.setProperty('--theme-secondary', theme.colors.secondary);
-    root.style.setProperty('--theme-accent', theme.colors.accent);
-    root.style.setProperty('--theme-background', theme.colors.background);
-    root.style.setProperty('--theme-surface', theme.colors.surface);
-    root.style.setProperty('--theme-text', theme.colors.text);
-    root.style.setProperty('--theme-blur', `${theme.effects.blur}px`);
-    
-    // Apply effects
-    if (theme.effects.glow) {
-      root.classList.add('theme-glow');
-    } else {
-      root.classList.remove('theme-glow');
-    }
-    
-    if (theme.effects.particles) {
-      root.classList.add('theme-particles');
-    } else {
-      root.classList.remove('theme-particles');
-    }
-    
-    root.classList.add(`theme-${theme.effects.animation}`);
-  };
-
-  const handleThemeSelect = (themeId: string) => {
-    const theme = themes.find(t => t.id === themeId);
-    if (theme) {
-      setSelectedTheme(themeId);
-      applyTheme(theme);
-      updateSetting('theme', themeId);
-    }
-  };
-
-  const handlePreviewToggle = () => {
-    setPreviewMode(!previewMode);
-    if (!previewMode) {
-      // Apply current theme for preview
-      const theme = themes.find(t => t.id === selectedTheme);
-      if (theme) applyTheme(theme);
-    }
+    setSelectedTheme(theme);
+    setIsOpen(false);
   };
 
   const createCustomTheme = () => {
@@ -209,188 +228,206 @@ export const AdvancedThemeSelector: React.FC = () => {
       id: 'custom',
       name: 'Custom Theme',
       description: 'Your personalized theme',
-      category: 'creative',
       colors: {
-        primary: customTheme.colors?.primary || '#3B82F6',
-        secondary: customTheme.colors?.secondary || '#8B5CF6',
-        accent: customTheme.colors?.accent || '#F59E0B',
-        background: customTheme.colors?.background || 'linear-gradient(135deg, #0f0f23, #1a1a2e)',
-        surface: customTheme.colors?.surface || 'rgba(255, 255, 255, 0.1)',
-        text: customTheme.colors?.text || '#FFFFFF'
+        primary: customTheme.colors?.primary || '#3b82f6',
+        secondary: customTheme.colors?.secondary || '#8b5cf6',
+        accent: customTheme.colors?.accent || '#ec4899',
+        background: customTheme.colors?.background || '#0f0f23',
+        surface: customTheme.colors?.surface || '#1a1a2e',
+        text: customTheme.colors?.text || '#ffffff'
+      },
+      gradients: {
+        primary: customTheme.gradients?.primary || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        secondary: customTheme.gradients?.secondary || 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        accent: customTheme.gradients?.accent || 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
       },
       effects: {
-        blur: customTheme.effects?.blur || 20,
-        glow: customTheme.effects?.glow || true,
-        animation: customTheme.effects?.animation || 'smooth',
-        particles: customTheme.effects?.particles || true
+        glassOpacity: customTheme.effects?.glassOpacity || 0.1,
+        blurIntensity: customTheme.effects?.blurIntensity || 20,
+        shadowIntensity: customTheme.effects?.shadowIntensity || 0.37
       },
-      preview: '🎨'
+      animations: {
+        duration: customTheme.animations?.duration || '0.3s',
+        easing: customTheme.animations?.easing || 'cubic-bezier(0.25, 1, 0.5, 1)'
+      }
     };
     
     applyTheme(newTheme);
-    updateSetting('theme', 'custom');
   };
-
-  useEffect(() => {
-    const theme = themes.find(t => t.id === selectedTheme);
-    if (theme) applyTheme(theme);
-  }, [selectedTheme]);
 
   return (
     <div className="advanced-theme-selector">
       <div className="theme-header">
-        <h2>🎨 Advanced Theme System</h2>
-        <div className="theme-controls">
-          <button 
-            className={`preview-btn ${previewMode ? 'active' : ''}`}
-            onClick={handlePreviewToggle}
-          >
-            {previewMode ? 'Exit Preview' : 'Live Preview'}
-          </button>
+        <h2>🌈 Advanced Theme Selector</h2>
+        <p>Customize your Amrikyy AIOS experience with beautiful themes</p>
+      </div>
+
+      <div className="theme-controls">
+        <button 
+          className="theme-toggle-btn"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? 'Close Themes' : 'Browse Themes'}
+        </button>
+        
+        <div className="current-theme">
+          <h3>Current Theme: {selectedTheme.name}</h3>
+          <p>{selectedTheme.description}</p>
         </div>
       </div>
 
-      <div className="theme-categories">
-        {['modern', 'classic', 'futuristic', 'minimal', 'creative'].map(category => (
-          <button
-            key={category}
-            className={`category-btn ${category}`}
-            onClick={() => {
-              const categoryThemes = themes.filter(t => t.category === category);
-              if (categoryThemes.length > 0) {
-                handleThemeSelect(categoryThemes[0].id);
-              }
-            }}
-          >
-            {category.charAt(0).toUpperCase() + category.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      <div className="themes-grid">
-        {themes.map(theme => (
-          <div
-            key={theme.id}
-            className={`theme-card ${selectedTheme === theme.id ? 'selected' : ''}`}
-            onClick={() => handleThemeSelect(theme.id)}
-          >
-            <div className="theme-preview" style={{ backgroundColor: theme.colors.primary }}>
-              <span className="theme-icon">{theme.preview}</span>
-            </div>
-            <div className="theme-info">
-              <h3>{theme.name}</h3>
-              <p>{theme.description}</p>
-              <div className="theme-tags">
-                <span className="tag">{theme.category}</span>
-                {theme.effects.glow && <span className="tag glow">✨ Glow</span>}
-                {theme.effects.particles && <span className="tag particles">🌟 Particles</span>}
+      {isOpen && (
+        <div className="themes-grid">
+          {themes.map(theme => (
+            <div 
+              key={theme.id}
+              className={`theme-card ${selectedTheme.id === theme.id ? 'selected' : ''}`}
+              onClick={() => applyTheme(theme)}
+            >
+              <div 
+                className="theme-preview"
+                style={{ background: theme.gradients.primary }}
+              >
+                <div className="theme-colors">
+                  <div 
+                    className="color-swatch"
+                    style={{ backgroundColor: theme.colors.primary }}
+                  ></div>
+                  <div 
+                    className="color-swatch"
+                    style={{ backgroundColor: theme.colors.secondary }}
+                  ></div>
+                  <div 
+                    className="color-swatch"
+                    style={{ backgroundColor: theme.colors.accent }}
+                  ></div>
+                </div>
+              </div>
+              <div className="theme-info">
+                <h4>{theme.name}</h4>
+                <p>{theme.description}</p>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       <div className="custom-theme-section">
         <h3>🎨 Create Custom Theme</h3>
-        <div className="custom-theme-form">
+        <div className="custom-theme-controls">
           <div className="color-inputs">
-            <label>
-              Primary Color:
+            <div className="input-group">
+              <label>Primary Color</label>
               <input
                 type="color"
-                value={customTheme.colors?.primary || '#3B82F6'}
+                value={customTheme.colors?.primary || '#3b82f6'}
                 onChange={(e) => setCustomTheme(prev => ({
                   ...prev,
                   colors: { ...prev.colors, primary: e.target.value }
                 }))}
               />
-            </label>
-            <label>
-              Secondary Color:
+            </div>
+            <div className="input-group">
+              <label>Secondary Color</label>
               <input
                 type="color"
-                value={customTheme.colors?.secondary || '#8B5CF6'}
+                value={customTheme.colors?.secondary || '#8b5cf6'}
                 onChange={(e) => setCustomTheme(prev => ({
                   ...prev,
                   colors: { ...prev.colors, secondary: e.target.value }
                 }))}
               />
-            </label>
-            <label>
-              Accent Color:
+            </div>
+            <div className="input-group">
+              <label>Accent Color</label>
               <input
                 type="color"
-                value={customTheme.colors?.accent || '#F59E0B'}
+                value={customTheme.colors?.accent || '#ec4899'}
                 onChange={(e) => setCustomTheme(prev => ({
                   ...prev,
                   colors: { ...prev.colors, accent: e.target.value }
                 }))}
               />
-            </label>
+            </div>
           </div>
           
           <div className="effect-controls">
-            <label>
-              Blur Intensity:
+            <div className="slider-group">
+              <label>Glass Opacity: {customTheme.effects?.glassOpacity || 0.1}</label>
               <input
                 type="range"
-                min="0"
+                min="0.05"
+                max="0.3"
+                step="0.01"
+                value={customTheme.effects?.glassOpacity || 0.1}
+                onChange={(e) => setCustomTheme(prev => ({
+                  ...prev,
+                  effects: { ...prev.effects, glassOpacity: parseFloat(e.target.value) }
+                }))}
+              />
+            </div>
+            <div className="slider-group">
+              <label>Blur Intensity: {customTheme.effects?.blurIntensity || 20}px</label>
+              <input
+                type="range"
+                min="5"
                 max="50"
-                value={customTheme.effects?.blur || 20}
+                step="1"
+                value={customTheme.effects?.blurIntensity || 20}
                 onChange={(e) => setCustomTheme(prev => ({
                   ...prev,
-                  effects: { ...prev.effects, blur: parseInt(e.target.value) }
+                  effects: { ...prev.effects, blurIntensity: parseInt(e.target.value) }
                 }))}
               />
-              <span>{customTheme.effects?.blur || 20}px</span>
-            </label>
-            
-            <label>
-              <input
-                type="checkbox"
-                checked={customTheme.effects?.glow || false}
-                onChange={(e) => setCustomTheme(prev => ({
-                  ...prev,
-                  effects: { ...prev.effects, glow: e.target.checked }
-                }))}
-              />
-              Enable Glow Effects
-            </label>
-            
-            <label>
-              <input
-                type="checkbox"
-                checked={customTheme.effects?.particles || false}
-                onChange={(e) => setCustomTheme(prev => ({
-                  ...prev,
-                  effects: { ...prev.effects, particles: e.target.checked }
-                }))}
-              />
-              Enable Particles
-            </label>
+            </div>
           </div>
           
-          <button className="create-theme-btn" onClick={createCustomTheme}>
-            Create Custom Theme
+          <button 
+            className="apply-custom-btn"
+            onClick={createCustomTheme}
+          >
+            Apply Custom Theme
           </button>
         </div>
       </div>
 
-      {previewMode && (
-        <div className="theme-preview-overlay">
-          <div className="preview-content">
-            <h3>Live Theme Preview</h3>
-            <p>Current theme: {themes.find(t => t.id === selectedTheme)?.name}</p>
-            <div className="preview-elements">
-              <div className="preview-card">Sample Card</div>
-              <div className="preview-button">Sample Button</div>
-              <div className="preview-input">
-                <input type="text" placeholder="Sample Input" />
-              </div>
+      <div className="theme-effects">
+        <h3>✨ Theme Effects</h3>
+        <div className="effects-grid">
+          <div className="effect-card">
+            <h4>🎭 Animations</h4>
+            <p>Enhanced transitions and micro-interactions</p>
+            <div className="effect-toggle">
+              <input type="checkbox" defaultChecked />
+              <span>Enable</span>
+            </div>
+          </div>
+          <div className="effect-card">
+            <h4>🌟 Particle Effects</h4>
+            <p>Floating particles and ambient effects</p>
+            <div className="effect-toggle">
+              <input type="checkbox" defaultChecked />
+              <span>Enable</span>
+            </div>
+          </div>
+          <div className="effect-card">
+            <h4>🔊 Sound Effects</h4>
+            <p>Audio feedback for interactions</p>
+            <div className="effect-toggle">
+              <input type="checkbox" />
+              <span>Enable</span>
+            </div>
+          </div>
+          <div className="effect-card">
+            <h4>🌈 Dynamic Gradients</h4>
+            <p>Animated background gradients</p>
+            <div className="effect-toggle">
+              <input type="checkbox" defaultChecked />
+              <span>Enable</span>
             </div>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };

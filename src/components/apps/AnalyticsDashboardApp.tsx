@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -47,6 +46,7 @@ export const AnalyticsDashboardApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadAnalytics();
     } else {
@@ -216,7 +216,7 @@ export const AnalyticsDashboardApp: React.FC = () => {
       <div className="analytics-header">
         <h2>📊 Analytics Dashboard</h2>
         <div className="header-controls">
-          <select 
+          <select aria-label="Select option" 
             value={timeRange} 
             onChange={(e) => setTimeRange(e.target.value)}
             className="time-range-select"

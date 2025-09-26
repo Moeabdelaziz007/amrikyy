@@ -9,6 +9,9 @@
 /* Import Premium Effects */
 @import './premium-effects.css';
 
+/* Import Task Queue Styles */
+@import './task-queue.css';
+
 /* Import Tailwind CSS */
 @tailwind base;
 @tailwind components;

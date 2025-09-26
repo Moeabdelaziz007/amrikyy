@@ -171,6 +171,12 @@
 
 .gradient-text {
   background: var(--gradient-primary);
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

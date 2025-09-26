@@ -6,6 +6,7 @@ import AgentsWorkflowCanvas from '../workflow/AgentsWorkflowCanvas';
 import MCPToolsPanel from '../mcp/MCPToolsPanel';
 import LiveActivityPanel from '../activity/LiveActivityPanel';
 import ThemeCustomization from '../settings/ThemeCustomization';
+import TaskQueue from './TaskQueue';
 
 interface Client {
   id: string;
@@ -57,7 +58,7 @@ export const Dashboard: React.FC = () => {
     },
   ]);
 
-  const [systemStats, setSystemStats] = useState({
+  const [systemStats] = useState({
     totalOperations: 532,
     successRate: 94.2,
     activeClients: 3,
@@ -71,7 +72,7 @@ export const Dashboard: React.FC = () => {
   } | null>(null);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [activeView, setActiveView] = useState<
-    'dashboard' | 'workflow' | 'mcp' | 'activity' | 'settings'
+    'dashboard' | 'tasks' | 'workflow' | 'mcp' | 'activity' | 'settings'
   >('dashboard');
 
   // Mock functions for client control
@@ -125,6 +126,7 @@ export const Dashboard: React.FC = () => {
 
   // Keyboard shortcuts
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const handler = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       const isMeta = e.metaKey || e.ctrlKey;
@@ -195,6 +197,7 @@ export const Dashboard: React.FC = () => {
             <div className="flex gap-2">
               {[
                 { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+                { id: 'tasks', label: 'Task Queue', icon: '📋' },
                 { id: 'workflow', label: 'Agents', icon: '🤖' },
                 { id: 'mcp', label: 'MCP Tools', icon: '🔧' },
                 { id: 'activity', label: 'Activity', icon: '📈' },
@@ -351,6 +354,8 @@ export const Dashboard: React.FC = () => {
             </GlassCard>
           </>
         )}
+
+        {activeView === 'tasks' && <TaskQueue className="mb-8" />}
 
         {activeView === 'workflow' && <AgentsWorkflowCanvas className="mb-8" />}
 

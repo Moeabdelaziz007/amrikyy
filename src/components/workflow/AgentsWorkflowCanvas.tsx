@@ -1,4 +1,3 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { GlassCard } from '../dashboard/GlassCard';
 
 interface AgentNode {
@@ -134,6 +133,7 @@ export const AgentsWorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   }, []);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (draggedNode) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);

@@ -21,8 +21,14 @@
   margin: 0;
   font-size: 24px;
   background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
   background-clip: text;
 }
 
@@ -245,10 +251,16 @@
   border-radius: 3px;
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
+  -webkit--webkit-appearance: none;
+  appearance: none;
 }
 
 .setting-item input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
+  appearance: none;
+  -webkit--webkit-appearance: none;
+  appearance: none;
   width: 20px;
   height: 20px;
   background: linear-gradient(135deg, #3B82F6, #8B5CF6);

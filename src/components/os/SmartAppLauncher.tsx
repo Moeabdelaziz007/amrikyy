@@ -1,4 +1,3 @@
-import React, { useState, useMemo } from 'react';
 import {
   Search,
   Grid3X3,
@@ -503,7 +502,7 @@ export const SmartAppLauncher: React.FC<SmartAppLauncherProps> = ({
             </div>
 
             {/* Category Filter */}
-            <select
+            <select aria-label="Select option"
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
               className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -520,7 +519,7 @@ export const SmartAppLauncher: React.FC<SmartAppLauncherProps> = ({
             </select>
 
             {/* Sort */}
-            <select
+            <select aria-label="Select option"
               value={sortBy}
               onChange={e => setSortBy(e.target.value as any)}
               className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-purple-500"

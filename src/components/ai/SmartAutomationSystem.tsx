@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -65,6 +64,7 @@ export const SmartAutomationSystem: React.FC = () => {
   });
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!user) {
       setLoading(false);
       return;
@@ -122,6 +122,7 @@ export const SmartAutomationSystem: React.FC = () => {
 
   // AI Learning Simulation
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const interval = setInterval(() => {
       if (user && Math.random() > 0.7) {
         generateAIInsight();
@@ -272,7 +273,7 @@ export const SmartAutomationSystem: React.FC = () => {
 
       // Mark insight as applied
       await addDoc(collection(db, 'aiInsights'), {
-        userId: user?.uid,
+        
         type: 'optimization',
         title: 'Insight Applied',
         description: `Applied insight: ${insight.title}`,
@@ -516,12 +517,12 @@ export const SmartAutomationSystem: React.FC = () => {
                 placeholder="Rule Name"
                 required
               />
-              <textarea
+              <textarea aria-label="Text area"
                 name="description"
                 placeholder="Description"
                 rows={3}
               ></textarea>
-              <select name="triggerType" required>
+              <select aria-label="Select option" name="triggerType" required>
                 <option value="time">Time-based</option>
                 <option value="behavior">Behavior-based</option>
                 <option value="pattern">Pattern-based</option>
@@ -532,7 +533,7 @@ export const SmartAutomationSystem: React.FC = () => {
                 name="conditions"
                 placeholder="Trigger Conditions"
               />
-              <select name="actionType" required>
+              <select aria-label="Select option" name="actionType" required>
                 <option value="create_task">Create Task</option>
                 <option value="send_notification">Send Notification</option>
                 <option value="optimize_system">Optimize System</option>

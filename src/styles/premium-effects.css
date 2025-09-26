@@ -195,8 +195,14 @@
 
 .text-gradient {
   background: linear-gradient(45deg, var(--theme-primary), var(--theme-secondary), var(--theme-accent));
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
   background-clip: text;
 }
 

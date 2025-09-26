@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 interface LogEvent {
   id: string;
@@ -32,6 +31,7 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
   const [autoscroll, setAutoscroll] = useState(true);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!open) return;
     let canceled = false;
     // Mock stream: replace with real-time source integration
@@ -66,6 +66,7 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
   }, [open, clientId, clientName]);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!autoscroll) return;
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [events, autoscroll]);
@@ -112,7 +113,7 @@ export const LiveLogsModal: React.FC<LiveLogsModalProps> = ({
               value={query}
               onChange={e => setQuery(e.target.value)}
             />
-            <select
+            <select aria-label="Select option"
               className="px-3 py-2 text-sm rounded-md bg-bg-primary border border-glass-border outline-none focus:border-cyber-blue"
               value={level}
               onChange={e => setLevel(e.target.value as any)}

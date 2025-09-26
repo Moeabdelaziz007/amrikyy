@@ -71,11 +71,11 @@
 
 .logo-text {
   font-size: 28px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #00ff88, #ff0080, #8000ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00ff88, #ff0080, #8000ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   margin: 0;
 }
 
@@ -91,6 +91,7 @@
 
 .login-card {
   background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;

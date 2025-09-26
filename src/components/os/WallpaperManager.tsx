@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ParticleSystem, MatrixParticles, StarField } from './ParticleSystem';
 
@@ -82,6 +81,7 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
 
   // Update time of day based on actual time
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateTimeOfDay = () => {
       const hour = new Date().getHours();
       setTimeOfDay(hour >= 6 && hour < 18 ? 'day' : 'night');
@@ -94,6 +94,7 @@ export const WallpaperManager: React.FC<WallpaperManagerProps> = ({
 
   // Track mouse movement for interactive effects
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,

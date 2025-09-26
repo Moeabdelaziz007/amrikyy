@@ -3,7 +3,6 @@
  * Advanced wallpaper system with multiple themes and effects
  */
 
-import React, { useState } from 'react';
 import {
   Palette,
   Sparkles,

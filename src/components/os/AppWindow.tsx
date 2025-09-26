@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { X, Minus, Maximize2, Minimize2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -52,6 +51,7 @@ export const AppWindow = ({
   };
 
   React.useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);

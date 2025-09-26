@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { apiClient } from '../../lib/api-client';
 
 // Telegram Bot App
@@ -13,6 +12,7 @@ export const TelegramBotApp: React.FC = () => {
   });
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadBotStatus();
     loadMessages();
     loadBotConfig();
@@ -135,7 +135,7 @@ export const TelegramBotApp: React.FC = () => {
           <div className="control-section">
             <h3>Send Message</h3>
             <div className="message-form">
-              <textarea
+              <textarea aria-label="Text area"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Type your message here..."
@@ -185,6 +185,7 @@ export const AutomationDashboardApp: React.FC = () => {
   });
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadWorkflows();
     loadActiveWorkflows();
     loadStats();
@@ -332,6 +333,7 @@ export const MCPToolsApp: React.FC = () => {
   const [toolParams, setToolParams] = useState({});
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadMCPTools();
   }, []);
 

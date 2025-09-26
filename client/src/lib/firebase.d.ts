@@ -2,7 +2,7 @@ import { User } from 'firebase/auth';
 declare const app: import("@firebase/app").FirebaseApp;
 export declare const auth: import("firebase/auth").Auth;
 export declare const db: import("@firebase/firestore").Firestore;
-export declare const analytics: import("@firebase/analytics").Analytics | undefined;
+export declare const analytics: import("@firebase/analytics").Analytics;
 export declare class AuthService {
     static signInWithGoogle(): Promise<User>;
     static signOut(): Promise<void>;

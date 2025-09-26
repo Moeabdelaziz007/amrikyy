@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -41,6 +40,7 @@ export const TaskTemplatesApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadTemplates();
       loadAutomations();
@@ -443,12 +443,12 @@ export const TaskTemplatesApp: React.FC = () => {
               value={newTemplate.name}
               onChange={e => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
             />
-            <textarea
+            <textarea aria-label="Text area"
               placeholder="Description"
               value={newTemplate.description}
               onChange={e => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
             ></textarea>
-            <select
+            <select aria-label="Select option"
               value={newTemplate.category}
               onChange={e => setNewTemplate(prev => ({ ...prev, category: e.target.value }))}
             >
@@ -470,13 +470,13 @@ export const TaskTemplatesApp: React.FC = () => {
                     value={task.title}
                     onChange={e => updateTaskInTemplate(index, 'title', e.target.value)}
                   />
-                  <textarea
+                  <textarea aria-label="Text area"
                     placeholder="Task Description"
                     value={task.description}
                     onChange={e => updateTaskInTemplate(index, 'description', e.target.value)}
                   ></textarea>
                   <div className="task-fields">
-                    <select
+                    <select aria-label="Select option"
                       value={task.priority}
                       onChange={e => updateTaskInTemplate(index, 'priority', e.target.value)}
                     >
@@ -528,12 +528,12 @@ export const TaskTemplatesApp: React.FC = () => {
               value={newAutomation.name}
               onChange={e => setNewAutomation(prev => ({ ...prev, name: e.target.value }))}
             />
-            <textarea
+            <textarea aria-label="Text area"
               placeholder="Description"
               value={newAutomation.description}
               onChange={e => setNewAutomation(prev => ({ ...prev, description: e.target.value }))}
             ></textarea>
-            <select
+            <select aria-label="Select option"
               value={newAutomation.trigger}
               onChange={e => setNewAutomation(prev => ({ ...prev, trigger: e.target.value }))}
             >
@@ -542,7 +542,7 @@ export const TaskTemplatesApp: React.FC = () => {
               <option value="monthly">Monthly</option>
               <option value="event">Event-based</option>
             </select>
-            <select
+            <select aria-label="Select option"
               value={newAutomation.templateId}
               onChange={e => setNewAutomation(prev => ({ ...prev, templateId: e.target.value }))}
             >

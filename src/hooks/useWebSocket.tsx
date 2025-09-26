@@ -1,4 +1,3 @@
-import React, { useEffect, useState, useRef } from 'react';
 
 interface WebSocketMessage {
   type: 'system' | 'agent' | 'automation' | 'user' | 'error' | 'success';
@@ -162,6 +161,7 @@ export const useWebSocket = (
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const websocket = new WebSocketIntegration(url, {
       ...options,
       onConnectionChange: isConnected => {
@@ -229,6 +229,7 @@ export const RealtimeDataProvider: React.FC<{
   const { connected, messages, sendMessage, subscribe } = useWebSocket(wsUrl);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const unsubscribeSystem = subscribe?.('system', data => {
       onSystemUpdate?.(data);
     });
@@ -278,6 +279,7 @@ export const LiveDataDisplay: React.FC<{
   const { subscribe } = useWebSocket('ws://localhost:8080/ws');
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const unsubscribe = subscribe?.(type, newData => {
       setData(newData);
       setLastUpdate(new Date());

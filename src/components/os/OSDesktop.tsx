@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { Clock, Wifi, Battery, Volume2, Grid3X3, Palette } from 'lucide-react';
 import { AppDock } from './AppDock';
 import { WindowManager } from './WindowManager';
@@ -22,6 +21,7 @@ export const OSDesktop = () => {
 
   // Update time every second
   React.useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);

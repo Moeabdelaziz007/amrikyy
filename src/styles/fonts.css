@@ -55,6 +55,12 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   background: var(--gradient-primary);
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -96,6 +102,12 @@
   font-size: clamp(1.5rem, 4vw, 3rem);
   line-height: 1.1;
   background: var(--gradient-accent);
+  -webkit--webkit--webkit-background-clip: text;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit--webkit-background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

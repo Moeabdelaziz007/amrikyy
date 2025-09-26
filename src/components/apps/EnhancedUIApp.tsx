@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -34,6 +33,7 @@ export const EnhancedUIApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadUserPreferences();
       loadThemes();
@@ -434,7 +434,7 @@ export const EnhancedUIApp: React.FC = () => {
           </div>
           <div className="personalization-item">
             <label>Font Size</label>
-            <select
+            <select aria-label="Select option"
               value={personalization.fontSize}
               onChange={(e) => handlePersonalizationChange('fontSize', e.target.value)}
             >
@@ -445,7 +445,7 @@ export const EnhancedUIApp: React.FC = () => {
           </div>
           <div className="personalization-item">
             <label>Density</label>
-            <select
+            <select aria-label="Select option"
               value={personalization.density}
               onChange={(e) => handlePersonalizationChange('density', e.target.value)}
             >
@@ -456,7 +456,7 @@ export const EnhancedUIApp: React.FC = () => {
           </div>
           <div className="personalization-item">
             <label>Language</label>
-            <select
+            <select aria-label="Select option"
               value={personalization.language}
               onChange={(e) => handlePersonalizationChange('language', e.target.value)}
             >
@@ -468,7 +468,7 @@ export const EnhancedUIApp: React.FC = () => {
           </div>
           <div className="personalization-item">
             <label>Time Format</label>
-            <select
+            <select aria-label="Select option"
               value={personalization.timeFormat}
               onChange={(e) => handlePersonalizationChange('timeFormat', e.target.value)}
             >

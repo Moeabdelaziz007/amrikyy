@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useUserSettings } from '../../contexts/UserSettingsContext';
 
 // File Manager App
@@ -136,7 +135,7 @@ export const SettingsApp: React.FC = () => {
               <h3>Appearance</h3>
               <div className="setting-item">
                 <label>Theme</label>
-                <select 
+                <select aria-label="Select option" 
                   value={settings.theme} 
                   onChange={(e) => updateSetting('theme', e.target.value)}
                 >
@@ -147,7 +146,7 @@ export const SettingsApp: React.FC = () => {
               </div>
               <div className="setting-item">
                 <label>Desktop Layout</label>
-                <select 
+                <select aria-label="Select option" 
                   value={settings.desktopLayout} 
                   onChange={(e) => updateSetting('desktopLayout', e.target.value)}
                 >
@@ -353,7 +352,7 @@ export const NotesApp: React.FC = () => {
                 readOnly={!isEditing}
                 onChange={(e) => setSelectedNote({...selectedNote, title: e.target.value})}
               />
-              <textarea 
+              <textarea aria-label="Text area" 
                 className="note-content-input"
                 value={selectedNote.content}
                 readOnly={!isEditing}

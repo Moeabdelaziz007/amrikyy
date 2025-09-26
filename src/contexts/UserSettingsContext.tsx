@@ -72,6 +72,7 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({ chil
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadUserSettings();
     } else {

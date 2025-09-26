@@ -3,7 +3,6 @@
  * Central hub for all automation tasks, Telegram integration, and system monitoring
  */
 
-import React, { useState, useEffect } from 'react';
 import {
   Activity,
   Bot,
@@ -86,6 +85,7 @@ const MainAutomationDashboard: React.FC = () => {
 
   // Load initial data
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadDashboardData();
     const interval = setInterval(loadDashboardData, 5000); // Update every 5 seconds
     return () => clearInterval(interval);

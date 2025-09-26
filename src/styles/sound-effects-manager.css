@@ -1,0 +1,339 @@
+/* Sound Effects Manager Styles */
+.sound-effects-manager {
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: white;
+}
+
+.sound-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.sound-header h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sound-header p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sound-controls {
+  margin-bottom: 40px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.master-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.control-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.control-group input[type="range"] {
+  width: 200px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  cursor: pointer;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.effects-list {
+  margin-bottom: 40px;
+}
+
+.effect-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.effect-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.effect-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.effect-icon {
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+}
+
+.effect-details h4 {
+  margin: 0 0 5px;
+  font-size: 16px;
+  color: #ffffff;
+}
+
+.effect-details p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.effect-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.test-sound-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.test-sound-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+.test-sound-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sound-visualizer {
+  margin-bottom: 40px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.sound-visualizer h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.visualizer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.sound-visualizer {
+  display: flex;
+  align-items: end;
+  gap: 4px;
+  height: 40px;
+}
+
+.sound-bar {
+  width: 6px;
+  background: linear-gradient(to top, #3b82f6, #8b5cf6);
+  border-radius: 3px;
+  animation: sound-wave 1.5s ease-in-out infinite;
+}
+
+.sound-bar:nth-child(1) { 
+  animation-delay: 0s; 
+  height: 20px;
+}
+.sound-bar:nth-child(2) { 
+  animation-delay: 0.2s; 
+  height: 30px;
+}
+.sound-bar:nth-child(3) { 
+  animation-delay: 0.4s; 
+  height: 40px;
+}
+.sound-bar:nth-child(4) { 
+  animation-delay: 0.6s; 
+  height: 25px;
+}
+.sound-bar:nth-child(5) { 
+  animation-delay: 0.8s; 
+  height: 35px;
+}
+
+@keyframes sound-wave {
+  0%, 100% { 
+    transform: scaleY(0.3);
+    opacity: 0.7;
+  }
+  50% { 
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.sound-presets {
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.sound-presets h3 {
+  margin: 0 0 20px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.presets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.preset-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.preset-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.preset-btn:nth-child(1):hover {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+.preset-btn:nth-child(2):hover {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.preset-btn:nth-child(3):hover {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sound-effects-manager {
+    padding: 20px;
+  }
+  
+  .master-controls {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .effect-item {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+  
+  .effect-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .control-group input[type="range"] {
+    width: 100%;
+  }
+  
+  .presets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .sound-effects-manager {
+    padding: 15px;
+  }
+  
+  .sound-header h2 {
+    font-size: 24px;
+  }
+  
+  .effect-info {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .sound-controls,
+  .sound-visualizer,
+  .sound-presets {
+    padding: 20px;
+  }
+}

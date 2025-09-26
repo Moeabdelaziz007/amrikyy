@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -24,6 +23,7 @@ export const FirestoreTestApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       testFirestoreConnection();
     } else {

@@ -1,4 +1,5 @@
 // API Configuration for AuraOS Frontend
+
 const API_CONFIG = {
   baseURL: 'http://localhost:3002',
   endpoints: {

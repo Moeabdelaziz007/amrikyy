@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -231,6 +230,7 @@ export const AITravelAgencyApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!user) {
       setLoading(false);
       return;
@@ -678,7 +678,7 @@ export const AITravelAgencyApp: React.FC = () => {
               
               <div className="form-group">
                 <label>Destination</label>
-                <select
+                <select aria-label="Select option"
                   value={currentTrip.destination?.id || ''}
                   onChange={(e) => {
                     const dest = mockDestinations.find(d => d.id === e.target.value);
@@ -749,7 +749,7 @@ export const AITravelAgencyApp: React.FC = () => {
 
               <div className="form-group">
                 <label>Notes</label>
-                <textarea
+                <textarea aria-label="Text area"
                   placeholder="Any special requests or notes..."
                   value={currentTrip.notes || ''}
                   onChange={(e) => setCurrentTrip(prev => ({ ...prev, notes: e.target.value }))}

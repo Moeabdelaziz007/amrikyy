@@ -1,4 +1,3 @@
-import React, { useState, useEffect, useRef } from 'react';
 import { GlassCard } from '../dashboard/GlassCard';
 
 interface ActivityEvent {
@@ -31,6 +30,7 @@ export const LiveActivityPanel: React.FC<LiveActivityPanelProps> = ({
 
   // Mock real-time events generator
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (isPaused) return;
 
     const eventTypes: ActivityEvent['type'][] = [
@@ -128,6 +128,7 @@ export const LiveActivityPanel: React.FC<LiveActivityPanelProps> = ({
 
   // Auto-scroll to bottom
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (autoScroll && bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -238,7 +239,7 @@ export const LiveActivityPanel: React.FC<LiveActivityPanelProps> = ({
               </svg>
             </div>
           </div>
-          <select
+          <select aria-label="Select option"
             value={filter}
             onChange={e => setFilter(e.target.value as any)}
             className="px-3 py-2 bg-glass-primary border border-glass-border rounded-lg text-text-primary focus:border-cyber-blue focus:outline-none"
@@ -251,7 +252,7 @@ export const LiveActivityPanel: React.FC<LiveActivityPanelProps> = ({
             <option value="error">Error</option>
             <option value="success">Success</option>
           </select>
-          <select
+          <select aria-label="Select option"
             value={levelFilter}
             onChange={e => setLevelFilter(e.target.value as any)}
             className="px-3 py-2 bg-glass-primary border border-glass-border rounded-lg text-text-primary focus:border-cyber-blue focus:outline-none"

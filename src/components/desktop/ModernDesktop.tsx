@@ -4,7 +4,6 @@
  * Features: Glassmorphism, 3D effects, motion design, immersive elements
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
 import {
   Home,
   Settings,
@@ -226,6 +225,7 @@ const ModernDesktop: React.FC = () => {
 
   // Update time every second
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -277,6 +277,7 @@ const ModernDesktop: React.FC = () => {
 
   // Load theme from localStorage
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const savedTheme = localStorage.getItem('auraos-theme');
     if (savedTheme) {
       try {

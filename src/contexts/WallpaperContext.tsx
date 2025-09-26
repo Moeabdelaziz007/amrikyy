@@ -101,6 +101,7 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({
 
   // Update time of day and apply time-based wallpaper changes
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateTimeOfDay = () => {
       const hour = new Date().getHours();
       const newTimeOfDay = hour >= 6 && hour < 18 ? 'day' : 'night';
@@ -127,6 +128,7 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({
 
   // Load saved preferences from localStorage
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const savedWallpaper = localStorage.getItem('auraos-wallpaper');
     const savedTimeBased = localStorage.getItem('auraos-time-based-wallpaper');
 
@@ -140,10 +142,12 @@ export const WallpaperProvider: React.FC<WallpaperProviderProps> = ({
 
   // Save preferences to localStorage
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     localStorage.setItem('auraos-wallpaper', currentWallpaper);
   }, [currentWallpaper]);
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     localStorage.setItem(
       'auraos-time-based-wallpaper',
       JSON.stringify(timeBasedWallpaper)

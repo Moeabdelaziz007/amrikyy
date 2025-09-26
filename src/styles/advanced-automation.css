@@ -1,0 +1,1081 @@
+/* Advanced Automation Styles */
+
+.smart-workflow-automation,
+.ai-task-scheduling,
+.intelligent-resource-allocation,
+.predictive-maintenance,
+.context-sensitive-actions {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Header Styles */
+.automation-header,
+.scheduling-header,
+.allocation-header,
+.maintenance-header,
+.actions-header {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-icon {
+  width: 2rem;
+  height: 2rem;
+  color: #3b82f6;
+}
+
+.header-title h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.header-controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Tab Styles */
+.automation-tabs,
+.scheduling-tabs,
+.allocation-tabs,
+.maintenance-tabs,
+.actions-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 2rem;
+  overflow-x: auto;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.tab-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Content Styles */
+.automation-content,
+.scheduling-content,
+.allocation-content,
+.maintenance-content,
+.actions-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Action Button Styles */
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+}
+
+.button-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Loading State */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Item Styles */
+.workflow-item,
+.task-item,
+.resource-item,
+.component-item,
+.action-item,
+.rule-item,
+.event-item,
+.template-item,
+.execution-item,
+.optimization-item,
+.pool-item,
+.prediction-item,
+.context-item {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.workflow-item:hover,
+.task-item:hover,
+.resource-item:hover,
+.component-item:hover,
+.action-item:hover,
+.rule-item:hover,
+.event-item:hover,
+.template-item:hover,
+.execution-item:hover,
+.optimization-item:hover,
+.pool-item:hover,
+.prediction-item:hover,
+.context-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.workflow-item.selected,
+.task-item.selected,
+.resource-item.selected,
+.component-item.selected,
+.action-item.selected,
+.rule-item.selected,
+.event-item.selected,
+.template-item.selected,
+.execution-item.selected,
+.optimization-item.selected,
+.pool-item.selected,
+.prediction-item.selected,
+.context-item.selected {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* Item Headers */
+.workflow-header,
+.task-header,
+.resource-header,
+.component-header,
+.action-header,
+.rule-header,
+.event-header,
+.template-header,
+.execution-header,
+.optimization-header,
+.pool-header,
+.prediction-header,
+.context-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.workflow-name,
+.task-name,
+.resource-name,
+.component-name,
+.action-name,
+.rule-name,
+.event-type,
+.template-name,
+.execution-workflow,
+.optimization-title,
+.pool-name,
+.prediction-title,
+.context-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Badge Styles */
+.status-badge,
+.priority-badge,
+.category-badge,
+.type-badge,
+.health-badge,
+.confidence-badge,
+.source-badge,
+.active-badge,
+.public-badge,
+.duration-badge,
+.flexible-badge,
+.effectiveness-badge,
+.updated-badge,
+.strategy-badge,
+.utilization-badge,
+.probability-badge,
+.impact-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.workflow-badges,
+.task-badges,
+.resource-badges,
+.component-badges,
+.action-badges,
+.rule-badges,
+.event-badges,
+.template-badges,
+.execution-badges,
+.optimization-badges,
+.pool-badges,
+.prediction-badges,
+.context-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* Description Styles */
+.workflow-description,
+.task-description,
+.resource-description,
+.component-description,
+.action-description,
+.rule-description,
+.event-description,
+.template-description,
+.execution-description,
+.optimization-description,
+.pool-description,
+.prediction-description,
+.context-description {
+  color: #9ca3af;
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.5;
+}
+
+/* Detail Rows */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Icon Styles */
+.workflow-icon,
+.task-icon,
+.resource-icon,
+.component-icon,
+.action-icon,
+.rule-icon,
+.event-icon,
+.template-icon,
+.execution-icon,
+.optimization-icon,
+.pool-icon,
+.prediction-icon,
+.context-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 0.75rem;
+  color: #3b82f6;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+/* Item Info Layout */
+.workflow-info,
+.task-info,
+.resource-info,
+.component-info,
+.action-info,
+.rule-info,
+.event-info,
+.template-info,
+.execution-info,
+.optimization-info,
+.pool-info,
+.prediction-info,
+.context-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Item Actions */
+.workflow-actions,
+.task-actions,
+.resource-actions,
+.component-actions,
+.action-actions,
+.rule-actions,
+.event-actions,
+.template-actions,
+.execution-actions,
+.optimization-actions,
+.pool-actions,
+.prediction-actions,
+.context-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+/* Grid Layouts */
+.workflows-list,
+.tasks-list,
+.resources-list,
+.components-list,
+.actions-list,
+.rules-list,
+.events-list,
+.templates-list,
+.executions-list,
+.optimizations-list,
+.pools-list,
+.predictions-list,
+.contexts-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.templates-grid,
+.pools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid,
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.metric-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: #3b82f6;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.metric-status {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Performance Grids */
+.performance-grid,
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 0.875rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Tags */
+.workflow-tags,
+.task-tags,
+.resource-tags,
+.component-tags,
+.action-tags,
+.rule-tags,
+.event-tags,
+.template-tags,
+.execution-tags,
+.optimization-tags,
+.pool-tags,
+.prediction-tags,
+.context-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  color: #3b82f6;
+  font-weight: 500;
+}
+
+/* Special Sections */
+.workflow-insights,
+.task-insights,
+.resource-performance,
+.component-metrics,
+.action-execution,
+.rule-details,
+.event-result,
+.event-error,
+.template-details,
+.execution-actions,
+.optimization-alternatives,
+.pool-performance,
+.prediction-factors,
+.prediction-recommendations,
+.context-metadata {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.workflow-insights h5,
+.task-insights h5,
+.resource-performance h5,
+.component-metrics h5,
+.action-execution h5,
+.rule-details h5,
+.event-result h5,
+.event-error h5,
+.template-details h5,
+.execution-actions h5,
+.optimization-alternatives h5,
+.pool-performance h5,
+.prediction-factors h5,
+.prediction-recommendations h5,
+.context-metadata h5 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.insight-reasoning,
+.insight-recommendations {
+  margin-top: 0.5rem;
+}
+
+.insight-recommendations {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.recommendation-tag {
+  padding: 0.25rem 0.75rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  color: #22c55e;
+  font-weight: 500;
+}
+
+/* Execution Steps */
+.execution-step {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.step-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.step-type {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.step-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Allocation Items */
+.allocation-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.allocation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.allocation-task {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.allocation-priority {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.allocation-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Alert Items */
+.alert-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.alert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.alert-message {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.alert-type {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.alert-type.warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.alert-type.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.alert-type.critical {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.alert-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Time Slots */
+.time-slot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.slot-time {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.slot-productivity,
+.slot-energy,
+.slot-focus {
+  color: #9ca3af;
+}
+
+/* Alternative Times */
+.alternative-time {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.alt-time {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.alt-score {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.alt-reason {
+  color: #9ca3af;
+}
+
+/* Schedule Blocks */
+.schedule-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.block-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.start-time,
+.end-time {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.start-time {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.block-content {
+  flex: 1;
+}
+
+.block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.block-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+.block-badges {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.block-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Timeline Container */
+.timeline-container {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.timeline-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.timeline-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 3px;
+}
+
+.timeline-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+/* Metadata Grid */
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.metadata-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+  font-size: 0.75rem;
+}
+
+.metadata-key {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.metadata-value {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Result and Error Content */
+.result-content,
+.error-content {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  white-space: pre-wrap;
+  font-family: 'Monaco', 'Menlo', monospace;
+}
+
+.error-content {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+  color: #fca5a5;
+}
+
+/* Notes and Lists */
+.task-notes,
+.prediction-factors,
+.prediction-recommendations {
+  margin-top: 1rem;
+}
+
+.task-notes ul,
+.prediction-factors ul,
+.prediction-recommendations ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.task-notes li,
+.prediction-factors li,
+.prediction-recommendations li {
+  padding: 0.25rem 0;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.task-notes li::before,
+.prediction-factors li::before,
+.prediction-recommendations li::before {
+  content: '•';
+  color: #3b82f6;
+  position: absolute;
+  left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .automation-header,
+  .scheduling-header,
+  .allocation-header,
+  .maintenance-header,
+  .actions-header {
+    padding: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .header-controls {
+    justify-content: center;
+  }
+
+  .automation-tabs,
+  .scheduling-tabs,
+  .allocation-tabs,
+  .maintenance-tabs,
+  .actions-tabs {
+    padding: 0 1rem;
+  }
+
+  .automation-content,
+  .scheduling-content,
+  .allocation-content,
+  .maintenance-content,
+  .actions-content {
+    padding: 1rem;
+  }
+
+  .dashboard-grid,
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .templates-grid,
+  .pools-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .performance-grid,
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .workflow-item,
+  .task-item,
+  .resource-item,
+  .component-item,
+  .action-item,
+  .rule-item,
+  .event-item,
+  .template-item,
+  .execution-item,
+  .optimization-item,
+  .pool-item,
+  .prediction-item,
+  .context-item {
+    padding: 1rem;
+  }
+
+  .workflow-actions,
+  .task-actions,
+  .resource-actions,
+  .component-actions,
+  .action-actions,
+  .rule-actions,
+  .event-actions,
+  .template-actions,
+  .execution-actions,
+  .optimization-actions,
+  .pool-actions,
+  .prediction-actions,
+  .context-actions {
+    flex-direction: row;
+    margin-left: 0;
+    margin-top: 1rem;
+  }
+
+  .schedule-block {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .block-time {
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .performance-grid,
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metadata-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-badges,
+  .task-badges,
+  .resource-badges,
+  .component-badges,
+  .action-badges,
+  .rule-badges,
+  .event-badges,
+  .template-badges,
+  .execution-badges,
+  .optimization-badges,
+  .pool-badges,
+  .prediction-badges,
+  .context-badges {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -3,7 +3,6 @@
  * Advanced theme customization interface
  */
 
-import React, { useState, useCallback } from 'react';
 import {
   Palette,
   Sun,
@@ -312,7 +311,7 @@ const ThemeCustomizer: React.FC<ThemeCustomizerProps> = ({
                           <label className="text-sm font-medium capitalize">
                             {key.replace(/([A-Z])/g, ' $1').trim()} Font
                           </label>
-                          <select
+                          <select aria-label="Select option"
                             value={value}
                             onChange={e =>
                               handleFontChange(
@@ -406,7 +405,7 @@ const ThemeCustomizer: React.FC<ThemeCustomizerProps> = ({
                         <label className="text-sm font-medium mb-2 block">
                           Wallpaper Type
                         </label>
-                        <select
+                        <select aria-label="Select option"
                           value={customTheme.wallpaper.type}
                           onChange={e =>
                             handleWallpaperChange(

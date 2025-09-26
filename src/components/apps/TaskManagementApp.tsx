@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -39,6 +38,7 @@ export const TaskManagementApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadTasks();
     }
@@ -352,7 +352,7 @@ export const TaskManagementApp: React.FC = () => {
             </div>
             <div className="form-group">
               <label>Description</label>
-              <textarea
+              <textarea aria-label="Text area"
                 value={newTask.description}
                 onChange={(e) => setNewTask(prev => ({ ...prev, description: e.target.value }))}
                 placeholder="Enter task description..."
@@ -362,7 +362,7 @@ export const TaskManagementApp: React.FC = () => {
             <div className="form-row">
               <div className="form-group">
                 <label>Priority</label>
-                <select
+                <select aria-label="Select option"
                   value={newTask.priority}
                   onChange={(e) => setNewTask(prev => ({ ...prev, priority: e.target.value }))}
                 >

@@ -3,7 +3,6 @@
  * Latest December 2024 automation features for Amrikyy AIOS System
  */
 
-import React, { useState, useEffect } from 'react';
 import {
   Activity,
   Bot,
@@ -86,6 +85,7 @@ const AdvancedAutomationDashboard: React.FC<AdvancedAutomationDashboardProps> = 
 
   // Load initial data
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     loadDashboardData();
     const interval = setInterval(loadDashboardData, 5000);
     return () => clearInterval(interval);

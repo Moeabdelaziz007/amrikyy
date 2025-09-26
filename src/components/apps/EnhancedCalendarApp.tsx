@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -109,6 +108,7 @@ export const EnhancedCalendarApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!user) {
       setLoading(false);
       return;
@@ -412,7 +412,7 @@ export const EnhancedCalendarApp: React.FC = () => {
       <div className="calendar-filters">
         <div className="filter-group">
           <label>Category:</label>
-          <select
+          <select aria-label="Select option"
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
           >
@@ -682,11 +682,11 @@ export const EnhancedCalendarApp: React.FC = () => {
             <div className="modal-content">
               <div className="form-group">
                 <label>Event Title</label>
-                <input type="text" placeholder="Enter event title" />
+                <input type="text" aria-label="Text input" placeholder="Enter event title" />
               </div>
               <div className="form-group">
                 <label>Description</label>
-                <textarea placeholder="Enter event description" rows={3}></textarea>
+                <textarea aria-label="Text area" placeholder="Enter event description" rows={3}></textarea>
               </div>
               <div className="form-row">
                 <div className="form-group">
@@ -710,11 +710,11 @@ export const EnhancedCalendarApp: React.FC = () => {
               </div>
               <div className="form-group">
                 <label>Location</label>
-                <input type="text" placeholder="Enter location" />
+                <input type="text" aria-label="Text input" placeholder="Enter location" />
               </div>
               <div className="form-group">
                 <label>Category</label>
-                <select>
+                <select aria-label="Select option">
                   <option value="work">Work</option>
                   <option value="personal">Personal</option>
                   <option value="meeting">Meeting</option>

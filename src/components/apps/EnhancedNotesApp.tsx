@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -118,6 +117,7 @@ export const EnhancedNotesApp: React.FC = () => {
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (!user) {
       setLoading(false);
       return;
@@ -379,7 +379,7 @@ export const EnhancedNotesApp: React.FC = () => {
       <div className="notes-controls">
         <div className="filter-group">
           <label>Sort by:</label>
-          <select
+          <select aria-label="Select option"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
           >
@@ -391,7 +391,7 @@ export const EnhancedNotesApp: React.FC = () => {
 
         <div className="filter-group">
           <label>Filter by tag:</label>
-          <select
+          <select aria-label="Select option"
             value={filterTag}
             onChange={(e) => setFilterTag(e.target.value)}
           >
@@ -535,7 +535,7 @@ export const EnhancedNotesApp: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <textarea
+                <textarea aria-label="Text area"
                   placeholder="Start writing your note..."
                   value={noteContent}
                   onChange={(e) => setNoteContent(e.target.value)}

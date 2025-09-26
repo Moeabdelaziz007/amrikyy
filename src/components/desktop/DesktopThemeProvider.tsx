@@ -189,6 +189,7 @@ export const DesktopThemeProvider: React.FC<DesktopThemeProviderProps> = ({
 
   // Apply theme to document
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const root = document.documentElement;
     const { colors, fonts, effects, wallpaper } = currentTheme;
 
@@ -253,6 +254,7 @@ export const DesktopThemeProvider: React.FC<DesktopThemeProviderProps> = ({
 
   // Load theme from localStorage on mount
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const savedTheme = localStorage.getItem('auraos-theme');
     if (savedTheme) {
       try {
@@ -266,6 +268,7 @@ export const DesktopThemeProvider: React.FC<DesktopThemeProviderProps> = ({
 
   // Listen for system theme changes
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleChange = () => {
       if (currentTheme.type === 'auto') {

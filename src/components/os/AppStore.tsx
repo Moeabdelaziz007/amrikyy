@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   Search,
   Star,
@@ -268,7 +267,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
             </div>
 
             {/* Category Filter */}
-            <select
+            <select aria-label="Select option"
               value={selectedCategory}
               onChange={e => setSelectedCategory(e.target.value)}
               className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -285,7 +284,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
             </select>
 
             {/* Sort */}
-            <select
+            <select aria-label="Select option"
               value={sortBy}
               onChange={e => setSortBy(e.target.value as any)}
               className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -623,7 +622,7 @@ export const AppStore: React.FC<AppStoreProps> = ({
                       selectedApp.color
                     )}
                   >
-                    <selectedApp.icon />
+                    <select aria-label="Select option"edApp.icon />
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-white">

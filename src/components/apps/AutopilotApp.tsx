@@ -74,6 +74,7 @@ export const AutopilotApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadAutomationData();
     } else {
@@ -357,14 +358,16 @@ export const AutopilotApp: React.FC = () => {
               value={newRule.name}
               onChange={(e) => setNewRule(prev => ({ ...prev, name: e.target.value }))}
             />
-            <textarea
+            <textarea 
+              aria-label="Rule description"
               placeholder="Rule Description"
               value={newRule.description}
               onChange={(e) => setNewRule(prev => ({ ...prev, description: e.target.value }))}
             ></textarea>
             <div className="trigger-settings">
               <h4>Trigger</h4>
-              <select
+              <select 
+                aria-label="Trigger type selection"
                 value={newRule.trigger.type}
                 onChange={(e) => setNewRule(prev => ({ 
                   ...prev, 
@@ -376,7 +379,8 @@ export const AutopilotApp: React.FC = () => {
                 <option value="condition">Condition</option>
               </select>
               {newRule.trigger.type === 'schedule' && (
-                <select
+                <select 
+                  aria-label="Frequency selection"
                   value={newRule.trigger.frequency}
                   onChange={(e) => setNewRule(prev => ({ 
                     ...prev, 

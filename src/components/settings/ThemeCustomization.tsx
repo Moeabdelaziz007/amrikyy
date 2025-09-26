@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { GlassCard } from '../dashboard/GlassCard';
 
 interface ThemeConfig {
@@ -124,6 +123,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({
   ];
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     // Apply theme to document
     const root = document.documentElement;
     root.style.setProperty('--primary-color', theme.primaryColor);
@@ -413,7 +413,7 @@ export const ThemeCustomization: React.FC<ThemeCustomizationProps> = ({
           {/* Custom CSS */}
           <div>
             <label className="block text-sm font-medium mb-2">Custom CSS</label>
-            <textarea
+            <textarea aria-label="Text area"
               value={theme.customCSS}
               onChange={e =>
                 setTheme(prev => ({ ...prev, customCSS: e.target.value }))

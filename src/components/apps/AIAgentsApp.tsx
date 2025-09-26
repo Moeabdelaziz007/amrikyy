@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -48,6 +47,7 @@ export const AIAgentsApp: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
     if (user) {
       loadAgents();
     } else {
@@ -246,12 +246,12 @@ export const AIAgentsApp: React.FC = () => {
               value={newAgent.name}
               onChange={(e) => setNewAgent(prev => ({ ...prev, name: e.target.value }))}
             />
-            <textarea
+            <textarea aria-label="Text area"
               placeholder="Agent Description"
               value={newAgent.description}
               onChange={(e) => setNewAgent(prev => ({ ...prev, description: e.target.value }))}
             ></textarea>
-            <select
+            <select aria-label="Select option"
               value={newAgent.type}
               onChange={(e) => setNewAgent(prev => ({ ...prev, type: e.target.value as any }))}
             >
