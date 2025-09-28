@@ -150,6 +150,36 @@ const DesktopApp: React.FC = () => {
   const [isMobile, setIsMobile] = React.useState(false);
   const { user, logout } = useAuth();
   const { t, dir } = useI18n();
+  const desktopRef = React.useRef<HTMLDivElement>(null);
+
+  // Mouse tracking for interactive wallpaper effect
+  React.useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!desktopRef.current) return;
+      const { clientX, clientY, currentTarget } = e;
+      const { innerWidth, innerHeight } = window;
+      const x = (clientX / innerWidth) * 2 - 1; // range from -1 to 1
+      const y = (clientY / innerHeight) * 2 - 1; // range from -1 to 1
+
+      desktopRef.current?.style.setProperty('--mouse-x', `${x}`);
+      desktopRef.current?.style.setProperty('--mouse-y', `${y}`);
+    };
+
+    const desktopEl = desktopRef.current;
+    if (desktopEl) {
+      desktopEl.addEventListener('mousemove', handleMouseMove);
+      desktopEl.addEventListener('mouseenter', () => desktopEl.classList.add('mouse-active'));
+      desktopEl.addEventListener('mouseleave', () => desktopEl.classList.remove('mouse-active'));
+    }
+
+    return () => {
+      if (desktopEl) {
+        desktopEl.removeEventListener('mousemove', handleMouseMove);
+        desktopEl.removeEventListener('mouseenter', () => desktopEl.classList.add('mouse-active'));
+        desktopEl.removeEventListener('mouseleave', () => desktopEl.classList.remove('mouse-active'));
+      }
+    };
+  }, []);
 
   // Check if device is mobile
   React.useEffect(() => {
@@ -294,7 +324,7 @@ const DesktopApp: React.FC = () => {
     <MobileOptimizationProvider>
       <div className="amrikyy-desktop" style={{ direction: dir }}>
         {/* Dynamic Background */}
-        <div className="desktop-background">
+        <div className="desktop-background" ref={desktopRef}>
           <div className="background-gradient"></div>
           <div className="background-particles"></div>
           <div className="background-grid"></div>
