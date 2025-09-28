@@ -1,11 +1,8 @@
-import React from 'react';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { UserSettingsProvider } from './contexts/UserSettingsContext';
-import LoginScreen from './components/auth/LoginScreen';
-import './styles/ai-enhanced.css';
-import {
-  FileManagerApp,
-  WeatherApp,
+  const apps = appsConfig.map(app => ({
+    ...app,
+    name: t(`app.${app.id}`),
+    icon: app.icon || '🚀' // Fallback icon
+  }));
   SettingsApp,
   CalendarApp,
   NotesApp
@@ -98,28 +95,28 @@ import './styles/enhanced-file-manager.css';
 import './styles/enhanced-weather.css';
 import './styles/enhanced-calendar.css';
 import './styles/enhanced-notes.css';
-import './styles/ai-travel-agency.css';
+              <div className="widget-title">{t('cpu_usage')}</div>
 import './styles/gaming-entertainment.css';
 import './styles/modern-desktop.css';
 import './styles/enhanced-wallpaper.css';
 import './styles/ultimate-desktop.css';
 import './styles/advanced-desktop.css';
 import './styles/login.css';
-import './styles/enhanced-ui.css';
+              <div className="widget-title">{t('memory')}</div>
 import './styles/advanced-ui-enhancements.css';
 import './styles/advanced-theme-selector.css';
 import './styles/sound-effects-manager.css';
 import './styles/mobile-optimization.css';
 import './styles/integration-connectivity.css';
 import './styles/ai-powered-features.css';
-import './styles/analytics-insights.css';
+              <div className="widget-title">{t('disk_space')}</div>
 import './styles/security-privacy.css';
 import './styles/i18n-localization.css';
 import './styles/advanced-ui-ux.css';
 import './styles/system-optimization.css';
 import './styles/future-technologies.css';
 import './styles/advanced-automation.css';
-import './styles/advanced-ai-ml.css';
+              <div className="widget-title">{t('network')}</div>
 import './styles/creative-design-enhancements.css';
 import './styles/system-integration.css';
 import './styles/task-management.css';
@@ -132,11 +129,12 @@ import './styles/ai-agents.css';
 import './styles/autopilot.css';
 import './styles/test-lab.css';
 import './styles/ultimate.css';
-import './styles/firestore-test.css';
-import ChatWindow from './components/ChatWindow';
+                <h3 className="category-title">{t('category.productivity')}</h3>
+                <p className="category-description">{t('category.productivity.description')}</p>
 import Icon from './components/icons/Icon';
 import { I18nProvider, useI18n } from './i18n/i18n';
 import LanguageToggle from './components/ui/LanguageToggle';
+import { appsConfig } from './apps-config';
 
 // Desktop Component
 const DesktopApp: React.FC = () => {
@@ -158,8 +156,8 @@ const DesktopApp: React.FC = () => {
       if (!desktopRef.current) return;
       const { clientX, clientY, currentTarget } = e;
       const { innerWidth, innerHeight } = window;
-      const x = (clientX / innerWidth) * 2 - 1; // range from -1 to 1
-      const y = (clientY / innerHeight) * 2 - 1; // range from -1 to 1
+                <h3 className="category-title">{t('category.system')}</h3>
+                <p className="category-description">{t('category.system.description')}</p>
 
       desktopRef.current?.style.setProperty('--mouse-x', `${x}`);
       desktopRef.current?.style.setProperty('--mouse-y', `${y}`);
@@ -185,8 +183,8 @@ const DesktopApp: React.FC = () => {
   React.useEffect(() => {
     const checkMobile = () => {
       const mobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      setIsMobile(mobile);
-    };
+                <h3 className="category-title">{t('category.ai')}</h3>
+                <p className="category-description">{t('category.ai.description')}</p>
 
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -194,100 +192,6 @@ const DesktopApp: React.FC = () => {
   }, []);
 
   // Apps configuration organized by categories with creative icons
-  const apps = [
-    // Core Productivity Apps (Top Row)
-    { id: 'productivity', name: 'Productivity Suite', icon: '🚀', color: 'blue', component: ProductivitySuite, category: 'productivity' },
-    { id: 'finance', name: 'AI Finance Manager', icon: '💰', color: 'green', component: AIFinanceManager, category: 'productivity' },
-    { id: 'health', name: 'Health Tracker', icon: '❤️', color: 'red', component: HealthTracker, category: 'productivity' },
-    { id: 'dashboard', name: 'Dashboard', icon: '🎯', color: 'blue', component: AnalyticsDashboardApp, category: 'productivity' },
-    { id: 'tasks', name: 'Tasks', icon: '⚡', color: 'purple', component: TaskManagementApp, category: 'productivity' },
-    { id: 'calendar', name: 'Calendar', icon: '🗓️', color: 'red', component: EnhancedCalendarApp, category: 'productivity' },
-    { id: 'notes', name: 'Notes', icon: '📚', color: 'yellow', component: EnhancedNotesApp, category: 'productivity' },
-
-    // Travel & Lifestyle Apps (Second Row)
-    { id: 'travel', name: 'AI Travel', icon: '🌍', color: 'cyan', component: AITravelAgencyApp, category: 'lifestyle' },
-    { id: 'gaming', name: 'Gaming Suite', icon: '🎲', color: 'purple', component: GamingEntertainmentSuite, category: 'entertainment' },
-
-    // File & System Management (Second Row)
-    { id: 'file-manager', name: 'Files', icon: '🗂️', color: 'orange', component: EnhancedFileManagerApp, category: 'system' },
-    { id: 'settings', name: 'Settings', icon: '🔧', color: 'gray', component: EnhancedSettingsApp, category: 'system' },
-    { id: 'ui', name: 'UI/UX', icon: '✨', color: 'purple', component: EnhancedUIApp, category: 'system' },
-    { id: 'weather', name: 'Weather', icon: '🌦️', color: 'cyan', component: EnhancedWeatherApp, category: 'system' },
-
-    // AI & Automation (Third Row)
-    { id: 'ai-agents', name: 'AI Agents', icon: '👾', color: 'green', component: AIAgentsApp, category: 'ai' },
-    { id: 'ai', name: 'AI Features', icon: '🔮', color: 'cyan', component: AIFeaturesApp, category: 'ai' },
-    { id: 'automation', name: 'Automation', icon: '🤖', color: 'purple', component: AutomationDashboardApp, category: 'ai' },
-    { id: 'autopilot', name: 'Autopilot', icon: '🚀', color: 'purple', component: AutopilotApp, category: 'ai' },
-
-    // Collaboration & Templates (Fourth Row)
-    { id: 'collaboration', name: 'Collaborate', icon: '🤝', color: 'blue', component: CollaborationApp, category: 'collaboration' },
-    { id: 'templates', name: 'Templates', icon: '📋', color: 'green', component: TaskTemplatesApp, category: 'collaboration' },
-    { id: 'telegram', name: 'Telegram', icon: '💬', color: 'blue', component: TelegramBotApp, category: 'collaboration' },
-    { id: 'mcp-tools', name: 'MCP Tools', icon: '🛠️', color: 'green', component: EnhancedMCPToolsApp, category: 'collaboration' },
-
-    // Development & Testing (Fifth Row)
-    { id: 'test-lab', name: 'Test Lab', icon: '🧪', color: 'red', component: TestLabApp, category: 'development' },
-    { id: 'firestore-test', name: 'Firestore Test', icon: '🔥', color: 'red', component: FirestoreTestApp, category: 'development' },
-    { id: 'ultimate', name: 'Ultimate', icon: '💎', color: 'gold', component: UltimateApp, category: 'premium' },
-
-    // Advanced Features (Sixth Row)
-    { id: 'advanced-themes', name: 'Advanced Themes', icon: '🌈', color: 'purple', component: AdvancedThemeSelector, category: 'advanced' },
-    { id: 'sound-effects', name: 'Sound Effects', icon: '🔊', color: 'orange', component: SoundEffectsManager, category: 'advanced' },
-    { id: 'smart-automation', name: 'Smart Automation', icon: '⚡', color: 'cyan', component: SmartAutomationSystem, category: 'advanced' },
-
-    // Integration & Connectivity (Seventh Row)
-    { id: 'integration-manager', name: 'Integration Manager', icon: '🔗', color: 'blue', component: EnhancedIntegrationManager, category: 'integration' },
-    { id: 'realtime-sync', name: 'Real-time Sync', icon: '🔄', color: 'green', component: EnhancedRealtimeSyncManager, category: 'integration' },
-    { id: 'cloud-storage', name: 'Cloud Storage', icon: '☁️', color: 'cyan', component: EnhancedCloudStorageManager, category: 'integration' },
-
-        // AI-Powered Features (Eighth Row)
-        { id: 'ai-assistant', name: 'AI Assistant', icon: '🤖', color: 'purple', component: EnhancedAIAssistant, category: 'ai' },
-        { id: 'intelligent-tasks', name: 'Smart Tasks', icon: '🎯', color: 'green', component: IntelligentTaskManager, category: 'ai' },
-        { id: 'voice-commands', name: 'Voice Control', icon: '🎤', color: 'blue', component: VoiceCommandSystem, category: 'ai' },
-        { id: 'ai-powered-desktop', name: 'AI Desktop', icon: '🧠', color: 'cyan', component: AIPoweredDesktop, category: 'ai' },
-        { id: 'intelligent-automation', name: 'Smart Automation', icon: '⚡', color: 'orange', component: IntelligentAutomationEngine, category: 'ai' },
-
-        // Analytics & Insights (Ninth Row)
-        { id: 'analytics-dashboard', name: 'Analytics', icon: '📊', color: 'blue', component: EnhancedAnalyticsDashboard, category: 'analytics' },
-        { id: 'performance-monitor', name: 'Performance', icon: '⚡', color: 'green', component: PerformanceMonitor, category: 'analytics' },
-        { id: 'usage-statistics', name: 'Usage Stats', icon: '📈', color: 'purple', component: UsageStatistics, category: 'analytics' },
-        { id: 'productivity-insights', name: 'Productivity', icon: '🧠', color: 'cyan', component: ProductivityInsights, category: 'analytics' },
-        { id: 'system-health', name: 'System Health', icon: '🏥', color: 'red', component: SystemHealthMonitor, category: 'analytics' },
-
-        // Security & Privacy (Tenth Row)
-        { id: 'security-dashboard', name: 'Security', icon: '🛡️', color: 'red', component: EnhancedSecurityDashboard, category: 'security' },
-        { id: 'data-encryption', name: 'Encryption', icon: '🔐', color: 'purple', component: DataEncryption, category: 'security' },
-        { id: 'user-permissions', name: 'Permissions', icon: '👥', color: 'blue', component: UserPermissions, category: 'security' },
-
-        // Multi-Language Support (Eleventh Row)
-        { id: 'language-selector', name: 'Languages', icon: '🌐', color: 'green', component: LanguageSelector, category: 'i18n' },
-        { id: 'localization-manager', name: 'Localization', icon: '🗺️', color: 'cyan', component: LocalizationManager, category: 'i18n' },
-
-        // Advanced UI/UX & System Optimization (Twelfth Row)
-        { id: 'advanced-animations', name: 'Animations', icon: '✨', color: 'purple', component: AdvancedAnimationSystem, category: 'ui' },
-        { id: 'system-optimizer', name: 'System Optimizer', icon: '⚙️', color: 'orange', component: SystemOptimizer, category: 'system' },
-
-        // Future Technologies (Thirteenth Row)
-        { id: 'ar-vr-integration', name: 'AR/VR', icon: '🥽', color: 'cyan', component: ARVRIntegration, category: 'future' },
-        { id: 'blockchain-features', name: 'Blockchain', icon: '⛓️', color: 'purple', component: BlockchainFeatures, category: 'future' },
-        { id: 'iot-connectivity', name: 'IoT', icon: '🌐', color: 'blue', component: IoTConnectivity, category: 'future' },
-        { id: 'quantum-computing', name: 'Quantum', icon: '⚛️', color: 'green', component: QuantumComputing, category: 'future' },
-        { id: 'neural-interfaces', name: 'Neural', icon: '🧠', color: 'pink', component: NeuralInterfaces, category: 'future' },
-
-        // Advanced Automation (Fourteenth Row)
-        { id: 'smart-workflow-automation', name: 'Smart Workflow', icon: '⚡', color: 'blue', component: SmartWorkflowAutomation, category: 'automation' },
-        { id: 'ai-task-scheduling', name: 'AI Scheduling', icon: '🧠', color: 'purple', component: AITaskScheduling, category: 'automation' },
-        { id: 'intelligent-resource-allocation', name: 'Resource Allocation', icon: '🎯', color: 'green', component: IntelligentResourceAllocation, category: 'automation' },
-        { id: 'predictive-maintenance', name: 'Predictive Maintenance', icon: '🔧', color: 'orange', component: PredictiveMaintenance, category: 'automation' },
-        { id: 'context-sensitive-actions', name: 'Context Actions', icon: '🎭', color: 'cyan', component: ContextSensitiveActions, category: 'automation' },
-
-        // Advanced AI & Machine Learning (Fifteenth Row)
-        { id: 'natural-language-processing', name: 'NLP', icon: '💬', color: 'blue', component: NaturalLanguageProcessing, category: 'ai' },
-        { id: 'computer-vision', name: 'Computer Vision', icon: '👁️', color: 'green', component: ComputerVision, category: 'ai' },
-        { id: 'predictive-analytics', name: 'Predictive Analytics', icon: '📈', color: 'purple', component: PredictiveAnalytics, category: 'ai' },
-        { id: 'intelligent-recommendations', name: 'Smart Recommendations', icon: '💡', color: 'yellow', component: IntelligentRecommendations, category: 'ai' },
-        { id: 'advanced-ai-models', name: 'AI Models', icon: '🧠', color: 'cyan', component: AdvancedAIModels, category: 'ai' },
 
         // Creative & Design Enhancements (Sixteenth Row)
         { id: 'advanced-theme-system', name: 'Advanced Themes', icon: '🎨', color: 'purple', component: AdvancedThemeSystem, category: 'creative' },
@@ -306,8 +210,8 @@ const DesktopApp: React.FC = () => {
         memory: Math.max(20, Math.min(80, prev.memory + (Math.random() - 0.5) * 5)),
         disk: Math.max(15, Math.min(35, prev.disk + (Math.random() - 0.5) * 2)),
         network: Math.max(30, Math.min(95, prev.network + (Math.random() - 0.5) * 15))
-      }));
-    }, 2000);
+                <h3 className="category-title">{t('category.collaboration')}</h3>
+                <p className="category-description">{t('category.collaboration.description')}</p>
 
     return () => clearInterval(interval);
   }, []);
@@ -333,8 +237,8 @@ const DesktopApp: React.FC = () => {
         {/* Desktop Content */}
         <div className="desktop-content">
           {/* Mobile App Launcher */}
-          {isMobile ? (
-            <MobileAppLauncher
+                <h3 className="category-title">{t('category.development')}</h3>
+                <p className="category-description">{t('category.development.description')}</p>
               apps={apps}
               onAppSelect={openApp}
             />
@@ -360,8 +264,8 @@ const DesktopApp: React.FC = () => {
                 <div className="status-right">
                   <div className="quick-actions">
                     <AdvancedThemeSelector />
-                    <button className="action-btn" title="Settings">⚙️</button>
-                    <button className="action-btn" title="Notifications">🔔</button>
+                <h3 className="category-title">{t('category.advanced')}</h3>
+                <p className="category-description">{t('category.advanced.description')}</p>
                     <LanguageToggle />
                     <div className="user-profile">
                       <img
@@ -388,7 +292,7 @@ const DesktopApp: React.FC = () => {
           <div className={`system-widget widget-blue`}>
             <div className="widget-icon">🖥️</div>
             <div className="widget-content">
-              <div className="widget-title">CPU Usage</div>
+              <span className="start-text">{t('start')}</span>
               <div className="widget-value">{Math.round(systemStats.cpu)}%</div>
             </div>
           </div>
