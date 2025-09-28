@@ -1,112 +1,55 @@
-/* Modern Desktop Animations and Effects */
+/* Modern Desktop + iOS-inspired AI Desktop Styles (merged)
+   - Merged modern-ios-desktop.css into this file
+   - Removed duplicate rules and fixed invalid comments
+   - Added glassmorphism, iOS-like app icons, and RTL-friendly logical properties
+*/
 
-/* Custom Animations */
+/* --- Animations (existing) --- */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
 @keyframes float-delayed {
-  0%, 100% {
-    transform: translateY(0px) translateX(0px);
-  }
-  33% {
-    transform: translateY(-15px) translateX(5px);
-  }
-  66% {
-    transform: translateY(-5px) translateX(-5px);
-  }
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33% { transform: translateY(-15px) translateX(5px); }
+  66% { transform: translateY(-5px) translateX(-5px); }
 }
 
 @keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4);
-  }
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(59, 130, 246, 0.4); }
 }
 
 @keyframes neon-pulse {
-  0%, 100% {
-    text-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.4);
-  }
+  0%, 100% { text-shadow: 0 0 5px rgba(59, 130, 246, 0.5); }
+  50% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.8), 0 0 30px rgba(59, 130, 246, 0.4); }
 }
 
 @keyframes particle-float {
-  0% {
-    transform: translateY(0px) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-100px) rotate(360deg);
-    opacity: 0;
-  }
+  0% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
 @keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Animation Classes */
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
+/* Animation utilities */
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-float-delayed { animation: float-delayed 4s ease-in-out infinite; }
+.animate-glow { animation: glow 2s ease-in-out infinite; }
+.animate-neon-pulse { animation: neon-pulse 2s ease-in-out infinite; }
+.animate-particle-float { animation: particle-float 3s linear infinite; }
+.animate-gradient-shift { background-size: 200% 200%; animation: gradient-shift 3s ease infinite; }
+.animation-delay-200 { animation-delay: 0.2s; }
+.animation-delay-400 { animation-delay: 0.4s; }
+.animation-delay-600 { animation-delay: 0.6s; }
+.animation-delay-800 { animation-delay: 0.8s; }
 
-.animate-float-delayed {
-  animation: float-delayed 4s ease-in-out infinite;
-}
-
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-.animate-neon-pulse {
-  animation: neon-pulse 2s ease-in-out infinite;
-}
-
-.animate-particle-float {
-  animation: particle-float 3s linear infinite;
-}
-
-.animate-gradient-shift {
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
-}
-
-/* Animation Delays */
-.animation-delay-200 {
-  animation-delay: 0.2s;
-}
-
-.animation-delay-400 {
-  animation-delay: 0.4s;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-}
-
-.animation-delay-800 {
-  animation-delay: 0.8s;
-}
-
-/* Glassmorphism Effects */
+/* Glassmorphism */
 .glass-premium {
   background: rgba(255, 255, 255, 0.1);
   -webkit-backdrop-filter: blur(20px);
@@ -123,156 +66,208 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* 3D Effects */
-.effect-3d {
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
+/* 3D & Hover */
+.effect-3d { transform-style: preserve-3d; perspective: 1000px; }
+.effect-3d:hover { transform: rotateX(5deg) rotateY(5deg) translateZ(10px); }
+.hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.hover-lift:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+.hover-glow { transition: box-shadow 0.3s ease; }
+.hover-glow:hover { box-shadow: 0 0 30px rgba(59,130,246,0.6); }
 
-.effect-3d:hover {
-  transform: rotateX(5deg) rotateY(5deg) translateZ(10px);
-}
+/* Neon variants */
+.neon-blue { box-shadow: 0 0 20px rgba(59,130,246,0.5); }
+.neon-purple { box-shadow: 0 0 20px rgba(147,51,234,0.5); }
+.neon-green { box-shadow: 0 0 20px rgba(34,197,94,0.5); }
+.neon-pink { box-shadow: 0 0 20px rgba(236,72,153,0.5); }
+.neon-orange { box-shadow: 0 0 20px rgba(249,115,22,0.5); }
 
-/* Neon Glow Effects */
-.neon-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-}
-
-.neon-purple {
-  box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
-}
-
-.neon-green {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
-}
-
-.neon-pink {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
-}
-
-.neon-orange {
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
-}
-
-/* Hover Effects */
-.hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-}
-
-.hover-glow {
-  transition: box-shadow 0.3s ease;
-}
-
-.hover-glow:hover {
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
-}
-
-/* Gradient Text */
+/* Gradient text (fixed) */
 .gradient-text {
   background: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
   background-size: 200% 200%;
-    -webkit--webkit-background-clip: text;
+  -webkit-background-clip: text;
   background-clip: text;
-    -webkit-background-clip: text;
-  background-clip: text;
-    -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
   animation: gradient-shift 3s ease infinite;
 }
 
-/* Particle System */
-.particle-container {
-  position: relative;
-  overflow: hidden;
+/* Particle system */
+.particle-container { position: relative; overflow: hidden; }
+.particle { position: absolute; width: 2px; height: 2px; background: rgba(255,255,255,0.6); border-radius: 50%; animation: particle-float 3s linear infinite; }
+
+/* Performance & accessibility */
+.desktop-icon { will-change: transform; }
+.desktop-icon-image { will-change: transform, filter; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-float, .animate-float-delayed, .animate-glow, .animate-neon-pulse, .animate-particle-float, .animate-gradient-shift { animation: none; }
+  .hover-lift:hover { transform: none; }
 }
 
-.particle {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: rgba(255, 255, 255, 0.6);
+/* --- iOS-inspired layout & components (merged from modern-ios-desktop.css) --- */
+
+.amrikyy-desktop {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  font-family: 'SF Pro Display', 'Cairo', Arial, sans-serif;
+}
+
+.system-status-bar, .taskbar {
+  background: rgba(255,255,255,0.7);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.06);
+  margin: 12px 24px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+}
+
+.system-logo, .category-icon, .app-icon-image {
+  background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
   border-radius: 50%;
-  animation: particle-float 3s linear infinite;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-inline-end: 12px;
 }
 
-/* Responsive Design */
+.app-icon {
+  border-radius: 24px;
+  background: rgba(255,255,255,0.8);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 12px 8px 8px 8px;
+  margin: 8px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-icon.active, .app-icon:hover {
+  box-shadow: 0 6px 24px rgba(0,122,255,0.18);
+  transform: translateY(-4px) scale(1.04);
+}
+
+.app-icon-label {
+  font-size: 1rem;
+  margin-top: 6px;
+  color: #222;
+  font-weight: 500;
+}
+
+.organized-desktop-apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  margin: 32px 0 0 0;
+}
+
+.app-category {
+  background: rgba(255,255,255,0.6);
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 24px 16px;
+  min-width: 260px;
+  max-width: 320px;
+  flex: 1 1 320px;
+}
+
+.category-header { display: flex; align-items: center; margin-bottom: 12px; }
+.category-title { font-size: 1.2rem; font-weight: 700; color: #007aff; margin: 0; }
+.category-description { font-size: 0.95rem; color: #888; margin: 0; }
+
+/* Chat window glassmorphism */
+.chat-container {
+  background: rgba(255,255,255,0.85);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(200,200,255,0.18);
+}
+
+/* Icon styles for SVG component and fallbacks */
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  color: inherit; /* allow color from parent */
+}
+
+.icon-fallback {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.app-icon-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+}
+
+.app-icon-image .icon-svg,
+.app-icon-image .icon-fallback {
+  width: 36px;
+  height: 36px;
+}
+
+.logo-icon-svg {
+  width: 28px;
+  height: 28px;
+  margin-inline-end: 8px;
+}
+
+.start-icon-svg {
+  width: 18px;
+  height: 18px;
+  margin-inline-end: 8px;
+}
+
+.app-icon-small-svg {
+  width: 18px !important;
+  height: 18px !important;
+  margin-inline-end: 8px;
+}
+
+/* ensure svg icons inherit text color for theming */
+.icon-svg path, .icon-svg rect, .icon-svg circle { fill: currentColor; }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .organized-desktop-apps { flex-direction: column; gap: 16px; align-items: stretch; }
+  .app-category { max-width: 100%; min-width: 0; }
+}
+
 @media (max-width: 768px) {
-  .desktop-icons {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .desktop-icon-image {
-    width: 4rem;
-    height: 4rem;
-  }
+  .desktop-icons { grid-template-columns: repeat(4, 1fr); gap: 1rem; padding: 1rem; }
+  .desktop-icon-image { width: 4rem; height: 4rem; }
 }
 
 @media (max-width: 480px) {
-  .desktop-icons {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.5rem;
-    padding: 0.5rem;
-  }
-  
-  .desktop-icon-image {
-    width: 3rem;
-    height: 3rem;
-  }
+  .desktop-icons { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; padding: 0.5rem; }
+  .desktop-icon-image { width: 3rem; height: 3rem; }
 }
 
-/* Dark Mode Enhancements */
-.dark .glass-premium {
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
+/* Dark mode tweaks */
+.dark .glass-premium { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); }
+.dark .neon-blue { box-shadow: 0 0 20px rgba(59,130,246,0.3); }
+.dark .neon-purple { box-shadow: 0 0 20px rgba(147,51,234,0.3); }
+.dark .neon-green { box-shadow: 0 0 20px rgba(34,197,94,0.3); }
+.dark .neon-pink { box-shadow: 0 0 20px rgba(236,72,153,0.3); }
+.dark .neon-orange { box-shadow: 0 0 20px rgba(249,115,22,0.3); }
 
-.dark .neon-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-}
+/* Accessibility: prefer-reduced-motion handled above */
 
-.dark .neon-purple {
-  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
-}
+/* small utility */
+.margin-inline-end-small { margin-inline-end: 8px; }
 
-.dark .neon-green {
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
-}
-
-.dark .neon-pink {
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
-}
-
-.dark .neon-orange {
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
-}
-
-/* Performance Optimizations */
-.desktop-icon {
-  will-change: transform;
-}
-
-.desktop-icon-image {
-  will-change: transform, filter;
-}
-
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-  .animate-float,
-  .animate-float-delayed,
-  .animate-glow,
-  .animate-neon-pulse,
-  .animate-particle-float,
-  .animate-gradient-shift {
-    animation: none;
-  }
-  
-  .hover-lift:hover {
-    transform: none;
-  }
-}
+/* end of merged styles */

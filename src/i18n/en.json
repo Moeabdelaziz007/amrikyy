@@ -1,0 +1,22 @@
+{
+  "desktop_title": "Amrikyy AIOS",
+  "start": "Start",
+  "productivity": "Productivity",
+  "system": "System",
+  "ai_automation": "AI & Automation",
+  "collaboration": "Collaboration",
+  "development_premium": "Development & Premium",
+  "advanced_features": "Advanced Features",
+  "cpu_usage": "CPU Usage",
+  "memory": "Memory",
+  "disk_space": "Disk Space",
+  "network": "Network",
+  "chat_placeholder": "Type your message here...",
+  "chat_greeting": "Hello! How can I help you today?",
+  "chat_thank_you": "Thank you for your message. I am analyzing your request now.",
+  "chat_notification": "New message",
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic"
+}
+

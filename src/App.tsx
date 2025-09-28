@@ -3,12 +3,12 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { UserSettingsProvider } from './contexts/UserSettingsContext';
 import LoginScreen from './components/auth/LoginScreen';
 import './styles/ai-enhanced.css';
-import { 
-  FileManagerApp, 
-  WeatherApp, 
-  SettingsApp, 
-  CalendarApp, 
-  NotesApp 
+import {
+  FileManagerApp,
+  WeatherApp,
+  SettingsApp,
+  CalendarApp,
+  NotesApp
 } from './components/apps/AdvancedApps';
 import ProductivitySuite from './apps/ProductivitySuite';
 import AIFinanceManager from './apps/AIFinanceManager';
@@ -133,6 +133,10 @@ import './styles/autopilot.css';
 import './styles/test-lab.css';
 import './styles/ultimate.css';
 import './styles/firestore-test.css';
+import ChatWindow from './components/ChatWindow';
+import Icon from './components/icons/Icon';
+import { I18nProvider, useI18n } from './i18n/i18n';
+import LanguageToggle from './components/ui/LanguageToggle';
 
 // Desktop Component
 const DesktopApp: React.FC = () => {
@@ -145,6 +149,7 @@ const DesktopApp: React.FC = () => {
   });
   const [isMobile, setIsMobile] = React.useState(false);
   const { user, logout } = useAuth();
+  const { t, dir } = useI18n();
 
   // Check if device is mobile
   React.useEffect(() => {
@@ -152,7 +157,7 @@ const DesktopApp: React.FC = () => {
       const mobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(mobile);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
@@ -168,34 +173,34 @@ const DesktopApp: React.FC = () => {
     { id: 'tasks', name: 'Tasks', icon: '⚡', color: 'purple', component: TaskManagementApp, category: 'productivity' },
     { id: 'calendar', name: 'Calendar', icon: '🗓️', color: 'red', component: EnhancedCalendarApp, category: 'productivity' },
     { id: 'notes', name: 'Notes', icon: '📚', color: 'yellow', component: EnhancedNotesApp, category: 'productivity' },
-    
+
     // Travel & Lifestyle Apps (Second Row)
     { id: 'travel', name: 'AI Travel', icon: '🌍', color: 'cyan', component: AITravelAgencyApp, category: 'lifestyle' },
     { id: 'gaming', name: 'Gaming Suite', icon: '🎲', color: 'purple', component: GamingEntertainmentSuite, category: 'entertainment' },
-    
+
     // File & System Management (Second Row)
     { id: 'file-manager', name: 'Files', icon: '🗂️', color: 'orange', component: EnhancedFileManagerApp, category: 'system' },
     { id: 'settings', name: 'Settings', icon: '🔧', color: 'gray', component: EnhancedSettingsApp, category: 'system' },
     { id: 'ui', name: 'UI/UX', icon: '✨', color: 'purple', component: EnhancedUIApp, category: 'system' },
     { id: 'weather', name: 'Weather', icon: '🌦️', color: 'cyan', component: EnhancedWeatherApp, category: 'system' },
-    
+
     // AI & Automation (Third Row)
     { id: 'ai-agents', name: 'AI Agents', icon: '👾', color: 'green', component: AIAgentsApp, category: 'ai' },
     { id: 'ai', name: 'AI Features', icon: '🔮', color: 'cyan', component: AIFeaturesApp, category: 'ai' },
     { id: 'automation', name: 'Automation', icon: '🤖', color: 'purple', component: AutomationDashboardApp, category: 'ai' },
     { id: 'autopilot', name: 'Autopilot', icon: '🚀', color: 'purple', component: AutopilotApp, category: 'ai' },
-    
+
     // Collaboration & Templates (Fourth Row)
     { id: 'collaboration', name: 'Collaborate', icon: '🤝', color: 'blue', component: CollaborationApp, category: 'collaboration' },
     { id: 'templates', name: 'Templates', icon: '📋', color: 'green', component: TaskTemplatesApp, category: 'collaboration' },
     { id: 'telegram', name: 'Telegram', icon: '💬', color: 'blue', component: TelegramBotApp, category: 'collaboration' },
     { id: 'mcp-tools', name: 'MCP Tools', icon: '🛠️', color: 'green', component: EnhancedMCPToolsApp, category: 'collaboration' },
-    
+
     // Development & Testing (Fifth Row)
     { id: 'test-lab', name: 'Test Lab', icon: '🧪', color: 'red', component: TestLabApp, category: 'development' },
     { id: 'firestore-test', name: 'Firestore Test', icon: '🔥', color: 'red', component: FirestoreTestApp, category: 'development' },
     { id: 'ultimate', name: 'Ultimate', icon: '💎', color: 'gold', component: UltimateApp, category: 'premium' },
-    
+
     // Advanced Features (Sixth Row)
     { id: 'advanced-themes', name: 'Advanced Themes', icon: '🌈', color: 'purple', component: AdvancedThemeSelector, category: 'advanced' },
     { id: 'sound-effects', name: 'Sound Effects', icon: '🔊', color: 'orange', component: SoundEffectsManager, category: 'advanced' },
@@ -287,7 +292,7 @@ const DesktopApp: React.FC = () => {
 
   return (
     <MobileOptimizationProvider>
-      <div className="amrikyy-desktop">
+      <div className="amrikyy-desktop" style={{ direction: dir }}>
         {/* Dynamic Background */}
         <div className="desktop-background">
           <div className="background-gradient"></div>
@@ -299,8 +304,8 @@ const DesktopApp: React.FC = () => {
         <div className="desktop-content">
           {/* Mobile App Launcher */}
           {isMobile ? (
-            <MobileAppLauncher 
-              apps={apps} 
+            <MobileAppLauncher
+              apps={apps}
               onAppSelect={openApp}
             />
           ) : (
@@ -308,44 +313,45 @@ const DesktopApp: React.FC = () => {
               {/* System Status Bar */}
               <div className="system-status-bar">
                 <div className="status-left">
-                <div className="system-logo">
-                  <span className="logo-icon">🚀</span>
-                  <span className="logo-text">Amrikyy AIOS</span>
+                  <div className="system-logo">
+                    <Icon name="rocket" fallback="🚀" size={28} className="logo-icon-svg" />
+                    <span className="logo-text">{t('desktop_title')}</span>
+                  </div>
+                  <div className="system-time">
+                    {new Date().toLocaleTimeString()}
+                  </div>
                 </div>
-                <div className="system-time">
-                  {new Date().toLocaleTimeString()}
+                <div className="status-center">
+                  <div className="system-indicators">
+                    <div className="indicator online">●</div>
+                    <span>System Online</span>
+                  </div>
                 </div>
-              </div>
-              <div className="status-center">
-                <div className="system-indicators">
-                  <div className="indicator online">●</div>
-                  <span>System Online</span>
-                </div>
-              </div>
-              <div className="status-right">
-                <div className="quick-actions">
-                  <AdvancedThemeSelector />
-                  <button className="action-btn" title="Settings">⚙️</button>
-                  <button className="action-btn" title="Notifications">🔔</button>
-                  <div className="user-profile">
-                    <img 
-                      src={user?.photoURL || '/default-avatar.png'} 
-                      alt={user?.displayName || 'User'} 
-                      className="user-avatar"
-                    />
-                    <div className="user-menu">
-                      <div className="user-info">
-                        <div className="user-name">{user?.displayName || 'User'}</div>
-                        <div className="user-email">{user?.email}</div>
+                <div className="status-right">
+                  <div className="quick-actions">
+                    <AdvancedThemeSelector />
+                    <button className="action-btn" title="Settings">⚙️</button>
+                    <button className="action-btn" title="Notifications">🔔</button>
+                    <LanguageToggle />
+                    <div className="user-profile">
+                      <img
+                        src={user?.photoURL || '/default-avatar.png'}
+                        alt={user?.displayName || 'User'}
+                        className="user-avatar"
+                      />
+                      <div className="user-menu">
+                        <div className="user-info">
+                          <div className="user-name">{user?.displayName || 'User'}</div>
+                          <div className="user-email">{user?.email}</div>
+                        </div>
+                        <button className="logout-btn" onClick={logout}>
+                          Sign Out
+                        </button>
                       </div>
-                      <button className="logout-btn" onClick={logout}>
-                        Sign Out
-                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
         {/* System Widgets */}
         <div className="system-widgets">
@@ -398,11 +404,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
 
@@ -423,11 +431,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
 
@@ -448,11 +458,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
 
@@ -473,11 +485,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
 
@@ -498,11 +512,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
 
@@ -523,11 +539,13 @@ const DesktopApp: React.FC = () => {
                   onClick={() => openApp(app.id)}
                 >
                   <div className={`app-icon-image app-icon ${app.color}`}>
-                    <div className="app-icon-content">{app.icon}</div>
+                    <div className="app-icon-content">
+                      <Icon name={app.id} fallback={app.icon} size={36} />
+                    </div>
                   </div>
-                  <span className="app-icon-label">{app.name}</span>
-                </div>
-              ))}
+                   <span className="app-icon-label">{app.name}</span>
+                 </div>
+               ))}
             </div>
           </div>
         </div>
@@ -536,15 +554,15 @@ const DesktopApp: React.FC = () => {
         <div className="taskbar">
           <div className="taskbar-left">
             <button className="start-button">
-              <span className="start-icon">🚀</span>
-              <span className="start-text">Start</span>
+              <Icon name="rocket" fallback="🚀" size={18} className="start-icon-svg" />
+              <span className="start-text">{t('start') /* localized Start */}</span>
             </button>
           </div>
           <div className="taskbar-center">
             <div className="running-apps">
               {apps.filter(app => activeApp === app.id).map(app => (
                 <div key={app.id} className="running-app active">
-                  <span className={`app-icon-small app-icon ${app.color}`}>{app.icon}</span>
+                  <Icon name={app.id} fallback={app.icon} size={18} className={`app-icon-small-svg ${app.color}`} />
                   <span className="app-name">{app.name}</span>
                 </div>
               ))}
@@ -639,14 +657,17 @@ function App() {
 // App with Auth Provider
 function AppWithAuth() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <UserSettingsProvider>
-          <App />
-        </UserSettingsProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <I18nProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <UserSettingsProvider>
+            <App />
+          </UserSettingsProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </I18nProvider>
   );
 }
 
 export default AppWithAuth;
+

@@ -1,6 +1,7 @@
 /* Cyberpunk Fonts - AuraOS */
 
 /* Preload fonts for better performance */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200;300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
@@ -8,14 +9,15 @@
 
 /* Font Face Declarations */
 :root {
-  --font-cyberpunk: 'Orbitron', system-ui, sans-serif;
-  --font-futuristic: 'Oxanium', system-ui, sans-serif;
-  --font-tech: 'Audiowide', system-ui, sans-serif;
-  --font-modern: 'Rajdhani', system-ui, sans-serif;
+  --font-ui: 'Inter', 'SF Pro Text', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-cyberpunk: 'Orbitron', var(--font-ui);
+  --font-futuristic: 'Oxanium', var(--font-ui);
+  --font-tech: 'Audiowide', var(--font-ui);
+  --font-modern: 'Rajdhani', var(--font-ui);
 
   /* Default system fonts as fallbacks */
   --font-sans:
-    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    var(--font-ui);
   --font-serif: Georgia, 'Times New Roman', Times, serif;
   --font-mono:
     'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New',
@@ -23,6 +25,10 @@
 }
 
 /* Typography Classes */
+.font-ui {
+  font-family: var(--font-ui);
+}
+
 .font-cyberpunk {
   font-family: var(--font-cyberpunk);
   font-weight: 400;

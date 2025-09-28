@@ -1,0 +1,21 @@
+{
+  "desktop_title": "أمريكي آي أو إس",
+  "start": "ابدأ",
+  "productivity": "الإنتاجية",
+  "system": "النظام",
+  "ai_automation": "الذكاء الاصطناعي والأتمتة",
+  "collaboration": "التعاون",
+  "development_premium": "التطوير والميزات المميزة",
+  "advanced_features": "ميزات متقدمة",
+  "cpu_usage": "استخدام المعالج",
+  "memory": "الذاكرة",
+  "disk_space": "مساحة القرص",
+  "network": "الشبكة",
+  "chat_placeholder": "اكتب رسالتك هنا...",
+  "chat_greeting": "مرحباً! كيف يمكنني مساعدتك اليوم؟",
+  "chat_thank_you": "شكراً لرسالتك. أنا الآن أحلل طلبك.",
+  "chat_notification": "رسالة جديدة",
+  "language": "اللغة",
+  "english": "الإنجليزية",
+  "arabic": "العربية"
+}
