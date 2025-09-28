@@ -57,6 +57,7 @@ import { UsageStatistics } from './components/analytics/UsageStatistics';
 import { ProductivityInsights } from './components/analytics/ProductivityInsights';
 import { SystemHealthMonitor } from './components/analytics/SystemHealthMonitor';
 import { SecurityDashboard } from './components/security/SecurityDashboard';
+import { EnhancedSecurityDashboard } from './components/apps/EnhancedSecurityDashboard';
 import { DataEncryption } from './components/security/DataEncryption';
 import { UserPermissions } from './components/security/UserPermissions';
 import { LanguageSelector } from './components/i18n/LanguageSelector';
@@ -214,7 +215,7 @@ const DesktopApp: React.FC = () => {
         { id: 'system-health', name: 'System Health', icon: '🏥', color: 'red', component: SystemHealthMonitor, category: 'analytics' },
 
         // Security & Privacy (Tenth Row)
-        { id: 'security-dashboard', name: 'Security', icon: '🛡️', color: 'red', component: SecurityDashboard, category: 'security' },
+        { id: 'security-dashboard', name: 'Security', icon: '🛡️', color: 'red', component: EnhancedSecurityDashboard, category: 'security' },
         { id: 'data-encryption', name: 'Encryption', icon: '🔐', color: 'purple', component: DataEncryption, category: 'security' },
         { id: 'user-permissions', name: 'Permissions', icon: '👥', color: 'blue', component: UserPermissions, category: 'security' },
 
