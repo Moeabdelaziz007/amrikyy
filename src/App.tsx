@@ -20,11 +20,12 @@ import { EnhancedCalendarApp } from './components/apps/EnhancedCalendarApp';
 import { EnhancedNotesApp } from './components/apps/EnhancedNotesApp';
 import { AITravelAgencyApp } from './components/apps/AITravelAgencyApp';
 import { GamingEntertainmentSuite } from './components/apps/GamingEntertainmentSuite';
-import { 
-  TelegramBotApp, 
-  AutomationDashboardApp, 
-  MCPToolsApp 
+import {
+  TelegramBotApp,
+  AutomationDashboardApp,
+  MCPToolsApp
 } from './components/apps/SystemIntegrationApps';
+import { EnhancedMCPToolsApp } from './components/apps/EnhancedMCPToolsApp';
 import { TaskManagementApp } from './components/apps/TaskManagementApp';
 import { AnalyticsDashboardApp } from './components/apps/AnalyticsDashboardApp';
 import { CollaborationApp } from './components/apps/CollaborationApp';
@@ -46,8 +47,11 @@ import { Rocket, DollarSign, Heart } from 'lucide-react';
 import { MobileOptimizationProvider } from './components/mobile/PWAInstallManager';
 import { MobileAppLauncher, MobileWindowManager } from './components/mobile/TouchGestureManager';
 import { IntegrationManager } from './components/integration/IntegrationManager';
+import { EnhancedIntegrationManager } from './components/apps/EnhancedIntegrationManager';
 import { RealtimeSyncManager } from './components/integration/RealtimeSyncManager';
+import { EnhancedRealtimeSyncManager } from './components/apps/EnhancedRealtimeSyncManager';
 import { CloudStorageManager } from './components/integration/CloudStorageManager';
+import { EnhancedCloudStorageManager } from './components/apps/EnhancedCloudStorageManager';
 import { AIAssistant } from './components/ai/AIAssistant';
 import { IntelligentTaskManager } from './components/ai/IntelligentTaskManager';
 import { VoiceCommandSystem } from './components/ai/VoiceCommandSystem';
@@ -183,7 +187,7 @@ const DesktopApp: React.FC = () => {
     { id: 'collaboration', name: 'Collaborate', icon: '🤝', color: 'blue', component: CollaborationApp, category: 'collaboration' },
     { id: 'templates', name: 'Templates', icon: '📋', color: 'green', component: TaskTemplatesApp, category: 'collaboration' },
     { id: 'telegram', name: 'Telegram', icon: '💬', color: 'blue', component: TelegramBotApp, category: 'collaboration' },
-    { id: 'mcp-tools', name: 'MCP Tools', icon: '🛠️', color: 'green', component: MCPToolsApp, category: 'collaboration' },
+    { id: 'mcp-tools', name: 'MCP Tools', icon: '🛠️', color: 'green', component: EnhancedMCPToolsApp, category: 'collaboration' },
     
     // Development & Testing (Fifth Row)
     { id: 'test-lab', name: 'Test Lab', icon: '🧪', color: 'red', component: TestLabApp, category: 'development' },
@@ -196,9 +200,9 @@ const DesktopApp: React.FC = () => {
     { id: 'smart-automation', name: 'Smart Automation', icon: '⚡', color: 'cyan', component: SmartAutomationSystem, category: 'advanced' },
 
     // Integration & Connectivity (Seventh Row)
-    { id: 'integration-manager', name: 'Integration Manager', icon: '🔗', color: 'blue', component: IntegrationManager, category: 'integration' },
-    { id: 'realtime-sync', name: 'Real-time Sync', icon: '🔄', color: 'green', component: RealtimeSyncManager, category: 'integration' },
-    { id: 'cloud-storage', name: 'Cloud Storage', icon: '☁️', color: 'cyan', component: CloudStorageManager, category: 'integration' },
+    { id: 'integration-manager', name: 'Integration Manager', icon: '🔗', color: 'blue', component: EnhancedIntegrationManager, category: 'integration' },
+    { id: 'realtime-sync', name: 'Real-time Sync', icon: '🔄', color: 'green', component: EnhancedRealtimeSyncManager, category: 'integration' },
+    { id: 'cloud-storage', name: 'Cloud Storage', icon: '☁️', color: 'cyan', component: EnhancedCloudStorageManager, category: 'integration' },
 
         // AI-Powered Features (Eighth Row)
         { id: 'ai-assistant', name: 'AI Assistant', icon: '🤖', color: 'purple', component: AIAssistant, category: 'ai' },

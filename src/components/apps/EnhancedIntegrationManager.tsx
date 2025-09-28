@@ -1,0 +1,996 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { ScrollArea } from '../ui/scroll-area';
+import { 
+  Link, 
+  Plus, 
+  Settings, 
+  CheckCircle, 
+  XCircle, 
+  AlertTriangle,
+  RefreshCw,
+  Trash2,
+  Edit,
+  Eye,
+  Zap,
+  Database,
+  Globe,
+  MessageSquare,
+  FileText,
+  Calendar,
+  Mail,
+  Cloud,
+  Github,
+  Slack,
+  Twitter,
+  Facebook,
+  Instagram,
+  Youtube,
+  Linkedin,
+  Discord,
+  Spotify,
+  GoogleDrive,
+  Dropbox,
+  OneDrive,
+  Trello,
+  Asana,
+  Notion,
+  Figma,
+  Adobe,
+  Microsoft,
+  Apple,
+  Amazon,
+  Netflix,
+  Zoom,
+  Skype,
+  Teams,
+  Webex,
+  Jira,
+  Confluence,
+  Bitbucket,
+  Gitlab,
+  Docker,
+  Kubernetes,
+  AWS,
+  Azure,
+  GCP,
+  Firebase,
+  Stripe,
+  PayPal,
+  Square,
+  Shopify,
+  WooCommerce,
+  WordPress,
+  Drupal,
+  Joomla,
+  HubSpot,
+  Salesforce,
+  Zendesk,
+  Intercom,
+  Mailchimp,
+  SendGrid,
+  Twilio,
+  Plaid,
+  OpenAI,
+  Anthropic,
+  GoogleAI,
+  MetaAI
+} from 'lucide-react';
+
+interface Integration {
+  id: string;
+  name: string;
+  category: 'productivity' | 'communication' | 'storage' | 'development' | 'analytics' | 'payment' | 'ai' | 'social';
+  provider: string;
+  status: 'connected' | 'disconnected' | 'error' | 'pending';
+  description: string;
+  icon: string;
+  lastSync?: Date;
+  syncFrequency: 'real-time' | 'hourly' | 'daily' | 'weekly' | 'manual';
+  permissions: string[];
+  dataTypes: string[];
+  webhookUrl?: string;
+  apiKey?: string;
+  configuration: any;
+  usage: {
+    requests: number;
+    lastRequest: Date;
+    errors: number;
+    quota: number;
+  };
+}
+
+interface IntegrationTemplate {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  icon: string;
+  setupSteps: string[];
+  requiredPermissions: string[];
+  optionalPermissions: string[];
+  pricing: 'free' | 'freemium' | 'paid';
+}
+
+export const EnhancedIntegrationManager: React.FC = () => {
+  const { user } = useAuth();
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
+  const [templates, setTemplates] = useState<IntegrationTemplate[]>([]);
+  const [selectedTab, setSelectedTab] = useState<'overview' | 'integrations' | 'templates' | 'analytics'>('overview');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<IntegrationTemplate | null>(null);
+  const [showSetup, setShowSetup] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadIntegrationData();
+    
+    // Set up real-time updates
+    const interval = setInterval(() => {
+      loadIntegrationData();
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadIntegrationData = async () => {
+    try {
+      await Promise.all([
+        loadIntegrations(),
+        loadTemplates()
+      ]);
+    } catch (error) {
+      console.error('Failed to load integration data:', error);
+      // Use mock data if API fails
+      setIntegrations(getMockIntegrations());
+      setTemplates(getMockTemplates());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadIntegrations = async () => {
+    try {
+      const response = await fetch('/api/integrations');
+      const data = await response.json();
+      
+      if (data.integrations) {
+        setIntegrations(data.integrations.map((integration: any) => ({
+          ...integration,
+          lastSync: integration.lastSync ? new Date(integration.lastSync) : undefined,
+          usage: {
+            ...integration.usage,
+            lastRequest: new Date(integration.usage.lastRequest)
+          }
+        })));
+      } else {
+        setIntegrations(getMockIntegrations());
+      }
+    } catch (error) {
+      console.error('Failed to load integrations:', error);
+      setIntegrations(getMockIntegrations());
+    }
+  };
+
+  const loadTemplates = async () => {
+    try {
+      const response = await fetch('/api/integrations/templates');
+      const data = await response.json();
+      
+      if (data.templates) {
+        setTemplates(data.templates);
+      } else {
+        setTemplates(getMockTemplates());
+      }
+    } catch (error) {
+      console.error('Failed to load integration templates:', error);
+      setTemplates(getMockTemplates());
+    }
+  };
+
+  const connectIntegration = async (template: IntegrationTemplate, config: any) => {
+    setIsConnecting(true);
+    try {
+      const response = await fetch('/api/integrations/connect', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          templateId: template.id,
+          configuration: config
+        })
+      });
+
+      if (response.ok) {
+        loadIntegrations();
+        setShowSetup(false);
+        setSelectedTemplate(null);
+        alert(`${template.name} connected successfully!`);
+      } else {
+        throw new Error('Failed to connect integration');
+      }
+    } catch (error) {
+      console.error('Failed to connect integration:', error);
+      alert(`Failed to connect ${template.name}. Please try again.`);
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  const disconnectIntegration = async (integrationId: string) => {
+    if (!confirm('Are you sure you want to disconnect this integration?')) return;
+
+    try {
+      const response = await fetch(`/api/integrations/${integrationId}/disconnect`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        loadIntegrations();
+        alert('Integration disconnected successfully!');
+      } else {
+        throw new Error('Failed to disconnect integration');
+      }
+    } catch (error) {
+      console.error('Failed to disconnect integration:', error);
+      alert('Failed to disconnect integration. Please try again.');
+    }
+  };
+
+  const syncIntegration = async (integrationId: string) => {
+    try {
+      const response = await fetch(`/api/integrations/${integrationId}/sync`, {
+        method: 'POST'
+      });
+
+      if (response.ok) {
+        loadIntegrations();
+        alert('Integration synced successfully!');
+      } else {
+        throw new Error('Failed to sync integration');
+      }
+    } catch (error) {
+      console.error('Failed to sync integration:', error);
+      alert('Failed to sync integration. Please try again.');
+    }
+  };
+
+  const getIntegrationIcon = (provider: string) => {
+    const iconMap: { [key: string]: React.ComponentType<any> } = {
+      'google': GoogleDrive,
+      'dropbox': Dropbox,
+      'onedrive': OneDrive,
+      'github': Github,
+      'slack': Slack,
+      'discord': Discord,
+      'zoom': Zoom,
+      'teams': Teams,
+      'jira': Jira,
+      'trello': Trello,
+      'notion': Notion,
+      'figma': Figma,
+      'openai': OpenAI,
+      'anthropic': Anthropic,
+      'stripe': Stripe,
+      'paypal': PayPal,
+      'shopify': Shopify,
+      'wordpress': WordPress,
+      'hubspot': HubSpot,
+      'salesforce': Salesforce,
+      'mailchimp': Mailchimp,
+      'twilio': Twilio,
+      'aws': AWS,
+      'azure': Azure,
+      'gcp': GCP,
+      'firebase': Firebase,
+      'docker': Docker,
+      'kubernetes': Kubernetes
+    };
+
+    const IconComponent = iconMap[provider.toLowerCase()] || Globe;
+    return <IconComponent className="w-6 h-6" />;
+  };
+
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case 'productivity':
+        return <FileText className="w-5 h-5 text-blue-400" />;
+      case 'communication':
+        return <MessageSquare className="w-5 h-5 text-green-400" />;
+      case 'storage':
+        return <Cloud className="w-5 h-5 text-purple-400" />;
+      case 'development':
+        return <Database className="w-5 h-5 text-orange-400" />;
+      case 'analytics':
+        return <Globe className="w-5 h-5 text-cyan-400" />;
+      case 'payment':
+        return <Zap className="w-5 h-5 text-yellow-400" />;
+      case 'ai':
+        return <Zap className="w-5 h-5 text-purple-400" />;
+      case 'social':
+        return <MessageSquare className="w-5 h-5 text-pink-400" />;
+      default:
+        return <Link className="w-5 h-5 text-gray-400" />;
+    }
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'connected':
+        return <CheckCircle className="w-4 h-4 text-green-400" />;
+      case 'disconnected':
+        return <XCircle className="w-4 h-4 text-gray-400" />;
+      case 'error':
+        return <AlertTriangle className="w-4 h-4 text-red-400" />;
+      case 'pending':
+        return <RefreshCw className="w-4 h-4 text-yellow-400 animate-spin" />;
+      default:
+        return <XCircle className="w-4 h-4 text-gray-400" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'connected':
+        return 'bg-green-600 text-white';
+      case 'disconnected':
+        return 'bg-gray-600 text-white';
+      case 'error':
+        return 'bg-red-600 text-white';
+      case 'pending':
+        return 'bg-yellow-600 text-white';
+      default:
+        return 'bg-gray-600 text-white';
+    }
+  };
+
+  // Mock data functions
+  const getMockIntegrations = (): Integration[] => [
+    {
+      id: '1',
+      name: 'Google Drive',
+      category: 'storage',
+      provider: 'google',
+      status: 'connected',
+      description: 'Sync files and folders with Google Drive',
+      icon: 'google-drive',
+      lastSync: new Date(Date.now() - 1000 * 60 * 15),
+      syncFrequency: 'real-time',
+      permissions: ['read', 'write', 'delete'],
+      dataTypes: ['files', 'folders', 'metadata'],
+      configuration: { folderId: 'root', syncMode: 'bidirectional' },
+      usage: {
+        requests: 1247,
+        lastRequest: new Date(Date.now() - 1000 * 60 * 5),
+        errors: 3,
+        quota: 10000
+      }
+    },
+    {
+      id: '2',
+      name: 'Slack',
+      category: 'communication',
+      provider: 'slack',
+      status: 'connected',
+      description: 'Send notifications and messages to Slack channels',
+      icon: 'slack',
+      lastSync: new Date(Date.now() - 1000 * 60 * 30),
+      syncFrequency: 'real-time',
+      permissions: ['read', 'write'],
+      dataTypes: ['messages', 'channels', 'users'],
+      configuration: { workspaceId: 'T123456', defaultChannel: '#general' },
+      usage: {
+        requests: 892,
+        lastRequest: new Date(Date.now() - 1000 * 60 * 10),
+        errors: 1,
+        quota: 5000
+      }
+    },
+    {
+      id: '3',
+      name: 'GitHub',
+      category: 'development',
+      provider: 'github',
+      status: 'connected',
+      description: 'Access repositories, issues, and pull requests',
+      icon: 'github',
+      lastSync: new Date(Date.now() - 1000 * 60 * 45),
+      syncFrequency: 'hourly',
+      permissions: ['read', 'write'],
+      dataTypes: ['repositories', 'issues', 'pull-requests', 'commits'],
+      configuration: { organization: 'myorg', defaultRepo: 'main' },
+      usage: {
+        requests: 567,
+        lastRequest: new Date(Date.now() - 1000 * 60 * 20),
+        errors: 0,
+        quota: 5000
+      }
+    },
+    {
+      id: '4',
+      name: 'OpenAI',
+      category: 'ai',
+      provider: 'openai',
+      status: 'connected',
+      description: 'Access OpenAI models for AI-powered features',
+      icon: 'openai',
+      lastSync: new Date(Date.now() - 1000 * 60 * 60),
+      syncFrequency: 'manual',
+      permissions: ['read'],
+      dataTypes: ['text', 'completions', 'embeddings'],
+      configuration: { model: 'gpt-4', temperature: 0.7 },
+      usage: {
+        requests: 234,
+        lastRequest: new Date(Date.now() - 1000 * 60 * 60),
+        errors: 2,
+        quota: 1000
+      }
+    },
+    {
+      id: '5',
+      name: 'Stripe',
+      category: 'payment',
+      provider: 'stripe',
+      status: 'error',
+      description: 'Process payments and manage subscriptions',
+      icon: 'stripe',
+      lastSync: new Date(Date.now() - 1000 * 60 * 60 * 2),
+      syncFrequency: 'real-time',
+      permissions: ['read', 'write'],
+      dataTypes: ['payments', 'customers', 'subscriptions'],
+      configuration: { mode: 'live', webhookSecret: 'whsec_...' },
+      usage: {
+        requests: 156,
+        lastRequest: new Date(Date.now() - 1000 * 60 * 60 * 2),
+        errors: 12,
+        quota: 10000
+      }
+    }
+  ];
+
+  const getMockTemplates = (): IntegrationTemplate[] => [
+    {
+      id: '1',
+      name: 'Dropbox',
+      category: 'storage',
+      description: 'Sync files and folders with Dropbox',
+      icon: 'dropbox',
+      setupSteps: [
+        'Create Dropbox app',
+        'Generate access token',
+        'Configure sync settings',
+        'Test connection'
+      ],
+      requiredPermissions: ['read', 'write'],
+      optionalPermissions: ['delete'],
+      pricing: 'freemium'
+    },
+    {
+      id: '2',
+      name: 'Discord',
+      category: 'communication',
+      description: 'Send messages and notifications to Discord channels',
+      icon: 'discord',
+      setupSteps: [
+        'Create Discord application',
+        'Generate bot token',
+        'Invite bot to server',
+        'Configure channels'
+      ],
+      requiredPermissions: ['send-messages'],
+      optionalPermissions: ['manage-messages', 'embed-links'],
+      pricing: 'free'
+    },
+    {
+      id: '3',
+      name: 'Trello',
+      category: 'productivity',
+      description: 'Manage boards, lists, and cards',
+      icon: 'trello',
+      setupSteps: [
+        'Create Trello account',
+        'Generate API key',
+        'Configure board access',
+        'Set up webhooks'
+      ],
+      requiredPermissions: ['read', 'write'],
+      optionalPermissions: ['admin'],
+      pricing: 'freemium'
+    },
+    {
+      id: '4',
+      name: 'Mailchimp',
+      category: 'communication',
+      description: 'Manage email campaigns and subscribers',
+      icon: 'mailchimp',
+      setupSteps: [
+        'Create Mailchimp account',
+        'Generate API key',
+        'Configure audience',
+        'Set up automation'
+      ],
+      requiredPermissions: ['read', 'write'],
+      optionalPermissions: ['delete'],
+      pricing: 'paid'
+    },
+    {
+      id: '5',
+      name: 'Anthropic Claude',
+      category: 'ai',
+      description: 'Access Claude AI models for advanced reasoning',
+      icon: 'anthropic',
+      setupSteps: [
+        'Create Anthropic account',
+        'Generate API key',
+        'Configure model settings',
+        'Test API connection'
+      ],
+      requiredPermissions: ['read'],
+      optionalPermissions: [],
+      pricing: 'paid'
+    }
+  ];
+
+  const filteredIntegrations = integrations.filter(integration => {
+    const matchesCategory = selectedCategory === 'all' || integration.category === selectedCategory;
+    const matchesSearch = searchQuery === '' || 
+      integration.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      integration.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const filteredTemplates = templates.filter(template => {
+    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
+    const matchesSearch = searchQuery === '' || 
+      template.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      template.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  const categories = ['all', 'productivity', 'communication', 'storage', 'development', 'analytics', 'payment', 'ai', 'social'];
+
+  if (loading) {
+    return (
+      <div className="flex h-full bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-400 mx-auto mb-4"></div>
+            <p className="text-white text-lg">Loading integrations...</p>
+            <p className="text-gray-400">Connecting to external services</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex h-full bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div className="flex items-center space-x-3">
+            <Link className="w-8 h-8 text-blue-400" />
+            <div>
+              <h1 className="text-2xl font-bold text-white">Integration Manager</h1>
+              <p className="text-gray-400">Connect and manage external services</p>
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            <Button
+              onClick={() => setSelectedTab('templates')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Integration
+            </Button>
+            <Button
+              onClick={loadIntegrationData}
+              variant="outline"
+              className="text-blue-400 border-blue-400 hover:bg-blue-400 hover:text-white"
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
+        </div>
+
+        {/* Statistics */}
+        <div className="p-6 border-b border-white/10 bg-black/20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4 text-center">
+                <Link className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">{integrations.length}</p>
+                <p className="text-gray-400 text-sm">Total Integrations</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4 text-center">
+                <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">
+                  {integrations.filter(i => i.status === 'connected').length}
+                </p>
+                <p className="text-gray-400 text-sm">Connected</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4 text-center">
+                <AlertTriangle className="w-8 h-8 text-red-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">
+                  {integrations.filter(i => i.status === 'error').length}
+                </p>
+                <p className="text-gray-400 text-sm">Errors</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-white/5 border-white/10">
+              <CardContent className="p-4 text-center">
+                <Zap className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                <p className="text-2xl font-bold text-white">
+                  {integrations.reduce((sum, i) => sum + i.usage.requests, 0)}
+                </p>
+                <p className="text-gray-400 text-sm">API Calls</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex border-b border-white/10">
+          {[
+            { id: 'overview', label: 'Overview', icon: Globe },
+            { id: 'integrations', label: 'Integrations', icon: Link },
+            { id: 'templates', label: 'Templates', icon: Plus },
+            { id: 'analytics', label: 'Analytics', icon: Zap }
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setSelectedTab(tab.id as any)}
+              className={`flex items-center space-x-2 px-6 py-4 border-b-2 transition-colors ${
+                selectedTab === tab.id
+                  ? 'border-blue-400 text-blue-400 bg-blue-400/10'
+                  : 'border-transparent text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span>{tab.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Content */}
+        <ScrollArea className="flex-1">
+          <div className="p-6">
+            {/* Filters */}
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="relative">
+                <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search integrations..."
+                  className="pl-10 bg-white/5 border-white/20 text-white placeholder-gray-400 w-64"
+                />
+              </div>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="bg-white/5 border border-white/20 text-white rounded px-3 py-2"
+              >
+                {categories.map(category => (
+                  <option key={category} value={category}>
+                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {selectedTab === 'overview' && (
+              <div className="space-y-6">
+                {/* Recent Integrations */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Link className="w-5 h-5 text-blue-400" />
+                      <span>Active Integrations</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {integrations.slice(0, 6).map(integration => (
+                        <div key={integration.id} className="p-4 bg-black/20 rounded-lg border border-white/10">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-3">
+                              {getIntegrationIcon(integration.provider)}
+                              <div>
+                                <h4 className="text-white font-semibold">{integration.name}</h4>
+                                <p className="text-gray-400 text-sm">{integration.category}</p>
+                              </div>
+                            </div>
+                            <Badge className={getStatusColor(integration.status)}>
+                              {integration.status}
+                            </Badge>
+                          </div>
+                          <p className="text-gray-300 text-sm mb-3">{integration.description}</p>
+                          <div className="flex items-center justify-between text-xs text-gray-400">
+                            <span>Last sync: {integration.lastSync?.toLocaleTimeString() || 'Never'}</span>
+                            <span>{integration.usage.requests} calls</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Integration Health */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <AlertTriangle className="w-5 h-5 text-red-400" />
+                      <span>Integration Health</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {integrations.filter(i => i.status === 'error').map(integration => (
+                        <div key={integration.id} className="flex items-center justify-between p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <AlertTriangle className="w-5 h-5 text-red-400" />
+                            <div>
+                              <h4 className="text-white font-semibold">{integration.name}</h4>
+                              <p className="text-gray-400 text-sm">Connection error - {integration.usage.errors} failures</p>
+                            </div>
+                          </div>
+                          <Button
+                            onClick={() => syncIntegration(integration.id)}
+                            size="sm"
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                          >
+                            Retry
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {selectedTab === 'integrations' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredIntegrations.map(integration => (
+                    <Card key={integration.id} className="bg-white/5 border-white/10">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            {getIntegrationIcon(integration.provider)}
+                            <div>
+                              <CardTitle className="text-white text-lg">{integration.name}</CardTitle>
+                              <Badge className={getStatusColor(integration.status)}>
+                                {integration.status}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-300 mb-4">{integration.description}</p>
+                        
+                        <div className="space-y-3 mb-4">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Category:</span>
+                            <span className="text-white">{integration.category}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Sync:</span>
+                            <span className="text-white">{integration.syncFrequency}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Requests:</span>
+                            <span className="text-white">{integration.usage.requests}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Last Used:</span>
+                            <span className="text-white">
+                              {integration.usage.lastRequest.toLocaleTimeString()}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-2">
+                          <Button
+                            onClick={() => syncIntegration(integration.id)}
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white flex-1"
+                          >
+                            <RefreshCw className="w-4 h-4 mr-1" />
+                            Sync
+                          </Button>
+                          <Button
+                            onClick={() => disconnectIntegration(integration.id)}
+                            size="sm"
+                            variant="outline"
+                            className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {selectedTab === 'templates' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredTemplates.map(template => (
+                    <Card key={template.id} className="bg-white/5 border-white/10">
+                      <CardHeader>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            {getCategoryIcon(template.category)}
+                            <div>
+                              <CardTitle className="text-white text-lg">{template.name}</CardTitle>
+                              <Badge variant="outline" className="text-gray-400 border-gray-400">
+                                {template.pricing}
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-300 mb-4">{template.description}</p>
+                        
+                        <div className="mb-4">
+                          <p className="text-gray-400 text-sm mb-2">Setup Steps:</p>
+                          <ul className="text-gray-300 text-sm space-y-1">
+                            {template.setupSteps.slice(0, 3).map((step, index) => (
+                              <li key={index} className="flex items-center space-x-2">
+                                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
+                                <span>{step}</span>
+                              </li>
+                            ))}
+                            {template.setupSteps.length > 3 && (
+                              <li className="text-gray-400 text-xs">
+                                +{template.setupSteps.length - 3} more steps
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+
+                        <Button
+                          onClick={() => {
+                            setSelectedTemplate(template);
+                            setShowSetup(true);
+                          }}
+                          className="w-full bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Connect
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {selectedTab === 'analytics' && (
+              <div className="space-y-6">
+                {/* Usage Analytics */}
+                <Card className="bg-white/5 border-white/10">
+                  <CardHeader>
+                    <CardTitle className="text-white flex items-center space-x-2">
+                      <Zap className="w-5 h-5 text-yellow-400" />
+                      <span>Integration Usage Analytics</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {integrations.map(integration => (
+                        <div key={integration.id} className="flex items-center justify-between p-4 bg-black/20 rounded-lg border border-white/10">
+                          <div className="flex items-center space-x-4">
+                            {getIntegrationIcon(integration.provider)}
+                            <div>
+                              <h4 className="text-white font-semibold">{integration.name}</h4>
+                              <p className="text-gray-400 text-sm">
+                                {integration.usage.requests} requests • {integration.usage.errors} errors
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="w-32 bg-gray-700 rounded-full h-2 mb-2">
+                              <div 
+                                className="bg-blue-500 h-2 rounded-full"
+                                style={{ width: `${(integration.usage.requests / integration.usage.quota) * 100}%` }}
+                              />
+                            </div>
+                            <p className="text-gray-400 text-xs">
+                              {Math.round((integration.usage.requests / integration.usage.quota) * 100)}% of quota used
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+
+        {/* Setup Modal */}
+        {showSetup && selectedTemplate && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md bg-slate-800 border-white/10">
+              <CardHeader>
+                <CardTitle className="text-white">Connect {selectedTemplate.name}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    API Key
+                  </label>
+                  <Input
+                    placeholder="Enter your API key"
+                    className="bg-white/5 border-white/20 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Configuration
+                  </label>
+                  <textarea
+                    placeholder="Additional configuration (JSON)"
+                    className="w-full p-2 bg-white/5 border border-white/20 text-white rounded"
+                    rows={3}
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => connectIntegration(selectedTemplate, {})}
+                    disabled={isConnecting}
+                    className="bg-green-600 hover:bg-green-700 text-white flex-1"
+                  >
+                    {isConnecting ? (
+                      <RefreshCw className="w-4 h-4 animate-spin mr-2" />
+                    ) : (
+                      <Plus className="w-4 h-4 mr-2" />
+                    )}
+                    Connect
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setShowSetup(false);
+                      setSelectedTemplate(null);
+                    }}
+                    variant="outline"
+                    className="text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
