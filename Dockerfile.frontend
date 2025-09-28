@@ -1,0 +1,16 @@
+# Frontend build (Vite) and nginx serve
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package.json package-lock.json* ./
+# install only production deps needed for build
+RUN npm ci --silent || npm install --no-audit --no-fund --silent
+COPY . .
+RUN npm run build
+
+# Production image
+FROM nginx:stable-alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+# Optional: copy nginx config if provided
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+

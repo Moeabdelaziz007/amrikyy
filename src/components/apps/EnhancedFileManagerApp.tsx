@@ -5,19 +5,19 @@ import { Input } from '../ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { ScrollArea } from '../ui/scroll-area';
-import { 
-  Folder, 
-  File, 
-  Upload, 
-  Download, 
-  Trash2, 
-  Edit, 
-  Copy, 
-  Move, 
-  Search, 
-  Grid, 
-  List, 
-  Plus, 
+import {
+  Folder,
+  File,
+  Upload,
+  Download,
+  Trash2,
+  Edit,
+  Copy,
+  Move,
+  Search,
+  Grid,
+  List,
+  Plus,
   MoreHorizontal,
   Image,
   FileText,
@@ -78,7 +78,7 @@ export const EnhancedFileManagerApp: React.FC = () => {
       const path = currentPath.join('/');
       const response = await fetch(`/api/files?path=${encodeURIComponent(path)}`);
       const data = await response.json();
-      
+
       if (data.folder) {
         setCurrentFolder(data.folder);
       } else {
@@ -225,11 +225,16 @@ export const EnhancedFileManagerApp: React.FC = () => {
     setSelectedItems([]);
   };
 
-  const navigateUp = () => {
+  const navigateBack = () => {
     if (currentPath.length > 1) {
       setCurrentPath(currentPath.slice(0, -1));
       setSelectedItems([]);
     }
+  };
+
+  const navigateToPath = (index: number) => {
+    setCurrentPath(prev => prev.slice(0, index + 1));
+    setSelectedItems([]);
   };
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -414,12 +419,12 @@ export const EnhancedFileManagerApp: React.FC = () => {
 
   const sortedItems = React.useMemo(() => {
     if (!currentFolder) return [];
-    
+
     const allItems = [...currentFolder.files, ...currentFolder.subfolders];
-    
+
     return allItems.sort((a, b) => {
       let comparison = 0;
-      
+
       if (a.type !== b.type) {
         comparison = a.type === 'folder' ? -1 : 1;
       } else {
@@ -435,131 +440,18 @@ export const EnhancedFileManagerApp: React.FC = () => {
             break;
         }
       }
-      
+
       return sortOrder === 'asc' ? comparison : -comparison;
     });
   }, [currentFolder, sortBy, sortOrder]);
 
   const filteredItems = React.useMemo(() => {
     if (!searchQuery) return sortedItems;
-    
+
     return sortedItems.filter(item =>
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [sortedItems, searchQuery]);
-
-  const navigateToFolder = (folderName: string) => {
-    setCurrentPath(prev => [...prev, folderName]);
-    setSelectedItems([]);
-  };
-
-  const navigateBack = () => {
-    if (currentPath.length > 1) {
-      setCurrentPath(prev => prev.slice(0, -1));
-      setSelectedItems([]);
-    }
-  };
-          name: 'Documents',
-          files: [
-            {
-              id: 'doc3',
-              name: 'Report.pdf',
-              type: 'file',
-              size: 3072000,
-              modified: new Date('2024-01-12'),
-              icon: '📊',
-              color: 'purple'
-            }
-          ],
-          subfolders: []
-        },
-        {
-          id: 'images',
-          name: 'Images',
-          files: [
-            {
-              id: 'img2',
-              name: 'Photo.jpg',
-              type: 'file',
-              size: 8388608,
-              modified: new Date('2024-01-11'),
-              icon: '📸',
-              color: 'orange'
-            }
-          ],
-          subfolders: []
-        },
-        {
-          id: 'projects',
-          name: 'Projects',
-          files: [],
-          subfolders: [
-            {
-              id: 'project1',
-              name: 'AIOS System',
-              files: [
-                {
-                  id: 'code1',
-                  name: 'main.tsx',
-                  type: 'file',
-                  size: 51200,
-                  modified: new Date('2024-01-10'),
-                  icon: '⚛️',
-                  color: 'cyan'
-                },
-                {
-                  id: 'code2',
-                  name: 'styles.css',
-                  type: 'file',
-                  size: 25600,
-                  modified: new Date('2024-01-09'),
-                  icon: '🎨',
-                  color: 'pink'
-                }
-              ],
-              subfolders: []
-            }
-          ]
-        }
-      ]
-    }
-  ];
-
-  useEffect(() => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-    // Find current folder based on path
-    let folder = mockFolders[0]; // Start with Home
-    for (let i = 1; i < currentPath.length; i++) {
-      const pathName = currentPath[i];
-      folder = folder.subfolders.find(f => f.name === pathName) || folder;
-    }
-    setCurrentFolder(folder);
-  }, [currentPath]);
-
-  const navigateToFolder = (folderName: string) => {
-    setCurrentPath(prev => [...prev, folderName]);
-    setSelectedItems([]);
-  };
-
-  const navigateBack = () => {
-    if (currentPath.length > 1) {
-      setCurrentPath(prev => prev.slice(0, -1));
-      setSelectedItems([]);
-    }
-  };
-
-  const navigateToPath = (index: number) => {
-    setCurrentPath(prev => prev.slice(0, index + 1));
-    setSelectedItems([]);
-  };
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
 
   const formatDate = (date: Date): string => {
     return date.toLocaleDateString('en-US', {
@@ -569,85 +461,18 @@ export const EnhancedFileManagerApp: React.FC = () => {
     });
   };
 
-  const getSortedItems = () => {
-    if (!currentFolder) return [];
-    
-    const allItems = [
-      ...currentFolder.subfolders.map(f => ({ ...f, type: 'folder' as const })),
-      ...currentFolder.files
-    ];
-
-    return allItems.sort((a, b) => {
-      let comparison = 0;
-      
-      if (sortBy === 'name') {
-        comparison = a.name.localeCompare(b.name);
-      } else if (sortBy === 'size') {
-        const aSize = a.type === 'folder' ? 0 : (a.size || 0);
-        const bSize = b.type === 'folder' ? 0 : (b.size || 0);
-        comparison = aSize - bSize;
-      } else if (sortBy === 'modified') {
-        const aDate = a.type === 'folder' ? new Date() : a.modified;
-        const bDate = b.type === 'folder' ? new Date() : b.modified;
-        comparison = aDate.getTime() - bDate.getTime();
-      }
-      
-      return sortOrder === 'asc' ? comparison : -comparison;
-    });
-  };
-
-  const getFilteredItems = () => {
-    const items = getSortedItems();
-    if (!searchQuery) return items;
-    
-    return items.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  };
-
-  const handleItemClick = (item: FileItem | Folder, event: React.MouseEvent) => {
+  const handleItemClick = (item: FileItem | { id: string, name: string, type: 'folder' }, event: React.MouseEvent) => {
     if (event.ctrlKey || event.metaKey) {
-      // Multi-select
-      setSelectedItems(prev => 
-        prev.includes(item.id) 
+      setSelectedItems(prev =>
+        prev.includes(item.id)
           ? prev.filter(id => id !== item.id)
           : [...prev, item.id]
       );
     } else {
-      // Single select
       setSelectedItems([item.id]);
-      
       if (item.type === 'folder') {
         navigateToFolder(item.name);
       }
-    }
-  };
-
-  const createNewFolder = () => {
-    if (newFolderName.trim()) {
-      // In a real app, this would create the folder
-      alert(`Created folder: ${newFolderName}`);
-      setNewFolderName('');
-      setShowCreateFolder(false);
-    }
-  };
-
-  const deleteSelectedItems = () => {
-    if (selectedItems.length > 0) {
-      if (window.confirm(`Delete ${selectedItems.length} item(s)?`)) {
-        // In a real app, this would delete the items
-        alert(`Deleted ${selectedItems.length} item(s)`);
-        setSelectedItems([]);
-      }
-    }
-  };
-
-  const uploadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      // In a real app, this would upload the files
-      alert(`Uploaded ${files.length} file(s)`);
-      setShowUpload(false);
     }
   };
 
@@ -667,14 +492,14 @@ export const EnhancedFileManagerApp: React.FC = () => {
       {/* Header */}
       <div className="file-manager-header">
         <div className="header-left">
-          <button 
+          <button
             className="nav-btn back-btn"
             onClick={navigateBack}
             disabled={currentPath.length <= 1}
           >
             ← Back
           </button>
-          
+
           <div className="breadcrumb">
             {currentPath.map((path, index) => (
               <React.Fragment key={index}>
@@ -738,19 +563,20 @@ export const EnhancedFileManagerApp: React.FC = () => {
       {/* Toolbar */}
       <div className="file-manager-toolbar">
         <div className="toolbar-left">
-          <button 
+          <button
             className="toolbar-btn primary"
-            onClick={() => setShowUpload(true)}
+            onClick={() => fileInputRef.current?.click()}
           >
             📤 Upload
           </button>
-          <button 
+          <input type="file" ref={fileInputRef} onChange={handleFileUpload} multiple style={{ display: 'none' }} />
+          <button
             className="toolbar-btn"
             onClick={() => setShowCreateFolder(true)}
           >
             📁 New Folder
           </button>
-          <button 
+          <button
             className="toolbar-btn"
             onClick={() => window.open('https://drive.google.com', '_blank')}
           >
@@ -764,19 +590,19 @@ export const EnhancedFileManagerApp: React.FC = () => {
               <span className="selection-count">
                 {selectedItems.length} item(s) selected
               </span>
-              <button 
+              <button
                 className="toolbar-btn danger"
-                onClick={deleteSelectedItems}
+                onClick={deleteItems}
               >
                 🗑️ Delete
               </button>
-              <button className="toolbar-btn">
+              <button className="toolbar-btn" onClick={copyItems}>
                 📋 Copy
               </button>
-              <button className="toolbar-btn">
+              <button className="toolbar-btn" onClick={cutItems}>
                 ✂️ Cut
               </button>
-              <button className="toolbar-btn">
+              <button className="toolbar-btn" onClick={pasteItems} disabled={!clipboard}>
                 📋 Paste
               </button>
             </>
@@ -786,7 +612,7 @@ export const EnhancedFileManagerApp: React.FC = () => {
 
       {/* File Grid/List */}
       <div className={`file-content ${viewMode}`}>
-        {getFilteredItems().map(item => (
+        {filteredItems.map(item => (
           <div
             key={item.id}
             className={`file-item ${selectedItems.includes(item.id) ? 'selected' : ''}`}
@@ -794,10 +620,10 @@ export const EnhancedFileManagerApp: React.FC = () => {
           >
             <div className="file-icon">
               <span className={`icon ${item.type === 'folder' ? 'folder' : 'file'}`}>
-                {item.type === 'folder' ? '📁' : (item as FileItem).icon}
+                {item.type === 'folder' ? <Folder className="w-8 h-8 text-yellow-500" /> : getFileIcon(item as FileItem)}
               </span>
             </div>
-            
+
             <div className="file-info">
               <div className="file-name">{item.name}</div>
               <div className="file-meta">
@@ -807,40 +633,30 @@ export const EnhancedFileManagerApp: React.FC = () => {
                   </span>
                 )}
                 <span className="file-date">
-                  {formatDate(item.type === 'folder' ? new Date() : (item as FileItem).modified)}
+                  {formatDate(item.modified)}
                 </span>
               </div>
             </div>
 
-            {item.type === 'file' && (
-              <div className="file-actions">
-                <button className="action-btn" title="Download">
-                  ⬇️
-                </button>
-                <button className="action-btn" title="Share">
-                  🔗
-                </button>
-                <button className="action-btn" title="Properties">
-                  ℹ️
-                </button>
-              </div>
-            )}
+            <div className="file-actions">
+              <MoreHorizontal className="w-5 h-5" />
+            </div>
           </div>
         ))}
 
-        {getFilteredItems().length === 0 && (
+        {filteredItems.length === 0 && (
           <div className="empty-state">
             <div className="empty-icon">📁</div>
             <h3>No files found</h3>
             <p>
-              {searchQuery 
+              {searchQuery
                 ? `No files match "${searchQuery}"`
                 : 'This folder is empty'
               }
             </p>
-            <button 
+            <button
               className="empty-action-btn"
-              onClick={() => setShowUpload(true)}
+              onClick={() => fileInputRef.current?.click()}
             >
               Upload Files
             </button>
@@ -848,46 +664,13 @@ export const EnhancedFileManagerApp: React.FC = () => {
         )}
       </div>
 
-      {/* Upload Modal */}
-      {showUpload && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
-              <h3>Upload Files</h3>
-              <button 
-                className="modal-close"
-                onClick={() => setShowUpload(false)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="modal-content">
-              <div className="upload-area">
-                <input
-                  type="file"
-                  multiple
-                  onChange={uploadFile}
-                  style={{ display: 'none' }}
-                  id="file-upload"
-                />
-                <label htmlFor="file-upload" className="upload-label">
-                  <div className="upload-icon">📤</div>
-                  <p>Click to select files or drag and drop</p>
-                  <span className="upload-hint">Supports all file types</span>
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Create Folder Modal */}
       {showCreateFolder && (
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
               <h3>Create New Folder</h3>
-              <button 
+              <button
                 className="modal-close"
                 onClick={() => setShowCreateFolder(false)}
               >
@@ -906,14 +689,14 @@ export const EnhancedFileManagerApp: React.FC = () => {
                 />
               </div>
               <div className="modal-actions">
-                <button 
+                <button
                   className="btn primary"
-                  onClick={createNewFolder}
+                  onClick={createFolder}
                   disabled={!newFolderName.trim()}
                 >
                   Create Folder
                 </button>
-                <button 
+                <button
                   className="btn secondary"
                   onClick={() => setShowCreateFolder(false)}
                 >
