@@ -591,11 +591,11 @@ export const PersonalizationFeatures: React.FC = () => {
                   <h4>Basic Information</h4>
                   <div className="form-group">
                     <label>Profile Name</label>
-                    <input type="text" defaultValue="Default Profile" />
+                    <input type="text" defaultValue="Default Profile" aria-label="Profile name" />
                   </div>
                   <div className="form-group">
                     <label>Description</label>
-                    <textarea defaultValue="Standard personalization settings" rows={3}></textarea>
+                    <textarea defaultValue="Standard personalization settings" rows={3} aria-label="Profile description"></textarea>
                   </div>
                   <div className="form-group">
                     <label>Avatar</label>
@@ -744,11 +744,11 @@ export const PersonalizationFeatures: React.FC = () => {
                     </div>
                     <div className="form-group">
                       <label>Opacity</label>
-                      <input type="range" min="0" max="1" step="0.1" defaultValue="0.9" />
+                      <input type="range" min="0" max="1" step="0.1" defaultValue="0.9" aria-label="Brightness control" />
                     </div>
                     <div className="form-group">
                       <label>Blur</label>
-                      <input type="range" min="0" max="50" defaultValue="20" />
+                      <input type="range" min="0" max="50" defaultValue="20" aria-label="Blur control" />
                     </div>
                   </div>
                 </div>

@@ -17,6 +17,7 @@
 .insights-header,
 .health-header {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1.5rem 2rem;
@@ -101,6 +102,7 @@
 .health-tabs {
   display: flex;
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0 2rem;
@@ -190,6 +192,7 @@
 
 .metric-card {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -278,6 +281,7 @@
 /* Activity Timeline */
 .activity-timeline {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -350,6 +354,7 @@
 /* Category Breakdown */
 .category-breakdown {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -424,6 +429,7 @@
 /* App Usage */
 .apps-list {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -528,6 +534,7 @@
 /* Time Distribution */
 .time-distribution {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -595,6 +602,7 @@
 
 .insight-card {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -725,6 +733,7 @@
 
 .detail-card {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -790,6 +799,7 @@
 /* History Charts */
 .history-charts {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -842,6 +852,7 @@
 /* Alerts */
 .alerts-list {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -933,6 +944,7 @@
 /* Optimization Suggestions */
 .optimization-suggestions {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1034,6 +1046,7 @@
 
 .summary-card {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1115,6 +1128,7 @@
 
 .security-score {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1171,6 +1185,7 @@
 
 .security-details {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1223,6 +1238,7 @@
 /* Security Actions */
 .security-actions {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1277,6 +1293,7 @@
 /* Storage Tab */
 .storage-overview {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
@@ -1359,6 +1376,7 @@
 /* Storage Actions */
 .storage-actions {
   background: rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;

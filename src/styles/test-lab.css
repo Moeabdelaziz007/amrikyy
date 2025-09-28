@@ -47,6 +47,7 @@
 
 .stat-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -94,8 +95,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit--webkit-background-clip: text;
-  background-clip: text;
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -144,6 +143,7 @@
 
 .suite-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -314,6 +314,7 @@
 
 .result-item {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
@@ -411,6 +412,7 @@
 
 .create-suite-form {
   background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 15px;

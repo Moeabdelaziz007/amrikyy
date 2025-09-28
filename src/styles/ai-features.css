@@ -84,6 +84,7 @@
 
 .suggestion-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -142,6 +143,7 @@
 
 .insight-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -190,8 +192,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  -webkit--webkit-background-clip: text;
-  background-clip: text;
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -230,6 +230,7 @@
 
 .category-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
@@ -273,6 +274,7 @@
 
 .automation-rule {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -370,6 +372,7 @@
 
 .setting-item {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;

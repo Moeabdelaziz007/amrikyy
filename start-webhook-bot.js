@@ -5,7 +5,7 @@
  */
 
 import dotenv from 'dotenv';
-import { createWebhookTelegramService } from './server/webhook-telegram.js';
+import { createWebhookTelegramService } from './server/webhook-telegram.ts';
 
 dotenv.config();
 

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -704,6 +705,7 @@ export const AITravelAgencyApp: React.FC = () => {
                       ...prev, 
                       startDate: e.target.value ? new Date(e.target.value) : undefined 
                     }))}
+                    aria-label="Trip start date"
                   />
                 </div>
                 <div className="form-group">
@@ -715,6 +717,7 @@ export const AITravelAgencyApp: React.FC = () => {
                       ...prev, 
                       endDate: e.target.value ? new Date(e.target.value) : undefined 
                     }))}
+                    aria-label="Trip end date"
                   />
                 </div>
               </div>
@@ -730,6 +733,7 @@ export const AITravelAgencyApp: React.FC = () => {
                       ...prev, 
                       travelers: parseInt(e.target.value) || 1 
                     }))}
+                    aria-label="Number of travelers"
                   />
                 </div>
                 <div className="form-group">

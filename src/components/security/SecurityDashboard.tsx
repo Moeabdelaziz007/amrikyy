@@ -427,6 +427,7 @@ export const SecurityDashboard: React.FC = () => {
                       type="checkbox"
                       checked={privacySettings.dataSharing}
                       onChange={(e) => handlePrivacySettingChange('dataSharing', e.target.checked)}
+                      aria-label="Enable data sharing"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -441,6 +442,7 @@ export const SecurityDashboard: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={privacySettings.locationServices}
+                      aria-label="Enable location services"
                       onChange={(e) => handlePrivacySettingChange('locationServices', e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
@@ -457,6 +459,7 @@ export const SecurityDashboard: React.FC = () => {
                       type="checkbox"
                       checked={privacySettings.cameraAccess}
                       onChange={(e) => handlePrivacySettingChange('cameraAccess', e.target.checked)}
+                      aria-label="Enable camera access"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -472,6 +475,7 @@ export const SecurityDashboard: React.FC = () => {
                       type="checkbox"
                       checked={privacySettings.microphoneAccess}
                       onChange={(e) => handlePrivacySettingChange('microphoneAccess', e.target.checked)}
+                      aria-label="Enable microphone access"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -487,6 +491,7 @@ export const SecurityDashboard: React.FC = () => {
                       type="checkbox"
                       checked={privacySettings.contactsAccess}
                       onChange={(e) => handlePrivacySettingChange('contactsAccess', e.target.checked)}
+                      aria-label="Enable contacts access"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -502,6 +507,7 @@ export const SecurityDashboard: React.FC = () => {
                       type="checkbox"
                       checked={privacySettings.calendarAccess}
                       onChange={(e) => handlePrivacySettingChange('calendarAccess', e.target.checked)}
+                      aria-label="Enable calendar access"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -521,6 +527,8 @@ export const SecurityDashboard: React.FC = () => {
                     value={privacySettings.dataRetention}
                     onChange={(e) => handlePrivacySettingChange('dataRetention', Number(e.target.value))}
                     className="data-retention-select"
+                    title="Select data retention period"
+                    aria-label="Select data retention period"
                   >
                     <option value={30}>30 days</option>
                     <option value={90}>90 days</option>
@@ -639,6 +647,7 @@ export const SecurityDashboard: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={securitySettings.twoFactorAuth}
+                      aria-label="Enable two-factor authentication"
                       onChange={(e) => handleSecuritySettingChange('twoFactorAuth', e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
@@ -654,6 +663,7 @@ export const SecurityDashboard: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={securitySettings.biometricAuth}
+                      aria-label="Enable biometric authentication"
                       onChange={(e) => handleSecuritySettingChange('biometricAuth', e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
@@ -669,6 +679,7 @@ export const SecurityDashboard: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={securitySettings.dataEncryption}
+                      aria-label="Enable data encryption"
                       onChange={(e) => handleSecuritySettingChange('dataEncryption', e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
@@ -684,6 +695,7 @@ export const SecurityDashboard: React.FC = () => {
                     <input
                       type="checkbox"
                       checked={securitySettings.autoLogout}
+                      aria-label="Enable auto logout"
                       onChange={(e) => handleSecuritySettingChange('autoLogout', e.target.checked)}
                     />
                     <span className="toggle-slider"></span>
@@ -699,6 +711,8 @@ export const SecurityDashboard: React.FC = () => {
                     value={securitySettings.sessionTimeout}
                     onChange={(e) => handleSecuritySettingChange('sessionTimeout', Number(e.target.value))}
                     className="session-timeout-select"
+                    title="Select session timeout"
+                    aria-label="Select session timeout period"
                   >
                     <option value={15}>15 minutes</option>
                     <option value={30}>30 minutes</option>
@@ -714,6 +728,8 @@ export const SecurityDashboard: React.FC = () => {
                   </div>
                   <select 
                     value={securitySettings.passwordComplexity}
+                    title="Select password complexity"
+                    aria-label="Select password complexity level"
                     onChange={(e) => handleSecuritySettingChange('passwordComplexity', e.target.value)}
                     className="password-complexity-select"
                   >

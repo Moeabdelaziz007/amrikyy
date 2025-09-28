@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useUserSettings } from '../../contexts/UserSettingsContext';
 
 // File Manager App
@@ -351,6 +352,8 @@ export const NotesApp: React.FC = () => {
                 value={selectedNote.title}
                 readOnly={!isEditing}
                 onChange={(e) => setSelectedNote({...selectedNote, title: e.target.value})}
+                aria-label="Note title"
+                placeholder="Enter note title"
               />
               <textarea aria-label="Text area" 
                 className="note-content-input"

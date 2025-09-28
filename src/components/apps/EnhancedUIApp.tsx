@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -428,6 +429,7 @@ export const EnhancedUIApp: React.FC = () => {
             <label>Accent Color</label>
             <input
               type="color"
+              aria-label="Accent color picker"
               value={personalization.accentColor}
               onChange={(e) => handlePersonalizationChange('accentColor', e.target.value)}
             />

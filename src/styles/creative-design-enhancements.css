@@ -18,6 +18,7 @@
 .personalization-features .personalization-header,
 .creative-tools .tools-header {
   background: rgba(26, 26, 46, 0.8);
+  -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(59, 130, 246, 0.2);
   padding: 1rem 2rem;

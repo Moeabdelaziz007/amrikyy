@@ -731,6 +731,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.autoOptimize}
                       onChange={(e) => handleSettingChange('autoOptimize', e.target.checked)}
+                      aria-label="Enable automatic system optimization"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -745,6 +746,8 @@ export const SystemOptimizer: React.FC = () => {
                     value={systemSettings.performanceMode}
                     onChange={(e) => handleSettingChange('performanceMode', e.target.value)}
                     className="performance-select"
+                    title="Select performance mode"
+                    aria-label="Select performance mode"
                   >
                     <option value="balanced">Balanced</option>
                     <option value="performance">Performance</option>
@@ -762,6 +765,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.backgroundTasks}
                       onChange={(e) => handleSettingChange('backgroundTasks', e.target.checked)}
+                      aria-label="Enable background optimization tasks"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -777,6 +781,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.autoUpdate}
                       onChange={(e) => handleSettingChange('autoUpdate', e.target.checked)}
+                      aria-label="Enable automatic system updates"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -792,6 +797,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.telemetry}
                       onChange={(e) => handleSettingChange('telemetry', e.target.checked)}
+                      aria-label="Enable telemetry data collection"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -807,6 +813,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.crashReporting}
                       onChange={(e) => handleSettingChange('crashReporting', e.target.checked)}
+                      aria-label="Enable crash reporting"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -822,6 +829,7 @@ export const SystemOptimizer: React.FC = () => {
                       type="checkbox"
                       checked={systemSettings.diagnosticMode}
                       onChange={(e) => handleSettingChange('diagnosticMode', e.target.checked)}
+                      aria-label="Enable diagnostic mode"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -836,6 +844,8 @@ export const SystemOptimizer: React.FC = () => {
                     value={systemSettings.maintenanceSchedule}
                     onChange={(e) => handleSettingChange('maintenanceSchedule', e.target.value)}
                     className="schedule-select"
+                    title="Select maintenance schedule"
+                    aria-label="Select maintenance schedule"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -859,6 +869,7 @@ export const SystemOptimizer: React.FC = () => {
                         value={systemSettings.resourceLimits.cpu}
                         onChange={(e) => handleResourceLimitChange('cpu', parseInt(e.target.value))}
                         className="limit-slider"
+                        aria-label="CPU resource limit"
                       />
                     </div>
                     <div className="limit-item">
@@ -870,6 +881,7 @@ export const SystemOptimizer: React.FC = () => {
                         value={systemSettings.resourceLimits.memory}
                         onChange={(e) => handleResourceLimitChange('memory', parseInt(e.target.value))}
                         className="limit-slider"
+                        aria-label="Memory resource limit"
                       />
                     </div>
                     <div className="limit-item">
@@ -881,6 +893,7 @@ export const SystemOptimizer: React.FC = () => {
                         value={systemSettings.resourceLimits.disk}
                         onChange={(e) => handleResourceLimitChange('disk', parseInt(e.target.value))}
                         className="limit-slider"
+                        aria-label="Disk resource limit"
                       />
                     </div>
                     <div className="limit-item">
@@ -892,6 +905,7 @@ export const SystemOptimizer: React.FC = () => {
                         value={systemSettings.resourceLimits.network}
                         onChange={(e) => handleResourceLimitChange('network', parseInt(e.target.value))}
                         className="limit-slider"
+                        aria-label="Network resource limit"
                       />
                     </div>
                   </div>

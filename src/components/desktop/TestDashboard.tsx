@@ -3,6 +3,7 @@
  * Comprehensive testing interface for all automation features
  */
 
+import React, { useState, useEffect } from 'react';
 import {
   TestTube,
   Play,
@@ -270,6 +271,8 @@ const TestDashboard: React.FC<TestDashboardProps> = ({ onClose }) => {
                 <button
                   onClick={() => runSuiteTests(suite.name)}
                   disabled={isRunning}
+                  title="Run test suite"
+                  aria-label={`Run ${suite.name} test suite`}
                   className="p-2 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors disabled:opacity-50"
                 >
                   <Play className="w-4 h-4" />

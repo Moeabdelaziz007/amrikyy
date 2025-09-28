@@ -463,7 +463,7 @@ export const DataEncryption: React.FC = () => {
                     {showKeys && (
                       <div className="key-value">
                         <code>••••••••••••••••••••••••••••••••</code>
-                        <button className="copy-button">
+                        <button className="copy-button" title="Copy encryption key" aria-label="Copy encryption key to clipboard">
                           <Copy className="w-4 h-4" />
                         </button>
                       </div>
@@ -531,7 +531,7 @@ export const DataEncryption: React.FC = () => {
                         className="decrypt-button"
                         onClick={() => decryptFile(file.id)}
                       >
-                        <Unlock className="w-4 h-4" />
+                        <Lock className="w-4 h-4" />
                         Decrypt
                       </button>
                     ) : (
@@ -543,7 +543,7 @@ export const DataEncryption: React.FC = () => {
                         Encrypt
                       </button>
                     )}
-                    <button className="download-button">
+                    <button className="download-button" title="Download key" aria-label="Download encryption key">
                       <Download className="w-4 h-4" />
                     </button>
                   </div>
@@ -567,6 +567,8 @@ export const DataEncryption: React.FC = () => {
                     value={encryptionSettings.defaultAlgorithm}
                     onChange={(e) => handleSettingChange('defaultAlgorithm', e.target.value)}
                     className="algorithm-select"
+                    title="Select encryption algorithm"
+                    aria-label="Select default encryption algorithm"
                   >
                     <option value="AES-256">AES-256</option>
                     <option value="RSA-2048">RSA-2048</option>
@@ -584,6 +586,8 @@ export const DataEncryption: React.FC = () => {
                     value={encryptionSettings.keyRotation}
                     onChange={(e) => handleSettingChange('keyRotation', Number(e.target.value))}
                     className="rotation-select"
+                    title="Select key rotation period"
+                    aria-label="Select key rotation period"
                   >
                     <option value={30}>30 days</option>
                     <option value={60}>60 days</option>
@@ -603,6 +607,7 @@ export const DataEncryption: React.FC = () => {
                       type="checkbox"
                       checked={encryptionSettings.autoEncrypt}
                       onChange={(e) => handleSettingChange('autoEncrypt', e.target.checked)}
+                      aria-label="Enable automatic encryption"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -618,6 +623,7 @@ export const DataEncryption: React.FC = () => {
                       type="checkbox"
                       checked={encryptionSettings.encryptBackups}
                       onChange={(e) => handleSettingChange('encryptBackups', e.target.checked)}
+                      aria-label="Encrypt backup data"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -633,6 +639,7 @@ export const DataEncryption: React.FC = () => {
                       type="checkbox"
                       checked={encryptionSettings.encryptTransit}
                       onChange={(e) => handleSettingChange('encryptTransit', e.target.checked)}
+                      aria-label="Encrypt data in transit"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -648,6 +655,7 @@ export const DataEncryption: React.FC = () => {
                       type="checkbox"
                       checked={encryptionSettings.encryptAtRest}
                       onChange={(e) => handleSettingChange('encryptAtRest', e.target.checked)}
+                      aria-label="Encrypt data at rest"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -663,6 +671,7 @@ export const DataEncryption: React.FC = () => {
                       type="checkbox"
                       checked={encryptionSettings.zeroKnowledge}
                       onChange={(e) => handleSettingChange('zeroKnowledge', e.target.checked)}
+                      aria-label="Enable zero-knowledge encryption"
                     />
                     <span className="toggle-slider"></span>
                   </label>

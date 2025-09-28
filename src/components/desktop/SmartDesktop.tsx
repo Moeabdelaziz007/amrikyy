@@ -3,6 +3,7 @@
  * Intelligent desktop layout with automation hub
  */
 
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Brain,
   Cpu,
@@ -458,6 +459,8 @@ const SmartDesktop: React.FC<SmartDesktopProps> = ({ onClose }) => {
           <button
             onClick={onClose}
             className="p-2 rounded-full bg-red-500/20 hover:bg-red-500/30 transition-colors text-red-400"
+            title="Close window"
+            aria-label="Close window"
           >
             <XCircle className="w-5 h-5" />
           </button>
@@ -526,6 +529,8 @@ const SmartDesktop: React.FC<SmartDesktopProps> = ({ onClose }) => {
                 className={`p-2 rounded-lg transition-colors ${
                   viewMode === 'grid' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-gray-400 hover:text-white'
                 }`}
+                title="Grid view"
+                aria-label="Switch to grid view"
               >
                 <Grid className="w-4 h-4" />
               </button>
@@ -534,6 +539,8 @@ const SmartDesktop: React.FC<SmartDesktopProps> = ({ onClose }) => {
                 className={`p-2 rounded-lg transition-colors ${
                   viewMode === 'list' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-gray-400 hover:text-white'
                 }`}
+                title="List view"
+                aria-label="Switch to list view"
               >
                 <List className="w-4 h-4" />
               </button>
@@ -542,6 +549,8 @@ const SmartDesktop: React.FC<SmartDesktopProps> = ({ onClose }) => {
                 className={`p-2 rounded-lg transition-colors ${
                   viewMode === 'compact' ? 'bg-blue-500/20 text-blue-400' : 'bg-white/10 text-gray-400 hover:text-white'
                 }`}
+                title="Compact view"
+                aria-label="Switch to compact view"
               >
                 <Layout className="w-4 h-4" />
               </button>

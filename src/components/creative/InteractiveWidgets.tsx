@@ -689,10 +689,10 @@ export const InteractiveWidgets: React.FC = () => {
                         <span>{widget.name}</span>
                       </div>
                       <div className="widget-controls">
-                        <button className="control-button">
+                        <button className="control-button" title="Widget settings" aria-label="Open widget settings">
                           <Settings className="w-3 h-3" />
                         </button>
-                        <button className="control-button">
+                        <button className="control-button" title="Remove widget" aria-label="Remove widget">
                           <XCircle className="w-3 h-3" />
                         </button>
                       </div>

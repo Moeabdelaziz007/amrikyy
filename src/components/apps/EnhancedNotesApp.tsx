@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -172,7 +173,7 @@ export const EnhancedNotesApp: React.FC = () => {
 
   const getAllTags = (): string[] => {
     const allTags = notes.flatMap(note => note.tags);
-    return Array.from(new Set(allTags)).sort();
+    return Array.from(new Set(allTags)).sort() as string[];
   };
 
   const createNewNote = () => {
@@ -552,6 +553,8 @@ export const EnhancedNotesApp: React.FC = () => {
                       key={color}
                       className={`color-btn ${noteColor === color ? 'active' : ''}`}
                       style={{ backgroundColor: color }}
+                      title={`Select ${color} color`}
+                      aria-label={`Select ${color} color for note`}
                       onClick={() => setNoteColor(color)}
                     />
                   ))}

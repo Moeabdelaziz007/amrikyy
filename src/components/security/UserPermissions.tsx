@@ -397,6 +397,8 @@ export const UserPermissions: React.FC = () => {
                   value={filterRole}
                   onChange={(e) => setFilterRole(e.target.value)}
                   className="filter-select"
+                  title="Filter by role"
+                  aria-label="Filter users by role"
                 >
                   <option value="all">All Roles</option>
                   <option value="admin">Admin</option>
@@ -407,6 +409,8 @@ export const UserPermissions: React.FC = () => {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
+                  title="Filter by status"
+                  aria-label="Filter users by status"
                   className="filter-select"
                 >
                   <option value="all">All Status</option>
@@ -458,6 +462,8 @@ export const UserPermissions: React.FC = () => {
                       value={user.role}
                       onChange={(e) => handleRoleChange(user.id, e.target.value)}
                       className="role-select"
+                      title={`Change role for ${user.name}`}
+                      aria-label={`Change role for ${user.name}`}
                     >
                       <option value="admin">Admin</option>
                       <option value="moderator">Moderator</option>
@@ -468,16 +474,18 @@ export const UserPermissions: React.FC = () => {
                       value={user.status}
                       onChange={(e) => handleStatusChange(user.id, e.target.value)}
                       className="status-select"
+                      title={`Change status for ${user.name}`}
+                      aria-label={`Change status for ${user.name}`}
                     >
                       <option value="active">Active</option>
                       <option value="inactive">Inactive</option>
                       <option value="suspended">Suspended</option>
                       <option value="pending">Pending</option>
                     </select>
-                    <button className="action-button small">
+                    <button className="action-button small" title="Edit user" aria-label="Edit user permissions">
                       <Edit className="w-4 h-4" />
                     </button>
-                    <button className="action-button small danger">
+                    <button className="action-button small danger" title="Delete user" aria-label="Delete user">
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>

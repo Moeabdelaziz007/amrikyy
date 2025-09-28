@@ -1121,10 +1121,10 @@ export const CustomWallpaperEngine: React.FC = () => {
                         <span className="wallpaper-category">Nature</span>
                       </div>
                       <div className="time-actions">
-                        <button className="action-button">
+                        <button className="action-button" title="Edit wallpaper" aria-label="Edit wallpaper settings">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" title="Delete wallpaper" aria-label="Delete wallpaper">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -1136,10 +1136,10 @@ export const CustomWallpaperEngine: React.FC = () => {
                         <span className="wallpaper-category">Minimal</span>
                       </div>
                       <div className="time-actions">
-                        <button className="action-button">
+                        <button className="action-button" title="Edit wallpaper" aria-label="Edit wallpaper settings">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" title="Delete wallpaper" aria-label="Delete wallpaper">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -1151,10 +1151,10 @@ export const CustomWallpaperEngine: React.FC = () => {
                         <span className="wallpaper-category">Space</span>
                       </div>
                       <div className="time-actions">
-                        <button className="action-button">
+                        <button className="action-button" title="Edit wallpaper" aria-label="Edit wallpaper settings">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" title="Delete wallpaper" aria-label="Delete wallpaper">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -1166,10 +1166,10 @@ export const CustomWallpaperEngine: React.FC = () => {
                         <span className="wallpaper-category">Space</span>
                       </div>
                       <div className="time-actions">
-                        <button className="action-button">
+                        <button className="action-button" title="Edit wallpaper" aria-label="Edit wallpaper settings">
                           <Edit className="w-4 h-4" />
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" title="Delete wallpaper" aria-label="Delete wallpaper">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>

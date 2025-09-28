@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { 
   collection, 
@@ -493,6 +494,8 @@ export const TaskTemplatesApp: React.FC = () => {
                     <input
                       type="date"
                       value={task.dueDate}
+                      aria-label="Task due date"
+                      placeholder="Select due date"
                       onChange={e => updateTaskInTemplate(index, 'dueDate', e.target.value)}
                     />
                   </div>

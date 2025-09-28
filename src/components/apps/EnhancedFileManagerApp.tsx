@@ -1,4 +1,33 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
+import { ScrollArea } from '../ui/scroll-area';
+import { 
+  Folder, 
+  File, 
+  Upload, 
+  Download, 
+  Trash2, 
+  Edit, 
+  Copy, 
+  Move, 
+  Search, 
+  Grid, 
+  List, 
+  Plus, 
+  MoreHorizontal,
+  Image,
+  FileText,
+  Music,
+  Video,
+  Archive,
+  Code,
+  Database,
+  Settings
+} from 'lucide-react';
 
 interface FileItem {
   id: string;
@@ -8,6 +37,9 @@ interface FileItem {
   modified: Date;
   icon: string;
   color: string;
+  path: string;
+  extension?: string;
+  mimeType?: string;
 }
 
 interface Folder {
@@ -15,6 +47,7 @@ interface Folder {
   name: string;
   files: FileItem[];
   subfolders: Folder[];
+  path: string;
 }
 
 export const EnhancedFileManagerApp: React.FC = () => {
@@ -29,30 +62,391 @@ export const EnhancedFileManagerApp: React.FC = () => {
   const [showUpload, setShowUpload] = useState(false);
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{[key: string]: number}>({});
+  const [contextMenu, setContextMenu] = useState<{x: number, y: number, item: FileItem | null}>({x: 0, y: 0, item: null});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [clipboard, setClipboard] = useState<{action: 'copy' | 'cut', items: FileItem[]} | null>(null);
 
-  // Mock data for demonstration
-  const mockFolders: Folder[] = [
-    {
-      id: 'home',
-      name: 'Home',
-      files: [
-        {
-          id: 'doc1',
-          name: 'Project Proposal.pdf',
-          type: 'file',
-          size: 2048576,
-          modified: new Date('2024-01-15'),
-          icon: '📄',
-          color: 'red'
+  useEffect(() => {
+    loadCurrentFolder();
+  }, [currentPath]);
+
+  const loadCurrentFolder = async () => {
+    setIsLoading(true);
+    try {
+      const path = currentPath.join('/');
+      const response = await fetch(`/api/files?path=${encodeURIComponent(path)}`);
+      const data = await response.json();
+      
+      if (data.folder) {
+        setCurrentFolder(data.folder);
+      } else {
+        // Use mock data if API fails
+        setCurrentFolder(getMockFolder());
+      }
+    } catch (error) {
+      console.error('Failed to load folder:', error);
+      setCurrentFolder(getMockFolder());
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getMockFolder = (): Folder => ({
+    id: 'current',
+    name: currentPath[currentPath.length - 1],
+    path: currentPath.join('/'),
+    files: [
+      {
+        id: 'doc1',
+        name: 'Project Proposal.pdf',
+        type: 'file',
+        size: 2048576,
+        modified: new Date('2024-01-15'),
+        icon: '📄',
+        color: 'red',
+        path: currentPath.join('/') + '/Project Proposal.pdf',
+        extension: 'pdf',
+        mimeType: 'application/pdf'
+      },
+      {
+        id: 'doc2',
+        name: 'Meeting Notes.docx',
+        type: 'file',
+        size: 1536000,
+        modified: new Date('2024-01-14'),
+        icon: '📝',
+        color: 'blue',
+        path: currentPath.join('/') + '/Meeting Notes.docx',
+        extension: 'docx',
+        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      },
+      {
+        id: 'img1',
+        name: 'Screenshot.png',
+        type: 'file',
+        size: 1024000,
+        modified: new Date('2024-01-13'),
+        icon: '🖼️',
+        color: 'green',
+        path: currentPath.join('/') + '/Screenshot.png',
+        extension: 'png',
+        mimeType: 'image/png'
+      },
+      {
+        id: 'video1',
+        name: 'Demo Video.mp4',
+        type: 'file',
+        size: 52428800,
+        modified: new Date('2024-01-12'),
+        icon: '🎥',
+        color: 'purple',
+        path: currentPath.join('/') + '/Demo Video.mp4',
+        extension: 'mp4',
+        mimeType: 'video/mp4'
+      }
+    ],
+    subfolders: [
+      {
+        id: 'folder1',
+        name: 'Documents',
+        path: currentPath.join('/') + '/Documents',
+        files: [],
+        subfolders: []
+      },
+      {
+        id: 'folder2',
+        name: 'Images',
+        path: currentPath.join('/') + '/Images',
+        files: [],
+        subfolders: []
+      },
+      {
+        id: 'folder3',
+        name: 'Videos',
+        path: currentPath.join('/') + '/Videos',
+        files: [],
+        subfolders: []
+      }
+    ]
+  });
+
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const getFileIcon = (file: FileItem) => {
+    const extension = file.extension?.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return <FileText className="w-6 h-6 text-red-500" />;
+      case 'docx':
+      case 'doc':
+        return <FileText className="w-6 h-6 text-blue-500" />;
+      case 'png':
+      case 'jpg':
+      case 'jpeg':
+      case 'gif':
+        return <Image className="w-6 h-6 text-green-500" />;
+      case 'mp4':
+      case 'avi':
+      case 'mov':
+        return <Video className="w-6 h-6 text-purple-500" />;
+      case 'mp3':
+      case 'wav':
+      case 'flac':
+        return <Music className="w-6 h-6 text-yellow-500" />;
+      case 'zip':
+      case 'rar':
+      case '7z':
+        return <Archive className="w-6 h-6 text-orange-500" />;
+      case 'js':
+      case 'ts':
+      case 'jsx':
+      case 'tsx':
+      case 'html':
+      case 'css':
+        return <Code className="w-6 h-6 text-cyan-500" />;
+      case 'sql':
+      case 'db':
+        return <Database className="w-6 h-6 text-indigo-500" />;
+      default:
+        return <File className="w-6 h-6 text-gray-500" />;
+    }
+  };
+
+  const navigateToFolder = (folderName: string) => {
+    setCurrentPath([...currentPath, folderName]);
+    setSelectedItems([]);
+  };
+
+  const navigateUp = () => {
+    if (currentPath.length > 1) {
+      setCurrentPath(currentPath.slice(0, -1));
+      setSelectedItems([]);
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (const file of Array.from(files)) {
+      await uploadFile(file);
+    }
+  };
+
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('path', currentPath.join('/'));
+
+    try {
+      const response = await fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData,
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(prev => ({ ...prev, [file.name]: progress }));
+        }
+      });
+
+      if (response.ok) {
+        setUploadProgress(prev => {
+          const newProgress = { ...prev };
+          delete newProgress[file.name];
+          return newProgress;
+        });
+        loadCurrentFolder();
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+      alert(`Failed to upload ${file.name}`);
+    }
+  };
+
+  const createFolder = async () => {
+    if (!newFolderName.trim()) return;
+
+    try {
+      const response = await fetch('/api/files/folder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        {
-          id: 'doc2',
-          name: 'Meeting Notes.docx',
-          type: 'file',
-          size: 1536000,
-          modified: new Date('2024-01-14'),
-          icon: '📝',
-          color: 'blue'
+        body: JSON.stringify({
+          name: newFolderName,
+          path: currentPath.join('/')
+        })
+      });
+
+      if (response.ok) {
+        setNewFolderName('');
+        setShowCreateFolder(false);
+        loadCurrentFolder();
+      } else {
+        throw new Error('Failed to create folder');
+      }
+    } catch (error) {
+      console.error('Failed to create folder:', error);
+      alert('Failed to create folder');
+    }
+  };
+
+  const deleteItems = async () => {
+    if (selectedItems.length === 0) return;
+    if (!confirm(`Are you sure you want to delete ${selectedItems.length} item(s)?`)) return;
+
+    try {
+      const response = await fetch('/api/files/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: selectedItems,
+          path: currentPath.join('/')
+        })
+      });
+
+      if (response.ok) {
+        setSelectedItems([]);
+        loadCurrentFolder();
+      } else {
+        throw new Error('Failed to delete items');
+      }
+    } catch (error) {
+      console.error('Failed to delete items:', error);
+      alert('Failed to delete items');
+    }
+  };
+
+  const downloadFile = async (file: FileItem) => {
+    try {
+      const response = await fetch(`/api/files/download?path=${encodeURIComponent(file.path)}`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        throw new Error('Download failed');
+      }
+    } catch (error) {
+      console.error('Failed to download file:', error);
+      alert('Failed to download file');
+    }
+  };
+
+  const copyItems = () => {
+    const items = currentFolder?.files.filter(f => selectedItems.includes(f.id)) || [];
+    setClipboard({ action: 'copy', items });
+  };
+
+  const cutItems = () => {
+    const items = currentFolder?.files.filter(f => selectedItems.includes(f.id)) || [];
+    setClipboard({ action: 'cut', items });
+  };
+
+  const pasteItems = async () => {
+    if (!clipboard) return;
+
+    try {
+      const response = await fetch('/api/files/paste', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          items: clipboard.items,
+          action: clipboard.action,
+          destinationPath: currentPath.join('/')
+        })
+      });
+
+      if (response.ok) {
+        setClipboard(null);
+        loadCurrentFolder();
+      } else {
+        throw new Error('Paste failed');
+      }
+    } catch (error) {
+      console.error('Failed to paste items:', error);
+      alert('Failed to paste items');
+    }
+  };
+
+  const renameItem = async (item: FileItem, newName: string) => {
+    try {
+      const response = await fetch('/api/files/rename', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          oldPath: item.path,
+          newName: newName
+        })
+      });
+
+      if (response.ok) {
+        loadCurrentFolder();
+      } else {
+        throw new Error('Rename failed');
+      }
+    } catch (error) {
+      console.error('Failed to rename item:', error);
+      alert('Failed to rename item');
+    }
+  };
+
+  const sortedItems = React.useMemo(() => {
+    if (!currentFolder) return [];
+    
+    const allItems = [...currentFolder.files, ...currentFolder.subfolders];
+    
+    return allItems.sort((a, b) => {
+      let comparison = 0;
+      
+      if (a.type !== b.type) {
+        comparison = a.type === 'folder' ? -1 : 1;
+      } else {
+        switch (sortBy) {
+          case 'name':
+            comparison = a.name.localeCompare(b.name);
+            break;
+          case 'size':
+            comparison = (a.size || 0) - (b.size || 0);
+            break;
+          case 'modified':
+            comparison = new Date(a.modified).getTime() - new Date(b.modified).getTime();
+            break;
+        }
+      }
+      
+      return sortOrder === 'asc' ? comparison : -comparison;
+    });
+  }, [currentFolder, sortBy, sortOrder]);
+
+  const filteredItems = React.useMemo(() => {
+    if (!searchQuery) return sortedItems;
+    
+    return sortedItems.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [sortedItems, searchQuery]);
         },
         {
           id: 'img1',

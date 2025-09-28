@@ -608,6 +608,8 @@ export const CreativeTools: React.FC = () => {
                       <button 
                         className="preview-button"
                         onClick={() => openTool(tool)}
+                        title={`Open ${tool.name}`}
+                        aria-label={`Open ${tool.name} tool`}
                       >
                         <Play className="w-4 h-4" />
                       </button>

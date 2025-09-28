@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useUserSettings } from '../../contexts/UserSettingsContext';
 import { db } from '../../lib/firebase';
@@ -558,6 +559,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                         ...prev,
                         display: { ...prev.display, brightness: parseInt(e.target.value) }
                       }))}
+                      aria-label="Adjust display brightness"
                     />
                   </div>
                   <div className="setting-item">
@@ -571,6 +573,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                         ...prev,
                         display: { ...prev.display, contrast: parseInt(e.target.value) }
                       }))}
+                      aria-label="Adjust display contrast"
                     />
                   </div>
                   <div className="setting-item">
@@ -584,6 +587,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                         ...prev,
                         display: { ...prev.display, scaling: parseInt(e.target.value) }
                       }))}
+                      aria-label="Adjust display scaling"
                     />
                   </div>
                 </div>
@@ -604,6 +608,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="0"
                       max="100"
                       value={systemSettings.audio.masterVolume}
+                      aria-label="Adjust master volume"
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
                         audio: { ...prev.audio, masterVolume: parseInt(e.target.value) }
@@ -617,6 +622,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="0"
                       max="100"
                       value={systemSettings.audio.speakerLevel}
+                      aria-label="Adjust speaker level"
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
                         audio: { ...prev.audio, speakerLevel: parseInt(e.target.value) }
@@ -630,6 +636,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="0"
                       max="100"
                       value={systemSettings.audio.microphoneLevel}
+                      aria-label="Adjust microphone level"
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
                         audio: { ...prev.audio, microphoneLevel: parseInt(e.target.value) }
@@ -889,6 +896,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="5"
                       max="120"
                       value={systemSettings.security.sessionTimeout}
+                      aria-label="Adjust session timeout"
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
                         security: { ...prev.security, sessionTimeout: parseInt(e.target.value) }
@@ -983,6 +991,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="1"
                       max="20"
                       value={systemSettings.performance.backgroundProcesses}
+                      aria-label="Adjust maximum background processes"
                       onChange={(e) => setSystemSettings(prev => ({
                         ...prev,
                         performance: { ...prev.performance, backgroundProcesses: parseInt(e.target.value) }
@@ -1015,12 +1024,13 @@ export const EnhancedSettingsApp: React.FC = () => {
                   </div>
                   <div className="setting-item">
                     <label>Backup Frequency</label>
-                    <select aria-label="Select option" 
+                    <select 
                       value={backupSettings.backupFrequency}
                       onChange={(e) => setBackupSettings(prev => ({
                         ...prev,
                         backupFrequency: e.target.value
                       }))}
+                      aria-label="Select backup frequency"
                     >
                       <option value="hourly">Hourly</option>
                       <option value="daily">Daily</option>
@@ -1035,6 +1045,7 @@ export const EnhancedSettingsApp: React.FC = () => {
                       min="7"
                       max="365"
                       value={backupSettings.retentionDays}
+                      aria-label="Adjust backup retention period"
                       onChange={(e) => setBackupSettings(prev => ({
                         ...prev,
                         retentionDays: parseInt(e.target.value)

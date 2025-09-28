@@ -495,12 +495,12 @@ export const LanguageSelector: React.FC = () => {
                       </button>
                     )}
                     {translation.status === 'needs_review' && (
-                      <button className="review-button">
+                      <button className="review-button" title="Review language settings" aria-label="Review language settings">
                         <Check className="w-4 h-4" />
                         Review
                       </button>
                     )}
-                    <button className="edit-button">
+                    <button className="edit-button" title="Edit language settings" aria-label="Edit language settings">
                       <Settings className="w-4 h-4" />
                       Edit
                     </button>
@@ -525,6 +525,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.defaultLanguage}
                     onChange={(e) => handleSettingChange('defaultLanguage', e.target.value)}
                     className="language-select"
+                    title="Select default language"
+                    aria-label="Select default language"
                   >
                     {languages.map(lang => (
                       <option key={lang.code} value={lang.code}>
@@ -543,6 +545,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.fallbackLanguage}
                     onChange={(e) => handleSettingChange('fallbackLanguage', e.target.value)}
                     className="language-select"
+                    title="Select fallback language"
+                    aria-label="Select fallback language"
                   >
                     {languages.map(lang => (
                       <option key={lang.code} value={lang.code}>
@@ -562,6 +566,7 @@ export const LanguageSelector: React.FC = () => {
                       type="checkbox"
                       checked={languageSettings.autoDetect}
                       onChange={(e) => handleSettingChange('autoDetect', e.target.checked)}
+                      aria-label="Enable automatic language detection"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -577,6 +582,7 @@ export const LanguageSelector: React.FC = () => {
                       type="checkbox"
                       checked={languageSettings.saveUserPreference}
                       onChange={(e) => handleSettingChange('saveUserPreference', e.target.checked)}
+                      aria-label="Save user language preference"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -592,6 +598,7 @@ export const LanguageSelector: React.FC = () => {
                       type="checkbox"
                       checked={languageSettings.showNativeNames}
                       onChange={(e) => handleSettingChange('showNativeNames', e.target.checked)}
+                      aria-label="Show language names in native script"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -607,6 +614,7 @@ export const LanguageSelector: React.FC = () => {
                       type="checkbox"
                       checked={languageSettings.enableRTL}
                       onChange={(e) => handleSettingChange('enableRTL', e.target.checked)}
+                      aria-label="Enable right-to-left language support"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -621,6 +629,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.dateFormat}
                     onChange={(e) => handleSettingChange('dateFormat', e.target.value)}
                     className="format-select"
+                    title="Select date format"
+                    aria-label="Select date format"
                   >
                     <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
                     <option value="DD/MM/YYYY">DD/MM/YYYY (EU)</option>
@@ -637,6 +647,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.timeFormat}
                     onChange={(e) => handleSettingChange('timeFormat', e.target.value)}
                     className="format-select"
+                    title="Select time format"
+                    aria-label="Select time format"
                   >
                     <option value="12h">12-hour (AM/PM)</option>
                     <option value="24h">24-hour</option>
@@ -652,6 +664,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.numberFormat}
                     onChange={(e) => handleSettingChange('numberFormat', e.target.value)}
                     className="format-select"
+                    title="Select number format"
+                    aria-label="Select number format"
                   >
                     <option value="US">US (1,234.56)</option>
                     <option value="EU">EU (1.234,56)</option>
@@ -668,6 +682,8 @@ export const LanguageSelector: React.FC = () => {
                     value={languageSettings.currency}
                     onChange={(e) => handleSettingChange('currency', e.target.value)}
                     className="currency-select"
+                    title="Select currency"
+                    aria-label="Select currency"
                   >
                     <option value="USD">USD ($)</option>
                     <option value="EUR">EUR (€)</option>

@@ -718,6 +718,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.autoDetect}
                       onChange={(e) => handleSettingChange('autoDetect', e.target.checked)}
+                      aria-label="Enable automatic localization detection"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -732,6 +733,8 @@ export const LocalizationManager: React.FC = () => {
                     value={localizationSettings.fallbackLocale}
                     onChange={(e) => handleSettingChange('fallbackLocale', e.target.value)}
                     className="locale-select"
+                    title="Select fallback locale"
+                    aria-label="Select fallback locale"
                   >
                     {locales.map(locale => (
                       <option key={locale.id} value={locale.id}>
@@ -751,6 +754,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableRTL}
                       onChange={(e) => handleSettingChange('enableRTL', e.target.checked)}
+                      aria-label="Enable right-to-left language support"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -766,6 +770,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableCulturalAdaptation}
                       onChange={(e) => handleSettingChange('enableCulturalAdaptation', e.target.checked)}
+                      aria-label="Enable cultural adaptation features"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -781,6 +786,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableRegionalFormatting}
                       onChange={(e) => handleSettingChange('enableRegionalFormatting', e.target.checked)}
+                      aria-label="Enable regional formatting for dates and numbers"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -796,6 +802,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableHolidayCalendar}
                       onChange={(e) => handleSettingChange('enableHolidayCalendar', e.target.checked)}
+                      aria-label="Enable local holiday calendar"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -811,6 +818,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableBusinessHours}
                       onChange={(e) => handleSettingChange('enableBusinessHours', e.target.checked)}
+                      aria-label="Enable local business hours support"
                     />
                     <span className="toggle-slider"></span>
                   </label>
@@ -826,6 +834,7 @@ export const LocalizationManager: React.FC = () => {
                       type="checkbox"
                       checked={localizationSettings.enableSocialNorms}
                       onChange={(e) => handleSettingChange('enableSocialNorms', e.target.checked)}
+                      aria-label="Enable local social norms adaptation"
                     />
                     <span className="toggle-slider"></span>
                   </label>

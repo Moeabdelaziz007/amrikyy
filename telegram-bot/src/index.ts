@@ -125,7 +125,7 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     botInfo: {
-      username: bot.options.username,
+      username: 'auraos-bot',
       isPolling: bot.isPolling()
     }
   });
@@ -160,7 +160,7 @@ app.post('/webhook', async (req, res) => {
       messageId: sentMessage.message_id 
     });
 
-    res.json({
+    return res.json({
       success: true,
       messageId: sentMessage.message_id,
       timestamp: new Date().toISOString()

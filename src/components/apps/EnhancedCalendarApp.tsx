@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { db } from '../../lib/firebase';
 import { 
@@ -691,21 +692,21 @@ export const EnhancedCalendarApp: React.FC = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label>Start Date</label>
-                  <input type="date" />
+                  <input type="date" aria-label="Event start date" />
                 </div>
                 <div className="form-group">
                   <label>Start Time</label>
-                  <input type="time" />
+                  <input type="time" aria-label="Event start time" />
                 </div>
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label>End Date</label>
-                  <input type="date" />
+                  <input type="date" aria-label="Event end date" />
                 </div>
                 <div className="form-group">
                   <label>End Time</label>
-                  <input type="time" />
+                  <input type="time" aria-label="Event end time" />
                 </div>
               </div>
               <div className="form-group">

@@ -296,6 +296,7 @@ export const SoundEffectsManager: React.FC = () => {
               step="0.1"
               value={masterVolume}
               onChange={(e) => setMasterVolume(parseFloat(e.target.value))}
+              aria-label="Master volume control"
             />
           </div>
         </div>
@@ -331,6 +332,7 @@ export const SoundEffectsManager: React.FC = () => {
                   min="0"
                   max="1"
                   step="0.1"
+                  aria-label={`${effect.name} volume control`}
                   value={effect.volume}
                   onChange={(e) => updateEffect(effect.id, { volume: parseFloat(e.target.value) })}
                 />

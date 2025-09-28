@@ -55,6 +55,7 @@
 
 .metric-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -161,6 +162,7 @@
 
 .chart-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -310,6 +312,7 @@
 
 .insight-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -352,6 +355,7 @@
 /* System Status */
 .system-status {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;

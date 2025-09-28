@@ -4,6 +4,7 @@
  * Features: Liquid Glass, Holographic UI, Quantum Desktop, Neural Networks
  */
 
+import React, { useState, useCallback } from 'react';
 import {
   Brain,
   Zap,
@@ -631,6 +632,8 @@ const UltimateDesktop: React.FC<UltimateDesktopProps> = ({ onClose }) => {
               <button
                 onClick={() => setIsPreviewMode(false)}
                 className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors text-white"
+                title="Exit preview mode"
+                aria-label="Exit theme preview mode"
               >
                 <X className="w-4 h-4" />
               </button>

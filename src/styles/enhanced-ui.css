@@ -58,6 +58,7 @@
 
 .theme-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -139,6 +140,7 @@
 
 .wallpaper-card {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -194,6 +196,7 @@
 
 .layout-option {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -271,6 +274,7 @@
 
 .personalization-item {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -309,6 +313,7 @@
 
 .effect-item {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
@@ -333,6 +338,7 @@
 /* Preview Container */
 .preview-container {
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 15px;
