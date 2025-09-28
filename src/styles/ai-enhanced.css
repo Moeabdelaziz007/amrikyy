@@ -1,0 +1,802 @@
+/* AI-Enhanced AuraOS Styles */
+
+/* Import AI theme styles */
+@import './ai-powered-theme.css';
+@import './ai-desktop.css';
+@import './intelligent-automation.css';
+
+/* AI-Enhanced Global Styles */
+:root {
+  /* AI Color Palette */
+  --ai-primary: #00D4FF;
+  --ai-secondary: #7C3AED;
+  --ai-accent: #F59E0B;
+  --ai-background: #0A0A0F;
+  --ai-surface: #1A1A2E;
+  --ai-text: #FFFFFF;
+  --ai-text-secondary: #A1A1AA;
+  --ai-border: #27272A;
+  --ai-success: #10B981;
+  --ai-warning: #F59E0B;
+  --ai-error: #EF4444;
+  --ai-info: #3B82F6;
+  --ai-neural: #7C3AED;
+  --ai-quantum: #EC4899;
+  --ai-cyber: #06B6D4;
+
+  /* AI Gradients */
+  --ai-gradient-primary: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+  --ai-gradient-secondary: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  --ai-gradient-background: linear-gradient(135deg, #0A0A0F 0%, #1A1A2E 100%);
+  --ai-gradient-surface: linear-gradient(135deg, #1A1A2E 0%, #27272A 100%);
+  --ai-gradient-ai: linear-gradient(135deg, #00D4FF 0%, #7C3AED 50%, #EC4899 100%);
+  --ai-gradient-neural: linear-gradient(135deg, #7C3AED 0%, #00D4FF 100%);
+  --ai-gradient-quantum: linear-gradient(135deg, #EC4899 0%, #06B6D4 100%);
+  --ai-gradient-cyber: linear-gradient(135deg, #06B6D4 0%, #00D4FF 100%);
+
+  /* AI Effects */
+  --ai-glow: 0 0 30px rgba(0, 212, 255, 0.5), 0 0 60px rgba(124, 58, 237, 0.3);
+  --ai-pulse: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.2);
+  --ai-matrix: 0 0 25px rgba(16, 185, 129, 0.4), 0 0 50px rgba(16, 185, 129, 0.2);
+  --ai-hologram: 0 0 35px rgba(236, 72, 153, 0.4), 0 0 70px rgba(236, 72, 153, 0.2);
+  --ai-neural: 0 0 40px rgba(124, 58, 237, 0.5), 0 0 80px rgba(124, 58, 237, 0.3);
+  --ai-quantum: 0 0 45px rgba(236, 72, 153, 0.6), 0 0 90px rgba(236, 72, 153, 0.4);
+
+  /* AI Animations */
+  --ai-animation-pulse: ai-pulse 2s ease-in-out infinite alternate;
+  --ai-animation-data-flow: data-flow 3s linear infinite;
+  --ai-animation-neural-network: neural-network 4s ease-in-out infinite;
+  --ai-animation-quantum-field: quantum-field 5s ease-in-out infinite;
+  --ai-animation-cyber-grid: cyber-grid 6s linear infinite;
+}
+
+/* AI-Enhanced Body */
+body {
+  background: var(--ai-gradient-background);
+  color: var(--ai-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* AI-Enhanced App Container */
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: var(--ai-gradient-background);
+  overflow: hidden;
+}
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+  animation: var(--ai-animation-neural-network);
+  z-index: -1;
+}
+
+.app-container::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 40%, rgba(0, 212, 255, 0.03) 50%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(124, 58, 237, 0.03) 50%, transparent 60%);
+  background-size: 20px 20px;
+  animation: var(--ai-animation-cyber-grid);
+  z-index: -1;
+}
+
+/* AI-Enhanced Desktop */
+.desktop {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: var(--ai-gradient-background);
+  overflow: hidden;
+}
+
+/* AI-Enhanced App Grid */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* AI-Enhanced App Categories */
+.app-category {
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-category:hover {
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: var(--ai-glow);
+  transform: translateY(-4px);
+}
+
+.app-category::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ai-gradient-ai);
+  animation: var(--ai-animation-data-flow);
+}
+
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.category-icon {
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.category-title {
+  color: var(--ai-text);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+  background: var(--ai-gradient-ai);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.category-description {
+  color: var(--ai-text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.category-apps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+}
+
+/* AI-Enhanced App Icons */
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.app-icon:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.3);
+  box-shadow: var(--ai-pulse);
+  transform: translateY(-2px);
+}
+
+.app-icon.active {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: var(--ai-primary);
+  box-shadow: var(--ai-glow);
+}
+
+.app-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.app-icon:hover::before {
+  left: 100%;
+}
+
+.app-icon-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  font-size: 1.5rem;
+  transition: all 0.3s;
+}
+
+.app-icon:hover .app-icon-image {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: var(--ai-pulse);
+}
+
+.app-icon-label {
+  color: var(--ai-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* AI-Enhanced Taskbar */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3rem;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 212, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 100;
+  box-shadow: var(--ai-glow);
+}
+
+.taskbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.start-button {
+  background: var(--ai-gradient-primary);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.start-button:hover {
+  box-shadow: var(--ai-glow);
+  transform: translateY(-2px);
+}
+
+.start-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.start-button:hover::before {
+  left: 100%;
+}
+
+.start-icon {
+  font-size: 1.25rem;
+}
+
+.start-text {
+  font-size: 0.875rem;
+}
+
+.taskbar-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.running-apps {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.running-app {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 0.5rem;
+  color: var(--ai-text);
+  font-size: 0.875rem;
+  transition: all 0.3s;
+}
+
+.running-app:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: var(--ai-pulse);
+}
+
+.running-app.active {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: var(--ai-primary);
+  box-shadow: var(--ai-glow);
+}
+
+.app-icon-small {
+  font-size: 1rem;
+}
+
+.app-name {
+  font-weight: 500;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.system-tray {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ai-text-secondary);
+  font-size: 0.875rem;
+}
+
+.tray-item {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: all 0.3s;
+}
+
+.tray-item:hover {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--ai-text);
+}
+
+/* AI-Enhanced App Windows */
+.app-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vh;
+  max-width: 1200px;
+  max-height: 800px;
+  background: rgba(0, 0, 0, 0.9);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: var(--ai-glow);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 212, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.window-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.control-btn {
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.control-btn.close {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--ai-error);
+}
+
+.control-btn.close:hover {
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.control-btn.minimize {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--ai-warning);
+}
+
+.control-btn.minimize:hover {
+  background: rgba(245, 158, 11, 0.3);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.control-btn.maximize {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--ai-success);
+}
+
+.control-btn.maximize:hover {
+  background: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.window-title {
+  color: var(--ai-text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.window-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.app-content {
+  color: var(--ai-text);
+}
+
+.app-content h2 {
+  color: var(--ai-text);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: var(--ai-gradient-ai);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.app-content p {
+  color: var(--ai-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.app-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.feature-card:hover {
+  background: rgba(0, 212, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.2);
+  box-shadow: var(--ai-pulse);
+  transform: translateY(-2px);
+}
+
+.feature-card h3 {
+  color: var(--ai-text);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: var(--ai-text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* AI-Enhanced Animations */
+@keyframes ai-pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes neural-network {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes quantum-field {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes cyber-grid {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    padding: 1rem;
+  }
+  
+  .category-apps {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+  
+  .app-window {
+    width: 90vw;
+    height: 85vh;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  .app-category {
+    padding: 1rem;
+  }
+  
+  .category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .category-apps {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  }
+  
+  .app-icon {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .app-icon-image {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+  }
+  
+  .app-icon-label {
+    font-size: 0.625rem;
+  }
+  
+  .taskbar {
+    height: 2.5rem;
+    padding: 0 0.5rem;
+  }
+  
+  .start-button {
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .start-text {
+    display: none;
+  }
+  
+  .running-app {
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .app-name {
+    display: none;
+  }
+  
+  .app-window {
+    width: 95vw;
+    height: 90vh;
+  }
+  
+  .window-content {
+    padding: 1rem;
+  }
+  
+  .app-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .category-apps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .app-icon {
+    padding: 0.5rem;
+  }
+  
+  .app-icon-image {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+  
+  .app-icon-label {
+    font-size: 0.5rem;
+  }
+  
+  .taskbar {
+    height: 2rem;
+  }
+  
+  .start-button {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .running-app {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .system-tray {
+    font-size: 0.75rem;
+  }
+  
+  .app-window {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .window-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .window-content {
+    padding: 0.75rem;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .app-category,
+  .app-icon,
+  .app-window {
+    border-width: 2px;
+  }
+  
+  .start-button,
+  .running-app {
+    border: 2px solid var(--ai-text);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .app-container::before,
+  .app-container::after,
+  .app-category::before,
+  .app-icon::before,
+  .start-button::before {
+    display: none;
+  }
+  
+  .app-category:hover,
+  .app-icon:hover,
+  .start-button:hover,
+  .running-app:hover,
+  .feature-card:hover {
+    transform: none;
+  }
+  
+  .app-icon,
+  .start-button,
+  .running-app,
+  .feature-card {
+    transition: none;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .taskbar,
+  .app-window {
+    display: none;
+  }
+  
+  .app-grid {
+    position: static;
+    display: block;
+  }
+  
+  .app-category {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+  }
+}
+

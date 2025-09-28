@@ -1,0 +1,593 @@
+/* AuraOS AI-Powered Theme System - Advanced CSS */
+
+/* AI Theme CSS Custom Properties */
+:root {
+  /* AI Colors */
+  --ai-primary: #00D4FF;
+  --ai-secondary: #7C3AED;
+  --ai-accent: #F59E0B;
+  --ai-background: #0A0A0F;
+  --ai-surface: #1A1A2E;
+  --ai-text: #FFFFFF;
+  --ai-text-secondary: #A1A1AA;
+  --ai-border: #27272A;
+  --ai-success: #10B981;
+  --ai-warning: #F59E0B;
+  --ai-error: #EF4444;
+  --ai-info: #3B82F6;
+  --ai-neural: #7C3AED;
+  --ai-quantum: #EC4899;
+  --ai-cyber: #06B6D4;
+
+  /* AI Gradients */
+  --ai-gradient-primary: linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%);
+  --ai-gradient-secondary: linear-gradient(135deg, #F59E0B 0%, #EF4444 100%);
+  --ai-gradient-background: linear-gradient(135deg, #0A0A0F 0%, #1A1A2E 100%);
+  --ai-gradient-surface: linear-gradient(135deg, #1A1A2E 0%, #27272A 100%);
+  --ai-gradient-ai: linear-gradient(135deg, #00D4FF 0%, #7C3AED 50%, #EC4899 100%);
+  --ai-gradient-neural: linear-gradient(135deg, #7C3AED 0%, #00D4FF 100%);
+  --ai-gradient-quantum: linear-gradient(135deg, #EC4899 0%, #06B6D4 100%);
+  --ai-gradient-cyber: linear-gradient(135deg, #06B6D4 0%, #00D4FF 100%);
+
+  /* AI Effects */
+  --ai-glow: 0 0 30px rgba(0, 212, 255, 0.5), 0 0 60px rgba(124, 58, 237, 0.3);
+  --ai-pulse: 0 0 20px rgba(0, 212, 255, 0.4), 0 0 40px rgba(0, 212, 255, 0.2);
+  --ai-matrix: 0 0 25px rgba(16, 185, 129, 0.4), 0 0 50px rgba(16, 185, 129, 0.2);
+  --ai-hologram: 0 0 35px rgba(236, 72, 153, 0.4), 0 0 70px rgba(236, 72, 153, 0.2);
+  --ai-neural: 0 0 40px rgba(124, 58, 237, 0.5), 0 0 80px rgba(124, 58, 237, 0.3);
+  --ai-quantum: 0 0 45px rgba(236, 72, 153, 0.6), 0 0 90px rgba(236, 72, 153, 0.4);
+
+  /* AI Animations */
+  --ai-animation-pulse: ai-pulse 2s ease-in-out infinite alternate;
+  --ai-animation-data-flow: data-flow 3s linear infinite;
+  --ai-animation-neural-network: neural-network 4s ease-in-out infinite;
+  --ai-animation-quantum-field: quantum-field 5s ease-in-out infinite;
+  --ai-animation-cyber-grid: cyber-grid 6s linear infinite;
+}
+
+/* AI Theme Selector */
+.ai-theme-selector-button {
+  background: rgba(0, 212, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: var(--ai-text);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-theme-selector-button:hover {
+  background: rgba(0, 212, 255, 0.2);
+  border-color: rgba(0, 212, 255, 0.4);
+  box-shadow: var(--ai-pulse);
+}
+
+.ai-theme-selector-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.ai-theme-selector-button:hover::before {
+  left: 100%;
+}
+
+.ai-status-indicator {
+  position: relative;
+  width: 8px;
+  height: 8px;
+}
+
+.ai-pulse-dot {
+  width: 100%;
+  height: 100%;
+  background: var(--ai-primary);
+  border-radius: 50%;
+  animation: var(--ai-animation-pulse);
+  box-shadow: var(--ai-pulse);
+}
+
+/* AI Theme Modal */
+.ai-theme-modal {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  width: 24rem;
+  background: rgba(0, 0, 0, 0.95);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: var(--ai-glow);
+  padding: 1.5rem;
+  z-index: 50;
+  animation: ai-modal-enter 0.3s ease-out;
+}
+
+@keyframes ai-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ai-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.ai-close-button {
+  background: none;
+  border: none;
+  color: var(--ai-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.ai-close-button:hover {
+  color: var(--ai-text);
+  background: rgba(0, 212, 255, 0.1);
+}
+
+/* AI Status Panel */
+.ai-status-panel {
+  background: rgba(0, 212, 255, 0.05);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-status-title {
+  color: var(--ai-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ai-status-title::before {
+  content: '⚡';
+  color: var(--ai-primary);
+}
+
+.ai-status-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.ai-status-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--ai-text-secondary);
+}
+
+.ai-status-badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ai-status-badge.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--ai-success);
+}
+
+.ai-status-badge.processing {
+  background: rgba(245, 158, 11, 0.2);
+  color: var(--ai-warning);
+}
+
+.ai-status-badge.monitoring {
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--ai-info);
+}
+
+.ai-status-badge.optimal {
+  background: rgba(0, 212, 255, 0.2);
+  color: var(--ai-primary);
+}
+
+/* AI Theme Grid */
+.ai-theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.ai-theme-card {
+  background: rgba(0, 212, 255, 0.05);
+  border: 2px solid rgba(0, 212, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-theme-card:hover {
+  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(0, 212, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--ai-pulse);
+}
+
+.ai-theme-card.selected {
+  border-color: var(--ai-primary);
+  background: rgba(0, 212, 255, 0.15);
+  box-shadow: var(--ai-glow);
+}
+
+.ai-theme-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.ai-theme-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--ai-primary);
+}
+
+.ai-theme-title {
+  color: var(--ai-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.ai-theme-description {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+/* AI Color Matrix */
+.ai-color-matrix {
+  margin-bottom: 0.5rem;
+}
+
+.ai-color-row {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.ai-color-cell {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s;
+}
+
+.ai-color-cell:hover {
+  transform: scale(1.2);
+}
+
+.ai-selected-indicator {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: var(--ai-primary);
+  animation: var(--ai-animation-pulse);
+}
+
+/* AI Features Preview */
+.ai-features-preview {
+  background: rgba(124, 58, 237, 0.05);
+  border: 1px solid rgba(124, 58, 237, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.ai-features-title {
+  color: var(--ai-text);
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ai-features-title::before {
+  content: '🧠';
+  color: var(--ai-neural);
+}
+
+.ai-features-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.ai-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--ai-text-secondary);
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+}
+
+.ai-feature-item:hover {
+  background: rgba(124, 58, 237, 0.1);
+  color: var(--ai-text);
+}
+
+/* AI-Powered Components */
+.ai-card {
+  background: var(--ai-gradient-surface);
+  border: 1px solid var(--ai-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--ai-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ai-gradient-ai);
+  animation: var(--ai-animation-data-flow);
+}
+
+.ai-button {
+  background: var(--ai-gradient-primary);
+  color: var(--ai-text);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-button:hover {
+  box-shadow: var(--ai-glow);
+  transform: translateY(-2px);
+}
+
+.ai-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.ai-button:hover::before {
+  left: 100%;
+}
+
+.ai-input {
+  background: rgba(0, 212, 255, 0.05);
+  border: 2px solid rgba(0, 212, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--ai-text);
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+.ai-input:focus {
+  outline: none;
+  border-color: var(--ai-primary);
+  box-shadow: var(--ai-pulse);
+  background: rgba(0, 212, 255, 0.1);
+}
+
+.ai-input::placeholder {
+  color: var(--ai-text-secondary);
+}
+
+/* AI Animations */
+@keyframes ai-pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes data-flow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes neural-network {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes quantum-field {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes cyber-grid {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+/* AI Desktop Background Effects */
+.ai-desktop-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--ai-gradient-background);
+  z-index: -1;
+}
+
+.ai-desktop-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+  animation: var(--ai-animation-neural-network);
+}
+
+.ai-desktop-background::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(45deg, transparent 40%, rgba(0, 212, 255, 0.03) 50%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(124, 58, 237, 0.03) 50%, transparent 60%);
+  background-size: 20px 20px;
+  animation: var(--ai-animation-cyber-grid);
+}
+
+/* AI Status Indicators */
+.ai-status-online {
+  color: var(--ai-success);
+  animation: var(--ai-animation-pulse);
+}
+
+.ai-status-processing {
+  color: var(--ai-warning);
+  animation: var(--ai-animation-pulse);
+}
+
+.ai-status-error {
+  color: var(--ai-error);
+  animation: var(--ai-animation-pulse);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ai-theme-modal {
+    width: 20rem;
+    padding: 1rem;
+  }
+  
+  .ai-theme-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ai-status-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ai-features-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .ai-theme-selector-button {
+    border-width: 2px;
+  }
+  
+  .ai-theme-card {
+    border-width: 3px;
+  }
+  
+  .ai-button {
+    border: 2px solid var(--ai-text);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .ai-theme-selector-button::before,
+  .ai-button::before {
+    display: none;
+  }
+  
+  .ai-pulse-dot,
+  .ai-selected-indicator {
+    animation: none;
+  }
+  
+  .ai-desktop-background::before,
+  .ai-desktop-background::after {
+    animation: none;
+  }
+}

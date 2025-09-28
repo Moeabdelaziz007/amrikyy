@@ -2,6 +2,7 @@ import React from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { UserSettingsProvider } from './contexts/UserSettingsContext';
 import LoginScreen from './components/auth/LoginScreen';
+import './styles/ai-enhanced.css';
 import { 
   FileManagerApp, 
   WeatherApp, 
@@ -9,6 +10,9 @@ import {
   CalendarApp, 
   NotesApp 
 } from './components/apps/AdvancedApps';
+import ProductivitySuite from './apps/ProductivitySuite';
+import AIFinanceManager from './apps/AIFinanceManager';
+import HealthTracker from './apps/HealthTracker';
 import { EnhancedSettingsApp } from './components/apps/EnhancedSettingsApp';
 import { EnhancedFileManagerApp } from './components/apps/EnhancedFileManagerApp';
 import { EnhancedWeatherApp } from './components/apps/EnhancedWeatherApp';
@@ -34,7 +38,11 @@ import { UltimateApp } from './components/apps/UltimateApp';
 import { FirestoreTestApp } from './components/apps/FirestoreTestApp';
 import { SoundEffectsManager } from './components/ui/SoundEffectsManager';
 import { SmartAutomationSystem } from './components/ai/SmartAutomationSystem';
-import { AdvancedThemeSelector } from './components/ui/AdvancedThemeSelector';
+import { ThemeProvider, AdvancedThemeSelector } from './themes/AdvancedThemeSystem';
+import { AIPoweredThemeSelector } from './themes/AIPoweredTheme';
+import AIPoweredDesktop from './components/ai/AIPoweredDesktop';
+import IntelligentAutomationEngine from './components/ai/IntelligentAutomationEngine';
+import { Rocket, DollarSign, Heart } from 'lucide-react';
 import { MobileOptimizationProvider } from './components/mobile/PWAInstallManager';
 import { MobileAppLauncher, MobileWindowManager } from './components/mobile/TouchGestureManager';
 import { IntegrationManager } from './components/integration/IntegrationManager';
@@ -146,6 +154,9 @@ const DesktopApp: React.FC = () => {
   // Apps configuration organized by categories with creative icons
   const apps = [
     // Core Productivity Apps (Top Row)
+    { id: 'productivity', name: 'Productivity Suite', icon: '🚀', color: 'blue', component: ProductivitySuite, category: 'productivity' },
+    { id: 'finance', name: 'AI Finance Manager', icon: '💰', color: 'green', component: AIFinanceManager, category: 'productivity' },
+    { id: 'health', name: 'Health Tracker', icon: '❤️', color: 'red', component: HealthTracker, category: 'productivity' },
     { id: 'dashboard', name: 'Dashboard', icon: '🎯', color: 'blue', component: AnalyticsDashboardApp, category: 'productivity' },
     { id: 'tasks', name: 'Tasks', icon: '⚡', color: 'purple', component: TaskManagementApp, category: 'productivity' },
     { id: 'calendar', name: 'Calendar', icon: '🗓️', color: 'red', component: EnhancedCalendarApp, category: 'productivity' },
@@ -192,6 +203,8 @@ const DesktopApp: React.FC = () => {
         { id: 'ai-assistant', name: 'AI Assistant', icon: '🤖', color: 'purple', component: AIAssistant, category: 'ai' },
         { id: 'intelligent-tasks', name: 'Smart Tasks', icon: '🎯', color: 'green', component: IntelligentTaskManager, category: 'ai' },
         { id: 'voice-commands', name: 'Voice Control', icon: '🎤', color: 'blue', component: VoiceCommandSystem, category: 'ai' },
+        { id: 'ai-powered-desktop', name: 'AI Desktop', icon: '🧠', color: 'cyan', component: AIPoweredDesktop, category: 'ai' },
+        { id: 'intelligent-automation', name: 'Smart Automation', icon: '⚡', color: 'orange', component: IntelligentAutomationEngine, category: 'ai' },
 
         // Analytics & Insights (Ninth Row)
         { id: 'analytics-dashboard', name: 'Analytics', icon: '📊', color: 'blue', component: AnalyticsDashboard, category: 'analytics' },
@@ -304,6 +317,7 @@ const DesktopApp: React.FC = () => {
               </div>
               <div className="status-right">
                 <div className="quick-actions">
+                  <AdvancedThemeSelector />
                   <button className="action-btn" title="Settings">⚙️</button>
                   <button className="action-btn" title="Notifications">🔔</button>
                   <div className="user-profile">
@@ -618,11 +632,13 @@ function App() {
 // App with Auth Provider
 function AppWithAuth() {
   return (
-    <AuthProvider>
-      <UserSettingsProvider>
-        <App />
-      </UserSettingsProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <UserSettingsProvider>
+          <App />
+        </UserSettingsProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
