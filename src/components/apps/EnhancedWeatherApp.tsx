@@ -246,7 +246,7 @@ export const EnhancedWeatherApp: React.FC = () => {
     }
   };
 
-  const searchLocation = async () => {
+  const handleSearchLocation = async () => {
     if (!searchLocation.trim()) return;
     
     setIsSearching(true);
@@ -420,14 +420,14 @@ export const EnhancedWeatherApp: React.FC = () => {
               <Input
                 value={searchLocation}
                 onChange={(e) => setSearchLocation(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && searchLocation()}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearchLocation()}
                 placeholder="Search for a city..."
                 className="pl-10 bg-white/5 border-white/20 text-white placeholder-gray-400"
                 disabled={isSearching}
               />
             </div>
             <Button
-              onClick={searchLocation}
+              onClick={handleSearchLocation}
               disabled={!searchLocation.trim() || isSearching}
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >

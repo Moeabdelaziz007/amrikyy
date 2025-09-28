@@ -97,26 +97,26 @@ export const EnhancedFileManagerApp: React.FC = () => {
     id: 'current',
     name: currentPath[currentPath.length - 1],
     path: currentPath.join('/'),
-    files: [
-      {
-        id: 'doc1',
-        name: 'Project Proposal.pdf',
-        type: 'file',
-        size: 2048576,
-        modified: new Date('2024-01-15'),
-        icon: '📄',
+      files: [
+        {
+          id: 'doc1',
+          name: 'Project Proposal.pdf',
+          type: 'file',
+          size: 2048576,
+          modified: new Date('2024-01-15'),
+          icon: '📄',
         color: 'red',
         path: currentPath.join('/') + '/Project Proposal.pdf',
         extension: 'pdf',
         mimeType: 'application/pdf'
-      },
-      {
-        id: 'doc2',
-        name: 'Meeting Notes.docx',
-        type: 'file',
-        size: 1536000,
-        modified: new Date('2024-01-14'),
-        icon: '📝',
+        },
+        {
+          id: 'doc2',
+          name: 'Meeting Notes.docx',
+          type: 'file',
+          size: 1536000,
+          modified: new Date('2024-01-14'),
+          icon: '📝',
         color: 'blue',
         path: currentPath.join('/') + '/Meeting Notes.docx',
         extension: 'docx',
@@ -447,20 +447,18 @@ export const EnhancedFileManagerApp: React.FC = () => {
       item.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }, [sortedItems, searchQuery]);
-        },
-        {
-          id: 'img1',
-          name: 'Screenshot.png',
-          type: 'file',
-          size: 5242880,
-          modified: new Date('2024-01-13'),
-          icon: '🖼️',
-          color: 'green'
-        }
-      ],
-      subfolders: [
-        {
-          id: 'documents',
+
+  const navigateToFolder = (folderName: string) => {
+    setCurrentPath(prev => [...prev, folderName]);
+    setSelectedItems([]);
+  };
+
+  const navigateBack = () => {
+    if (currentPath.length > 1) {
+      setCurrentPath(prev => prev.slice(0, -1));
+      setSelectedItems([]);
+    }
+  };
           name: 'Documents',
           files: [
             {
