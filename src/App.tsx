@@ -53,9 +53,11 @@ import { EnhancedRealtimeSyncManager } from './components/apps/EnhancedRealtimeS
 import { CloudStorageManager } from './components/integration/CloudStorageManager';
 import { EnhancedCloudStorageManager } from './components/apps/EnhancedCloudStorageManager';
 import { AIAssistant } from './components/ai/AIAssistant';
+import { EnhancedAIAssistant } from './components/apps/EnhancedAIAssistant';
 import { IntelligentTaskManager } from './components/ai/IntelligentTaskManager';
 import { VoiceCommandSystem } from './components/ai/VoiceCommandSystem';
 import { AnalyticsDashboard } from './components/analytics/AnalyticsDashboard';
+import { EnhancedAnalyticsDashboard } from './components/apps/EnhancedAnalyticsDashboard';
 import { PerformanceMonitor } from './components/analytics/PerformanceMonitor';
 import { UsageStatistics } from './components/analytics/UsageStatistics';
 import { ProductivityInsights } from './components/analytics/ProductivityInsights';
@@ -205,14 +207,14 @@ const DesktopApp: React.FC = () => {
     { id: 'cloud-storage', name: 'Cloud Storage', icon: '☁️', color: 'cyan', component: EnhancedCloudStorageManager, category: 'integration' },
 
         // AI-Powered Features (Eighth Row)
-        { id: 'ai-assistant', name: 'AI Assistant', icon: '🤖', color: 'purple', component: AIAssistant, category: 'ai' },
+        { id: 'ai-assistant', name: 'AI Assistant', icon: '🤖', color: 'purple', component: EnhancedAIAssistant, category: 'ai' },
         { id: 'intelligent-tasks', name: 'Smart Tasks', icon: '🎯', color: 'green', component: IntelligentTaskManager, category: 'ai' },
         { id: 'voice-commands', name: 'Voice Control', icon: '🎤', color: 'blue', component: VoiceCommandSystem, category: 'ai' },
         { id: 'ai-powered-desktop', name: 'AI Desktop', icon: '🧠', color: 'cyan', component: AIPoweredDesktop, category: 'ai' },
         { id: 'intelligent-automation', name: 'Smart Automation', icon: '⚡', color: 'orange', component: IntelligentAutomationEngine, category: 'ai' },
 
         // Analytics & Insights (Ninth Row)
-        { id: 'analytics-dashboard', name: 'Analytics', icon: '📊', color: 'blue', component: AnalyticsDashboard, category: 'analytics' },
+        { id: 'analytics-dashboard', name: 'Analytics', icon: '📊', color: 'blue', component: EnhancedAnalyticsDashboard, category: 'analytics' },
         { id: 'performance-monitor', name: 'Performance', icon: '⚡', color: 'green', component: PerformanceMonitor, category: 'analytics' },
         { id: 'usage-statistics', name: 'Usage Stats', icon: '📈', color: 'purple', component: UsageStatistics, category: 'analytics' },
         { id: 'productivity-insights', name: 'Productivity', icon: '🧠', color: 'cyan', component: ProductivityInsights, category: 'analytics' },
