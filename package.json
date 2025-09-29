@@ -28,7 +28,6 @@
   "author": "AuraOS Team",
   "license": "MIT",
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
     "@tailwindcss/typography": "^0.5.19",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
@@ -43,12 +42,18 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^20.10.5",
+    "@types/react": "^19.1.15",
+    "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.21",
     "concurrently": "^8.2.2",
     "eslint": "^8.56.0",
     "nodemon": "^3.0.2",
-    "typescript": "^5.3.3",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
     "vite": "^5.0.8"
   },
   "engines": {
