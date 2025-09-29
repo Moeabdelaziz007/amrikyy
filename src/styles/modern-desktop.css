@@ -112,21 +112,22 @@
 }
 
 .system-status-bar, .taskbar {
-  background: rgba(255,255,255,0.7);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  border-radius: 24px;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.06);
+  background: rgba(240, 240, 240, 0.6); /* Lighter background for more contrast */
+  -webkit-backdrop-filter: blur(20px); /* Stronger blur */
+  backdrop-filter: blur(20px);
+  border-radius: 16px; /* Slightly smaller radius for a sharper look */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1); /* Softer, more pronounced shadow */
   margin: 12px 24px;
-  padding: 8px 24px;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.system-logo, .category-icon, .app-icon-image {
-  background: linear-gradient(135deg, #e0e7ff 0%, #fff 100%);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+.system-logo, .category-icon {
+  background: transparent;
+  border-radius: 12px; /* Squircle shape */
+  box-shadow: none;
   width: 48px;
   height: 48px;
   display: flex;
@@ -137,10 +138,10 @@
 }
 
 .app-icon {
-  border-radius: 24px;
-  background: rgba(255,255,255,0.8);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  padding: 12px 8px 8px 8px;
+  border-radius: 18px; /* More rounded, iOS-like */
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 12px;
   margin: 8px;
   transition: box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
@@ -150,15 +151,16 @@
 }
 
 .app-icon.active, .app-icon:hover {
-  box-shadow: 0 6px 24px rgba(0,122,255,0.18);
-  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(0, 122, 255, 0.2);
+  transform: translateY(-5px) scale(1.05);
 }
 
 .app-icon-label {
-  font-size: 1rem;
-  margin-top: 6px;
-  color: #222;
+  font-size: 0.85rem; /* Smaller font for a cleaner look */
+  margin-top: 8px;
+  color: #333;
   font-weight: 500;
+  text-align: center;
 }
 
 .organized-desktop-apps {
@@ -182,6 +184,56 @@
 .category-header { display: flex; align-items: center; margin-bottom: 12px; }
 .category-title { font-size: 1.2rem; font-weight: 700; color: #007aff; margin: 0; }
 .category-description { font-size: 0.95rem; color: #888; margin: 0; }
+
+/* App Window Styles */
+.app-window {
+  background: rgba(250, 250, 250, 0.75);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(200, 200, 200, 0.3);
+}
+
+.window-title {
+  font-weight: 600;
+  color: #333;
+}
+
+.window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.control-btn.close { background-color: #ff5f56; }
+.control-btn.minimize { background-color: #ffbd2e; }
+.control-btn.maximize { background-color: #27c93f; }
+
+.window-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
 
 /* Chat window glassmorphism */
 .chat-container {
