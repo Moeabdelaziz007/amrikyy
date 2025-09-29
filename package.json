@@ -4,8 +4,10 @@
   "description": "Complete AuraOS Telegram Bot System with AI, Automation, and Monitoring",
   "main": "unified-telegram-bot.js",
   "scripts": {
-    "start": "node unified-telegram-bot.js",
-    "dev": "nodemon unified-telegram-bot.js",
+    "start": "npm run start:frontend",
+    "start:frontend": "vite",
+    "start:backend": "cd backend && npm run dev",
+    "dev": "concurrently \"npm:start:frontend\" \"npm:start:backend\"",
     "test": "node telegram-test-suite.js",
     "dashboard": "node telegram-bot-dashboard.js",
     "deploy": "firebase deploy",
@@ -40,18 +42,13 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
-    "@types/node": "^20.10.5",
-    "@types/react": "^19.1.15",
-    "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "^10.4.21",
-    "eslint": "^8.56.0",
     "nodemon": "^3.0.2",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.13",
+    "vite": "^5.0.8",
+    "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "@types/node": "^20.10.5",
+    "eslint": "^8.56.0",
+    "concurrently": "^8.2.2"
   },
   "engines": {
     "node": ">=18.0.0"
