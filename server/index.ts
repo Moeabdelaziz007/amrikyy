@@ -51,9 +51,9 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// API Routes
-app.use('/api/v1', automationRoutes);
+// API Routes (mount AI first to avoid catch-all/guards in automation routes)
 app.use('/api/v1/ai', aiRoutes);
+app.use('/api/v1', automationRoutes);
 
 // Error handling middleware
 app.use(
