@@ -48,6 +48,24 @@ services:
     depends_on:
       - prometheus
 
+  # Database (pgvector)
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: auraos-postgres
+    environment:
+      - POSTGRES_DB=auraos_automation
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d auraos_automation"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   # Node Exporter for system metrics
   node-exporter:
     image: prom/node-exporter:v1.6.1
@@ -116,6 +134,19 @@ services:
       - ./services/templates/ide-agent:/app
     command: ["python", "run.py"]
 
+  # AI Orchestrator
+  ai-orchestrator:
+    build:
+      context: ./services/ai-orchestrator
+    container_name: auraos-ai-orchestrator
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/auraos_automation
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   # Development Services
   nginx:
     image: nginx:alpine
@@ -135,6 +166,7 @@ volumes:
   redis_data:
   prometheus_data:
   grafana_data:
+  pg_data:
 
 networks:
   default:

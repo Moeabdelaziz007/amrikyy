@@ -7,6 +7,7 @@ import { config } from 'dotenv';
 import { createServer } from 'http';
 import { dbManager } from './api/automation/database';
 import automationRoutes from './api/automation/routes';
+import aiRoutes from './routes/ai';
 import {
   initializeWebSocketServer,
   getWebSocketServer,
@@ -52,6 +53,7 @@ app.get('/health', async (req, res) => {
 
 // API Routes
 app.use('/api/v1', automationRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // Error handling middleware
 app.use(
