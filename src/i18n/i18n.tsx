@@ -1,5 +1,4 @@
-npm install
-npm startimport React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Supported languages
 const LANGS = ['en', 'ar'] as const;

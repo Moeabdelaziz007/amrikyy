@@ -116,11 +116,15 @@
 /* Base Styles */
 @layer base {
   * {
-    @apply border-border;
+    @apply border;
   }
 
   body {
-    @apply text-foreground font-sans antialiased;
+    /* Avoid Tailwind @apply font-sans in PostCSS pipeline */
+    font-family: var(--font-sans), system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: hsl(var(--foreground));
     background: var(--gradient-background);
     background-attachment: fixed;
     overflow-x: hidden;
@@ -214,10 +218,7 @@
     scroll-behavior: smooth;
   }
 
-  /* Dark mode by default */
-  html {
-    @apply dark;
-  }
+  /* Dark mode preference is controlled by adding/removing the 'dark' class on <html> in JS */
 }
 
 /* Component Layer */
@@ -229,11 +230,17 @@
 @layer utilities {
   /* Text gradients */
   .text-gradient {
-    @apply bg-gradient-primary bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   .text-gradient-accent {
-    @apply bg-gradient-accent bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   /* Animations */
@@ -251,7 +258,13 @@
 
   /* Responsive utilities */
   .container-cyberpunk {
-    @apply container mx-auto px-4 sm:px-6 lg:px-8;
+    /* Avoid responsive variants in @apply with Tailwind v4 */
+    width: 100%;
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* ~px-4 */
+    padding-right: 1rem;
   }
 
   /* Accessibility utilities */

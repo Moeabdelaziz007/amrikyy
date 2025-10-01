@@ -182,6 +182,15 @@ exports.default = {
         },
         '.border-border\/50': {
           'border-color': 'hsl(var(--border) / 0.5)'
+        },
+        '.text-foreground': {
+          'color': 'hsl(var(--foreground) / 1)'
+        },
+        '.bg-gradient-primary': {
+          'background-image': 'var(--gradient-primary)'
+        },
+        '.bg-gradient-accent': {
+          'background-image': 'var(--gradient-accent)'
         }
       };
       addUtilities(newUtilities, ['responsive']);

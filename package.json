@@ -28,7 +28,10 @@
   "author": "AuraOS Team",
   "license": "MIT",
   "dependencies": {
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/typography": "^0.5.19",
+    "class-variance-authority": "^0.7.1",
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^4.18.2",
@@ -39,6 +42,7 @@
     "node-telegram-bot-api": "^0.66.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
