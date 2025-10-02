@@ -1,0 +1,209 @@
+/**
+ * Liquid Intelligence UI System
+ * 
+ * Advanced, fluid, motion-driven design system inspired by iOS
+ * but powered by AI and physics-based animations.
+ */
+
+/* ============================================================================
+   WINDOW SYSTEM - Liquid Windows
+   ============================================================================ */
+
+.aura-window {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  background: rgba(26, 31, 46, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aura-window.glow-astro {
+  box-shadow: 
+    0 0 40px rgba(0, 246, 255, 0.4),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+  border-color: rgba(0, 246, 255, 0.3);
+}
+
+.aura-window.window-unfocused {
+  opacity: 0.7;
+  backdrop-filter: blur(20px);
+  transform: scale(0.98);
+}
+
+.aura-window__titlebar {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  user-select: none;
+}
+
+.aura-window__content {
+  background: rgba(10, 15, 30, 0.4);
+}
+
+/* ============================================================================
+   DESKTOP MODES - Adaptive System
+   ============================================================================ */
+
+.desktop-work-mode {
+  background: linear-gradient(135deg, #0a0f1e 0%, #1a1f2e 100%);
+}
+
+.desktop-work-mode .aura-window {
+  border-color: rgba(0, 246, 255, 0.2);
+}
+
+.desktop-creative-mode {
+  background: linear-gradient(135deg, #1e0a1e 0%, #2e1a2e 100%);
+}
+
+.desktop-creative-mode .aura-window {
+  border-color: rgba(255, 0, 244, 0.2);
+}
+
+.desktop-relax-mode {
+  background: linear-gradient(135deg, #0a1e1e 0%, #1a2e2e 100%);
+}
+
+.desktop-relax-mode .aura-window {
+  border-color: rgba(0, 255, 136, 0.2);
+}
+
+/* ============================================================================
+   ANIMATIONS - Physics-based Motion
+   ============================================================================ */
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============================================================================
+   GLASS EFFECTS - Enhanced Glassmorphism
+   ============================================================================ */
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================================================
+   GLOW EFFECTS - Astro Theme
+   ============================================================================ */
+
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 246, 255, 0.5);
+}
+
+.glow-magenta {
+  box-shadow: 0 0 20px rgba(255, 0, 244, 0.5);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+}
+
+/* ============================================================================
+   RESPONSIVE - Fluid Scaling
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .aura-window {
+    border-radius: 12px;
+  }
+  
+  .aura-window__titlebar {
+    padding: 0.5rem;
+  }
+}
+
+/* ============================================================================
+   TASKBAR - Minimized Windows
+   ============================================================================ */
+
+.taskbar {
+  backdrop-filter: blur(20px);
+  background: rgba(26, 31, 46, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-item {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.taskbar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 246, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 246, 255, 0.3);
+}
+
+/* ============================================================================
+   RESIZE CURSORS - Enhanced Visibility
+   ============================================================================ */
+
+.cursor-se-resize { cursor: se-resize !important; }
+.cursor-sw-resize { cursor: sw-resize !important; }
+.cursor-ne-resize { cursor: ne-resize !important; }
+.cursor-nw-resize { cursor: nw-resize !important; }
+.cursor-s-resize { cursor: s-resize !important; }
+.cursor-n-resize { cursor: n-resize !important; }
+.cursor-e-resize { cursor: e-resize !important; }
+.cursor-w-resize { cursor: w-resize !important; }
+
+/* ============================================================================
+   ACCESSIBILITY - Motion Preferences
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-window,
+  .aura-window.window-unfocused {
+    transition: none;
+    animation: none;
+  }
+  
+  .animate-shimmer,
+  .animate-float {
+    animation: none;
+  }
+}

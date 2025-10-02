@@ -1,5 +1,6 @@
 import React from 'react';
 import './styles/minimal.css';
+import './styles/liquid-intelligence.css';
 import { I18nProvider } from './i18n/i18n';
 import { ThemeProvider } from './themes/AdvancedThemeSystem';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
