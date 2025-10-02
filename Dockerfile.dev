@@ -8,34 +8,15 @@ WORKDIR /workspace
 RUN apk add --no-cache \
     git \
     curl \
-    python3 \
-    make \
-    g++ \
+    bash \
     && rm -rf /var/cache/apk/*
-
-# Copy package files
-COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --only=production=false
-
-# Copy source code
-COPY . .
 
 # Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Change ownership
-RUN chown -R nodejs:nodejs /workspace
-USER nodejs
+# Expose Vite port
+EXPOSE 5173
 
-# Expose ports
-EXPOSE 3000 3001 3002
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000 || exit 1
-
-# Default command
-CMD ["npm", "run", "dev"]
+# Default command (will be overridden by docker-compose)
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
