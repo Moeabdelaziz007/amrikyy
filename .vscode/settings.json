@@ -1,0 +1,98 @@
+{
+  // Disable Dev Container prompts
+  "remote.containers.showRecommendations": false,
+  "remote.containers.promptForDevContainer": false,
+  
+  // Editor settings
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  
+  // TypeScript settings
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.suggest.autoImports": true,
+  
+  // JavaScript settings
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  
+  // Files to exclude from explorer
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true,
+    "**/.devcontainer": true,
+    "**/.devcontainer.disabled": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.cache": true,
+    "**/__pycache__": true,
+    "**/.venv": true
+  },
+  
+  // Search exclude
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/.venv": true,
+    "**/package-lock.json": true
+  },
+  
+  // Prettier settings
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.tabWidth": 2,
+  "prettier.semi": true,
+  
+  // ESLint settings
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  
+  // Git settings
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  
+  // Terminal settings
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.fontSize": 13,
+  
+  // Emmet settings
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  
+  // File associations
+  "files.associations": {
+    "*.css": "tailwindcss",
+    "*.tsx": "typescriptreact",
+    "*.jsx": "javascriptreact"
+  },
+  
+  // Tailwind CSS
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  
+  // Auto save
+  "files.autoSave": "onFocusChange",
+  
+  // Breadcrumbs
+  "breadcrumbs.enabled": true,
+  
+  // Minimap
+  "editor.minimap.enabled": true,
+  "editor.minimap.maxColumn": 120
+}
