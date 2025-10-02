@@ -30,7 +30,5 @@
 
   "forwardPorts": [5173],
   
-  "postCreateCommand": "npm install && echo 'AuraOS development environment ready!'",
-  
-  "remoteUser": "nodejs"
+  "postCreateCommand": "npm install && echo 'AuraOS development environment ready!'"
 }

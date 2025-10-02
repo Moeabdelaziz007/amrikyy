@@ -9,11 +9,20 @@ RUN apk add --no-cache \
     git \
     curl \
     bash \
+    sudo \
     && rm -rf /var/cache/apk/*
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+# Create non-root user with sudo access
+RUN addgroup -g 1000 node || true && \
+    adduser -u 1000 -G node -s /bin/bash -D node 2>/dev/null || true && \
+    echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/node && \
+    chmod 0440 /etc/sudoers.d/node
+
+# Set proper permissions for workspace
+RUN chown -R node:node /workspace
+
+# Switch to node user
+USER node
 
 # Expose Vite port
 EXPOSE 5173
