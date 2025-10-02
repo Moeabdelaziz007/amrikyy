@@ -1,21 +1,43 @@
 /* AuraOS - Main Styles Entry Point */
 
-/* Import Design Tokens */
-@import './design-tokens.css';
-
-/* Import Fonts */
-@import './fonts.css';
-
-/* Import Premium Effects */
-@import './premium-effects.css';
-
-/* Import Task Queue Styles */
-@import './task-queue.css';
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
 
 /* Import Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Basic utility classes for compatibility */
+.text-green-400 { color: #4ade80; }
+.text-red-400 { color: #f87171; }
+.text-blue-400 { color: #60a5fa; }
+.text-yellow-400 { color: #facc15; }
+.text-gray-400 { color: #9ca3af; }
+.text-purple-400 { color: #a78bfa; }
+.text-orange-400 { color: #fb923c; }
+.text-cyan-400 { color: #22d3ee; }
+.text-pink-400 { color: #f472b6; }
+
+.bg-green-400 { background-color: #4ade80; }
+.bg-red-400 { background-color: #f87171; }
+.bg-blue-400 { background-color: #60a5fa; }
+.bg-yellow-400 { background-color: #facc15; }
+.bg-gray-400 { background-color: #9ca3af; }
+.bg-purple-400 { background-color: #a78bfa; }
+.bg-orange-400 { background-color: #fb923c; }
+.bg-cyan-400 { background-color: #22d3ee; }
+.bg-pink-400 { background-color: #f472b6; }
+
+.border-green-400 { border-color: #4ade80; }
+.border-red-400 { border-color: #f87171; }
+.border-blue-400 { border-color: #60a5fa; }
+.border-yellow-400 { border-color: #facc15; }
+.border-gray-400 { border-color: #9ca3af; }
+.border-purple-400 { border-color: #a78bfa; }
+.border-orange-400 { border-color: #fb923c; }
+.border-cyan-400 { border-color: #22d3ee; }
+.border-pink-400 { border-color: #f472b6; }
 
 /* Amrikyy AI System Design System - Premium AI-Powered OS Interface */
 @layer base {
@@ -120,35 +142,45 @@
   }
 
   body {
-    /* Avoid Tailwind @apply font-sans in PostCSS pipeline */
-    font-family: var(--font-sans), system-ui, sans-serif;
+    /* Astro Space Theme - Deep space background */
+    font-family: 'Inter', 'Poppins', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: hsl(var(--foreground));
-    background: var(--gradient-background);
+    color: #f0f0f0;
+    background: #0a0f1e;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(0, 246, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 0, 244, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
     background-attachment: fixed;
     overflow-x: hidden;
-    font-feature-settings:
-      'rlig' 1,
-      'calt' 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    min-height: 100vh;
   }
 
-  /* Glass morphism utilities */
+  /* Astro Glass morphism utilities */
   .glass {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-strong {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
 
-  .glass-strong {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
+  /* Astro Neon glow effects */
+  .glow-astro {
+    box-shadow: 0 0 20px #00f6ff, 0 0 40px #00f6ff40;
+  }
+
+  .glow-astro-accent {
+    box-shadow: 0 0 20px #ff00f4, 0 0 40px #ff00f440;
   }
 
   /* AI Glow effects */

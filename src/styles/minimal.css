@@ -1,0 +1,388 @@
+/* Minimal CSS for AuraOS */
+
+/* Basic utility classes for compatibility */
+.text-green-400 { color: #4ade80; }
+.text-red-400 { color: #f87171; }
+.text-blue-400 { color: #60a5fa; }
+.text-yellow-400 { color: #facc15; }
+.text-gray-400 { color: #9ca3af; }
+.text-purple-400 { color: #a78bfa; }
+.text-orange-400 { color: #fb923c; }
+.text-cyan-400 { color: #22d3ee; }
+.text-pink-400 { color: #f472b6; }
+
+.bg-green-400 { background-color: #4ade80; }
+.bg-red-400 { background-color: #f87171; }
+.bg-blue-400 { background-color: #60a5fa; }
+.bg-yellow-400 { background-color: #facc15; }
+.bg-gray-400 { background-color: #9ca3af; }
+.bg-purple-400 { background-color: #a78bfa; }
+.bg-orange-400 { background-color: #fb923c; }
+.bg-cyan-400 { background-color: #22d3ee; }
+.bg-pink-400 { background-color: #f472b6; }
+
+.border-green-400 { border-color: #4ade80; }
+.border-red-400 { border-color: #f87171; }
+.border-blue-400 { border-color: #60a5fa; }
+.border-yellow-400 { border-color: #facc15; }
+.border-gray-400 { border-color: #9ca3af; }
+.border-purple-400 { border-color: #a78bfa; }
+.border-orange-400 { border-color: #fb923c; }
+.border-cyan-400 { border-color: #22d3ee; }
+.border-pink-400 { border-color: #f472b6; }
+
+/* Basic styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* ===== Enhanced Login Screen ===== */
+.login-screen {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(99, 102, 241, 0.18), transparent 60%),
+              radial-gradient(1000px 700px at 80% 90%, rgba(16, 185, 129, 0.14), transparent 60%),
+              linear-gradient(180deg, #0b0b0f 0%, #0a0a0a 100%);
+  overflow: hidden;
+}
+
+.login-screen::before,
+.login-screen::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: conic-gradient(from 180deg at 50% 50%, rgba(99,102,241,0.06), rgba(16,185,129,0.06), rgba(236,72,153,0.06), rgba(99,102,241,0.06));
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 980px;
+  padding: 24px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 10px 30px rgba(99,102,241,0.18);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.login-subtitle {
+  margin-top: 8px;
+  color: rgba(255,255,255,0.72);
+}
+
+.login-content {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.login-card {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 520px;
+  border-radius: 20px;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+.login-title {
+  margin: 0 0 6px 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.login-description {
+  margin: 0 0 18px 0;
+  color: rgba(255,255,255,0.72);
+}
+
+.google-signin-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.google-signin-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,0.22);
+  box-shadow: 0 8px 26px rgba(99,102,241,0.25);
+}
+
+.google-signin-btn:active {
+  transform: translateY(0);
+}
+
+.google-signin-btn[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.google-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.signin-text {
+  font-size: 14px;
+}
+
+.login-features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.feature-icon {
+  filter: drop-shadow(0 6px 14px rgba(255,255,255,0.08));
+}
+
+.feature-text {
+  color: rgba(255,255,255,0.82);
+}
+
+.login-footer {
+  margin-top: 18px;
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.56);
+}
+
+/* ===== Enhanced Desktop (AuraOS) ===== */
+.amrikyy-desktop {
+  position: relative;
+  min-height: 100vh;
+  background: radial-gradient(1400px 900px at 15% 10%, rgba(59,130,246,0.12), transparent 60%),
+              radial-gradient(1400px 900px at 85% 90%, rgba(236,72,153,0.10), transparent 60%),
+              linear-gradient(180deg, #0c0c10 0%, #0a0a0a 100%);
+  overflow: hidden;
+}
+
+.desktop-background {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,255,255,0.04) 0px,
+    rgba(255,255,255,0.04) 1px,
+    transparent 1px,
+    transparent 40px
+  );
+  -webkit-mask-image: radial-gradient(1200px 600px at 50% 50%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(1200px 600px at 50% 50%, #000 60%, transparent 100%);
+  pointer-events: none;
+}
+
+.background-grid {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% -10%, rgba(255,255,255,0.06), transparent 40%);
+  -webkit-backdrop-filter: none; /* ensure Safari lint satisfied when backdrop-filter present elsewhere */
+  backdrop-filter: none;
+}
+
+.desktop-content {
+  position: relative;
+  z-index: 1;
+  padding: 28px 28px 80px 28px;
+}
+
+.organized-desktop-apps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.app-category {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 16px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.category-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.category-title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.88);
+}
+
+.category-description {
+  font-size: 12px;
+  color: rgba(255,255,255,0.56);
+}
+
+.category-apps {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.app-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: transform 0.16s ease, filter 0.2s ease;
+}
+
+.app-icon:hover { transform: translateY(-2px); }
+.app-icon:active { transform: translateY(0); }
+
+.app-icon-image {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.app-icon-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.82);
+}
+
+.app-window {
+  position: fixed;
+  top: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, calc(100% - 48px));
+  height: min(70vh, 820px);
+  border-radius: 18px;
+  background: rgba(12, 12, 16, 0.88);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  z-index: 40;
+}
+
+.window-header {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.window-title {
+  font-weight: 600;
+}
+
+.control-btn {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: none;
+  background: #f43f5e;
+}
+
+.control-btn.close { background: #ef4444; }
+
+.window-content {
+  height: calc(100% - 54px);
+  overflow: auto;
+}
+
+/* Status bar & taskbar placeholders (non-intrusive) */
+.system-status-bar,
+.taskbar {
+  height: 48px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .organized-desktop-apps { grid-template-columns: 1fr; }
+  .category-apps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+  .login-card { padding: 22px; border-radius: 16px; }
+  .category-apps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

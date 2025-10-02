@@ -45,7 +45,7 @@
 
   "forwardPorts": [3000, 3001, 5432, 6379, 9090],
   
-  "postCreateCommand": "npm install && pip install -r requirements.txt || echo 'تحقق من ملف requirements.txt'",
+  "postCreateCommand": "npm install && npm run env:template && echo 'AuraOS development environment ready!'",
   
   "remoteUser": "node"
 }

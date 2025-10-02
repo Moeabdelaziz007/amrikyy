@@ -1,0 +1,65 @@
+# Gitpod Configuration for AuraOS
+image:
+  file: .devcontainer/Dockerfile.dev
+
+# Ports to expose
+ports:
+  - port: 3000
+    onOpen: open-browser
+    name: AuraOS Frontend
+  - port: 3001
+    onOpen: ignore
+    name: AuraOS Backend
+  - port: 3002
+    onOpen: ignore
+    name: AuraOS API
+  - port: 5432
+    onOpen: ignore
+    name: PostgreSQL
+  - port: 6379
+    onOpen: ignore
+    name: Redis
+  - port: 9090
+    onOpen: open-browser
+    name: Prometheus
+
+# Tasks to run on workspace start
+tasks:
+  - name: Setup Environment
+    init: |
+      echo "🚀 Setting up AuraOS development environment..."
+      npm install
+      npm run env:template
+      echo "✅ Environment setup complete!"
+  
+  - name: Start Development Server
+    command: |
+      echo "🎯 Starting AuraOS development server..."
+      npm run dev
+    openMode: split-right
+
+# Environment variables
+env:
+  - name: NODE_ENV
+    value: development
+  - name: PORT
+    value: "3000"
+  - name: FRONTEND_URL
+    value: "http://localhost:3000"
+  - name: DATABASE_URL
+    value: "postgresql://postgres:postgres@postgres:5432/auraos_automation"
+  - name: REDIS_URL
+    value: "redis://redis:6379"
+
+# VS Code extensions to install
+vscode:
+  extensions:
+    - ms-vscode.vscode-typescript-next
+    - bradlc.vscode-tailwindcss
+    - esbenp.prettier-vscode
+    - ms-python.python
+    - redhat.vscode-yaml
+    - ms-vscode.vscode-json
+    - formulahendry.auto-rename-tag
+    - christian-kohler.path-intellisense
+    - ms-vscode.vscode-eslint

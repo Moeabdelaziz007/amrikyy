@@ -17,6 +17,32 @@ exports.default = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        // Standard Tailwind colors for compatibility
+        green: {
+          400: '#4ade80',
+          500: '#22c55e',
+          600: '#16a34a',
+        },
+        red: {
+          400: '#f87171',
+          500: '#ef4444',
+          600: '#dc2626',
+        },
+        blue: {
+          400: '#60a5fa',
+          500: '#3b82f6',
+          600: '#2563eb',
+        },
+        yellow: {
+          400: '#facc15',
+          500: '#eab308',
+          600: '#ca8a04',
+        },
+        gray: {
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+        },
         background: 'var(--background)',
         foreground: 'var(--foreground)',
         card: {

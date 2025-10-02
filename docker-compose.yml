@@ -82,6 +82,30 @@ services:
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
 
+  # AuraOS Development Server
+  auraos-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: auraos-server
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - FRONTEND_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/auraos_automation
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    depends_on:
+      - postgres
+      - redis
+    command: ["npm", "run", "dev"]
+
   # AuraOS Services
   conversational-core:
     build:

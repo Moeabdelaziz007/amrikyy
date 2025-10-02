@@ -12,7 +12,12 @@
     "dashboard": "node telegram-bot-dashboard.js",
     "deploy": "firebase deploy",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "env:template": "npx ts-node ./scripts/env-agent.ts generate-template",
+    "env:validate": "npx ts-node ./scripts/env-agent.ts validate",
+    "env:scan": "npx ts-node ./scripts/env-agent.ts scan",
+    "env:share:create": "npx ts-node ./scripts/env-share-agent.ts create",
+    "env:share:sync": "npx ts-node ./scripts/env-share-agent.ts sync"
   },
   "keywords": [
     "telegram",
@@ -43,10 +48,10 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3.4.17",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^20.10.5",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
@@ -56,7 +61,7 @@
     "eslint": "^8.56.0",
     "nodemon": "^3.0.2",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.13",
+    "terser": "^5.44.0",
     "typescript": "^5.9.2",
     "vite": "^5.0.8"
   },

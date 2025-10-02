@@ -1,11 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { 
-  signInWithPopup, 
-  signOut, 
-  onAuthStateChanged, 
-  User 
-} from 'firebase/auth';
-import { auth, googleProvider } from '../lib/firebase';
+import { User } from 'firebase/auth';
+import { authService } from '../core/services/auth.service';
 
 interface AuthContextType {
   user: User | null;
@@ -29,39 +24,25 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(authService.getUser());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsub = authService.onChange((u) => {
+      setUser(u);
       setLoading(false);
     });
-
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
   const signInWithGoogle = async () => {
-    try {
-      setLoading(true);
-      await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      console.error('Error signing in with Google:', error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await authService.loginWithGoogle().finally(() => setLoading(false));
   };
 
   const logout = async () => {
-    try {
-      setLoading(true);
-      await signOut(auth);
-    } catch (error) {
-      console.error('Error signing out:', error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await authService.logout().finally(() => setLoading(false));
   };
 
   const value: AuthContextType = {

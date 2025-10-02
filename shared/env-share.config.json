@@ -1,0 +1,23 @@
+{
+  "repositories": [
+    "../auraos-frontend",
+    "../auraos-backend"
+  ],
+  "defaultValues": {
+    "NODE_ENV": "development",
+    "PORT": "3002",
+    "FRONTEND_URL": "http://localhost:5173",
+    "DATABASE_URL": "SET_YOUR_DATABASE_URL",
+    "FIREBASE_PROJECT_ID": "SET_YOUR_FIREBASE_PROJECT_ID",
+    "FIREBASE_PRIVATE_KEY": "SET_YOUR_FIREBASE_PRIVATE_KEY",
+    "FIREBASE_CLIENT_EMAIL": "SET_YOUR_FIREBASE_CLIENT_EMAIL",
+    "OPENAI_API_KEY": "SET_YOUR_OPENAI_API_KEY",
+    "ANTHROPIC_API_KEY": "SET_YOUR_ANTHROPIC_API_KEY",
+    "JWT_SECRET": "SET_YOUR_JWT_SECRET",
+    "JWT_EXPIRES_IN": "7d",
+    "WEATHER_API_KEY": "SET_YOUR_WEATHER_API_KEY",
+    "GOOGLE_MAPS_API_KEY": "SET_YOUR_GOOGLE_MAPS_API_KEY",
+    "LOG_LEVEL": "info",
+    "LOG_FILE": "./logs/app.log"
+  }
+}

@@ -33,14 +33,14 @@ export * from './apps/EnhancedAnalyticsDashboard';
 export * from './apps/EnhancedCalendarApp';
 export * from './apps/EnhancedCloudStorageManager';
 export * from './apps/EnhancedFileManagerApp';
-export * from './apps/EnhancedIntegrationManager';
+// export * from './apps/EnhancedIntegrationManager'; // Temporarily disabled due to build issues
 export * from './apps/EnhancedMCPToolsApp';
 export * from './apps/EnhancedNotesApp';
 export * from './apps/EnhancedRealtimeSyncManager';
 export * from './apps/EnhancedSecurityDashboard';
 export * from './apps/EnhancedSettingsApp';
 export * from './apps/EnhancedUIApp';
-export * from './apps/EnhancedWeatherApp';
+// export * from './apps/EnhancedWeatherApp'; // Temporarily disabled due to build issues
 export * from './apps/FirestoreTestApp';
 export * from './apps/GamingEntertainmentSuite';
 export * from './apps/SystemIntegrationApps';

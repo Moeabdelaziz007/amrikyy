@@ -17,31 +17,36 @@ function getDir(lang: Lang): 'rtl' | 'ltr' {
   return lang === 'ar' ? 'rtl' : 'ltr';
 }
 
-function loadMessages(lang: Lang): Record<string, string> {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return require(`./${lang}.json`);
-  } catch (err) {
-    console.error('Failed to load messages for', lang, err);
-    return {};
-  }
+const messageModules = import.meta.glob('./*.json', { eager: true });
+const messagesMap: Record<string, Record<string, string>> = {};
+Object.entries(messageModules).forEach(([path, mod]) => {
+  const key = path.replace('./', '').replace('.json', '');
+  const m = (mod as any).default || mod;
+  messagesMap[key] = m as Record<string, string>;
+});
+
+async function loadMessagesAsync(lang: Lang): Promise<Record<string, string>> {
+  return messagesMap[lang] || {};
 }
 
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
   const saved = (typeof window !== 'undefined' && localStorage.getItem('amrikyy_lang')) as Lang | null;
   const initial: Lang = (saved as Lang) || 'ar';
   const [lang, setLangState] = useState<Lang>(initial);
-  const [messages, setMessages] = useState<Record<string, string>>(loadMessages(initial));
+  const [messages, setMessages] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    setMessages(loadMessages(lang));
+    let alive = true;
+    loadMessagesAsync(lang).then(m => {
+      if (!alive) return;
+      setMessages(m);
+    });
     document.documentElement.dir = getDir(lang);
     document.documentElement.lang = lang;
     try {
       localStorage.setItem('amrikyy_lang', lang);
-    } catch (e) {
-      // ignore
-    }
+    } catch (e) {}
+    return () => { alive = false; };
   }, [lang]);
 
   const setLang = (l: Lang) => setLangState(l);

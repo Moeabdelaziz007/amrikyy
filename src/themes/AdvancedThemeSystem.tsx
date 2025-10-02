@@ -17,6 +17,7 @@ import {
   Sunset,
   Sparkles
 } from 'lucide-react';
+import { astroTheme } from '../shell/theme/astro-theme';
 
 export interface Theme {
   id: string;
@@ -85,6 +86,71 @@ export interface Theme {
 }
 
 export const themes: Theme[] = [
+  {
+    id: 'astro',
+    name: 'astro',
+    displayName: 'Astro Space',
+    description: 'Futuristic space theme with neon cyan and magenta accents',
+    icon: Star,
+    colors: {
+      primary: astroTheme.colors.primary,
+      secondary: astroTheme.colors.accent,
+      accent: astroTheme.colors.accent,
+      background: astroTheme.colors.background,
+      surface: astroTheme.colors.surface,
+      text: astroTheme.colors.text,
+      textSecondary: astroTheme.colors.textSecondary,
+      border: astroTheme.colors.glassBorder,
+      success: astroTheme.colors.success,
+      warning: astroTheme.colors.warning,
+      error: astroTheme.colors.error,
+      info: astroTheme.colors.primary,
+    },
+    gradients: {
+      primary: astroTheme.gradients.primary,
+      secondary: astroTheme.gradients.accent,
+      background: astroTheme.gradients.background,
+      surface: astroTheme.gradients.glass,
+    },
+    shadows: {
+      small: '0 1px 3px rgba(0, 246, 255, 0.12), 0 1px 2px rgba(0, 246, 255, 0.24)',
+      medium: '0 4px 6px rgba(0, 246, 255, 0.07), 0 2px 4px rgba(0, 246, 255, 0.06)',
+      large: '0 10px 15px rgba(0, 246, 255, 0.1), 0 4px 6px rgba(0, 246, 255, 0.05)',
+      glow: astroTheme.shadows.glow,
+    },
+    animations: {
+      duration: astroTheme.animations.duration,
+      easing: astroTheme.animations.easing,
+    },
+    typography: {
+      fontFamily: astroTheme.fonts.primary,
+      fontSize: {
+        xs: '0.75rem',
+        sm: '0.875rem',
+        base: '1rem',
+        lg: '1.125rem',
+        xl: '1.25rem',
+        '2xl': '1.5rem',
+        '3xl': '1.875rem',
+      },
+    },
+    spacing: {
+      xs: '0.25rem',
+      sm: '0.5rem',
+      md: '1rem',
+      lg: '1.5rem',
+      xl: '2rem',
+      '2xl': '3rem',
+    },
+    borderRadius: {
+      none: '0',
+      sm: '0.125rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      full: '9999px',
+    },
+  },
   {
     id: 'aurora',
     name: 'aurora',
