@@ -1,0 +1,36 @@
+{
+  "name": "AuraOS Development Environment",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "auraos-server",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json",
+        "formulahendry.auto-rename-tag",
+        "christian-kohler.path-intellisense",
+        "ms-vscode.vscode-eslint"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "typescript.preferences.quoteStyle": "single",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        }
+      }
+    }
+  },
+
+  "forwardPorts": [5173],
+  
+  "postCreateCommand": "npm install && echo 'AuraOS development environment ready!'",
+  
+  "remoteUser": "nodejs"
+}
