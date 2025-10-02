@@ -3,25 +3,49 @@
 set -e
 
 echo "Step 1: Installing dependencies..."
-npm install
+#!/usr/bin/env bash
+# Robust deploy script for Firebase Hosting (no Docker dependency)
+set -euo pipefail
 
-echo "Step 2: Creating production build..."
-npm run build
+# Colors
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+BLUE="\033[0;34m"
+NC="\033[0m"
 
-echo "Step 3: Deploying to Firebase Hosting..."
-firebase deploy --only hosting
+log() { echo -e "${BLUE}[INFO]${NC} $*"; }
+ok()  { echo -e "${GREEN}[OK]${NC} $*"; }
+warn(){ echo -e "${YELLOW}[WARN]${NC} $*"; }
+err() { echo -e "${RED}[ERROR]${NC} $*"; }
 
-echo "Deployment script finished successfully!"
-#!/bin/bash
-set -e # Exit immediately if a command exits with a non-zero status.
+fail() {
+	err "$*"
+	exit 1
+}
 
-echo "Step 1: Installing dependencies..."
-npm install
+check_command() {
+	if ! command -v "$1" >/dev/null 2>&1; then
+		return 1
+	fi
+	return 0
+}
 
-echo "Step 2: Creating production build..."
-npm run build
+log "Starting simplified deployment script"
 
-echo "Step 3: Deploying to Firebase Hosting..."
-firebase deploy --only hosting
+# Prerequisite checks
+log "Checking prerequisites..."
+check_command node || fail "Node.js is not installed or not in PATH. Install Node.js (https://nodejs.org/)"
+check_command npm  || fail "npm is not installed or not in PATH. Install Node.js/npm"
+check_command firebase || warn "firebase CLI not found. Install with 'npm install -g firebase-tools' or ensure it's in PATH. If running in CI, set FIREBASE_TOKEN and install firebase-tools in CI."
 
-echo "Deployment script finished successfully!"
+# Use npm ci when lockfile exists (reproducible installs)
+if [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
+	log "Lockfile detected, using 'npm ci' for reproducible installs"
+	NPM_INSTALL_CMD=(npm ci)
+else
+	log "No lockfile detected, using 'npm install'"
+	NPM_INSTALL_CMD=(npm install)
+fi
+
+log "Step 1: Installing dependencies..."

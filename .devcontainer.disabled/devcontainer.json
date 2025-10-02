@@ -5,26 +5,12 @@
   "workspaceFolder": "/workspace",
   "shutdownAction": "stopCompose",
   
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "version": "18"
-    },
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11"
-    },
-    "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
-  },
-
   "customizations": {
     "vscode": {
       "extensions": [
         "ms-vscode.vscode-typescript-next",
         "bradlc.vscode-tailwindcss",
         "esbenp.prettier-vscode",
-        "ms-python.python",
-        "ms-python.flake8",
         "redhat.vscode-yaml",
         "ms-vscode.vscode-json",
         "formulahendry.auto-rename-tag",
@@ -34,7 +20,6 @@
       "settings": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
         "typescript.preferences.quoteStyle": "single",
         "editor.codeActionsOnSave": {
           "source.fixAll.eslint": true
@@ -43,9 +28,7 @@
     }
   },
 
-  "forwardPorts": [3000, 3001, 5432, 6379, 9090],
+  "forwardPorts": [5173],
   
-  "postCreateCommand": "npm install && npm run env:template && echo 'AuraOS development environment ready!'",
-  
-  "remoteUser": "node"
+  "postCreateCommand": "npm install && echo 'AuraOS development environment ready!'"
 }
