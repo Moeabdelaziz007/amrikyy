@@ -221,19 +221,66 @@ ${status.processes.map(p => `  ${p.name}: ${p.status} (${p.memory}MB)`).join('\n
    */
   private async executeAICommand(args: string[]): Promise<string> {
     const cmd = args[0];
+    const status = await this.getSystemStatus();
     
     switch (cmd) {
       case 'analyze':
-        return `AI Analysis: System is operating within normal parameters. 
-Recommendation: Continue current operations.`;
+        const healthScore = this.calculateHealthScore(status);
+        return `AI Analysis:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+System Health Score: ${healthScore}/100
+
+Status: ${healthScore > 80 ? '✅ Excellent' : healthScore > 60 ? '⚠️ Good' : '❌ Needs Attention'}
+
+Key Metrics:
+• Memory Usage: ${status.memory.percentage}% ${status.memory.percentage > 80 ? '⚠️' : '✅'}
+• CPU Usage: ${status.cpu.usage}% ${status.cpu.usage > 80 ? '⚠️' : '✅'}
+• Services: ${status.services.length} running ✅
+• Processes: ${status.processes.length} active ✅
+
+Recommendation: ${healthScore > 80 ? 'System is operating optimally.' : 'Consider closing unused applications to free up resources.'}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
         
       case 'summarize':
-        return `AI Summary: AuraOS is running ${status.services.length} services 
-with ${status.processes.length} active processes. All systems nominal.`;
+        return `AI Summary:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AuraOS System Overview
+
+Uptime: ${Math.floor(status.uptime / 1000)}s
+Services: ${status.services.length} running
+Processes: ${status.processes.length} active
+
+Resource Usage:
+• Memory: ${status.memory.used}MB / ${status.memory.total}MB
+• CPU: ${status.cpu.usage}% across ${status.cpu.cores} cores
+
+All systems nominal. ✅
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
         
       default:
         return `Unknown AI command: ${cmd}`;
     }
+  }
+
+  /**
+   * Calculate system health score
+   */
+  private calculateHealthScore(status: SystemStatus): number {
+    let score = 100;
+    
+    // Deduct points for high memory usage
+    if (status.memory.percentage > 80) score -= 20;
+    else if (status.memory.percentage > 60) score -= 10;
+    
+    // Deduct points for high CPU usage
+    if (status.cpu.usage > 80) score -= 20;
+    else if (status.cpu.usage > 60) score -= 10;
+    
+    // Deduct points for stopped services
+    const stoppedServices = status.services.filter(s => s.status !== 'running').length;
+    score -= stoppedServices * 10;
+    
+    return Math.max(0, score);
   }
 
   /**

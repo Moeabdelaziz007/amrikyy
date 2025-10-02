@@ -200,37 +200,104 @@ Provide a concise, actionable response.`;
   private parseBasicCommand(command: string) {
     const cmd = command.toLowerCase().trim();
     
+    // System commands
     if (cmd === 'help' || cmd.includes('help')) {
       return {
         type: 'system',
         command: 'help',
         description: 'Show available commands'
       };
-    } else if (cmd.startsWith('status') || cmd.includes('status')) {
+    }
+    
+    if (cmd === 'status' || cmd.includes('system status') || cmd.includes('show status')) {
       return {
         type: 'system',
         command: 'status',
         description: 'Show system status'
       };
-    } else if (cmd.includes('note') || cmd.includes('write')) {
+    }
+    
+    if (cmd.includes('memory') || cmd.includes('ram')) {
+      return {
+        type: 'system',
+        command: 'status',
+        description: 'Show memory usage'
+      };
+    }
+    
+    if (cmd.includes('services') || cmd.includes('list services')) {
+      return {
+        type: 'system',
+        command: 'services',
+        description: 'List running services'
+      };
+    }
+    
+    if (cmd.includes('processes') || cmd.includes('list processes')) {
+      return {
+        type: 'system',
+        command: 'processes',
+        description: 'List active processes'
+      };
+    }
+    
+    if (cmd.includes('uptime')) {
+      return {
+        type: 'system',
+        command: 'uptime',
+        description: 'Show system uptime'
+      };
+    }
+    
+    // Notes commands
+    if (cmd.includes('note') || cmd.includes('write')) {
       return {
         type: 'notes',
         command: command,
         description: 'Notes operation'
       };
-    } else if (cmd.includes('automat') || cmd.includes('workflow')) {
+    }
+    
+    // Automation commands
+    if (cmd.includes('automat') || cmd.includes('workflow')) {
       return {
         type: 'automation',
         command: command,
         description: 'Automation operation'
       };
-    } else {
+    }
+    
+    // AI commands
+    if (cmd.startsWith('ask ') || cmd.startsWith('what ') || cmd.startsWith('how ')) {
       return {
         type: 'ai',
         command: command,
-        description: 'AI processing'
+        description: 'AI question'
       };
     }
+    
+    if (cmd.startsWith('summarize ') || cmd.includes('summary')) {
+      return {
+        type: 'ai',
+        command: command,
+        description: 'Summarize text'
+      };
+    }
+    
+    if (cmd.startsWith('analyze ')) {
+      return {
+        type: 'ai',
+        command: command,
+        description: 'Analyze text'
+      };
+    }
+    
+    // Default to AI processing
+    return {
+      type: 'ai',
+      command: command,
+      description: 'AI processing'
+    };
   }
 }
 

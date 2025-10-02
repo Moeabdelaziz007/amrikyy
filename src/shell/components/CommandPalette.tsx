@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Sparkles, Terminal, Settings, FileText, Zap } from 'lucide-react';
+import { Search, Sparkles, Terminal, Settings, FileText, Zap, Activity, List } from 'lucide-react';
 import { kernel } from '../../core/kernel';
 import { aiService } from '../../core/services/ai.service';
 import { automationService } from '../../core/services/automation.service';
+import { mcpService } from '../../core/services/mcp.service';
 
 interface Command {
   id: string;
@@ -21,7 +22,14 @@ interface CommandPaletteProps {
 const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [result, setResult] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const showResult = (message: string) => {
+    setResult(message);
+    setTimeout(() => setResult(null), 5000); // Auto-hide after 5 seconds
+  };
 
   const commands: Command[] = [
     {
@@ -31,9 +39,16 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
       icon: Sparkles,
       category: 'ai',
       action: async () => {
-        // Placeholder: integrate with aiService.summarizeText()
-        console.log('AI: Summarizing note...');
-        onClose();
+        setLoading(true);
+        try {
+          const sampleText = "AuraOS is an advanced operating system with AI capabilities. It features a liquid intelligence UI, window management, and smart command processing.";
+          const summary = await aiService.summarizeText(sampleText);
+          showResult(`📝 Summary:\n\n${summary}`);
+        } catch (error) {
+          showResult(`❌ Error: ${error instanceof Error ? error.message : 'Failed to summarize'}`);
+        } finally {
+          setLoading(false);
+        }
       }
     },
     {
@@ -43,9 +58,61 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
       icon: Zap,
       category: 'ai',
       action: async () => {
-        // Placeholder: integrate with aiService.extractActionItems()
-        console.log('AI: Extracting action items...');
-        onClose();
+        setLoading(true);
+        try {
+          const sampleText = "TODO: Implement user authentication\n- Add login page\n- Setup Firebase\nAction: Test the new features";
+          const actions = await aiService.extractActionItems(sampleText);
+          showResult(`✅ Action Items:\n\n${actions.map((a, i) => `${i + 1}. ${a}`).join('\n')}`);
+        } catch (error) {
+          showResult(`❌ Error: ${error instanceof Error ? error.message : 'Failed to extract actions'}`);
+        } finally {
+          setLoading(false);
+        }
+      }
+    },
+    {
+      id: 'system-status',
+      title: 'Show system status',
+      description: 'Display current system information',
+      icon: Activity,
+      category: 'system',
+      action: async () => {
+        setLoading(true);
+        try {
+          const status = await mcpService.getSystemStatus();
+          const statusText = `System Status:
+Uptime: ${Math.floor(status.uptime / 1000)}s
+Memory: ${status.memory.used}MB / ${status.memory.total}MB (${status.memory.percentage}%)
+CPU: ${status.cpu.usage}% (${status.cpu.cores} cores)
+Services: ${status.services.length} running
+Processes: ${status.processes.length} active`;
+          showResult(statusText);
+        } catch (error) {
+          showResult(`❌ Error: ${error instanceof Error ? error.message : 'Failed to get status'}`);
+        } finally {
+          setLoading(false);
+        }
+      }
+    },
+    {
+      id: 'list-services',
+      title: 'List running services',
+      description: 'Show all active system services',
+      icon: List,
+      category: 'system',
+      action: async () => {
+        setLoading(true);
+        try {
+          const status = await mcpService.getSystemStatus();
+          const servicesText = `Active Services:\n\n${status.services.map(s => 
+            `• ${s.name}: ${s.status} (${Math.floor(s.uptime / 1000)}s)`
+          ).join('\n')}`;
+          showResult(servicesText);
+        } catch (error) {
+          showResult(`❌ Error: ${error instanceof Error ? error.message : 'Failed to list services'}`);
+        } finally {
+          setLoading(false);
+        }
       }
     },
     {
@@ -139,6 +206,10 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
       {/* Command Palette */}
       <div className="relative w-full max-w-2xl mx-4">
         <div className="glass rounded-xl overflow-hidden">
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#00f6ff] to-[#ff00f4] animate-pulse" />
+          )}
           {/* Search Input */}
           <div className="flex items-center gap-3 p-4 border-b border-white/20">
             <Search className="w-5 h-5 text-white/70" />
@@ -204,6 +275,26 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose }) => {
             </div>
           </div>
         </div>
+
+        {/* Result Display */}
+        {result && (
+          <div className="mt-4 glass rounded-xl p-4 animate-fade-in">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-[#00f6ff] flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <pre className="text-white text-sm whitespace-pre-wrap font-mono">
+                  {result}
+                </pre>
+              </div>
+              <button
+                onClick={() => setResult(null)}
+                className="text-white/50 hover:text-white transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

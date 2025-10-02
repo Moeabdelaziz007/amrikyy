@@ -54,8 +54,15 @@ const Terminal: React.FC = () => {
     setLoading(true);
 
     try {
+      // Handle built-in commands first
+      const builtInResult = handleBuiltInCommands(cmd);
+      if (builtInResult) {
+        addOutput('output', builtInResult);
+        setLoading(false);
+        return;
+      }
+
       // Step 1: Send command to AI service for analysis and structuring
-      // The AI will analyze the natural language command and convert it to structured actions
       const aiAnalysis = await analyzeCommandWithAI(cmd);
       
       // Step 2: Execute the structured commands through appropriate services
@@ -65,10 +72,53 @@ const Terminal: React.FC = () => {
       addOutput('output', results);
       
     } catch (error) {
-      addOutput('error', `Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      addOutput('error', `❌ Error: ${errorMessage}`);
+      
+      // Provide helpful suggestions
+      if (errorMessage.includes('API key')) {
+        addOutput('ai', '💡 Tip: Set VITE_GEMINI_API_KEY in your .env file to enable AI features');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  /**
+   * Handle built-in commands that don't require AI
+   */
+  const handleBuiltInCommands = (cmd: string): string | null => {
+    const lowerCmd = cmd.toLowerCase().trim();
+    
+    if (lowerCmd === 'help') {
+      return `AuraOS AI Terminal - Available Commands:
+
+System Commands:
+  help              Show this help message
+  clear             Clear terminal output
+  status            Show system status
+  services          List running services
+  processes         List active processes
+  
+AI Commands:
+  analyze [text]    Analyze text with AI
+  summarize [text]  Summarize text
+  ask [question]    Ask AI a question
+  
+Examples:
+  status
+  ask what is the weather like
+  summarize this is a long text...
+  
+Type any natural language command and AI will try to understand it!`;
+    }
+    
+    if (lowerCmd === 'clear') {
+      setOutputs([]);
+      return null;
+    }
+    
+    return null;
   };
 
   /**
@@ -79,14 +129,16 @@ const Terminal: React.FC = () => {
   const analyzeCommandWithAI = async (command: string): Promise<any> => {
     try {
       // Send command to AI service for analysis
-      // The AI will understand the intent and return structured actions
       const analysis = await aiService.analyzeCommand(command);
       
-      // Log AI analysis for debugging
-      addOutput('ai', `AI Analysis: ${JSON.stringify(analysis, null, 2)}`);
+      // Show AI analysis in debug mode (optional)
+      if (command.includes('--debug')) {
+        addOutput('ai', `🤖 AI Analysis:\n${JSON.stringify(analysis, null, 2)}`);
+      }
       
       return analysis;
     } catch (error) {
+      console.warn('AI analysis failed, using fallback:', error);
       // Fallback to basic command parsing if AI service fails
       return parseBasicCommand(command);
     }
@@ -99,33 +151,36 @@ const Terminal: React.FC = () => {
    */
   const executeStructuredCommands = async (analysis: any): Promise<string> => {
     try {
+      const { type, command, description } = analysis;
+      
       // Route commands to appropriate services based on analysis
-      if (analysis.type === 'system') {
-        // Execute system commands via MCP service
-        const result = await mcpService.executeCommand(analysis.command);
-        return result.output;
+      switch (type) {
+        case 'system':
+          // Execute system commands via MCP service
+          const mcpResult = await mcpService.executeCommand(command);
+          return `✅ ${description || 'System command executed'}\n\n${mcpResult.output}`;
         
-      } else if (analysis.type === 'notes') {
-        // Execute notes-related commands via notes service
-        // This would integrate with the Aura Notes app
-        return `Notes command: ${analysis.command}\n[Would execute via notes service]`;
+        case 'notes':
+          // Execute notes-related commands via notes service
+          return `📝 Notes Command: ${command}\n\n${description || 'Notes operation'}\n\n[Integration with Aura Notes app coming soon]`;
         
-      } else if (analysis.type === 'automation') {
-        // Execute automation commands via automation service
-        // This would integrate with the Automations app
-        return `Automation command: ${analysis.command}\n[Would execute via automation service]`;
+        case 'automation':
+          // Execute automation commands via automation service
+          return `⚡ Automation Command: ${command}\n\n${description || 'Automation operation'}\n\n[Integration with Automations app coming soon]`;
         
-      } else if (analysis.type === 'ai') {
-        // Execute AI-powered commands
-        const result = await aiService.processCommand(analysis.command);
-        return result;
+        case 'ai':
+          // Execute AI-powered commands
+          const aiResult = await aiService.processCommand(command);
+          return `🤖 AI Response:\n\n${aiResult}`;
         
-      } else {
-        // Default command execution
-        return `Executed: ${analysis.command}`;
+        default:
+          // Try to process with AI as fallback
+          const fallbackResult = await aiService.processCommand(command);
+          return `🤖 ${fallbackResult}`;
       }
     } catch (error) {
-      throw new Error(`Command execution failed: ${error}`);
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Command execution failed: ${errorMsg}`);
     }
   };
 
