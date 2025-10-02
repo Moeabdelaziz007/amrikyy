@@ -1,0 +1,33 @@
+FROM node:18-alpine
+
+# AuraOS Development Dockerfile (for devcontainer builds)
+LABEL maintainer="auraos"
+
+# Set working directory
+WORKDIR /workspace
+
+# Install system dependencies
+RUN apk add --no-cache \
+    git \
+    curl \
+    bash \
+    sudo \
+    && rm -rf /var/cache/apk/*
+
+# Create non-root user with sudo access (uid/gid 1000 to match common host users)
+RUN addgroup -g 1000 node || true && \
+    adduser -u 1000 -G node -s /bin/bash -D node 2>/dev/null || true && \
+    echo "node ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/node && \
+    chmod 0440 /etc/sudoers.d/node
+
+# Ensure workspace directory exists and set ownership
+RUN mkdir -p /workspace && chown -R node:node /workspace
+
+# Switch to node user
+USER node
+
+# Expose Vite default port
+EXPOSE 5173
+
+# Default command (docker-compose or devcontainer will override as needed)
+CMD ["/bin/sh", "-c", "npm run dev -- --host 0.0.0.0"]
